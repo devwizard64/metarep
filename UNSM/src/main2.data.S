@@ -1,0 +1,2 @@
+.bss
+.space 0x8038EEF0 - 0x8038BC90
