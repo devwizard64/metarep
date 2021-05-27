@@ -1,9 +1,3 @@
-try:
-    import png
-except:
-    png = None
-
-import main
 import ultra
 import table
 
@@ -22,16 +16,21 @@ def fmt(self, lst):
         if len(extern) > 0:
             f.append("\n\n")
         for a, s in sorted(extern, key=lambda x: x[0]):
-            f.append(s.fmt("/* 0x%08X */ extern " % a, ";") + "\n")
+            if ultra.COMM_EXTERN:
+                start = "/* 0x%08X */ extern " % a
+            else:
+                start = "extern "
+            f.append(s.fmt(start, ";") + "\n")
+        comm = "/* 0x%08X */ " % addr if ultra.COMM_VAR else ""
         if len(line) > 1 or line[-1].endswith(",") or line[-1].startswith("#"):
-            f.append("\n\n/* 0x%08X */ %s =\n{\n" % (addr, sym.fmt()))
+            f.append("\n\n%s%s =\n{\n" % (comm, sym.fmt()))
             for ln in line:
                 f.append(("%s\n" if ln.startswith("#") else "\t%s\n") % ln)
             f.append("};\n\n")
         else:
             if "\n" in line[0]:
                 f.append("\n")
-            f.append("/* 0x%08X */ %s =" % (addr, sym.fmt()))
+            f.append("%s%s =" % (comm, sym.fmt()))
             f.append("\n\t" if len(f[-1]) + 2 + len(line[0]) > 80 else " ")
             f.append(line[0] + ";\n")
             if "\n" in line[0]:
@@ -49,32 +48,57 @@ def d_pathfmt_prc(argv):
     return [fmt % ultra.script.path_join([fn], 1)]
 d_pathfmt = [False, d_pathfmt_prc]
 
-d_8     = [False, lambda argv: ["0x%02X"  % ultra.ub()]]
-d_s8    = [False, lambda argv: ["%d"      % ultra.sb()]]
-d_u8    = [False, lambda argv: ["%d"      % ultra.ub()]]
-d_16    = [False, lambda argv: ["0x%04X"  % ultra.uh()]]
-d_s16   = [False, lambda argv: ["%d"      % ultra.sh()]]
-d_u16   = [False, lambda argv: ["%d"      % ultra.uh()]]
-d_32    = [False, lambda argv: ["0x%08X"  % ultra.uw()]]
-d_s32   = [False, lambda argv: ["%d"      % ultra.sw()]]
-d_u32   = [False, lambda argv: ["%d"      % ultra.uw()]]
-d_64    = [False, lambda argv: ["0x%016X" % ultra.ud()]]
-d_s64   = [False, lambda argv: ["%d"      % ultra.sd()]]
-d_u64   = [False, lambda argv: ["%d"      % ultra.ud()]]
-d_f32   = [False, lambda argv: [ultra.fmt_float(ultra.f(), "F", len(argv)==0)]]
-d_f64   = [False, lambda argv: [ultra.fmt_float(ultra.d(), "",  len(argv)==0)]]
+def d_fnc(fnc, fmt="%d"):
+    return [False, lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else fmt, fnc())]]
+
+d_s8  = d_fnc(ultra.sb)
+d_u8  = d_fnc(ultra.ub)
+d_s16 = d_fnc(ultra.sh)
+d_u16 = d_fnc(ultra.uh)
+d_s32 = d_fnc(ultra.sw)
+d_u32 = d_fnc(ultra.uw)
+d_s64 = d_fnc(ultra.sd)
+d_u64 = d_fnc(ultra.ud)
+d_flag8  = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.ub())]]
+d_flag16 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uh())]]
+d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
+
+d_f32 = [False, lambda argv: [ultra.fmt_float(ultra.f(), "F", len(argv)==0)]]
+d_f64 = [False, lambda argv: [ultra.fmt_float(ultra.d(), "",  len(argv)==0)]]
+
+d_align_s8      = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
+d_align_u8      = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
+d_align_s16     = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
+d_align_u16     = [[0, 1, 1, d_u16],    [0, 1, 2, None]]
+d_align_flag8   = [[0, 1, 1, d_flag8],  [0, 1, 3, None]]
+d_align_flag16  = [[0, 1, 1, d_flag16], [0, 1, 2, None]]
+
+flag_button = [
+    (0x8000, 0x8000, "A_BUTTON"),
+    (0x4000, 0x4000, "B_BUTTON"),
+    (0x2000, 0x2000, "Z_TRIG"),
+    (0x1000, 0x1000, "START_BUTTON"),
+    (0x0800, 0x0800, "U_JPAD"),
+    (0x0400, 0x0400, "D_JPAD"),
+    (0x0200, 0x0200, "L_JPAD"),
+    (0x0100, 0x0100, "R_JPAD"),
+    (0x0080, 0x0080, "0x0080"),
+    (0x0040, 0x0040, "0x0040"),
+    (0x0020, 0x0020, "L_TRIG"),
+    (0x0010, 0x0010, "R_TRIG"),
+    (0x0008, 0x0008, "U_CBUTTONS"),
+    (0x0004, 0x0004, "D_CBUTTONS"),
+    (0x0002, 0x0002, "L_CBUTTONS"),
+    (0x0001, 0x0001, "R_CBUTTONS"),
+]
 
 def d_addr_prc(argv):
     flag = argv[0]
-    x = ultra.aw(extern=bool(flag & A_EXTERN))
-    if x.startswith("0x"):
-        x = "(void *)" + x
-    elif x != "NULL":
-        if flag & A_ADDR:
-            x = "&" + x
-        if len(argv) > 1:
-            x = "(%s)%s" % (argv[1], x)
-    return [x]
+    return [ultra.fmt_addr(
+        ultra.aw(extern=bool(flag & A_EXTERN)),
+        flag & A_ADDR,
+        argv[1] if len(argv) > 1 else None
+    )]
 d_addr = [False, d_addr_prc]
 
 def d_Lights1_prc(argv):
@@ -694,46 +718,6 @@ def d_Gfx_prc(self, line, tab, argv):
             line[-1][-1].append(tab + "{{0x%08X, 0x%08X}}," % (w0, w1))
 d_Gfx = [True, d_Gfx_prc]
 
-def d_texture_prc(argv):
-    fmt, w, h, name = argv
-    f, s, n, g, a, t = {
-        "rgba16": (ultra.uh, "0x%04X,", 1, False, True, lambda x: (
-            (x >> 11       ) * 0xFF//0x1F,
-            (x >>  6 & 0x1F) * 0xFF//0x1F,
-            (x >>  1 & 0x1F) * 0xFF//0x1F,
-            (x       & 0x01) * 0xFF,
-        )),
-        "ia4": (ultra.ub, "0x%02X,", 2, True, True, lambda x: (
-            (x >> 5       ) * 0xFF//0x07,
-            (x >> 4 & 0x01) * 0xFF,
-            (x >> 1 & 0x07) * 0xFF//0x07,
-            (x      & 0x01) * 0xFF,
-        )),
-        "ia8": (ultra.ub, "0x%02X,", 1, True, True, lambda x: (
-            (x >> 4       ) * 0xFF//0x0F,
-            (x      & 0x0F) * 0xFF//0x0F,
-        )),
-        "ia16": (ultra.uh, "0x%04X,", 1, True, True, lambda x: (
-            (x >> 8       ),
-            (x      & 0xFF),
-        )),
-    }[fmt]
-    if png != None:
-        data = [
-            [x for x in [t(f()) for _ in range(w//n)] for x in x]
-            for _ in range(h)
-        ]
-        writer = png.Writer(w, h, greyscale=g, alpha=a)
-        fn = ultra.script.path_join(["%s.%s.png" % (name, fmt)])
-        main.mkdir(fn)
-        with open(fn, "wb") as f:
-            writer.write(f, data)
-        return ["#include ASSET(%s.%s.h)" % (
-            ultra.script.path_join([name], 1), fmt
-        )]
-    return [" ".join([s % f() for _ in range(w//n)]) for _ in range(h)]
-d_texture = [False, d_texture_prc]
-
 def d_OSThreadTail_prc(argv):
     next     = ultra.aw()
     priority = ultra.sw()
@@ -741,11 +725,11 @@ def d_OSThreadTail_prc(argv):
 d_OSThreadTail = [False, d_OSThreadTail_prc]
 
 d_OSViCommonRegs = [
-    [0, -9, 1, d_32],
+    [0, -9, 1, d_u32],
 ]
 
 d_OSViFieldRegs = [
-    [0, -5, 1, d_32],
+    [0, -5, 1, d_u32],
 ]
 
 d_OSViMode_fldRegs = [
@@ -764,9 +748,8 @@ def lst_push(self, line):
     self.c_push()
     sym = table.sym_addr(self, self.c_dst, self.c_dst, True)
     if sym != None and not (len(line) > 0 and line[-1][1] == sym):
-        if "-" not in sym.label and "+" not in sym.label:
-            extern = set()
-            line.append((self.c_dst, sym, extern, []))
+        extern = set()
+        line.append((self.c_dst, sym, extern, []))
 
 def lst_main(self, line, lst, tab):
     for argv in lst:
@@ -792,10 +775,12 @@ def lst_main(self, line, lst, tab):
                     self.c_addr += n
                 else:
                     if t == "str":
-                        line[-1][-1].append(tab + start + "\"" + "".join([
-                            (lambda x: chr(x) if x > 0 else "")(ultra.ub())
-                            for _ in range(n)
-                        ]) + "\"" + end)
+                        line[-1][-1].append(tab + start + ultra.fmt_str(
+                            "".join([
+                                (lambda x: chr(x) if x > 0 else "")(ultra.ub())
+                                for _ in range(n)
+                            ])
+                        ) + end)
                     else:
                         r, f = t
                         if r:
@@ -812,3 +797,17 @@ def s_data(self, argv):
     line = []
     lst_main(self, line, lst, "")
     fmt(self, line)
+
+def s_bss(self, argv):
+    start, end, data, src = argv
+    init(self, start, data)
+    f = self.file[-1][1]
+    last = None
+    while self.c_addr < end:
+        self.c_push()
+        sym = table.sym_addr(self, src, self.c_dst, True)
+        if sym != None:
+            f.append(sym.fmt(
+                "/* 0x%08X */ " % self.c_dst if ultra.COMM_VAR else "", ";"
+            ) + "\n")
+        self.c_addr += 1

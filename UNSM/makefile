@@ -2,117 +2,97 @@ VERSION ?= E0
 BUILD   := build/$(VERSION)
 
 MAIN_OBJ := \
-	$(BUILD)/src/main.o             \
-	$(BUILD)/src/app.o              \
-	$(BUILD)/src/audio.o            \
-	$(BUILD)/src/game.o             \
-	$(BUILD)/src/player_touch.o     \
-	$(BUILD)/src/player.o           \
-	$(BUILD)/src/player_move.o      \
-	$(BUILD)/src/player_demo.o      \
-	$(BUILD)/src/player_hang.o      \
-	$(BUILD)/src/player_stop.o      \
-	$(BUILD)/src/player_ground.o    \
-	$(BUILD)/src/player_air.o       \
-	$(BUILD)/src/player_water.o     \
-	$(BUILD)/src/player_grab.o      \
-	$(BUILD)/src/player_gfx.o       \
-	$(BUILD)/src/memory.o           \
-	$(BUILD)/src/save.o             \
-	$(BUILD)/src/world.o            \
-	$(BUILD)/src/g_draw.o           \
-	$(BUILD)/src/time.o             \
+	$(BUILD)/src/main.o             $(BUILD)/src/main.data.o            \
+	$(BUILD)/src/app.o              $(BUILD)/src/app.data.o             \
+	$(BUILD)/src/audio.o            $(BUILD)/src/audio.data.o           \
+	$(BUILD)/src/game.o             $(BUILD)/src/game.data.o            \
+	$(BUILD)/src/player_touch.o     $(BUILD)/src/player_touch.data.o    \
+	$(BUILD)/src/player.o           $(BUILD)/src/player.data.o          \
+	$(BUILD)/src/player_move.o      $(BUILD)/src/player_move.data.o     \
+	$(BUILD)/src/player_demo.o      $(BUILD)/src/player_demo.data.o     \
+	$(BUILD)/src/player_hang.o      $(BUILD)/src/player_hang.data.o     \
+	$(BUILD)/src/player_stop.o      $(BUILD)/src/player_stop.data.o     \
+	$(BUILD)/src/player_ground.o    $(BUILD)/src/player_ground.data.o   \
+	$(BUILD)/src/player_air.o       $(BUILD)/src/player_air.data.o      \
+	$(BUILD)/src/player_water.o     $(BUILD)/src/player_water.data.o    \
+	$(BUILD)/src/player_grab.o      $(BUILD)/src/player_grab.data.o     \
+	$(BUILD)/src/player_gfx.o       $(BUILD)/src/player_gfx.data.o      \
+	$(BUILD)/src/mem.o              $(BUILD)/src/mem.data.o             \
+	$(BUILD)/src/save.o             $(BUILD)/src/save.data.o            \
+	$(BUILD)/src/world.o            $(BUILD)/src/world.data.o           \
+	$(BUILD)/src/g_draw.o           $(BUILD)/src/g_draw.data.o          \
+	$(BUILD)/src/time.o             $(BUILD)/src/time.data.o            \
 	$(BUILD)/src/szp.o              \
-	$(BUILD)/src/camera.o           \
+	$(BUILD)/src/camera.o           $(BUILD)/src/camera.data.o          \
 	$(BUILD)/src/course.o           \
-	$(BUILD)/src/object_update.o    \
-	$(BUILD)/src/object.o           \
-	$(BUILD)/src/object_state_a.o   \
-	$(BUILD)/src/object_move.o      \
-	$(BUILD)/src/object_touch.o     \
-	$(BUILD)/src/object_list.o      \
-	$(BUILD)/src/object_sfx.o       \
-	$(BUILD)/src/coin.o             \
-	$(BUILD)/src/door.o             \
-	$(BUILD)/src/object_debug.o     \
-	$(BUILD)/src/wipe.o             \
-	$(BUILD)/src/shadow.o           \
-	$(BUILD)/src/background.o       \
-	$(BUILD)/src/scroll.o           \
-	$(BUILD)/src/object_gfx.o       \
-	$(BUILD)/src/ripple.o           \
-	$(BUILD)/src/print.o            \
-	$(BUILD)/src/message.o          \
-	$(BUILD)/src/particle_snow.o    \
-	$(BUILD)/src/particle_lava.o    \
-	$(BUILD)/src/obj_data.o         \
-	$(BUILD)/src/hud.o              \
-	$(BUILD)/src/object_state_b.o   \
-	$(BUILD)/src/object_state_c.o   \
-	$(BUILD)/src/data.o             \
-	$(BUILD)/src/audio/a.o          \
-	$(BUILD)/src/audio/b.o          \
-	$(BUILD)/src/audio/c.o          \
-	$(BUILD)/src/audio/d.o          \
-	$(BUILD)/src/audio/e.o          \
-	$(BUILD)/src/audio/f.o          \
-	$(BUILD)/src/audio/g.o          \
-	$(BUILD)/src/audio/data.o
+	$(BUILD)/src/object.o           $(BUILD)/src/object.data.o          \
+	$(BUILD)/src/object_lib.o       $(BUILD)/src/object_lib.data.o      \
+	$(BUILD)/src/object_a.o         $(BUILD)/src/object_a.data.o        \
+	$(BUILD)/src/object_move.o      $(BUILD)/src/object_move.data.o     \
+	$(BUILD)/src/object_touch.o     $(BUILD)/src/object_touch.data.o    \
+	$(BUILD)/src/object_list.o      $(BUILD)/src/object_list.data.o     \
+	$(BUILD)/src/object_sfx.o       $(BUILD)/src/object_sfx.data.o      \
+	$(BUILD)/src/object_debug.o     $(BUILD)/src/object_debug.data.o    \
+	$(BUILD)/src/wipe.o             $(BUILD)/src/wipe.data.o            \
+	$(BUILD)/src/shadow.o           $(BUILD)/src/shadow.data.o          \
+	$(BUILD)/src/background.o       $(BUILD)/src/background.data.o      \
+	$(BUILD)/src/scroll.o           $(BUILD)/src/scroll.data.o          \
+	$(BUILD)/src/object_gfx.o       $(BUILD)/src/object_gfx.data.o      \
+	$(BUILD)/src/ripple.o           $(BUILD)/src/ripple.data.o          \
+	$(BUILD)/src/print.o            $(BUILD)/src/print.data.o           \
+	$(BUILD)/src/message.o          $(BUILD)/src/message.data.o         \
+	$(BUILD)/src/particle_snow.o    $(BUILD)/src/particle_snow.data.o   \
+	$(BUILD)/src/particle_lava.o    $(BUILD)/src/particle_lava.data.o   \
+	$(BUILD)/src/obj_data.o         $(BUILD)/src/obj_data.data.o        \
+	$(BUILD)/src/hud.o              $(BUILD)/src/hud.data.o             \
+	$(BUILD)/src/object_b.o         $(BUILD)/src/object_b.data.o        \
+	$(BUILD)/src/object_c.o         $(BUILD)/src/object_c.data.o
 
 MAIN2_OBJ := \
-	$(BUILD)/src/math.o             \
-	$(BUILD)/src/g.o                \
-	$(BUILD)/src/g_script.o         \
-	$(BUILD)/src/s_script.o         \
-	$(BUILD)/src/map.o              \
-	$(BUILD)/src/map_data.o         \
-	$(BUILD)/src/o_script.o         \
-	$(BUILD)/src/math.data.o        \
+	$(BUILD)/src/math.o             $(BUILD)/src/math.data.o            \
 	$(BUILD)/src/math_table.o       \
-	$(BUILD)/src/g_script.data.o    \
-	$(BUILD)/src/s_script.data.o    \
-	$(BUILD)/src/o_script.data.o    \
-	$(BUILD)/src/map.data.o         \
-	$(BUILD)/src/map_data.data.o    \
-	$(BUILD)/src/main2.data.o
+	$(BUILD)/src/g.o                \
+	$(BUILD)/src/g_script.o         $(BUILD)/src/g_script.data.o        \
+	$(BUILD)/src/s_script.o         $(BUILD)/src/s_script.data.o        \
+	$(BUILD)/src/map.o              $(BUILD)/src/map.data.o             \
+	$(BUILD)/src/map_data.o         $(BUILD)/src/map_data.data.o        \
+	$(BUILD)/src/o_script.o         $(BUILD)/src/o_script.data.o
 
-MENU_OBJ := \
-	$(BUILD)/src/title.o            \
-	$(BUILD)/src/title.data.o       \
-	$(BUILD)/src/title_bg.o         \
-	$(BUILD)/src/title_bg.data.o    \
-	$(BUILD)/src/file_select.o      \
-	$(BUILD)/src/file_select.data.o \
-	$(BUILD)/src/star_select.o      \
-	$(BUILD)/src/star_select.data.o \
-	$(BUILD)/src/menu.data.o
+AUDIO_OBJ := \
+	$(BUILD)/src/audio/a.o          $(BUILD)/src/audio/a.data.o         \
+	$(BUILD)/src/audio/b.o          $(BUILD)/src/audio/b.data.o         \
+	$(BUILD)/src/audio/c.o          \
+	$(BUILD)/src/audio/d.o          $(BUILD)/src/audio/d.data.o         \
+	$(BUILD)/src/audio/e.o          $(BUILD)/src/audio/e.data.o         \
+	$(BUILD)/src/audio/f.o          $(BUILD)/src/audio/f.data.o         \
+	$(BUILD)/src/audio/g.o          $(BUILD)/src/audio/g.data.o         \
+	$(BUILD)/src/audio/data.o
 
 FACE_OBJ := \
-	$(BUILD)/src/face/main.o        \
-	$(BUILD)/src/face/mem.o         \
+	$(BUILD)/src/face/main.o        $(BUILD)/src/face/main.data.o       \
+	$(BUILD)/src/face/mem.o         $(BUILD)/src/face/mem.data.o        \
 	$(BUILD)/src/face/sfx.o         \
-	$(BUILD)/src/face/draw.o        \
-	$(BUILD)/src/face/object.o      \
-	$(BUILD)/src/face/skin.o        \
-	$(BUILD)/src/face/particle.o    \
-	$(BUILD)/src/face/dynlist.o     \
-	$(BUILD)/src/face/gadget.o      \
-	$(BUILD)/src/face/stdio.o       \
-	$(BUILD)/src/face/joint.o       \
-	$(BUILD)/src/face/net.o         \
-	$(BUILD)/src/face/math.o        \
-	$(BUILD)/src/face/shape.o       \
-	$(BUILD)/src/face/gfx.o         \
+	$(BUILD)/src/face/draw.o        $(BUILD)/src/face/draw.data.o       \
+	$(BUILD)/src/face/object.o      $(BUILD)/src/face/object.data.o     \
+	$(BUILD)/src/face/skin.o        $(BUILD)/src/face/skin.data.o       \
+	$(BUILD)/src/face/particle.o    $(BUILD)/src/face/particle.data.o   \
+	$(BUILD)/src/face/dynlist.o     $(BUILD)/src/face/dynlist.data.o    \
+	$(BUILD)/src/face/gadget.o      $(BUILD)/src/face/gadget.data.o     \
+	$(BUILD)/src/face/stdio.o       $(BUILD)/src/face/stdio.data.o      \
+	$(BUILD)/src/face/joint.o       $(BUILD)/src/face/joint.data.o      \
+	$(BUILD)/src/face/net.o         $(BUILD)/src/face/net.data.o        \
+	$(BUILD)/src/face/math.o        $(BUILD)/src/face/math.data.o       \
+	$(BUILD)/src/face/shape.o       $(BUILD)/src/face/shape.data.o      \
+	$(BUILD)/src/face/gfx.o         $(BUILD)/src/face/gfx.data.o        \
 	$(BUILD)/src/face/data.o
 
-CODE_OBJ := \
-	$(BUILD)/src/header.o   \
-	$(BUILD)/src/main.ld.o  \
-	$(BUILD)/src/main2.ld.o \
-	$(MENU_OBJ)             \
-	$(BUILD)/src/face.ld.o
+SRC_OBJ := $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)
 
-SRC_OBJ := $(MAIN_OBJ) $(MAIN2_OBJ) $(MENU_OBJ) $(FACE_OBJ)
+ULTRA   := ultra
+EXE     := exe
+
+OBJ != make -C $(ULTRA)
+OBJ != make -C $(EXE)
 
 CC      := mips-linux-gnu-gcc
 LD      := mips-linux-gnu-ld
@@ -123,46 +103,54 @@ CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
 CC      += -fno-toplevel-reorder -G 0
 
-FLAG    := -I ultra/include -I include -I . -D BUILD=$(BUILD) -D _$(VERSION)
+FLAG    := -I $(ULTRA)/include -I include -I . -D BUILD=$(BUILD) -D _$(VERSION)
 CC      += $(FLAG) -Wall -Wextra -Wpedantic -O2
-CPP     += $(FLAG)
+CPP     += $(FLAG) -D ULTRA=$(ULTRA)
 
-OBJ := $(shell $(CPP) -P -o - make/obj.mk | tr "\n" " ")
+OBJ := $(filter $(BUILD)/%, $(sort \
+	$(shell $(CPP) -P -o - make/obj.mk | tr "\n" " ")))
 
-$(BUILD)/app.z64: $(BUILD)/app.elf | exe/build
+$(BUILD)/app.z64: $(BUILD)/app.elf
 	$(OBJCOPY) --pad-to 0x00800000 --gap-fill 0xFF -O binary $< $@
-	exe/build/crc $@
+	$(EXE)/crc $@
 
 $(BUILD)/app.elf: $(BUILD)/make/main.ld $(CODE_OBJ) $(OBJ)
 	$(LD) --accept-unknown-input-arch -Map $(@:.elf=.map) -o $@ -T $<
 
+include $(addsuffix .d,$(basename $(SRC_OBJ) $(OBJ)))
+
+-include $(BUILD)/make/main.d
+-include $(BUILD)/make/segment.d
 $(BUILD)/make/%: make/% | $(BUILD)/make
 	$(CPP) -MMD -MP -MT $@ -P -o $@ $<
 
-$(BUILD)/src/main.ld.o: $(MAIN_OBJ) | ultra/lib
-	$(LD) --whole-archive -L ultra/lib -r -o $@ $^ -l ultra_rom
+$(BUILD)/src/main.ld.o: $(MAIN_OBJ) $(AUDIO_OBJ)
+	$(LD) --whole-archive -L $(ULTRA)/lib -r -o $@ $^ -l ultra_rom
 
 $(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
 $(BUILD)/src/face.ld.o:  $(FACE_OBJ)
-$(BUILD)/%.ld.o:
+$(BUILD)/src/%.ld.o: | $(BUILD)/src
 	$(LD) -r -o $@ $^
 
+$(BUILD)/src/%.ld.d: | $(BUILD)/src
+	touch $@
+
 include $(BUILD)/make/segment.mk
-$(BUILD)/%.szp.o: %.c make/szp.ld | exe/build
+$(BUILD)/%.szp.o: %.c make/szp.ld
 	$(CC) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $@.o $<
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $@.elf $@.o
 	$(OBJCOPY) -O binary $@.elf $@.bin
 	$(NM) -f posix $@.elf > $@.sym
-	exe/build/szp $@.szp $@.bin $@.sym
+	$(EXE)/szp $@.szp $@.bin $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@.szp.o
 	$(LD) --accept-unknown-input-arch -r -o $@ -R $@.elf $@.szp.o
 
 $(BUILD)/%.szp.d: %.c
 	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/%.szp.o: %.bin | exe/build
+$(BUILD)/%.szp.o: %.bin
 	printf "a D 0 %X\n" $(shell stat --printf="%s" $<) > $@.sym
-	exe/build/szp $@.szp $< $@.sym
+	$(EXE)/szp $@.szp $< $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@
 
 $(BUILD)/%.szp.d: %.bin
@@ -180,48 +168,30 @@ $(BUILD)/%.d: %.c
 $(BUILD)/%.d: %.S
 	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/data/%.o: data/%.bin
-	touch $(@:.o=.d)
-	$(OBJCOPY) -O elf32-tradbigmips -I binary $< $@
+$(BUILD)/%.h: %.png
+	$(EXE)/texture $@ $^
 
-$(BUILD)/data/%.d: data/%.bin
-	touch $@
-
-$(BUILD)/%.h: %.png | exe/build
-	exe/build/texture $@ $^
-
+-include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
 $(BUILD)/%.h: %.ply
-	exe/gfx $@ $<
+	$(EXE)/gfx $@ $<
 
 $(BUILD)/%.h: %.obj
-	exe/map $@ $<
+	$(EXE)/map $@ $<
 
 $(BUILD)/%.h: %.txt
-	exe/msg $@ $<
+	$(EXE)/msg $@ $<
 
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
 	$(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
 BUILD_OBJ := $(call obj,*.c *.S *.bin *.png *.ply *.obj *.txt)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
-$(BUILD)/make $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
+$(BUILD)/make $(BUILD)/src $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@
 
-ultra/lib:
-	make -C ultra
-
-exe/build:
-	make -C exe
-
+.PHONY: clean
 clean:
 	rm -rf build
 
 print-%:
 	$(info $* = $(flavor $*): [$($*)]) @true
-
--include $(BUILD)/make/main.d
--include $(BUILD)/make/segment.d
-include $(addsuffix .d,$(basename $(SRC_OBJ) $(OBJ)))
--include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
-
-.PHONY: clean

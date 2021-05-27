@@ -8,8 +8,7 @@ LD      := $(CC65)/bin/ld65
 FLAG    := -D _$(VERSION) -I $(BUILD) -I include
 AS      += --cpu 65816 --feature c_comments -U -s $(FLAG)
 
-CRC     := build/exe/crc
-EXE     := $(CRC)
+EXE     := exe
 
 OBJ := \
 	$(BUILD)/src/code.o     \
@@ -17,25 +16,27 @@ OBJ := \
 	$(BUILD)/src/code_01.o  \
 	$(BUILD)/src/bank.o
 
-BUILD_DIR   := $(sort $(dir $(OBJ)))
+$(BUILD)/app.sfc: make/main.ld $(OBJ)
+	$(LD) -m $(@:.sfc=.map) -o $@ -C $^
+	$(EXE)/crc $@
 
-$(BUILD)/app.sfc: make/main.ld $(OBJ) $(CRC)
-	$(LD) -m $(@:.sfc=.map) -o $@ -C $< $(OBJ)
-	$(CRC) $@
+-include $(OBJ:.o=.d)
 
 $(BUILD)/%.o: %.s | $(BUILD_DIR)
 	$(AS) -o $@ $<
 
-build/exe/%: CC := cc -Wall -Wextra -Wpedantic -O2
-build/exe/%: exe/%.c | build/exe
-	$(CC) -MMD -MP -MF $@.d -o $@ $< $(LIB)
-
-build/exe $(BUILD_DIR):
+dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
+	$(filter $(subst *,%,$2),$d))
+obj = $(call dirs,src/,$1)
+BUILD_OBJ := $(call obj,*.s)
+$(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
+$(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@
 
+.PHONY: clean
 clean:
 	rm -rf build
 
--include $(addsuffix .d,$(EXE))
--include $(OBJ:.o=.d)
-.PHONY: clean
+$(BUILD)/app.sfc: | exe/crc
+exe/crc:
+	make -C exe

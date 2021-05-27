@@ -1,24 +1,32 @@
 import struct
 
+import main
 import table
 import ultra
 import UNSM
+
+def d_prg_prc():
+    src = ultra.uw()
+    siz = ultra.uh()+1
+    dst = ultra.uh()
+    return ".dw 0x%08X :: .dh 0x%04X-1, 0x%04X" % (src, siz, dst)
+d_prg = ["", d_prg_prc]
 
 segment_table = {
     0x02: "MAIN",
     0x03: "ENTITY",
     0x04: "PLAYER",
-    0x05: "OBJECTA",
-    0x06: "OBJECTB",
+    0x05: "GFXA",
+    0x06: "GFXB",
     0x07: "STAGE",
-    0x08: "OBJECTC",
+    0x08: "GFXC",
     0x09: "TEXTURE",
     0x0A: "BACKGROUND",
     0x0B: "PARTICLE",
-    0x0C: "OBJECTA",
-    0x0D: "OBJECTB",
+    0x0C: "GFXA",
+    0x0D: "GFXB",
     0x0E: "STAGE",
-    0x0F: "OBJECTC",
+    0x0F: "GFXC",
     0x13: "OBJECT",
     0x14: "MENU",
     0x15: "GAME",
@@ -27,7 +35,6 @@ segment_table = {
 }
 
 def chk_seg(sym, s):
-    # print(sym)
     if s != None and not sym.startswith(s+"_"):
         return True
     return not sym.endswith("_start")
@@ -110,13 +117,13 @@ def ss_mdata(argv):
             raise RuntimeError("UNSM.asm.ss_mdata(): bad dst")
     start = ultra.uw()
     end   = ultra.uw()
-    dev = ultra.script.addr + start
+    dev   = ultra.script.addr + start
     start = ultra.sym(start, dev)
     if chk_seg(start, s):
         raise RuntimeError("UNSM.asm.ss_mdata(): bad seg")
     name = start[:-6]
     if s != None:
-        seg  = segment_table[seg]
+        seg  = "MENU" if "menu" in start else segment_table[seg]
         name = name[len(s)+1:]
         return (None, seg, name)
     return (None, name)
@@ -234,7 +241,7 @@ def ss_wipe(argv):
 
 # 34
 def ss_bool(argv):
-    x = ("false", "true")[ultra.ub()]
+    x = UNSM.fmt_bool[ultra.ub()]
     ultra.script.c_addr += 1
     return (None, x)
 
@@ -562,9 +569,9 @@ def so_mdd(argv):
 
 # 1B
 def so_gfx(argv):
-    mem = um()
-    g   = UNSM.fmt_g(ultra.uh())
-    return (None, mem, g)
+    ultra.script.c_addr += 1
+    g = UNSM.fmt_g(ultra.uh())
+    return (None, g)
 
 # 1C 29 2C
 def so_object(argv):
@@ -610,8 +617,6 @@ def so_mp(argv):
     return (None, mem, script)
 
 # 28
-# [MM] 0000
-# so_motion
 def so_motion(argv):
     motion = "0x%02X" % ultra.ub() # T:enum
     ultra.script.c_addr += 2
@@ -812,3 +817,123 @@ def s_script(self, argv):
             tab += 1
         line.append((self.c_dst, ln))
     ultra.asm.fmt(self, line)
+
+def stbl_add(stbl, i, t, s):
+    if i not in stbl:
+        stbl[i] = [t]
+    stbl[i].append(s)
+
+def etbl_add(etbl, i, s):
+    if i not in etbl:
+        etbl[i] = []
+    etbl[i].append(s)
+
+def file_init(self, argv):
+    end, data, name, tbl = argv
+    ultra.asm.init(self, 0, data)
+    cnt = ultra.uw()
+    self.c_addr += 4
+    line = self.file[-1][1]
+    stbl = {}
+    etbl = {}
+    line.append("TABLE(table)\n\ntable_start:\n")
+    for i in range(cnt):
+        s = "%s_%s" % (name, tbl[0][i])
+        line.append("\tFILE(%s)\n" % s)
+        start = ultra.uw()
+        size  = ultra.uw()
+        stbl_add(stbl, start, 0, s)
+        etbl_add(etbl, start+size, s)
+    line.append("table_end:\n\n")
+    return end, name, tbl, cnt, line, stbl, etbl
+
+def file_s(self, line, stbl):
+    self.c_push()
+    if self.c_addr in stbl:
+        label = stbl[self.c_addr]
+        line.append("\n")
+        for s in label[1:]:
+            line.append("%s:\n" % s)
+        return label
+    return None
+
+def file_e(self, line, etbl):
+    if self.c_addr in etbl:
+        for s in etbl[self.c_addr]:
+            line.append("%s_end:\n" % s)
+        return True
+    return False
+
+def s_motion(self, argv):
+    end, name, tbl, cnt, line, stbl, etbl = file_init(self, argv)
+    init = True
+    i = 0
+    while self.c_addr < end:
+        if init:
+            fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".S"
+            line.append("#include \"%s/%s\"\n" % (name, fn))
+            c = [".balign 4\n"]
+        label = file_s(self, c, stbl)
+        if label != None:
+            t = label[0]
+            if t == 0:
+                s = label[-1]
+        init = False
+        # motion
+        if t == 0:
+            m_flag   = ultra.sh()
+            m_height = ultra.sh()
+            m_start  = ultra.sh()
+            m_end    = ultra.sh()
+            m_frame  = ultra.sh()
+            m_joint  = ultra.sh()
+            m_val    = self.c_dst + ultra.uw()
+            m_tbl    = self.c_dst + ultra.uw()
+            m_siz    = self.c_dst + ultra.uw()
+            stbl_add(stbl, m_val, 1, s + "_val")
+            stbl_add(stbl, m_tbl, 2, s + "_tbl")
+            c.append((
+                "\tMOTION(%s, 0x%04X, %d, %d, %d, %d, %d)\n"
+            ) % (s, m_flag, m_height, m_start, m_end, m_frame, m_joint))
+            i += 1
+        # val
+        elif t == 1:
+            c.append("\t.half %s\n" % ", ".join([
+                "0x%04X" % ultra.uh()
+                for _ in range(min(8, (m_siz-self.c_dst)//2))
+            ]))
+            if self.c_addr == m_siz:
+                c.append("\n")
+        # tbl
+        elif t == 2:
+            c.append("\t.half %s\n" % ", ".join([
+                "%5d" % ultra.uh()
+                for _ in range(6)
+            ]))
+        else:
+            raise RuntimeError("bad mode")
+        if file_e(self, c, etbl):
+            data = main.line_prc(c)
+            fn = self.path_join([name, fn])
+            main.mkdir(fn)
+            with open(fn, "w") as fd:
+                fd.write(data)
+            self.c_addr = (self.c_addr+3) & ~3
+            init = True
+
+def s_demo(self, argv):
+    end, name, tbl, cnt, line, stbl, etbl = file_init(self, argv)
+    while self.c_addr < end:
+        if file_s(self, line, stbl) != None:
+            stage = ultra.ub()
+            self.c_addr += 3
+            line.append("\tDEMO(%d)\n" % stage)
+        else:
+            count   = ultra.ub()
+            stick_x = ultra.sb()
+            stick_y = ultra.sb()
+            button  = ultra.ub()
+            line.append("\t.byte %3d, %3d, %3d, 0x%02X\n" % (
+                count, stick_x, stick_y, button
+            ))
+        file_e(self, line, etbl)

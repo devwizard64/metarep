@@ -1,7 +1,7 @@
 #ifndef _SM64_SCRIPT_H_
 #define _SM64_SCRIPT_H_
 
-#include <ultra64.h>
+#include <sm64/types.h>
 
 #ifndef __ASSEMBLER__
 

@@ -36,6 +36,8 @@
     .endif
 .endmacro
 
+.half equ .halfword
+
 SP_SR_H         equ 0x0001  ; halt
 SP_SR_B         equ 0x0002  ; break
 SP_SR_DB        equ 0x0004  ; DMA busy

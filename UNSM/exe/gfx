@@ -75,20 +75,18 @@ def sh(x):
 def sb(x):
     return max(-0x80, min(0x7F, int(round(x))))
 
-gfx_rgba_table = {
-    "x": (lambda v: "%4d" % sb(0x80*v["nx"])),
-    "y": (lambda v: "%4d" % sb(0x80*v["ny"])),
-    "z": (lambda v: "%4d" % sb(0x80*v["nz"])),
-    "r": (lambda v: "0x%02X" % v["red"]),
-    "g": (lambda v: "0x%02X" % v["green"]),
-    "b": (lambda v: "0x%02X" % v["blue"]),
-    "a": (lambda v: "0x%02X" % v["alpha"]),
+gfx_v_table = {
+    "x": (lambda v: "%4d"    % (sb(0x80*v["nx"]) if "nx"     in v else 0)),
+    "y": (lambda v: "%4d"    % (sb(0x80*v["ny"]) if "ny"     in v else 0)),
+    "z": (lambda v: "%4d"    % (sb(0x80*v["nz"]) if "nz"     in v else 0)),
+    "r": (lambda v: "0x%02X" % (v["red"]         if "red"    in v else 0)),
+    "g": (lambda v: "0x%02X" % (v["green"]       if "green"  in v else 0)),
+    "b": (lambda v: "0x%02X" % (v["blue"]        if "blue"   in v else 0)),
+    "a": (lambda v: "0x%02X" % (v["alpha"]       if "alpha"  in v else 0)),
 }
 
-def gfx_rgba(x):
-    if x in gfx_rgba_table:
-        return gfx_rgba_table[x]
-    return lambda v: x
+def gfx_v(x):
+    return gfx_v_table[x] if x in gfx_v_table else lambda v: x
 
 def gfx_write(path, name, ply, ini):
     ss, st, ts, tt = [float(x) for x in ini["t"]]
@@ -116,10 +114,10 @@ def gfx_write(path, name, ply, ini):
                 buf[2].append(v)
         buf[3].append(lst)
     gfx_flush(buf, name, vs)
-    r = gfx_rgba(ini["s"][0])
-    g = gfx_rgba(ini["s"][1])
-    b = gfx_rgba(ini["s"][2])
-    a = gfx_rgba(ini["s"][3])
+    r = gfx_v(ini["s"][0])
+    g = gfx_v(ini["s"][1])
+    b = gfx_v(ini["s"][2])
+    a = gfx_v(ini["s"][3])
     data = ("static const Vtx vtx_%s[] =\n{\n" % name) + "".join([
         "    {{{%6d, %6d, %6d}, 0, {%6d, %6d}, {%s, %s, %s, %s}}},\n" % (
             sh(vtx[v]["x"]),
@@ -151,7 +149,7 @@ def main(argv):
     ini = {
         "v": ["0", "16"],
         "t": ["0", "0", "0", "0"],
-        "s": ["x", "y", "z", "0"],
+        "s": ["x", "y", "z", "a"],
     }
     fn = argv[2].rpartition(".")[0] + ".ini"
     if os.path.isfile(fn):

@@ -1,10 +1,10 @@
 import table
 import hvc
 
-A16     = 0x800
-A8      = 0x400
-I16     = 0x200
-I8      = 0x100
+A16     = 1 << 16
+A8      = 1 << 17
+I16     = 1 << 18
+I8      = 1 << 19
 
 A_Y     = 0x00  # Y
 A_A     = 0x01  # A

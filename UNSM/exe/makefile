@@ -1,17 +1,16 @@
+OBJ     := crc szp texture
+
 CC      := cc -Wall -Wextra -Wpedantic -O2
 
-default: build/crc build/szp build/texture
+.PHONY: default
+default: $(OBJ)
 
-build/texture: texture.c ../lodepng/lodepng.c | build
-	$(CC) -I ../lodepng -o $@ $^
-
-build/%: %.c | build
+%: %.c
 	$(CC) -o $@ $^
 
-build:
-	mkdir -p $@
+texture: texture.c ../lodepng/lodepng.c
+	$(CC) -I ../lodepng -o $@ $^
 
+.PHONY: clean
 clean:
-	rm -rf build __pycache__ *.pyc
-
-.PHONY: default clean
+	rm -rf $(OBJ) __pycache__ *.pyc

@@ -16,21 +16,17 @@ SRC_OBJ := \
 	build/src/osSpTaskYielded.o         \
 	build/src/osStartThread.o           \
 	build/src/osWritebackDCacheAll.o    \
-	build/src/osCreateViManager.o       \
-	build/src/osCreateViManager.data.o  \
+	build/src/osCreateViManager.o       build/src/osCreateViManager.data.o  \
 	build/src/osViSetMode.o             \
 	build/src/osViBlack.o               \
 	build/src/osViSetSpecialFeatures.o  \
-	build/src/osCreatePiManager.o       \
-	build/src/osCreatePiManager.data.o  \
+	build/src/osCreatePiManager.o       build/src/osCreatePiManager.data.o  \
 	build/src/osSetThreadPri.o          \
-	build/src/osInitialize.o            \
-	build/src/osInitialize.data.o       \
+	build/src/osInitialize.o            build/src/osInitialize.data.o       \
 	build/src/osViSwapBuffer.o          \
 	build/src/sqrtf.o                   \
 	build/src/osContReadData.o          \
-	build/src/osContInit.o              \
-	build/src/osContInit.data.o         \
+	build/src/osContInit.o              build/src/osContInit.data.o         \
 	build/src/osEepromProbe.o           \
 	build/src/ll_multdiv.o              \
 	build/src/osInvalDCache.o           \
@@ -41,37 +37,26 @@ SRC_OBJ := \
 	build/src/osEepromLongWrite.o       \
 	build/src/bcopy.o                   \
 	build/src/guOrtho.o                 \
-	build/src/guPerspective.o           \
-	build/src/guPerspective.data.o      \
+	build/src/guPerspective.o           build/src/guPerspective.data.o      \
 	build/src/osGetTime.o               \
-	build/src/ll_cvt.o                  \
-	build/src/ll_cvt.data.o             \
-	build/src/cosf.o                    \
-	build/src/cosf.data.o               \
-	build/src/sinf.o                    \
-	build/src/sinf.data.o               \
+	build/src/ll_cvt.o                  build/src/ll_cvt.data.o             \
+	build/src/cosf.o                    build/src/cosf.data.o               \
+	build/src/sinf.o                    build/src/sinf.data.o               \
 	build/src/guTranslate.o             \
-	build/src/guRotate.o                \
-	build/src/guRotate.data.o           \
+	build/src/guRotate.o                build/src/guRotate.data.o           \
 	build/src/guScale.o                 \
 	build/src/osAiSetFrequency.o        \
 	build/src/alBnkfNew.o               \
 	build/src/osWritebackDCache.o       \
 	build/src/osAiGetLength.o           \
-	build/src/osAiSetNextBuffer.o       \
-	build/src/osAiSetNextBuffer.data.o  \
-	build/src/__osTimerService.o        \
-	build/src/__osTimerService.data.o   \
-	build/src/printf.o                  \
-	build/src/printf.data.o             \
+	build/src/osAiSetNextBuffer.o       build/src/osAiSetNextBuffer.data.o  \
+	build/src/__osTimerService.o        build/src/__osTimerService.data.o   \
+	build/src/printf.o                  build/src/printf.data.o             \
 	build/src/string.o                  \
-	build/src/__osDequeueThread.o       \
-	build/src/__osDequeueThread.data.o  \
+	build/src/__osDequeueThread.o       build/src/__osDequeueThread.data.o  \
 	build/src/__osInterrupt.o           \
-	build/src/__osViInit.o              \
-	build/src/__osViInit.data.o         \
-	build/src/__osException.o           \
-	build/src/__osException.data.o      \
+	build/src/__osViInit.o              build/src/__osViInit.data.o         \
+	build/src/__osException.o           build/src/__osException.data.o      \
 	build/src/__libm_qnan_f.o           \
 	build/src/osVirtualToPhysical.o     \
 	build/src/__osSpSetStatus.o         \
@@ -83,8 +68,7 @@ SRC_OBJ := \
 	build/src/__osViGetCurrentContext.o \
 	build/src/__osViSwapContext.o       \
 	build/src/osGetCount.o              \
-	build/src/__osPiAccess.o            \
-	build/src/__osPiAccess.data.o       \
+	build/src/__osPiAccess.o            build/src/__osPiAccess.data.o       \
 	build/src/osPiRawStartDma.o         \
 	build/src/__osDevMgrMain.o          \
 	build/src/__osSetSR.o               \
@@ -94,8 +78,7 @@ SRC_OBJ := \
 	build/src/__osSiRawWriteIo.o        \
 	build/src/osMapTLBRdb.o             \
 	build/src/osPiRawReadIo.o           \
-	build/src/__osSiAccess.o            \
-	build/src/__osSiAccess.data.o       \
+	build/src/__osSiAccess.o            build/src/__osSiAccess.data.o       \
 	build/src/__osSiRawStartDma.o       \
 	build/src/osSetTimer.o              \
 	build/src/osEepromWrite.o           \
@@ -106,18 +89,13 @@ SRC_OBJ := \
 	build/src/guNormalize.o             \
 	build/src/__osAiDeviceBusy.o        \
 	build/src/__osSetCompare.o          \
-	build/src/_Litob.o                  \
-	build/src/_Litob.data.o             \
-	build/src/_Ldtob.o                  \
-	build/src/_Ldtob.data.o             \
+	build/src/_Litob.o                  build/src/_Litob.data.o             \
+	build/src/_Ldtob.o                  build/src/_Ldtob.data.o             \
 	build/src/osViModeNtscLan1.o        \
 	build/src/osViModePalLan1.o         \
-	build/src/8032A860.o                \
-	build/src/8032A860.data.o           \
-	build/src/__osSyncPutChars.o        \
-	build/src/__osSyncPutChars.data.o   \
-	build/src/osSetIntMask.o            \
-	build/src/osSetIntMask.data.o       \
+	build/src/8032A860.o                build/src/8032A860.data.o           \
+	build/src/__osSyncPutChars.o        build/src/__osSyncPutChars.data.o   \
+	build/src/osSetIntMask.o            build/src/osSetIntMask.data.o       \
 	build/src/osDestroyThread.o         \
 	build/src/__osProbeTLB.o            \
 	build/src/__osSiDeviceBusy.o        \

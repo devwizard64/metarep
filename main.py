@@ -49,14 +49,18 @@ def s_file(self, argv):
         with open(self.file[-1][0], "r") as f:
             self.file[-1][1].append(f.read())
 
-def s_write(self, argv):
-    fn, line = self.file.pop()
+def line_prc(line):
     data = "".join(line)
     while "\n\n\n" in data:
         data = data.replace("\n\n\n", "\n\n")
     data = data.strip("\n").replace("\t", "    ")
     if len(data) > 0:
         data += "\n"
+    return data
+
+def s_write(self, argv):
+    fn, line = self.file.pop()
+    data = line_prc(line)
     mkdir(fn)
     with open(fn, "w") as f:
         f.write(data)
@@ -73,7 +77,7 @@ def s_bin(self, argv):
 def s_str(self, argv):
     self.file[argv[1] if len(argv) > 1 else -1][1].append(argv[0])
 
-class script_t:
+class script:
     def __init__(self, path, name):
         self.meta = importlib.import_module(name)
         self.root = path
@@ -110,7 +114,7 @@ def main(argv):
     if len(argv) != 3:
         print("usage: %s <output> <meta>" % argv[0])
         return 1
-    script_t(argv[1], argv[2]).main()
+    script(argv[1], argv[2]).main()
     return 0
 
 if __name__ == "__main__":

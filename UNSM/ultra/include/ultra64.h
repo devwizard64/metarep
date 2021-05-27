@@ -1,23 +1,6 @@
 #ifndef _ULTRA64_H_
 #define _ULTRA64_H_
 
-#ifndef __ASSEMBLER__
-
-/* types.h */
-#include <stddef.h>
-#include <stdint.h>
-
-typedef  int8_t  s8;
-typedef uint8_t  u8;
-typedef  int16_t s16;
-typedef uint16_t u16;
-typedef  int32_t s32;
-typedef uint32_t u32;
-typedef  int64_t s64;
-typedef uint64_t u64;
-typedef float    f32;
-typedef double   f64;
-
 /* math.h */
 #define M_PI                    3.14159265358979323846
 
@@ -40,41 +23,6 @@ typedef double   f64;
 #define OS_PRIORITY_SIMGR       140
 #define OS_PRIORITY_APPMAX      127
 #define OS_PRIORITY_IDLE        0
-typedef s32 OSPri;
-typedef s32 OSId;
-typedef union {struct {f32 f_odd; f32 f_even;} f; f64 d;} __OSfp;
-typedef struct
-{
-    u64     at, v0, v1, a0, a1, a2, a3;
-    u64 t0, t1, t2, t3, t4, t5, t6, t7;
-    u64 s0, s1, s2, s3, s4, s5, s6, s7;
-    u64 t8, t9,         gp, sp, s8, ra;
-    u64 lo, hi;
-    u32 sr, pc, cause, badvaddr, rcp;
-    u32 fpcsr;
-    __OSfp  fp0,  fp2,  fp4,  fp6,  fp8, fp10, fp12, fp14;
-    __OSfp fp16, fp18, fp20, fp22, fp24, fp26, fp28, fp30;
-}
-__OSThreadContext;
-typedef struct OSThread_s
-{
-    struct OSThread_s  *next;
-    OSPri               priority;
-    struct OSThread_s **queue;
-    struct OSThread_s  *tlnext;
-    u16                 state;
-    u16                 flags;
-    OSId                id;
-    s32                 fp;
-    __OSThreadContext   context;
-}
-OSThread;
-typedef struct
-{
-    struct OSThread_s  *next;
-    OSPri               priority;
-}
-__OSThreadTail;
 
 /* os_message.h */
 #define OS_EVENT_SW1            0x00
@@ -95,21 +43,6 @@ __OSThreadTail;
 #define OS_NUM_EVENTS           0x0F
 #define OS_MESG_NOBLOCK         0x00
 #define OS_MESG_BLOCK           0x01
-#define MQ_GET_COUNT(mq)        ((mq)->validCount)
-#define MQ_IS_EMPTY(mq)         (MQ_GET_COUNT(mq) == 0)
-#define MQ_IS_FULL(mq)          (MQ_GET_COUNT(mq) >= (mq)->msgCount)
-typedef u32 OSEvent;
-typedef void *OSMesg;
-typedef struct OSMesgQueue_s
-{
-    OSThread           *mtqueue;
-    OSThread           *fullqueue;
-    s32                 validCount;
-    s32                 first;
-    s32                 msgCount;
-    OSMesg             *msg;
-}
-OSMesgQueue;
 
 /* os_exception.h */
 #define OS_FLAG_CPU_BREAK       0x0001
@@ -132,8 +65,6 @@ OSMesgQueue;
 #define OS_IM_ALL               0x003FFF01
 #define RCP_IMASK               0x003F0000
 #define RCP_IMASKSHIFT          16
-typedef u32 OSIntMask;
-typedef u32 OSHWIntr;
 
 /* os_tlb.h */
 #define OS_PM_4K        0x0000000
@@ -143,7 +74,6 @@ typedef u32 OSHWIntr;
 #define OS_PM_1M        0x01FE000
 #define OS_PM_4M        0x07FE000
 #define OS_PM_16M       0x1FFE000
-typedef u32 OSPageMask;
 
 /* os_pi.h */
 #define OS_READ                 0x00
@@ -160,23 +90,6 @@ typedef u32 OSPageMask;
 #define OS_MESG_PRI_HIGH        0x01
 #define PI_DOMAIN1              0x00
 #define PI_DOMAIN2              0x01
-typedef struct
-{
-    u16                 type;
-    u8                  pri;
-    u8                  status;
-    OSMesgQueue        *retQueue;
-}
-OSIoMesgHdr;
-typedef struct
-{
-    OSIoMesgHdr         hdr;
-    void               *dramAddr;
-    u32                 devAddr;
-    u32                 size;
-    void               *piHandle;
-}
-OSIoMesg;
 
 /* os_vi.h */
 #define OS_VI_NTSC_LPN1         0x00
@@ -227,48 +140,6 @@ OSIoMesg;
 #define OS_VI_BIT_HIRES                 0x0200
 #define OS_VI_BIT_NTSC                  0x0400
 #define OS_VI_BIT_PAL                   0x0800
-typedef struct
-{
-    u32                 ctrl;
-    u32                 width;
-    u32                 burst;
-    u32                 vSync;
-    u32                 hSync;
-    u32                 leap;
-    u32                 hStart;
-    u32                 xScale;
-    u32                 vCurrent;
-}
-OSViCommonRegs;
-typedef struct
-{
-    u32                 origin;
-    u32                 yScale;
-    u32                 vStart;
-    u32                 vBurst;
-    u32                 vIntr;
-}
-OSViFieldRegs;
-typedef struct
-{
-    u8                  type;
-    OSViCommonRegs      comRegs;
-    OSViFieldRegs       fldRegs[2];
-}
-OSViMode;
-
-/* os_time.h */
-typedef u64 OSTime;
-typedef struct OSTimer_s
-{
-    struct OSTimer_s   *next;
-    struct OSTimer_s   *prev;
-    OSTime              interval;
-    OSTime              value;
-    OSMesgQueue        *mq;
-    OSMesg              msg;
-}
-OSTimer;
 
 /* os_cont.h */
 #define MAXCONTROLLERS          4
@@ -319,6 +190,168 @@ OSTimer;
 #define CONT_ERR_INVALID        0x05
 #define CONT_ERR_DEVICE         0x0B
 #define CONT_ERR_NOT_READY      0x0C
+
+/* os_system.h */
+#define OS_TV_PAL               0
+#define OS_TV_NTSC              1
+#define OS_TV_MPAL              2
+#define OS_APP_NMI_BUFSIZE      64
+
+/* sptask.h */
+#define OS_YIELD_DATA_SIZE      0x900
+#define OS_YIELD_AUDIO_SIZE     0x400
+
+/* mbi.h */
+#define M_GFXTASK               1
+#define M_AUDTASK               2
+
+/* ucode.h */
+#define SP_DRAM_STACK_SIZE8     0x0400
+#define SP_DRAM_STACK_SIZE64    0x0080
+#define SP_UCODE_SIZE           0x1000
+#define SP_UCODE_DATA_SIZE      0x0800
+
+#ifndef __ASSEMBLER__
+
+/* types.h */
+#include <stddef.h>
+#include <stdint.h>
+
+typedef  int8_t  s8;
+typedef uint8_t  u8;
+typedef  int16_t s16;
+typedef uint16_t u16;
+typedef  int32_t s32;
+typedef uint32_t u32;
+typedef  int64_t s64;
+typedef uint64_t u64;
+typedef float    f32;
+typedef double   f64;
+
+/* os_thread.h */
+typedef s32 OSPri;
+typedef s32 OSId;
+typedef union {struct {f32 f_odd; f32 f_even;} f; f64 d;} __OSfp;
+typedef struct
+{
+    u64     at, v0, v1, a0, a1, a2, a3;
+    u64 t0, t1, t2, t3, t4, t5, t6, t7;
+    u64 s0, s1, s2, s3, s4, s5, s6, s7;
+    u64 t8, t9,         gp, sp, s8, ra;
+    u64 lo, hi;
+    u32 sr, pc, cause, badvaddr, rcp;
+    u32 fpcsr;
+    __OSfp  fp0,  fp2,  fp4,  fp6,  fp8, fp10, fp12, fp14;
+    __OSfp fp16, fp18, fp20, fp22, fp24, fp26, fp28, fp30;
+}
+__OSThreadContext;
+typedef struct OSThread_s
+{
+    struct OSThread_s  *next;
+    OSPri               priority;
+    struct OSThread_s **queue;
+    struct OSThread_s  *tlnext;
+    u16                 state;
+    u16                 flags;
+    OSId                id;
+    s32                 fp;
+    __OSThreadContext   context;
+}
+OSThread;
+typedef struct
+{
+    struct OSThread_s  *next;
+    OSPri               priority;
+}
+__OSThreadTail;
+
+/* os_message.h */
+#define MQ_GET_COUNT(mq)        ((mq)->validCount)
+#define MQ_IS_EMPTY(mq)         (MQ_GET_COUNT(mq) == 0)
+#define MQ_IS_FULL(mq)          (MQ_GET_COUNT(mq) >= (mq)->msgCount)
+typedef u32 OSEvent;
+typedef void *OSMesg;
+typedef struct OSMesgQueue_s
+{
+    OSThread           *mtqueue;
+    OSThread           *fullqueue;
+    s32                 validCount;
+    s32                 first;
+    s32                 msgCount;
+    OSMesg             *msg;
+}
+OSMesgQueue;
+
+/* os_exception.h */
+typedef u32 OSIntMask;
+typedef u32 OSHWIntr;
+
+/* os_tlb.h */
+typedef u32 OSPageMask;
+
+/* os_pi.h */
+typedef struct
+{
+    u16                 type;
+    u8                  pri;
+    u8                  status;
+    OSMesgQueue        *retQueue;
+}
+OSIoMesgHdr;
+typedef struct
+{
+    OSIoMesgHdr         hdr;
+    void               *dramAddr;
+    u32                 devAddr;
+    u32                 size;
+}
+OSIoMesg;
+
+/* os_vi.h */
+typedef struct
+{
+    u32                 ctrl;
+    u32                 width;
+    u32                 burst;
+    u32                 vSync;
+    u32                 hSync;
+    u32                 leap;
+    u32                 hStart;
+    u32                 xScale;
+    u32                 vCurrent;
+}
+OSViCommonRegs;
+typedef struct
+{
+    u32                 origin;
+    u32                 yScale;
+    u32                 vStart;
+    u32                 vBurst;
+    u32                 vIntr;
+}
+OSViFieldRegs;
+typedef struct
+{
+    u8                  type;
+    OSViCommonRegs      comRegs;
+    OSViFieldRegs       fldRegs[2];
+}
+OSViMode;
+
+/* os_time.h */
+typedef u64 OSTime;
+typedef struct OSTimer_s
+{
+    struct OSTimer_s   *next;
+    struct OSTimer_s   *prev;
+    OSTime              interval;
+    OSTime              value;
+    OSMesgQueue        *mq;
+    OSMesg              msg;
+}
+OSTimer;
+
+/* os_cont.h */
 typedef struct
 {
     u16                 type;
@@ -335,19 +368,11 @@ typedef struct
 }
 OSContPad;
 
-/* os_system.h */
-#define OS_TV_PAL               0
-#define OS_TV_NTSC              1
-#define OS_TV_MPAL              2
-#define OS_APP_NMI_BUFSIZE      64
-
 /* os_convert.h */
 #define OS_K0_TO_PHYSICAL(x)    (u32)(((char *)(x)-0x80000000))
 #define OS_PHYSICAL_TO_K0(x)    (void *)(((u32)(x)+0x80000000))
 
 /* sptask.h */
-#define OS_YIELD_DATA_SIZE      0x900
-#define OS_YIELD_AUDIO_SIZE     0x400
 #define osSpTaskStart(tp)                                                      \
 {                                                                              \
     osSpTaskLoad((tp));                                                        \
@@ -382,35 +407,25 @@ OSTask;
 typedef u32 OSYieldResult;
 
 /* mbi.h */
-#define M_GFXTASK               1
-#define M_AUDTASK               2
 #define _SHIFTL(v, s, w)        ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
 #define _SHIFTR(v, s, w)        ((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
 #define G_OFF                   0x00
 #define G_ON                    0x01
 #include <gbi.h>
 
-/* libaudio.h */
-
-/* ucode.h */
-#define SP_DRAM_STACK_SIZE8     0x0400
-#define SP_DRAM_STACK_SIZE64    0x0080
-#define SP_UCODE_SIZE           0x1000
-#define SP_UCODE_DATA_SIZE      0x0800
-
 typedef struct
 {
     u16 _00;
     u16 _02;
     void *_04;
-    void *_08;
+    OSViMode *_08;
     u32 _0C;
-    void *_10;
-    void *_14;
-    u32 _18;
-    u32 _1C;
+    OSMesgQueue *_10;
+    OSMesg *_14;
+    f32 _18;
+    u16 _1C;
     u32 _20;
-    u32 _24;
+    f32 _24;
     u16 _28;
     u32 _2C;
 }

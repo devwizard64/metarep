@@ -2,6 +2,7 @@
 #define _SM64_SCRIPT_O_H_
 
 #include <sm64/script.h>
+#include <sm64/g_script.h>
 
 #define O_T_PLAYER              0x00
 #define O_T_0x01                0x01
@@ -159,8 +160,8 @@
 /* 0x18 */
 /* 0x19 */
 /* 0x1A */
-#define o_gfx(mem, gfx)                         \
-    _C(0x1B, O_M_##mem, gfx)
+#define o_gfx(gfx)                              \
+    _C(0x1B, 0, gfx)
 #define o_object(gfx, script)                   \
     _C(0x1C, 0, 0);                             \
     _W(gfx);                                    \

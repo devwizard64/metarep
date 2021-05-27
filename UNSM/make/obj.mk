@@ -1,5 +1,8 @@
-#define CODE(addr, name, code, bss)
-#define FILE(addr, name, fn) BUILD/data/fn.o
-#define SCRIPT(addr, name) BUILD/data/stage/name/s.o BUILD/data/stage/name/g.o
-#define SZP(name, fn) BUILD/data/fn.szp.o
+#define ASSERT(exp, message)
+#define TEXT(fn)    fn
+#define DATA(fn)    fn
+#define BSS(fn)     fn
+#define SECTION(addr, name, section) section
+#define CODE(addr, name, code, bss) code bss
+#define BUFFER(addr, name, bss) bss
 #include "main.h"

@@ -1,7 +1,6 @@
 import struct
 
 import table
-import hvc.asm
 
 script = None
 
@@ -77,3 +76,5 @@ def init(self, start, data):
     global script
     script = self
     script.c_init(start, data)
+
+import hvc.asm

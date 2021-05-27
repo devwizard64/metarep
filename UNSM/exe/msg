@@ -11,6 +11,18 @@ def list_rstrip(l, v):
         x.pop(-1)
     return x
 
+def list_split(l, v):
+    x = l + [v]
+    n = []
+    while v in x:
+        i = x.index(v)
+        n.append(x[:i])
+        x = x[i+1:]
+    return n
+
+def fmt_str(lst):
+    return ", ".join(["0x%02X" % x for x in lst+[0xFF]])
+
 def main(argv):
     if len(argv) != 3:
         print("usage: %s <output> <input>\n" % argv[0])
@@ -19,6 +31,7 @@ def main(argv):
         data = f.read()
     path = argv[1].rpartition(".")[0]
     name = path.rpartition(os.path.sep)[-1]
+    const = ""
     ltbl = None
     ctbl = []
     stbl = []
@@ -29,20 +42,26 @@ def main(argv):
             cmd, _, arg = line[1:].partition(":")
             cmd = cmd.strip()
             arg = [x.strip() for x in arg.split(";")]
-            if cmd == "lang":
+            if cmd == "const":
+                const = "const "
+            elif cmd == "lang":
                 ltbl = lang.table[arg[0]]
             else:
+                m = False
                 if cmd == "str":
                     label = arg[0]
                     t = arg[1]+" " if len(arg) > 1 else ""
+                elif cmd == "multi":
+                    label = arg[0]
+                    t = (int(arg[1]), arg[2]+" " if len(arg) > 2 else "")
                 elif cmd == "tbl":
                     label = "%s_%d" % (name, len(stbl))
-                    t = "const "
+                    t = "static "
                     stbl.append(label)
                     etbl.append(arg)
                 elif cmd == "msg":
                     label = "%s_%d" % (name, len(mtbl))
-                    t = "const "
+                    t = "static "
                     mtbl.append((label, arg[0]))
                     etbl.append(arg[1:])
                 else:
@@ -63,34 +82,45 @@ def main(argv):
                 raise RuntimeError("illegal character %d:%d:'%s'" % (
                     ln+1, i, s[i]
                 ))
-    data = "".join([
-        "%su8 str_%s[] = {%s};\n" % (t, label, ", ".join([
-            "0x%02X" % x for x in list_rstrip(lst, 0xFE) + [0xFF]
-        ]))
-        for label, t, lst in ctbl
-    ])
+    data = ""
+    for label, t, lst in ctbl:
+        if type(t) == tuple:
+            data += "%s%s u8 str_%s[][%s] =\n{\n%s};\n" % (
+                t[1], const, label, t[0], "".join([
+                    "    {%s},\n" % fmt_str(lst)
+                    for lst in list_split(list_rstrip(lst, 0xFE), 0xFE)
+                ])
+            )
+        else:
+            data +=  "%s%s u8 str_%s[] = {%s};\n" % (
+                t, const, label, fmt_str(list_rstrip(lst, 0xFE))
+            )
     if len(stbl) > 0:
-        data += ("\nconst u8 *const str_%s[] =\n{\n" % name) + "".join([
+        data += ("\n%su8 *%sstr_%s[] =\n{\n" % (const, const, name)) + "".join([
             "    str_%s,\n" % label for label in stbl
         ]) + "    NULL,\n};\n"
     if len(mtbl) > 0:
         data += "\n" + "".join([
-            "static const struct msg_t msg_%s = {%s, str_%s};\n" % (
-                label, arg, label
+            "static %sstruct msg msg_%s = {%s, str_%s};\n" % (
+                const, label, arg, label
             )
             for label, arg in mtbl
-        ]) + ("\nconst struct msg_t *const msg_%s[] =\n{\n" % name) + "".join([
+        ]) + ("\n%sstruct msg *%smsg_%s[] =\n{\n" % (
+            const, const, name
+        )) + "".join([
             "    &msg_%s,\n" % label for label, arg in mtbl
         ]) + "    NULL,\n};\n"
     with open(path + ".h", "w") as f:
         f.write(data)
     line = []
+    s = "0"
     i = 0
     for arg in etbl:
         if len(arg) > 0 and arg[0] != "":
             if len(arg) > 1 and arg[1] != "":
-                i = eval(arg[1])
-            line.append("#define %s %d\n" % (arg[0].ljust(63), i))
+                s = arg[1]
+                i = 0
+            line.append("#define %s ((%s)+%d)\n" % (arg[0].ljust(63), s, i))
         i += 1
     if len(line) > 0:
         hn = "".join([

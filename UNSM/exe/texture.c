@@ -15,7 +15,7 @@ typedef unsigned int uint;
 #define unused
 #endif
 
-struct texture_t
+struct texture
 {
     const char *str;
     void (*callback)(FILE *, const u8 *, const u8 *, uint, uint);
@@ -109,7 +109,7 @@ TEXTURE(i8)
 #undef TEXTURE
 
 #define TEXTURE(name)   {"." #name ".", texture_##name},
-static struct texture_t texture_table[] =
+static const struct texture texture_table[] =
 {
     TEXTURE(rgba16)
     TEXTURE(rgba32)
@@ -165,7 +165,7 @@ int main(int argc, const char **argv)
     }
     for (i = 0; i < lenof(texture_table); i++)
     {
-        struct texture_t *texture = &texture_table[i];
+        const struct texture *texture = &texture_table[i];
         if (strstr(argv[2], texture->str))
         {
             texture->callback(f, src, pal, w, h);

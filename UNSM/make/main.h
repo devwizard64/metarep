@@ -1,66 +1,125 @@
 #ifndef _MAKE_MAIN_H_
 #define _MAKE_MAIN_H_
-#define OBJECT(addr, name)                          \
-    SZP(object_##name, object/name/gfx)             \
-    FILE(addr, object_##name, object/name/g)
-#define BACKGROUND(name)                            \
-    SZP(background_##name, background/name)
-#define TEXTURE(name)                               \
-    SZP(texture_##name, texture/name)
-#define PARTICLE(name)                              \
-    SZP(particle_##name, particle/name)
-#define STAGE(name)                                 \
-    SZP(stage_##name, stage/name/gfx)               \
-    SCRIPT(SEGMENT_DATA_STAGE, name)
-#endif /* _MAKE_MAIN_H_ */
 
 #include <sm64/segment.h>
 
+#define DATA1(segment, name, fn)    \
+    SECTION(                        \
+        SEGMENT_DATA_##segment,     \
+        data_##name,                \
+        DATA(BUILD/data/fn.o)       \
+    )
+#define DATA2(segment, name, fn)    \
+    SECTION(                        \
+        SEGMENT_DATA_##segment,     \
+        data_##name,                \
+        DATA(BUILD/data/fn/s.o)     \
+        DATA(BUILD/data/fn/g.o)     \
+    )
+#define SZP(name, fn)               \
+    SECTION(                        \
+        0, szp_##name,              \
+        DATA(BUILD/data/fn.szp.o)   \
+    )
+#define FILE(name, fn)              \
+    SECTION(                        \
+        0, file_##name,             \
+        DATA(BUILD/data/fn.o)       \
+    )
+#define GFX(segment, name)                      \
+    SZP(gfx_##name, gfx/name/gfx)               \
+    DATA1(segment, gfx_##name, gfx/name/g)
+#define BACKGROUND(name)                        \
+    SZP(background_##name, background/name)
+#define TEXTURE(name)                           \
+    SZP(texture_##name, texture/name)
+#define PARTICLE(name)                          \
+    SZP(particle_##name, particle/name)
+#define STAGE(name)                             \
+    SZP(stage_##name, stage/name/gfx)           \
+    DATA2(STAGE, stage_##name, stage/name)
+
+#endif /* _MAKE_MAIN_H_ */
+
+SECTION(
+    0xA4000000, header,
+    TEXT(BUILD/src/header.o)
+    TEXT(ULTRA/lib/PR/ipl3.o)
+)
+BUFFER(
+    SEGMENT_ZIMG, zimg,
+    BSS(BUILD/src/buffer/depth.o)
+)
+BUFFER(
+    SEGMENT_BUFFER, buffer,
+    BSS(BUILD/src/buffer/texture.o)
+    BSS(BUILD/src/audio/heap.o)
+    BSS(BUILD/src/buffer/buffer.o)
+    BSS(BUILD/src/audio/bss.o)
+)
+BUFFER(
+    SEGMENT_FIFO, fifo,
+    BSS(BUILD/src/buffer/fifo.o)
+)
 CODE(
     SEGMENT_MAIN, main,
-    TEXT(ultra/lib/PR/crt0.o)
+    TEXT(ULTRA/lib/PR/crt0.o)
     TEXT(BUILD/src/main.ld.o)
-    TEXT(ultra/lib/PR/rspboot.o)
-    TEXT(ultra/lib/PR/gspFast3D.fifo.o)
-    TEXT(ultra/lib/PR/aspMain.o)
+    TEXT(ULTRA/lib/PR/rspboot.o)
+    TEXT(ULTRA/lib/PR/gspFast3D.fifo.o)
+    TEXT(ULTRA/lib/PR/aspMain.o)
     DATA(BUILD/src/main.ld.o)
-    DATA(ultra/lib/PR/rspboot.o)
-    DATA(ultra/lib/PR/gspFast3D.fifo.o)
-    DATA(ultra/lib/PR/aspMain.o),
+    DATA(ULTRA/lib/PR/rspboot.o)
+    DATA(ULTRA/lib/PR/gspFast3D.fifo.o)
+    DATA(ULTRA/lib/PR/aspMain.o),
     BSS(BUILD/src/main.ld.o)
-    BSS(ultra/lib/PR/rspboot.o)
-    BSS(ultra/lib/PR/gspFast3D.fifo.o)
-    BSS(ultra/lib/PR/aspMain.o)
+    BSS(ULTRA/lib/PR/rspboot.o)
+    BSS(ULTRA/lib/PR/gspFast3D.fifo.o)
+    BSS(ULTRA/lib/PR/aspMain.o)
 )
+ASSERT(__dev <= 0x00101000, "error: MAIN exceeds device size.")
+ASSERT(. <= SEGMENT_MAIN2, "error: MAIN exceeds memory size.")
 CODE(
     SEGMENT_MAIN2, main2,
     TEXT(BUILD/src/main2.ld.o)
     DATA(BUILD/src/main2.ld.o),
     BSS(BUILD/src/main2.ld.o)
 )
-FILE(SEGMENT_DATA_MAIN, main, main/s)
+ASSERT(. <= SEGMENT_CIMG, "error: MAIN2 exceeds memory size.")
+BUFFER(
+    SEGMENT_CIMG, cimg,
+    BSS(BUILD/src/buffer/frame.o)
+)
+DATA1(MAIN, main, main)
 SZP(main, main/gfx)
-OBJECT(SEGMENT_DATA_PLAYER, player)
-OBJECT(SEGMENT_DATA_OBJECTA, a0)
-OBJECT(SEGMENT_DATA_OBJECTA, a1)
-OBJECT(SEGMENT_DATA_OBJECTA, a2)
-OBJECT(SEGMENT_DATA_OBJECTA, a3)
-OBJECT(SEGMENT_DATA_OBJECTA, a4)
-OBJECT(SEGMENT_DATA_OBJECTA, a5)
-OBJECT(SEGMENT_DATA_OBJECTA, a6)
-OBJECT(SEGMENT_DATA_OBJECTA, a7)
-OBJECT(SEGMENT_DATA_OBJECTA, a8)
-OBJECT(SEGMENT_DATA_OBJECTA, a9)
-OBJECT(SEGMENT_DATA_OBJECTA, a10)
-OBJECT(SEGMENT_DATA_OBJECTB, b0)
-OBJECT(SEGMENT_DATA_OBJECTB, b1)
-OBJECT(SEGMENT_DATA_OBJECTB, b2)
-OBJECT(SEGMENT_DATA_OBJECTB, b3)
-OBJECT(SEGMENT_DATA_OBJECTB, b4)
-OBJECT(SEGMENT_DATA_OBJECTB, b5)
-OBJECT(SEGMENT_DATA_OBJECTC, c0)
-OBJECT(SEGMENT_DATA_ENTITY, entity)
-FILE(SEGMENT_DATA_OBJECT, object, object/o)
+GFX(PLAYER, player)
+GFX(GFXA, a0)
+GFX(GFXA, a1)
+GFX(GFXA, a2)
+GFX(GFXA, a3)
+GFX(GFXA, a4)
+GFX(GFXA, a5)
+GFX(GFXA, a6)
+GFX(GFXA, a7)
+GFX(GFXA, a8)
+GFX(GFXA, a9)
+GFX(GFXA, a10)
+GFX(GFXB, b0)
+GFX(GFXB, b1)
+GFX(GFXB, b2)
+GFX(GFXB, b3)
+GFX(GFXB, b4)
+GFX(GFXB, b5)
+GFX(GFXC, c0)
+GFX(ENTITY, entity)
+SECTION(
+    SEGMENT_DATA_OBJECT, data_object,
+    DATA(BUILD/data/object/object_a.o)
+    DATA(BUILD/data/object/player.o)
+    DATA(BUILD/data/object/object_b.o)
+    DATA(BUILD/data/object/object_c.o)
+    DATA(BUILD/data/object/camera.o)
+)
 CODE(
     SEGMENT_MENU, menu,
     TEXT(BUILD/src/title.o)
@@ -79,14 +138,17 @@ CODE(
     BSS(BUILD/src/star_select.data.o)
     BSS(BUILD/src/face.ld.o)
 )
-SCRIPT(SEGMENT_DATA_MENU, title)
-SZP(stage_title_a, stage/title/gfx_a)
-SZP(stage_title_b, stage/title/gfx_b)
+DATA2(MENU, menu_title, menu/title)
+SZP(menu_title_a, menu/title/gfx_a)
+SZP(menu_title_b, menu/title/gfx_b)
 BACKGROUND(title)
-FILE(SEGMENT_DATA_FACE, face, face/data)
-SCRIPT(SEGMENT_DATA_MENU, menu)
-SZP(stage_menu, stage/menu/gfx)
-FILE(SEGMENT_DATA_GAME, game, game)
+SECTION(
+    SEGMENT_DATA_FACE, data_face,
+    DATA(BUILD/data/face/data.o)
+)
+DATA2(MENU, menu_select, menu/select)
+SZP(menu_select, menu/select/gfx)
+DATA1(GAME, game, game)
 BACKGROUND(a)
 BACKGROUND(b)
 BACKGROUND(c)
@@ -141,9 +203,9 @@ STAGE(wmotr)
 STAGE(bitfsa)
 STAGE(bitsa)
 STAGE(ttm)
-FILE(0, motion_player, motion_player/data)
-FILE(0, demo,          demo/data)
-FILE(0, audio_ctl,     audio/ctl)
-FILE(0, audio_tbl,     audio/tbl)
-FILE(0, audio_seq,     audio/seq)
-FILE(0, audio_bnk,     audio/bnk)
+FILE(motion_player, motion_player)
+FILE(demo,          demo)
+FILE(audio_ctl,     audio/ctl)
+FILE(audio_tbl,     audio/tbl)
+FILE(audio_seq,     audio/seq)
+FILE(audio_bnk,     audio/bnk)

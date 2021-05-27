@@ -17,6 +17,12 @@
 #define G_CC_MODULATESE         \
     SHADE, 0, ENVIRONMENT, 0, SHADE, 0, ENVIRONMENT, 0
 
+#define gdSPDefViewport(w, h, x, y) \
+{{                                  \
+    {2*(w), 2*(h), G_MAXZ/2, 0},    \
+    {4*(x), 4*(y), G_MAXZ/2, 0},    \
+}}
+
 #define __gdSPDefMatrixI(x, y)  \
     (((u32)(int)(0x10000*(x)) & ~0xFFFF) | (u32)(int)(0x10000*(y)) >> 16)
 #define __gdSPDefMatrixF(x, y)  \

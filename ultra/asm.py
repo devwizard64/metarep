@@ -227,7 +227,10 @@ line        = None
 inst_int    = None
 inst_str    = None
 reg_table   = None
+lui_stack   = None
 lui_table   = None
+lui_next    = None
+lui_flag    = None
 have_imm    = None
 
 def sym(addr, src=None):
@@ -262,16 +265,34 @@ def lst_prc(ptr, argv):
             return str_prc(ptr, argv)
     raise RuntimeError("ultra.asm.lst_prc(): bad arg")
 
+def lui_write(reg, val):
+    if lui_flag & 1: lui_table[reg] = val
+    if lui_flag & 2: lui_next[reg]  = val
+
+def fnc_clear(argv):
+    reg = inst_int[argv[1]]
+    op   = inst_int[I_OP]
+    func = inst_int[I_FUNC]
+    rs   = inst_int[I_RS]
+    rt   = inst_int[I_RT]
+    if not (op == 0x00 and func == 0x21) or (reg != rs and reg != rt):
+        lui_write(reg, None)
+    return str_prc(argv[0], argv[1:])
+
+def fnc_clearf(argv):
+    return str_prc(argv[0], argv[1:])
+
 def fnc_or(argv):
     ptr, argv = ["or      %s, %s, %s", [I_RD, I_RS, I_RT]]
     if mode == 0:
         if inst_int[I_RT] == 0:
-            # if inst_int[I_RS] == 0:
-            #     if not have_imm:
-            #         inst_str[I_IMM] = "0"
-            #     ptr, argv = ["li      %s, %s", [I_RD, I_IMM]]
-            # else:
-                ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
+            ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
+            if inst_int[I_RS] == 0:
+                if macro:
+                    if not have_imm:
+                        inst_str[I_IMM] = "0"
+                    ptr, argv = ["li      %s, %s", [I_RD, I_IMM]]
+    lui_write(inst_int[I_RD], None)
     return str_prc(ptr, argv)
 
 def fnc_j(argv):
@@ -281,9 +302,14 @@ def fnc_j(argv):
     return str_prc(argv[0], argv[1])
 
 def fnc_b(argv):
-    inst_str[I_BDST] = sym(inst_int[I_BDST])
+    global lui_next
+    global lui_flag
+    bdst = inst_int[I_BDST]
+    lui_stack[bdst] = lui_next = lui_table[:]
+    inst_str[I_BDST] = sym(bdst)
     cnt, ptr = argv[:2]
     argv = [I_RS, I_RT]
+    lui_flag = 3
     # regimm
     if inst_int[I_OP] == 0x01:
         # b?z $0
@@ -294,6 +320,13 @@ def fnc_b(argv):
             # bgezall $0 -> ball
             elif inst_int[I_RT] == 0x13:
                 cnt, ptr = [0, "ball    "]
+        if inst_int[I_RT] in {0x02, 0x03, 0x12, 0x13}:
+            lui_flag = 2
+    # bc1?
+    elif inst_int[I_OP] == 0x11:
+        if inst_int[I_RS] == 0x08:
+            if inst_int[I_RT] in {0x02, 0x03}:
+                lui_flag = 2
     # b? rs, $0
     elif inst_int[I_RT] == 0x00:
         # beq
@@ -324,22 +357,26 @@ def fnc_addiu(argv):
         if inst_int[I_RS] == 0x00 and inst_int[I_IMMS] != 0:
             ptr, argv = ["li      %s, %s", [I_RT, I_IMMS]]
         # lui rt, hi(addr) ... addiu rt, rt, lo(addr)
-        elif inst_int[I_RT] == inst_int[I_RS]:
-            if lui_table[inst_int[I_RT]] != None:
-                ln, immhi = lui_table[inst_int[I_RT]]
-                sym = ultra.sym(immhi + inst_int[I_IMMS])
-                inst_str[I_IMMS] = "%%hi(%s)" % sym
+        elif lui_table[inst_int[I_RS]] != None:
+            ln, immhi = lui_table[inst_int[I_RS]]
+            inst_str[I_IMMS] = ultra.sym(immhi + inst_int[I_IMMS])
+            if inst_int[I_RT] == inst_int[I_RS] and macro:
                 line[ln] = (
-                    line[ln][0], str_prc("lui     %s, %s", [I_RT, I_IMMS])
+                    line[ln][0], str_prc("la.u    %s, %s", [I_RS, I_IMMS])
                 )
-                inst_str[I_IMMS] = "%%lo(%s)" % sym
-                ptr, argv = ["addiu   %s, %s, %s", [I_RT, I_RT, I_IMMS]]
-        lui_table[inst_int[I_RT]] = None
+                ptr, argv = ["la.l    %s, %s", [I_RT, I_IMMS]]
+            else:
+                line[ln] = (
+                    line[ln][0],
+                    str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
+                )
+                ptr, argv = ["addiu   %s, %s, %%lo(%s)", [I_RT, I_RS, I_IMMS]]
     else:
         # if inst_int[I_RS] == 0x00:
         #     inst_str[I_IMM] = ultra.sym(inst_int[I_IMM])
         #     ptr, argv = ["la      %s, %s", [I_RT, I_IMM]]
         pass
+    lui_write(inst_int[I_RT], None)
     return str_prc(ptr, argv)
 
 def fnc_ori(argv):
@@ -360,16 +397,25 @@ def fnc_ori(argv):
             ln, immhi = lui_table[inst_int[I_RT]]
             if not have_imm:
                 inst_str[I_IMM] = "0x%08X" % (immhi | inst_int[I_IMM])
-                line[ln] = (
-                    line[ln][0], str_prc("lui     %s, %s >> 16", [I_RT, I_IMM])
-                )
-                ptr, argv = ["ori     %s, %s, %s & 0xFFFF", [I_RT, I_RT, I_IMM]]
-    lui_table[inst_int[I_RT]] = None
+            if line[ln][1].startswith("li"):
+                if macro:
+                    line[ln] = (
+                        line[ln][0], str_prc("li.u    %s, %s", [I_RT, I_IMM])
+                    )
+                    ptr, argv = ["li.l    %s, %s", [I_RT, I_IMM]]
+                else:
+                    line[ln] = (
+                        line[ln][0],
+                        str_prc("lui     %s, %s >> 16", [I_RT, I_IMM])
+                    )
+                    ptr, argv = \
+                        ["ori     %s, %s, %s & 0xFFFF", [I_RT, I_RT, I_IMM]]
+    lui_write(inst_int[I_RT], None)
     return str_prc(ptr, argv)
 
 def fnc_lui(argv):
     if inst_int[I_RT] != 0x00:
-        lui_table[inst_int[I_RT]] = (len(line), inst_int[I_IMMHI])
+        lui_write(inst_int[I_RT], (len(line), inst_int[I_IMMHI]))
     if have_imm:
         ptr, argv = "lui     %s, %s", [I_RT, I_IMM]
     else:
@@ -397,21 +443,21 @@ def fnc_ls(argv):
             "lwr     ",
             "lwu     ",
         ):
-            lui_table[inst_int[argv[0]]] = None
+            lui_write(inst_int[argv[0]], None)
     else:
         pass
     ptr += "%s, %s(%s)"
     return str_prc(ptr, argv)
 
 lst_special = [
-    (T_STR, "sll     %s, %s, %s", [I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["sll     %s, %s, %s", I_RD, I_RT, I_SA]),
     None,
-    (T_STR, "srl     %s, %s, %s", [I_RD, I_RT, I_SA]),
-    (T_STR, "sra     %s, %s, %s", [I_RD, I_RT, I_SA]),
-    (T_STR, "sllv    %s, %s, %s", [I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["srl     %s, %s, %s", I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["sra     %s, %s, %s", I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["sllv    %s, %s, %s", I_RD, I_RT, I_RS]),
     None,
-    (T_STR, "srlv    %s, %s, %s", [I_RD, I_RT, I_RS]),
-    (T_STR, "srav    %s, %s, %s", [I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["srlv    %s, %s, %s", I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["srav    %s, %s, %s", I_RD, I_RT, I_RS]),
     (T_FNC, fnc_j, ["jr      %s", [I_RS]]),
     (T_FNC, fnc_j, ["jalr    %s", [I_RS]]),
     None,
@@ -420,14 +466,14 @@ lst_special = [
     (T_STR, "break   %s", [I_CODE]),
     None,
     (T_STR, "sync", []),
-    (T_STR, "mfhi    %s", [I_RD]),
+    (T_FNC, fnc_clear, ["mfhi    %s", I_RD]),
     (T_STR, "mthi    %s", [I_RS]),
-    (T_STR, "mflo    %s", [I_RD]),
+    (T_FNC, fnc_clear, ["mflo    %s", I_RD]),
     (T_STR, "mtlo    %s", [I_RS]),
-    (T_STR, "dsllv   %s, %s, %s", [I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["dsllv   %s, %s, %s", I_RD, I_RT, I_RS]),
     None,
-    (T_STR, "dsrlv   %s, %s, %s", [I_RD, I_RT, I_RS]),
-    (T_STR, "dsrav   %s, %s, %s", [I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["dsrlv   %s, %s, %s", I_RD, I_RT, I_RS]),
+    (T_FNC, fnc_clear, ["dsrav   %s, %s, %s", I_RD, I_RT, I_RS]),
     (T_STR, "mult    %s, %s", [I_RS, I_RT]),
     (T_STR, "multu   %s, %s", [I_RS, I_RT]),
     (T_STR, "div     %s, %s, %s", [I_RD, I_RS, I_RT]),
@@ -436,22 +482,22 @@ lst_special = [
     (T_STR, "dmultu  %s, %s", [I_RS, I_RT]),
     (T_STR, "ddiv    %s, %s, %s", [I_RD, I_RS, I_RT]),
     (T_STR, "ddivu   %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "add     %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "addu    %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "sub     %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "subu    %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "and     %s, %s, %s", [I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["add     %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["addu    %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["sub     %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["subu    %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["and     %s, %s, %s", I_RD, I_RS, I_RT]),
     (T_FNC, fnc_or, None),
-    (T_STR, "xor     %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "nor     %s, %s, %s", [I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["xor     %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["nor     %s, %s, %s", I_RD, I_RS, I_RT]),
     None,
     None,
-    (T_STR, "slt     %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "sltu    %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "dadd    %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "daddu   %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "dsub    %s, %s, %s", [I_RD, I_RS, I_RT]),
-    (T_STR, "dsubu   %s, %s, %s", [I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["slt     %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["sltu    %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["dadd    %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["daddu   %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["dsub    %s, %s, %s", I_RD, I_RS, I_RT]),
+    (T_FNC, fnc_clear, ["dsubu   %s, %s, %s", I_RD, I_RS, I_RT]),
     None, # tge
     None, # tgeu
     None, # tlt
@@ -460,14 +506,14 @@ lst_special = [
     None,
     None, # tne
     None,
-    (T_STR, "dsll    %s, %s, %s", [I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsll    %s, %s, %s", I_RD, I_RT, I_SA]),
     None,
-    (T_STR, "dsrl    %s, %s, %s", [I_RD, I_RT, I_SA]),
-    (T_STR, "dsra    %s, %s, %s", [I_RD, I_RT, I_SA]),
-    (T_STR, "dsll32  %s, %s, %s", [I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsrl    %s, %s, %s", I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsra    %s, %s, %s", I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsll32  %s, %s, %s", I_RD, I_RT, I_SA]),
     None,
-    (T_STR, "dsrl32  %s, %s, %s", [I_RD, I_RT, I_SA]),
-    (T_STR, "dsra32  %s, %s, %s", [I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsrl32  %s, %s, %s", I_RD, I_RT, I_SA]),
+    (T_FNC, fnc_clear, ["dsra32  %s, %s, %s", I_RD, I_RT, I_SA]),
 ]
 
 lst_regimm = [
@@ -573,9 +619,9 @@ lst_cop0_func = [
 ]
 
 lst_cop0_rs = [
-    (T_STR, "mfc0    %s, %s", [I_RT, I_C0REG]),
-    (T_STR, "dmfc0   %s, %s", [I_RT, I_C0REG]),
-    None, # (T_STR, "cfc0    %s, %s", [I_RT, I_C0CTL]),
+    (T_FNC, fnc_clear, ["mfc0    %s, %s", I_RT, I_C0REG]),
+    (T_FNC, fnc_clear, ["dmfc0   %s, %s", I_RT, I_C0REG]),
+    None, # (T_FNC, fnc_clear, ["cfc0    %s, %s", I_RT, I_C0CTL]),
     None,
     (T_STR, "mtc0    %s, %s", [I_RT, I_C0REG]),
     (T_STR, "dmtc0   %s, %s", [I_RT, I_C0REG]),
@@ -643,22 +689,22 @@ lst_bc1 = [
 ]
 
 lst_cop1_func = [
-    (T_STR, "add.%s   %s, %s, %s", [I_C1FMT, I_FD, I_FS, I_FT]),
-    (T_STR, "sub.%s   %s, %s, %s", [I_C1FMT, I_FD, I_FS, I_FT]),
-    (T_STR, "mul.%s   %s, %s, %s", [I_C1FMT, I_FD, I_FS, I_FT]),
-    (T_STR, "div.%s   %s, %s, %s", [I_C1FMT, I_FD, I_FS, I_FT]),
-    (T_STR, "sqrt.%s  %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "abs.%s   %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "mov.%s   %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "neg.%s   %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "round.l.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "trunc.l.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "ceil.l.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "floor.l.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "round.w.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "trunc.w.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "ceil.w.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "floor.w.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["add.%s   %s, %s, %s", I_C1FMT, I_FD, I_FS, I_FT]),
+    (T_FNC, fnc_clearf, ["sub.%s   %s, %s, %s", I_C1FMT, I_FD, I_FS, I_FT]),
+    (T_FNC, fnc_clearf, ["mul.%s   %s, %s, %s", I_C1FMT, I_FD, I_FS, I_FT]),
+    (T_FNC, fnc_clearf, ["div.%s   %s, %s, %s", I_C1FMT, I_FD, I_FS, I_FT]),
+    (T_FNC, fnc_clearf, ["sqrt.%s  %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["abs.%s   %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["mov.%s   %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["neg.%s   %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["round.l.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["trunc.l.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["ceil.l.%s %s, %s",    I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["floor.l.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["round.w.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["trunc.w.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["ceil.w.%s %s, %s",    I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["floor.w.%s %s, %s",   I_C1FMT, I_FD, I_FS]),
     None,
     None,
     None,
@@ -675,12 +721,12 @@ lst_cop1_func = [
     None,
     None,
     None,
-    (T_STR, "cvt.s.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "cvt.d.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["cvt.s.%s %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["cvt.d.%s %s, %s",     I_C1FMT, I_FD, I_FS]),
     None,
     None,
-    (T_STR, "cvt.w.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
-    (T_STR, "cvt.l.%s %s, %s", [I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["cvt.w.%s %s, %s",     I_C1FMT, I_FD, I_FS]),
+    (T_FNC, fnc_clearf, ["cvt.l.%s %s, %s",     I_C1FMT, I_FD, I_FS]),
     None,
     None,
     None,
@@ -710,9 +756,9 @@ lst_cop1_func = [
 ]
 
 lst_cop1_rs = [
-    (T_STR, "mfc1    %s, %s", [I_RT, I_FS]),
-    (T_STR, "dmfc1   %s, %s", [I_RT, I_FS]),
-    (T_STR, "cfc1    %s, %s", [I_RT, I_C1CTL]),
+    (T_FNC, fnc_clear, ["mfc1    %s, %s", I_RT, I_FS]),
+    (T_FNC, fnc_clear, ["dmfc1   %s, %s", I_RT, I_FS]),
+    (T_FNC, fnc_clear, ["cfc1    %s, %s", I_RT, I_C1CTL]),
     None,
     (T_STR, "mtc1    %s, %s", [I_RT, I_FS]),
     (T_STR, "dmtc1   %s, %s", [I_RT, I_FS]),
@@ -747,7 +793,7 @@ lst_cop1_rs = [
 lst_cop2_rs = [
     None, # mfc2
     None,
-    (T_STR, "cfc2    %s, %s", [I_RT, I_RD]),
+    (T_FNC, fnc_clear, ["cfc2    %s, %s", I_RT, I_RD]),
     None,
     None, # mtc2
     None,
@@ -794,13 +840,13 @@ lst_op = [
     (T_FNC, fnc_b, [2, "bne     "]),
     (T_FNC, fnc_b, [1, "blez    "]),
     (T_FNC, fnc_b, [1, "bgtz    "]),
-    (T_STR, "addi    %s, %s, %s", [I_RT, I_RS, I_IMMS]),
+    (T_FNC, fnc_clear, ["addi    %s, %s, %s", I_RT, I_RS, I_IMMS]),
     (T_FNC, fnc_addiu, None), # handle la/li
-    (T_STR, "slti    %s, %s, %s", [I_RT, I_RS, I_IMMS]),
-    (T_STR, "sltiu   %s, %s, %s", [I_RT, I_RS, I_IMMS]),
-    (T_STR, "andi    %s, %s, %s", [I_RT, I_RS, I_IMM]),
+    (T_FNC, fnc_clear, ["slti    %s, %s, %s", I_RT, I_RS, I_IMMS]),
+    (T_FNC, fnc_clear, ["sltiu   %s, %s, %s", I_RT, I_RS, I_IMMS]),
+    (T_FNC, fnc_clear, ["andi    %s, %s, %s", I_RT, I_RS, I_IMM]),
     (T_FNC, fnc_ori, None), # handle li
-    (T_STR, "xori    %s, %s, %s", [I_RT, I_RS, I_IMM]),
+    (T_FNC, fnc_clear, ["xori    %s, %s, %s", I_RT, I_RS, I_IMM]),
     (T_FNC, fnc_lui, None), # handle la/li
     (T_LST, lst_cop0_rs, [I_RS]),
     (T_LST, lst_cop1_rs, [I_RS]),
@@ -810,8 +856,8 @@ lst_op = [
     (T_FNC, fnc_b, [2, "bnel    "]),
     (T_FNC, fnc_b, [1, "blezl   "]),
     (T_FNC, fnc_b, [1, "bgtzl   "]),
-    (T_STR, "daddi   %s, %s, %s", [I_RT, I_RS, I_IMMS]),
-    (T_STR, "daddiu  %s, %s, %s", [I_RT, I_RS, I_IMMS]),
+    (T_FNC, fnc_clear, ["daddi   %s, %s, %s", I_RT, I_RS, I_IMMS]),
+    (T_FNC, fnc_clear, ["daddiu  %s, %s, %s", I_RT, I_RS, I_IMMS]),
     (T_FNC, fnc_ls, ["ldl     ", I_RT]),
     (T_FNC, fnc_ls, ["ldr     ", I_RT]),
     None,
@@ -868,38 +914,53 @@ def fmt(self, line, code=False):
                     if not sym.label.startswith("L80"):
                         f.append("\n")
                         if hasattr(sym, "fmt"):
-                            f.append(sym.fmt("/* 0x%08X   " % addr, " */")+"\n")
+                            if ultra.COMM_LABEL:
+                                start = "/* 0x%08X   " % addr
+                            else:
+                                start = "/* "
+                            f.append(sym.fmt(start, " */")+"\n")
                         else:
-                            f.append("/* 0x%08X */\n" % addr)
+                            if ultra.COMM_LABEL:
+                                f.append("/* 0x%08X */\n" % addr)
                     if sym.flag & table.GLOBL:
                         f.append(".globl %s\n" % sym.label)
                     f.append("%s:\n" % sym.label)
                 elif addr in btbl:
                     f.append(".L%08X:\n" % addr)
                 last = addr
-        if code:
+        if code and ultra.COMM_LINE:
             f.append("/*0x%08X*/  %s\n" % (addr, ln))
         else:
             f.append("\t%s\n" % ln)
 
 def s_code(self, argv):
     global mode
+    global macro
     global sep
     global line
     global inst_int
     global inst_str
     global reg_table
+    global lui_stack
     global lui_table
+    global lui_next
+    global lui_flag
     global have_imm
-    start, end, data, mode, sep = argv
+    start, end, data, mode, macro, sep = argv
     init(self, start, data)
     gpr  = (gpr_cpu,  gpr_rsp)[mode]
     cop0 = (cop0_cpu, cop0_rsp)[mode]
     line = []
     reg_table = 64*[False]
+    lui_stack = {}
     lui_table = 32*[None]
+    lui_next  = None
+    lui_flag  = 1
     while self.c_addr < end:
         self.c_push()
+        if self.c_dst in lui_stack:
+            lui_table = lui_stack[self.c_dst][:]
+        flag = lui_flag
         inst = ultra.uw()
         if inst == 0:
             line.append((self.c_dst, "nop"))
@@ -976,24 +1037,30 @@ def s_code(self, argv):
             if ln != None:
                 line.append((self.c_dst, ln))
             else:
-                # print("warning: illegal opcode 0x%08X:0x%08X" % (
-                #     self.c_dst, inst
-                # ))
-                line.append((
-                    self.c_dst, "nop :: .org .-4 :: .word 0x%08X" % inst
-                ))
+                if mode == 0:
+                    print("warning: illegal opcode 0x%08X:0x%08X" % (
+                        self.c_dst, inst
+                    ))
+                    s = ".word 0x%08X"
+                else:
+                    s = "nop :: .org .-4 :: .word 0x%08X"
+                line.append((self.c_dst, s % inst))
+        if flag != 1:
+            lui_flag = 1
     fmt(self, line, True)
 
-d_byte    = [".db", lambda: "0x%02X" % ultra.ub()]
-d_sbyte   = [".db", lambda: "%d"     % ultra.sb()]
-d_ubyte   = [".db", lambda: "%d"     % ultra.ub()]
-d_half    = [".dh", lambda: "0x%04X" % ultra.uh()]
-d_shalf   = [".dh", lambda: "%d"     % ultra.sh()]
-d_uhalf   = [".dh", lambda: "%d"     % ultra.uh()]
-d_word    = [".dw", lambda: "0x%08X" % ultra.uw()]
-d_sword   = [".dw", lambda: "%d"     % ultra.sw()]
-d_uword   = [".dw", lambda: "%d"     % ultra.uw()]
-d_addr    = [".dh", lambda: ultra.ah()]
+d_byte    = [".byte", lambda: "0x%02X" % ultra.ub()]
+d_sbyte   = [".byte", lambda: "%d"     % ultra.sb()]
+d_ubyte   = [".byte", lambda: "%d"     % ultra.ub()]
+d_half    = [".half", lambda: "0x%04X" % ultra.uh()]
+d_shalf   = [".half", lambda: "%d"     % ultra.sh()]
+d_uhalf   = [".half", lambda: "%d"     % ultra.uh()]
+d_word    = [".word", lambda: "0x%08X" % ultra.uw()]
+d_sword   = [".word", lambda: "%d"     % ultra.sw()]
+d_uword   = [".word", lambda: "%d"     % ultra.uw()]
+d_float   = [".float",  lambda: ultra.fmt_float(ultra.f(), "", False)]
+d_double  = [".double", lambda: ultra.fmt_float(ultra.d(), "", False)]
+d_addr    = [".half", lambda: ultra.ah()]
 
 def lst_main(self, line, lst):
     for argv in lst:

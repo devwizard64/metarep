@@ -1,7 +1,7 @@
 import struct
 
-UNUSED  = 1
-GLOBL   = 2
+UNUSED  = 1 << 0
+GLOBL   = 1 << 1
 
 def fmt_pre(v):
     return v if v == "" or v.endswith("*") else v+" "
