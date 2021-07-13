@@ -23,13 +23,17 @@
     SECTION_NOLOAD(addr, name, bss)                                     \
     bss_##name##_end = ADDR(.name.noload) + SIZEOF(.name.noload);       \
     bss_##name##_size = SIZEOF(.name.noload);
-
 #undef mips
 OUTPUT_ARCH(mips)
 SECTIONS
 {
     __dev = 0;
-#include "main.h"
+    SECTION(
+        0xA4000000, header,
+        TEXT(ULTRA/lib/PR/header.o)
+        TEXT(ULTRA/lib/PR/ipl3.o)
+    )
+#include <meta/main.h>
     bss_main_size_hi = bss_main_size >> 16;
     bss_main_size_lo = bss_main_size & 0xFFFF;
     /DISCARD/ : {*(*);}

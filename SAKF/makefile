@@ -5,10 +5,12 @@ CC65    := $(HOME)/sm64/cc65-2.19
 AS      := $(CC65)/bin/ca65
 LD      := $(CC65)/bin/ld65
 
-FLAG    := -D _$(VERSION) -I $(BUILD) -I include
+FLAG    := -D __$(VERSION)__ -I $(BUILD) -I include
 AS      += --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 EXE     := exe
+
+OBJ != make -C $(EXE)
 
 OBJ := \
 	$(BUILD)/src/code.o     \
@@ -36,7 +38,3 @@ $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 .PHONY: clean
 clean:
 	rm -rf build
-
-$(BUILD)/app.sfc: | exe/crc
-exe/crc:
-	make -C exe

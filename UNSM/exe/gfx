@@ -118,7 +118,7 @@ def gfx_write(path, name, ply, ini):
     g = gfx_v(ini["s"][1])
     b = gfx_v(ini["s"][2])
     a = gfx_v(ini["s"][3])
-    data = ("static const Vtx vtx_%s[] =\n{\n" % name) + "".join([
+    data = ("static Vtx vtx_%s[] =\n{\n" % name) + "".join([
         "    {{{%6d, %6d, %6d}, 0, {%6d, %6d}, {%s, %s, %s, %s}}},\n" % (
             sh(vtx[v]["x"]),
             sh(vtx[v]["y"]),

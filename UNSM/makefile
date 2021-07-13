@@ -1,4 +1,6 @@
 VERSION ?= E0
+LABEL   := SUPER MARIO 64
+
 BUILD   := build/$(VERSION)
 
 MAIN_OBJ := \
@@ -16,13 +18,13 @@ MAIN_OBJ := \
 	$(BUILD)/src/player_air.o       $(BUILD)/src/player_air.data.o      \
 	$(BUILD)/src/player_water.o     $(BUILD)/src/player_water.data.o    \
 	$(BUILD)/src/player_grab.o      $(BUILD)/src/player_grab.data.o     \
-	$(BUILD)/src/player_gfx.o       $(BUILD)/src/player_gfx.data.o      \
+	$(BUILD)/src/player_callback.o  $(BUILD)/src/player_callback.data.o \
 	$(BUILD)/src/mem.o              $(BUILD)/src/mem.data.o             \
 	$(BUILD)/src/save.o             $(BUILD)/src/save.data.o            \
 	$(BUILD)/src/world.o            $(BUILD)/src/world.data.o           \
 	$(BUILD)/src/g_draw.o           $(BUILD)/src/g_draw.data.o          \
 	$(BUILD)/src/time.o             $(BUILD)/src/time.data.o            \
-	$(BUILD)/src/szp.o              \
+	$(BUILD)/src/slidec.o           \
 	$(BUILD)/src/camera.o           $(BUILD)/src/camera.data.o          \
 	$(BUILD)/src/course.o           \
 	$(BUILD)/src/object.o           $(BUILD)/src/object.data.o          \
@@ -86,7 +88,8 @@ FACE_OBJ := \
 	$(BUILD)/src/face/gfx.o         $(BUILD)/src/face/gfx.data.o        \
 	$(BUILD)/src/face/data.o
 
-SRC_OBJ := $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)
+MAIN_OBJ    += $(AUDIO_OBJ)
+SRC_OBJ     := $(MAIN_OBJ) $(MAIN2_OBJ) $(FACE_OBJ)
 
 ULTRA   := ultra
 EXE     := exe
@@ -103,16 +106,18 @@ CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
 CC      += -fno-toplevel-reorder -G 0
 
-FLAG    := -I $(ULTRA)/include -I include -I . -D BUILD=$(BUILD) -D _$(VERSION)
-CC      += $(FLAG) -Wall -Wextra -Wpedantic -O2
+FLAG    := -I $(ULTRA)/include -I include -I .
+FLAG    += -D __$(VERSION)__ -D BUILD=$(BUILD)
+CC      += $(FLAG) -Wall -Wextra -Wpedantic -Wno-variadic-macros -O2
 CPP     += $(FLAG) -D ULTRA=$(ULTRA)
 
 OBJ := $(filter $(BUILD)/%, $(sort \
 	$(shell $(CPP) -P -o - make/obj.mk | tr "\n" " ")))
+SEQ := $(shell $(CPP) -P -o - make/seq.mk | tr "\n" " ")
 
 $(BUILD)/app.z64: $(BUILD)/app.elf
-	$(OBJCOPY) --pad-to 0x00800000 --gap-fill 0xFF -O binary $< $@
-	$(EXE)/crc $@
+	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
+	$(EXE)/mask $@ "$(LABEL)" NSM$(VERSION)
 
 $(BUILD)/app.elf: $(BUILD)/make/main.ld $(CODE_OBJ) $(OBJ)
 	$(LD) --accept-unknown-input-arch -Map $(@:.elf=.map) -o $@ -T $<
@@ -124,7 +129,7 @@ include $(addsuffix .d,$(basename $(SRC_OBJ) $(OBJ)))
 $(BUILD)/make/%: make/% | $(BUILD)/make
 	$(CPP) -MMD -MP -MT $@ -P -o $@ $<
 
-$(BUILD)/src/main.ld.o: $(MAIN_OBJ) $(AUDIO_OBJ)
+$(BUILD)/src/main.ld.o: $(MAIN_OBJ)
 	$(LD) --whole-archive -L $(ULTRA)/lib -r -o $@ $^ -l ultra_rom
 
 $(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
@@ -141,7 +146,7 @@ $(BUILD)/%.szp.o: %.c make/szp.ld
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $@.elf $@.o
 	$(OBJCOPY) -O binary $@.elf $@.bin
 	$(NM) -f posix $@.elf > $@.sym
-	$(EXE)/szp $@.szp $@.bin $@.sym
+	$(EXE)/slienc $@.szp $@.bin $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@.szp.o
 	$(LD) --accept-unknown-input-arch -r -o $@ -R $@.elf $@.szp.o
 
@@ -150,22 +155,22 @@ $(BUILD)/%.szp.d: %.c
 
 $(BUILD)/%.szp.o: %.bin
 	printf "a D 0 %X\n" $(shell stat --printf="%s" $<) > $@.sym
-	$(EXE)/szp $@.szp $< $@.sym
+	$(EXE)/slienc $@.szp $< $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@
 
 $(BUILD)/%.szp.d: %.bin
 	touch $@
 
-$(BUILD)/%.o: %.c
-	$(CC) -MMD -MP -c -o $@ $<
-
 $(BUILD)/%.o: %.S
 	$(CC) -MMD -MP -c -o $@ $<
 
-$(BUILD)/%.d: %.c
+$(BUILD)/%.d: %.S
 	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/%.d: %.S
+$(BUILD)/%.o: %.c
+	$(CC) -MMD -MP -c -o $@ $<
+
+$(BUILD)/%.d: %.c
 	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.h: %.png
@@ -181,10 +186,14 @@ $(BUILD)/%.h: %.obj
 $(BUILD)/%.h: %.txt
 	$(EXE)/msg $@ $<
 
+$(BUILD)/data/audio/seq.o: $(SEQ)
+$(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
+	cp $< $@
+
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
 	$(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
-BUILD_OBJ := $(call obj,*.c *.S *.bin *.png *.ply *.obj *.txt)
+BUILD_OBJ := $(call obj,*.S *.c *.bin *.png *.ply *.obj *.txt *.seq)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
 $(BUILD)/make $(BUILD)/src $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@

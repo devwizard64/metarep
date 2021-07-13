@@ -2,6 +2,8 @@ import struct
 
 import table
 
+import hvc.asm
+
 script = None
 
 def sb():
@@ -24,7 +26,7 @@ def sym_addr(x, n, w=False):
     if n == 2:
         if script.c_dst >> 16 >= 0x40 or x >= 0x8000:
             x |= script.c_dst & ~0xFFFF
-    sym = table.sym_addr(script, script.c_dst, x)
+    sym = table.sym_addr(script, x)
     if sym != None:
         sym = sym.label
     else:

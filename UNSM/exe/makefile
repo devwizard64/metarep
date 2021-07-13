@@ -1,4 +1,4 @@
-OBJ     := crc szp texture
+OBJ     := mask slienc texture
 
 CC      := cc -Wall -Wextra -Wpedantic -O2
 
@@ -8,8 +8,8 @@ default: $(OBJ)
 %: %.c
 	$(CC) -o $@ $^
 
-texture: texture.c ../lodepng/lodepng.c
-	$(CC) -I ../lodepng -o $@ $^
+texture: texture.c lodepng/lodepng.c
+	$(CC) -I lodepng -o $@ $^
 
 .PHONY: clean
 clean:

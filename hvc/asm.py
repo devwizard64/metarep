@@ -584,9 +584,11 @@ def fmt(self, line, code=False):
             elif addr in btbl:
                 f.append("_%s:\n" % (fmt_addr % addr))
             last = addr
-        if not 0xFFB0 <= addr < 0x10000:
+        if 0 and not 0xFFB0 <= addr < 0x10000:
             f.append("/*%s*/  " % (fmt_addr % addr))
-        f.append("\t%s\n" % ln)
+        else:
+            f.append("\t")
+        f.append("%s\n" % ln)
 
 def s_code(self, argv):
     global op
@@ -596,7 +598,7 @@ def s_code(self, argv):
     p = 0
     while self.c_addr < end:
         self.c_push()
-        sym = table.sym_addr(self, self.c_dst, self.c_dst)
+        sym = table.sym_addr(self, self.c_dst)
         if sym != None:
             if sym.flag & A16:  p &= ~0x20
             if sym.flag & A8:   p |=  0x20
@@ -619,7 +621,7 @@ def s_code(self, argv):
         argv = op_table[op]
         if argv != None:
             lst = []
-            imm = table.imm_addr(self, start-self.addr, self.c_dst)
+            imm = table.imm_addr(self, self.c_dst, self.c_dst)
             for i, arg in enumerate(argv[1:]):
                 if arg == A_IA:
                     arg = A_IB if (p & 0x20) else A_IW
@@ -645,7 +647,7 @@ def s_code(self, argv):
                 elif arg == A_AF: lst.append(hvc.al(True))
                 elif arg == A_RB:
                     bdst = hvc.sb() + self.c_addr
-                    sym = table.sym_addr(self, self.c_dst, bdst)
+                    sym = table.sym_addr(self, bdst)
                     if sym != None:
                         lst.append(sym.label)
                     else:
@@ -672,7 +674,7 @@ def s_code(self, argv):
             if len(lst) > 0:
                 ln += " " + ", ".join(lst)
             line.append((self.c_dst, ln))
-            sym = table.sym_addr(self, self.c_dst, self.c_dst)
+            sym = table.sym_addr(self, self.c_dst)
             if sym != None:
                 if "-" not in sym.label and "+" not in sym.label:
                     if sym.label.startswith("data_"):

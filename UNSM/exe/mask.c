@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#define MIN(a, b)               ((a) < (b) ? (a) : (b))
 typedef uint8_t  u8;
 typedef uint32_t u32;
 typedef unsigned int uint;
@@ -11,21 +12,27 @@ typedef unsigned int uint;
 int main(int argc, const char **argv)
 {
     FILE *f;
+    char  buf[0x30];
     u8   *data;
+    uint  size;
+    uint  i;
     u32   c0;
     u32   c1;
     u32   c0a;
     u32   c0b;
     u32   c1a;
     u32   c1b;
-    uint  size;
-    uint  i;
-    u8    buf[8];
-    if (argc != 2)
+    if (argc != 4)
     {
-        fprintf(stderr, "usage: %s <image>\n", argv[0]);
+        fprintf(stderr, "usage: %s <image> <label> <code>\n", argv[0]);
         return EXIT_FAILURE;
     }
+    memset(buf, 0x00, sizeof(buf));
+    memset(&buf[0x10], ' ', 20);
+    size = strlen(argv[2]);
+    memcpy(&buf[0x10], argv[2], MIN(20, size));
+    memcpy(&buf[0x2B], argv[3], 4);
+    buf[0x2F] = strtol(&argv[3][4], NULL, 0);
     f = fopen(argv[1], "r+b");
     if (f == NULL)
     {
@@ -68,14 +75,14 @@ int main(int argc, const char **argv)
     }
     c0 ^= c0a^c0b;
     c1 ^= c1a^c1b;
-    buf[0] = c0 >> 24;
-    buf[1] = c0 >> 16;
-    buf[2] = c0 >>  8;
-    buf[3] = c0 >>  0;
-    buf[4] = c1 >> 24;
-    buf[5] = c1 >> 16;
-    buf[6] = c1 >>  8;
-    buf[7] = c1 >>  0;
+    buf[0x00] = c0 >> 24;
+    buf[0x01] = c0 >> 16;
+    buf[0x02] = c0 >>  8;
+    buf[0x03] = c0 >>  0;
+    buf[0x04] = c1 >> 24;
+    buf[0x05] = c1 >> 16;
+    buf[0x06] = c1 >>  8;
+    buf[0x07] = c1 >>  0;
     free(data);
     fseek(f, 0x00000010, SEEK_SET);
     fwrite(buf, 1, sizeof(buf), f);

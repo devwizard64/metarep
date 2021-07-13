@@ -6,9 +6,10 @@
 
 #define false   0
 #define true    1
+#define MIN(a, b)               ((a) < (b) ? (a) : (b))
+#define MAX(a, b)               ((a) > (b) ? (a) : (b))
 typedef uint8_t u8;
 typedef unsigned int uint;
-typedef u8 bool;
 
 #define SIG_0   'M'
 #define SIG_1   'I'
@@ -34,11 +35,11 @@ typedef u8 bool;
     *p++ = x >> 0;                      \
 }
 
-static bool sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
+static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
 {
-    uint o  = i >= BLK_OH ? i-BLK_OH : 0;
-    uint ms = size-i < BLK_SH ? size-i : BLK_SH;
-    bool found = false;
+    uint o  = MAX(0, (int)i-BLK_OH);
+    uint ms = MIN(BLK_SH, size-i);
+    uint found = false;
     while (o < i && *sz < ms)
     {
         uint s = 0;

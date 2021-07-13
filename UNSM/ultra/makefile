@@ -105,6 +105,7 @@ SRC_OBJ := \
 	build/src/data.o
 
 OBJ := \
+	lib/PR/header.o         \
 	lib/PR/ipl3.o           \
 	lib/PR/crt0.o           \
 	lib/PR/rspboot.o        \

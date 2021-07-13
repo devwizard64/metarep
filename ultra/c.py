@@ -1,5 +1,5 @@
-import ultra
 import table
+import ultra
 
 A_ADDR      = 1
 A_EXTERN    = 2
@@ -11,7 +11,6 @@ def init(self, start, data):
 
 def fmt(self, lst):
     f = self.file[-1][1]
-    last = None
     for addr, sym, extern, line in lst:
         if len(extern) > 0:
             f.append("\n\n")
@@ -21,16 +20,18 @@ def fmt(self, lst):
             else:
                 start = "extern "
             f.append(s.fmt(start, ";") + "\n")
-        comm = "/* 0x%08X */ " % addr if ultra.COMM_VAR else ""
+        start = "/* 0x%08X */ " % addr if ultra.COMM_VAR else ""
+        if sym.flag & ultra.DALIGN:
+            start += "dalign "
         if len(line) > 1 or line[-1].endswith(",") or line[-1].startswith("#"):
-            f.append("\n\n%s%s =\n{\n" % (comm, sym.fmt()))
+            f.append("\n\n%s\n{\n" % sym.fmt(start, " ="))
             for ln in line:
                 f.append(("%s\n" if ln.startswith("#") else "\t%s\n") % ln)
             f.append("};\n\n")
         else:
             if "\n" in line[0]:
                 f.append("\n")
-            f.append("%s%s =" % (comm, sym.fmt()))
+            f.append(sym.fmt(start, " ="))
             f.append("\n\t" if len(f[-1]) + 2 + len(line[0]) > 80 else " ")
             f.append(line[0] + ";\n")
             if "\n" in line[0]:
@@ -49,7 +50,8 @@ def d_pathfmt_prc(argv):
 d_pathfmt = [False, d_pathfmt_prc]
 
 def d_fnc(fnc, fmt="%d"):
-    return [False, lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else fmt, fnc())]]
+    x = lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else fmt, fnc())]
+    return [False, x]
 
 d_s8  = d_fnc(ultra.sb)
 d_u8  = d_fnc(ultra.ub)
@@ -66,12 +68,10 @@ d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
 d_f32 = [False, lambda argv: [ultra.fmt_float(ultra.f(), "F", len(argv)==0)]]
 d_f64 = [False, lambda argv: [ultra.fmt_float(ultra.d(), "",  len(argv)==0)]]
 
-d_align_s8      = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
-d_align_u8      = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
-d_align_s16     = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
-d_align_u16     = [[0, 1, 1, d_u16],    [0, 1, 2, None]]
-d_align_flag8   = [[0, 1, 1, d_flag8],  [0, 1, 3, None]]
-d_align_flag16  = [[0, 1, 1, d_flag16], [0, 1, 2, None]]
+d_align_s8  = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
+d_align_u8  = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
+d_align_s16 = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
+d_align_u16 = [[0, 1, 1, d_u16],    [0, 1, 2, None]]
 
 flag_button = [
     (0x8000, 0x8000, "A_BUTTON"),
@@ -152,11 +152,11 @@ def g_calc_lrs(width, height, siz):
     return min(0x7FF, ((width*height+(3,1,0,0)[siz]) >> (2,1,0,0)[siz])-1)
 
 def g_calc_dxt(width, siz):
-    w = max(1, width*(1,2,4,8)[siz]//16)
+    w = max(1, width << siz >> 4)
     return (0x7FF+w) // w
 
 def g_calc_line(width, siz):
-    return (width*(1,2,4,8)[siz]//2 + 7) >> 3
+    return ((width << siz >> 1) + 7) >> 3
 
 g_im_fmt = (
     "G_IM_FMT_RGBA",
@@ -170,9 +170,6 @@ def g_im_siz(siz):
     return "G_IM_SIZ_%db" % (4 << siz)
 
 def g_tx_cm(cm):
-    # c = "G_TX_CLAMP"  if cm & 2 else "G_TX_WRAP"
-    # m = "G_TX_MIRROR" if cm & 1 else "G_TX_NOMIRROR"
-    # return (c, m)
     return (
         "G_TX_WRAP",
         "G_TX_MIRROR",
@@ -187,10 +184,8 @@ def g_tx_lod(lod):
     return "G_TX_NOLOD" if lod == 0 else "%d" % lod
 
 def g_tx_tile(tile):
-    if tile == 0:
-        return "G_TX_RENDERTILE"
-    if tile == 7:
-        return "G_TX_LOADTILE"
+    if tile == 0:   return "G_TX_RENDERTILE"
+    if tile == 7:   return "G_TX_LOADTILE"
     return "%d" % tile
 
 def g_null(argv):
@@ -313,6 +308,7 @@ g_setothermode_h = {
 g_setothermode_l = {
     3: ("DPSetRenderMode", {
         0x00552078: "G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2",
+        0x00553078: "G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2",
         0x005041C8: "G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2",
         0x0F0A4000: "G_RM_OPA_SURF, G_RM_OPA_SURF2",
         0x00504240: "G_RM_XLU_SURF, G_RM_XLU_SURF2",
@@ -345,9 +341,14 @@ def gx_settimg(w0, w1):
 
 def gx_settile(w0, w1):
     return (
-        w0 >> 21 & 0x07, w0 >> 19 & 0x03, w0 >> 9 & 0x1FF, w0 & 0x1FF,
-        w1 >> 24 & 0x07, w1 >> 20 & 0x0F, w1 >> 18 & 0x03, w1 >> 14 & 0x0F,
-        w1 >> 10 & 0x0F, w1 >> 8 & 0x03, w1 >> 4 & 0x0F, w1 & 0x0F,
+        w0 >> 21 &  0x07, # fmt
+        w0 >> 19 &  0x03, # siz
+        w0 >> 9  & 0x1FF, # line
+        w0       & 0x1FF, # tmem
+        w1 >> 24 &  0x07, # tile
+        w1 >> 20 &  0x0F, # palette
+        w1 >> 18 & 0x03, w1 >> 14 & 0x0F, w1 >> 10 & 0x0F, # cmt maskt shiftt
+        w1 >>  8 & 0x03, w1 >>  4 & 0x0F, w1       & 0x0F, # cms masks shifts
     )
 
 def gx_tile(w0, w1):
@@ -699,7 +700,7 @@ def gfx_prc(tab, cmd, argv):
 
 def d_Gfx_prc(self, line, tab, argv):
     end, = argv
-    table = [self.meta.gfx_table, gfx_table]
+    table = [self.meta.c.gfx_table, gfx_table]
     while self.c_addr < end:
         lst_push(self, line)
         cmd = ultra.ub()
@@ -746,12 +747,12 @@ d_OSViMode = [
 def lst_push(self, line):
     global extern
     self.c_push()
-    sym = table.sym_addr(self, self.c_dst, self.c_dst, True)
+    sym = table.sym_addr(self, self.c_dst, rej=True)
     if sym != None and not (len(line) > 0 and line[-1][1] == sym):
         extern = set()
         line.append((self.c_dst, sym, extern, []))
 
-def lst_main(self, line, lst, tab):
+def s_data_lst(self, line, lst, tab):
     for argv in lst:
         start = "{"*argv[0]
         end   = "}"*argv[0]
@@ -764,10 +765,10 @@ def lst_main(self, line, lst, tab):
             if type(argv[2]) == list:
                 if argv[0] > 0:
                     line[-1][-1].append(tab + start)
-                    lst_main(self, line, argv[2], tab + "\t")
+                    s_data_lst(self, line, argv[2], tab + "\t")
                     line[-1][-1].append(tab + end)
                 else:
-                    lst_main(self, line, argv[2], tab)
+                    s_data_lst(self, line, argv[2], tab)
             else:
                 n = argv[2]
                 t = argv[3]
@@ -788,26 +789,71 @@ def lst_main(self, line, lst, tab):
                                 f(self, line, tab, argv[4:])
                         else:
                             line[-1][-1].append(tab + start + ", ".join([
-                                ("\n"+tab).join(f(argv[4:])) for _ in range(n)
+                                ("\n\t"+tab).join(f(argv[4:])) for _ in range(n)
                             ]) + end)
 
 def s_data(self, argv):
     start, end, data, lst = argv
+    if start|end == 0 and len(lst) > 0:
+        raise RuntimeError("bad lst %s" % str(lst))
     init(self, start, data)
     line = []
-    lst_main(self, line, lst, "")
+    s_data_lst(self, line, lst, "")
     fmt(self, line)
 
-def s_bss(self, argv):
+def s_declare(self, argv, var, addr, s):
     start, end, data, src = argv
     init(self, start, data)
+    if src == None:
+        src = start
     f = self.file[-1][1]
-    last = None
     while self.c_addr < end:
         self.c_push()
-        sym = table.sym_addr(self, src, self.c_dst, True)
-        if sym != None:
-            f.append(sym.fmt(
-                "/* 0x%08X */ " % self.c_dst if ultra.COMM_VAR else "", ";"
-            ) + "\n")
+        sym = table.sym_addr(self, self.c_dst, src, True)
+        if sym != None and hasattr(sym, "fmt"):
+            if var or (sym.flag & table.GLOBL and not sym.flag & table.LOCAL):
+                if addr:
+                    start = "/* 0x%08X */ " % self.c_dst + s
+                else:
+                    start = s
+                if var and sym.flag & ultra.BALIGN:
+                    start += "balign "
+                f.append(sym.fmt(start, ";") + "\n")
         self.c_addr += 1
+
+def s_bss(self, argv):
+    s_declare(self, argv, True, ultra.COMM_VAR, "")
+
+def s_extern(self, argv):
+    s_declare(self, argv, False, ultra.COMM_EXTERN, "extern ")
+
+def s_struct_fmt(size):
+    fmt = "/* %s */" % ultra.fmt_sizefmt(size)
+    return fmt + " "*(4 - (len(fmt % 0) & 3))
+
+def s_struct_lst(f, tab, fmt, lst):
+    tab += "    "
+    for x in lst:
+        off = x[0]
+        start = tab + fmt % off if off != None else tab
+        if type(x) == list:
+            c    = x[1]
+            name = x[2]
+            lst  = x[3]
+            end  = x[4] if len(x) > 4 else ""
+            t = tab + " "*len(fmt % 0)
+            f.append(start+c+"\n" + t+"{\n")
+            s_struct_lst(f, t, fmt, lst)
+            f.append(t+"}\n" + t+name+end+";\n")
+        else:
+            sym = x[1]
+            f.append(sym.fmt(start, ";", 8) + "\n")
+
+def s_struct(self, argv):
+    tbl, = argv
+    f = self.file[-1][1]
+    for size, name, lst in tbl:
+        fmt = s_struct_fmt(size)
+        f.append("struct %s\n{\n" % name)
+        s_struct_lst(f, "", fmt, lst)
+        f.append("};  " + fmt.rstrip() % size + "\n\n")

@@ -2,6 +2,9 @@ import struct
 
 import table
 
+DALIGN      = 1 << 16
+BALIGN      = 1 << 17
+
 COMM_EXTERN = True
 COMM_VAR    = True
 COMM_LABEL  = True
@@ -65,12 +68,6 @@ def d():
         script.c_next(8)
     )
 
-def sym_addr(addr, src=None):
-    if src == None:
-        src = script.c_dst
-    # print("addr=%08X  src=%08X" % (addr, src))
-    return table.sym_addr(script, src, addr)
-
 def addr_chk(seg, addr):
     return False
     # if seg in {0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}:
@@ -86,7 +83,7 @@ def addr_chk(seg, addr):
     return True
 
 def sym(addr, src=None, fmt="0x%08X", extern=False):
-    sym = sym_addr(addr, src)
+    sym = table.sym_addr(script, addr, src)
     if sym != None:
         if extern and hasattr(sym, "fmt"):
             c.extern.add((addr, sym))
@@ -140,7 +137,7 @@ def sym(addr, src=None, fmt="0x%08X", extern=False):
                 0x07: 0x0E000000,
                 0x08: 0x0F000000,
             }[seg]-script.addr
-            sym = sym_addr(x)
+            sym = table.sym_addr(script, x)
             if sym != None:
                 _, _, name = sym.label.partition("_")
                 _, _, name = name.partition("_")
@@ -203,6 +200,9 @@ def fmt_str(x):
     ):
         x = x.replace(old, new)
     return "\"" + x + "\""
+
+def fmt_sizefmt(size):
+    return "0x%%0%dX" % max(2, (size.bit_length()+3)//4)
 
 def init(self, start, data):
     global script

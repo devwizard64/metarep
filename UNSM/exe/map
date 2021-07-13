@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+
+def main(argv):
+    if len(argv) != 3:
+        print("usage: %s <output> <input>" % argv[0])
+        return 1
+    path = argv[1].rpartition(".")[0]
+    with open(argv[2], "r") as f:
+        data = f.read()
+    vtx_data = {"v": []}
+    obj_data = []
+    obj = None
+    o = "0"
+    for line in data.split("\n"):
+        arg = line.split()
+        if len(arg) == 0:
+            continue
+        elif arg[0] in vtx_data:
+            vtx_data[arg[0]].append([float(x) for x in arg[1:]])
+        elif arg[0] == "f":
+            if obj == None:
+                for i, obj in obj_data:
+                    if i == o:
+                        break
+                else:
+                    obj = []
+                    obj_data.append([o, obj])
+            face = [
+                [int(x)-1 if x != "" else None for x in vtx.split("/")]
+                for vtx in arg[1:]
+            ]
+            for i in range(len(face)-2):
+                obj.append((face[0], face[i+1], face[i+2]))
+        elif arg[0] == "o":
+            o = "".join([
+                x if x in (
+                    "0123456789"
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    "abcdefghijklmnopqrstuvwxyz"
+                ) else "_"
+                for x in arg[1].partition(";")[0]
+            ])
+            obj = None
+    data = "M_VTX, %d,\n" % len(vtx_data["v"]) + "".join([
+        "%d, %d, %d,\n" % tuple([
+            max(-0x8000, min(0x7FFF, int(round(x))))
+            for x in vtx
+        ])
+        for vtx in vtx_data["v"]
+    ])
+    for o, obj in obj_data:
+        data += "%s, %d,\n" % (o, len(obj)) + "".join([
+            "%d, %d, %d,\n" % tuple([
+                x[0] for x in face
+            ])
+            for face in obj
+        ])
+    data += "M_FACEEND,\n"
+    with open(argv[1], "w") as f:
+        f.write(data)
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

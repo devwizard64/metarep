@@ -8,6 +8,11 @@ import table
 import ultra
 import UNSM
 
+d_bool_s8   = [[0, 1, 1, ultra.c.d_s8,  UNSM.fmt_bool], [0, 1, 3, None]]
+d_bool_u8   = [[0, 1, 1, ultra.c.d_u8,  UNSM.fmt_bool], [0, 1, 3, None]]
+d_bool_s16  = [[0, 1, 1, ultra.c.d_s16, UNSM.fmt_bool], [0, 1, 2, None]]
+d_bool_u16  = [[0, 1, 1, ultra.c.d_u16, UNSM.fmt_bool], [0, 1, 2, None]]
+
 # main.h
 # app.h
 # audio.h
@@ -30,25 +35,52 @@ def d_staff_prc(argv):
 d_staff = [False, d_staff_prc]
 
 # player_touch.h
+
+def d_player_touch_prc(argv):
+    flag     = ultra.uw() # T:flag
+    callback = ultra.aw()
+    return ["{0x%08X, %s}" % (flag, callback)]
+d_player_touch = [False, d_player_touch_prc]
+
 # player.h
 # player_move.h
 # player_demo.h
 # player_hang.h
 # player_stop.h
+
 # player_ground.h
+
+d_player_ground = [
+    [0, -2, 1, ultra.c.d_s16],
+    [0, -5, 1, ultra.c.d_u32, "0x%08X"],
+]
+
 # player_air.h
 # player_water.h
 # player_grab.h
-# player_gfx.h
+# player_callback.h
 # mem.h
 # save.h
 # world.h
 # g_draw.h
 # time.h
-# szp.h
+# slidec.h
 # camera.h
 # course.h
+
 # object.h
+
+def d_particle_prc(argv):
+    code    = ultra.uw()
+    flag    = ultra.uw()
+    shape   = UNSM.fmt_shape(ultra.ub())
+    ultra.script.c_addr += 3
+    script  = ultra.aw(extern=True)
+    if (code, flag, shape, script) == (0, 0, "S_NULL", "NULL"):
+        return ["{0}"]
+    return ["{0x%08X, 0x%08X, %s, %s}" % (code, flag, shape, script)]
+d_particle = [False, d_particle_prc]
+
 # object_lib.h
 # object_a.h
 # object_move.h
@@ -63,9 +95,9 @@ d_staff = [False, d_staff_prc]
 def d_shadow_rect_prc(argv):
     sx = ultra.fmt_float(ultra.f(), "F")
     sz = ultra.fmt_float(ultra.f(), "F")
-    h_scale = UNSM.fmt_bool[ultra.sb()]
+    y_scale = UNSM.fmt_bool[ultra.sb()]
     ultra.script.c_addr += 3
-    return ["{%s, %s, %s}" % (sx, sz, h_scale)]
+    return ["{%s, %s, %s}" % (sx, sz, y_scale)]
 d_shadow_rect = [False, d_shadow_rect_prc]
 
 # background.h
@@ -85,21 +117,21 @@ def d_scroll_prc(argv):
     g       = ultra.ub()
     b       = ultra.ub()
     a       = ultra.ub()
-    rm      = ultra.sw()
+    layer   = ultra.sw()
     arg0    = (index, texture, length, data)
     arg1    = (start, end, draw)
-    arg2    = (r, g, b, a, UNSM.rm_table[rm])
+    arg2    = (r, g, b, a, UNSM.fmt_glayer[layer])
     if arg0+arg1+arg2 == (
         0, 0, 0, "NULL",
         "NULL", "NULL", "NULL",
-        0, 0, 0, 0, "BACKGROUND"
+        0, 0, 0, 0, "G_LAYER_BACKGROUND"
     ):
         return ["{0}"]
     return [
         "{",
             "\t0x%04X, %d, %2d, %s," % arg0,
             "\t%s, %s, %s," % arg1,
-            "\t0x%02X, 0x%02X, 0x%02X, 0x%02X, G_R_%s," % arg2,
+            "\t0x%02X, 0x%02X, 0x%02X, 0x%02X, %s," % arg2,
         "}",
     ]
 d_scroll = [False, d_scroll_prc]
@@ -115,7 +147,7 @@ def d_ripple_0_prc(argv):
         x = ultra.sh()
         y = ultra.sh()
         z = ultra.sh()
-        lst.append("\t%d, %d, %d," % (x, y, z))
+        lst.append("%d, %d, %d," % (x, y, z))
     return lst
 d_ripple_0 = [False, d_ripple_0_prc]
 
@@ -125,8 +157,7 @@ def d_ripple_1_prc(argv):
     while ultra.script.c_addr < end:
         n = ultra.sh()
         f = [n] + [ultra.sh() for _ in range(n)]
-        lst.append("\t" + " ".join(["%d," % x for x in f]))
-    lst[0] = lst[0][1:]
+        lst.append(" ".join(["%d," % x for x in f]))
     return lst
 d_ripple_1 = [False, d_ripple_1_prc]
 
@@ -139,18 +170,18 @@ d_ripple_1 = [False, d_ripple_1_prc]
 
 def d_obj_data_prc(argv):
     script  = ultra.aw(extern=True)
-    g       = UNSM.fmt_g(ultra.sh())
+    shape   = UNSM.fmt_shape(ultra.sh())
     arg     = ultra.sh()
-    return ["{%s, %s, %d}" % (script, g, arg)]
+    return ["{%s, %s, %d}" % (script, shape, arg)]
 d_obj_data = [False, d_obj_data_prc]
 
 def d_map_obj_prc(argv):
     index   = ultra.ub()
     t       = ultra.ub()
     arg     = ultra.ub()
-    g       = UNSM.fmt_g(ultra.ub())
+    shape   = UNSM.fmt_shape(ultra.ub())
     script  = ultra.aw(extern=True)
-    return ["{%3d, %d, %d, %s, %s}" % (index, t, arg, g, script)]
+    return ["{%3d, %d, %d, %s, %s}" % (index, t, arg, shape, script)]
 d_map_obj = [False, d_map_obj_prc]
 
 # hud.h
@@ -167,7 +198,17 @@ d_power = [False, d_power_prc]
 
 # object_b.h
 # object_c.h
+
 # math.h
+
+def d_bspline_prc(argv):
+    time = ultra.sh()
+    x    = ultra.sh()
+    y    = ultra.sh()
+    z    = ultra.sh()
+    return ["{%2d, {%5d, %5d, %5d}}" % (time, x, y, z)]
+d_bspline = [None, d_bspline_prc]
+
 # g.h
 # g_script.h
 # s_script.h
@@ -489,8 +530,8 @@ def g_loadimageblock(cmd, timg, fmt, siz, width, w):
     tile, uls, ult, lrs, dxt = ultra.c.gx_tile(w[0], w[1])
     if (width, tile, uls, ult) != (1, 7, 0, 0):
         return None
-    width  = 0x800*(1,2,4,8)[siz] // dxt
-    height = ((lrs+1) << (2,1,0,0)[siz]) // width
+    width  = max(16 >> siz, (0x800 << siz) // dxt)
+    height = (lrs+1) // width
     timg   = ultra.sym(timg)
     fmt    = ultra.c.g_im_fmt[fmt]
     siz    = ultra.c.g_im_siz(siz)
@@ -667,8 +708,7 @@ def s_msg_str(self, lang, line):
 def s_msg(self, argv):
     start, end, data, m, name, s, table = argv
     ultra.init(self, start, data)
-    line = ["$const\n"] if m & 4 else []
-    m &= 3
+    line = []
     lang = s_msg_lang(self, None, line, s)
     i = 0
     while self.c_addr < end:
@@ -779,7 +819,7 @@ def sg_lod(argv):
     b = "%d" % ultra.sh()
     return (None, a, b)
 
-# 0E 18 19
+# 0E 18
 def sg_callback(argv):
     ultra.script.c_addr += 1
     arg = "%d" % ultra.sh() # T:enum ?
@@ -830,10 +870,10 @@ def sg_gfx_posrot(argv):
         s = "pry"
         a = (ry,)
     if arg & 0x80:
-        rm = UNSM.rm_table[arg & 0x0F]
+        layer = UNSM.fmt_glayer[arg & 0x0F][8:]
         ultra.tag = "gfx"
         gfx = ultra.aw(extern=True)
-        return ("gfx_"+s, rm, gfx) + a
+        return ("gfx_"+s, layer, gfx) + a
     return (s,) + a
 
 # 11 12 14 1D
@@ -854,29 +894,29 @@ def sg_gfx_arg(argv):
         ))
         a = (s,)
     if arg & 0x80:
-        rm = UNSM.rm_table[arg & 0x0F]
+        layer = UNSM.fmt_glayer[arg & 0x0F][8:]
         ultra.tag = "gfx"
         gfx = ultra.aw(extern=True)
-        return (c, rm, gfx) + a
+        return (c, layer, gfx) + a
     return (None,) + a
 
 # 13
 def sg_gfx_pos(argv):
-    rm = UNSM.rm_table[ultra.ub()]
+    layer = UNSM.fmt_glayer[ultra.ub()][8:]
     x = "%d" % ultra.sh()
     y = "%d" % ultra.sh()
     z = "%d" % ultra.sh()
     ultra.tag = "gfx"
     gfx = ultra.aw(extern=True)
-    return (None, rm, gfx, x, y, z)
+    return (None, layer, gfx, x, y, z)
 
 # 15
 def sg_gfx(argv):
-    rm = UNSM.rm_table[ultra.ub()]
+    layer = UNSM.fmt_glayer[ultra.ub()][8:]
     ultra.script.c_addr += 2
     ultra.tag = "gfx"
     gfx = ultra.aw(extern=True)
-    return (None, rm, gfx)
+    return (None, layer, gfx)
 
 # 16
 def sg_shadow(argv):
@@ -885,6 +925,21 @@ def sg_shadow(argv):
     alpha = "0x%02X" % ultra.uh()
     scale = "%d" % ultra.uh()
     return (None, scale, alpha, t)
+
+# 19
+def sg_background(argv):
+    ultra.script.c_addr += 1
+    arg = ultra.sh() # T:enum
+    callback = ultra.aw()
+    if callback == "NULL":
+        r = (arg >> 11 & 0x1F) * 0xFF//0x1F
+        g = (arg >>  6 & 0x1F) * 0xFF//0x1F
+        b = (arg >>  1 & 0x1F) * 0xFF//0x1F
+        a = arg & 1
+        arg = "GPACK_RGBA5551(0x%02X, 0x%02X, 0x%02X, %d)" % (r, g, b, a)
+    else:
+        arg = "%d" % arg
+    return (None, arg, callback)
 
 # 1C
 def sg_hand(argv):
@@ -900,8 +955,8 @@ sg_str = (
     "exit", # 0x01
     "jump", # 0x02
     "return", # 0x03
-    "start", # 0x04
-    "end", # 0x05
+    "push", # 0x04
+    "pull", # 0x05
     None, # 0x06
     None, # 0x07
     "world", # 0x08
@@ -957,7 +1012,7 @@ sg_fnc = (
     (sg_shadow,), # 0x16
     (sg_null,), # 0x17
     (sg_callback,), # 0x18
-    (sg_callback,), # 0x19
+    (sg_background,), # 0x19
     None, # 0x1A
     None, # 0x1B
     (sg_hand,), # 0x1C
@@ -974,7 +1029,7 @@ def s_script_g(self, argv):
     line = []
     while self.c_addr < end:
         self.c_push()
-        sym = table.sym_addr(self, self.c_dst, self.c_dst, True)
+        sym = table.sym_addr(self, self.c_dst, rej=True)
         if sym != None:
             tab = 0
             line.append((
@@ -984,6 +1039,8 @@ def s_script_g(self, argv):
         f = sg_fnc[c]
         argv = f[0](f[1:])
         s = argv[0] if argv[0] != None else sg_str[c]
+        if self.addr == 0x0E000000-0x004EB1F0 and self.c_dst == 0x0E00093C:
+            c = 0x05
         if c in {0x05} and tab > 0:
             tab -= 1
         if c in {0x01}:

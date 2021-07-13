@@ -17,19 +17,19 @@ def i_loword(sym, addr):
     return ("#.loword(%s)" % sym[addr].label,)
 
 def s_ifdef(s):
-    return [main.s_str, ".ifdef %s\n" % s]
+    return [main.s_str, "\n\n.ifdef %s\n\n" % s]
 
 def s_ifndef(s):
-    return [main.s_str, ".ifndef %s\n" % s]
+    return [main.s_str, "\n\n.ifndef %s\n\n" % s]
 
 def s_else():
-    return [main.s_str, ".else\n"]
+    return [main.s_str, "\n\n.else\n\n"]
 
 def s_endif():
-    return [main.s_str, ".endif\n"]
+    return [main.s_str, "\n\n.endif\n\n"]
 
 def s_segment(s):
-    return [main.s_str, ".segment \"%s\"\n" % s]
+    return [main.s_str, "\n.segment \"%s\"\n" % s]
 
 def s_file(addr, fn, lst):
     return [main.s_call, [

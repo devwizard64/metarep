@@ -28,19 +28,19 @@
     jml code_008C6D
 .endmacro
 
-.macro mem_t arg, size, src, dst
+.macro MEM arg, size, src, dst
     .byte arg
     .word size
     .faraddr src
     .word dst
 .endmacro
 
-.macro _00841C_t arg0, arg1
+.macro _00841C arg0, arg1
     .byte arg0
     .word arg1
 .endmacro
 
-.ifdef _J0
+.ifdef __J0__
 code_0397F4 = $0397F4
 code_03A02A = $03A02A
 code_03A103 = $03A103
@@ -91,7 +91,7 @@ bss_769D = $769D
 bss_7934 = $7934
 .endif
 
-.ifdef _E0
+.ifdef __E0__
 code_01DFC6_E0 = $01DFC6
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A02A ;
@@ -144,7 +144,7 @@ bss_769D = $769F
 bss_7934 = $7936
 .endif
 
-.ifdef _P0
+.ifdef __P0__
 code_01DFC6_E0 = $01DFC6 ;
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A02A ;

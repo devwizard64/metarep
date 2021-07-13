@@ -79,6 +79,7 @@ def s_str(self, argv):
 
 class script:
     def __init__(self, path, name):
+        self.name = name
         self.meta = importlib.import_module(name)
         self.root = path
         self.path = []
@@ -94,6 +95,24 @@ class script:
         s_call(self, [self.meta.lst])
     def path_join(self, path, i=0):
         return path_join(([self.root] + self.path + path)[i:])
+
+    def cache(self, start, end, data, callback=None):
+        fn = os.path.join(".cache", "%s%s_%08X.bin" % (self.name, data, start))
+        if os.path.isfile(fn):
+            with open(fn, "rb") as f:
+                data = f.read()
+        else:
+            data = self.data[data][start:end]
+            if callback != None:
+                data = callback(data)
+            with open(fn, "wb") as f:
+                f.write(data)
+        return data
+
+    def c_dev(self, src=None):
+        if src == None:
+            src = self.c_dst
+        return self.dev if self.dev != None else src-self.addr
 
     def c_init(self, start, data):
         self.c_data = data

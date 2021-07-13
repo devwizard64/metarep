@@ -16,17 +16,17 @@ segment_table = {
     0x02: "MAIN",
     0x03: "ENTITY",
     0x04: "PLAYER",
-    0x05: "GFXA",
-    0x06: "GFXB",
+    0x05: "SHAPEA",
+    0x06: "SHAPEB",
     0x07: "STAGE",
-    0x08: "GFXC",
+    0x08: "SHAPEC",
     0x09: "TEXTURE",
     0x0A: "BACKGROUND",
     0x0B: "PARTICLE",
-    0x0C: "GFXA",
-    0x0D: "GFXB",
+    0x0C: "SHAPEA",
+    0x0D: "SHAPEB",
     0x0E: "STAGE",
-    0x0F: "GFXC",
+    0x0F: "SHAPEC",
     0x13: "OBJECT",
     0x14: "MENU",
     0x15: "GAME",
@@ -40,7 +40,7 @@ def chk_seg(sym, s):
     return not sym.endswith("_start")
 
 # 00 01
-def ss_mjump(argv):
+def ss_push_jump(argv):
     seg    = segment_table[ultra.uh()]
     start  = ultra.uw()
     end    = ultra.uw()
@@ -73,7 +73,7 @@ def ss_script(argv):
 # (08) (09)
 
 # 0B 0C
-def ss_cond(argv):
+def ss_if_jump(argv):
     s, = argv
     c = (
         "AND",
@@ -100,7 +100,7 @@ def ss_callback(argv):
     callback = ultra.aw()
     return (None, callback, arg)
 
-# 13 19 31 38
+# 13 19 31
 def ss_arg(argv):
     x = "%d" % ultra.sh()
     return (None, x)
@@ -108,7 +108,7 @@ def ss_arg(argv):
 # (14) (15)
 
 # 16 17 18 1A
-def ss_mdata(argv):
+def ss_load(argv):
     s, = argv
     seg = ultra.uh()
     if s == None:
@@ -129,33 +129,33 @@ def ss_mdata(argv):
     return (None, name)
 
 # 1F
-def ss_wstart(argv):
+def ss_world_start(argv):
     world = "%d" % ultra.ub()
     ultra.script.c_addr += 1
     script = ultra.aw()
     return (None, world, script)
 
 # 21
-def ss_ggfx(argv):
+def ss_shape_gfx(argv):
     x = ultra.uh()
-    rm = UNSM.rm_table[x >> 12]
-    g = UNSM.fmt_g(x & 0x0FFF)
+    layer = UNSM.fmt_glayer[x >> 12][8:]
+    shape = UNSM.fmt_shape(x & 0x0FFF)
     ultra.tag = "gfx"
     gfx = ultra.aw()
-    return (None, g, gfx, rm)
+    return (None, shape, gfx, layer)
 
 # 22
-def ss_gscript(argv):
-    g = UNSM.fmt_g(ultra.uh())
+def ss_shape_script(argv):
+    shape = UNSM.fmt_shape(ultra.uh())
     script = ultra.aw()
-    return (None, g, script)
+    return (None, shape, script)
 
 # (23)
 
 # 24
 def ss_object(argv):
     mask = ultra.ub()
-    g = UNSM.fmt_g(ultra.ub())
+    shape = UNSM.fmt_shape(ultra.ub())
     px = "%d" % ultra.sh()
     py = "%d" % ultra.sh()
     pz = "%d" % ultra.sh()
@@ -168,21 +168,25 @@ def ss_object(argv):
     script = ultra.aw()
     if mask == 0x1F:
         return (
-            "object_all", g, px, py, pz, rx, ry, rz, arg0, arg1, flag, script
+            "object_all", shape, px, py, pz, rx, ry, rz, arg0, arg1, flag,
+            script
         )
     mask = "0x%02X" % mask
-    return (None, mask, g, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
+    return (None, mask, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
 
 # 25
 def ss_player(argv):
-    g = ultra.uh()
-    arg = ultra.uw()
+    shape = UNSM.fmt_shape(ultra.uh())
+    arg0 = ultra.ub()
+    arg1 = ultra.ub()
+    flag = ultra.uh()
     script = ultra.aw()
-    if g == 0x01 and arg == 1 and script == "o_mario":
+    if (shape, arg0, arg1, flag, script) == ("S_MARIO", 0, 0, 1, "o_mario"):
         return ("mario",)
-    g = UNSM.fmt_g(g)
-    arg = "%d" % arg
-    return (None, g, arg, script)
+    arg0 = "%d" % arg0
+    arg1 = "%d" % arg1
+    flag = "%d" % flag # T:flag
+    return (None, shape, arg0, arg1, flag, script)
 
 # 26 27
 def ss_link(argv):
@@ -196,7 +200,7 @@ def ss_link(argv):
     return (m if flag == 0x80 else None, index, stage, world, link)
 
 # 28
-def ss_linkw(argv):
+def ss_connect(argv):
     index = "%d" % ultra.ub()
     world = "%d" % ultra.ub()
     px = "%d" % ultra.sh()
@@ -212,7 +216,7 @@ def ss_world(argv):
     return (None, world)
 
 # 2B
-def ss_pinit(argv):
+def ss_player_open(argv):
     world = "%d" % ultra.ub()
     ultra.script.c_addr += 1
     ry = "%d" % ultra.sh()
@@ -255,9 +259,14 @@ def ss_bgm(argv):
     return (None, t, bgm)
 
 # 37
-def ss_bgmplay(argv):
+def ss_bgm_play(argv):
     bgm = "0x%02X" % ultra.uh() # T:enum
     return (None, bgm)
+
+# 38
+def ss_bgm_stop(argv):
+    time = "%d" % (ultra.sh()+2)
+    return (None, time)
 
 # (3A)
 
@@ -272,10 +281,10 @@ def ss_jet(argv):
     return (None, index, mode, px, py, pz, arg)
 
 # 3C
-def ss_arw(argv):
+def ss_var(argv):
     t = (
-        "aw",
-        "ar",
+        "store",
+        "load",
     )[ultra.ub()]
     v = (
         "SAVE",
@@ -287,72 +296,72 @@ def ss_arw(argv):
     return (t, v)
 
 ss_str = [
-    "mcall",    # 0x00 jsl
-    "mjump",    # 0x01 jml
-    "mreturn",  # 0x02 rtl
-    "sleep",    # 0x03
-    "freeze",   # 0x04
-    "jump",     # 0x05 jmp
-    "call",     # 0x06 jsr
-    "return",   # 0x07 rts
-    "for",      # 0x08
-    "done",     # 0x09
-    "do",       # 0x0A
-    "while",    # 0x0B
-    "cjump",    # 0x0C b*
-    "ccall",    # 0x0D c*
-    "if",       # 0x0E
-    "else",     # 0x0F
-    "endif",    # 0x10
-    "acall",    # 0x11
-    "aupdate",  # 0x12
-    "aset",     # 0x13
-    "mpush",    # 0x14
-    "mpop",     # 0x15
-    "mcode",    # 0x16
-    "mdata",    # 0x17
-    "mszp",     # 0x18
-    "mface",    # 0x19
-    "mtexture", # 0x1A
-    "sinit",    # 0x1B
-    "sdestroy", # 0x1C
-    "sstart",   # 0x1D
-    "send",     # 0x1E
-    "wstart",   # 0x1F
-    "wend",     # 0x20
-    "ggfx",     # 0x21
-    "gscript",  # 0x22
-    "gscale",   # 0x23
-    "object",   # 0x24
-    "player",   # 0x25
-    "link",     # 0x26
-    "linkbg",   # 0x27
-    "linkw",    # 0x28
-    "winit",    # 0x29
-    "wdestroy", # 0x2A
-    "pinit",    # 0x2B
-    "pdestroy", # 0x2C
-    "wupdate",  # 0x2D
-    "map",      # 0x2E
-    "area",     # 0x2F
-    "msg",      # 0x30
-    "env",      # 0x31
-    None,       # 0x32
-    "wipe",     # 0x33
-    "viblack",  # 0x34
-    "vigamma",  # 0x35
-    "bgm",      # 0x36
-    "bgmplay",  # 0x37
-    "bgmstop",  # 0x38
-    "obj",      # 0x39
-    "wind",     # 0x3A
-    "jet",      # 0x3B
-    None,       # 0x3C
+    "push_call",    # 0x00 jsl
+    "push_jump",    # 0x01 jml
+    "pull_return",  # 0x02 rtl
+    "sleep",        # 0x03
+    "freeze",       # 0x04
+    "jump",         # 0x05 jmp
+    "call",         # 0x06 jsr
+    "return",       # 0x07 rts
+    "for",          # 0x08
+    "done",         # 0x09
+    "do",           # 0x0A
+    "while",        # 0x0B
+    "if_jump",      # 0x0C b*
+    "if_call",      # 0x0D c*
+    "if",           # 0x0E
+    "else",         # 0x0F
+    "endif",        # 0x10
+    "callback",     # 0x11
+    "process",      # 0x12
+    "set",          # 0x13
+    "push",         # 0x14
+    "pull",         # 0x15
+    "load_code",    # 0x16
+    "load_data",    # 0x17
+    "load_szp",     # 0x18
+    "load_face",    # 0x19
+    "load_texture", # 0x1A
+    "stage_init",   # 0x1B
+    "stage_free",   # 0x1C
+    "stage_start",  # 0x1D
+    "stage_end",    # 0x1E
+    "world_start",  # 0x1F
+    "world_end",    # 0x20
+    "shape_gfx",    # 0x21
+    "shape_script", # 0x22
+    "shape_scale",  # 0x23
+    "object",       # 0x24
+    "player",       # 0x25
+    "link",         # 0x26
+    "linkbg",       # 0x27
+    "connect",      # 0x28
+    "world_open",   # 0x29
+    "world_close",  # 0x2A
+    "player_open",  # 0x2B
+    "player_close", # 0x2C
+    "world_update", # 0x2D
+    "map",          # 0x2E
+    "area",         # 0x2F
+    "msg",          # 0x30
+    "env",          # 0x31
+    None,           # 0x32
+    "wipe",         # 0x33
+    "vi_black",     # 0x34
+    "vi_gamma",     # 0x35
+    "bgm",          # 0x36
+    "bgm_play",     # 0x37
+    "bgm_stop",     # 0x38
+    "obj",          # 0x39
+    "wind",         # 0x3A
+    "jet",          # 0x3B
+    None,           # 0x3C
 ]
 
 ss_fnc = [
-    (ss_mjump,), # 0x00
-    (ss_mjump,), # 0x01
+    (ss_push_jump,), # 0x00
+    (ss_push_jump,), # 0x01
     (ss_null,), # 0x02
     (ss_time,), # 0x03
     (ss_time,), # 0x04
@@ -362,8 +371,8 @@ ss_fnc = [
     None, # 0x08
     None, # 0x09
     (ss_null,), # 0x0A
-    (ss_cond, False), # 0x0B
-    (ss_cond, True), # 0x0C
+    (ss_if_jump, False), # 0x0B
+    (ss_if_jump, True), # 0x0C
     None, # 0x0D
     None, # 0x0E
     None, # 0x0F
@@ -373,28 +382,28 @@ ss_fnc = [
     (ss_arg,), # 0x13
     None, # 0x14
     None, # 0x15
-    (ss_mdata, None), # 0x16
-    (ss_mdata, "data"), # 0x17
-    (ss_mdata, "szp"), # 0x18
+    (ss_load, None), # 0x16
+    (ss_load, "data"), # 0x17
+    (ss_load, "szp"), # 0x18
     (ss_arg,), # 0x19 T:enum
-    (ss_mdata, "szp"), # 0x1A
+    (ss_load, "szp"), # 0x1A
     (ss_null,), # 0x1B
     (ss_null,), # 0x1C
     (ss_null,), # 0x1D
     (ss_null,), # 0x1E
-    (ss_wstart,), # 0x1F
+    (ss_world_start,), # 0x1F
     (ss_null,), # 0x20
-    (ss_ggfx,), # 0x21
-    (ss_gscript,), # 0x22
+    (ss_shape_gfx,), # 0x21
+    (ss_shape_script,), # 0x22
     None, # 0x23
     (ss_object,), # 0x24
     (ss_player,), # 0x25
-    (ss_link, "linkm"), # 0x26
-    (ss_link, "linkbgm"), # 0x27
-    (ss_linkw,), # 0x28
+    (ss_link, "link_mid"), # 0x26
+    (ss_link, "linkbg_mid"), # 0x27
+    (ss_connect,), # 0x28
     (ss_world,), # 0x29
     (ss_world,), # 0x2A
-    (ss_pinit,), # 0x2B
+    (ss_player_open,), # 0x2B
     None, # 0x2C
     None, # 0x2D
     (ss_script, True), # 0x2E
@@ -406,12 +415,12 @@ ss_fnc = [
     (ss_bool,), # 0x34
     None, # 0x35
     (ss_bgm,), # 0x36
-    (ss_bgmplay,), # 0x37
-    (ss_arg,), # 0x38 T:time2
+    (ss_bgm_play,), # 0x37
+    (ss_bgm_stop,), # 0x38 T:time2
     (ss_script, True), # 0x39
     None, # 0x3A
     (ss_jet,), # 0x3B
-    (ss_arw,), # 0x3C
+    (ss_var,), # 0x3C
 ]
 
 ss_inc = {0x08, 0x0A, 0x0E, 0x0F, 0x1D, 0x1F}
@@ -500,26 +509,12 @@ mem_table = (
     "0x4F", # 0x4F
 )
 
-def um():
+def mb():
     return mem_table[ultra.ub()]
 
 # 00
 def so_init(argv):
-    t = (
-        "PLAYER",
-        "0x01",
-        "PLAYERATTACK",
-        "0x03",
-        "OBJECTA",
-        "OBJECTB",
-        "ITEM",
-        "0x07",
-        "DEFAULT",
-        "MOVEBG",
-        "PLAYERUSE",
-        "SYSTEM",
-        "PARTICLE",
-    )[ultra.ub()]
+    t = UNSM.fmt_otype[ultra.ub()][7:]
     ultra.script.c_addr += 2
     return (None, t)
 
@@ -549,46 +544,46 @@ def so_arg(argv):
 
 # 0D 0E 0F 10
 def so_md(argv):
-    mem = um()
+    mem = mb()
     val = "%d" % ultra.sh()
     return (None, mem, val)
 
 # 11 (12)
 def so_mh(argv):
-    mem = um()
+    mem = mb()
     val = "0x%04X" % ultra.uh()
     return (None, mem, val)
 
 # 13 14 15 16 (17)
 def so_mdd(argv):
-    mem = um()
+    mem = mb()
     val = "%d" % ultra.sh()
     mul = "%d" % ultra.sh()
     ultra.script.c_addr += 2
     return (None, mem, val, mul)
 
 # 1B
-def so_gfx(argv):
+def so_shape(argv):
     ultra.script.c_addr += 1
-    g = UNSM.fmt_g(ultra.uh())
-    return (None, g)
+    shape = UNSM.fmt_shape(ultra.uh())
+    return (None, shape)
 
 # 1C 29 2C
 def so_object(argv):
     m, = argv
     ultra.script.c_addr += 1
     arg = "%d" % ultra.sh()
-    gfx = "0x%02X" % ultra.uw()
+    shape = UNSM.fmt_shape(ultra.uw())
     script = ultra.aw()
     if m:
-        return (None, gfx, script, arg)
-    return (None, gfx, script)
+        return (None, shape, script, arg)
+    return (None, shape, script)
 
 # 1F (20)
 def so_mmm(argv):
-    mem = um()
-    a   = um()
-    b   = um()
+    mem = mb()
+    a   = mb()
+    b   = mb()
     return (None, mem, a, b)
 
 # 23 2B 2E
@@ -605,13 +600,13 @@ def so_hitbox(argv):
 
 # 25 (26)
 def so_m(argv):
-    mem = um()
+    mem = mb()
     ultra.script.c_addr += 2
     return (None, mem)
 
 # 27
 def so_mp(argv):
-    mem = um()
+    mem = mb()
     ultra.script.c_addr += 2
     script = ultra.aw()
     return (None, mem, script)
@@ -643,14 +638,14 @@ def so_move(argv):
 
 # 33
 def so_memclrflag(argv):
-    mem = um()
+    mem = mb()
     ultra.script.c_addr += 2
     flag = "0x%08X" % ultra.uw() # T:flag
     return (None, mem, flag)
 
 # 34
 def so_mt(argv):
-    mem = um()
+    mem = mb()
     time = UNSM.fmt_time(ultra.sh())
     return (None, mem, time)
 
@@ -682,14 +677,14 @@ so_str = [
     None,       # 0x18
     None,       # 0x19
     None,       # 0x1A
-    "gfx",      # 0x1B
+    "shape",    # 0x1B
     "object",   # 0x1C
     "destroy",  # 0x1D
     "ground",   # 0x1E
     "memaddf",  # 0x1F
     "memaddi",  # 0x20
     "billboard",    # 0x21
-    "gfxhide",  # 0x22
+    "shapehide",    # 0x22
     "hitbox",   # 0x23
     None,       # 0x24
     "memsleep", # 0x25
@@ -708,7 +703,7 @@ so_str = [
     "scale",    # 0x32
     "memclrflag",   # 0x33
     "inc",      # 0x34
-    "gfxdisable",   # 0x35
+    "shapedisable", # 0x35
     "sets",     # 0x36
     "objdata",  # 0x37
 ]
@@ -741,7 +736,7 @@ so_fnc = [
     None, # 0x18
     None, # 0x19
     None, # 0x1A
-    (so_gfx,), # 0x1B
+    (so_shape,), # 0x1B
     (so_object, False), # 0x1C
     (so_null,), # 0x1D
     (so_null,), # 0x1E
@@ -836,7 +831,7 @@ def file_init(self, argv):
     line = self.file[-1][1]
     stbl = {}
     etbl = {}
-    line.append("TABLE(table)\n\ntable_start:\n")
+    line.append("TABLE()\ntable_start:\n")
     for i in range(cnt):
         s = "%s_%s" % (name, tbl[0][i])
         line.append("\tFILE(%s)\n" % s)
@@ -881,24 +876,24 @@ def s_motion(self, argv):
         init = False
         # motion
         if t == 0:
-            m_flag   = ultra.sh()
-            m_height = ultra.sh()
-            m_start  = ultra.sh()
-            m_end    = ultra.sh()
-            m_frame  = ultra.sh()
-            m_joint  = ultra.sh()
-            m_val    = self.c_dst + ultra.uw()
-            m_tbl    = self.c_dst + ultra.uw()
-            m_siz    = self.c_dst + ultra.uw()
+            m_flag  = ultra.sh()
+            m_waist = ultra.sh()
+            m_start = ultra.sh()
+            m_end   = ultra.sh()
+            m_frame = ultra.sh()
+            m_joint = ultra.sh()
+            m_val   = self.c_dst + ultra.uw()
+            m_tbl   = self.c_dst + ultra.uw()
+            m_siz   = self.c_dst + ultra.uw()
             stbl_add(stbl, m_val, 1, s + "_val")
             stbl_add(stbl, m_tbl, 2, s + "_tbl")
             c.append((
                 "\tMOTION(%s, 0x%04X, %d, %d, %d, %d, %d)\n"
-            ) % (s, m_flag, m_height, m_start, m_end, m_frame, m_joint))
+            ) % (s, m_flag, m_waist, m_start, m_end, m_frame, m_joint))
             i += 1
         # val
         elif t == 1:
-            c.append("\t.half %s\n" % ", ".join([
+            c.append("\t.short %s\n" % ", ".join([
                 "0x%04X" % ultra.uh()
                 for _ in range(min(8, (m_siz-self.c_dst)//2))
             ]))
@@ -906,7 +901,7 @@ def s_motion(self, argv):
                 c.append("\n")
         # tbl
         elif t == 2:
-            c.append("\t.half %s\n" % ", ".join([
+            c.append("\t.short %s\n" % ", ".join([
                 "%5d" % ultra.uh()
                 for _ in range(6)
             ]))
@@ -937,3 +932,37 @@ def s_demo(self, argv):
                 count, stick_x, stick_y, button
             ))
         file_e(self, line, etbl)
+
+def s_audio_ctltbl(self, argv):
+    return
+
+def s_audio_seqbnk(self, argv):
+    seq, bnk, data, tbl = argv
+    self.addr = 0-seq
+    ultra.asm.init(self, 0, data)
+    self.c_addr += 2
+    cnt = ultra.uh()
+    for i in range(cnt):
+        start   = ultra.uw()
+        size    = ultra.uw()
+        fn = self.path_join(["seq", "%s.seq" % tbl[i]])
+        main.mkdir(fn)
+        with open(fn, "wb") as f:
+            f.write(self.data[self.c_data][seq+start:seq+start+size])
+    self.addr = 0-bnk
+    ultra.asm.init(self, 0, data)
+    line = []
+    for i in range(cnt):
+        start   = ultra.uh()
+        self.c_push()
+        self.c_addr = start
+        n = ultra.ub()
+        line.append("SEQ(%s, %s)\n" % (tbl[i], ", ".join([
+            "%d" % ultra.ub() for _ in range(n)
+        ])))
+        self.c_pull()
+    data = "".join(line)
+    fn = main.path_join([self.root, "meta", "seq.h"])
+    main.mkdir(fn)
+    with open(fn, "w") as f:
+        f.write(data)

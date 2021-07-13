@@ -2,9 +2,15 @@ import struct
 
 UNUSED  = 1 << 0
 GLOBL   = 1 << 1
+LOCAL   = 1 << 2
 
-def fmt_pre(v):
-    return v if v == "" or v.endswith("*") else v+" "
+def fmt_pre(v, j, end=""):
+    if v.endswith("*"):
+        ts, _, te = v.rpartition(" ")
+        te += end
+    else:
+        ts, te = v, end
+    return (ts+" " if ts != "" else ts).ljust(j-len(te)) + te
 
 def fmt_arg(v, e, arg):
     a = ", ".join(arg)
@@ -23,8 +29,8 @@ class sym_var:
         self.flag  = flag
         self.var   = var
         self.lst   = lst
-    def fmt(self, start="", end=""):
-        return start + fmt_pre(self.var) + self.label + self.lst + end
+    def fmt(self, start="", end="", j=0):
+        return start + fmt_pre(self.var, j) + self.label + self.lst + end
 
 class sym_fnc:
     def __init__(self, label, val="void", arg=("void",), flag=0):
@@ -32,8 +38,10 @@ class sym_fnc:
         self.flag  = flag
         self.val   = val
         self.arg   = arg
-    def fmt(self, start="", end=""):
-        return fmt_arg(start + fmt_pre(self.val) + self.label, end, self.arg)
+    def fmt(self, start="", end="", j=0):
+        return fmt_arg(
+            start + fmt_pre(self.val, j) + self.label, end, self.arg
+        )
 
 class sym_var_fnc:
     def __init__(
@@ -45,33 +53,37 @@ class sym_var_fnc:
         self.lst   = lst
         self.val   = val
         self.arg   = arg
-    def fmt(self, start="", end=""):
+    def fmt(self, start="", end="", j=0):
         return fmt_arg(
-            start + fmt_pre(self.val) + "(*" + sym_var.fmt(self) + ")", end,
-            self.arg
+            start + fmt_pre(self.val, j, "(*") + sym_var.fmt(self) + ")",
+            end, self.arg
         )
 
-def sym_addr(self, src, dst, rej=False):
-    dev = self.dev if self.dev != None else src-self.addr
-    if not rej:
-        for start, end, data, sym, fnc, imm in self.meta.table:
-            if self.c_data.startswith(data) and src in fnc:
-                dev = fnc[src]
+def dev_addr(self, src=None):
+    addr = self.c_dev(src)
+    for start, end, data, sym, dev, imm in self.meta.sym.table:
+        if addr >= start and addr < end and self.c_data.startswith(data):
+            if src in dev:
+                return dev[src]
+    return addr
+
+def sym_addr(self, dst, src=None, rej=False):
+    addr = self.c_dev(src) if rej else dev_addr(self, src)
     res = None
-    for start, end, data, sym, fnc, imm in self.meta.table:
+    for start, end, data, sym, dev, imm in self.meta.sym.table:
         if self.c_data.startswith(data) and dst in sym:
             res = sym[dst]
-            if dev >= start and dev < end:
+            if addr >= start and addr < end:
                 return res
     if not rej:
         if res != None:
             return res
     return None
 
-def imm_addr(self, src, dst):
-    dev = self.dev if self.dev != None else src-self.addr
-    for start, end, data, sym, fnc, imm in self.meta.table:
-        if self.c_data.startswith(data) and dev >= start and dev < end:
+def imm_addr(self, dst, src):
+    addr = self.c_dev(src)
+    for start, end, data, sym, dev, imm in self.meta.sym.table:
+        if addr >= start and addr < end and self.c_data.startswith(data):
             if dst in imm:
                 return imm[dst]
     return None

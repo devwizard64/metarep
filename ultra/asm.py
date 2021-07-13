@@ -235,9 +235,7 @@ have_imm    = None
 
 def sym(addr, src=None):
     btbl.add(addr)
-    if src == None:
-        src = ultra.script.c_dst
-    sym = table.sym_addr(ultra.script, src, addr, True)
+    sym = table.sym_addr(ultra.script, addr, src, True)
     if sym != None:
         return sym.label
     return ".L%08X" % addr
@@ -911,7 +909,7 @@ def fmt(self, line, code=False):
             if last != addr:
                 sym = table.sym_addr(self, addr, addr, True)
                 if sym != None:
-                    if not sym.label.startswith("L80"):
+                    if not sym.flag & table.LOCAL:
                         f.append("\n")
                         if hasattr(sym, "fmt"):
                             if ultra.COMM_LABEL:
@@ -1087,6 +1085,48 @@ def s_data(self, argv):
     lst_main(self, line, lst)
     fmt(self, line)
 
+def s_definelabel(self, argv):
+    c_data, = argv
+    f = self.file[-1][1]
+    for start, end, data, sym, fnc, imm in self.meta.sym.table:
+        if c_data.startswith(data):
+            for addr in sorted(sym.keys()):
+                s = sym[addr]
+                if "-" in s.label or "+" in s.label: continue
+                if not s.flag & table.LOCAL:
+                    f.append("%s0x%08X\n" % (
+                        (".definelabel %s, " % s.label).ljust(64), addr
+                    ))
+
+def s_struct_lst(line, prefix, lst):
+    for x in lst:
+        if type(x) == list:
+            off  = x[0]
+            name = x[2]
+            lst  = x[3]
+            pre  = prefix + (name,)
+            line.append((off,) + pre)
+            s_struct_lst(line, pre, lst)
+        else:
+            off = x[0]
+            sym = x[1]
+            line.append((off,) + prefix + (sym.label,))
+
+def s_struct(self, argv):
+    tbl, = argv
+    f = self.file[-1][1]
+    for size, name, lst in tbl:
+        fmt = ultra.fmt_sizefmt(size)
+        line = []
+        s_struct_lst(line, (name,), lst)
+        line.append((size, "sizeof", name))
+        f += [
+            ("#define %s " % "__".join(x[1:])).ljust(32) + fmt % x[0] + "\n"
+            for x in line
+            if x[0] != None
+        ]
+        f.append("\n")
+
 def s_header(self, argv):
     data, = argv
     ultra.init(self, 0, data)
@@ -1095,28 +1135,16 @@ def s_header(self, argv):
     p2 = ultra.ub()
     p3 = ultra.ub()
     c  = ultra.uw()
-    start = ultra.aw()
-    self.c_addr += 2
+    s  = ultra.aw()
     u0 = ultra.ub()
     u1 = ultra.ub()
-    self.c_addr += 16
-    label = self.c_next(20).decode("shift-jis")
-    self.c_addr += 7
-    m  = ultra.ub()
-    i0 = ultra.ub()
-    i1 = ultra.ub()
-    r  = ultra.ub()
-    v  = ultra.ub()
+    u2 = ultra.ub()
+    u3 = ultra.ub()
+    self.c_addr += 0x30
     self.file[-1][1].append((
         ".byte 0x%02X, 0x%02X, 0x%02X, 0x%02X\n"
         ".word 0x%08X\n"
         ".word %s\n"
-        ".byte 0, 0, %d, '%c'\n"
-        ".word 0, 0, 0, 0\n"
-        ".ascii \"%s\"\n"
-        ".fill 7\n"
-        ".ascii \"%c\"\n"
-        ".ascii \"%c%c\"\n"
-        ".ascii \"%c\"\n"
-        ".byte %d\n"
-    ) % (p0, p1, p2, p3, c, start, u0, u1, label, m, i0, i1, r, v))
+        ".byte %d, %d, %d, '%c'\n"
+        ".fill 0x30\n"
+    ) % (p0, p1, p2, p3, c, s, u0, u1, u2, u3))

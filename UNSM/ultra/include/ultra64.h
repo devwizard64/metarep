@@ -594,7 +594,7 @@ struct ultra_1
 /* 0x8033A2C0 */ extern u64 aspMainDataStart[];
 /* 0x8033A580 */ extern u64 aspMainDataEnd[];
 
-/* 0x80364BA0 */ extern u8 ultra_bss[];
+/* 0x80364BA0 */ extern u8 _ultra_bss[];
 
 #else /* __ASSEMBLER__ */
 
