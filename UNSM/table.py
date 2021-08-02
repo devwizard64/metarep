@@ -1549,7 +1549,7 @@ sym_E0_d_ultra = {
     0x803359B4: table.sym_var("__osFaultedThread",  "OSThread *",  flag=ultra.DALIGN),
 
     # ultra/src/vi.data.c
-    0x803359C0: table.sym_var("vi", "OSViContext",  "[2]"),
+    0x803359C0: table.sym_var("vi", "__OSViContext",  "[2]"),
     0x80335A20: table.sym_var("__osViCurr", "OSViContext *",    flag=ultra.DALIGN),
     0x80335A24: table.sym_var("__osViNext", "OSViContext *",    flag=ultra.DALIGN),
     0x80335A28: table.sym_var("ultra_data_80335A28",    "u32",  flag=ultra.DALIGN),
@@ -1641,7 +1641,7 @@ sym_E0_d_ultra = {
     # ==========================================================================
 
     # ultra/src/seteventmesg.data.c
-    0x80364BA0: table.sym_var("__osEventStateTab",  "struct os_event_state",    "[OS_NUM_EVENTS]",  ultra.BALIGN),
+    0x80364BA0: table.sym_var("__osEventStateTab",  "__OSEventState",   "[OS_NUM_EVENTS]",  ultra.BALIGN),
 
     # ultra/src/sptask.data.c
     0x80364C20: table.sym_var("tmp_task",   "OSTask",   flag=ultra.BALIGN),

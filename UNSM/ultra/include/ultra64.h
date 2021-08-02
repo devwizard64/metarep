@@ -258,12 +258,6 @@ typedef struct OSThread_s
     __OSThreadContext   context;
 }
 OSThread;
-typedef struct
-{
-    struct OSThread_s  *next;
-    OSPri               priority;
-}
-__OSThreadTail;
 
 /* os_message.h */
 #define MQ_GET_COUNT(mq)        ((mq)->validCount)
@@ -306,6 +300,16 @@ typedef struct
     u32                 size;
 }
 OSIoMesg;
+typedef struct
+{
+    s32                 active;
+    OSThread           *thread;
+    OSMesgQueue        *cmdQueue;
+    OSMesgQueue        *evtQueue;
+    OSMesgQueue        *acsQueue;
+    s32               (*dma)(s32, u32, void *, u32);
+}
+OSDevMgr;
 
 /* os_vi.h */
 typedef struct
@@ -429,24 +433,21 @@ typedef struct
     u16 _28;
     u32 _2C;
 }
-OSViContext;
+__OSViContext;
 
 typedef struct
 {
-    s32                 active;
-    OSThread           *thread;
-    OSMesgQueue        *cmdQueue;
-    OSMesgQueue        *evtQueue;
-    OSMesgQueue        *acsQueue;
-    s32               (*dma)(s32, u32, void *, u32);
+    struct OSThread_s  *next;
+    OSPri               priority;
 }
-OSDevMgr;
+__OSThreadTail;
 
-struct os_event_state
+typedef struct
 {
-    OSMesgQueue        *mq;
-    OSMesg              msg;
-};
+    OSMesgQueue        *messageQueue;
+    OSMesg              message;
+}
+__OSEventState;
 
 /* 0x80000300 */ extern s32 osTvType;
 /* 0x80000304 */ extern s32 osRomType;
