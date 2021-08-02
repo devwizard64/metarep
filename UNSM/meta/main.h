@@ -6,12 +6,12 @@
         data_##name,                \
         DATA(BUILD/data/fn.o)       \
     )
-#define DATA2(segment, name, fn)    \
-    SECTION(                        \
-        SEGMENT_DATA_##segment,     \
-        data_##name,                \
-        DATA(BUILD/data/fn/s.o)     \
-        DATA(BUILD/data/fn/g.o)     \
+#define DATA2(segment, name, fn)        \
+    SECTION(                            \
+        SEGMENT_DATA_##segment,         \
+        data_##name,                    \
+        DATA(BUILD/data/fn/program.o)   \
+        DATA(BUILD/data/fn/shape.o)     \
     )
 #define SZP(name, fn)               \
     SECTION(                        \
@@ -25,13 +25,11 @@
     )
 #define SHAPE(segment, name)                    \
     SZP(shape_##name, shape/name/gfx)           \
-    DATA1(segment, shape_##name, shape/name/g)
+    DATA1(segment, shape_##name, shape/name/shape)
 #define BACKGROUND(name)                        \
     SZP(background_##name, background/name/gfx)
 #define TEXTURE(name)                           \
     SZP(texture_##name, texture/name/gfx)
-#define PARTICLE(name)                          \
-    SZP(particle_##name, particle/name/gfx)
 #define STAGE(name)                             \
     SZP(stage_##name, stage/name/gfx)           \
     DATA2(STAGE, stage_##name, stage/name)
@@ -167,7 +165,7 @@ TEXTURE(i)
 TEXTURE(j)
 TEXTURE(k)
 TEXTURE(l)
-PARTICLE(a)
+SZP(weather, weather/gfx)
 STAGE(bbh)
 STAGE(ccm)
 STAGE(inside)
@@ -199,8 +197,8 @@ STAGE(wmotr)
 STAGE(bitfsa)
 STAGE(bitsa)
 STAGE(ttm)
-FILE(motion,    file/motion)
-FILE(demo,      file/demo)
+FILE(anime, file/anime)
+FILE(demo,  file/demo)
 FILE(audio_ctl, audio/ctl)
 FILE(audio_tbl, audio/tbl)
 FILE(audio_seq, audio/seq)

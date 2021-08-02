@@ -61,7 +61,7 @@ class sym_var_fnc:
 
 def dev_addr(self, src=None):
     addr = self.c_dev(src)
-    for start, end, data, sym, dev, imm in self.meta.sym.table:
+    for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if addr >= start and addr < end and self.c_data.startswith(data):
             if src in dev:
                 return dev[src]
@@ -70,7 +70,7 @@ def dev_addr(self, src=None):
 def sym_addr(self, dst, src=None, rej=False):
     addr = self.c_dev(src) if rej else dev_addr(self, src)
     res = None
-    for start, end, data, sym, dev, imm in self.meta.sym.table:
+    for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if self.c_data.startswith(data) and dst in sym:
             res = sym[dst]
             if addr >= start and addr < end:
@@ -80,9 +80,19 @@ def sym_addr(self, dst, src=None, rej=False):
             return res
     return None
 
-def imm_addr(self, dst, src):
+def sym_range(self, dst_start, dst_end, src=None):
     addr = self.c_dev(src)
-    for start, end, data, sym, dev, imm in self.meta.sym.table:
+    for start, end, data, sym, dev, imm in self.meta.table.tbl:
+        if addr >= start and addr < end and self.c_data.startswith(data):
+            return [
+                (x, sym[x]) for x in sorted(sym.keys())
+                if x >= dst_start and x < dst_end
+            ]
+    return []
+
+def imm_addr(self, dst, src=None):
+    addr = self.c_dev(src)
+    for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if addr >= start and addr < end and self.c_data.startswith(data):
             if dst in imm:
                 return imm[dst]
@@ -93,7 +103,7 @@ def imm_prc(imm, arg):
         if "%" in imm:
             return imm % arg
         return imm
-    if type(imm) in {list, tuple}:
+    if type(imm) in {list, tuple, dict}:
         return imm[arg]
     return imm(arg)
 

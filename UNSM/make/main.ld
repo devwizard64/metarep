@@ -32,6 +32,7 @@ SECTIONS
         0xA4000000, header,
         TEXT(ULTRA/lib/PR/header.o)
         TEXT(ULTRA/lib/PR/ipl3.o)
+        DATA(ULTRA/lib/PR/ipl3.o)
     )
 #include <meta/main.h>
     bss_main_size_hi = bss_main_size >> 16;

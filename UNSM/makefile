@@ -8,43 +8,43 @@ MAIN_OBJ := \
 	$(BUILD)/src/app.o              $(BUILD)/src/app.data.o             \
 	$(BUILD)/src/audio.o            $(BUILD)/src/audio.data.o           \
 	$(BUILD)/src/game.o             $(BUILD)/src/game.data.o            \
-	$(BUILD)/src/player_touch.o     $(BUILD)/src/player_touch.data.o    \
+	$(BUILD)/src/pl_collision.o     $(BUILD)/src/pl_collision.data.o    \
 	$(BUILD)/src/player.o           $(BUILD)/src/player.data.o          \
-	$(BUILD)/src/player_move.o      $(BUILD)/src/player_move.data.o     \
-	$(BUILD)/src/player_demo.o      $(BUILD)/src/player_demo.data.o     \
-	$(BUILD)/src/player_hang.o      $(BUILD)/src/player_hang.data.o     \
-	$(BUILD)/src/player_stop.o      $(BUILD)/src/player_stop.data.o     \
-	$(BUILD)/src/player_ground.o    $(BUILD)/src/player_ground.data.o   \
-	$(BUILD)/src/player_air.o       $(BUILD)/src/player_air.data.o      \
-	$(BUILD)/src/player_water.o     $(BUILD)/src/player_water.data.o    \
-	$(BUILD)/src/player_grab.o      $(BUILD)/src/player_grab.data.o     \
-	$(BUILD)/src/player_callback.o  $(BUILD)/src/player_callback.data.o \
+	$(BUILD)/src/pl_physics.o       $(BUILD)/src/pl_physics.data.o      \
+	$(BUILD)/src/pl_demo.o          $(BUILD)/src/pl_demo.data.o         \
+	$(BUILD)/src/pl_hang.o          $(BUILD)/src/pl_hang.data.o         \
+	$(BUILD)/src/pl_stop.o          $(BUILD)/src/pl_stop.data.o         \
+	$(BUILD)/src/pl_ground.o        $(BUILD)/src/pl_ground.data.o       \
+	$(BUILD)/src/pl_air.o           $(BUILD)/src/pl_air.data.o          \
+	$(BUILD)/src/pl_water.o         $(BUILD)/src/pl_water.data.o        \
+	$(BUILD)/src/pl_grab.o          $(BUILD)/src/pl_grab.data.o         \
+	$(BUILD)/src/pl_callback.o      $(BUILD)/src/pl_callback.data.o     \
 	$(BUILD)/src/mem.o              $(BUILD)/src/mem.data.o             \
 	$(BUILD)/src/save.o             $(BUILD)/src/save.data.o            \
 	$(BUILD)/src/world.o            $(BUILD)/src/world.data.o           \
-	$(BUILD)/src/g_draw.o           $(BUILD)/src/g_draw.data.o          \
+	$(BUILD)/src/shape_draw.o       $(BUILD)/src/shape_draw.data.o      \
 	$(BUILD)/src/time.o             $(BUILD)/src/time.data.o            \
 	$(BUILD)/src/slidec.o           \
 	$(BUILD)/src/camera.o           $(BUILD)/src/camera.data.o          \
 	$(BUILD)/src/course.o           \
 	$(BUILD)/src/object.o           $(BUILD)/src/object.data.o          \
-	$(BUILD)/src/object_lib.o       $(BUILD)/src/object_lib.data.o      \
+	$(BUILD)/src/obj_lib.o          $(BUILD)/src/obj_lib.data.o         \
 	$(BUILD)/src/object_a.o         $(BUILD)/src/object_a.data.o        \
-	$(BUILD)/src/object_move.o      $(BUILD)/src/object_move.data.o     \
-	$(BUILD)/src/object_touch.o     $(BUILD)/src/object_touch.data.o    \
-	$(BUILD)/src/object_list.o      $(BUILD)/src/object_list.data.o     \
-	$(BUILD)/src/object_sfx.o       $(BUILD)/src/object_sfx.data.o      \
-	$(BUILD)/src/object_debug.o     $(BUILD)/src/object_debug.data.o    \
+	$(BUILD)/src/obj_physics.o      $(BUILD)/src/obj_physics.data.o     \
+	$(BUILD)/src/obj_collision.o    $(BUILD)/src/obj_collision.data.o   \
+	$(BUILD)/src/obj_list.o         $(BUILD)/src/obj_list.data.o        \
+	$(BUILD)/src/obj_sfx.o          $(BUILD)/src/obj_sfx.data.o         \
+	$(BUILD)/src/obj_debug.o        $(BUILD)/src/obj_debug.data.o       \
 	$(BUILD)/src/wipe.o             $(BUILD)/src/wipe.data.o            \
 	$(BUILD)/src/shadow.o           $(BUILD)/src/shadow.data.o          \
 	$(BUILD)/src/background.o       $(BUILD)/src/background.data.o      \
 	$(BUILD)/src/scroll.o           $(BUILD)/src/scroll.data.o          \
-	$(BUILD)/src/object_gfx.o       $(BUILD)/src/object_gfx.data.o      \
+	$(BUILD)/src/obj_shape.o        $(BUILD)/src/obj_shape.data.o       \
 	$(BUILD)/src/ripple.o           $(BUILD)/src/ripple.data.o          \
 	$(BUILD)/src/print.o            $(BUILD)/src/print.data.o           \
 	$(BUILD)/src/message.o          $(BUILD)/src/message.data.o         \
-	$(BUILD)/src/particle_snow.o    $(BUILD)/src/particle_snow.data.o   \
-	$(BUILD)/src/particle_lava.o    $(BUILD)/src/particle_lava.data.o   \
+	$(BUILD)/src/weather_snow.o     $(BUILD)/src/weather_snow.data.o    \
+	$(BUILD)/src/weather_lava.o     $(BUILD)/src/weather_lava.data.o    \
 	$(BUILD)/src/obj_data.o         $(BUILD)/src/obj_data.data.o        \
 	$(BUILD)/src/hud.o              $(BUILD)/src/hud.data.o             \
 	$(BUILD)/src/object_b.o         $(BUILD)/src/object_b.data.o        \
@@ -53,9 +53,9 @@ MAIN_OBJ := \
 MAIN2_OBJ := \
 	$(BUILD)/src/math.o             $(BUILD)/src/math.data.o            \
 	$(BUILD)/src/math_table.o       \
-	$(BUILD)/src/g.o                \
-	$(BUILD)/src/g_script.o         $(BUILD)/src/g_script.data.o        \
+	$(BUILD)/src/shape.o            \
 	$(BUILD)/src/s_script.o         $(BUILD)/src/s_script.data.o        \
+	$(BUILD)/src/p_script.o         $(BUILD)/src/p_script.data.o        \
 	$(BUILD)/src/map.o              $(BUILD)/src/map.data.o             \
 	$(BUILD)/src/map_data.o         $(BUILD)/src/map_data.data.o        \
 	$(BUILD)/src/o_script.o         $(BUILD)/src/o_script.data.o

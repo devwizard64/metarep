@@ -9,4 +9,4 @@ BUILD/data/menu/%.szp.o:            ADDR := SEGMENT_SZP_MENU
 BUILD/data/shape/c%.szp.o:          ADDR := SEGMENT_SZP_SHAPEC
 BUILD/data/texture/%.szp.o:         ADDR := SEGMENT_SZP_TEXTURE
 BUILD/data/background/%.szp.o:      ADDR := SEGMENT_SZP_BACKGROUND
-BUILD/data/particle/%.szp.o:        ADDR := SEGMENT_SZP_PARTICLE
+BUILD/data/weather/%.szp.o:         ADDR := SEGMENT_SZP_WEATHER

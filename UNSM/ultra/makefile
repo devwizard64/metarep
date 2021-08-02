@@ -1,107 +1,107 @@
 SRC_OBJ := \
-	build/src/parameters.o              \
-	build/src/osViModeTable.o           \
-	build/src/osSetTime.o               \
-	build/src/osMapTLB.o                \
-	build/src/osUnmapTLBAll.o           \
-	build/src/sprintf.o                 \
-	build/src/osCreateMesgQueue.o       \
-	build/src/osSetEventMesg.o          \
-	build/src/osViSetEvent.o            \
-	build/src/osCreateThread.o          \
-	build/src/osRecvMesg.o              \
-	build/src/osSpTaskStart.o           \
-	build/src/osSpTaskYield.o           \
-	build/src/osSendMesg.o              \
-	build/src/osSpTaskYielded.o         \
-	build/src/osStartThread.o           \
-	build/src/osWritebackDCacheAll.o    \
-	build/src/osCreateViManager.o       build/src/osCreateViManager.data.o  \
-	build/src/osViSetMode.o             \
-	build/src/osViBlack.o               \
-	build/src/osViSetSpecialFeatures.o  \
-	build/src/osCreatePiManager.o       build/src/osCreatePiManager.data.o  \
-	build/src/osSetThreadPri.o          \
-	build/src/osInitialize.o            build/src/osInitialize.data.o       \
-	build/src/osViSwapBuffer.o          \
-	build/src/sqrtf.o                   \
-	build/src/osContReadData.o          \
-	build/src/osContInit.o              build/src/osContInit.data.o         \
-	build/src/osEepromProbe.o           \
-	build/src/ll_multdiv.o              \
-	build/src/osInvalDCache.o           \
-	build/src/osPiStartDma.o            \
-	build/src/bzero.o                   \
-	build/src/osInvalICache.o           \
-	build/src/osEepromLongRead.o        \
-	build/src/osEepromLongWrite.o       \
-	build/src/bcopy.o                   \
-	build/src/guOrtho.o                 \
-	build/src/guPerspective.o           build/src/guPerspective.data.o      \
-	build/src/osGetTime.o               \
-	build/src/ll_cvt.o                  build/src/ll_cvt.data.o             \
-	build/src/cosf.o                    build/src/cosf.data.o               \
-	build/src/sinf.o                    build/src/sinf.data.o               \
-	build/src/guTranslate.o             \
-	build/src/guRotate.o                build/src/guRotate.data.o           \
-	build/src/guScale.o                 \
-	build/src/osAiSetFrequency.o        \
-	build/src/alBnkfNew.o               \
-	build/src/osWritebackDCache.o       \
-	build/src/osAiGetLength.o           \
-	build/src/osAiSetNextBuffer.o       build/src/osAiSetNextBuffer.data.o  \
-	build/src/__osTimerService.o        build/src/__osTimerService.data.o   \
-	build/src/printf.o                  build/src/printf.data.o             \
-	build/src/string.o                  \
-	build/src/__osDequeueThread.o       build/src/__osDequeueThread.data.o  \
-	build/src/__osInterrupt.o           \
-	build/src/__osViInit.o              build/src/__osViInit.data.o         \
-	build/src/__osException.o           build/src/__osException.data.o      \
-	build/src/__libm_qnan_f.o           \
-	build/src/osVirtualToPhysical.o     \
-	build/src/__osSpSetStatus.o         \
-	build/src/__osSpSetPc.o             \
-	build/src/__osSpRawStartDma.o       \
-	build/src/__osSpDeviceBusy.o        \
-	build/src/__osSpGetStatus.o         \
-	build/src/osGetThreadPri.o          \
-	build/src/__osViGetCurrentContext.o \
-	build/src/__osViSwapContext.o       \
-	build/src/osGetCount.o              \
-	build/src/__osPiAccess.o            build/src/__osPiAccess.data.o       \
-	build/src/osPiRawStartDma.o         \
-	build/src/__osDevMgrMain.o          \
-	build/src/__osSetSR.o               \
-	build/src/__osGetSR.o               \
-	build/src/__osSetFpcCsr.o           \
-	build/src/__osSiRawReadIo.o         \
-	build/src/__osSiRawWriteIo.o        \
-	build/src/osMapTLBRdb.o             \
-	build/src/osPiRawReadIo.o           \
-	build/src/__osSiAccess.o            build/src/__osSiAccess.data.o       \
-	build/src/__osSiRawStartDma.o       \
-	build/src/osSetTimer.o              \
-	build/src/osEepromWrite.o           \
-	build/src/osJamMesg.o               \
-	build/src/osPiGetCmdQueue.o         \
-	build/src/osEepromRead.o            \
-	build/src/guMtxIdent.o              \
-	build/src/guNormalize.o             \
-	build/src/__osAiDeviceBusy.o        \
-	build/src/__osSetCompare.o          \
-	build/src/_Litob.o                  build/src/_Litob.data.o             \
-	build/src/_Ldtob.o                  build/src/_Ldtob.data.o             \
-	build/src/osViModeNtscLan1.o        \
-	build/src/osViModePalLan1.o         \
-	build/src/8032A860.o                build/src/8032A860.data.o           \
-	build/src/__osSyncPutChars.o        build/src/__osSyncPutChars.data.o   \
-	build/src/osSetIntMask.o            build/src/osSetIntMask.data.o       \
-	build/src/osDestroyThread.o         \
-	build/src/__osProbeTLB.o            \
-	build/src/__osSiDeviceBusy.o        \
-	build/src/ldiv.o                    \
-	build/src/__osGetCause.o            \
-	build/src/__osAtomicDec.o           \
+	build/src/parameters.o          \
+	build/src/vitbl.o               \
+	build/src/settime.o             \
+	build/src/maptlb.o              \
+	build/src/unmaptlball.o         \
+	build/src/sprintf.o             \
+	build/src/createmesgqueue.o     \
+	build/src/seteventmesg.o        \
+	build/src/visetevent.o          \
+	build/src/createthread.o        \
+	build/src/recvmesg.o            \
+	build/src/sptask.o              \
+	build/src/sptaskyield.o         \
+	build/src/sendmesg.o            \
+	build/src/sptaskyielded.o       \
+	build/src/startthread.o         \
+	build/src/writebackdcacheall.o  \
+	build/src/vimgr.o               build/src/vimgr.data.o              \
+	build/src/visetmode.o           \
+	build/src/viblack.o             \
+	build/src/visetspecial.o        \
+	build/src/pimgr.o               build/src/pimgr.data.o              \
+	build/src/setthreadpri.o        \
+	build/src/initialize.o          build/src/initialize.data.o         \
+	build/src/viswapbuf.o           \
+	build/src/sqrtf.o               \
+	build/src/contreaddata.o        \
+	build/src/controller.o          build/src/controller.data.o         \
+	build/src/conteepprobe.o        \
+	build/src/ll.o                  \
+	build/src/invaldcache.o         \
+	build/src/pidma.o               \
+	build/src/bzero.o               \
+	build/src/invalicache.o         \
+	build/src/conteeplongread.o     \
+	build/src/conteeplongwrite.o    \
+	build/src/bcopy.o               \
+	build/src/ortho.o               \
+	build/src/perspective.o         build/src/perspective.data.o        \
+	build/src/gettime.o             \
+	build/src/llcvt.o               build/src/llcvt.data.o              \
+	build/src/cosf.o                build/src/cosf.data.o               \
+	build/src/sinf.o                build/src/sinf.data.o               \
+	build/src/translate.o           \
+	build/src/rotate.o              build/src/rotate.data.o             \
+	build/src/scale.o               \
+	build/src/aisetfreq.o           \
+	build/src/bnkf.o                \
+	build/src/writebackdcache.o     \
+	build/src/aigetlen.o            \
+	build/src/aisetnextbuf.o        build/src/aisetnextbuf.data.o       \
+	build/src/timerintr.o           build/src/timerintr.data.o          \
+	build/src/xprintf.o             build/src/xprintf.data.o            \
+	build/src/string.o              \
+	build/src/thread.o              build/src/thread.data.o             \
+	build/src/interrupt.o           \
+	build/src/vi.o                  build/src/vi.data.o                 \
+	build/src/exceptasm.o           \
+	build/src/libm_vals.o           \
+	build/src/virtualtophysical.o   \
+	build/src/spsetstat.o           \
+	build/src/spsetpc.o             \
+	build/src/sprawdma.o            \
+	build/src/sp.o                  \
+	build/src/spgetstat.o           \
+	build/src/getthreadpri.o        \
+	build/src/vigetcurrcontext.o    \
+	build/src/viswapcontext.o       \
+	build/src/getcount.o            \
+	build/src/piacs.o               build/src/piacs.data.o              \
+	build/src/pirawdma.o            \
+	build/src/devmgr.o              \
+	build/src/setsr.o               \
+	build/src/getsr.o               \
+	build/src/setfpccsr.o           \
+	build/src/sirawread.o           \
+	build/src/sirawwrite.o          \
+	build/src/maptlbrdb.o           \
+	build/src/pirawread.o           \
+	build/src/siacs.o               build/src/siacs.data.o              \
+	build/src/sirawdma.o            \
+	build/src/settimer.o            \
+	build/src/conteepwrite.o        \
+	build/src/jammesg.o             \
+	build/src/pigetcmdq.o           \
+	build/src/conteepread.o         \
+	build/src/mtx.o                 \
+	build/src/normalize.o           \
+	build/src/ai.o                  \
+	build/src/setcompare.o          \
+	build/src/xlitob.o              build/src/xlitob.data.o             \
+	build/src/xldtob.o              build/src/xldtob.data.o             \
+	build/src/vimodentsclan1.o      \
+	build/src/vimodepallan1.o       \
+	build/src/kdebugserver.o        build/src/kdebugserver.data.o       \
+	build/src/syncputchars.o        build/src/syncputchars.data.o       \
+	build/src/setintmask.o          build/src/setintmask.data.o         \
+	build/src/destroythread.o       \
+	build/src/probetlb.o            \
+	build/src/si.o                  \
+	build/src/ldiv.o                \
+	build/src/getcause.o            \
+	build/src/atomic.o              \
 	build/src/data.o
 
 OBJ := \
@@ -114,10 +114,6 @@ OBJ := \
 	lib/libultra_rom.a
 
 CC      := mips-linux-gnu-gcc
-LD      := mips-linux-gnu-ld
-CPP     := mips-linux-gnu-cpp
-OBJCOPY := mips-linux-gnu-objcopy
-NM      := mips-linux-gnu-nm
 CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
 CC      += -fno-toplevel-reorder -G 0
@@ -131,18 +127,20 @@ default: $(OBJ)
 lib/libultra_rom.a: $(SRC_OBJ) | lib
 	$(AR) rc $@ $^
 
-build/src/%.o: src/%.c | build/src
-	$(CC) -c -o $@ $<
-
 build/src/%.o: src/%.S | build/src
 	$(CC) -c -o $@ $<
 
-lib/PR/%.o: PR/%.S | lib/PR
+build/src/%.o: src/%.c | build/src
 	$(CC) -c -o $@ $<
 
-lib/PR/%.o: PR/%.asm | build/PR lib/PR
+lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
+
+lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
 	$(ARMIPS) $<
-	$(CC) -c -o $@ $(<:.asm=.s)
+	$(CC) -c -o $@ $(<:.asm=.S)
+
+lib/PR/%.o: PR/%.S | lib/PR
+	$(CC) -c -o $@ $<
 
 build/src build/PR lib lib/PR:
 	mkdir -p $@

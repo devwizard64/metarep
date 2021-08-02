@@ -16,17 +16,17 @@ def i_hiword(sym, addr):
 def i_loword(sym, addr):
     return ("#.loword(%s)" % sym[addr].label,)
 
-def s_ifdef(s):
-    return [main.s_str, "\n\n.ifdef %s\n\n" % s]
+def s_ifdef(s, l=0, r=0):
+    return [main.s_str, "%s.ifdef %s%s" % ("\n"*l, s, "\n"*(1+r))]
 
-def s_ifndef(s):
-    return [main.s_str, "\n\n.ifndef %s\n\n" % s]
+def s_ifndef(s, l=0, r=0):
+    return [main.s_str, "%s.ifndef %s%s" % ("\n"*l, s, "\n"*(1+r))]
 
-def s_else():
-    return [main.s_str, "\n\n.else\n\n"]
+def s_else(s, l=0, r=0):
+    return [main.s_str, "%s.else /* %s */%s" % ("\n"*l, s, "\n"*(1+r))]
 
-def s_endif():
-    return [main.s_str, "\n\n.endif\n\n"]
+def s_endif(s, l=0, r=0):
+    return [main.s_str, "%s.endif /* %s */%s" % ("\n"*l, s, "\n"*(1+r))]
 
 def s_segment(s):
     return [main.s_str, "\n.segment \"%s\"\n" % s]

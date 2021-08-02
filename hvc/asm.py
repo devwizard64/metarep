@@ -621,25 +621,23 @@ def s_code(self, argv):
         argv = op_table[op]
         if argv != None:
             lst = []
-            imm = table.imm_addr(self, self.c_dst, self.c_dst)
+            imm = table.imm_addr(self, self.c_dst)
             for i, arg in enumerate(argv[1:]):
-                if arg == A_IA:
-                    arg = A_IB if (p & 0x20) else A_IW
-                if arg == A_IX:
-                    arg = A_IB if (p & 0x10) else A_IW
+                if arg == A_IA: arg = A_IB if (p & 0x20) else A_IW
+                if arg == A_IX: arg = A_IB if (p & 0x10) else A_IW
                 if   arg == A_Y:  lst.append("y")
                 elif arg == A_A:  lst.append("a")
                 elif arg == A_X:  lst.append("x")
                 elif arg == A_IB:
-                    if imm != None:
-                        lst.append(table.imm_prc(imm[i], hvc.ub()))
-                    else:
-                        lst.append("#$%02X" % hvc.ub())
+                    lst.append(table.imm_prc(
+                        imm[i] if imm != None and imm[i] != None else "#$%02X",
+                        hvc.ub()
+                    ))
                 elif arg == A_IW:
-                    if imm != None:
-                        lst.append(table.imm_prc(imm[i], hvc.uw()))
-                    else:
-                        lst.append("#$%04X" % hvc.uw())
+                    lst.append(table.imm_prc(
+                        imm[i] if imm != None and imm[i] != None else "#$%04X",
+                        hvc.uw()
+                    ))
                 elif arg == A_AB: lst.append(hvc.ab())
                 elif arg == A_AW: lst.append(hvc.aw())
                 elif arg == A_AL: lst.append(hvc.al())

@@ -16,9 +16,24 @@ def path_join(path):
         fn = os.path.join(fn, p)
     return fn
 
+def arg_repr(x):
+    if x == None:
+        return "None"
+    if callable(x):
+        return x.__name__
+    if type(x) == int:
+        return "-0x%X(%d)" % (-x, x) if x < 0 else "0x%X(%d)" % (x, x)
+    if type(x) in {bool, str, list, dict, tuple, set}:
+        s = repr(x)
+        return s[:20]+"..."+s[-20+3:] if len(s) > 40 else s
+    print("WARNING: type '%s' has no repr !" % type(x))
+    return repr(x)
+
 def s_call(self, argv):
     lst, = argv
     for argv in lst:
+        if argv[0] != s_call:
+            print("[%s]" % ", ".join([arg_repr(x) for x in argv]))
         argv[0](self, argv[1:])
 
 def s_dir(self, argv):

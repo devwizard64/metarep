@@ -1,10 +1,10 @@
 import table
 import ultra
 
-A_ADDR      = 1
-A_EXTERN    = 2
-
 extern = None
+
+def aw(extern=False, addr=False, cast=None, array=None):
+    return ultra.fmt_addr(ultra.uw(), extern, addr, cast, array)
 
 def init(self, start, data):
     ultra.init(self, start, data)
@@ -49,8 +49,8 @@ def d_pathfmt_prc(argv):
     return [fmt % ultra.script.path_join([fn], 1)]
 d_pathfmt = [False, d_pathfmt_prc]
 
-def d_fnc(fnc, fmt="%d"):
-    x = lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else fmt, fnc())]
+def d_fnc(fnc, imm="%d"):
+    x = lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else imm, fnc())]
     return [False, x]
 
 d_s8  = d_fnc(ultra.sb)
@@ -64,41 +64,32 @@ d_u64 = d_fnc(ultra.ud)
 d_flag8  = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.ub())]]
 d_flag16 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uh())]]
 d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
-
 d_f32 = [False, lambda argv: [ultra.fmt_float(ultra.f(), "F", len(argv)==0)]]
 d_f64 = [False, lambda argv: [ultra.fmt_float(ultra.d(), "",  len(argv)==0)]]
-
 d_align_s8  = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
 d_align_u8  = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
 d_align_s16 = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
 d_align_u16 = [[0, 1, 1, d_u16],    [0, 1, 2, None]]
 
-flag_button = [
-    (0x8000, 0x8000, "A_BUTTON"),
-    (0x4000, 0x4000, "B_BUTTON"),
-    (0x2000, 0x2000, "Z_TRIG"),
-    (0x1000, 0x1000, "START_BUTTON"),
-    (0x0800, 0x0800, "U_JPAD"),
-    (0x0400, 0x0400, "D_JPAD"),
-    (0x0200, 0x0200, "L_JPAD"),
-    (0x0100, 0x0100, "R_JPAD"),
-    (0x0080, 0x0080, "0x0080"),
-    (0x0040, 0x0040, "0x0040"),
-    (0x0020, 0x0020, "L_TRIG"),
-    (0x0010, 0x0010, "R_TRIG"),
-    (0x0008, 0x0008, "U_CBUTTONS"),
-    (0x0004, 0x0004, "D_CBUTTONS"),
-    (0x0002, 0x0002, "L_CBUTTONS"),
-    (0x0001, 0x0001, "R_CBUTTONS"),
-]
-
 def d_addr_prc(argv):
+    x = ultra.uw()
+    extern = False
+    addr   = False
+    cast   = None
+    array  = None
     flag = argv[0]
-    return [ultra.fmt_addr(
-        ultra.aw(extern=bool(flag & A_EXTERN)),
-        flag & A_ADDR,
-        argv[1] if len(argv) > 1 else None
-    )]
+    i = 1
+    if flag & ultra.A_EXTERN:
+        extern = True
+    if flag & ultra.A_ADDR:
+        addr = True
+    if flag & ultra.A_CAST:
+        cast = argv[i]
+        i += 1
+    if flag & ultra.A_ARRAY:
+        array = (argv[i+0], argv[i+1])
+        i += 2
+    return [ultra.fmt_addr(x, extern, addr, cast, array)]
 d_addr = [False, d_addr_prc]
 
 def d_Lights1_prc(argv):
@@ -194,7 +185,7 @@ def g_null(argv):
 
 def g_mtx(argv):
     w0 = ultra.uw()
-    m = ultra.aw()
+    m = aw()
     if not m.startswith("0x"):
         m = "&" + m
     p = w0 >> 16 & 0xFF
@@ -205,7 +196,7 @@ def g_mtx(argv):
 
 def g_vtx(argv):
     w0 = ultra.uw()
-    v  = ultra.aw()
+    v  = aw()
     n  = "%d" % (w0 >>  4 & 0x0FFF)
     v0 = "%d" % (w0 >> 16 & 0x0F)
     return ("SPVertex", v, n, v0)
@@ -720,7 +711,7 @@ def d_Gfx_prc(self, line, tab, argv):
 d_Gfx = [True, d_Gfx_prc]
 
 def d_OSThreadTail_prc(argv):
-    next     = ultra.aw()
+    next     = aw()
     priority = ultra.sw()
     return ["{%s, %d}" % (next, priority)]
 d_OSThreadTail = [False, d_OSThreadTail_prc]
@@ -807,19 +798,13 @@ def s_declare(self, argv, var, addr, s):
     if src == None:
         src = start
     f = self.file[-1][1]
-    while self.c_addr < end:
-        self.c_push()
-        sym = table.sym_addr(self, self.c_dst, src, True)
-        if sym != None and hasattr(sym, "fmt"):
+    for dst, sym in table.sym_range(self, start, end, src):
+        if hasattr(sym, "fmt"):
             if var or (sym.flag & table.GLOBL and not sym.flag & table.LOCAL):
-                if addr:
-                    start = "/* 0x%08X */ " % self.c_dst + s
-                else:
-                    start = s
+                start = "/* 0x%08X */ " % dst + s if addr else s
                 if var and sym.flag & ultra.BALIGN:
                     start += "balign "
                 f.append(sym.fmt(start, ";") + "\n")
-        self.c_addr += 1
 
 def s_bss(self, argv):
     s_declare(self, argv, True, ultra.COMM_VAR, "")
@@ -854,6 +839,6 @@ def s_struct(self, argv):
     f = self.file[-1][1]
     for size, name, lst in tbl:
         fmt = s_struct_fmt(size)
-        f.append("struct %s\n{\n" % name)
+        f.append("typedef struct %s\n{\n" % name)
         s_struct_lst(f, "", fmt, lst)
-        f.append("};  " + fmt.rstrip() % size + "\n\n")
+        f.append(("}   "+fmt.rstrip()+"\n%s;\n\n") % (size, name.upper()))

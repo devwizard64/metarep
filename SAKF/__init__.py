@@ -7,7 +7,7 @@ from hvc.meta import *
 
 hvc.meta.c_data = "J0"
 hvc.meta.c_type = 1
-import SAKF.sym
+import SAKF.table
 
 def mc_jsx(arg, argv):
     op, = arg
@@ -123,13 +123,13 @@ def s_bank(start, j, e, p, name):
         s_segment(name),
         s_ifdef("__J0__"),
         s_bin(start, j, "J0_%s" % name, "J0"),
-        s_endif(),
+        s_endif("__J0__"),
         s_ifdef("__E0__"),
         s_bin(start, e, "E0_%s" % name, "E0"),
-        s_endif(),
+        s_endif("__E0__"),
         s_ifdef("__P0__"),
         s_bin(start, p, "P0_%s" % name, "P0"),
-        s_endif(),
+        s_endif("__P0__"),
     ]]
 
 d_mem = ["MEM", lambda: "$%02X, $%04X, $%06X, $%04X" % (
@@ -153,7 +153,7 @@ src_code = [
     s_code(0x0086E5, 0x008A9B),
     s_ifndef("__J0__"),
         s_code(0x008A9B, 0x008AC0, "E0"),
-    s_endif(),
+    s_endif("__J0__"),
     s_code(0x008A9B, 0x008AED),
     s_data(0x008AED, 0x008B8D, [
         [10, 4, hvc.asm.d_word],
@@ -163,10 +163,10 @@ src_code = [
         [1, 8, hvc.asm.d_byte],
     ]),
     s_code(0x008B8D, 0x008D12),
-    s_ifndef("__J0__"),
+    s_ifndef("__J0__", 1, -1),
         s_code(0x008D37, 0x008D4F, "E0"),
         s_data(0x008D4F, 0x008D6F, [[4, 4, hvc.asm.d_word]], "E0"),
-    s_endif(),
+    s_endif("__J0__"),
     s_data(0x008D12, 0x008D28, "addr"),
     s_code(0x008D28, 0x008F5A),
     s_data(0x008F5A, 0x008F62, "addr"),
@@ -202,7 +202,7 @@ src_code = [
     s_code(0x00BF99, 0x00C0D2),
     s_ifndef("__J0__"),
         s_code(0x00C12F, 0x00C133, "E0"),
-    s_endif(),
+    s_endif("__J0__"),
     s_code(0x00C0D2, 0x00C247),
     s_data(0x00C247, 0x00C251, "addr"),
     s_code(0x00C251, 0x00C324),
@@ -223,7 +223,7 @@ src_code = [
     s_code(0x00CA9C, 0x00CB2F),
     s_ifndef("__J0__"),
         s_code(0x00CB90, 0x00CB9A, "E0"),
-    s_endif(),
+    s_endif("__J0__"),
     s_code(0x00CB2F, 0x00CD05),
     s_data(0x00CD05, 0x00CD1E, d_mem_n(3)),
     s_code(0x00CD1E, 0x00CD81),
@@ -263,26 +263,22 @@ src_code = [
 
 src_header = [
     [main.s_str, """
-nmi_main = $81B1
-irq_main = $84A2
-start    = $8004
 .ifdef __J0__
 .define REGCODE "J"
 .define REGION  $00
 .define VERSION 0
-.endif
+.endif /* __J0__ */
 .ifdef __E0__
 .define REGCODE "E"
 .define REGION  $01
 .define VERSION 0
-.endif
+.endif /* __E0__ */
 .ifdef __P0__
 .define REGCODE "P"
 .define REGION  $02
 .define VERSION 0
-.endif
+.endif /* __P0__ */
 """],
-
     s_segment("HEADER"),
     s_data(0x00FFC0, 0x00FFD9, [[1, 21, "ascii"], [4, 1, hvc.asm.d_byte]]),
     [main.s_str, "\t.byte REGION\n"],

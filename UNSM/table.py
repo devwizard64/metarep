@@ -1,6 +1,802 @@
 import table
 import ultra
 
+fmt_bool = ["false", "true"]
+
+fmt_mem_alloc = [
+    "MEM_ALLOC_L",
+    "MEM_ALLOC_R",
+]
+
+fmt_slayer = (
+    "S_LAYER_BACKGROUND",
+    "S_LAYER_OPA_SURF",
+    "S_LAYER_OPA_DECAL",
+    "S_LAYER_OPA_INTER",
+    "S_LAYER_TEX_EDGE",
+    "S_LAYER_XLU_SURF",
+    "S_LAYER_XLU_DECAL",
+    "S_LAYER_XLU_INTER",
+)
+
+fmt_otype = [
+    "O_TYPE_PLAYER",
+    "O_TYPE_1",
+    "O_TYPE_PLAYERATTACK",
+    "O_TYPE_3",
+    "O_TYPE_OBJECTA",
+    "O_TYPE_OBJECTB",
+    "O_TYPE_ITEM",
+    "O_TYPE_7",
+    "O_TYPE_DEFAULT",
+    "O_TYPE_MOVEBG",
+    "O_TYPE_PLAYERUSE",
+    "O_TYPE_SYSTEM",
+    "O_TYPE_EFFECT",
+]
+
+shp_game = {
+    1: "MARIO",
+    116: "ENTITY_116",
+    117: "ENTITY_117",
+    118: "ENTITY_118",
+    119: "ENTITY_119",
+    121: "ENTITY_121",
+    122: "ENTITY_122",
+    124: "ENTITY_124",
+    133: "ENTITY_133",
+    134: "ENTITY_134",
+    135: "ENTITY_135",
+    136: "ENTITY_136",
+    138: "ENTITY_138",
+    139: "ENTITY_139",
+    142: "ENTITY_142",
+    143: "GLOW",
+    144: "ENTITY_144",
+    145: "ENTITY_145",
+    148: "SMOKE",
+    149: "SPARKLE",
+    150: "DUST",
+    156: "SMOKE2",
+    158: "ENTITY_158",
+    159: "ENTITY_159",
+    160: "ENTITY_160",
+    161: "ENTITY_161",
+    162: "ENTITY_162",
+    163: "RIPPLE_MOVE",
+    164: "DROPLET_WHITE",
+    165: "WAVE_WHITE",
+    166: "RIPPLE_STOP",
+    167: "SPLASH",
+    168: "BUBBLE_A",
+    170: "BUBBLE_B",
+    185: "ENTITY_185",
+    186: "ENTITY_186",
+    187: "ENTITY_187",
+    200: "ENTITY_200",
+    203: "ENTITY_203",
+    204: "ENTITY_204",
+    205: "ENTITY_205",
+    212: "ENTITY_212",
+    215: "ENTITY_215",
+    216: "ENTITY_216",
+    219: "DIGIT",
+    224: "ENTITY_224",
+}
+
+shp_c0 = {
+    120: "C0_120",
+    127: "C0_127",
+    128: "C0_128",
+    129: "C0_129",
+    130: "C0_130",
+    131: "C0_131",
+    132: "C0_132",
+    137: "C0_137",
+    140: "C0_140",
+    180: "C0_180",
+    188: "C0_188",
+    190: "C0_190",
+    192: "C0_192",
+    194: "C0_194",
+    195: "C0_195",
+    201: "C0_201",
+    202: "C0_202",
+    207: "C0_207",
+    217: "C0_217",
+    218: "C0_218",
+    220: "C0_220",
+    223: "C0_223",
+    225: "C0_225",
+}
+
+shp_a0 = {
+    84: "A0_84",
+    85: "A0_85",
+    86: "A0_86",
+    87: "A0_87",
+    88: "A0_88",
+    89: "A0_89",
+}
+
+shp_a1 = {
+    84: "A1_84",
+    86: "A1_86",
+    87: "A1_87",
+}
+
+shp_a2 = {
+    84: "A2_84",
+    85: "A2_85",
+    86: "A2_86",
+}
+
+shp_a3 = {
+    84: "A3_84",
+    85: "A3_85",
+    86: "A3_86",
+    87: "A3_87",
+    88: "A3_88",
+}
+
+shp_a4 = {
+    84: "A4_84",
+    85: "A4_85",
+    86: "A4_86",
+    87: "A4_87",
+    88: "A4_88",
+    89: "A4_89",
+}
+
+shp_a5 = {
+    84: "A5_84",
+    85: "A5_85",
+    86: "A5_86",
+    87: "A5_87",
+}
+
+shp_a6 = {
+    84: "A6_84",
+    85: "A6_85",
+    86: "A6_86",
+    87: "A6_87",
+}
+
+shp_a7 = {
+    84: "A7_84",
+    85: "A7_85",
+    86: "A7_86",
+}
+
+shp_a8 = {
+    84: "A8_84",
+    85: "A8_85",
+    86: "A8_86",
+    87: "A8_87",
+    88: "A8_88",
+    89: "A8_89",
+    90: "A8_90",
+}
+
+shp_a9 = {
+    84: "A9_84",
+    85: "A9_85",
+    222: "A9_222",
+}
+
+shp_a10 = {
+    84: "A10_84",
+    85: "A10_85",
+    86: "A10_86",
+    87: "A10_87",
+    88: "A10_88",
+    89: "A10_89",
+}
+
+shp_b0 = {
+    100: "B0_100",
+    101: "B0_101",
+    102: "B0_102",
+    103: "B0_103",
+    104: "B0_104",
+    105: "B0_105",
+    179: "B0_179",
+}
+
+shp_b1 = {
+    100: "B1_100",
+    101: "B1_101",
+    102: "B1_102",
+    103: "B1_103",
+    104: "B1_104",
+    105: "B1_105",
+    179: "B1_179",
+    193: "B1_193",
+}
+
+shp_b2 = {
+    100: "B2_100",
+    101: "B2_101",
+    102: "B2_102",
+    103: "B2_103",
+    104: "B2_104",
+    106: "B2_106",
+    107: "B2_107",
+    191: "B2_191",
+}
+
+shp_b3 = {
+    100: "B3_100",
+    101: "B3_101",
+    102: "B3_102",
+    221: "B3_221",
+}
+
+shp_b4 = {
+    100: "B4_100",
+    101: "B4_101",
+    102: "B4_102",
+}
+
+shp_b5 = {
+    100: "B5_100",
+    101: "B5_101",
+    102: "B5_102",
+    103: "B5_103",
+    104: "B5_104",
+    206: "B5_206",
+}
+
+shp_select = {
+    3: "SELECT_3",
+    4: "SELECT_4",
+    5: "SELECT_5",
+    6: "SELECT_6",
+    7: "SELECT_7",
+    8: "SELECT_8",
+    9: "SELECT_9",
+    10: "SELECT_10",
+    11: "SELECT_11",
+    12: "SELECT_12",
+}
+
+shp_bbh = {
+    29: "ENTITY_29",
+    53: "BBH_53",
+    54: "BBH_54",
+    55: "BBH_55",
+    56: "BBH_56",
+    57: "BBH_57",
+    58: "BBH_58",
+    59: "BBH_59",
+    60: "BBH_60",
+}
+
+shp_ccm = {
+    3: "CCM_3",
+    4: "CCM_4",
+    5: "CCM_5",
+    6: "CCM_6",
+    7: "CCM_7",
+    25: "ENTITY_25",
+    39: "ENTITY_39",
+    54: "CCM_54",
+    55: "CCM_55",
+    210: "CCM_210",
+}
+
+shp_inside = {
+    28: "ENTITY_28",
+    29: "ENTITY_29",
+    34: "ENTITY_34",
+    35: "ENTITY_35",
+    36: "ENTITY_36",
+    37: "ENTITY_37",
+    38: "ENTITY_38",
+    39: "ENTITY_39",
+    41: "ENTITY_41",
+    53: "INSIDE_53",
+    54: "INSIDE_54",
+    55: "INSIDE_55",
+    56: "INSIDE_56",
+    57: "INSIDE_57",
+    208: "INSIDE_208",
+    209: "INSIDE_209",
+    213: "INSIDE_213",
+    214: "INSIDE_214",
+}
+
+shp_hmc = {
+    29: "ENTITY_29",
+    31: "ENTITY_31",
+    32: "ENTITY_32",
+    54: "HMC_54",
+    55: "HMC_55",
+    56: "HMC_56",
+    57: "HMC_57",
+    58: "HMC_58",
+    59: "HMC_59",
+    60: "HMC_60",
+}
+
+shp_ssl = {
+    3: "SSL_3",
+    4: "SSL_4",
+    27: "ENTITY_27",
+    54: "SSL_54",
+    55: "SSL_55",
+    56: "SSL_56",
+    57: "SSL_57",
+    58: "SSL_58",
+    199: "SSL_199",
+}
+
+shp_bob = {
+    23: "ENTITY_23",
+    54: "BOB_54",
+    55: "BOB_55",
+    56: "BOB_56",
+}
+
+shp_sl = {
+    25: "ENTITY_25",
+    54: "SL_54",
+    55: "SL_55",
+    56: "SL_56",
+}
+
+shp_wdw = {
+    23: "ENTITY_23",
+    54: "WDW_54",
+    55: "WDW_55",
+    56: "WDW_56",
+    57: "WDW_57",
+    58: "WDW_58",
+    59: "WDW_59",
+    60: "WDW_60",
+}
+
+shp_jrb = {
+    53: "JRB_53",
+    54: "JRB_54",
+    55: "JRB_55",
+    56: "JRB_56",
+    57: "JRB_57",
+    58: "JRB_58",
+    59: "JRB_59",
+    60: "JRB_60",
+    61: "JRB_61",
+    62: "JRB_62",
+    63: "JRB_63",
+}
+
+shp_thi = {
+    3: "THI_3",
+    22: "ENTITY_22",
+    23: "ENTITY_23",
+    54: "THI_54",
+    55: "THI_55",
+}
+
+shp_ttc = {
+    54: "TTC_54",
+    55: "TTC_55",
+    56: "TTC_56",
+    57: "TTC_57",
+    58: "TTC_58",
+    59: "TTC_59",
+    60: "TTC_60",
+    61: "TTC_61",
+    62: "TTC_62",
+    63: "TTC_63",
+    64: "TTC_64",
+    65: "TTC_65",
+    66: "TTC_66",
+    67: "TTC_67",
+    68: "TTC_68",
+}
+
+shp_rr = {
+    3: "RR_3",
+    4: "RR_4",
+    5: "RR_5",
+    6: "RR_6",
+    7: "RR_7",
+    8: "RR_8",
+    9: "RR_9",
+    10: "RR_10",
+    11: "RR_11",
+    12: "RR_12",
+    13: "RR_13",
+    14: "RR_14",
+    15: "RR_15",
+    16: "RR_16",
+    17: "RR_17",
+    18: "RR_18",
+    19: "RR_19",
+    20: "RR_20",
+    21: "RR_21",
+    22: "RR_22",
+    54: "RR_54",
+    55: "RR_55",
+    56: "RR_56",
+    57: "RR_57",
+    58: "RR_58",
+    59: "RR_59",
+    60: "RR_60",
+    61: "RR_61",
+    62: "RR_62",
+    63: "RR_63",
+    64: "RR_64",
+    65: "RR_65",
+    66: "RR_66",
+    67: "RR_67",
+    68: "RR_68",
+    69: "RR_69",
+}
+
+shp_ground = {
+    3: "GROUNDS_3",
+    22: "ENTITY_22",
+    23: "ENTITY_23",
+    38: "ENTITY_38",
+    41: "ENTITY_41",
+    54: "GROUNDS_54",
+    55: "GROUNDS_55",
+    56: "GROUNDS_56",
+}
+
+shp_bitdw = {
+    3: "BITDW_3",
+    4: "BITDW_4",
+    5: "BITDW_5",
+    6: "BITDW_6",
+    7: "BITDW_7",
+    8: "BITDW_8",
+    9: "BITDW_9",
+    10: "BITDW_10",
+    11: "BITDW_11",
+    12: "BITDW_12",
+    13: "BITDW_13",
+    14: "BITDW_14",
+    15: "BITDW_15",
+    16: "BITDW_16",
+    17: "BITDW_17",
+    18: "ENTITY_18",
+    54: "BITDW_54",
+    55: "BITDW_55",
+    56: "BITDW_56",
+    57: "BITDW_57",
+    58: "BITDW_58",
+    59: "BITDW_59",
+    60: "BITDW_60",
+    61: "BITDW_61",
+    62: "BITDW_62",
+    63: "BITDW_63",
+}
+
+shp_vcutm = {
+    22: "ENTITY_22",
+    54: "VCUTM_54",
+}
+
+shp_bitfs = {
+    3: "BITFS_3",
+    4: "BITFS_4",
+    5: "BITFS_5",
+    6: "BITFS_6",
+    7: "BITFS_7",
+    8: "BITFS_8",
+    9: "BITFS_9",
+    10: "BITFS_10",
+    11: "BITFS_11",
+    12: "BITFS_12",
+    13: "BITFS_13",
+    14: "BITFS_14",
+    15: "BITFS_15",
+    16: "BITFS_16",
+    17: "BITFS_17",
+    18: "BITFS_18",
+    19: "BITFS_19",
+    20: "BITFS_20",
+    21: "BITFS_21",
+    54: "BITFS_54",
+    55: "BITFS_55",
+    56: "BITFS_56",
+    57: "BITFS_57",
+    58: "BITFS_58",
+    59: "BITFS_59",
+    60: "BITFS_60",
+    61: "BITFS_61",
+    62: "BITFS_62",
+    63: "BITFS_63",
+    64: "BITFS_64",
+    65: "BITFS_65",
+}
+
+shp_sa = {
+}
+
+shp_bits = {
+    3: "BITS_3",
+    4: "BITS_4",
+    5: "BITS_5",
+    6: "BITS_6",
+    7: "BITS_7",
+    8: "BITS_8",
+    9: "BITS_9",
+    10: "BITS_10",
+    11: "BITS_11",
+    12: "BITS_12",
+    13: "BITS_13",
+    14: "BITS_14",
+    15: "BITS_15",
+    16: "BITS_16",
+    17: "BITS_17",
+    18: "BITS_18",
+    19: "BITS_19",
+    20: "BITS_20",
+    54: "BITS_54",
+    55: "BITS_55",
+    57: "BITS_57",
+    60: "BITS_60",
+    61: "BITS_61",
+    62: "BITS_62",
+    63: "BITS_63",
+    64: "BITS_64",
+    65: "BITS_65",
+    66: "BITS_66",
+    67: "BITS_67",
+    68: "BITS_68",
+    69: "BITS_69",
+    73: "ENTITY_73",
+}
+
+shp_lll = {
+    3: "LLL_3",
+    4: "LLL_4",
+    5: "LLL_5",
+    6: "LLL_6",
+    7: "LLL_7",
+    8: "LLL_8",
+    9: "LLL_9",
+    10: "LLL_10",
+    11: "LLL_11",
+    12: "LLL_12",
+    13: "LLL_13",
+    14: "LLL_14",
+    53: "LLL_53",
+    54: "LLL_54",
+    55: "LLL_55",
+    56: "LLL_56",
+    57: "LLL_57",
+    58: "LLL_58",
+    59: "LLL_59",
+    60: "LLL_60",
+    61: "LLL_61",
+    62: "LLL_62",
+    63: "LLL_63",
+    64: "LLL_64",
+    65: "LLL_65",
+    67: "LLL_67",
+    68: "LLL_68",
+    69: "LLL_69",
+    70: "LLL_70",
+    71: "LLL_71",
+    72: "LLL_72",
+    73: "LLL_73",
+    74: "LLL_74",
+    75: "LLL_75",
+    76: "LLL_76",
+    77: "LLL_77",
+    78: "LLL_78",
+    79: "LLL_79",
+    80: "LLL_80",
+    83: "LLL_83",
+}
+
+shp_ddd = {
+    54: "DDD_54",
+    55: "DDD_55",
+    56: "DDD_56",
+}
+
+shp_wf = {
+    3: "WF_3",
+    4: "WF_4",
+    5: "WF_5",
+    6: "WF_6",
+    7: "WF_7",
+    8: "WF_8",
+    9: "WF_9",
+    10: "WF_10",
+    12: "WF_12",
+    13: "WF_13",
+    14: "WF_14",
+    15: "WF_15",
+    16: "WF_16",
+    17: "WF_17",
+    18: "WF_18",
+    23: "ENTITY_23",
+    44: "WF_44",
+    45: "WF_45",
+    46: "WF_46",
+    47: "WF_47",
+    54: "WF_54",
+    55: "WF_55",
+    56: "WF_56",
+    57: "WF_57",
+    58: "WF_58",
+    173: "WF_173",
+    174: "WF_174",
+    175: "WF_175",
+    176: "WF_176",
+    177: "WF_177",
+    178: "WF_178",
+}
+
+shp_end = {
+}
+
+shp_courty = {
+    3: "COURTYARD_3",
+    24: "ENTITY_24",
+    39: "ENTITY_39",
+}
+
+shp_pss = {
+}
+
+shp_cotmc = {
+}
+
+shp_totwc = {
+    3: "TOTWC_3",
+}
+
+shp_bitdwa = {
+    3: "B0_3",
+}
+
+shp_wmotr = {
+}
+
+shp_bitfsa = {
+    54: "BITFSA_54",
+}
+
+shp_bitsa = {
+    3: "BITSA_3",
+    54: "BITSA_54",
+    55: "BITSA_55",
+    56: "BITSA_56",
+    57: "BITSA_57",
+    58: "BITSA_58",
+    59: "BITSA_59",
+    60: "BITSA_60",
+    61: "BITSA_61",
+    62: "BITSA_62",
+    63: "BITSA_63",
+}
+
+shp_ttm = {
+    3: "TTM_3",
+    4: "TTM_4",
+    5: "TTM_5",
+    6: "TTM_6",
+    7: "TTM_7",
+    8: "TTM_8",
+    9: "TTM_9",
+    10: "TTM_10",
+    11: "TTM_11",
+    12: "TTM_12",
+    13: "TTM_13",
+    15: "TTM_15",
+    16: "TTM_16",
+    17: "TTM_17",
+    18: "TTM_18",
+    19: "TTM_19",
+    20: "TTM_20",
+    21: "TTM_21",
+    22: "TTM_22",
+    53: "TTM_53",
+    54: "TTM_54",
+    55: "TTM_55",
+    56: "TTM_56",
+    57: "TTM_57",
+    58: "TTM_58",
+    123: "TTM_123",
+}
+
+shp_table = (
+    (0x002A6120, 0x002ABCA0, shp_select),
+    (0x002ABCA0, 0x002AC300, shp_game,),
+    (0x002AC300, 0x002AC3BC, shp_c0,),
+    (0x002AC3BC, 0x002AC3F0, shp_a0,),
+    (0x002AC3F0, 0x002AC40C, shp_a1,),
+    (0x002AC40C, 0x002AC428, shp_a2,),
+    (0x002AC428, 0x002AC454, shp_a3,),
+    (0x002AC454, 0x002AC488, shp_a4,),
+    (0x002AC488, 0x002AC4AC, shp_a5,),
+    (0x002AC4AC, 0x002AC4EC, shp_a6,),
+    (0x002AC4D0, 0x002AC4EC, shp_a7,),
+    (0x002AC4EC, 0x002AC528, shp_a8,),
+    (0x002AC528, 0x002AC544, shp_a9,),
+    (0x002AC544, 0x002AC578, shp_a10,),
+    (0x002AC578, 0x002AC5B4, shp_b0,),
+    (0x002AC5B4, 0x002AC5F8, shp_b1,),
+    (0x002AC5F8, 0x002AC63C, shp_b2,),
+    (0x002AC63C, 0x002AC660, shp_b3,),
+    (0x002AC660, 0x002AC67C, shp_b4,),
+    (0x002AC67C, 0x002AC6B0, shp_b5,),
+    (0x00371C40, 0x00383950, shp_game, shp_c0, shp_a8,  shp_b5, shp_bbh),
+    (0x00383950, 0x00396340, shp_game, shp_c0, shp_a6,  shp_b4, shp_ccm),
+    (0x00396340, 0x003D0DC0, shp_game,                  shp_b3, shp_inside),
+    (0x003D0DC0, 0x003E76B0, shp_game, shp_c0, shp_a5,  shp_b5, shp_hmc),
+    (0x003E76B0, 0x003FC2B0, shp_game, shp_c0, shp_a4,          shp_ssl),
+    (0x003FC2B0, 0x00405FB0, shp_game, shp_c0, shp_a2,  shp_b2, shp_bob),
+    (0x00405FB0, 0x0040ED70, shp_game, shp_c0, shp_a6,  shp_b4, shp_sl),
+    (0x0040ED70, 0x0041A760, shp_game, shp_c0, shp_a0,  shp_b1, shp_wdw),
+    (0x0041A760, 0x004246D0, shp_game, shp_c0, shp_a3,  shp_b1, shp_jrb),
+    (0x004246D0, 0x0042CF20, shp_game, shp_c0, shp_a10, shp_b2, shp_thi),
+    (0x0042CF20, 0x00437870, shp_game, shp_c0, shp_a0,          shp_ttc),
+    (0x00437870, 0x0044ABC0, shp_game, shp_c0, shp_a10,         shp_rr),
+    (0x0044ABC0, 0x00454E00, shp_game, shp_c0, shp_a9,  shp_b3, shp_ground),
+    (0x00454E00, 0x0045C600, shp_game, shp_c0, shp_a10, shp_b5, shp_bitdw),
+    (0x0045C600, 0x004614D0, shp_game, shp_c0, shp_a7,          shp_vcutm),
+    (0x004614D0, 0x0046B090, shp_game, shp_c0, shp_a1,  shp_b5, shp_bitfs),
+    (0x0046B090, 0x0046C3A0, shp_game,         shp_a3,  shp_b1, shp_sa),
+    (0x0046C3A0, 0x004784A0, shp_game, shp_c0,          shp_b2, shp_bits),
+    (0x004784A0, 0x0048D930, shp_game, shp_c0, shp_a1,  shp_b5, shp_lll),
+    (0x0048D930, 0x00496090, shp_game, shp_c0, shp_a3,  shp_b1, shp_ddd),
+    (0x00496090, 0x0049E710, shp_game, shp_c0, shp_a0,  shp_b2, shp_wf),
+    (0x0049E710, 0x004AC570, shp_game,                          shp_end),
+    (0x004AC570, 0x004AF930, shp_game, shp_c0, shp_a8,          shp_courty),
+    (0x004AF930, 0x004B80D0, shp_game, shp_c0, shp_a7,          shp_pss),
+    (0x004B80D0, 0x004BEC30, shp_game, shp_c0, shp_a7,  shp_b5, shp_cotmc),
+    (0x004BEC30, 0x004C2920, shp_game, shp_c0, shp_a7,          shp_totwc),
+    (0x004C2920, 0x004C4320, shp_game,                  shp_b0, shp_bitdwa),
+    (0x004C4320, 0x004CDBD0, shp_game, shp_c0, shp_a1,  shp_b5, shp_wmotr),
+    (0x004CDBD0, 0x004CEC00, shp_game,                  shp_b0, shp_bitfsa),
+    (0x004CEC00, 0x004D1910, shp_game,                  shp_b0, shp_bitsa),
+    (0x004D1910, 0x004EC000, shp_game, shp_c0, shp_a5,          shp_ttm),
+)
+
+def fmt_mask(x):
+    return "~0x%02X" % ~x if x < 0 else "0x%02X" % x
+
+def fmt_time(x):
+    if x >= 30:
+        s = "30*%d" % (x//30)
+        x %= 30
+        if x != 0:
+            s += "+%d" % x
+        return s
+    else:
+        return "%d" % x
+
+def fmt_shape(x):
+    if x == 0:
+        return "S_NULL"
+    addr = table.dev_addr(ultra.script)
+    for shp in shp_table:
+        if addr >= shp[0] and addr < shp[1]:
+            for s in shp[2:]:
+                if x in s:
+                    return "S_" + s[x]
+    return "%d" % x
+
+sym_E0_t_ipl3 = {
+    0xA40004C0: table.sym("_A40004C0"), # la
+    0xA4000774: table.sym("_A4000774"), # la
+    0xA4000778: table.sym("_A4000778"),
+    0xA4000880: table.sym("_A4000880"),
+    0xA400090C: table.sym("_A400090C"),
+    0xA4000980: table.sym("_A4000980"),
+    0xA4000A40: table.sym("_A4000A40"),
+    0xA4000AD0: table.sym("_A4000AD0"),
+}
+
 sym_E0_t_crt0 = {
     # ==========================================================================
     # text
@@ -14,8 +810,8 @@ sym_E0_t_crt0 = {
 }
 
 imm_E0_t_crt0 = {
-    0x80246004: "bss_main_size_hi",
-    0x8024600C: "bss_main_size_lo",
+    0x80246004: ("bss_main_size_hi",),
+    0x8024600C: ("bss_main_size_lo",),
 }
 
 sym_E0_t_ultra = {
@@ -25,7 +821,7 @@ sym_E0_t_ultra = {
     # text
     # ==========================================================================
 
-    # ultra/src/parameter.S
+    # ultra/src/parameters.S
     0x80000300: table.sym("osTvType"),
     0x80000304: table.sym("osRomType"),
     0x80000308: table.sym("osRomBase"),
@@ -35,12 +831,12 @@ sym_E0_t_ultra = {
     0x80000318: table.sym("osMemSize"),
     0x8000031C: table.sym("osAppNMIBuffer"),
 
-    # ultra/src/osSetTime.S
+    # ultra/src/settime.S
     0x803223B0: table.sym_fnc("osSetTime", arg=(
         "OSTime time",
     ), flag=table.GLOBL),
 
-    # ultra/src/osMapTLB.S
+    # ultra/src/maptlb.S
     0x803223E0: table.sym_fnc("osMapTLB", arg=(
         "s32 index",
         "OSPageMask pm",
@@ -50,39 +846,39 @@ sym_E0_t_ultra = {
         "s32 asid",
     ), flag=table.GLOBL),
 
-    # ultra/src/osUnmapTLBAll.S
+    # ultra/src/unmaptlball.S
     0x803224A0: table.sym_fnc("osUnmapTLBAll", flag=table.GLOBL),
 
     # ultra/src/sprintf.S
     0x803224F0: table.sym_fnc("sprintf", "int", (
         "char *",
         "const char *",
-        "..."
+        "...",
     ), table.GLOBL),
-    0x8032255C: table.sym("ultra_8032255C"),
+    0x8032255C: table.sym("proutSprintf"),
 
-    # ultra/src/osCreateMesgQueue.S
+    # ultra/src/createmesgqueue.S
     0x803225A0: table.sym_fnc("osCreateMesgQueue", arg=(
         "OSMesgQueue *mq",
         "OSMesg *msg",
         "s32 count",
     ), flag=table.GLOBL),
 
-    # ultra/src/osSetEventMesg.S
+    # ultra/src/seteventmesg.S
     0x803225D0: table.sym_fnc("osSetEventMesg", arg=(
         "OSEvent e",
         "OSMesgQueue *mq",
         "OSMesg m",
     ), flag=table.GLOBL),
 
-    # ultra/src/osViSetEvent.S
+    # ultra/src/visetevent.S
     0x80322640: table.sym_fnc("osViSetEvent", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "u32 retraceCount",
     ), flag=table.GLOBL),
 
-    # ultra/src/osCreateThread.S
+    # ultra/src/createthread.S
     0x803226B0: table.sym_fnc("osCreateThread", arg=(
         "OSThread *t",
         "OSId id",
@@ -92,15 +888,15 @@ sym_E0_t_ultra = {
         "OSPri pri",
     ), flag=table.GLOBL),
 
-    # ultra/src/osRecvMesg.S
+    # ultra/src/recvmesg.S
     0x80322800: table.sym_fnc("osRecvMesg", "s32", (
         "OSMesgQueue *mq",
         "OSMesg *msg",
         "s32 flag",
     ), table.GLOBL),
 
-    # ultra/src/osSpTaskStart.S
-    0x80322940: table.sym("ultra_80322940"),
+    # ultra/src/sptask.S
+    0x80322940: table.sym("_VirtualToPhysicalTask"),
     0x80322A5C: table.sym_fnc("osSpTaskLoad", arg=(
         "OSTask *task",
     ), flag=table.GLOBL),
@@ -108,51 +904,51 @@ sym_E0_t_ultra = {
         "OSTask *task",
     ), table.GLOBL),
 
-    # ultra/src/osSpTaskYield.S
+    # ultra/src/sptaskyield.S
     0x80322C00: table.sym_fnc("osSpTaskYield", "s32", flag=table.GLOBL),
 
-    # ultra/src/osSendMesg.S
+    # ultra/src/sendmesg.S
     0x80322C20: table.sym_fnc("osSendMesg", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "s32 flag",
     ), flag=table.GLOBL),
 
-    # ultra/src/osSpTaskYielded.S
+    # ultra/src/sptaskyielded.S
     0x80322D70: table.sym_fnc("osSpTaskYielded", "OSYieldResult", (
-        "OSTask *task"
+        "OSTask *task",
     ), table.GLOBL),
 
-    # ultra/src/osStartThread.S
+    # ultra/src/startthread.S
     0x80322DF0: table.sym_fnc("osStartThread", arg=(
         "OSThread *t",
     ), flag=table.GLOBL),
 
-    # ultra/src/osWritebackDCacheAll.S
+    # ultra/src/writebackdcacheall.S
     0x80322F40: table.sym_fnc("osWritebackDCacheAll", flag=table.GLOBL),
 
-    # ultra/src/osCreateViManager.S
+    # ultra/src/vimgr.S
     0x80322F70: table.sym_fnc("osCreateViManager", arg=(
         "OSPri pri",
     ), flag=table.GLOBL),
     0x803230F4: table.sym("viMgrMain"),
 
-    # ultra/src/osViSetMode.S
+    # ultra/src/visetmode.S
     0x803232D0: table.sym_fnc("osViSetMode", arg=(
-        "OSViMode *mode"
+        "OSViMode *mode",
     ), flag=table.GLOBL),
 
-    # ultra/src/osViBlack.S
+    # ultra/src/viblack.S
     0x80323340: table.sym_fnc("osViBlack", arg=(
-        "u8 active"
+        "u8 active",
     ), flag=table.GLOBL),
 
-    # ultra/src/osViSetSpecialFeatures.S
+    # ultra/src/visetspecial.S
     0x803233B0: table.sym_fnc("osViSetSpecialFeatures", arg=(
-        "u32 func"
+        "u32 func",
     ), flag=table.GLOBL),
 
-    # ultra/src/osCreatePiManager.S
+    # ultra/src/pimgr.S
     0x80323570: table.sym_fnc("osCreatePiManager", arg=(
         "OSPri pri",
         "OSMesgQueue *cmdQ",
@@ -160,16 +956,16 @@ sym_E0_t_ultra = {
         "s32 cmdMsgCnt",
     ), flag=table.GLOBL),
 
-    # ultra/src/osSetThreadPri.S
+    # ultra/src/setthreadpri.S
     0x803236F0: table.sym_fnc("osSetThreadPri", arg=(
         "OSThread *t",
-        "OSPri pri"
+        "OSPri pri",
     ), flag=table.GLOBL),
 
-    # ultra/src/osInitialize.S
+    # ultra/src/initialize.S
     0x803237D0: table.sym_fnc("osInitialize", flag=table.GLOBL),
 
-    # ultra/src/osViSwapBuffer.S
+    # ultra/src/viswapbuf.S
     0x80323A00: table.sym_fnc("osViSwapBuffer", arg=(
         "void *vaddr",
     ), flag=table.GLOBL),
@@ -179,16 +975,16 @@ sym_E0_t_ultra = {
         "float value",
     ), flag=table.GLOBL),
 
-    # ultra/src/osContReadData.S
+    # ultra/src/contreaddata.S
     0x80323A60: table.sym_fnc("osContStartReadData", "s32", (
-        "OSMesgQueue *mq"
+        "OSMesgQueue *mq",
     ), table.GLOBL),
     0x80323B24: table.sym_fnc("osContGetReadData", arg=(
-        "OSContPad *pad"
+        "OSContPad *pad",
     ), flag=table.GLOBL),
     0x80323BCC: table.sym("__osPackReadData"),
 
-    # ultra/src/osContInit.S
+    # ultra/src/controller.S
     0x80323CC0: table.sym_fnc("osContInit", "s32", (
         "OSMesgQueue *mq",
         "u8 *bitpattern",
@@ -197,12 +993,12 @@ sym_E0_t_ultra = {
     0x80323EBC: table.sym("__osContGetInitData"),
     0x80323F8C: table.sym("__osPackRequestData"),
 
-    # ultra/src/osEepromProbe.S
+    # ultra/src/conteepprobe.S
     0x80324080: table.sym_fnc("osEepromProbe", "s32", (
-        "OSMesgQueue *mq"
+        "OSMesgQueue *mq",
     ), table.GLOBL),
 
-    # ultra/src/ll_multdiv.S
+    # ultra/src/ll.S
     0x803240F0: table.sym("__ull_rshift", table.GLOBL), # unused
     0x8032411C: table.sym("__ull_rem", table.GLOBL),
     0x80324158: table.sym("__ull_div", table.GLOBL),
@@ -214,13 +1010,13 @@ sym_E0_t_ultra = {
     0x803242E8: table.sym("__ll_mod", table.GLOBL), # unused
     0x80324384: table.sym("__ll_rshift", table.GLOBL), # unused
 
-    # ultra/src/osInvalDCache.S
+    # ultra/src/invaldcache.S
     0x803243B0: table.sym_fnc("osInvalDCache", arg=(
         "void *vaddr",
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/osPiStartDma.S
+    # ultra/src/pidma.S
     0x80324460: table.sym_fnc("osPiStartDma", arg=(
         "OSIoMesg *mb",
         "s32 priority",
@@ -234,16 +1030,16 @@ sym_E0_t_ultra = {
     # ultra/src/bzero.S
     0x80324570: table.sym_fnc("bzero", arg=(
         "void *",
-        "size_t"
+        "size_t",
     ), flag=table.GLOBL),
 
-    # ultra/src/osInvalICache.S
+    # ultra/src/invalicache.S
     0x80324610: table.sym_fnc("osInvalICache", arg=(
         "void *vaddr",
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/osEepromLongRead.S
+    # ultra/src/conteeplongread.S
     0x80324690: table.sym_fnc("osEepromLongRead", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -251,7 +1047,7 @@ sym_E0_t_ultra = {
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/osEepromLongWrite.S
+    # ultra/src/conteeplongwrite.S
     0x803247D0: table.sym_fnc("osEepromLongWrite", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -266,7 +1062,7 @@ sym_E0_t_ultra = {
         "size_t",
     ), flag=table.GLOBL),
 
-    # ultra/src/guOrtho.S
+    # ultra/src/ortho.S
     0x80324C20: table.sym_fnc("guOrthoF", arg=(
         "float mf[4][4]",
         "float l",
@@ -288,7 +1084,7 @@ sym_E0_t_ultra = {
         "float scale",
     ), flag=table.GLOBL),
 
-    # ultra/src/guPerspective.S
+    # ultra/src/perspective.S
     0x80324DE0: table.sym_fnc("guPerspectiveF", arg=(
         "float mf[4][4]",
         "u16 *perspNorm",
@@ -308,10 +1104,10 @@ sym_E0_t_ultra = {
         "float scale",
     ), flag=table.GLOBL),
 
-    # ultra/src/osGetTime.S
+    # ultra/src/gettime.S
     0x80325070: table.sym_fnc("osGetTime", "OSTime", flag=table.GLOBL),
 
-    # ultra/src/ll_cvt.S
+    # ultra/src/llcvt.S
     0x80325100: table.sym("__d_to_ll", table.GLOBL), # unused
     0x8032511C: table.sym("__f_to_ll", table.GLOBL), # unused
     0x80325138: table.sym("__d_to_ull", table.GLOBL),
@@ -331,7 +1127,7 @@ sym_E0_t_ultra = {
         "float angle",
     ), table.GLOBL),
 
-    # ultra/src/guTranslate.S
+    # ultra/src/translate.S
     0x80325640: table.sym_fnc("guTranslateF", arg=(
         "float mf[4][4]",
         "float x",
@@ -345,7 +1141,7 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/guRotate.S
+    # ultra/src/rotate.S
     0x803256E0: table.sym_fnc("guRotateF", arg=(
         "float mf[4][4]",
         "float a",
@@ -361,7 +1157,7 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/guScale.S
+    # ultra/src/scale.S
     0x803258D0: table.sym_fnc("guScaleF", arg=(
         "float mf[4][4]",
         "float x",
@@ -375,45 +1171,46 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/osAiSetFrequency.S
+    # ultra/src/aisetfreq.S
     0x80325970: table.sym_fnc("osAiSetFrequency", arg=(
         "u32 frequency",
     ), flag=table.GLOBL),
 
-    # ultra/src/80325AE0.S
-    0x80325AD0: table.sym("ultra_80325AD0"), # unused
-    0x80325AD8: table.sym("ultra_80325AD8"), # unused
-    0x80325AE0: table.sym("ultra_80325AE0"),
-    0x80325BD4: table.sym("alBnkfNew"), # unused
+    # ultra/src/bnkf.S
+    0x80325AD0: table.sym("_bnkfPatchBank"), # unused
+    0x80325AD8: table.sym("_bnkfPatchInst"), # unused
+    0x80325AE0: table.sym("_bnkfPatchSound"),
+    0x80325BD4: table.sym("alBnkfNew", table.GLOBL), # unused
+    0x80325BCC: table.sym("_bnkfPatchWaveTable"), # unused
     0x80325CD8: table.sym_fnc("alSeqFileNew", arg=(
         "ALSeqFile *file",
         "u8 *base",
     ), flag=table.GLOBL),
 
-    # ultra/src/osWritebackDCache.S
+    # ultra/src/writebackdcache.S
     0x80325D20: table.sym_fnc("osWritebackDCache", arg=(
         "void *vaddr",
-        "s32 nbytes"
+        "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/osAiGetLength.S
+    # ultra/src/aigetlen.S
     0x80325DA0: table.sym_fnc("osAiGetLength", "u32", flag=table.GLOBL),
 
-    # ultra/src/osAiSetNextBuffer.S
+    # ultra/src/aisetnextbuf.S
     0x80325DB0: table.sym_fnc("osAiSetNextBuffer", "s32", (
         "void *vaddr",
-        "u32 nbytes"
+        "u32 nbytes",
     ), table.GLOBL),
 
-    # ultra/src/__osTimerService.S
+    # ultra/src/timerintr.S
     0x80325E60: table.sym("__osTimerServicesInit", table.GLOBL),
     0x80325EEC: table.sym("__osTimerInterrupt", table.GLOBL),
     0x80326064: table.sym("__osSetTimerIntr", table.GLOBL),
     0x803260D8: table.sym("__osInsertTimer", table.GLOBL),
 
-    # ultra/src/printf.o
-    0x80326260: table.sym("ultra_80326260", table.GLOBL),
-    0x80326A8C: table.sym("ultra_80326A8C"),
+    # ultra/src/xprintf.o
+    0x80326260: table.sym("_Printf", table.GLOBL),
+    0x80326A8C: table.sym("_Putfld"),
     0x80326B40: table.sym_fnc("L80326B40", flag=table.GLOBL|table.LOCAL),
     0x80326B90: table.sym_fnc("L80326B90", flag=table.GLOBL|table.LOCAL),
     0x80326D90: table.sym_fnc("L80326D90", flag=table.GLOBL|table.LOCAL),
@@ -437,116 +1234,136 @@ sym_E0_t_ultra = {
         "int",
     ), table.GLOBL),
 
-    # ultra/src/__osDequeueThread.S
+    # ultra/src/thread.S
     0x80327490: table.sym("__osDequeueThread", table.GLOBL),
 
-    # ultra/src/__osInterrupt.S
+    # ultra/src/interrupt.S
     0x803274D0: table.sym("__osDisableInt", table.GLOBL),
     0x803274F0: table.sym("__osRestoreInt", table.GLOBL),
 
-    # ultra/src/__osViInit.S
+    # ultra/src/vi.S
     0x80327510: table.sym("__osViInit", table.GLOBL),
 
-    # ultra/src/__osException.S
+    # ultra/src/exceptasm.S
     0x80327640: table.sym("__osExceptionPreamble", table.GLOBL),
     0x80327650: table.sym("__osException"),
-    0x803278E4: table.sym_fnc("L803278E4", flag=table.GLOBL|table.LOCAL),
-    0x80327904: table.sym_fnc("L80327904", flag=table.GLOBL|table.LOCAL),
-    0x80327938: table.sym_fnc("L80327938", flag=table.GLOBL|table.LOCAL),
-    0x80327A68: table.sym_fnc("L80327A68", flag=table.GLOBL|table.LOCAL),
-    0x80327AC4: table.sym_fnc("L80327AC4", flag=table.GLOBL|table.LOCAL),
-    0x80327AE4: table.sym_fnc("L80327AE4", flag=table.GLOBL|table.LOCAL),
-    0x80327B1C: table.sym_fnc("L80327B1C", flag=table.GLOBL|table.LOCAL),
-    0x80327B68: table.sym_fnc("L80327B68", flag=table.GLOBL|table.LOCAL),
+    0x803276B4: table.sym("notIP7", table.LOCAL),
+    0x803276D0: table.sym("savecontext", table.LOCAL),
+    0x80327834: table.sym("no_kdebug", table.LOCAL),
+    0x80327880: table.sym("no_rdb_mesg", table.LOCAL),
+    0x803278A8: table.sym("handle_interrupt"),
+    0x803278AC: table.sym("next_interrupt", table.LOCAL),
+    0x803278E4: table.sym("counter"),
+    0x80327904: table.sym("cart"),
+    0x80327938: table.sym("rcp"),
+    0x80327988: table.sym("sp_other_break", table.LOCAL),
+    0x80327998: table.sym("vi", table.LOCAL),
+    0x803279BC: table.sym("ai", table.LOCAL),
+    0x803279E8: table.sym("si", table.LOCAL),
+    0x80327A0C: table.sym("pi", table.LOCAL),
+    0x80327A38: table.sym("dp", table.LOCAL),
+    0x80327A5C: table.sym("NoMoreRcpInts", table.LOCAL),
+    0x80327A68: table.sym("prenmi"),
+    0x80327A94: table.sym("firstnmi", table.LOCAL),
+    0x80327AC4: table.sym("sw2"),
+    0x80327AE4: table.sym("sw1"),
+    0x80327B04: table.sym("handle_break"),
+    0x80327B1C: table.sym("redispatch"),
+    0x80327B50: table.sym("enqueueRunning", table.LOCAL),
+    0x80327B68: table.sym("panic"),
     0x80327B98: table.sym("send_mesg"),
+    0x80327C44: table.sym("send_done", table.LOCAL),
+    0x80327C4C: table.sym("handle_CpU"),
     0x80327C80: table.sym("__osEnqueueAndYield", table.GLOBL),
+    0x80327D08: table.sym("noEnqueue", table.LOCAL),
     0x80327D10: table.sym("__osEnqueueThread", table.GLOBL),
     0x80327D58: table.sym("__osPopThread", table.GLOBL),
     0x80327D68: table.sym("__osDispatchThread", table.GLOBL),
+    0x80327D88: table.sym("__osDispatchThreadSave", table.LOCAL),
     0x80327EA8: table.sym("__osCleanupThread", table.GLOBL),
 
-    # ultra/src/osVirtualToPhysical.S
+    # ultra/src/virtualtophysical.S
     0x80327EB0: table.sym_fnc("osVirtualToPhysical", "u32", (
         "void *vaddr",
     ), table.GLOBL),
 
-    # ultra/src/__osSpSetStatus.S
+    # ultra/src/spsetstat.S
     0x80327F30: table.sym("__osSpSetStatus", table.GLOBL),
 
-    # ultra/src/__osSpSetPc.S
+    # ultra/src/spsetpc.S
     0x80327F40: table.sym("__osSpSetPc", table.GLOBL),
 
-    # ultra/src/__osSpRawStartDma.S
+    # ultra/src/sprawdma.S
     0x80327F80: table.sym("__osSpRawStartDma", table.GLOBL),
 
-    # ultra/src/__osSpDeviceBusy.S
+    # ultra/src/sp.S
     0x80328010: table.sym("__osSpDeviceBusy", table.GLOBL),
 
-    # ultra/src/__osSpGetStatus.S
+    # ultra/src/spgetstat.S
     0x80328040: table.sym("__osSpGetStatus", table.GLOBL),
 
-    # ultra/src/osGetThreadPri.S
+    # ultra/src/getthreadpri.S
     0x80328050: table.sym_fnc("osGetThreadPri", "OSPri", (
         "OSThread *t",
     ), table.GLOBL),
 
-    # ultra/src/__osViGetCurrentContext.S
+    # ultra/src/vigetcurrcontext.S
     0x80328070: table.sym("__osViGetCurrentContext", table.GLOBL),
 
-    # ultra/src/__osViSwapContext.S
+    # ultra/src/viswapcontext.S
     0x80328080: table.sym("__osViSwapContext", table.GLOBL),
 
-    # ultra/src/osGetCount.S
+    # ultra/src/getcount.S
     0x803283E0: table.sym_fnc("osGetCount", "u32", flag=table.GLOBL),
 
-    # ultra/src/__osPiAccess.S
+    # ultra/src/piacs.S
     0x803283F0: table.sym("__osPiCreateAccessQueue", table.GLOBL),
     0x80328440: table.sym("__osPiGetAccess"), # unused
     0x80328484: table.sym("__osPiRelAccess"), # unused
 
-    # ultra/src/osPiRawStartDma.S
+    # ultra/src/pirawdma.S
     0x803284B0: table.sym("osPiRawStartDma", table.GLOBL),
 
-    # ultra/src/__osDevMgrMain.S
+    # ultra/src/devmgr.S
     0x80328590: table.sym("__osDevMgrMain", table.GLOBL),
 
-    # ultra/src/__osSetSR.S
+    # ultra/src/setsr.S
     0x80328710: table.sym_fnc("__osSetSR", arg=(
         "u32 value",
     ), flag=table.GLOBL),
 
-    # ultra/src/__osGetSR.S
+    # ultra/src/getsr.S
     0x80328720: table.sym_fnc("__osGetSR", "u32", flag=table.GLOBL),
 
-    # ultra/src/__osSetFpcCsr.S
+    # ultra/src/setfpccsr.S
     0x80328730: table.sym_fnc("__osSetFpcCsr", "u32", (
         "u32 value",
     ), table.GLOBL),
 
-    # ultra/src/__osSiRawReadIo.S
+    # ultra/src/sirawread.S
     0x80328740: table.sym("__osSiRawReadIo", table.GLOBL),
 
-    # ultra/src/__osSiRawWriteIo.S
+    # ultra/src/sirawwrite.S
     0x80328790: table.sym("__osSiRawWriteIo", table.GLOBL),
 
-    # ultra/src/osMapTLBRdb.S
+    # ultra/src/maptlbrdb.S
     0x803287E0: table.sym_fnc("osMapTLBRdb", flag=table.GLOBL),
 
-    # ultra/src/osPiRawReadIo.S
+    # ultra/src/pirawread.S
     0x80328840: table.sym_fnc("osPiRawReadIo", "s32", (
         "u32 devAddr",
         "u32 *data",
     ), table.GLOBL),
 
-    # ultra/src/__osSiAccess.S
+    # ultra/src/siacs.S
     0x803288A0: table.sym("__osSiCreateAccessQueue", table.GLOBL),
     0x803288F0: table.sym("__osSiGetAccess", table.GLOBL),
     0x80328934: table.sym("__osSiRelAccess", table.GLOBL),
 
-    # ultra/src/__osSiRawStartDma.S
+    # ultra/src/sirawdma.S
     0x80328960: table.sym("__osSiRawStartDma", table.GLOBL),
 
-    # ultra/src/osSetTimer.S
+    # ultra/src/settimer.S
     0x80328A10: table.sym_fnc("osSetTimer", arg=(
         "OSTimer *timer",
         "OSTime countdown",
@@ -555,7 +1372,7 @@ sym_E0_t_ultra = {
         "OSMesg msg",
     ), flag=table.GLOBL),
 
-    # ultra/src/osEepromWrite.S
+    # ultra/src/conteepwrite.S
     0x80328AF0: table.sym_fnc("osEepromWrite", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -564,18 +1381,18 @@ sym_E0_t_ultra = {
     0x80328CA0: table.sym("__osPackEepWriteData"),
     0x80328DAC: table.sym("__osEepStatus", table.GLOBL),
 
-    # ultra/src/osJamMesg.S
+    # ultra/src/jammesg.S
     0x80328FD0: table.sym_fnc("osJamMesg", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "s32 flag",
     ), flag=table.GLOBL),
 
-    # ultra/src/osPiGetCmdQueue.S
+    # ultra/src/pigetcmdq.S
     0x80329120: table.sym_fnc("osPiGetCmdQueue", "OSMesgQueue *",
     flag=table.GLOBL),
 
-    # ultra/src/osEepromRead.S
+    # ultra/src/conteepread.S
     0x80329150: table.sym_fnc("osEepromRead", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -583,7 +1400,7 @@ sym_E0_t_ultra = {
     ), flag=table.GLOBL),
     0x80329340: table.sym("__osPackEepReadData"),
 
-    # ultra/src/guMtxIdent.S
+    # ultra/src/mtx.S
     0x80329450: table.sym_fnc("guMtxF2L", arg=(
         "float mf[4][4]",
         "Mtx *m",
@@ -599,65 +1416,65 @@ sym_E0_t_ultra = {
         "Mtx *m",
     ), flag=table.GLOBL), # unused
 
-    # ultra/src/guNormalize.S
+    # ultra/src/normalize.S
     0x803296C0: table.sym_fnc("guNormalize", arg=(
         "float *x",
         "float *y",
         "float *z",
     ), flag=table.GLOBL),
 
-    # ultra/src/__osAiDeviceBusy.S
+    # ultra/src/ai.S
     0x80329750: table.sym("__osAiDeviceBusy", table.GLOBL),
 
-    # ultra/src/__osSetCompare.S
+    # ultra/src/setcompare.S
     0x80329780: table.sym_fnc("__osSetCompare", arg=(
         "u32 value",
     ), flag=table.GLOBL),
 
-    # ultra/src/_Litob.S
+    # ultra/src/xlitob.S
     0x80329790: table.sym("_Litob", table.GLOBL),
 
-    # ultra/src/_Ldtob.S
+    # ultra/src/xldtob.S
     0x80329A90: table.sym("_Ldtob", table.GLOBL),
-    0x8032A090: table.sym("ultra_8032A090"),
-    0x8032A170: table.sym("ultra_8032A170"),
+    0x8032A090: table.sym("_Ldunscale"),
+    0x8032A170: table.sym("_Genld"),
 
-    # ultra/src/8032A860.S
-    0x8032A860: table.sym("ultra_8032A860"), # unused
-    0x8032A890: table.sym("ultra_8032A890"),
-    0x8032A8E8: table.sym("ultra_8032A8E8"),
-    0x8032A9A8: table.sym("ultra_8032A9A8"),
-    0x8032AA80: table.sym("ultra_8032AA80"),
-    0x8032AACC: table.sym("ultra_8032AACC"),
-    0x8032AAF8: table.sym("ultra_8032AAF8", table.GLOBL),
+    # ultra/src/kdebugserver.S
+    0x8032A860: table.sym("u32_to_string"), # unused
+    0x8032A890: table.sym("string_to_u32"),
+    0x8032A8E8: table.sym("send_packet"),
+    0x8032A9A8: table.sym("send"),
+    0x8032AA80: table.sym("process_command_memory"),
+    0x8032AACC: table.sym("process_command_register"),
+    0x8032AAF8: table.sym("kdebugserver", table.GLOBL),
 
-    # ultra/src/__osSyncPutChars.S
+    # ultra/src/syncputchars.S
     0x8032ACE0: table.sym("__osSyncPutChars", table.GLOBL), # unused
 
-    # ultra/src/osSetIntMask.S
+    # ultra/src/setintmask.S
     0x8032AE10: table.sym_fnc("osSetIntMask", "OSIntMask", (
         "OSIntMask im",
     ), table.GLOBL), # unused
 
-    # ultra/src/osDestroyThread.S
+    # ultra/src/destroythread.S
     0x8032AE70: table.sym_fnc("osDestroyThread", arg=(
         "OSThread *t",
     ), flag=table.GLOBL),
 
-    # ultra/src/__osProbeTLB.S
+    # ultra/src/probetlb.S
     0x8032AF70: table.sym("__osProbeTLB", table.GLOBL),
 
-    # ultra/src/__osSiDeviceBusy.S
+    # ultra/src/si.S
     0x8032B030: table.sym("__osSiDeviceBusy", table.GLOBL),
 
     # ultra/src/ldiv.S
     0x8032B060: table.sym("lldiv", table.GLOBL),
     0x8032B160: table.sym("ldiv", table.GLOBL),
 
-    # ultra/src/__osGetCause.S
+    # ultra/src/getcause.S
     0x8032B1F0: table.sym_fnc("__osGetCause", "u32", flag=table.GLOBL),
 
-    # ultra/src/__osAtomicDec.S
+    # ultra/src/atomic.S
     0x8032B200: table.sym("__osAtomicDec", table.GLOBL),
 
     0x803358D0: table.sym("__osViDevMgr+0x00"),
@@ -677,46 +1494,69 @@ sym_E0_t_ultra = {
     0x80335910: table.sym("osClockRate+0"),
     0x80335914: table.sym("osClockRate+4"),
 
-    0x80364BA0: table.sym("_ultra_bss+0x0000"),
-    0x80364C20: table.sym("_ultra_bss+0x0080"),
-    0x80364C60: table.sym("_ultra_bss+0x00C0"),
-    0x80364E10: table.sym("_ultra_bss+0x0270"),
-    0x80365E10: table.sym("_ultra_bss+0x1270"),
-    0x80365E28: table.sym("_ultra_bss+0x1288"),
-    0x80365E40: table.sym("_ultra_bss+0x12A0"),
-    0x80365E42: table.sym("_ultra_bss+0x12A2"),
-    0x80365E44: table.sym("_ultra_bss+0x12A4"),
-    0x80365E58: table.sym("_ultra_bss+0x12B8"),
-    0x80365E5A: table.sym("_ultra_bss+0x12BA"),
-    0x80365E5C: table.sym("_ultra_bss+0x12BC"),
-    0x80365E6C: table.sym("_ultra_bss+0x12CC"),
-    0x80365E70: table.sym("_ultra_bss+0x12D0"),
-    0x80366020: table.sym("_ultra_bss+0x1480"),
-    0x80367020: table.sym("_ultra_bss+0x2480"),
-    0x80367038: table.sym("_ultra_bss+0x2498"),
-    0x80367040: table.sym("_ultra_bss+0x24A0"),
-    0x80367050: table.sym("_ultra_bss+0x24B0"),
-    0x8036708C: table.sym("_ultra_bss+0x24EC"),
-    0x80367090: table.sym("_ultra_bss+0x24F0"),
-    0x80367091: table.sym("_ultra_bss+0x24F1"),
-    0x80367098: table.sym("_ultra_bss+0x24F8"),
-    0x803670B8: table.sym("_ultra_bss+0x2518"),
-    0x803670D0: table.sym("_ultra_bss+0x2530"),
-    0x803670E0: table.sym("_ultra_bss+0x2540"),
-    0x803670F0: table.sym("_ultra_bss+0x2550"),
-    0x80367110: table.sym("_ultra_bss+0x2570"),
-    0x80367114: table.sym("_ultra_bss+0x2574"),
-    0x80367118: table.sym("_ultra_bss+0x2578"),
-    0x8036711C: table.sym("_ultra_bss+0x257C"),
-    0x80367120: table.sym("_ultra_bss+0x2580"),
-    0x80367130: table.sym("_ultra_bss+0x2590"),
-    0x80367138: table.sym("_ultra_bss+0x2598"),
-    0x80367150: table.sym("_ultra_bss+0x25B0"),
-    0x80367158: table.sym("_ultra_bss+0x25B8"),
-    0x80367170: table.sym("_ultra_bss+0x25D0"),
-    0x803671AC: table.sym("_ultra_bss+0x260C"),
-    0x803671B0: table.sym("_ultra_bss+0x2610"),
-    0x803672B0: table.sym("_ultra_bss+0x2710"),
+    # seteventmesg.o
+    0x80364BA0: table.sym("_ultra_bss+0x0000"), # <0x80>    __osEventStateTab
+
+    # sptask.o
+    0x80364C20: table.sym("_ultra_bss+0x0080"), # OSTask    tmp_task
+
+    # vimgr.o
+    0x80364C60: table.sym("_ultra_bss+0x00C0"), # OSThread      viThread
+    0x80364E10: table.sym("_ultra_bss+0x0270"), # u64[512]      viThreadStack
+    0x80365E10: table.sym("_ultra_bss+0x1270"), # OSMesgQueue   viEventQueue
+    0x80365E28: table.sym("_ultra_bss+0x1288"), # OSMesg[5]     viEventBuf
+    0x80365E40: table.sym("_ultra_bss+0x12A0+0"),   # <0x16>    viRetraceMsg
+    0x80365E42: table.sym("_ultra_bss+0x12A0+2"),
+    0x80365E44: table.sym("_ultra_bss+0x12A0+4"),
+    0x80365E58: table.sym("_ultra_bss+0x12B8+0"),   # <0x16>    viCounterMsg
+    0x80365E5A: table.sym("_ultra_bss+0x12B8+2"),
+    0x80365E5C: table.sym("_ultra_bss+0x12B8+4"),
+    0x80365E6C: table.sym("_ultra_bss+0x12B8+0x14"),
+
+    # pimgr.o
+    0x80365E70: table.sym("_ultra_bss+0x12D0"), # OSThread      piThread
+    0x80366020: table.sym("_ultra_bss+0x1480"), # u64[512]      piThreadStack
+    0x80367020: table.sym("_ultra_bss+0x2480"), # OSMesgQueue   piEventQueue
+    0x80367038: table.sym("_ultra_bss+0x2498"), # OSMesg[1]     piEventBuf
+
+    # initialize.o
+    0x80367040: table.sym("_ultra_bss+0x24A0"), # int   __osFinalrom
+
+    # controller.o
+    0x80367050: table.sym("_ultra_bss+0x24B0"), # u32[16]       __osContPifRam
+    0x8036708C: table.sym("_ultra_bss+0x24B0+0x3C"),
+    0x80367090: table.sym("_ultra_bss+0x24F0"), # u8            __osContLastCmd
+    0x80367091: table.sym("_ultra_bss+0x24F1"), # u8            __osMaxControllers
+    0x80367098: table.sym("_ultra_bss+0x24F8"), # OSTimer       __osEepromTimer
+    0x803670B8: table.sym("_ultra_bss+0x2518"), # OSMesgQueue   __osEepromTimerQ
+    0x803670D0: table.sym("_ultra_bss+0x2530"), # OSMesg[1]     __osEepromTimerMsg
+
+    # rotate.o
+    0x803670E0: table.sym("_ultra_bss+0x2540"), # float <static>
+
+    # timerintr.o
+    0x803670F0: table.sym("_ultra_bss+0x2550"), # OSTimer   __osBaseTimer
+    0x80367110: table.sym("_ultra_bss+0x2570+0"), # OSTime  __osCurrentTime
+    0x80367114: table.sym("_ultra_bss+0x2570+4"),
+    0x80367118: table.sym("_ultra_bss+0x2578"), # u32   __osBaseCounter
+    0x8036711C: table.sym("_ultra_bss+0x257C"), # u32   __osViIntrCount
+    0x80367120: table.sym("_ultra_bss+0x2580"), # u32   __osTimerCounter
+
+    # piacs.o
+    0x80367130: table.sym("_ultra_bss+0x2590"), # OSMesg[1]     piAccessBuf
+    0x80367138: table.sym("_ultra_bss+0x2598"), # OSMesgQueue   __osPiAccessQueue
+
+    # siacs.o
+    0x80367150: table.sym("_ultra_bss+0x25B0"), # OSMesg[1]     siAccessBuf
+    0x80367158: table.sym("_ultra_bss+0x25B8"), # OSMesgQueue   __osSiAccessQueue
+
+    # conteepread.o
+    0x80367170: table.sym("_ultra_bss+0x25D0"), # u32[16]   __osEepPifRam
+    0x803671AC: table.sym("_ultra_bss+0x25D0+0x3C"),
+
+    # kdebugserver.o
+    0x803671B0: table.sym("_ultra_bss+0x2610"), # u8[0x100] buffer
+    0x803672B0: table.sym("_ultra_bss+0x2710"), # OSThread  __osThreadSave
 }
 
 sym_E0_d_ultra = {
@@ -724,85 +1564,84 @@ sym_E0_d_ultra = {
     # data
     # ==========================================================================
 
-    # ultra/src/osViModeTable.c
+    # ultra/src/vitbl.c
     0x80335010: table.sym_var("osViModeTable", "OSViMode", "[]"),
 
-    # ultra/src/osCreateViManager.data.c
+    # ultra/src/vimgr.data.c
     0x803358D0: table.sym_var("__osViDevMgr", "struct ultra_0"),
 
-    # ultra/src/osCreatePiManager.data.c
+    # ultra/src/pimgr.data.c
     0x803358F0: table.sym_var("__osPiDevMgr", "struct ultra_0"),
 
-    # ultra/src/osInitialize.data.c
+    # ultra/src/initialize.data.c
     0x80335910: table.sym_var("osClockRate", "u64"),
     0x80335918: table.sym_var("osViClock", "u32"),
 
-    # ultra/src/osContInit.data.c
+    # ultra/src/controller.data.c
     0x80335920: table.sym_var("__osContinitialized", "u32"),
 
-    # ultra/src/osAiSetNextBuffer.data.c
-    0x80335930: table.sym_var("ultra_data_80335930", "u8"),
+    # ultra/src/aisetnextbuf.data.c
+    0x80335930: table.sym_var("hdwrBugFlag", "u8"),
 
-    # ultra/src/__osTimerService.c
+    # ultra/src/timerintr.c
     0x80335940: table.sym_var("__osTimerList", "void *"),
 
-    # ultra/src/printf.data.c
-    0x80335950: table.sym_var("ultra_data_80335950", "char", "[]"),
-    0x80335974: table.sym_var("ultra_data_80335974", "char", "[]"),
+    # ultra/src/xprintf.data.c
+    0x80335950: table.sym_var("spaces", "char", "[]"),
+    0x80335974: table.sym_var("zeroes", "char", "[]"),
 
-    # ultra/src/__osDequeueThread.data.c
+    # ultra/src/thread.data.c
     0x803359A0: table.sym_var("__osThreadTail", "__OSThreadTail"),
     0x803359A8: table.sym_var("__osRunQueue", "OSThread *"),
     0x803359AC: table.sym_var("__osActiveQueue", "OSThread *"),
     0x803359B0: table.sym_var("__osRunningThread", "OSThread *"),
     0x803359B4: table.sym_var("__osFaultedThread", "OSThread *"),
 
-    # ultra/src/__osViInit.data.c
-    0x803359C0: table.sym_var("ultra_data_803359C0", "OSViContext"),
-    0x803359F0: table.sym_var("ultra_data_803359F0", "OSViContext"),
+    # ultra/src/vi.data.c
+    0x803359C0: table.sym_var("vi", "OSViContext", "[2]"),
     0x80335A20: table.sym_var("__osViCurr", "OSViContext *"),
     0x80335A24: table.sym_var("__osViNext", "OSViContext *"),
     0x80335A28: table.sym_var("ultra_data_80335A28", "u32"),
     0x80335A2C: table.sym_var("ultra_data_80335A2C", "u32"),
 
-    # ultra/src/__osException.data.c
-    0x80335A30: table.sym_var_fnc("__osHwIntTable", lst="[5]"),
-    0x80335A44: table.sym_var("ultra_data_80335A44", "u32"),
-    0x80335A48: table.sym_var("ultra_data_80335A48", "u32"),
+    # ultra/src/exceptasm.S
+    0x80335A30: table.sym("__osHwIntTable"),
+    0x80335A44: table.sym("ultra_data_80335A44"), # rdb IP7 trigger (write)
+    0x80335A48: table.sym("ultra_data_80335A48"), # rdb IP6 trigger (read)
 
-    # ultra/src/__osPiAccess.data.c
+    # ultra/src/piacs.data.c
     0x80335A50: table.sym_var("__osPiAccessQueueEnabled", "u32"),
 
-    # ultra/src/__osSiAccess.data.c
+    # ultra/src/siacs.data.c
     0x80335A60: table.sym_var("__osSiAccessQueueEnabled", "u32"),
 
-    # ultra/src/_Litob.data.c
-    0x80335A70: table.sym_var("ultra_data_80335A70", "char", "[]"),
-    0x80335A84: table.sym_var("ultra_data_80335A84", "char", "[]"),
+    # ultra/src/xlitob.data.c
+    0x80335A70: table.sym_var("ldigs",  "char", "[]"),
+    0x80335A84: table.sym_var("udigs",  "char", "[]"),
 
-    # ultra/src/osViModeNtscLan1.c
+    # ultra/src/vimodentsclan1.c
     0x80335AA0: table.sym_var("osViModeNtscLan1", "OSViMode"),
 
-    # ultra/src/osViModePalLan1.c
+    # ultra/src/vimodepallan1.c
     0x80335AF0: table.sym_var("osViModePalLan1", "OSViMode"),
 
-    # ultra/src/8032A860.data.c
-    0x80335B40: table.sym_var("ultra_data_80335B40", "u32"),
+    # ultra/src/kdebugserver.data.c
+    0x80335B40: table.sym_var("ultra_data_80335B40", "u32"), # numChars ?
     0x80335B44: table.sym_var("ultra_data_80335B44", "u32"),
     0x80335B48: table.sym_var("ultra_data_80335B48", "u32"),
 
-    # ultra/src/__osSyncPutChars.data.c
+    # ultra/src/syncputchars.data.c
     0x80335B50: table.sym_var("__osRdbSendMessage", "u32", flag=table.GLOBL),
-    0x80335B54: table.sym_var("__osRdbWriteOK", "u32", flag=table.GLOBL),
+    0x80335B54: table.sym_var("__osRdbWriteOK",     "u32", flag=table.GLOBL),
 
     # ==========================================================================
     # rodata
     # ==========================================================================
 
-    # ultra/src/guPerspective.data.c
+    # ultra/src/perspective.data.c
     0x803397B0: table.sym_var("ultra_rodata_803397B0", "const double"),
 
-    # ultra/src/ll_cvt.data.c
+    # ultra/src/llcvt.data.c
     0x803397C0: table.sym_var("ultra_rodata_803397C0", "const u64"),
     0x803397C8: table.sym_var("ultra_rodata_803397C8", "const u64"),
 
@@ -820,30 +1659,30 @@ sym_E0_d_ultra = {
     0x80339858: table.sym_var("ultra_rodata_80339858", "const double"),
     0x80339860: table.sym_var("ultra_rodata_80339860", "const double"),
 
-    # ultra/src/guRotate.data.c
+    # ultra/src/rotate.data.c
     0x80339870: table.sym_var("ultra_rodata_80339870", "const float"),
 
-    # ultra/src/printf.data.c
+    # ultra/src/xprintf.data.c
     0x80339880: table.sym_var("ultra_rodata_80339880", "const char", "[]"),
     0x80339884: table.sym_var("ultra_rodata_80339884", "const char", "[]"),
     0x8033988C: table.sym_var("ultra_rodata_8033988C", "const u32", "[]"),
     0x803398A4: table.sym_var_fnc("ultra_rodata_803398A4", "const", "[]"),
 
-    # ultra/src/__osException.data.c
-    0x80339980: table.sym_var("ultra_rodata_80339980", "const u8", "[]"),
-    0x803399A0: table.sym_var_fnc("ultra_rodata_803399A0", "const", "[]"),
+    # ultra/src/exceptasm.S
+    0x80339980: table.sym("__osIntOffTable"),
+    0x803399A0: table.sym("__osIntTable"),
 
-    # ultra/src/__libm_qnan_f.c
+    # ultra/src/libm_vals.c
     0x803399D0: table.sym_var("__libm_qnan_f", "const u32"),
 
-    # ultra/src/_Ldtob.data.c
+    # ultra/src/xldtob.data.c
     0x803399E0: table.sym_var("ultra_rodata_803399E0", "const f64", "[]"),
     0x80339A28: table.sym_var("ultra_rodata_80339A28", "const char", "[]"),
     0x80339A2C: table.sym_var("ultra_rodata_80339A2C", "const char", "[]"),
     0x80339A30: table.sym_var("ultra_rodata_80339A30", "const char", "[]"),
     0x80339A38: table.sym_var("ultra_rodata_80339A38", "const double"),
 
-    # ultra/src/osSetIntMask.data.c
+    # ultra/src/setintmask.data.c
     0x80339A40: table.sym_var("__osRcpImTable", "const u16", "[]"),
 
     # ==========================================================================
@@ -855,93 +1694,194 @@ sym_E0_t_spboot = {
     0x8032B260: table.sym("rspbootTextStart"),
     0x8032B330: table.sym("rspbootTextEnd"),
 
-    0x0400100C: table.sym("_0400100C"),
-    0x04001040: table.sym("_04001040"),
-    0x04001068: table.sym("_04001068"),
+    0x0400100C: table.sym("boot"),
+    0x04001024: table.sym("@@dmabusy", table.LOCAL),
+    0x04001040: table.sym("yield_check"),
+    0x04001054: table.sym("@@yield", table.LOCAL),
+    0x04001068: table.sym("main"),
+    0x04001090: table.sym("@@nodpwait", table.LOCAL),
+    0x0400109C: table.sym("@@dmafull", table.LOCAL),
+    0x040010B4: table.sym("@@dmabusy", table.LOCAL),
+}
+
+imm_E0_t_spboot = {
+    0x04001000: ("%d",),
+    # 0x04001008: os_task
+    0x0400100C: (ultra.fmt_struct_OSTask,),
+    0x04001010: (lambda x: "0x%04X-1" % (x+1 & 0xFFFF),),
+    0x04001044: (ultra.fmt_sp_sr,),
+    0x04001058: (ultra.fmt_sp_sw,),
+    0x04001068: (ultra.fmt_struct_OSTask,),
+    0x0400106C: (ultra.fmt_OSTask_flags,),
+    0x04001084: (ultra.fmt_dpc_sr,),
+    0x04001090: (ultra.fmt_struct_OSTask,),
+    0x04001094: (ultra.fmt_struct_OSTask,),
+    0x04001098: ("%d",),
 }
 
 sym_E0_t_gF3D_0 = {
     0x8032B330: table.sym("gspFast3D_fifoTextStart"),
     0x8032C738: table.sym("gspFast3D_fifoTextEnd"),
 
-    0x0400109C: table.sym(".L0400109C"),
-    0x040010A8: table.sym("_040010A8"),
-    0x040010B8: table.sym("_040010B8"),
-    0x040010C8: table.sym("_040010C8"),
-    0x040010D4: table.sym("_040010D4"),
-    0x040010F8: table.sym("_040010F8"),
-    0x040010FC: table.sym("_040010FC"),
-    0x0400111C: table.sym("_0400111C"),
-    0x0400113C: table.sym("_0400113C"),
-    0x04001164: table.sym("_04001164"),
-    0x04001178: table.sym("_04001178"),
-    0x040012D0: table.sym("_040012D0"),
-    0x040013A8: table.sym("_040013A8"),
-    0x04001420: table.sym("_04001420"),
-    0x04001438: table.sym("_04001438"),
+    0x04001000: table.sym("_04001000"),
+    0x04001058: table.sym("cmd_next_sync"),
+    0x04001060: table.sym(".cmd_proc", table.LOCAL),
+    0x0400109C: table.sym(".cmd_nodma", table.LOCAL),
+    0x040010A8: table.sym("cmd_next"),
+    0x040010B8: table.sym("cmd_cont"),
+    0x040010C8: table.sym("task_exit"),
+    0x040010CC: table.sym("task_yield"),
+    0x040010D4: table.sym("cmd_load"),
+    0x040010F8: table.sym("prg_load"),
+    0x040010FC: table.sym("prg_jump"),
+    0x0400111C: table.sym("segment_to_physical"),
+    0x0400113C: table.sym("dma_start"),
+    0x0400115C: table.sym("@@write", table.LOCAL),
+    0x04001164: table.sym("dma_sync"),
+    0x04001178: table.sym("rdp_write"),
+    0x04001198: table.sym("@@syncready", table.LOCAL),
+    0x040011A4: table.sym("@@syncwrap", table.LOCAL),
+    0x040011B8: table.sym("@@syncfit", table.LOCAL),
+    0x040011D4: table.sym("@@write", table.LOCAL),
+    0x040011F4: table.sym("@@end", table.LOCAL),
+    0x040011FC: table.sym("case_IMM"),
+    0x0400120C: table.sym("case_G_TRI1"),
+    0x04001250: table.sym("case_G_POPMTX"),
+    0x04001288: table.sym("case_G_MOVEWORD"),
+    0x040012A0: table.sym("case_G_TEXTURE"),
+    0x040012C4: table.sym("case_G_SETOTHERMODE_H"),
+    0x040012CC: table.sym("case_G_SETOTHERMODE_L"),
+    0x040012D0: table.sym(".setothermode", table.LOCAL),
+    0x0400130C: table.sym("case_G_CULLDL"),
+    0x04001314: table.sym("@@loop", table.LOCAL),
+    0x04001328: table.sym("case_G_ENDDL"),
+    0x04001348: table.sym("case_G_SETGEOMETRYMODE"),
+    0x04001358: table.sym("case_G_CLEARGEOMETRYMODE"),
+    0x04001370: table.sym("case_G_PERSPNORM"),
+    0x04001378: table.sym("case_G_RDPHALF_1"),
+    0x04001380: table.sym("case_G_RDPHALF_CONT"),
+    0x04001384: table.sym("case_G_RDPHALF_2"),
+    0x0400138C: table.sym("case_RDP"),
+    0x040013A8: table.sym("rdp_cmd"),
+    0x040013C4: table.sym("case_DMA"),
+    0x040013DC: table.sym("case_G_MTX"),
+    0x04001420: table.sym(".L04001420", table.LOCAL),
+    0x04001438: table.sym(".L04001438", table.LOCAL),
     0x04001444: table.sym("_04001444"),
     0x04001484: table.sym("_04001484"),
     0x040014E8: table.sym("_040014E8"),
     0x04001510: table.sym("_04001510"),
     0x04001524: table.sym("_04001524"),
-    0x040015E4: table.sym(".L040015E4"),
-    0x040015E8: table.sym("_040015E8"),
-    0x04001780: table.sym("_04001780"),
-    0x04001800: table.sym("_04001800"),
-    0x04001998: table.sym("_04001998"),
-    0x040019C4: table.sym(".L040019C4"),
-    0x04001A30: table.sym("_04001A30"),
-}
+    0x04001558: table.sym("case_G_MOVEMEM"),
+    0x04001568: table.sym("case_G_VTX"),
+    0x040015E4: table.sym(".light_return", table.LOCAL),
+    0x040015E8: table.sym(".vtx_clip_return", table.LOCAL),
+    0x04001734: table.sym("case_G_DL"),
+    0x04001754: table.sym("@@nopush", table.LOCAL),
 
-sym_E0_t_gF3D_1 = {
-    0x04001000: table.sym("_04001000"),
-    0x04001058: table.sym("_04001058"),
-    0x04001060: table.sym(".L04001060"),
+    0x04001768: table.sym("@clip"),
+    0x04001774: table.sym("@light"),
+
+    0x04001780: table.sym("init"),
+    0x040017E4: table.sym("@@initfifo", table.LOCAL),
+    0x04001800: table.sym("@@noinitfifo", table.LOCAL),
+    0x04001870: table.sym("@@fromyield", table.LOCAL),
+    0x04001998: table.sym("rdp_tri"),
+    0x040019C4: table.sym(".clip_return", table.LOCAL),
+    0x04001A30: table.sym(".L04001A30", table.LOCAL),
 }
 
 sym_E0_t_gF3D_2 = {
-    0x040010FC: table.sym("_040010FC"),
-    0x040017D4: table.sym("_040017D4"),
-    0x04001804: table.sym(".L04001804_2"),
+    0x040010FC: table.sym("prg_jump"),
+    0x040015E8: table.sym(".vtx_clip_return", table.LOCAL),
+    0x04001768: table.sym("@clip"),
+    0x04001774: table.sym("@light"),
+
+    0x04001784: table.sym("clip"),
+    0x040017A0: table.sym("ProcClipNext"),
+    0x040017BC: table.sym("ProcClipI"),
+    0x040017C0: table.sym("ProcClipO"),
+    0x040017D4: table.sym(".L040017D4", table.LOCAL),
+    0x04001818: table.sym("ProcClipFI"),
+    0x0400182C: table.sym("ProcClipFO"),
+    0x04001964: table.sym("ProcClipDraw"),
+    0x04001804: table.sym(".L04001804_2", table.LOCAL),
     0x04001980: table.sym("_04001980"),
+
+    0x040019C4: table.sym(".clip_return", table.LOCAL),
 }
 
 sym_E0_t_gF3D_3 = {
-    0x040010FC: table.sym("_040010FC"),
-    0x04001804: table.sym(".L04001804_3"),
+    0x040010FC: table.sym("prg_jump"),
+    0x040015E4: table.sym(".light_return", table.LOCAL),
+    0x04001768: table.sym("@clip"),
+    0x04001774: table.sym("light"),
+
+    0x04001804: table.sym(".L04001804_3", table.LOCAL),
 }
 
 sym_E0_t_gF3D_4 = {
-    0x04001788: table.sym("_04001788"),
+    0x04001768: table.sym("@yield"),
+    0x04001770: table.sym("exit"),
+    0x04001788: table.sym("yield"),
+}
+
+imm_E0_t_gF3D_4 = {
+    0x040017C8: (lambda x: "0x%04X" % (x & 0xFFFF),),
 }
 
 sym_E0_d_gF3D = {
     0x80339AC0: table.sym("gspFast3D_fifoDataStart"),
     0x8033A2C0: table.sym("gspFast3D_fifoDataEnd"),
+
+    0x04001000: table.sym("prg_main_start"),
+    0x04001080: table.sym("prg_init_start"),
+    0x04001768: table.sym("prg_ext_start"),
+
+    0x04001328: table.sym("case_G_ENDDL"),
+    0x0400138C: table.sym("case_RDP"),
 }
 
 sym_E0_t_aMain = {
     0x8032C740: table.sym("aspMainTextStart"),
     0x8032D560: table.sym("aspMainTextEnd"),
 
-    0x040010D4: table.sym("_040010D4"),
-    0x04001118: table.sym("_04001118"),
-    0x04001150: table.sym("_04001150"),
-    0x04001184: table.sym("_04001184"),
-    0x040011B0: table.sym("_040011B0"),
-    0x040018E8: table.sym("_040018E8"),
-    0x040019D8: table.sym("_040019D8"),
-    0x04001BB0: table.sym("_04001BB0"),
-    0x04001C48: table.sym("_04001C48"),
-    0x04001CB8: table.sym("_04001CB8"),
-    0x04001D04: table.sym("_04001D04"),
-    0x04001D50: table.sym("_04001D50"),
-    0x04001DBC: table.sym("_04001DBC"),
+    0x040010D4: table.sym(".cmd_proc", table.LOCAL),
+    0x04001118: table.sym("cmd_next"),
+    0x04001150: table.sym("cmd_load"),
+    0x04001184: table.sym("dma_read"),
+    0x040011B0: table.sym("dma_write"),
+    0x040011DC: table.sym("case_A_CLEARBUFF"),
+    0x04001214: table.sym("case_A_LOADBUFF"),
+    0x04001254: table.sym("case_A_SAVEBUFF"),
+    0x04001294: table.sym("case_A_LOADADPCM"),
+    0x040012D0: table.sym("case_A_SEGMENT"),
+    0x040012EC: table.sym("case_A_SETBUFF"),
+    0x04001328: table.sym("case_A_SETVOL"),
+    0x0400138C: table.sym("case_A_INTERLEAVE"),
+    0x0400140C: table.sym("case_A_DMEMMOVE"),
+    0x0400144C: table.sym("case_A_SETLOOP"),
+    0x04001470: table.sym("case_A_ADPCM"),
+    0x0400170C: table.sym("case_A_POLEF"),
+    0x0400187C: table.sym("case_A_RESAMPLE"),
+    0x040018E8: table.sym(".L040018E8", table.LOCAL),
+    0x040019D8: table.sym(".L040019D8", table.LOCAL),
+    0x04001B38: table.sym("case_A_ENVMIXER"),
+    0x04001BB0: table.sym(".L04001BB0", table.LOCAL),
+    0x04001C48: table.sym(".L04001C48", table.LOCAL),
+    0x04001CB8: table.sym(".L04001CB8", table.LOCAL),
+    0x04001D04: table.sym(".L04001D04", table.LOCAL),
+    0x04001D50: table.sym(".L04001D50", table.LOCAL),
+    0x04001DBC: table.sym(".L04001DBC", table.LOCAL),
+    0x04001E24: table.sym("case_A_MIXER"),
 }
 
 sym_E0_d_aMain = {
     0x8033A2C0: table.sym("aspMainDataStart"),
     0x8033A580: table.sym("aspMainDataEnd"),
+
+    0x04001328: table.sym("case_A_SETVOL"),
+    0x0400138C: table.sym("case_A_INTERLEAVE"),
 }
 
 sym_E0_t_main = {
@@ -953,10 +1893,10 @@ sym_E0_t_main = {
     0x80246050: table.sym_fnc("debug_update", flag=table.GLOBL), # unused
     0x80246170: table.sym_fnc("dummy"), # unused
     0x802461CC: table.sym_fnc("debug_main"),
-    0x802461DC: table.sym_fnc("debug_scheduler_main"),
-    0x802461EC: table.sym_fnc("debug_scheduler_vi"),
-    0x802461FC: table.sym_fnc("scheduler_init"),
-    0x802462E0: table.sym_fnc("scheduler_init_mem"),
+    0x802461DC: table.sym_fnc("debug_sc_main"),
+    0x802461EC: table.sym_fnc("debug_sc_vi"),
+    0x802461FC: table.sym_fnc("sc_init"),
+    0x802462E0: table.sym_fnc("sc_init_mem"),
     0x80246338: table.sym_fnc("thread_create", arg=(
         "OSThread *t",
         "OSId id",
@@ -965,18 +1905,18 @@ sym_E0_t_main = {
         "void *sp",
         "OSPri pri",
     )),
-    0x8024639C: table.sym_fnc("scheduler_msg_prenmi"),
-    0x802463EC: table.sym_fnc("scheduler_flush"),
-    0x8024651C: table.sym_fnc("scheduler_task_start", arg=(
+    0x8024639C: table.sym_fnc("sc_msg_prenmi"),
+    0x802463EC: table.sym_fnc("sc_task_flush"),
+    0x8024651C: table.sym_fnc("sc_task_start", arg=(
         "int type",
     )),
-    0x8024659C: table.sym_fnc("scheduler_task_yield"),
-    0x802465EC: table.sym_fnc("scheduler_msg_gfxtask"),
-    0x80246648: table.sym_fnc("scheduler_audtask_skip"),
-    0x8024669C: table.sym_fnc("scheduler_msg_vi"),
-    0x802467FC: table.sym_fnc("scheduler_msg_sp"),
-    0x8024694C: table.sym_fnc("scheduler_msg_dp"),
-    0x802469B8: table.sym_fnc("scheduler_main", arg=(
+    0x8024659C: table.sym_fnc("sc_task_yield"),
+    0x802465EC: table.sym_fnc("sc_msg_gfxtask"),
+    0x80246648: table.sym_fnc("sc_audtask_skip"),
+    0x8024669C: table.sym_fnc("sc_msg_vi"),
+    0x802467FC: table.sym_fnc("sc_msg_sp"),
+    0x8024694C: table.sym_fnc("sc_msg_dp"),
+    0x802469B8: table.sym_fnc("sc_main", arg=(
         "unused void *arg",
     )),
     0x80246A9C: table.sym_fnc("L80246A9C", flag=table.GLOBL|table.LOCAL),
@@ -984,24 +1924,24 @@ sym_E0_t_main = {
     0x80246ABC: table.sym_fnc("L80246ABC", flag=table.GLOBL|table.LOCAL),
     0x80246ACC: table.sym_fnc("L80246ACC", flag=table.GLOBL|table.LOCAL),
     0x80246ADC: table.sym_fnc("L80246ADC", flag=table.GLOBL|table.LOCAL),
-    0x80246B14: table.sym_fnc("scheduler_vq_init", arg=(
+    0x80246B14: table.sym_fnc("sc_client_init", arg=(
         "int i",
-        "struct vq *vq",
+        "struct sc_client *client",
         "OSMesgQueue *mq",
         "OSMesg msg",
     ), flag=table.GLOBL),
-    0x80246B74: table.sym_fnc("scheduler_queue_sptask", arg=(
-        "struct sptask *sptask",
+    0x80246B74: table.sym_fnc("sc_queue_task", arg=(
+        "struct sc_task *task",
     ), flag=table.GLOBL), # unused
-    0x80246BB4: table.sym_fnc("scheduler_queue_audtask", arg=(
-        "struct sptask *sptask",
+    0x80246BB4: table.sym_fnc("sc_queue_audtask", arg=(
+        "struct sc_task *task",
     ), flag=table.GLOBL),
-    0x80246C10: table.sym_fnc("scheduler_queue_gfxtask", arg=(
-        "struct sptask *sptask",
+    0x80246C10: table.sym_fnc("sc_queue_gfxtask", arg=(
+        "struct sc_task *task",
     ), flag=table.GLOBL),
-    0x80246C9C: table.sym_fnc("scheduler_audio_enable",
+    0x80246C9C: table.sym_fnc("sc_audio_enable",
     flag=table.GLOBL), # unused
-    0x80246CB8: table.sym_fnc("scheduler_audio_disable",
+    0x80246CB8: table.sym_fnc("sc_audio_disable",
     flag=table.GLOBL), # unused
     0x80246CF0: table.sym_fnc("idle_main", arg=(
         "unused void *arg",
@@ -1023,7 +1963,7 @@ sym_E0_t_main = {
     0x802479BC: table.sym_fnc("video_vp_scissor", arg=(
         "const Vp *vp",
     ), flag=table.GLOBL),
-    0x80247B3C: table.sym_fnc("video_task"),
+    0x80247B3C: table.sym_fnc("video_init_task"),
     0x80247CCC: table.sym_fnc("video_draw_start", flag=table.GLOBL),
     0x80247D14: table.sym_fnc("video_draw_end", flag=table.GLOBL),
     0x80247DB4: table.sym_fnc("video_draw_reset"),
@@ -1150,83 +2090,83 @@ sym_E0_t_main = {
     0x8024BA3C: table.sym_fnc("L8024BA3C", flag=table.GLOBL|table.LOCAL),
     0x8024BA50: table.sym_fnc("L8024BA50", flag=table.GLOBL|table.LOCAL),
     0x8024BA8C: table.sym("game_8024BA8C"),
-    0x8024BCD8: table.sym("game_8024BCD8", table.GLOBL), # s callback
-    0x8024BD5C: table.sym("game_8024BD5C", table.GLOBL), # s callback
-    0x8024BE14: table.sym("game_8024BE14", table.GLOBL), # s callback
-    0x8024BFA0: table.sym("game_8024BFA0", table.GLOBL), # s callback
+    0x8024BCD8: table.sym("p_game_8024BCD8", table.GLOBL), # p callback
+    0x8024BD5C: table.sym("p_game_8024BD5C", table.GLOBL), # p callback
+    0x8024BE14: table.sym("p_game_8024BE14", table.GLOBL), # p callback
+    0x8024BFA0: table.sym("p_game_8024BFA0", table.GLOBL), # p callback
 
-    # src/player_touch.S
-    0x8024BFF0: table.sym("player_touch_8024BFF0"),
-    0x8024C0B8: table.sym("player_touch_8024C0B8"),
-    0x8024C16C: table.sym("player_touch_8024C16C", table.GLOBL),
-    0x8024C1D8: table.sym("player_touch_8024C1D8"),
-    0x8024C51C: table.sym("player_touch_8024C51C"),
+    # src/pl_collision.S
+    0x8024BFF0: table.sym("pl_collision_8024BFF0"),
+    0x8024C0B8: table.sym("pl_collision_8024C0B8"),
+    0x8024C16C: table.sym("pl_collision_8024C16C", table.GLOBL),
+    0x8024C1D8: table.sym("pl_collision_8024C1D8"),
+    0x8024C51C: table.sym("pl_collision_8024C51C"),
     0x8024C590: table.sym_fnc("L8024C590", flag=table.GLOBL|table.LOCAL),
     0x8024C5A0: table.sym_fnc("L8024C5A0", flag=table.GLOBL|table.LOCAL),
     0x8024C5B0: table.sym_fnc("L8024C5B0", flag=table.GLOBL|table.LOCAL),
     0x8024C5C0: table.sym_fnc("L8024C5C0", flag=table.GLOBL|table.LOCAL),
     0x8024C5F0: table.sym_fnc("L8024C5F0", flag=table.GLOBL|table.LOCAL),
-    0x8024C618: table.sym("player_touch_8024C618", table.GLOBL),
-    0x8024C66C: table.sym("player_touch_8024C66C", table.GLOBL),
-    0x8024C6C0: table.sym("player_touch_8024C6C0", table.GLOBL),
-    0x8024C780: table.sym("player_touch_8024C780", table.GLOBL),
-    0x8024C894: table.sym("player_touch_8024C894", table.GLOBL),
-    0x8024C8FC: table.sym("player_touch_8024C8FC", table.GLOBL),
-    0x8024C928: table.sym("player_touch_8024C928", table.GLOBL),
-    0x8024CA68: table.sym("player_touch_8024CA68", table.GLOBL),
-    0x8024CAF8: table.sym("player_touch_8024CAF8", table.GLOBL),
-    0x8024CB58: table.sym("player_touch_8024CB58"),
-    0x8024CBFC: table.sym("player_touch_8024CBFC", table.GLOBL),
-    0x8024CC7C: table.sym("player_touch_8024CC7C", table.GLOBL),
-    0x8024CE08: table.sym("player_touch_8024CE08"),
-    0x8024D0B4: table.sym("player_touch_8024D0B4"),
-    0x8024D130: table.sym("player_touch_8024D130"),
-    0x8024D16C: table.sym("player_touch_8024D16C"), # unused
-    0x8024D2BC: table.sym("player_touch_8024D2BC"),
-    0x8024D578: table.sym("player_touch_8024D578"),
-    0x8024D72C: table.sym("player_touch_8024D72C"),
-    0x8024D804: table.sym("player_touch_8024D804"),
-    0x8024D8B0: table.sym("player_touch_8024D8B0"),
-    0x8024D998: table.sym("player_touch_8024D998"),
-    0x8024DAAC: table.sym("player_touch_8024DAAC"),
-    0x8024DB2C: table.sym_fnc("player_touch_8024DB2C", "uint", (
+    0x8024C618: table.sym("pl_collision_8024C618", table.GLOBL),
+    0x8024C66C: table.sym("pl_collision_8024C66C", table.GLOBL),
+    0x8024C6C0: table.sym("pl_collision_8024C6C0", table.GLOBL),
+    0x8024C780: table.sym("pl_collision_8024C780", table.GLOBL),
+    0x8024C894: table.sym("pl_collision_8024C894", table.GLOBL),
+    0x8024C8FC: table.sym("pl_collision_8024C8FC", table.GLOBL),
+    0x8024C928: table.sym("pl_collision_8024C928", table.GLOBL),
+    0x8024CA68: table.sym("pl_collision_8024CA68", table.GLOBL),
+    0x8024CAF8: table.sym("pl_collision_8024CAF8", table.GLOBL),
+    0x8024CB58: table.sym("pl_collision_8024CB58"),
+    0x8024CBFC: table.sym("pl_collision_8024CBFC", table.GLOBL),
+    0x8024CC7C: table.sym("pl_collision_8024CC7C", table.GLOBL),
+    0x8024CE08: table.sym("pl_collision_8024CE08"),
+    0x8024D0B4: table.sym("pl_collision_8024D0B4"),
+    0x8024D130: table.sym("pl_collision_8024D130"),
+    0x8024D16C: table.sym("pl_collision_8024D16C"), # unused
+    0x8024D2BC: table.sym("pl_collision_8024D2BC"),
+    0x8024D578: table.sym("pl_collision_8024D578"),
+    0x8024D72C: table.sym("pl_collision_8024D72C"),
+    0x8024D804: table.sym("pl_collision_8024D804"),
+    0x8024D8B0: table.sym("pl_collision_8024D8B0"),
+    0x8024D998: table.sym("pl_collision_8024D998"),
+    0x8024DAAC: table.sym("pl_collision_8024DAAC"),
+    0x8024DB2C: table.sym_fnc("pl_collision_8024DB2C", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024DBF0: table.sym_fnc("player_touch_8024DBF0", "uint", (
+    0x8024DBF0: table.sym_fnc("pl_collision_8024DBF0", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024DC28: table.sym_fnc("player_touch_8024DC28", "uint", (
+    0x8024DC28: table.sym_fnc("pl_collision_8024DC28", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024DE4C: table.sym_fnc("player_touch_8024DE4C", "uint", (
+    0x8024DE4C: table.sym_fnc("pl_collision_8024DE4C", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024DF10: table.sym_fnc("player_touch_8024DF10", "uint", (
+    0x8024DF10: table.sym_fnc("pl_collision_8024DF10", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E0C4: table.sym_fnc("player_touch_8024E0C4", "uint", (
+    0x8024E0C4: table.sym_fnc("pl_collision_8024E0C4", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E2FC: table.sym("player_touch_8024E2FC", table.GLOBL),
+    0x8024E2FC: table.sym("pl_collision_8024E2FC", table.GLOBL),
     0x8024E388: table.sym_fnc("L8024E388", flag=table.GLOBL|table.LOCAL),
     0x8024E3B0: table.sym_fnc("L8024E3B0", flag=table.GLOBL|table.LOCAL),
     0x8024E3D8: table.sym_fnc("L8024E3D8", flag=table.GLOBL|table.LOCAL),
     0x8024E3E8: table.sym_fnc("L8024E3E8", flag=table.GLOBL|table.LOCAL),
     0x8024E3F8: table.sym_fnc("L8024E3F8", flag=table.GLOBL|table.LOCAL),
     0x8024E408: table.sym_fnc("L8024E408", flag=table.GLOBL|table.LOCAL),
-    0x8024E420: table.sym_fnc("player_touch_8024E420", "uint", (
+    0x8024E420: table.sym_fnc("pl_collision_8024E420", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
@@ -1238,128 +2178,128 @@ sym_E0_t_main = {
     0x8024E5E4: table.sym_fnc("L8024E5E4", flag=table.GLOBL|table.LOCAL),
     0x8024E5F4: table.sym_fnc("L8024E5F4", flag=table.GLOBL|table.LOCAL),
     0x8024E604: table.sym_fnc("L8024E604", flag=table.GLOBL|table.LOCAL),
-    0x8024E6EC: table.sym_fnc("player_touch_8024E6EC", "uint", (
+    0x8024E6EC: table.sym_fnc("pl_collision_8024E6EC", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E778: table.sym_fnc("player_touch_8024E778", "uint", (
+    0x8024E778: table.sym_fnc("pl_collision_8024E778", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E7D4: table.sym_fnc("player_touch_8024E7D4", "uint", (
+    0x8024E7D4: table.sym_fnc("pl_collision_8024E7D4", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E8F0: table.sym_fnc("player_touch_8024E8F0", "uint", (
+    0x8024E8F0: table.sym_fnc("pl_collision_8024E8F0", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024E9D0: table.sym_fnc("player_touch_8024E9D0", "uint", (
+    0x8024E9D0: table.sym_fnc("pl_collision_8024E9D0", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024EAD8: table.sym_fnc("player_touch_8024EAD8", "uint", (
+    0x8024EAD8: table.sym_fnc("pl_collision_8024EAD8", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024EC54: table.sym_fnc("player_touch_8024EC54", "uint", (
+    0x8024EC54: table.sym_fnc("pl_collision_8024EC54", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024ED84: table.sym_fnc("player_touch_8024ED84", "uint", (
+    0x8024ED84: table.sym_fnc("pl_collision_8024ED84", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024EE44: table.sym_fnc("player_touch_8024EE44", "uint", (
+    0x8024EE44: table.sym_fnc("pl_collision_8024EE44", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024EFF8: table.sym_fnc("player_touch_8024EFF8", "uint", (
+    0x8024EFF8: table.sym_fnc("pl_collision_8024EFF8", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F134: table.sym("player_touch_8024F134"), # unused
-    0x8024F170: table.sym_fnc("player_touch_8024F170", "uint", (
+    0x8024F134: table.sym("pl_collision_8024F134"), # unused
+    0x8024F170: table.sym_fnc("pl_collision_8024F170", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F1E0: table.sym_fnc("player_touch_8024F1E0", "uint", (
+    0x8024F1E0: table.sym_fnc("pl_collision_8024F1E0", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F354: table.sym_fnc("player_touch_8024F354", "uint", (
+    0x8024F354: table.sym_fnc("pl_collision_8024F354", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F4AC: table.sym_fnc("player_touch_8024F4AC", "uint", (
+    0x8024F4AC: table.sym_fnc("pl_collision_8024F4AC", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F55C: table.sym_fnc("player_touch_8024F55C", "uint", (
+    0x8024F55C: table.sym_fnc("pl_collision_8024F55C", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F5CC: table.sym_fnc("player_touch_8024F5CC", "uint", (
+    0x8024F5CC: table.sym_fnc("pl_collision_8024F5CC", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F6A4: table.sym_fnc("player_touch_8024F6A4", "uint", (
+    0x8024F6A4: table.sym_fnc("pl_collision_8024F6A4", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024F7A8: table.sym("player_touch_8024F7A8"),
-    0x8024F8BC: table.sym_fnc("player_touch_8024F8BC", "uint", (
+    0x8024F7A8: table.sym("pl_collision_8024F7A8"),
+    0x8024F8BC: table.sym_fnc("pl_collision_8024F8BC", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024FA60: table.sym_fnc("player_touch_8024FA60", "uint", (
+    0x8024FA60: table.sym_fnc("pl_collision_8024FA60", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024FB30: table.sym_fnc("player_touch_8024FB30", "uint", (
+    0x8024FB30: table.sym_fnc("pl_collision_8024FB30", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024FD2C: table.sym_fnc("player_touch_8024FD2C", "uint", (
+    0x8024FD2C: table.sym_fnc("pl_collision_8024FD2C", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x8024FE6C: table.sym("player_touch_8024FE6C"),
-    0x8024FF04: table.sym("player_touch_8024FF04"),
-    0x80250098: table.sym("player_touch_80250098"),
-    0x80250198: table.sym_fnc("player_touch_80250198", "uint", (
+    0x8024FE6C: table.sym("pl_collision_8024FE6C"),
+    0x8024FF04: table.sym("pl_collision_8024FF04"),
+    0x80250098: table.sym("pl_collision_80250098"),
+    0x80250198: table.sym_fnc("pl_collision_80250198", "int", (
         "struct player *pl",
         "u32 flag",
         "struct object *obj",
     ), table.GLOBL), # data
-    0x80250230: table.sym("player_touch_80250230"),
-    0x802503F0: table.sym("player_touch_802503F0", table.GLOBL),
-    0x802505C8: table.sym("player_touch_802505C8"),
-    0x8025065C: table.sym("player_touch_8025065C"),
-    0x80250724: table.sym("player_touch_80250724"),
-    0x80250778: table.sym("player_touch_80250778"),
-    0x802507FC: table.sym("player_touch_802507FC", table.GLOBL),
+    0x80250230: table.sym("pl_collision_80250230"),
+    0x802503F0: table.sym("pl_collision_802503F0", table.GLOBL),
+    0x802505C8: table.sym("pl_collision_802505C8"),
+    0x8025065C: table.sym("pl_collision_8025065C"),
+    0x80250724: table.sym("pl_collision_80250724"),
+    0x80250778: table.sym("pl_collision_80250778"),
+    0x802507FC: table.sym("pl_collision_802507FC", table.GLOBL),
 
     # src/player.S
     0x80250940: table.sym("player_80250940", table.GLOBL),
@@ -1443,112 +2383,112 @@ sym_E0_t_main = {
     0x80254B20: table.sym("player_80254B20", table.GLOBL),
     0x80254F44: table.sym("player_80254F44", table.GLOBL),
 
-    # src/player_move.S
-    0x80255080: table.sym("player_move_80255080", table.GLOBL),
-    0x8025509C: table.sym("player_move_8025509C", table.GLOBL),
-    0x802550B0: table.sym("player_move_802550B0", table.GLOBL),
-    0x802550C0: table.sym("player_move_802550C0", table.GLOBL),
-    0x80255238: table.sym("player_move_80255238", table.GLOBL),
-    0x802552FC: table.sym("player_move_802552FC", table.GLOBL),
-    0x80255414: table.sym("player_move_80255414", table.GLOBL),
+    # src/pl_physics.S
+    0x80255080: table.sym("pl_physics_80255080", table.GLOBL),
+    0x8025509C: table.sym("pl_physics_8025509C", table.GLOBL),
+    0x802550B0: table.sym("pl_physics_802550B0", table.GLOBL),
+    0x802550C0: table.sym("pl_physics_802550C0", table.GLOBL),
+    0x80255238: table.sym("pl_physics_80255238", table.GLOBL),
+    0x802552FC: table.sym("pl_physics_802552FC", table.GLOBL),
+    0x80255414: table.sym("pl_physics_80255414", table.GLOBL),
     0x802554B0: table.sym_fnc("L802554B0", flag=table.GLOBL|table.LOCAL),
     0x802554FC: table.sym_fnc("L802554FC", flag=table.GLOBL|table.LOCAL),
     0x80255548: table.sym_fnc("L80255548", flag=table.GLOBL|table.LOCAL),
     0x80255594: table.sym_fnc("L80255594", flag=table.GLOBL|table.LOCAL),
     0x802555F4: table.sym_fnc("L802555F4", flag=table.GLOBL|table.LOCAL),
     0x80255620: table.sym_fnc("L80255620", flag=table.GLOBL|table.LOCAL),
-    0x80255654: table.sym("player_move_80255654", table.GLOBL),
-    0x8025570C: table.sym("player_move_8025570C", table.GLOBL),
-    0x8025580C: table.sym("player_move_8025580C", table.GLOBL),
-    0x802559B0: table.sym("player_move_802559B0", table.GLOBL),
-    0x80255A34: table.sym("player_move_80255A34", table.GLOBL),
-    0x80255B04: table.sym("player_move_80255B04"),
-    0x80255D88: table.sym("player_move_80255D88", table.GLOBL),
-    0x80255EC4: table.sym("player_move_80255EC4"),
-    0x802560AC: table.sym("player_move_802560AC"),
-    0x802564E0: table.sym("player_move_802564E0"),
-    0x80256584: table.sym("player_move_80256584"),
-    0x8025661C: table.sym("player_move_8025661C"),
-    0x802569F8: table.sym("player_move_802569F8"),
-    0x80256B24: table.sym("player_move_80256B24", table.GLOBL),
-    0x80256CD8: table.sym("player_move_80256CD8"), # unused
-    0x80256D8C: table.sym("player_move_80256D8C"), # unused
+    0x80255654: table.sym("pl_physics_80255654", table.GLOBL),
+    0x8025570C: table.sym("pl_physics_8025570C", table.GLOBL),
+    0x8025580C: table.sym("pl_physics_8025580C", table.GLOBL),
+    0x802559B0: table.sym("pl_physics_802559B0", table.GLOBL),
+    0x80255A34: table.sym("pl_physics_80255A34", table.GLOBL),
+    0x80255B04: table.sym("pl_physics_80255B04"),
+    0x80255D88: table.sym("pl_physics_80255D88", table.GLOBL),
+    0x80255EC4: table.sym("pl_physics_80255EC4"),
+    0x802560AC: table.sym("pl_physics_802560AC"),
+    0x802564E0: table.sym("pl_physics_802564E0"),
+    0x80256584: table.sym("pl_physics_80256584"),
+    0x8025661C: table.sym("pl_physics_8025661C"),
+    0x802569F8: table.sym("pl_physics_802569F8"),
+    0x80256B24: table.sym("pl_physics_80256B24", table.GLOBL),
+    0x80256CD8: table.sym("pl_physics_80256CD8"), # unused
+    0x80256D8C: table.sym("pl_physics_80256D8C"), # unused
 
-    # src/player_demo.S
-    0x80256E00: table.sym("player_demo_80256E00"),
-    0x80256E88: table.sym("player_demo_80256E88", table.GLOBL),
-    0x80257060: table.sym("player_demo_80257060", table.GLOBL), # o callback
-    0x802570DC: table.sym("player_demo_802570DC", table.GLOBL), # o callback
-    0x80257198: table.sym("player_demo_80257198", table.GLOBL), # g callback
-    0x80257270: table.sym("player_demo_80257270"), # unused
-    0x802572B0: table.sym("player_demo_802572B0"),
-    0x8025733C: table.sym("player_demo_8025733C"),
-    0x80257450: table.sym("player_demo_80257450"),
-    0x802574E8: table.sym("player_demo_802574E8"),
-    0x80257548: table.sym("player_demo_80257548"),
-    0x802575A8: table.sym("player_demo_802575A8", table.GLOBL),
-    0x80257640: table.sym("player_demo_80257640", table.GLOBL),
-    0x80257748: table.sym("player_demo_80257748"),
-    0x80257980: table.sym("player_demo_80257980"),
-    0x80257A0C: table.sym("player_demo_80257A0C"),
-    0x80257AB0: table.sym("player_demo_80257AB0"),
-    0x80257CE4: table.sym("player_demo_80257CE4"),
-    0x80257EAC: table.sym("player_demo_80257EAC"),
-    0x80258184: table.sym("player_demo_80258184"),
-    0x80258420: table.sym("player_demo_80258420"),
-    0x802584DC: table.sym("player_demo_802584DC"),
-    0x802585C0: table.sym("player_demo_802585C0"),
-    0x802586CC: table.sym("player_demo_802586CC"),
-    0x80258744: table.sym("player_demo_80258744"),
-    0x802587EC: table.sym("player_demo_802587EC"),
-    0x8025883C: table.sym("player_demo_8025883C"),
-    0x8025888C: table.sym("player_demo_8025888C"),
-    0x802588F8: table.sym("player_demo_802588F8"),
-    0x80258964: table.sym("player_demo_80258964"),
-    0x80258A7C: table.sym("player_demo_80258A7C"),
-    0x80258B24: table.sym("player_demo_80258B24"),
-    0x80258BA8: table.sym("player_demo_80258BA8"),
-    0x80258DAC: table.sym("player_demo_80258DAC"),
-    0x80258F94: table.sym("player_demo_80258F94"),
-    0x80259264: table.sym("player_demo_80259264"),
-    0x802593CC: table.sym("player_demo_802593CC"),
-    0x802594D4: table.sym("player_demo_802594D4"),
-    0x80259608: table.sym("player_demo_80259608"),
-    0x80259740: table.sym("player_demo_80259740"),
-    0x802597AC: table.sym("player_demo_802597AC"),
-    0x80259854: table.sym("player_demo_80259854"),
-    0x802598D0: table.sym("player_demo_802598D0"),
-    0x80259C30: table.sym("player_demo_80259C30"),
-    0x80259CE8: table.sym("player_demo_80259CE8"),
-    0x80259D74: table.sym("player_demo_80259D74"),
-    0x80259E00: table.sym("player_demo_80259E00"),
-    0x80259EF8: table.sym("player_demo_80259EF8"),
-    0x80259FCC: table.sym("player_demo_80259FCC"),
-    0x8025A040: table.sym("player_demo_8025A040"),
-    0x8025A0BC: table.sym("player_demo_8025A0BC"),
+    # src/pl_demo.S
+    0x80256E00: table.sym("pl_demo_80256E00"),
+    0x80256E88: table.sym("pl_demo_80256E88", table.GLOBL),
+    0x80257060: table.sym("pl_demo_80257060", table.GLOBL), # o callback
+    0x802570DC: table.sym("pl_demo_802570DC", table.GLOBL), # o callback
+    0x80257198: table.sym("s_pl_demo_80257198", table.GLOBL), # s callback
+    0x80257270: table.sym("pl_demo_80257270"), # unused
+    0x802572B0: table.sym("pl_demo_802572B0"),
+    0x8025733C: table.sym("pl_demo_8025733C"),
+    0x80257450: table.sym("pl_demo_80257450"),
+    0x802574E8: table.sym("pl_demo_802574E8"),
+    0x80257548: table.sym("pl_demo_80257548"),
+    0x802575A8: table.sym("pl_demo_802575A8", table.GLOBL),
+    0x80257640: table.sym("pl_demo_80257640", table.GLOBL),
+    0x80257748: table.sym("pl_demo_80257748"),
+    0x80257980: table.sym("pl_demo_80257980"),
+    0x80257A0C: table.sym("pl_demo_80257A0C"),
+    0x80257AB0: table.sym("pl_demo_80257AB0"),
+    0x80257CE4: table.sym("pl_demo_80257CE4"),
+    0x80257EAC: table.sym("pl_demo_80257EAC"),
+    0x80258184: table.sym("pl_demo_80258184"),
+    0x80258420: table.sym("pl_demo_80258420"),
+    0x802584DC: table.sym("pl_demo_802584DC"),
+    0x802585C0: table.sym("pl_demo_802585C0"),
+    0x802586CC: table.sym("pl_demo_802586CC"),
+    0x80258744: table.sym("pl_demo_80258744"),
+    0x802587EC: table.sym("pl_demo_802587EC"),
+    0x8025883C: table.sym("pl_demo_8025883C"),
+    0x8025888C: table.sym("pl_demo_8025888C"),
+    0x802588F8: table.sym("pl_demo_802588F8"),
+    0x80258964: table.sym("pl_demo_80258964"),
+    0x80258A7C: table.sym("pl_demo_80258A7C"),
+    0x80258B24: table.sym("pl_demo_80258B24"),
+    0x80258BA8: table.sym("pl_demo_80258BA8"),
+    0x80258DAC: table.sym("pl_demo_80258DAC"),
+    0x80258F94: table.sym("pl_demo_80258F94"),
+    0x80259264: table.sym("pl_demo_80259264"),
+    0x802593CC: table.sym("pl_demo_802593CC"),
+    0x802594D4: table.sym("pl_demo_802594D4"),
+    0x80259608: table.sym("pl_demo_80259608"),
+    0x80259740: table.sym("pl_demo_80259740"),
+    0x802597AC: table.sym("pl_demo_802597AC"),
+    0x80259854: table.sym("pl_demo_80259854"),
+    0x802598D0: table.sym("pl_demo_802598D0"),
+    0x80259C30: table.sym("pl_demo_80259C30"),
+    0x80259CE8: table.sym("pl_demo_80259CE8"),
+    0x80259D74: table.sym("pl_demo_80259D74"),
+    0x80259E00: table.sym("pl_demo_80259E00"),
+    0x80259EF8: table.sym("pl_demo_80259EF8"),
+    0x80259FCC: table.sym("pl_demo_80259FCC"),
+    0x8025A040: table.sym("pl_demo_8025A040"),
+    0x8025A0BC: table.sym("pl_demo_8025A0BC"),
     0x8025A1AC: table.sym_fnc("L8025A1AC", flag=table.GLOBL|table.LOCAL),
     0x8025A244: table.sym_fnc("L8025A244", flag=table.GLOBL|table.LOCAL),
     0x8025A2E0: table.sym_fnc("L8025A2E0", flag=table.GLOBL|table.LOCAL),
     0x8025A450: table.sym_fnc("L8025A450", flag=table.GLOBL|table.LOCAL),
-    0x8025A494: table.sym("player_demo_8025A494"),
-    0x8025A610: table.sym("player_demo_8025A610"),
-    0x8025A6FC: table.sym("player_demo_8025A6FC"),
-    0x8025A858: table.sym("player_demo_8025A858"),
-    0x8025A9AC: table.sym("player_demo_8025A9AC"),
-    0x8025AE0C: table.sym("player_demo_8025AE0C"),
-    0x8025AEA8: table.sym("player_demo_8025AEA8"),
-    0x8025AFFC: table.sym("player_demo_8025AFFC"),
-    0x8025B050: table.sym("player_demo_8025B050"),
-    0x8025B0A4: table.sym("player_demo_8025B0A4"),
-    0x8025B0F8: table.sym("player_demo_8025B0F8"),
-    0x8025B11C: table.sym("player_demo_8025B11C"),
-    0x8025B178: table.sym("player_demo_8025B178"),
-    0x8025B234: table.sym("player_demo_8025B234"),
-    0x8025B2EC: table.sym("player_demo_8025B2EC"),
-    0x8025B404: table.sym("player_demo_8025B404"),
-    0x8025B454: table.sym("player_demo_8025B454"),
-    0x8025B520: table.sym("player_demo_8025B520"),
-    0x8025B58C: table.sym("player_demo_8025B58C"),
+    0x8025A494: table.sym("pl_demo_8025A494"),
+    0x8025A610: table.sym("pl_demo_8025A610"),
+    0x8025A6FC: table.sym("pl_demo_8025A6FC"),
+    0x8025A858: table.sym("pl_demo_8025A858"),
+    0x8025A9AC: table.sym("pl_demo_8025A9AC"),
+    0x8025AE0C: table.sym("pl_demo_8025AE0C"),
+    0x8025AEA8: table.sym("pl_demo_8025AEA8"),
+    0x8025AFFC: table.sym("pl_demo_8025AFFC"),
+    0x8025B050: table.sym("pl_demo_8025B050"),
+    0x8025B0A4: table.sym("pl_demo_8025B0A4"),
+    0x8025B0F8: table.sym("pl_demo_8025B0F8"),
+    0x8025B11C: table.sym("pl_demo_8025B11C"),
+    0x8025B178: table.sym("pl_demo_8025B178"),
+    0x8025B234: table.sym("pl_demo_8025B234"),
+    0x8025B2EC: table.sym("pl_demo_8025B2EC"),
+    0x8025B404: table.sym("pl_demo_8025B404"),
+    0x8025B454: table.sym("pl_demo_8025B454"),
+    0x8025B520: table.sym("pl_demo_8025B520"),
+    0x8025B58C: table.sym("pl_demo_8025B58C"),
     0x8025B5C4: table.sym_fnc("L8025B5C4", flag=table.GLOBL|table.LOCAL),
     0x8025B5D4: table.sym_fnc("L8025B5D4", flag=table.GLOBL|table.LOCAL),
     0x8025B5E4: table.sym_fnc("L8025B5E4", flag=table.GLOBL|table.LOCAL),
@@ -1556,26 +2496,26 @@ sym_E0_t_main = {
     0x8025B604: table.sym_fnc("L8025B604", flag=table.GLOBL|table.LOCAL),
     0x8025B614: table.sym_fnc("L8025B614", flag=table.GLOBL|table.LOCAL),
     0x8025B624: table.sym_fnc("L8025B624", flag=table.GLOBL|table.LOCAL),
-    0x8025B654: table.sym("player_demo_8025B654"),
-    0x8025B760: table.sym("player_demo_8025B760"),
-    0x8025B9A8: table.sym("player_demo_8025B9A8"),
-    0x8025BBEC: table.sym("player_demo_8025BBEC"),
-    0x8025BC80: table.sym("player_demo_8025BC80"),
-    0x8025BEB8: table.sym("player_demo_8025BEB8"),
-    0x8025BF64: table.sym("player_demo_8025BF64"),
-    0x8025C014: table.sym("player_demo_8025C014"),
-    0x8025C0C4: table.sym("player_demo_8025C0C4"),
-    0x8025C1C0: table.sym("player_demo_8025C1C0"),
-    0x8025C498: table.sym("player_demo_8025C498"),
-    0x8025C600: table.sym("player_demo_8025C600"),
-    0x8025C6F8: table.sym("player_demo_8025C6F8"),
-    0x8025C904: table.sym("player_demo_8025C904"),
-    0x8025CA48: table.sym("player_demo_8025CA48"),
-    0x8025CBDC: table.sym("player_demo_8025CBDC"),
-    0x8025CD6C: table.sym("player_demo_8025CD6C"),
-    0x8025CEF0: table.sym("player_demo_8025CEF0"),
-    0x8025CFE4: table.sym("player_demo_8025CFE4"),
-    0x8025D040: table.sym("player_demo_8025D040"),
+    0x8025B654: table.sym("pl_demo_8025B654"),
+    0x8025B760: table.sym("pl_demo_8025B760"),
+    0x8025B9A8: table.sym("pl_demo_8025B9A8"),
+    0x8025BBEC: table.sym("pl_demo_8025BBEC"),
+    0x8025BC80: table.sym("pl_demo_8025BC80"),
+    0x8025BEB8: table.sym("pl_demo_8025BEB8"),
+    0x8025BF64: table.sym("pl_demo_8025BF64"),
+    0x8025C014: table.sym("pl_demo_8025C014"),
+    0x8025C0C4: table.sym("pl_demo_8025C0C4"),
+    0x8025C1C0: table.sym("pl_demo_8025C1C0"),
+    0x8025C498: table.sym("pl_demo_8025C498"),
+    0x8025C600: table.sym("pl_demo_8025C600"),
+    0x8025C6F8: table.sym("pl_demo_8025C6F8"),
+    0x8025C904: table.sym("pl_demo_8025C904"),
+    0x8025CA48: table.sym("pl_demo_8025CA48"),
+    0x8025CBDC: table.sym("pl_demo_8025CBDC"),
+    0x8025CD6C: table.sym("pl_demo_8025CD6C"),
+    0x8025CEF0: table.sym("pl_demo_8025CEF0"),
+    0x8025CFE4: table.sym("pl_demo_8025CFE4"),
+    0x8025D040: table.sym("pl_demo_8025D040"),
     0x8025D078: table.sym_fnc("L8025D078", flag=table.GLOBL|table.LOCAL),
     0x8025D088: table.sym_fnc("L8025D088", flag=table.GLOBL|table.LOCAL),
     0x8025D098: table.sym_fnc("L8025D098", flag=table.GLOBL|table.LOCAL),
@@ -1589,10 +2529,10 @@ sym_E0_t_main = {
     0x8025D118: table.sym_fnc("L8025D118", flag=table.GLOBL|table.LOCAL),
     0x8025D128: table.sym_fnc("L8025D128", flag=table.GLOBL|table.LOCAL),
     0x8025D138: table.sym_fnc("L8025D138", flag=table.GLOBL|table.LOCAL),
-    0x8025D1D4: table.sym("player_demo_8025D1D4"),
-    0x8025D4F0: table.sym("player_demo_8025D4F0"),
-    0x8025D70C: table.sym("player_demo_8025D70C"),
-    0x8025D798: table.sym("player_demo_main", table.GLOBL),
+    0x8025D1D4: table.sym("pl_demo_8025D1D4"),
+    0x8025D4F0: table.sym("pl_demo_8025D4F0"),
+    0x8025D70C: table.sym("pl_demo_8025D70C"),
+    0x8025D798: table.sym("pl_demo_main", table.GLOBL),
     0x8025D92C: table.sym_fnc("L8025D92C", flag=table.GLOBL|table.LOCAL),
     0x8025D954: table.sym_fnc("L8025D954", flag=table.GLOBL|table.LOCAL),
     0x8025D968: table.sym_fnc("L8025D968", flag=table.GLOBL|table.LOCAL),
@@ -1641,86 +2581,86 @@ sym_E0_t_main = {
     0x8025DD00: table.sym_fnc("L8025DD00", flag=table.GLOBL|table.LOCAL),
     0x8025DD14: table.sym_fnc("L8025DD14", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_hang.S
-    0x8025DD70: table.sym("player_hang_8025DD70"),
-    0x8025DE1C: table.sym("player_hang_8025DE1C"),
-    0x8025DF04: table.sym("player_hang_8025DF04"),
-    0x8025E21C: table.sym("player_hang_8025E21C"),
-    0x8025E5A8: table.sym("player_hang_8025E5A8"),
-    0x8025E7A4: table.sym("player_hang_8025E7A4"),
-    0x8025E830: table.sym("player_hang_8025E830"),
-    0x8025E930: table.sym("player_hang_8025E930"),
-    0x8025EA30: table.sym("player_hang_8025EA30"),
-    0x8025EB50: table.sym("player_hang_8025EB50"),
-    0x8025ECFC: table.sym("player_hang_8025ECFC"),
-    0x8025EED0: table.sym("player_hang_8025EED0"),
-    0x8025EF58: table.sym("player_hang_8025EF58"),
-    0x8025F0B4: table.sym("player_hang_8025F0B4"),
-    0x8025F1E4: table.sym("player_hang_8025F1E4"),
-    0x8025F384: table.sym("player_hang_8025F384"),
-    0x8025F4B4: table.sym("player_hang_8025F4B4"),
-    0x8025F560: table.sym("player_hang_8025F560"),
-    0x8025F644: table.sym("player_hang_8025F644"),
-    0x8025F6C0: table.sym("player_hang_8025F6C0"),
-    0x8025F970: table.sym("player_hang_8025F970"),
-    0x8025FA64: table.sym("player_hang_8025FA64"),
-    0x8025FAE8: table.sym("player_hang_8025FAE8"),
-    0x8025FB90: table.sym("player_hang_8025FB90"),
-    0x8025FC6C: table.sym("player_hang_8025FC6C"),
-    0x80260154: table.sym("player_hang_80260154"),
-    0x80260568: table.sym("player_hang_80260568"),
-    0x802605D0: table.sym("player_hang_main", table.GLOBL),
+    # src/pl_hang.S
+    0x8025DD70: table.sym("pl_hang_8025DD70"),
+    0x8025DE1C: table.sym("pl_hang_8025DE1C"),
+    0x8025DF04: table.sym("pl_hang_8025DF04"),
+    0x8025E21C: table.sym("pl_hang_8025E21C"),
+    0x8025E5A8: table.sym("pl_hang_8025E5A8"),
+    0x8025E7A4: table.sym("pl_hang_8025E7A4"),
+    0x8025E830: table.sym("pl_hang_8025E830"),
+    0x8025E930: table.sym("pl_hang_8025E930"),
+    0x8025EA30: table.sym("pl_hang_8025EA30"),
+    0x8025EB50: table.sym("pl_hang_8025EB50"),
+    0x8025ECFC: table.sym("pl_hang_8025ECFC"),
+    0x8025EED0: table.sym("pl_hang_8025EED0"),
+    0x8025EF58: table.sym("pl_hang_8025EF58"),
+    0x8025F0B4: table.sym("pl_hang_8025F0B4"),
+    0x8025F1E4: table.sym("pl_hang_8025F1E4"),
+    0x8025F384: table.sym("pl_hang_8025F384"),
+    0x8025F4B4: table.sym("pl_hang_8025F4B4"),
+    0x8025F560: table.sym("pl_hang_8025F560"),
+    0x8025F644: table.sym("pl_hang_8025F644"),
+    0x8025F6C0: table.sym("pl_hang_8025F6C0"),
+    0x8025F970: table.sym("pl_hang_8025F970"),
+    0x8025FA64: table.sym("pl_hang_8025FA64"),
+    0x8025FAE8: table.sym("pl_hang_8025FAE8"),
+    0x8025FB90: table.sym("pl_hang_8025FB90"),
+    0x8025FC6C: table.sym("pl_hang_8025FC6C"),
+    0x80260154: table.sym("pl_hang_80260154"),
+    0x80260568: table.sym("pl_hang_80260568"),
+    0x802605D0: table.sym("pl_hang_main", table.GLOBL),
     0x80260748: table.sym_fnc("L80260748", flag=table.GLOBL|table.LOCAL),
     0x8026075C: table.sym_fnc("L8026075C", flag=table.GLOBL|table.LOCAL),
     0x80260770: table.sym_fnc("L80260770", flag=table.GLOBL|table.LOCAL),
     0x80260784: table.sym_fnc("L80260784", flag=table.GLOBL|table.LOCAL),
     0x80260798: table.sym_fnc("L80260798", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_stop.S
-    0x802608B0: table.sym("player_stop_802608B0"),
-    0x80260AAC: table.sym("player_stop_80260AAC"),
-    0x80260CB4: table.sym("player_stop_80260CB4"),
-    0x80260F94: table.sym("player_stop_80260F94"),
-    0x80261000: table.sym("player_stop_80261000"),
-    0x80261268: table.sym("player_stop_80261268"),
-    0x802614FC: table.sym("player_stop_802614FC"),
-    0x8026168C: table.sym("player_stop_8026168C"),
-    0x802618D8: table.sym("player_stop_802618D8"),
-    0x802619D0: table.sym("player_stop_802619D0"),
-    0x80261AD0: table.sym("player_stop_80261AD0"),
-    0x80261BF8: table.sym("player_stop_80261BF8"),
-    0x80261CEC: table.sym("player_stop_80261CEC"),
-    0x80261DB4: table.sym("player_stop_80261DB4"),
-    0x80261F70: table.sym("player_stop_80261F70"),
-    0x80262080: table.sym("player_stop_80262080"),
-    0x8026217C: table.sym("player_stop_8026217C"),
-    0x802621DC: table.sym("player_stop_802621DC"),
-    0x802622DC: table.sym("player_stop_802622DC"),
-    0x80262398: table.sym("player_stop_80262398"),
-    0x80262490: table.sym("player_stop_80262490"),
-    0x80262530: table.sym("player_stop_80262530"),
-    0x80262650: table.sym("player_stop_80262650"),
-    0x80262770: table.sym("player_stop_80262770"),
-    0x80262890: table.sym("player_stop_80262890"),
-    0x80262980: table.sym("player_stop_80262980"),
-    0x80262BC4: table.sym("player_stop_80262BC4"),
-    0x80262C34: table.sym("player_stop_80262C34"),
-    0x80262D68: table.sym("player_stop_80262D68"),
-    0x80262DC4: table.sym("player_stop_80262DC4"),
-    0x80262E20: table.sym("player_stop_80262E20"),
-    0x80262E94: table.sym("player_stop_80262E94"),
-    0x80262EF0: table.sym("player_stop_80262EF0"),
-    0x80262F50: table.sym("player_stop_80262F50"),
-    0x80262FEC: table.sym("player_stop_80262FEC"),
-    0x8026305C: table.sym("player_stop_8026305C"),
-    0x802630F8: table.sym("player_stop_802630F8"),
-    0x802631F0: table.sym("player_stop_802631F0"),
-    0x802632E8: table.sym("player_stop_802632E8"),
-    0x802633B4: table.sym("player_stop_802633B4"),
-    0x8026350C: table.sym("player_stop_8026350C"),
-    0x802635E8: table.sym("player_stop_802635E8"),
-    0x80263784: table.sym("player_stop_80263784"),
-    0x80263898: table.sym("player_stop_main", table.GLOBL),
+    # src/pl_stop.S
+    0x802608B0: table.sym("pl_stop_802608B0"),
+    0x80260AAC: table.sym("pl_stop_80260AAC"),
+    0x80260CB4: table.sym("pl_stop_80260CB4"),
+    0x80260F94: table.sym("pl_stop_80260F94"),
+    0x80261000: table.sym("pl_stop_80261000"),
+    0x80261268: table.sym("pl_stop_80261268"),
+    0x802614FC: table.sym("pl_stop_802614FC"),
+    0x8026168C: table.sym("pl_stop_8026168C"),
+    0x802618D8: table.sym("pl_stop_802618D8"),
+    0x802619D0: table.sym("pl_stop_802619D0"),
+    0x80261AD0: table.sym("pl_stop_80261AD0"),
+    0x80261BF8: table.sym("pl_stop_80261BF8"),
+    0x80261CEC: table.sym("pl_stop_80261CEC"),
+    0x80261DB4: table.sym("pl_stop_80261DB4"),
+    0x80261F70: table.sym("pl_stop_80261F70"),
+    0x80262080: table.sym("pl_stop_80262080"),
+    0x8026217C: table.sym("pl_stop_8026217C"),
+    0x802621DC: table.sym("pl_stop_802621DC"),
+    0x802622DC: table.sym("pl_stop_802622DC"),
+    0x80262398: table.sym("pl_stop_80262398"),
+    0x80262490: table.sym("pl_stop_80262490"),
+    0x80262530: table.sym("pl_stop_80262530"),
+    0x80262650: table.sym("pl_stop_80262650"),
+    0x80262770: table.sym("pl_stop_80262770"),
+    0x80262890: table.sym("pl_stop_80262890"),
+    0x80262980: table.sym("pl_stop_80262980"),
+    0x80262BC4: table.sym("pl_stop_80262BC4"),
+    0x80262C34: table.sym("pl_stop_80262C34"),
+    0x80262D68: table.sym("pl_stop_80262D68"),
+    0x80262DC4: table.sym("pl_stop_80262DC4"),
+    0x80262E20: table.sym("pl_stop_80262E20"),
+    0x80262E94: table.sym("pl_stop_80262E94"),
+    0x80262EF0: table.sym("pl_stop_80262EF0"),
+    0x80262F50: table.sym("pl_stop_80262F50"),
+    0x80262FEC: table.sym("pl_stop_80262FEC"),
+    0x8026305C: table.sym("pl_stop_8026305C"),
+    0x802630F8: table.sym("pl_stop_802630F8"),
+    0x802631F0: table.sym("pl_stop_802631F0"),
+    0x802632E8: table.sym("pl_stop_802632E8"),
+    0x802633B4: table.sym("pl_stop_802633B4"),
+    0x8026350C: table.sym("pl_stop_8026350C"),
+    0x802635E8: table.sym("pl_stop_802635E8"),
+    0x80263784: table.sym("pl_stop_80263784"),
+    0x80263898: table.sym("pl_stop_main", table.GLOBL),
     0x80263B38: table.sym_fnc("L80263B38", flag=table.GLOBL|table.LOCAL),
     0x80263B4C: table.sym_fnc("L80263B4C", flag=table.GLOBL|table.LOCAL),
     0x80263B88: table.sym_fnc("L80263B88", flag=table.GLOBL|table.LOCAL),
@@ -1748,80 +2688,80 @@ sym_E0_t_main = {
     0x80263DE0: table.sym_fnc("L80263DE0", flag=table.GLOBL|table.LOCAL),
     0x80263E08: table.sym_fnc("L80263E08", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_ground.S
-    0x80263E60: table.sym("player_ground_80263E60"),
-    0x80263EE4: table.sym("player_ground_80263EE4", table.GLOBL),
-    0x80264024: table.sym("player_ground_80264024"),
-    0x8026409C: table.sym("player_ground_8026409C"),
-    0x802640FC: table.sym("player_ground_802640FC"),
-    0x802642B4: table.sym("player_ground_802642B4"),
-    0x80264340: table.sym("player_ground_80264340"),
-    0x8026440C: table.sym("player_ground_8026440C"),
-    0x80264740: table.sym("player_ground_80264740"),
-    0x80264B54: table.sym("player_ground_80264B54"),
-    0x80264D80: table.sym("player_ground_80264D80"),
-    0x80264E18: table.sym("player_ground_80264E18"),
-    0x80265080: table.sym("player_ground_80265080"),
-    0x802651B0: table.sym("player_ground_802651B0"),
-    0x80265244: table.sym("player_ground_80265244"),
-    0x80265458: table.sym("player_ground_80265458"),
-    0x80265514: table.sym("player_ground_80265514"),
-    0x80265558: table.sym("player_ground_80265558"),
-    0x80265620: table.sym("player_ground_80265620"),
-    0x80265700: table.sym("player_ground_80265700"),
-    0x80265B1C: table.sym("player_ground_80265B1C"),
-    0x80265D90: table.sym("player_ground_80265D90"),
-    0x80265DF8: table.sym("player_ground_80265DF8"),
-    0x80266038: table.sym("player_ground_80266038"),
-    0x802661CC: table.sym("player_ground_802661CC"),
-    0x80266354: table.sym("player_ground_80266354"),
-    0x802665B4: table.sym("player_ground_802665B4"),
-    0x80266734: table.sym("player_ground_80266734"),
-    0x8026699C: table.sym("player_ground_8026699C"),
-    0x80266AF8: table.sym("player_ground_80266AF8"),
-    0x80266D4C: table.sym("player_ground_80266D4C"),
-    0x80266E48: table.sym("player_ground_80266E48"),
-    0x80266FC8: table.sym("player_ground_80266FC8"),
-    0x80267240: table.sym("player_ground_80267240"),
-    0x80267504: table.sym("player_ground_80267504"),
-    0x80267728: table.sym("player_ground_80267728"),
-    0x8026795C: table.sym("player_ground_8026795C"),
-    0x80267C24: table.sym("player_ground_80267C24"),
-    0x80267CE4: table.sym("player_ground_80267CE4"),
-    0x80267FA4: table.sym("player_ground_80267FA4"),
-    0x80268074: table.sym("player_ground_80268074"),
-    0x802680D4: table.sym("player_ground_802680D4"),
-    0x80268168: table.sym("player_ground_80268168"),
-    0x80268338: table.sym("player_ground_80268338"),
-    0x802684AC: table.sym("player_ground_802684AC"),
-    0x802685C0: table.sym("player_ground_802685C0"),
-    0x80268608: table.sym("player_ground_80268608"),
-    0x80268684: table.sym("player_ground_80268684"),
-    0x802687B8: table.sym("player_ground_802687B8"),
-    0x802689F8: table.sym("player_ground_802689F8"),
-    0x80268ADC: table.sym("player_ground_80268ADC"),
-    0x80268B64: table.sym("player_ground_80268B64"),
-    0x80268BB0: table.sym("player_ground_80268BB0"),
-    0x80268BFC: table.sym("player_ground_80268BFC"),
-    0x80268C48: table.sym("player_ground_80268C48"),
-    0x80268C94: table.sym("player_ground_80268C94"),
-    0x80268D04: table.sym("player_ground_80268D04"),
-    0x80268DCC: table.sym("player_ground_80268DCC"),
-    0x80268F78: table.sym("player_ground_80268F78"),
-    0x80269108: table.sym("player_ground_80269108"),
-    0x80269170: table.sym("player_ground_80269170"),
-    0x802691D8: table.sym("player_ground_802691D8"),
-    0x80269264: table.sym("player_ground_80269264"),
-    0x80269300: table.sym("player_ground_80269300"),
-    0x8026939C: table.sym("player_ground_8026939C"),
-    0x8026947C: table.sym("player_ground_8026947C"),
-    0x802694E4: table.sym("player_ground_802694E4"),
-    0x80269588: table.sym("player_ground_80269588"),
-    0x80269640: table.sym("player_ground_80269640"),
-    0x80269788: table.sym("player_ground_80269788"),
-    0x802697DC: table.sym("player_ground_802697DC"),
-    0x80269830: table.sym("player_ground_80269830"),
-    0x80269954: table.sym("player_ground_main", table.GLOBL),
+    # src/pl_ground.S
+    0x80263E60: table.sym("pl_ground_80263E60"),
+    0x80263EE4: table.sym("pl_ground_80263EE4", table.GLOBL),
+    0x80264024: table.sym("pl_ground_80264024"),
+    0x8026409C: table.sym("pl_ground_8026409C"),
+    0x802640FC: table.sym("pl_ground_802640FC"),
+    0x802642B4: table.sym("pl_ground_802642B4"),
+    0x80264340: table.sym("pl_ground_80264340"),
+    0x8026440C: table.sym("pl_ground_8026440C"),
+    0x80264740: table.sym("pl_ground_80264740"),
+    0x80264B54: table.sym("pl_ground_80264B54"),
+    0x80264D80: table.sym("pl_ground_80264D80"),
+    0x80264E18: table.sym("pl_ground_80264E18"),
+    0x80265080: table.sym("pl_ground_80265080"),
+    0x802651B0: table.sym("pl_ground_802651B0"),
+    0x80265244: table.sym("pl_ground_80265244"),
+    0x80265458: table.sym("pl_ground_80265458"),
+    0x80265514: table.sym("pl_ground_80265514"),
+    0x80265558: table.sym("pl_ground_80265558"),
+    0x80265620: table.sym("pl_ground_80265620"),
+    0x80265700: table.sym("pl_ground_80265700"),
+    0x80265B1C: table.sym("pl_ground_80265B1C"),
+    0x80265D90: table.sym("pl_ground_80265D90"),
+    0x80265DF8: table.sym("pl_ground_80265DF8"),
+    0x80266038: table.sym("pl_ground_80266038"),
+    0x802661CC: table.sym("pl_ground_802661CC"),
+    0x80266354: table.sym("pl_ground_80266354"),
+    0x802665B4: table.sym("pl_ground_802665B4"),
+    0x80266734: table.sym("pl_ground_80266734"),
+    0x8026699C: table.sym("pl_ground_8026699C"),
+    0x80266AF8: table.sym("pl_ground_80266AF8"),
+    0x80266D4C: table.sym("pl_ground_80266D4C"),
+    0x80266E48: table.sym("pl_ground_80266E48"),
+    0x80266FC8: table.sym("pl_ground_80266FC8"),
+    0x80267240: table.sym("pl_ground_80267240"),
+    0x80267504: table.sym("pl_ground_80267504"),
+    0x80267728: table.sym("pl_ground_80267728"),
+    0x8026795C: table.sym("pl_ground_8026795C"),
+    0x80267C24: table.sym("pl_ground_80267C24"),
+    0x80267CE4: table.sym("pl_ground_80267CE4"),
+    0x80267FA4: table.sym("pl_ground_80267FA4"),
+    0x80268074: table.sym("pl_ground_80268074"),
+    0x802680D4: table.sym("pl_ground_802680D4"),
+    0x80268168: table.sym("pl_ground_80268168"),
+    0x80268338: table.sym("pl_ground_80268338"),
+    0x802684AC: table.sym("pl_ground_802684AC"),
+    0x802685C0: table.sym("pl_ground_802685C0"),
+    0x80268608: table.sym("pl_ground_80268608"),
+    0x80268684: table.sym("pl_ground_80268684"),
+    0x802687B8: table.sym("pl_ground_802687B8"),
+    0x802689F8: table.sym("pl_ground_802689F8"),
+    0x80268ADC: table.sym("pl_ground_80268ADC"),
+    0x80268B64: table.sym("pl_ground_80268B64"),
+    0x80268BB0: table.sym("pl_ground_80268BB0"),
+    0x80268BFC: table.sym("pl_ground_80268BFC"),
+    0x80268C48: table.sym("pl_ground_80268C48"),
+    0x80268C94: table.sym("pl_ground_80268C94"),
+    0x80268D04: table.sym("pl_ground_80268D04"),
+    0x80268DCC: table.sym("pl_ground_80268DCC"),
+    0x80268F78: table.sym("pl_ground_80268F78"),
+    0x80269108: table.sym("pl_ground_80269108"),
+    0x80269170: table.sym("pl_ground_80269170"),
+    0x802691D8: table.sym("pl_ground_802691D8"),
+    0x80269264: table.sym("pl_ground_80269264"),
+    0x80269300: table.sym("pl_ground_80269300"),
+    0x8026939C: table.sym("pl_ground_8026939C"),
+    0x8026947C: table.sym("pl_ground_8026947C"),
+    0x802694E4: table.sym("pl_ground_802694E4"),
+    0x80269588: table.sym("pl_ground_80269588"),
+    0x80269640: table.sym("pl_ground_80269640"),
+    0x80269788: table.sym("pl_ground_80269788"),
+    0x802697DC: table.sym("pl_ground_802697DC"),
+    0x80269830: table.sym("pl_ground_80269830"),
+    0x80269954: table.sym("pl_ground_main", table.GLOBL),
     0x80269BEC: table.sym_fnc("L80269BEC", flag=table.GLOBL|table.LOCAL),
     0x80269C00: table.sym_fnc("L80269C00", flag=table.GLOBL|table.LOCAL),
     0x80269C14: table.sym_fnc("L80269C14", flag=table.GLOBL|table.LOCAL),
@@ -1849,23 +2789,23 @@ sym_E0_t_main = {
     0x80269EBC: table.sym_fnc("L80269EBC", flag=table.GLOBL|table.LOCAL),
     0x80269ED0: table.sym_fnc("L80269ED0", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_air.S
-    0x80269F40: table.sym("player_air_80269F40"),
-    0x80269FC0: table.sym("player_air_80269FC0"),
-    0x8026A090: table.sym("player_air_8026A090"),
-    0x8026A12C: table.sym("player_air_8026A12C"),
-    0x8026A224: table.sym("player_air_8026A224"),
-    0x8026A400: table.sym("player_air_8026A400"),
-    0x8026A494: table.sym("player_air_8026A494"),
-    0x8026A598: table.sym("player_air_8026A598"),
-    0x8026A62C: table.sym("player_air_8026A62C"),
-    0x8026A818: table.sym("player_air_8026A818"),
-    0x8026AA48: table.sym("player_air_8026AA48"),
-    0x8026ACD8: table.sym("player_air_8026ACD8"),
-    0x8026AE5C: table.sym("player_air_8026AE5C"),
-    0x8026B004: table.sym("player_air_8026B004"),
-    0x8026B17C: table.sym("player_air_8026B17C"),
-    0x8026B444: table.sym("player_air_8026B444"),
+    # src/pl_air.S
+    0x80269F40: table.sym("pl_air_80269F40"),
+    0x80269FC0: table.sym("pl_air_80269FC0"),
+    0x8026A090: table.sym("pl_air_8026A090"),
+    0x8026A12C: table.sym("pl_air_8026A12C"),
+    0x8026A224: table.sym("pl_air_8026A224"),
+    0x8026A400: table.sym("pl_air_8026A400"),
+    0x8026A494: table.sym("pl_air_8026A494"),
+    0x8026A598: table.sym("pl_air_8026A598"),
+    0x8026A62C: table.sym("pl_air_8026A62C"),
+    0x8026A818: table.sym("pl_air_8026A818"),
+    0x8026AA48: table.sym("pl_air_8026AA48"),
+    0x8026ACD8: table.sym("pl_air_8026ACD8"),
+    0x8026AE5C: table.sym("pl_air_8026AE5C"),
+    0x8026B004: table.sym("pl_air_8026B004"),
+    0x8026B17C: table.sym("pl_air_8026B17C"),
+    0x8026B444: table.sym("pl_air_8026B444"),
     0x8026B49C: table.sym_fnc("L8026B49C", flag=table.GLOBL|table.LOCAL),
     0x8026B4B0: table.sym_fnc("L8026B4B0", flag=table.GLOBL|table.LOCAL),
     0x8026B4E0: table.sym_fnc("L8026B4E0", flag=table.GLOBL|table.LOCAL),
@@ -1873,54 +2813,54 @@ sym_E0_t_main = {
     0x8026B654: table.sym_fnc("L8026B654", flag=table.GLOBL|table.LOCAL),
     0x8026B670: table.sym_fnc("L8026B670", flag=table.GLOBL|table.LOCAL),
     0x8026B680: table.sym_fnc("L8026B680", flag=table.GLOBL|table.LOCAL),
-    0x8026B6A0: table.sym("player_air_8026B6A0"),
-    0x8026B740: table.sym("player_air_8026B740"),
-    0x8026B814: table.sym("player_air_8026B814"),
-    0x8026B90C: table.sym("player_air_8026B90C"),
-    0x8026B9AC: table.sym("player_air_8026B9AC"),
-    0x8026BAB8: table.sym("player_air_8026BAB8"),
-    0x8026BBB4: table.sym("player_air_8026BBB4"),
-    0x8026BCC0: table.sym("player_air_8026BCC0"),
-    0x8026BDCC: table.sym("player_air_8026BDCC"),
-    0x8026BE78: table.sym("player_air_8026BE78"),
-    0x8026BF40: table.sym("player_air_8026BF40"),
-    0x8026C034: table.sym("player_air_8026C034"),
-    0x8026C1E0: table.sym("player_air_8026C1E0"),
-    0x8026C4B8: table.sym("player_air_8026C4B8"),
-    0x8026C5D0: table.sym("player_air_8026C5D0"),
-    0x8026C738: table.sym("player_air_8026C738"),
-    0x8026C880: table.sym("player_air_8026C880"),
-    0x8026C9FC: table.sym("player_air_8026C9FC"),
-    0x8026CD0C: table.sym("player_air_8026CD0C"),
-    0x8026CE50: table.sym("player_air_8026CE50"),
-    0x8026CF28: table.sym("player_air_8026CF28"),
-    0x8026D1B0: table.sym("player_air_8026D1B0"),
-    0x8026D33C: table.sym("player_air_8026D33C"),
-    0x8026D3C8: table.sym("player_air_8026D3C8"),
-    0x8026D43C: table.sym("player_air_8026D43C"),
-    0x8026D4B0: table.sym("player_air_8026D4B0"),
-    0x8026D508: table.sym("player_air_8026D508"),
-    0x8026D560: table.sym("player_air_8026D560"),
-    0x8026D608: table.sym("player_air_8026D608"),
-    0x8026D6FC: table.sym("player_air_8026D6FC"),
-    0x8026D770: table.sym("player_air_8026D770"),
-    0x8026D988: table.sym("player_air_8026D988"),
-    0x8026DB54: table.sym("player_air_8026DB54"),
-    0x8026DCF4: table.sym("player_air_8026DCF4"),
-    0x8026DE98: table.sym("player_air_8026DE98"),
-    0x8026E088: table.sym("player_air_8026E088"),
-    0x8026E2B4: table.sym("player_air_8026E2B4"),
-    0x8026E59C: table.sym("player_air_8026E59C"),
-    0x8026E810: table.sym("player_air_8026E810"),
-    0x8026E968: table.sym("player_air_8026E968"),
-    0x8026EC00: table.sym("player_air_8026EC00"),
-    0x8026F158: table.sym("player_air_8026F158"),
-    0x8026F2EC: table.sym("player_air_8026F2EC"),
-    0x8026F614: table.sym("player_air_8026F614"),
-    0x8026F660: table.sym("player_air_8026F660"),
-    0x8026F840: table.sym("player_air_8026F840"),
-    0x8026FA18: table.sym("player_air_8026FA18"),
-    0x8026FB04: table.sym("player_air_main", table.GLOBL),
+    0x8026B6A0: table.sym("pl_air_8026B6A0"),
+    0x8026B740: table.sym("pl_air_8026B740"),
+    0x8026B814: table.sym("pl_air_8026B814"),
+    0x8026B90C: table.sym("pl_air_8026B90C"),
+    0x8026B9AC: table.sym("pl_air_8026B9AC"),
+    0x8026BAB8: table.sym("pl_air_8026BAB8"),
+    0x8026BBB4: table.sym("pl_air_8026BBB4"),
+    0x8026BCC0: table.sym("pl_air_8026BCC0"),
+    0x8026BDCC: table.sym("pl_air_8026BDCC"),
+    0x8026BE78: table.sym("pl_air_8026BE78"),
+    0x8026BF40: table.sym("pl_air_8026BF40"),
+    0x8026C034: table.sym("pl_air_8026C034"),
+    0x8026C1E0: table.sym("pl_air_8026C1E0"),
+    0x8026C4B8: table.sym("pl_air_8026C4B8"),
+    0x8026C5D0: table.sym("pl_air_8026C5D0"),
+    0x8026C738: table.sym("pl_air_8026C738"),
+    0x8026C880: table.sym("pl_air_8026C880"),
+    0x8026C9FC: table.sym("pl_air_8026C9FC"),
+    0x8026CD0C: table.sym("pl_air_8026CD0C"),
+    0x8026CE50: table.sym("pl_air_8026CE50"),
+    0x8026CF28: table.sym("pl_air_8026CF28"),
+    0x8026D1B0: table.sym("pl_air_8026D1B0"),
+    0x8026D33C: table.sym("pl_air_8026D33C"),
+    0x8026D3C8: table.sym("pl_air_8026D3C8"),
+    0x8026D43C: table.sym("pl_air_8026D43C"),
+    0x8026D4B0: table.sym("pl_air_8026D4B0"),
+    0x8026D508: table.sym("pl_air_8026D508"),
+    0x8026D560: table.sym("pl_air_8026D560"),
+    0x8026D608: table.sym("pl_air_8026D608"),
+    0x8026D6FC: table.sym("pl_air_8026D6FC"),
+    0x8026D770: table.sym("pl_air_8026D770"),
+    0x8026D988: table.sym("pl_air_8026D988"),
+    0x8026DB54: table.sym("pl_air_8026DB54"),
+    0x8026DCF4: table.sym("pl_air_8026DCF4"),
+    0x8026DE98: table.sym("pl_air_8026DE98"),
+    0x8026E088: table.sym("pl_air_8026E088"),
+    0x8026E2B4: table.sym("pl_air_8026E2B4"),
+    0x8026E59C: table.sym("pl_air_8026E59C"),
+    0x8026E810: table.sym("pl_air_8026E810"),
+    0x8026E968: table.sym("pl_air_8026E968"),
+    0x8026EC00: table.sym("pl_air_8026EC00"),
+    0x8026F158: table.sym("pl_air_8026F158"),
+    0x8026F2EC: table.sym("pl_air_8026F2EC"),
+    0x8026F614: table.sym("pl_air_8026F614"),
+    0x8026F660: table.sym("pl_air_8026F660"),
+    0x8026F840: table.sym("pl_air_8026F840"),
+    0x8026FA18: table.sym("pl_air_8026FA18"),
+    0x8026FB04: table.sym("pl_air_main", table.GLOBL),
     0x8026FD70: table.sym_fnc("L8026FD70", flag=table.GLOBL|table.LOCAL),
     0x8026FD84: table.sym_fnc("L8026FD84", flag=table.GLOBL|table.LOCAL),
     0x8026FD98: table.sym_fnc("L8026FD98", flag=table.GLOBL|table.LOCAL),
@@ -1954,45 +2894,45 @@ sym_E0_t_main = {
     0x802700B8: table.sym_fnc("L802700B8", flag=table.GLOBL|table.LOCAL),
     0x802700E0: table.sym_fnc("L802700E0", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_water.S
-    0x80270110: table.sym("player_water_80270110"),
-    0x802701CC: table.sym("player_water_802701CC"),
-    0x80270234: table.sym("player_water_80270234"),
-    0x80270304: table.sym("player_water_80270304"),
-    0x80270500: table.sym("player_water_80270500"),
-    0x80270918: table.sym("player_water_80270918"),
-    0x80270A74: table.sym("player_water_80270A74"),
-    0x80270B4C: table.sym("player_water_80270B4C"),
-    0x80270C94: table.sym("player_water_80270C94"),
-    0x80270E40: table.sym("player_water_80270E40"),
-    0x80270FD8: table.sym("player_water_80270FD8"),
-    0x802710C4: table.sym("player_water_802710C4"),
-    0x802711D4: table.sym("player_water_802711D4"),
-    0x802712C0: table.sym("player_water_802712C0"),
-    0x802713BC: table.sym("player_water_802713BC"),
-    0x802714A8: table.sym("player_water_802714A8"),
-    0x802715EC: table.sym("player_water_802715EC"),
-    0x8027163C: table.sym("player_water_8027163C"),
-    0x80271704: table.sym("player_water_80271704"),
-    0x80271918: table.sym("player_water_80271918"),
-    0x8027197C: table.sym("player_water_8027197C"),
-    0x80271AA0: table.sym("player_water_80271AA0"),
-    0x80271D04: table.sym("player_water_80271D04"),
-    0x80271EB4: table.sym("player_water_80271EB4"),
-    0x8027202C: table.sym("player_water_8027202C"),
-    0x8027226C: table.sym("player_water_8027226C"),
-    0x802723F0: table.sym("player_water_802723F0"),
-    0x80272548: table.sym("player_water_80272548"),
-    0x8027267C: table.sym("player_water_8027267C"),
-    0x80272778: table.sym("player_water_80272778"),
-    0x80272870: table.sym("player_water_80272870"),
-    0x80272A60: table.sym("player_water_80272A60"),
-    0x80272B1C: table.sym("player_water_80272B1C"),
-    0x80272B64: table.sym("player_water_80272B64"),
-    0x80272BAC: table.sym("player_water_80272BAC"),
-    0x80272CBC: table.sym("player_water_80272CBC"),
-    0x80272DC0: table.sym("player_water_80272DC0"),
-    0x80272E3C: table.sym("player_water_80272E3C"),
+    # src/pl_water.S
+    0x80270110: table.sym("pl_water_80270110"),
+    0x802701CC: table.sym("pl_water_802701CC"),
+    0x80270234: table.sym("pl_water_80270234"),
+    0x80270304: table.sym("pl_water_80270304"),
+    0x80270500: table.sym("pl_water_80270500"),
+    0x80270918: table.sym("pl_water_80270918"),
+    0x80270A74: table.sym("pl_water_80270A74"),
+    0x80270B4C: table.sym("pl_water_80270B4C"),
+    0x80270C94: table.sym("pl_water_80270C94"),
+    0x80270E40: table.sym("pl_water_80270E40"),
+    0x80270FD8: table.sym("pl_water_80270FD8"),
+    0x802710C4: table.sym("pl_water_802710C4"),
+    0x802711D4: table.sym("pl_water_802711D4"),
+    0x802712C0: table.sym("pl_water_802712C0"),
+    0x802713BC: table.sym("pl_water_802713BC"),
+    0x802714A8: table.sym("pl_water_802714A8"),
+    0x802715EC: table.sym("pl_water_802715EC"),
+    0x8027163C: table.sym("pl_water_8027163C"),
+    0x80271704: table.sym("pl_water_80271704"),
+    0x80271918: table.sym("pl_water_80271918"),
+    0x8027197C: table.sym("pl_water_8027197C"),
+    0x80271AA0: table.sym("pl_water_80271AA0"),
+    0x80271D04: table.sym("pl_water_80271D04"),
+    0x80271EB4: table.sym("pl_water_80271EB4"),
+    0x8027202C: table.sym("pl_water_8027202C"),
+    0x8027226C: table.sym("pl_water_8027226C"),
+    0x802723F0: table.sym("pl_water_802723F0"),
+    0x80272548: table.sym("pl_water_80272548"),
+    0x8027267C: table.sym("pl_water_8027267C"),
+    0x80272778: table.sym("pl_water_80272778"),
+    0x80272870: table.sym("pl_water_80272870"),
+    0x80272A60: table.sym("pl_water_80272A60"),
+    0x80272B1C: table.sym("pl_water_80272B1C"),
+    0x80272B64: table.sym("pl_water_80272B64"),
+    0x80272BAC: table.sym("pl_water_80272BAC"),
+    0x80272CBC: table.sym("pl_water_80272CBC"),
+    0x80272DC0: table.sym("pl_water_80272DC0"),
+    0x80272E3C: table.sym("pl_water_80272E3C"),
     0x80272FE8: table.sym_fnc("L80272FE8", flag=table.GLOBL|table.LOCAL),
     0x80273004: table.sym_fnc("L80273004", flag=table.GLOBL|table.LOCAL),
     0x80273020: table.sym_fnc("L80273020", flag=table.GLOBL|table.LOCAL),
@@ -2005,25 +2945,25 @@ sym_E0_t_main = {
     0x802730F4: table.sym_fnc("L802730F4", flag=table.GLOBL|table.LOCAL),
     0x80273108: table.sym_fnc("L80273108", flag=table.GLOBL|table.LOCAL),
     0x8027311C: table.sym_fnc("L8027311C", flag=table.GLOBL|table.LOCAL),
-    0x80273160: table.sym("player_water_80273160"),
-    0x80273518: table.sym("player_water_80273518"),
-    0x802735A4: table.sym("player_water_802735A4"),
-    0x80273618: table.sym("player_water_80273618"),
-    0x802737F4: table.sym("player_water_802737F4"),
-    0x80273A2C: table.sym("player_water_80273A2C"),
-    0x80273BD4: table.sym("player_water_80273BD4"),
-    0x80273CD0: table.sym("player_water_80273CD0"),
-    0x80273E74: table.sym("player_water_80273E74"),
-    0x80274030: table.sym("player_water_80274030"),
-    0x80274134: table.sym("player_water_80274134"),
-    0x80274268: table.sym("player_water_80274268"),
-    0x80274384: table.sym("player_water_80274384"),
-    0x802744AC: table.sym("player_water_802744AC"),
-    0x80274580: table.sym("player_water_80274580"),
-    0x80274688: table.sym("player_water_80274688"),
-    0x8027475C: table.sym("player_water_8027475C"),
-    0x80274864: table.sym("player_water_80274864"),
-    0x8027499C: table.sym("player_water_main", table.GLOBL),
+    0x80273160: table.sym("pl_water_80273160"),
+    0x80273518: table.sym("pl_water_80273518"),
+    0x802735A4: table.sym("pl_water_802735A4"),
+    0x80273618: table.sym("pl_water_80273618"),
+    0x802737F4: table.sym("pl_water_802737F4"),
+    0x80273A2C: table.sym("pl_water_80273A2C"),
+    0x80273BD4: table.sym("pl_water_80273BD4"),
+    0x80273CD0: table.sym("pl_water_80273CD0"),
+    0x80273E74: table.sym("pl_water_80273E74"),
+    0x80274030: table.sym("pl_water_80274030"),
+    0x80274134: table.sym("pl_water_80274134"),
+    0x80274268: table.sym("pl_water_80274268"),
+    0x80274384: table.sym("pl_water_80274384"),
+    0x802744AC: table.sym("pl_water_802744AC"),
+    0x80274580: table.sym("pl_water_80274580"),
+    0x80274688: table.sym("pl_water_80274688"),
+    0x8027475C: table.sym("pl_water_8027475C"),
+    0x80274864: table.sym("pl_water_80274864"),
+    0x8027499C: table.sym("pl_water_main", table.GLOBL),
     0x80274CBC: table.sym_fnc("L80274CBC", flag=table.GLOBL|table.LOCAL),
     0x80274CD0: table.sym_fnc("L80274CD0", flag=table.GLOBL|table.LOCAL),
     0x80274CE4: table.sym_fnc("L80274CE4", flag=table.GLOBL|table.LOCAL),
@@ -2041,9 +2981,9 @@ sym_E0_t_main = {
     0x80274E74: table.sym_fnc("L80274E74", flag=table.GLOBL|table.LOCAL),
     0x80274E88: table.sym_fnc("L80274E88", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_grab.S
-    0x80274EB0: table.sym("player_grab_80274EB0"),
-    0x80274F10: table.sym("player_grab_80274F10", table.GLOBL),
+    # src/pl_grab.S
+    0x80274EB0: table.sym("pl_grab_80274EB0"),
+    0x80274F10: table.sym("pl_grab_80274F10", table.GLOBL),
     0x80274F90: table.sym_fnc("L80274F90", flag=table.GLOBL|table.LOCAL),
     0x80274FA8: table.sym_fnc("L80274FA8", flag=table.GLOBL|table.LOCAL),
     0x80275050: table.sym_fnc("L80275050", flag=table.GLOBL|table.LOCAL),
@@ -2053,18 +2993,18 @@ sym_E0_t_main = {
     0x802751EC: table.sym_fnc("L802751EC", flag=table.GLOBL|table.LOCAL),
     0x80275280: table.sym_fnc("L80275280", flag=table.GLOBL|table.LOCAL),
     0x80275308: table.sym_fnc("L80275308", flag=table.GLOBL|table.LOCAL),
-    0x80275328: table.sym("player_grab_80275328"),
-    0x8027546C: table.sym("player_grab_8027546C"),
-    0x802755FC: table.sym("player_grab_802755FC"),
-    0x802756C8: table.sym("player_grab_802756C8"),
-    0x80275794: table.sym("player_grab_80275794"),
-    0x802758C0: table.sym("player_grab_802758C0"),
-    0x802759B4: table.sym("player_grab_802759B4"),
-    0x80275A80: table.sym("player_grab_80275A80"),
-    0x80275B34: table.sym("player_grab_80275B34"),
-    0x80275E78: table.sym("player_grab_80275E78"),
-    0x80275F0C: table.sym("player_grab_80275F0C"),
-    0x80275FE0: table.sym("player_grab_main", table.GLOBL),
+    0x80275328: table.sym("pl_grab_80275328"),
+    0x8027546C: table.sym("pl_grab_8027546C"),
+    0x802755FC: table.sym("pl_grab_802755FC"),
+    0x802756C8: table.sym("pl_grab_802756C8"),
+    0x80275794: table.sym("pl_grab_80275794"),
+    0x802758C0: table.sym("pl_grab_802758C0"),
+    0x802759B4: table.sym("pl_grab_802759B4"),
+    0x80275A80: table.sym("pl_grab_80275A80"),
+    0x80275B34: table.sym("pl_grab_80275B34"),
+    0x80275E78: table.sym("pl_grab_80275E78"),
+    0x80275F0C: table.sym("pl_grab_80275F0C"),
+    0x80275FE0: table.sym("pl_grab_main", table.GLOBL),
     0x802760C8: table.sym_fnc("L802760C8", flag=table.GLOBL|table.LOCAL),
     0x802760DC: table.sym_fnc("L802760DC", flag=table.GLOBL|table.LOCAL),
     0x802760F0: table.sym_fnc("L802760F0", flag=table.GLOBL|table.LOCAL),
@@ -2074,39 +3014,39 @@ sym_E0_t_main = {
     0x80276168: table.sym_fnc("L80276168", flag=table.GLOBL|table.LOCAL),
     0x8027617C: table.sym_fnc("L8027617C", flag=table.GLOBL|table.LOCAL),
 
-    # src/player_callback.S
-    0x802761D0: table.sym("g_stage_particle", table.GLOBL), # g callback
-    0x802763D4: table.sym("g_stage_background", table.GLOBL), # g callback
-    0x802764B0: table.sym("g_face_main", table.GLOBL), # g callback
-    0x8027657C: table.sym("player_callback_8027657C"),
-    0x802765FC: table.sym("player_callback_802765FC"),
-    0x802766B4: table.sym("player_callback_802766B4"),
-    0x802767B8: table.sym("player_callback_802767B8"),
-    0x80276804: table.sym("player_callback_80276804"),
-    0x8027684C: table.sym("player_callback_8027684C", table.GLOBL), # o callback
+    # src/pl_callback.S
+    0x802761D0: table.sym("s_stage_weather", table.GLOBL), # s callback
+    0x802763D4: table.sym("s_stage_background", table.GLOBL), # s callback
+    0x802764B0: table.sym("s_face_main", table.GLOBL), # s callback
+    0x8027657C: table.sym("pl_callback_8027657C"),
+    0x802765FC: table.sym("pl_callback_802765FC"),
+    0x802766B4: table.sym("pl_callback_802766B4"),
+    0x802767B8: table.sym("pl_callback_802767B8"),
+    0x80276804: table.sym("pl_callback_80276804"),
+    0x8027684C: table.sym("pl_callback_8027684C", table.GLOBL), # o callback
     0x802768A8: table.sym_fnc("L802768A8", flag=table.GLOBL|table.LOCAL),
     0x802768B8: table.sym_fnc("L802768B8", flag=table.GLOBL|table.LOCAL),
     0x802768C8: table.sym_fnc("L802768C8", flag=table.GLOBL|table.LOCAL),
     0x802768D8: table.sym_fnc("L802768D8", flag=table.GLOBL|table.LOCAL),
     0x802768E8: table.sym_fnc("L802768E8", flag=table.GLOBL|table.LOCAL),
-    0x80276910: table.sym("player_callback_80276910", table.GLOBL), # o callback
-    0x80276AA0: table.sym("player_callback_80276AA0"),
-    0x80276BB8: table.sym("player_callback_80276BB8", table.GLOBL), # o callback
-    0x80276CCC: table.sym("player_callback_80276CCC", table.GLOBL), # o callback
-    0x80276F90: table.sym("player_callback_80276F90"),
-    0x802770A4: table.sym("g_player_alpha",         table.GLOBL), # g callback
-    0x80277150: table.sym("g_player_select_lod",    table.GLOBL), # g callback
-    0x802771BC: table.sym("g_player_select_eye",    table.GLOBL), # g callback
-    0x80277294: table.sym("g_player_rot_torso",     table.GLOBL), # g callback
-    0x802773A4: table.sym("g_player_rot_head",      table.GLOBL), # g callback
-    0x802774F4: table.sym("g_player_select_glove",  table.GLOBL), # g callback
-    0x802775CC: table.sym("g_player_scale",         table.GLOBL), # g callback
-    0x802776D8: table.sym("g_player_select_cap",    table.GLOBL), # g callback
-    0x80277740: table.sym("g_player_select_head",   table.GLOBL), # g callback
-    0x80277824: table.sym("g_player_rot_wing",      table.GLOBL), # g callback
-    0x8027795C: table.sym("g_player_hand",          table.GLOBL), # g callback
-    0x80277B14: table.sym("g_inside_mirror",        table.GLOBL), # g callback
-    0x80277D6C: table.sym("g_player_mirror",        table.GLOBL), # g callback
+    0x80276910: table.sym("pl_callback_80276910", table.GLOBL), # o callback
+    0x80276AA0: table.sym("pl_callback_80276AA0"),
+    0x80276BB8: table.sym("pl_callback_80276BB8", table.GLOBL), # o callback
+    0x80276CCC: table.sym("pl_callback_80276CCC", table.GLOBL), # o callback
+    0x80276F90: table.sym("pl_callback_80276F90"),
+    0x802770A4: table.sym("s_player_alpha",         table.GLOBL), # s callback
+    0x80277150: table.sym("s_player_select_lod",    table.GLOBL), # s callback
+    0x802771BC: table.sym("s_player_select_eye",    table.GLOBL), # s callback
+    0x80277294: table.sym("s_player_rot_torso",     table.GLOBL), # s callback
+    0x802773A4: table.sym("s_player_rot_head",      table.GLOBL), # s callback
+    0x802774F4: table.sym("s_player_select_glove",  table.GLOBL), # s callback
+    0x802775CC: table.sym("s_player_scale",         table.GLOBL), # s callback
+    0x802776D8: table.sym("s_player_select_cap",    table.GLOBL), # s callback
+    0x80277740: table.sym("s_player_select_head",   table.GLOBL), # s callback
+    0x80277824: table.sym("s_player_rot_wing",      table.GLOBL), # s callback
+    0x8027795C: table.sym("s_player_hand",          table.GLOBL), # s callback
+    0x80277B14: table.sym("s_inside_mirror",        table.GLOBL), # s callback
+    0x80277D6C: table.sym("s_player_mirror",        table.GLOBL), # s callback
 
     # src/mem.S
     0x80277EE0: table.sym_fnc("segment_set", "uintptr_t", (
@@ -2201,13 +3141,13 @@ sym_E0_t_main = {
     0x80278F2C: table.sym_fnc("gfx_alloc", "void *", (
         "size_t size",
     ), table.GLOBL),
-    0x80278FA0: table.sym_fnc("file_init_table", "struct file_meta *", (
+    0x80278FA0: table.sym_fnc("file_init_table", "struct file_table *", (
         "const u8 *src",
     )),
     0x80279028: table.sym_fnc("file_init", arg=(
         "struct file *file",
         "const u8 *src",
-        "u8 *dst",
+        "u8 *buf",
     ), flag=table.GLOBL),
     0x80279084: table.sym_fnc("file_update", "int", (
         "struct file *file",
@@ -2278,32 +3218,32 @@ sym_E0_t_main = {
     0x8027B35C: table.sym("world_8027B35C", table.GLOBL),
     0x8027B3B4: table.sym("world_draw", table.GLOBL),
 
-    # src/g_draw.S
-    0x8027B6C0: table.sym("g_draw_layer_draw"),
-    0x8027B904: table.sym("g_draw_layer_gfx"),
-    0x8027BA00: table.sym("g_draw_layer"),
-    0x8027BA98: table.sym("g_draw_ortho"),
-    0x8027BC74: table.sym("g_draw_perspective"),
-    0x8027BDF0: table.sym("g_draw_lod"),
-    0x8027BE84: table.sym("g_draw_select"),
-    0x8027BF58: table.sym("g_draw_camera"),
-    0x8027C114: table.sym("g_draw_posrot"),
-    0x8027C238: table.sym("g_draw_pos"),
-    0x8027C35C: table.sym("g_draw_rot"),
-    0x8027C474: table.sym("g_draw_scale"),
-    0x8027C594: table.sym("g_draw_billboard"),
-    0x8027C73C: table.sym("g_draw_gfx"),
-    0x8027C7A4: table.sym("g_draw_callback"),
-    0x8027C858: table.sym("g_draw_background"),
-    0x8027CA70: table.sym("g_draw_joint"),
-    0x8027CF38: table.sym("g_draw_object_skeleton"),
-    0x8027D0B8: table.sym("g_draw_shadow"),
-    0x8027D518: table.sym("g_draw_object_visible"),
-    0x8027D6FC: table.sym("g_draw_object"),
-    0x8027DA10: table.sym("g_draw_object_list"),
-    0x8027DA84: table.sym("g_draw_hand"),
-    0x8027DE68: table.sym("g_draw_child"),
-    0x8027DEA8: table.sym("g_draw_list"),
+    # src/shape_draw.S
+    0x8027B6C0: table.sym("shape_draw_layer_draw"),
+    0x8027B904: table.sym("shape_draw_layer_gfx"),
+    0x8027BA00: table.sym("shape_draw_layer"),
+    0x8027BA98: table.sym("shape_draw_ortho"),
+    0x8027BC74: table.sym("shape_draw_perspective"),
+    0x8027BDF0: table.sym("shape_draw_lod"),
+    0x8027BE84: table.sym("shape_draw_select"),
+    0x8027BF58: table.sym("shape_draw_camera"),
+    0x8027C114: table.sym("shape_draw_posrot"),
+    0x8027C238: table.sym("shape_draw_pos"),
+    0x8027C35C: table.sym("shape_draw_rot"),
+    0x8027C474: table.sym("shape_draw_scale"),
+    0x8027C594: table.sym("shape_draw_billboard"),
+    0x8027C73C: table.sym("shape_draw_gfx"),
+    0x8027C7A4: table.sym("shape_draw_callback"),
+    0x8027C858: table.sym("shape_draw_background"),
+    0x8027CA70: table.sym("shape_draw_joint"),
+    0x8027CF38: table.sym("shape_draw_object_skeleton"),
+    0x8027D0B8: table.sym("shape_draw_shadow"),
+    0x8027D518: table.sym("shape_draw_object_visible"),
+    0x8027D6FC: table.sym("shape_draw_object"),
+    0x8027DA10: table.sym("shape_draw_object_list"),
+    0x8027DA84: table.sym("shape_draw_hand"),
+    0x8027DE68: table.sym("shape_draw_child"),
+    0x8027DEA8: table.sym("shape_draw_list"),
     0x8027DF90: table.sym_fnc("L8027DF90", flag=table.GLOBL|table.LOCAL),
     0x8027DFA0: table.sym_fnc("L8027DFA0", flag=table.GLOBL|table.LOCAL),
     0x8027DFB0: table.sym_fnc("L8027DFB0", flag=table.GLOBL|table.LOCAL),
@@ -2324,7 +3264,7 @@ sym_E0_t_main = {
     0x8027E0A0: table.sym_fnc("L8027E0A0", flag=table.GLOBL|table.LOCAL),
     0x8027E0B0: table.sym_fnc("L8027E0B0", flag=table.GLOBL|table.LOCAL),
     0x8027E0C0: table.sym_fnc("L8027E0C0", flag=table.GLOBL|table.LOCAL),
-    0x8027E130: table.sym("g_draw_world", table.GLOBL),
+    0x8027E130: table.sym("shape_draw_world", table.GLOBL),
 
     # src/time.S
     0x8027E3E0: table.sym("time_8027E3E0", table.GLOBL),
@@ -2374,48 +3314,104 @@ sym_E0_t_main = {
     0x80280368: table.sym("camera_80280368"),
     0x802804F4: table.sym("camera_802804F4"),
     0x802806A4: table.sym("camera_802806A4"),
-    0x80280810: table.sym("camera_80280810", table.GLOBL), # data
-    0x80280970: table.sym("camera_80280970", table.GLOBL), # data
+    0x80280810: table.sym_fnc("camera_80280810", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
+    0x80280970: table.sym_fnc("camera_80280970", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80280B00: table.sym("camera_80280B00"),
     0x80281188: table.sym("camera_80281188"),
     0x802813BC: table.sym("camera_802813BC"),
     0x802813EC: table.sym("camera_802813EC"),
     0x8028146C: table.sym("camera_8028146C"),
     0x80281588: table.sym("camera_80281588"),
-    0x802816A0: table.sym("camera_802816A0", table.GLOBL), # data
+    0x802816A0: table.sym_fnc("camera_802816A0", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x802817FC: table.sym("camera_802817FC"),
-    0x80281904: table.sym("camera_80281904", table.GLOBL), # data
-    0x80282280: table.sym("camera_80282280", table.GLOBL), # data
-    0x802826A0: table.sym("camera_802826A0", table.GLOBL), # data
-    0x80282C0C: table.sym("camera_80282C0C", table.GLOBL), # data
+    0x80281904: table.sym_fnc("camera_80281904", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
+    0x80282280: table.sym_fnc("camera_80282280", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
+    0x802826A0: table.sym_fnc("camera_802826A0", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
+    0x80282C0C: table.sym_fnc("camera_80282C0C", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80282C28: table.sym("camera_80282C28"), # unused
     0x80282C3C: table.sym("camera_80282C3C"),
     0x80282C7C: table.sym("camera_80282C7C"),
     0x80282CE0: table.sym("camera_80282CE0"),
-    0x80282D78: table.sym("camera_80282D78", table.GLOBL), # data
+    0x80282D78: table.sym_fnc("camera_80282D78", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80283340: table.sym("camera_80283340"),
     0x80283578: table.sym("camera_80283578"),
     0x802839E4: table.sym("camera_802839E4"),
-    0x80283A18: table.sym("camera_80283A18", table.GLOBL), # data
+    0x80283A18: table.sym_fnc("camera_80283A18", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80283A34: table.sym("camera_80283A34"),
-    0x80283A68: table.sym("camera_80283A68", table.GLOBL), # data
+    0x80283A68: table.sym_fnc("camera_80283A68", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80283AF8: table.sym("camera_80283AF8"),
     0x80284CB8: table.sym("camera_80284CB8"),
     0x80284CFC: table.sym("camera_80284CFC"),
     0x80284D38: table.sym("camera_80284D38"),
-    0x80284D74: table.sym("camera_80284D74", table.GLOBL), # data
+    0x80284D74: table.sym_fnc("camera_80284D74", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x802850AC: table.sym("camera_802850AC"),
-    0x802850EC: table.sym("camera_802850EC", table.GLOBL), # data
+    0x802850EC: table.sym_fnc("camera_802850EC", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x8028517C: table.sym("camera_8028517C"), # unused
     0x802851DC: table.sym("camera_802851DC"),
     0x8028526C: table.sym("camera_8028526C"),
     0x802852F4: table.sym("camera_802852F4"),
     0x80285370: table.sym("camera_80285370"),
-    0x80285808: table.sym("camera_80285808", table.GLOBL), # data
+    0x80285808: table.sym_fnc("camera_80285808", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x802858A4: table.sym("camera_802858A4"),
     0x80285A2C: table.sym("camera_80285A2C"),
     0x80285D20: table.sym("camera_80285D20"),
-    0x80285ED8: table.sym("camera_80285ED8", table.GLOBL), # data
+    0x80285ED8: table.sym_fnc("camera_80285ED8", "int", (
+        "struct camera *cam",
+        "vecf",
+        "vecf",
+    ), table.GLOBL), # data / tbl
     0x80285F60: table.sym("camera_80285F60"),
     0x8028603C: table.sym("camera_8028603C"),
     0x80286088: table.sym("camera_80286088"),
@@ -2453,7 +3449,7 @@ sym_E0_t_main = {
     0x80287BC4: table.sym("camera_80287BC4", table.GLOBL),
     0x80287BE0: table.sym("camera_80287BE0"),
     0x80287CB8: table.sym("camera_80287CB8"),
-    0x80287D30: table.sym("g_stage_camera", table.GLOBL), # g callback
+    0x80287D30: table.sym("s_stage_camera", table.GLOBL), # s callback
     0x80287DC0: table.sym("camera_80287DC0"),
     0x80287DD4: table.sym("camera_80287DD4"),
     0x80287DE8: table.sym("camera_80287DE8"),
@@ -2566,69 +3562,191 @@ sym_E0_t_main = {
     0x8028D79C: table.sym("camera_8028D79C"),
     0x8028D888: table.sym("camera_8028D888"),
     0x8028D92C: table.sym("camera_8028D92C"),
-    0x8028DA18: table.sym("camera_8028DA18", table.GLOBL), # data
-    0x8028DA50: table.sym("camera_8028DA50", table.GLOBL), # data
-    0x8028DAEC: table.sym("camera_8028DAEC", table.GLOBL), # data
-    0x8028DB38: table.sym("camera_8028DB38", table.GLOBL), # data
-    0x8028DBB4: table.sym("camera_8028DBB4", table.GLOBL), # data
-    0x8028DBF4: table.sym("camera_8028DBF4", table.GLOBL), # data
-    0x8028DC1C: table.sym("camera_8028DC1C", table.GLOBL), # data
-    0x8028DC70: table.sym("camera_8028DC70", table.GLOBL), # data
+    0x8028DA18: table.sym_fnc("camera_8028DA18", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DA50: table.sym_fnc("camera_8028DA50", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DAEC: table.sym_fnc("camera_8028DAEC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DB38: table.sym_fnc("camera_8028DB38", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DBB4: table.sym_fnc("camera_8028DBB4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DBF4: table.sym_fnc("camera_8028DBF4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DC1C: table.sym_fnc("camera_8028DC1C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DC70: table.sym_fnc("camera_8028DC70", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
     0x8028DCA4: table.sym("camera_8028DCA4"),
-    0x8028DD48: table.sym("camera_8028DD48", table.GLOBL), # data
-    0x8028DE2C: table.sym("camera_8028DE2C", table.GLOBL), # data
-    0x8028DE5C: table.sym("camera_8028DE5C", table.GLOBL), # data
-    0x8028DE90: table.sym("camera_8028DE90", table.GLOBL), # data
-    0x8028DEC4: table.sym("camera_8028DEC4", table.GLOBL), # data
-    0x8028DEF8: table.sym("camera_8028DEF8", table.GLOBL), # data
-    0x8028DF24: table.sym("camera_8028DF24", table.GLOBL), # data
-    0x8028DF6C: table.sym("camera_8028DF6C", table.GLOBL), # data
-    0x8028DFB4: table.sym("camera_8028DFB4", table.GLOBL), # data
-    0x8028DFE8: table.sym("camera_8028DFE8", table.GLOBL), # data
-    0x8028E01C: table.sym("camera_8028E01C", table.GLOBL), # data
-    0x8028E064: table.sym("camera_8028E064", table.GLOBL), # data
-    0x8028E098: table.sym("camera_8028E098", table.GLOBL), # data
-    0x8028E0EC: table.sym("camera_8028E0EC", table.GLOBL), # data
-    0x8028E164: table.sym("camera_8028E164", table.GLOBL), # data
-    0x8028E210: table.sym("camera_8028E210", table.GLOBL), # data
-    0x8028E298: table.sym("camera_8028E298", table.GLOBL), # data
-    0x8028E300: table.sym("camera_8028E300", table.GLOBL), # data
+    0x8028DD48: table.sym_fnc("camera_8028DD48", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DE2C: table.sym_fnc("camera_8028DE2C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DE5C: table.sym_fnc("camera_8028DE5C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DE90: table.sym_fnc("camera_8028DE90", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DEC4: table.sym_fnc("camera_8028DEC4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DEF8: table.sym_fnc("camera_8028DEF8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DF24: table.sym_fnc("camera_8028DF24", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DF6C: table.sym_fnc("camera_8028DF6C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DFB4: table.sym_fnc("camera_8028DFB4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028DFE8: table.sym_fnc("camera_8028DFE8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E01C: table.sym_fnc("camera_8028E01C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E064: table.sym_fnc("camera_8028E064", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E098: table.sym_fnc("camera_8028E098", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E0EC: table.sym_fnc("camera_8028E0EC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E164: table.sym_fnc("camera_8028E164", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E210: table.sym_fnc("camera_8028E210", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E298: table.sym_fnc("camera_8028E298", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E300: table.sym_fnc("camera_8028E300", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
     0x8028E334: table.sym("camera_8028E334"), # unused
-    0x8028E38C: table.sym("camera_8028E38C", table.GLOBL), # data
-    0x8028E3B8: table.sym("camera_8028E3B8", table.GLOBL), # data
-    0x8028E3F0: table.sym("camera_8028E3F0", table.GLOBL), # data
-    0x8028E41C: table.sym("camera_8028E41C", table.GLOBL), # data
-    0x8028E450: table.sym("camera_8028E450", table.GLOBL), # data
-    0x8028E47C: table.sym("camera_8028E47C", table.GLOBL), # data
-    0x8028E524: table.sym("camera_8028E524", table.GLOBL), # data
-    0x8028E55C: table.sym("camera_8028E55C", table.GLOBL), # data
-    0x8028E594: table.sym("camera_8028E594", table.GLOBL), # data
-    0x8028E5CC: table.sym("camera_8028E5CC", table.GLOBL), # data
-    0x8028E604: table.sym("camera_8028E604", table.GLOBL), # data
-    0x8028E63C: table.sym("camera_8028E63C", table.GLOBL), # data
-    0x8028E674: table.sym("camera_8028E674", table.GLOBL), # data
-    0x8028E6C4: table.sym("camera_8028E6C4", table.GLOBL), # data
-    0x8028E714: table.sym("camera_8028E714", table.GLOBL), # data
-    0x8028E758: table.sym("camera_8028E758", table.GLOBL), # data
-    0x8028E790: table.sym("camera_8028E790", table.GLOBL), # data
-    0x8028E7C8: table.sym("camera_8028E7C8", table.GLOBL), # data
-    0x8028E818: table.sym("camera_8028E818", table.GLOBL), # data
-    0x8028E868: table.sym("camera_8028E868", table.GLOBL), # data
-    0x8028E8A0: table.sym("camera_8028E8A0", table.GLOBL), # data
-    0x8028E8CC: table.sym("camera_8028E8CC", table.GLOBL), # data
-    0x8028E930: table.sym("camera_8028E930", table.GLOBL), # data
-    0x8028E974: table.sym("camera_8028E974", table.GLOBL), # data
-    0x8028E9A0: table.sym("camera_8028E9A0", table.GLOBL), # data
-    0x8028E9D8: table.sym("camera_8028E9D8", table.GLOBL), # data
-    0x8028EA28: table.sym("camera_8028EA28", table.GLOBL), # data
-    0x8028EA60: table.sym("camera_8028EA60", table.GLOBL), # data
-    0x8028EAB0: table.sym("camera_8028EAB0", table.GLOBL), # data
-    0x8028EAE8: table.sym("camera_8028EAE8", table.GLOBL), # data
-    0x8028EB38: table.sym("camera_8028EB38", table.GLOBL), # data
-    0x8028EB88: table.sym("camera_8028EB88", table.GLOBL), # data
-    0x8028EBC0: table.sym("camera_8028EBC0", table.GLOBL), # data
-    0x8028EC04: table.sym("camera_8028EC04", table.GLOBL), # data
-    0x8028EC2C: table.sym("camera_8028EC2C", table.GLOBL), # data
+    0x8028E38C: table.sym_fnc("camera_8028E38C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E3B8: table.sym_fnc("camera_8028E3B8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E3F0: table.sym_fnc("camera_8028E3F0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E41C: table.sym_fnc("camera_8028E41C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E450: table.sym_fnc("camera_8028E450", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E47C: table.sym_fnc("camera_8028E47C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E524: table.sym_fnc("camera_8028E524", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E55C: table.sym_fnc("camera_8028E55C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E594: table.sym_fnc("camera_8028E594", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E5CC: table.sym_fnc("camera_8028E5CC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E604: table.sym_fnc("camera_8028E604", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E63C: table.sym_fnc("camera_8028E63C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E674: table.sym_fnc("camera_8028E674", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E6C4: table.sym_fnc("camera_8028E6C4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E714: table.sym_fnc("camera_8028E714", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E758: table.sym_fnc("camera_8028E758", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E790: table.sym_fnc("camera_8028E790", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E7C8: table.sym_fnc("camera_8028E7C8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E818: table.sym_fnc("camera_8028E818", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E868: table.sym_fnc("camera_8028E868", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E8A0: table.sym_fnc("camera_8028E8A0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E8CC: table.sym_fnc("camera_8028E8CC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E930: table.sym_fnc("camera_8028E930", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E974: table.sym_fnc("camera_8028E974", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E9A0: table.sym_fnc("camera_8028E9A0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028E9D8: table.sym_fnc("camera_8028E9D8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EA28: table.sym_fnc("camera_8028EA28", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EA60: table.sym_fnc("camera_8028EA60", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EAB0: table.sym_fnc("camera_8028EAB0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EAE8: table.sym_fnc("camera_8028EAE8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EB38: table.sym_fnc("camera_8028EB38", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EB88: table.sym_fnc("camera_8028EB88", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EBC0: table.sym_fnc("camera_8028EBC0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EC04: table.sym_fnc("camera_8028EC04", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
+    0x8028EC2C: table.sym_fnc("camera_8028EC2C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / ctl
     0x8028EC58: table.sym("camera_8028EC58"),
     0x8028ED30: table.sym("camera_8028ED30"),
     0x8028ED98: table.sym("camera_8028ED98"),
@@ -2650,7 +3768,9 @@ sym_E0_t_main = {
     0x802901FC: table.sym("camera_802901FC"),
     0x802903B8: table.sym("camera_802903B8"),
     0x8029040C: table.sym("camera_8029040C"), # unused
-    0x80290440: table.sym("camera_80290440", table.GLOBL), # data
+    0x80290440: table.sym_fnc("camera_80290440", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80290474: table.sym("camera_80290474"), # unused
     0x802904A8: table.sym("camera_802904A8"),
     0x802904E4: table.sym("camera_802904E4"),
@@ -2670,34 +3790,62 @@ sym_E0_t_main = {
     0x80290BA4: table.sym("camera_80290BA4"),
     0x80290BD8: table.sym("camera_80290BD8"),
     0x80290C08: table.sym("camera_80290C08"), # unused
-    0x80290C1C: table.sym("camera_80290C1C", table.GLOBL), # data
-    0x80290C30: table.sym("camera_80290C30", table.GLOBL), # data
+    0x80290C1C: table.sym_fnc("camera_80290C1C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80290C30: table.sym_fnc("camera_80290C30", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80290C44: table.sym("camera_80290C44"),
     0x80290C9C: table.sym("camera_80290C9C"),
-    0x80290D90: table.sym("camera_80290D90", table.GLOBL), # data
-    0x80290E00: table.sym("camera_80290E00", table.GLOBL), # data
+    0x80290D90: table.sym_fnc("camera_80290D90", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80290E00: table.sym_fnc("camera_80290E00", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80290E74: table.sym("camera_80290E74"),
     0x80290EB0: table.sym("camera_80290EB0"),
-    0x80290F1C: table.sym("camera_80290F1C", table.GLOBL), # data
-    0x80290F8C: table.sym("camera_80290F8C", table.GLOBL), # data
+    0x80290F1C: table.sym_fnc("camera_80290F1C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80290F8C: table.sym_fnc("camera_80290F8C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80291074: table.sym("camera_80291074"),
-    0x80291108: table.sym("camera_80291108", table.GLOBL), # data
+    0x80291108: table.sym_fnc("camera_80291108", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802911C8: table.sym("camera_802911C8"),
     0x80291208: table.sym("camera_80291208"),
     0x8029127C: table.sym("camera_8029127C"),
     0x802912B8: table.sym("camera_802912B8"),
-    0x80291354: table.sym("camera_80291354", table.GLOBL), # data
-    0x8029142C: table.sym("camera_8029142C", table.GLOBL), # data
+    0x80291354: table.sym_fnc("camera_80291354", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x8029142C: table.sym_fnc("camera_8029142C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802914CC: table.sym("camera_802914CC"),
-    0x80291514: table.sym("camera_80291514", table.GLOBL), # data
-    0x802915D4: table.sym("camera_802915D4", table.GLOBL), # data
+    0x80291514: table.sym_fnc("camera_80291514", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802915D4: table.sym_fnc("camera_802915D4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80291654: table.sym("camera_80291654"),
     0x802916B8: table.sym("camera_802916B8"),
-    0x80291774: table.sym("camera_80291774", table.GLOBL), # data
+    0x80291774: table.sym_fnc("camera_80291774", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802917E4: table.sym("camera_802917E4"),
     0x8029184C: table.sym("camera_8029184C"),
-    0x80291870: table.sym("camera_80291870", table.GLOBL), # data
-    0x80291924: table.sym("camera_80291924", table.GLOBL), # data
+    0x80291870: table.sym_fnc("camera_80291870", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80291924: table.sym_fnc("camera_80291924", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80291964: table.sym("camera_80291964"),
     0x802919DC: table.sym("camera_802919DC"),
     0x80291AB4: table.sym("camera_80291AB4"),
@@ -2705,12 +3853,16 @@ sym_E0_t_main = {
     0x80291B68: table.sym("camera_80291B68"),
     0x80291BF4: table.sym("camera_80291BF4"),
     0x80291C3C: table.sym("camera_80291C3C"),
-    0x80291CD0: table.sym("camera_80291CD0", table.GLOBL), # data
+    0x80291CD0: table.sym_fnc("camera_80291CD0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80291DB0: table.sym("camera_80291DB0"),
     0x80291E84: table.sym("camera_80291E84"),
     0x80291F18: table.sym("camera_80291F18"),
     0x80292038: table.sym("camera_80292038"),
-    0x80292164: table.sym("camera_80292164", table.GLOBL), # data
+    0x80292164: table.sym_fnc("camera_80292164", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802921FC: table.sym("camera_802921FC"),
     0x8029228C: table.sym("camera_8029228C"),
     0x80292324: table.sym("camera_80292324"),
@@ -2720,7 +3872,9 @@ sym_E0_t_main = {
     0x80292414: table.sym("camera_80292414"),
     0x8029244C: table.sym("camera_8029244C"),
     0x80292484: table.sym("camera_80292484"),
-    0x802924B8: table.sym("camera_802924B8", table.GLOBL), # data
+    0x802924B8: table.sym_fnc("camera_802924B8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80292628: table.sym("camera_80292628"),
     0x802926DC: table.sym("camera_802926DC"),
     0x802927D0: table.sym("camera_802927D0"),
@@ -2728,7 +3882,9 @@ sym_E0_t_main = {
     0x80292974: table.sym("camera_80292974"),
     0x80292A20: table.sym("camera_80292A20"),
     0x80292A4C: table.sym("camera_80292A4C"),
-    0x80292A80: table.sym("camera_80292A80", table.GLOBL), # data
+    0x80292A80: table.sym_fnc("camera_80292A80", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80292C00: table.sym("camera_80292C00"),
     0x80292D80: table.sym("camera_80292D80"),
     0x80292E2C: table.sym("camera_80292E2C"),
@@ -2736,7 +3892,9 @@ sym_E0_t_main = {
     0x80292F40: table.sym("camera_80292F40"),
     0x80292F98: table.sym("camera_80292F98"),
     0x80292FE4: table.sym("camera_80292FE4"),
-    0x80293018: table.sym("camera_80293018", table.GLOBL), # data
+    0x80293018: table.sym_fnc("camera_80293018", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802930F0: table.sym("camera_802930F0"),
     0x80293164: table.sym("camera_80293164"),
     0x802931C0: table.sym("camera_802931C0"),
@@ -2745,7 +3903,9 @@ sym_E0_t_main = {
     0x802932F4: table.sym("camera_802932F4"),
     0x80293328: table.sym("camera_80293328"),
     0x80293354: table.sym("camera_80293354"),
-    0x8029338C: table.sym("camera_8029338C", table.GLOBL), # data
+    0x8029338C: table.sym_fnc("camera_8029338C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80293488: table.sym("camera_80293488"),
     0x802934B4: table.sym("camera_802934B4"),
     0x802934D8: table.sym("camera_802934D8"),
@@ -2757,59 +3917,97 @@ sym_E0_t_main = {
     0x80293708: table.sym("camera_80293708"),
     0x80293734: table.sym("camera_80293734"),
     0x802937E8: table.sym("camera_802937E8"),
-    0x8029386C: table.sym("camera_8029386C", table.GLOBL), # data
-    0x802938C8: table.sym("camera_802938C8", table.GLOBL), # data
-    0x80293944: table.sym("camera_80293944", table.GLOBL), # data
+    0x8029386C: table.sym_fnc("camera_8029386C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802938C8: table.sym_fnc("camera_802938C8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80293944: table.sym_fnc("camera_80293944", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80293ABC: table.sym("camera_80293ABC"),
     0x80293AE8: table.sym("camera_80293AE8"),
     0x80293B70: table.sym("camera_80293B70"),
     0x80293BF4: table.sym("camera_80293BF4"),
-    0x80293C2C: table.sym("camera_80293C2C", table.GLOBL), # data
-    0x80293CB0: table.sym("camera_80293CB0", table.GLOBL), # data
-    0x80293D5C: table.sym("camera_80293D5C", table.GLOBL), # data
+    0x80293C2C: table.sym_fnc("camera_80293C2C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80293CB0: table.sym_fnc("camera_80293CB0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80293D5C: table.sym_fnc("camera_80293D5C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80293D90: table.sym("camera_80293D90"),
     0x80293DD4: table.sym("camera_80293DD4"),
-    0x80293E7C: table.sym("camera_80293E7C", table.GLOBL), # data
-    0x80293ED8: table.sym("camera_80293ED8", table.GLOBL), # data
+    0x80293E7C: table.sym_fnc("camera_80293E7C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80293ED8: table.sym_fnc("camera_80293ED8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80293F2C: table.sym("camera_80293F2C"),
-    0x80293F70: table.sym("camera_80293F70", table.GLOBL), # data
+    0x80293F70: table.sym_fnc("camera_80293F70", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80293FCC: table.sym("camera_80293FCC"),
     0x80294024: table.sym("camera_80294024"),
     0x80294088: table.sym("camera_80294088"),
     0x802940CC: table.sym("camera_802940CC"),
     0x8029410C: table.sym("camera_8029410C"),
     0x802942CC: table.sym("camera_802942CC"),
-    0x802942F0: table.sym("camera_802942F0", table.GLOBL), # data
-    0x802943D4: table.sym("camera_802943D4", table.GLOBL), # data
+    0x802942F0: table.sym_fnc("camera_802942F0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802943D4: table.sym_fnc("camera_802943D4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80294428: table.sym("camera_80294428"),
     0x80294718: table.sym("camera_80294718"),
     0x802947A4: table.sym("camera_802947A4"),
     0x8029480C: table.sym("camera_8029480C"),
     0x802948A0: table.sym("camera_802948A0"),
-    0x80294A14: table.sym("camera_80294A14", table.GLOBL), # data
-    0x80294A94: table.sym("camera_80294A94", table.GLOBL), # data
+    0x80294A14: table.sym_fnc("camera_80294A14", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80294A94: table.sym_fnc("camera_80294A94", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80294AE8: table.sym("camera_80294AE8"),
     0x80294B78: table.sym("camera_80294B78"),
     0x80294BB4: table.sym("camera_80294BB4"),
     0x80294C28: table.sym("camera_80294C28"),
-    0x80294C5C: table.sym("camera_80294C5C", table.GLOBL), # data
+    0x80294C5C: table.sym_fnc("camera_80294C5C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80294CC4: table.sym("camera_80294CC4"),
     0x80294D48: table.sym("camera_80294D48"),
     0x80294D88: table.sym("camera_80294D88"), # unused
-    0x80294DB4: table.sym("camera_80294DB4", table.GLOBL), # data
+    0x80294DB4: table.sym_fnc("camera_80294DB4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80294E24: table.sym("camera_80294E24"),
     0x80294EA8: table.sym("camera_80294EA8"),
-    0x80294EE8: table.sym("camera_80294EE8", table.GLOBL), # data
+    0x80294EE8: table.sym_fnc("camera_80294EE8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80294F58: table.sym("camera_80294F58"),
     0x80294F94: table.sym("camera_80294F94"),
-    0x80294FEC: table.sym("camera_80294FEC", table.GLOBL), # data
+    0x80294FEC: table.sym_fnc("camera_80294FEC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802950B0: table.sym("camera_802950B0"),
     0x80295140: table.sym("camera_80295140"),
     0x802951F0: table.sym("camera_802951F0"),
-    0x80295270: table.sym("camera_80295270", table.GLOBL), # data
+    0x80295270: table.sym_fnc("camera_80295270", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80295310: table.sym("camera_80295310"),
     0x802953DC: table.sym("camera_802953DC"),
-    0x80295418: table.sym("camera_80295418", table.GLOBL), # data
+    0x80295418: table.sym_fnc("camera_80295418", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80295480: table.sym("camera_80295480"),
     0x802954EC: table.sym("camera_802954EC"),
     0x80295518: table.sym("camera_80295518"),
@@ -2817,36 +4015,64 @@ sym_E0_t_main = {
     0x80295670: table.sym("camera_80295670"),
     0x80295740: table.sym("camera_80295740"),
     0x8029576C: table.sym("camera_8029576C"),
-    0x802957C8: table.sym("camera_802957C8", table.GLOBL), # data
-    0x80295894: table.sym("camera_80295894", table.GLOBL), # data
+    0x802957C8: table.sym_fnc("camera_802957C8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80295894: table.sym_fnc("camera_80295894", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802958D4: table.sym("camera_802958D4"),
-    0x80295930: table.sym("camera_80295930", table.GLOBL), # data
+    0x80295930: table.sym_fnc("camera_80295930", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802959CC: table.sym("camera_802959CC"), # unused
     0x80295A58: table.sym("camera_80295A58"),
     0x80295BF0: table.sym("camera_80295BF0"),
     0x80295E24: table.sym("camera_80295E24"),
-    0x80295E8C: table.sym("camera_80295E8C", table.GLOBL), # data
-    0x80295FB0: table.sym("camera_80295FB0", table.GLOBL), # data
-    0x80295FD8: table.sym("camera_80295FD8", table.GLOBL), # data
+    0x80295E8C: table.sym_fnc("camera_80295E8C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80295FB0: table.sym_fnc("camera_80295FB0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80295FD8: table.sym_fnc("camera_80295FD8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80296020: table.sym("camera_80296020"),
     0x802960B0: table.sym("camera_802960B0"), # unused
-    0x80296160: table.sym("camera_80296160", table.GLOBL), # data
-    0x802962C8: table.sym("camera_802962C8", table.GLOBL), # data
-    0x802962F0: table.sym("camera_802962F0", table.GLOBL), # data
+    0x80296160: table.sym_fnc("camera_80296160", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802962C8: table.sym_fnc("camera_802962C8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802962F0: table.sym_fnc("camera_802962F0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80296318: table.sym("camera_80296318"),
     0x802963B8: table.sym("camera_802963B8"),
     0x8029652C: table.sym("camera_8029652C"),
     0x8029665C: table.sym("camera_8029665C"),
     0x8029669C: table.sym("camera_8029669C"),
     0x802966E4: table.sym("camera_802966E4"),
-    0x80296710: table.sym("camera_80296710", table.GLOBL), # data
-    0x802967C4: table.sym("camera_802967C4", table.GLOBL), # data
+    0x80296710: table.sym_fnc("camera_80296710", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802967C4: table.sym_fnc("camera_802967C4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x8029685C: table.sym("camera_8029685C"),
-    0x802968A0: table.sym("camera_802968A0", table.GLOBL), # data
+    0x802968A0: table.sym_fnc("camera_802968A0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x8029695C: table.sym("camera_8029695C"),
-    0x802969F8: table.sym("camera_802969F8", table.GLOBL), # data
+    0x802969F8: table.sym_fnc("camera_802969F8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80296A64: table.sym("camera_80296A64"),
-    0x80296B30: table.sym("camera_80296B30", table.GLOBL), # data
+    0x80296B30: table.sym_fnc("camera_80296B30", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80296BC8: table.sym("camera_80296BC8"),
     0x80296C4C: table.sym("camera_80296C4C"),
     0x80296D60: table.sym("camera_80296D60"),
@@ -2854,19 +4080,25 @@ sym_E0_t_main = {
     0x80296EB4: table.sym("camera_80296EB4"),
     0x80296F38: table.sym("camera_80296F38"),
     0x80296F70: table.sym("camera_80296F70"), # unused
-    0x80296FA8: table.sym("camera_80296FA8", table.GLOBL), # data
+    0x80296FA8: table.sym_fnc("camera_80296FA8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80297148: table.sym("camera_80297148"),
     0x8029720C: table.sym("camera_8029720C"),
     0x80297290: table.sym("camera_80297290"),
     0x802972EC: table.sym("camera_802972EC"),
     0x80297300: table.sym("camera_80297300"),
     0x80297384: table.sym("camera_80297384"),
-    0x802973B0: table.sym("camera_802973B0", table.GLOBL), # data
+    0x802973B0: table.sym_fnc("camera_802973B0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80297464: table.sym("camera_80297464"),
     0x80297560: table.sym("camera_80297560"),
     0x8029758C: table.sym("camera_8029758C"),
     0x802975C4: table.sym("camera_802975C4"),
-    0x8029762C: table.sym("camera_8029762C", table.GLOBL), # data
+    0x8029762C: table.sym_fnc("camera_8029762C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802976BC: table.sym("camera_802976BC"),
     0x80297728: table.sym("camera_80297728"),
     0x80297748: table.sym("camera_80297748"),
@@ -2874,14 +4106,26 @@ sym_E0_t_main = {
     0x802977C8: table.sym("camera_802977C8"),
     0x802977F4: table.sym("camera_802977F4"),
     0x80297820: table.sym("camera_80297820"),
-    0x8029784C: table.sym("camera_8029784C", table.GLOBL), # data
-    0x80297908: table.sym("camera_80297908", table.GLOBL), # data
-    0x80297A38: table.sym("camera_80297A38", table.GLOBL), # data
-    0x80297A64: table.sym("camera_80297A64", table.GLOBL), # data
+    0x8029784C: table.sym_fnc("camera_8029784C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80297908: table.sym_fnc("camera_80297908", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80297A38: table.sym_fnc("camera_80297A38", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80297A64: table.sym_fnc("camera_80297A64", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80297B58: table.sym("camera_80297B58"),
-    0x80297B84: table.sym("camera_80297B84", table.GLOBL), # data
+    0x80297B84: table.sym_fnc("camera_80297B84", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80297C14: table.sym("camera_80297C14"),
-    0x80297C40: table.sym("camera_80297C40", table.GLOBL), # data
+    0x80297C40: table.sym_fnc("camera_80297C40", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x80297D60: table.sym_fnc("L80297D60", flag=table.GLOBL|table.LOCAL),
     0x80297DA0: table.sym_fnc("L80297DA0", flag=table.GLOBL|table.LOCAL),
     0x80297E00: table.sym_fnc("L80297E00", flag=table.GLOBL|table.LOCAL),
@@ -2898,27 +4142,61 @@ sym_E0_t_main = {
     0x80298218: table.sym("camera_80298218"),
     0x80298254: table.sym("camera_80298254"),
     0x80298290: table.sym("camera_80298290"),
-    0x802983B4: table.sym("camera_802983B4", table.GLOBL), # data
-    0x80298458: table.sym("camera_80298458", table.GLOBL), # data
+    0x802983B4: table.sym_fnc("camera_802983B4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298458: table.sym_fnc("camera_80298458", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802984A0: table.sym("camera_802984A0"),
-    0x802984B4: table.sym("camera_802984B4", table.GLOBL), # data
+    0x802984B4: table.sym_fnc("camera_802984B4", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802987B0: table.sym("camera_802987B0"),
     0x8029894C: table.sym("camera_8029894C"),
     0x802989E8: table.sym("camera_802989E8"),
-    0x80298AF8: table.sym("camera_80298AF8", table.GLOBL), # data
-    0x80298BA0: table.sym("camera_80298BA0", table.GLOBL), # data
-    0x80298C2C: table.sym("camera_80298C2C", table.GLOBL), # data
-    0x80298CCC: table.sym("camera_80298CCC", table.GLOBL), # data
-    0x80298D44: table.sym("camera_80298D44", table.GLOBL), # data
-    0x80298D9C: table.sym("camera_80298D9C", table.GLOBL), # data
-    0x80298FE8: table.sym("camera_80298FE8", table.GLOBL), # data
-    0x80299100: table.sym("camera_80299100", table.GLOBL), # data
-    0x80299154: table.sym("camera_80299154", table.GLOBL), # data
-    0x802991A8: table.sym("camera_802991A8", table.GLOBL), # data
-    0x802991F0: table.sym("camera_802991F0", table.GLOBL), # data
-    0x802992CC: table.sym("camera_802992CC", table.GLOBL), # data
-    0x80299360: table.sym("camera_80299360", table.GLOBL), # data
-    0x80299404: table.sym("camera_80299404", table.GLOBL), # data
+    0x80298AF8: table.sym_fnc("camera_80298AF8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298BA0: table.sym_fnc("camera_80298BA0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298C2C: table.sym_fnc("camera_80298C2C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298CCC: table.sym_fnc("camera_80298CCC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298D44: table.sym_fnc("camera_80298D44", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298D9C: table.sym_fnc("camera_80298D9C", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80298FE8: table.sym_fnc("camera_80298FE8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80299100: table.sym_fnc("camera_80299100", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80299154: table.sym_fnc("camera_80299154", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802991A8: table.sym_fnc("camera_802991A8", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802991F0: table.sym_fnc("camera_802991F0", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x802992CC: table.sym_fnc("camera_802992CC", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80299360: table.sym_fnc("camera_80299360", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
+    0x80299404: table.sym_fnc("camera_80299404", arg=(
+        "struct camera *cam",
+    ), flag=table.GLOBL), # data / demo
     0x802994E8: table.sym("camera_802994E8"),
     0x8029956C: table.sym_fnc("L8029956C", flag=table.GLOBL|table.LOCAL),
     0x802995B4: table.sym_fnc("L802995B4", flag=table.GLOBL|table.LOCAL),
@@ -2984,7 +4262,7 @@ sym_E0_t_main = {
     0x8029A8D0: table.sym("camera_8029A8D0"),
     0x8029A968: table.sym("camera_8029A968"),
     0x8029A9A4: table.sym("camera_8029A9A4"),
-    0x8029AA3C: table.sym("g_stage_perspective", table.GLOBL), # g callback
+    0x8029AA3C: table.sym("s_stage_perspective", table.GLOBL), # s callback
     0x8029AAAC: table.sym_fnc("L8029AAAC", flag=table.GLOBL|table.LOCAL),
     0x8029AABC: table.sym_fnc("L8029AABC", flag=table.GLOBL|table.LOCAL),
     0x8029AACC: table.sym_fnc("L8029AACC", flag=table.GLOBL|table.LOCAL),
@@ -3041,241 +4319,241 @@ sym_E0_t_main = {
     0x8029D4D0: table.sym("object_8029D4D0"), # unused
     0x8029D690: table.sym("object_8029D690", table.GLOBL),
 
-    # src/object_lib.S
-    0x8029D890: table.sym("object_lib_8029D890", table.GLOBL), # g callback
-    0x8029D924: table.sym("object_lib_8029D924", table.GLOBL), # g callback
-    0x8029DB48: table.sym("object_lib_8029DB48", table.GLOBL), # g callback
-    0x8029DBD4: table.sym("object_lib_8029DBD4", table.GLOBL), # g callback
-    0x8029DCD4: table.sym("object_lib_8029DCD4", table.GLOBL),
-    0x8029DDA8: table.sym("object_lib_8029DDA8", table.GLOBL),
-    0x8029DE80: table.sym("object_lib_8029DE80", table.GLOBL),
-    0x8029E1B0: table.sym("object_lib_8029E1B0", table.GLOBL),
-    0x8029E27C: table.sym("object_lib_8029E27C", table.GLOBL),
-    0x8029E2F8: table.sym("object_lib_8029E2F8", table.GLOBL),
-    0x8029E398: table.sym("object_lib_8029E398", table.GLOBL),
-    0x8029E3E8: table.sym("object_lib_8029E3E8", table.GLOBL),
-    0x8029E494: table.sym("object_lib_8029E494", table.GLOBL),
-    0x8029E530: table.sym("object_lib_8029E530", table.GLOBL),
-    0x8029E5EC: table.sym("object_lib_8029E5EC", table.GLOBL),
-    0x8029E694: table.sym("object_lib_8029E694", table.GLOBL),
-    0x8029E714: table.sym("object_lib_8029E714", table.GLOBL),
-    0x8029E8BC: table.sym("object_lib_8029E8BC", table.GLOBL),
-    0x8029E914: table.sym("object_lib_8029E914", table.GLOBL),
-    0x8029E96C: table.sym("object_lib_8029E96C", table.GLOBL),
-    0x8029E9AC: table.sym("object_lib_8029E9AC", table.GLOBL),
-    0x8029EA24: table.sym("object_lib_8029EA24", table.GLOBL),
-    0x8029EAAC: table.sym("object_lib_8029EAAC"), # unused
-    0x8029EB04: table.sym("object_lib_8029EB04", table.GLOBL),
-    0x8029ED20: table.sym("object_lib_8029ED20", table.GLOBL),
-    0x8029EDCC: table.sym("object_lib_8029EDCC", table.GLOBL),
-    0x8029EE24: table.sym("object_lib_8029EE24", table.GLOBL),
-    0x8029EEB8: table.sym("object_lib_8029EEB8", table.GLOBL),
-    0x8029EF20: table.sym("object_lib_8029EF20"),
-    0x8029EF64: table.sym("object_lib_8029EF64", table.GLOBL),
-    0x8029EFFC: table.sym("object_lib_8029EFFC", table.GLOBL),
-    0x8029F070: table.sym("object_lib_8029F070"), # unused
-    0x8029F0C8: table.sym("object_lib_8029F0C8", table.GLOBL),
-    0x8029F0E0: table.sym("object_lib_8029F0E0", table.GLOBL),
-    0x8029F120: table.sym("object_lib_8029F120", table.GLOBL),
-    0x8029F148: table.sym("object_lib_8029F148"),
-    0x8029F188: table.sym("object_lib_8029F188", table.GLOBL),
-    0x8029F1B0: table.sym("object_lib_8029F1B0"), # unused
-    0x8029F200: table.sym("object_lib_8029F200", table.GLOBL),
-    0x8029F274: table.sym("object_lib_8029F274", table.GLOBL),
-    0x8029F2EC: table.sym("object_lib_8029F2EC"),
-    0x8029F3A8: table.sym("object_lib_8029F3A8", table.GLOBL),
-    0x8029F3D0: table.sym("object_lib_8029F3D0", table.GLOBL),
-    0x8029F404: table.sym("object_lib_8029F404", table.GLOBL),
-    0x8029F430: table.sym("object_lib_8029F430", table.GLOBL),
-    0x8029F464: table.sym("object_lib_8029F464", table.GLOBL),
-    0x8029F4B4: table.sym("object_lib_8029F4B4", table.GLOBL),
-    0x8029F514: table.sym("object_lib_8029F514", table.GLOBL),
-    0x8029F59C: table.sym("object_lib_8029F59C", table.GLOBL),
-    0x8029F600: table.sym("object_lib_8029F600"), # unused
-    0x8029F620: table.sym("object_lib_8029F620", table.GLOBL),
-    0x8029F644: table.sym("object_lib_8029F644"), # unused
-    0x8029F66C: table.sym("object_lib_8029F66C", table.GLOBL),
-    0x8029F694: table.sym("object_lib_8029F694", table.GLOBL),
-    0x8029F6BC: table.sym("object_lib_8029F6BC", table.GLOBL),
-    0x8029F6E0: table.sym("object_lib_8029F6E0", table.GLOBL),
-    0x8029F7D8: table.sym("object_lib_8029F7D8"),
-    0x8029F820: table.sym("object_lib_8029F820", table.GLOBL),
-    0x8029F848: table.sym("object_lib_8029F848"), # unused
-    0x8029F8EC: table.sym("object_lib_8029F8EC", table.GLOBL),
-    0x8029F914: table.sym("object_lib_8029F914", table.GLOBL),
-    0x8029F95C: table.sym("object_lib_8029F95C", table.GLOBL),
-    0x8029F998: table.sym("object_lib_8029F998", table.GLOBL),
-    0x8029F9EC: table.sym("object_lib_8029F9EC", table.GLOBL),
-    0x8029FB1C: table.sym("object_lib_8029FB1C", table.GLOBL),
-    0x8029FB68: table.sym("object_lib_8029FB68"), # unused
-    0x8029FBDC: table.sym("object_lib_8029FBDC", table.GLOBL),
-    0x8029FC9C: table.sym("object_lib_8029FC9C", table.GLOBL),
-    0x8029FD8C: table.sym("object_lib_8029FD8C"),
-    0x8029FDB4: table.sym("object_lib_8029FDB4", table.GLOBL),
-    0x8029FE00: table.sym("object_lib_8029FE00", table.GLOBL),
-    0x8029FE6C: table.sym("object_lib_8029FE6C", table.GLOBL),
-    0x8029FEA4: table.sym("object_lib_8029FEA4", table.GLOBL),
-    0x8029FF04: table.sym("object_lib_8029FF04", table.GLOBL),
-    0x8029FFA4: table.sym("object_lib_8029FFA4", table.GLOBL),
-    0x802A0008: table.sym("object_lib_802A0008", table.GLOBL),
-    0x802A0050: table.sym("object_lib_802A0050", table.GLOBL),
-    0x802A00AC: table.sym("object_lib_802A00AC"), # unused
-    0x802A0114: table.sym("object_lib_802A0114", table.GLOBL),
-    0x802A0154: table.sym("object_lib_802A0154", table.GLOBL),
-    0x802A0198: table.sym("object_lib_802A0198", table.GLOBL),
-    0x802A01D8: table.sym("object_lib_802A01D8", table.GLOBL),
-    0x802A0234: table.sym("object_lib_802A0234"),
-    0x802A0380: table.sym("object_lib_802A0380", table.GLOBL),
-    0x802A0474: table.sym("object_lib_802A0474", table.GLOBL),
-    0x802A04C0: table.sym("object_lib_802A04C0", table.GLOBL),
-    0x802A04F0: table.sym("object_lib_802A04F0"), # unused
-    0x802A0514: table.sym("object_lib_802A0514", table.GLOBL),
-    0x802A0568: table.sym("object_lib_802A0568", table.GLOBL),
-    0x802A057C: table.sym("object_lib_802A057C", table.GLOBL),
-    0x802A05B4: table.sym("object_lib_802A05B4", table.GLOBL),
-    0x802A05D4: table.sym("object_lib_802A05D4", table.GLOBL),
-    0x802A05F0: table.sym("object_lib_802A05F0", table.GLOBL),
-    0x802A0604: table.sym("object_lib_802A0604", table.GLOBL),
-    0x802A064C: table.sym("object_lib_802A064C", table.GLOBL),
-    0x802A069C: table.sym("object_lib_802A069C"),
-    0x802A079C: table.sym("object_lib_802A079C", table.GLOBL),
-    0x802A07E8: table.sym("object_lib_802A07E8"),
-    0x802A0AB0: table.sym("object_lib_802A0AB0"),
-    0x802A0BDC: table.sym("object_lib_802A0BDC"),
-    0x802A0D84: table.sym("object_lib_802A0D84"),
-    0x802A0E68: table.sym("object_lib_802A0E68", table.GLOBL),
-    0x802A10E0: table.sym("object_lib_802A10E0"), # unused
-    0x802A10F0: table.sym("object_lib_802A10F0"),
-    0x802A113C: table.sym("object_lib_802A113C"), # unused
-    0x802A11A8: table.sym("object_lib_802A11A8", table.GLOBL),
-    0x802A120C: table.sym("object_lib_802A120C", table.GLOBL),
-    0x802A12A4: table.sym("object_lib_802A12A4", table.GLOBL),
-    0x802A1308: table.sym("object_lib_802A1308", table.GLOBL), # o callback
-    0x802A1370: table.sym("object_lib_802A1370", table.GLOBL),
-    0x802A1424: table.sym("object_lib_802A1424", table.GLOBL),
-    0x802A148C: table.sym("object_lib_802A148C", table.GLOBL),
-    0x802A14C4: table.sym("object_lib_802A14C4", table.GLOBL),
-    0x802A14FC: table.sym("object_lib_802A14FC", table.GLOBL),
-    0x802A1554: table.sym("object_lib_802A1554", table.GLOBL),
-    0x802A15AC: table.sym("object_lib_802A15AC", table.GLOBL),
-    0x802A1634: table.sym("object_lib_802A1634", table.GLOBL),
-    0x802A16AC: table.sym("object_lib_802A16AC"), # unused
-    0x802A1774: table.sym("object_lib_802A1774"), # unused
-    0x802A184C: table.sym("object_lib_802A184C", table.GLOBL),
-    0x802A188C: table.sym("object_lib_802A188C", table.GLOBL),
-    0x802A18DC: table.sym("object_lib_802A18DC", table.GLOBL),
-    0x802A1930: table.sym("object_lib_802A1930", table.GLOBL),
-    0x802A1960: table.sym("object_lib_802A1960"), # unused
-    0x802A19AC: table.sym("object_lib_802A19AC", table.GLOBL),
-    0x802A19C8: table.sym("object_lib_802A19C8", table.GLOBL),
-    0x802A19F0: table.sym("object_lib_802A19F0", table.GLOBL),
-    0x802A1A18: table.sym("object_lib_802A1A18"),
-    0x802A1B34: table.sym("object_lib_802A1B34"),
-    0x802A1B8C: table.sym("object_lib_802A1B8C", table.GLOBL),
-    0x802A1BDC: table.sym("object_lib_802A1BDC", table.GLOBL),
-    0x802A1C68: table.sym("object_lib_802A1C68"), # unused
-    0x802A1CC4: table.sym("object_lib_802A1CC4"), # unused
-    0x802A1D7C: table.sym("object_lib_802A1D7C"),
-    0x802A1F3C: table.sym("object_lib_802A1F3C", table.GLOBL),
-    0x802A20F4: table.sym("object_lib_802A20F4"),
-    0x802A21D4: table.sym("object_lib_802A21D4"),
-    0x802A2320: table.sym("object_lib_802A2320", table.GLOBL), # o callback
-    0x802A2348: table.sym("object_lib_802A2348", table.GLOBL),
-    0x802A24D0: table.sym("object_lib_802A24D0"),
-    0x802A25B4: table.sym("object_lib_802A25B4", table.GLOBL),
-    0x802A2644: table.sym("object_lib_802A2644", table.GLOBL), # o callback
-    0x802A2674: table.sym("object_lib_802A2674"), # unused
-    0x802A2748: table.sym("object_lib_802A2748", table.GLOBL),
-    0x802A27B0: table.sym("object_lib_802A27B0", table.GLOBL),
-    0x802A2804: table.sym("object_lib_802A2804", table.GLOBL),
-    0x802A2930: table.sym("object_lib_802A2930", table.GLOBL),
-    0x802A2A18: table.sym("object_lib_802A2A18", table.GLOBL),
-    0x802A2A84: table.sym("object_lib_802A2A84", table.GLOBL),
-    0x802A2B28: table.sym("object_lib_802A2B28"), # unused
-    0x802A2B6C: table.sym("object_lib_802A2B6C"), # unused
-    0x802A2BC4: table.sym("object_lib_802A2BC4", table.GLOBL), # o callback
-    0x802A2C1C: table.sym("object_lib_802A2C1C"), # unused
-    0x802A2C5C: table.sym("object_lib_802A2C5C", table.GLOBL),
-    0x802A2ED4: table.sym("object_lib_802A2ED4", table.GLOBL),
-    0x802A2F14: table.sym("object_lib_802A2F14", table.GLOBL),
-    0x802A2F5C: table.sym("object_lib_802A2F5C", table.GLOBL),
-    0x802A2FC0: table.sym("object_lib_802A2FC0", table.GLOBL),
-    0x802A308C: table.sym("object_lib_802A308C", table.GLOBL),
-    0x802A3124: table.sym("object_lib_802A3124"),
-    0x802A31E0: table.sym("object_lib_802A31E0", table.GLOBL),
-    0x802A3268: table.sym("object_lib_802A3268", table.GLOBL),
-    0x802A32AC: table.sym("object_lib_802A32AC", table.GLOBL),
-    0x802A34A4: table.sym("object_lib_802A34A4", table.GLOBL),
-    0x802A3604: table.sym("object_lib_802A3604", table.GLOBL),
-    0x802A3634: table.sym("object_lib_802A3634", table.GLOBL),
-    0x802A3674: table.sym("object_lib_802A3674", table.GLOBL),
-    0x802A36A4: table.sym("object_lib_802A36A4", table.GLOBL),
-    0x802A3754: table.sym("object_lib_802A3754", table.GLOBL),
-    0x802A37AC: table.sym("object_lib_802A37AC", table.GLOBL),
-    0x802A37DC: table.sym("object_lib_802A37DC", table.GLOBL),
-    0x802A3818: table.sym("object_lib_802A3818", table.GLOBL),
-    0x802A390C: table.sym("object_lib_802A390C", table.GLOBL),
-    0x802A399C: table.sym("object_lib_802A399C", table.GLOBL), # o callback
-    0x802A3A3C: table.sym("object_lib_802A3A3C"), # unused
-    0x802A3A4C: table.sym("object_lib_802A3A4C", table.GLOBL),
-    0x802A3A88: table.sym("object_lib_802A3A88", table.GLOBL),
-    0x802A3B28: table.sym("object_lib_802A3B28"), # unused
-    0x802A3B40: table.sym("object_lib_802A3B40", table.GLOBL),
-    0x802A3C18: table.sym("object_lib_802A3C18", table.GLOBL),
-    0x802A3CEC: table.sym("object_lib_802A3CEC"), # unused
-    0x802A3CFC: table.sym("object_lib_802A3CFC", table.GLOBL),
-    0x802A3D40: table.sym("object_lib_802A3D40"), # unused
-    0x802A3DD4: table.sym("object_lib_802A3DD4", table.GLOBL),
-    0x802A3E30: table.sym("object_lib_802A3E30", table.GLOBL),
-    0x802A3E80: table.sym("object_lib_802A3E80"),
-    0x802A3EF8: table.sym("object_lib_802A3EF8"), # unused
-    0x802A3F24: table.sym("object_lib_802A3F24", table.GLOBL),
-    0x802A3F48: table.sym("object_lib_802A3F48", table.GLOBL),
-    0x802A404C: table.sym("object_lib_802A404C", table.GLOBL),
-    0x802A40B8: table.sym("object_lib_802A40B8", table.GLOBL),
-    0x802A4110: table.sym("object_lib_802A4110"), # unused
-    0x802A4120: table.sym("object_lib_802A4120", table.GLOBL), # o callback
-    0x802A4210: table.sym("object_lib_802A4210", table.GLOBL),
-    0x802A4360: table.sym("object_lib_802A4360", table.GLOBL),
-    0x802A4440: table.sym("object_lib_802A4440", table.GLOBL),
-    0x802A44F4: table.sym("object_lib_802A44F4", table.GLOBL),
-    0x802A452C: table.sym("object_lib_802A452C", table.GLOBL),
-    0x802A4564: table.sym("object_lib_802A4564", table.GLOBL),
-    0x802A45E4: table.sym("object_lib_802A45E4", table.GLOBL), # g callback
-    0x802A462C: table.sym("object_lib_802A462C"), # unused
-    0x802A46CC: table.sym("object_lib_802A46CC", table.GLOBL),
-    0x802A4704: table.sym("object_lib_802A4704", table.GLOBL),
-    0x802A4728: table.sym("object_lib_802A4728", table.GLOBL),
-    0x802A4750: table.sym("object_lib_802A4750", table.GLOBL),
-    0x802A4774: table.sym("object_lib_802A4774", table.GLOBL),
-    0x802A47A0: table.sym("object_lib_802A47A0", table.GLOBL),
-    0x802A48BC: table.sym("object_lib_802A48BC", table.GLOBL),
-    0x802A48FC: table.sym("object_lib_802A48FC"),
-    0x802A4960: table.sym("object_lib_802A4960", table.GLOBL),
+    # src/obj_lib.S
+    0x8029D890: table.sym("s_obj_lib_8029D890", table.GLOBL), # s callback
+    0x8029D924: table.sym("s_obj_lib_8029D924", table.GLOBL), # s callback
+    0x8029DB48: table.sym("s_obj_lib_8029DB48", table.GLOBL), # s callback
+    0x8029DBD4: table.sym("s_obj_lib_8029DBD4", table.GLOBL), # s callback
+    0x8029DCD4: table.sym("obj_lib_8029DCD4", table.GLOBL),
+    0x8029DDA8: table.sym("obj_lib_8029DDA8", table.GLOBL),
+    0x8029DE80: table.sym("obj_lib_8029DE80", table.GLOBL),
+    0x8029E1B0: table.sym("obj_lib_8029E1B0", table.GLOBL),
+    0x8029E27C: table.sym("obj_lib_8029E27C", table.GLOBL),
+    0x8029E2F8: table.sym("obj_lib_8029E2F8", table.GLOBL),
+    0x8029E398: table.sym("obj_lib_8029E398", table.GLOBL),
+    0x8029E3E8: table.sym("obj_lib_8029E3E8", table.GLOBL),
+    0x8029E494: table.sym("obj_lib_8029E494", table.GLOBL),
+    0x8029E530: table.sym("obj_lib_8029E530", table.GLOBL),
+    0x8029E5EC: table.sym("obj_lib_8029E5EC", table.GLOBL),
+    0x8029E694: table.sym("obj_lib_8029E694", table.GLOBL),
+    0x8029E714: table.sym("obj_lib_8029E714", table.GLOBL),
+    0x8029E8BC: table.sym("obj_lib_8029E8BC", table.GLOBL),
+    0x8029E914: table.sym("obj_lib_8029E914", table.GLOBL),
+    0x8029E96C: table.sym("obj_lib_8029E96C", table.GLOBL),
+    0x8029E9AC: table.sym("obj_lib_8029E9AC", table.GLOBL),
+    0x8029EA24: table.sym("obj_lib_8029EA24", table.GLOBL),
+    0x8029EAAC: table.sym("obj_lib_8029EAAC"), # unused
+    0x8029EB04: table.sym("obj_lib_8029EB04", table.GLOBL),
+    0x8029ED20: table.sym("obj_lib_8029ED20", table.GLOBL),
+    0x8029EDCC: table.sym("obj_lib_8029EDCC", table.GLOBL),
+    0x8029EE24: table.sym("obj_lib_8029EE24", table.GLOBL),
+    0x8029EEB8: table.sym("obj_lib_8029EEB8", table.GLOBL),
+    0x8029EF20: table.sym("obj_lib_8029EF20"),
+    0x8029EF64: table.sym("obj_lib_8029EF64", table.GLOBL),
+    0x8029EFFC: table.sym("obj_lib_8029EFFC", table.GLOBL),
+    0x8029F070: table.sym("obj_lib_8029F070"), # unused
+    0x8029F0C8: table.sym("obj_lib_8029F0C8", table.GLOBL),
+    0x8029F0E0: table.sym("obj_lib_8029F0E0", table.GLOBL),
+    0x8029F120: table.sym("obj_lib_8029F120", table.GLOBL),
+    0x8029F148: table.sym("obj_lib_8029F148"),
+    0x8029F188: table.sym("obj_lib_8029F188", table.GLOBL),
+    0x8029F1B0: table.sym("obj_lib_8029F1B0"), # unused
+    0x8029F200: table.sym("obj_lib_8029F200", table.GLOBL),
+    0x8029F274: table.sym("obj_lib_8029F274", table.GLOBL),
+    0x8029F2EC: table.sym("obj_lib_8029F2EC"),
+    0x8029F3A8: table.sym("obj_lib_8029F3A8", table.GLOBL),
+    0x8029F3D0: table.sym("obj_lib_8029F3D0", table.GLOBL),
+    0x8029F404: table.sym("obj_lib_8029F404", table.GLOBL),
+    0x8029F430: table.sym("obj_lib_8029F430", table.GLOBL),
+    0x8029F464: table.sym("obj_lib_8029F464", table.GLOBL),
+    0x8029F4B4: table.sym("obj_lib_8029F4B4", table.GLOBL),
+    0x8029F514: table.sym("obj_lib_8029F514", table.GLOBL),
+    0x8029F59C: table.sym("obj_lib_8029F59C", table.GLOBL),
+    0x8029F600: table.sym("obj_lib_8029F600"), # unused
+    0x8029F620: table.sym("obj_lib_8029F620", table.GLOBL),
+    0x8029F644: table.sym("obj_lib_8029F644"), # unused
+    0x8029F66C: table.sym("obj_lib_8029F66C", table.GLOBL),
+    0x8029F694: table.sym("obj_lib_8029F694", table.GLOBL),
+    0x8029F6BC: table.sym("obj_lib_8029F6BC", table.GLOBL),
+    0x8029F6E0: table.sym("obj_lib_8029F6E0", table.GLOBL),
+    0x8029F7D8: table.sym("obj_lib_8029F7D8"),
+    0x8029F820: table.sym("obj_lib_8029F820", table.GLOBL),
+    0x8029F848: table.sym("obj_lib_8029F848"), # unused
+    0x8029F8EC: table.sym("obj_lib_8029F8EC", table.GLOBL),
+    0x8029F914: table.sym("obj_lib_8029F914", table.GLOBL),
+    0x8029F95C: table.sym("obj_lib_8029F95C", table.GLOBL),
+    0x8029F998: table.sym("obj_lib_8029F998", table.GLOBL),
+    0x8029F9EC: table.sym("obj_lib_8029F9EC", table.GLOBL),
+    0x8029FB1C: table.sym("obj_lib_8029FB1C", table.GLOBL),
+    0x8029FB68: table.sym("obj_lib_8029FB68"), # unused
+    0x8029FBDC: table.sym("obj_lib_8029FBDC", table.GLOBL),
+    0x8029FC9C: table.sym("obj_lib_8029FC9C", table.GLOBL),
+    0x8029FD8C: table.sym("obj_lib_8029FD8C"),
+    0x8029FDB4: table.sym("obj_lib_8029FDB4", table.GLOBL),
+    0x8029FE00: table.sym("obj_lib_8029FE00", table.GLOBL),
+    0x8029FE6C: table.sym("obj_lib_8029FE6C", table.GLOBL),
+    0x8029FEA4: table.sym("obj_lib_8029FEA4", table.GLOBL),
+    0x8029FF04: table.sym("obj_lib_8029FF04", table.GLOBL),
+    0x8029FFA4: table.sym("obj_lib_8029FFA4", table.GLOBL),
+    0x802A0008: table.sym("obj_lib_802A0008", table.GLOBL),
+    0x802A0050: table.sym("obj_lib_802A0050", table.GLOBL),
+    0x802A00AC: table.sym("obj_lib_802A00AC"), # unused
+    0x802A0114: table.sym("obj_lib_802A0114", table.GLOBL),
+    0x802A0154: table.sym("obj_lib_802A0154", table.GLOBL),
+    0x802A0198: table.sym("obj_lib_802A0198", table.GLOBL),
+    0x802A01D8: table.sym("obj_lib_802A01D8", table.GLOBL),
+    0x802A0234: table.sym("obj_lib_802A0234"),
+    0x802A0380: table.sym("obj_lib_802A0380", table.GLOBL),
+    0x802A0474: table.sym("obj_lib_802A0474", table.GLOBL),
+    0x802A04C0: table.sym("obj_lib_802A04C0", table.GLOBL),
+    0x802A04F0: table.sym("obj_lib_802A04F0"), # unused
+    0x802A0514: table.sym("obj_lib_802A0514", table.GLOBL),
+    0x802A0568: table.sym("obj_lib_802A0568", table.GLOBL),
+    0x802A057C: table.sym("obj_lib_802A057C", table.GLOBL),
+    0x802A05B4: table.sym("obj_lib_802A05B4", table.GLOBL),
+    0x802A05D4: table.sym("obj_lib_802A05D4", table.GLOBL),
+    0x802A05F0: table.sym("obj_lib_802A05F0", table.GLOBL),
+    0x802A0604: table.sym("obj_lib_802A0604", table.GLOBL),
+    0x802A064C: table.sym("obj_lib_802A064C", table.GLOBL),
+    0x802A069C: table.sym("obj_lib_802A069C"),
+    0x802A079C: table.sym("obj_lib_802A079C", table.GLOBL),
+    0x802A07E8: table.sym("obj_lib_802A07E8"),
+    0x802A0AB0: table.sym("obj_lib_802A0AB0"),
+    0x802A0BDC: table.sym("obj_lib_802A0BDC"),
+    0x802A0D84: table.sym("obj_lib_802A0D84"),
+    0x802A0E68: table.sym("obj_lib_802A0E68", table.GLOBL),
+    0x802A10E0: table.sym("obj_lib_802A10E0"), # unused
+    0x802A10F0: table.sym("obj_lib_802A10F0"),
+    0x802A113C: table.sym("obj_lib_802A113C"), # unused
+    0x802A11A8: table.sym("obj_lib_802A11A8", table.GLOBL),
+    0x802A120C: table.sym("obj_lib_802A120C", table.GLOBL),
+    0x802A12A4: table.sym("obj_lib_802A12A4", table.GLOBL),
+    0x802A1308: table.sym("obj_lib_802A1308", table.GLOBL), # o callback
+    0x802A1370: table.sym("obj_lib_802A1370", table.GLOBL),
+    0x802A1424: table.sym("obj_lib_802A1424", table.GLOBL),
+    0x802A148C: table.sym("obj_lib_802A148C", table.GLOBL),
+    0x802A14C4: table.sym("obj_lib_802A14C4", table.GLOBL),
+    0x802A14FC: table.sym("obj_lib_802A14FC", table.GLOBL),
+    0x802A1554: table.sym("obj_lib_802A1554", table.GLOBL),
+    0x802A15AC: table.sym("obj_lib_802A15AC", table.GLOBL),
+    0x802A1634: table.sym("obj_lib_802A1634", table.GLOBL),
+    0x802A16AC: table.sym("obj_lib_802A16AC"), # unused
+    0x802A1774: table.sym("obj_lib_802A1774"), # unused
+    0x802A184C: table.sym("obj_lib_802A184C", table.GLOBL),
+    0x802A188C: table.sym("obj_lib_802A188C", table.GLOBL),
+    0x802A18DC: table.sym("obj_lib_802A18DC", table.GLOBL),
+    0x802A1930: table.sym("obj_lib_802A1930", table.GLOBL),
+    0x802A1960: table.sym("obj_lib_802A1960"), # unused
+    0x802A19AC: table.sym("obj_lib_802A19AC", table.GLOBL),
+    0x802A19C8: table.sym("obj_lib_802A19C8", table.GLOBL),
+    0x802A19F0: table.sym("obj_lib_802A19F0", table.GLOBL),
+    0x802A1A18: table.sym("obj_lib_802A1A18"),
+    0x802A1B34: table.sym("obj_lib_802A1B34"),
+    0x802A1B8C: table.sym("obj_lib_802A1B8C", table.GLOBL),
+    0x802A1BDC: table.sym("obj_lib_802A1BDC", table.GLOBL),
+    0x802A1C68: table.sym("obj_lib_802A1C68"), # unused
+    0x802A1CC4: table.sym("obj_lib_802A1CC4"), # unused
+    0x802A1D7C: table.sym("obj_lib_802A1D7C"),
+    0x802A1F3C: table.sym("obj_lib_802A1F3C", table.GLOBL),
+    0x802A20F4: table.sym("obj_lib_802A20F4"),
+    0x802A21D4: table.sym("obj_lib_802A21D4"),
+    0x802A2320: table.sym("obj_lib_802A2320", table.GLOBL), # o callback
+    0x802A2348: table.sym("obj_lib_802A2348", table.GLOBL),
+    0x802A24D0: table.sym("obj_lib_802A24D0"),
+    0x802A25B4: table.sym("obj_lib_802A25B4", table.GLOBL),
+    0x802A2644: table.sym("obj_lib_802A2644", table.GLOBL), # o callback
+    0x802A2674: table.sym("obj_lib_802A2674"), # unused
+    0x802A2748: table.sym("obj_lib_802A2748", table.GLOBL),
+    0x802A27B0: table.sym("obj_lib_802A27B0", table.GLOBL),
+    0x802A2804: table.sym("obj_lib_802A2804", table.GLOBL),
+    0x802A2930: table.sym("obj_lib_802A2930", table.GLOBL),
+    0x802A2A18: table.sym("obj_lib_802A2A18", table.GLOBL),
+    0x802A2A84: table.sym("obj_lib_802A2A84", table.GLOBL),
+    0x802A2B28: table.sym("obj_lib_802A2B28"), # unused
+    0x802A2B6C: table.sym("obj_lib_802A2B6C"), # unused
+    0x802A2BC4: table.sym("obj_lib_802A2BC4", table.GLOBL), # o callback
+    0x802A2C1C: table.sym("obj_lib_802A2C1C"), # unused
+    0x802A2C5C: table.sym("obj_lib_802A2C5C", table.GLOBL),
+    0x802A2ED4: table.sym("obj_lib_802A2ED4", table.GLOBL),
+    0x802A2F14: table.sym("obj_lib_802A2F14", table.GLOBL),
+    0x802A2F5C: table.sym("obj_lib_802A2F5C", table.GLOBL),
+    0x802A2FC0: table.sym("obj_lib_802A2FC0", table.GLOBL),
+    0x802A308C: table.sym("obj_lib_802A308C", table.GLOBL),
+    0x802A3124: table.sym("obj_lib_802A3124"),
+    0x802A31E0: table.sym("obj_lib_802A31E0", table.GLOBL),
+    0x802A3268: table.sym("obj_lib_802A3268", table.GLOBL),
+    0x802A32AC: table.sym("obj_lib_802A32AC", table.GLOBL),
+    0x802A34A4: table.sym("obj_lib_802A34A4", table.GLOBL),
+    0x802A3604: table.sym("obj_lib_802A3604", table.GLOBL),
+    0x802A3634: table.sym("obj_lib_802A3634", table.GLOBL),
+    0x802A3674: table.sym("obj_lib_802A3674", table.GLOBL),
+    0x802A36A4: table.sym("obj_lib_802A36A4", table.GLOBL),
+    0x802A3754: table.sym("obj_lib_802A3754", table.GLOBL),
+    0x802A37AC: table.sym("obj_lib_802A37AC", table.GLOBL),
+    0x802A37DC: table.sym("obj_lib_802A37DC", table.GLOBL),
+    0x802A3818: table.sym("obj_lib_802A3818", table.GLOBL),
+    0x802A390C: table.sym("obj_lib_802A390C", table.GLOBL),
+    0x802A399C: table.sym("obj_lib_802A399C", table.GLOBL), # o callback
+    0x802A3A3C: table.sym("obj_lib_802A3A3C"), # unused
+    0x802A3A4C: table.sym("obj_lib_802A3A4C", table.GLOBL),
+    0x802A3A88: table.sym("obj_lib_802A3A88", table.GLOBL),
+    0x802A3B28: table.sym("obj_lib_802A3B28"), # unused
+    0x802A3B40: table.sym("obj_lib_802A3B40", table.GLOBL),
+    0x802A3C18: table.sym("obj_lib_802A3C18", table.GLOBL),
+    0x802A3CEC: table.sym("obj_lib_802A3CEC"), # unused
+    0x802A3CFC: table.sym("obj_lib_802A3CFC", table.GLOBL),
+    0x802A3D40: table.sym("obj_lib_802A3D40"), # unused
+    0x802A3DD4: table.sym("obj_lib_802A3DD4", table.GLOBL),
+    0x802A3E30: table.sym("obj_lib_802A3E30", table.GLOBL),
+    0x802A3E80: table.sym("obj_lib_802A3E80"),
+    0x802A3EF8: table.sym("obj_lib_802A3EF8"), # unused
+    0x802A3F24: table.sym("obj_lib_802A3F24", table.GLOBL),
+    0x802A3F48: table.sym("obj_lib_802A3F48", table.GLOBL),
+    0x802A404C: table.sym("obj_lib_802A404C", table.GLOBL),
+    0x802A40B8: table.sym("obj_lib_802A40B8", table.GLOBL),
+    0x802A4110: table.sym("obj_lib_802A4110"), # unused
+    0x802A4120: table.sym("obj_lib_802A4120", table.GLOBL), # o callback
+    0x802A4210: table.sym("obj_lib_802A4210", table.GLOBL),
+    0x802A4360: table.sym("obj_lib_802A4360", table.GLOBL),
+    0x802A4440: table.sym("obj_lib_802A4440", table.GLOBL),
+    0x802A44F4: table.sym("obj_lib_802A44F4", table.GLOBL),
+    0x802A452C: table.sym("obj_lib_802A452C", table.GLOBL),
+    0x802A4564: table.sym("obj_lib_802A4564", table.GLOBL),
+    0x802A45E4: table.sym("s_obj_lib_802A45E4", table.GLOBL), # s callback
+    0x802A462C: table.sym("obj_lib_802A462C"), # unused
+    0x802A46CC: table.sym("obj_lib_802A46CC", table.GLOBL),
+    0x802A4704: table.sym("obj_lib_802A4704", table.GLOBL),
+    0x802A4728: table.sym("obj_lib_802A4728", table.GLOBL),
+    0x802A4750: table.sym("obj_lib_802A4750", table.GLOBL),
+    0x802A4774: table.sym("obj_lib_802A4774", table.GLOBL),
+    0x802A47A0: table.sym("obj_lib_802A47A0", table.GLOBL),
+    0x802A48BC: table.sym("obj_lib_802A48BC", table.GLOBL),
+    0x802A48FC: table.sym("obj_lib_802A48FC"),
+    0x802A4960: table.sym("obj_lib_802A4960", table.GLOBL),
     0x802A49B4: table.sym_fnc("L802A49B4", flag=table.GLOBL|table.LOCAL),
     0x802A4A28: table.sym_fnc("L802A4A28", flag=table.GLOBL|table.LOCAL),
     0x802A4A58: table.sym_fnc("L802A4A58", flag=table.GLOBL|table.LOCAL),
     0x802A4AAC: table.sym_fnc("L802A4AAC", flag=table.GLOBL|table.LOCAL),
     0x802A4B30: table.sym_fnc("L802A4B30", flag=table.GLOBL|table.LOCAL),
-    0x802A4BE4: table.sym("object_lib_802A4BE4", table.GLOBL),
-    0x802A4F04: table.sym("object_lib_802A4F04", table.GLOBL),
-    0x802A4F58: table.sym("object_lib_802A4F58", table.GLOBL),
-    0x802A5034: table.sym("object_lib_802A5034"), # unused
-    0x802A50FC: table.sym("object_lib_802A50FC", table.GLOBL),
-    0x802A513C: table.sym("object_lib_802A513C", table.GLOBL),
-    0x802A51AC: table.sym("object_lib_802A51AC", table.GLOBL),
-    0x802A5228: table.sym("object_lib_802A5228", table.GLOBL),
-    0x802A5248: table.sym("object_lib_802A5248", table.GLOBL),
-    0x802A5288: table.sym("object_lib_802A5288", table.GLOBL),
-    0x802A52C4: table.sym("object_lib_802A52C4", table.GLOBL),
-    0x802A52F8: table.sym("object_lib_802A52F8", table.GLOBL),
-    0x802A5358: table.sym("object_lib_802A5358", table.GLOBL),
-    0x802A540C: table.sym("object_lib_802A540C"), # unused
-    0x802A5460: table.sym("object_lib_802A5460"), # unused
-    0x802A5498: table.sym("object_lib_802A5498", table.GLOBL),
-    0x802A54D8: table.sym("object_lib_802A54D8", table.GLOBL),
-    0x802A5524: table.sym("object_lib_802A5524", table.GLOBL),
-    0x802A5588: table.sym("object_lib_802A5588", table.GLOBL),
+    0x802A4BE4: table.sym("obj_lib_802A4BE4", table.GLOBL),
+    0x802A4F04: table.sym("obj_lib_802A4F04", table.GLOBL),
+    0x802A4F58: table.sym("obj_lib_802A4F58", table.GLOBL),
+    0x802A5034: table.sym("obj_lib_802A5034"), # unused
+    0x802A50FC: table.sym("obj_lib_802A50FC", table.GLOBL),
+    0x802A513C: table.sym("obj_lib_802A513C", table.GLOBL),
+    0x802A51AC: table.sym("obj_lib_802A51AC", table.GLOBL),
+    0x802A5228: table.sym("obj_lib_802A5228", table.GLOBL),
+    0x802A5248: table.sym("obj_lib_802A5248", table.GLOBL),
+    0x802A5288: table.sym("obj_lib_802A5288", table.GLOBL),
+    0x802A52C4: table.sym("obj_lib_802A52C4", table.GLOBL),
+    0x802A52F8: table.sym("obj_lib_802A52F8", table.GLOBL),
+    0x802A5358: table.sym("obj_lib_802A5358", table.GLOBL),
+    0x802A540C: table.sym("obj_lib_802A540C"), # unused
+    0x802A5460: table.sym("obj_lib_802A5460"), # unused
+    0x802A5498: table.sym("obj_lib_802A5498", table.GLOBL),
+    0x802A54D8: table.sym("obj_lib_802A54D8", table.GLOBL),
+    0x802A5524: table.sym("obj_lib_802A5524", table.GLOBL),
+    0x802A5588: table.sym("obj_lib_802A5588", table.GLOBL),
 
     # src/object_a.S
     0x802A5620: table.sym("object_a_802A5620"),
@@ -3286,37 +4564,37 @@ sym_E0_t_main = {
     0x802A5824: table.sym_fnc("L802A5824", flag=table.GLOBL|table.LOCAL),
     0x802A58A4: table.sym_fnc("L802A58A4", flag=table.GLOBL|table.LOCAL),
     0x802A58DC: table.sym("object_a_802A58DC", table.GLOBL), # o callback
-    0x802A597C: table.sym("object_a_802A597C", table.GLOBL), # data
-    0x802A5A44: table.sym("object_a_802A5A44", table.GLOBL), # data
+    0x802A597C: table.sym_fnc("object_a_802A597C", flag=table.GLOBL), # data
+    0x802A5A44: table.sym_fnc("object_a_802A5A44", flag=table.GLOBL), # data
     0x802A5AA0: table.sym("object_a_802A5AA0", table.GLOBL), # o callback
     0x802A5ACC: table.sym("object_a_802A5ACC"),
     0x802A5BD4: table.sym("object_a_802A5BD4", table.GLOBL), # o callback
-    0x802A5D4C: table.sym("object_a_802A5D4C", table.GLOBL), # data
-    0x802A6518: table.sym("object_a_802A6518", table.GLOBL), # data
-    0x802A68A0: table.sym("object_a_802A68A0", table.GLOBL), # data
-    0x802A6AD8: table.sym("object_a_802A6AD8", table.GLOBL), # data
+    0x802A5D4C: table.sym_fnc("object_a_802A5D4C", flag=table.GLOBL), # data
+    0x802A6518: table.sym_fnc("object_a_802A6518", flag=table.GLOBL), # data
+    0x802A68A0: table.sym_fnc("object_a_802A68A0", flag=table.GLOBL), # data
+    0x802A6AD8: table.sym_fnc("object_a_802A6AD8", flag=table.GLOBL), # data
     0x802A6B7C: table.sym("object_a_802A6B7C", table.GLOBL), # o callback
     0x802A6C20: table.sym("object_a_802A6C20", table.GLOBL), # o callback
     0x802A6C74: table.sym("object_a_802A6C74", table.GLOBL), # o callback
     0x802A6CF4: table.sym("object_a_802A6CF4", table.GLOBL), # o callback
     0x802A6D64: table.sym("object_a_802A6D64", table.GLOBL), # o callback
-    0x802A6EE4: table.sym("object_a_802A6EE4", table.GLOBL), # data
-    0x802A7020: table.sym("object_a_802A7020", table.GLOBL), # data
-    0x802A708C: table.sym("object_a_802A708C", table.GLOBL), # data
-    0x802A7160: table.sym("object_a_802A7160", table.GLOBL), # data
+    0x802A6EE4: table.sym_fnc("object_a_802A6EE4", flag=table.GLOBL), # data
+    0x802A7020: table.sym_fnc("object_a_802A7020", flag=table.GLOBL), # data
+    0x802A708C: table.sym_fnc("object_a_802A708C", flag=table.GLOBL), # data
+    0x802A7160: table.sym_fnc("object_a_802A7160", flag=table.GLOBL), # data
     0x802A7170: table.sym("object_a_802A7170", table.GLOBL), # o callback
-    0x802A719C: table.sym("object_a_802A719C", table.GLOBL), # g callback
+    0x802A719C: table.sym("s_object_a_802A719C", table.GLOBL), # s callback
     0x802A7230: table.sym("object_a_802A7230", table.GLOBL), # o callback
-    0x802A7264: table.sym("object_a_802A7264", table.GLOBL), # data
+    0x802A7264: table.sym_fnc("object_a_802A7264", flag=table.GLOBL), # data
     0x802A7384: table.sym("object_a_802A7384"),
-    0x802A73D8: table.sym("object_a_802A73D8", table.GLOBL), # data
-    0x802A7598: table.sym("object_a_802A7598", table.GLOBL), # data
-    0x802A7804: table.sym("object_a_802A7804", table.GLOBL), # data
-    0x802A78D8: table.sym("object_a_802A78D8", table.GLOBL), # data
-    0x802A7A60: table.sym("object_a_802A7A60", table.GLOBL), # data
-    0x802A7B1C: table.sym("object_a_802A7B1C", table.GLOBL), # data
-    0x802A7B5C: table.sym("object_a_802A7B5C", table.GLOBL), # data
-    0x802A7D14: table.sym("object_a_802A7D14", table.GLOBL), # data
+    0x802A73D8: table.sym_fnc("object_a_802A73D8", flag=table.GLOBL), # data
+    0x802A7598: table.sym_fnc("object_a_802A7598", flag=table.GLOBL), # data
+    0x802A7804: table.sym_fnc("object_a_802A7804", flag=table.GLOBL), # data
+    0x802A78D8: table.sym_fnc("object_a_802A78D8", flag=table.GLOBL), # data
+    0x802A7A60: table.sym_fnc("object_a_802A7A60", flag=table.GLOBL), # data
+    0x802A7B1C: table.sym_fnc("object_a_802A7B1C", flag=table.GLOBL), # data
+    0x802A7B5C: table.sym_fnc("object_a_802A7B5C", flag=table.GLOBL), # data
+    0x802A7D14: table.sym_fnc("object_a_802A7D14", flag=table.GLOBL), # data
     0x802A7D4C: table.sym_fnc("L802A7D4C", flag=table.GLOBL|table.LOCAL),
     0x802A7E08: table.sym_fnc("L802A7E08", flag=table.GLOBL|table.LOCAL),
     0x802A7EDC: table.sym_fnc("L802A7EDC", flag=table.GLOBL|table.LOCAL),
@@ -3340,23 +4618,23 @@ sym_E0_t_main = {
     0x802A8CDC: table.sym("object_a_802A8CDC", table.GLOBL), # o callback
     0x802A8D48: table.sym("object_a_802A8D48", table.GLOBL), # o callback
     0x802A8D98: table.sym("object_a_802A8D98", table.GLOBL), # o callback
-    0x802A8DC0: table.sym("object_a_802A8DC0", table.GLOBL), # data
-    0x802A8F40: table.sym("object_a_802A8F40", table.GLOBL), # data
-    0x802A9114: table.sym("object_a_802A9114", table.GLOBL), # data
-    0x802A92FC: table.sym("object_a_802A92FC", table.GLOBL), # data
-    0x802A93F8: table.sym("object_a_802A93F8", table.GLOBL), # data
-    0x802A9440: table.sym("object_a_802A9440", table.GLOBL), # data
-    0x802A9460: table.sym("object_a_802A9460", table.GLOBL), # data
+    0x802A8DC0: table.sym_fnc("object_a_802A8DC0", flag=table.GLOBL), # data
+    0x802A8F40: table.sym_fnc("object_a_802A8F40", flag=table.GLOBL), # data
+    0x802A9114: table.sym_fnc("object_a_802A9114", flag=table.GLOBL), # data
+    0x802A92FC: table.sym_fnc("object_a_802A92FC", flag=table.GLOBL), # data
+    0x802A93F8: table.sym_fnc("object_a_802A93F8", flag=table.GLOBL), # data
+    0x802A9440: table.sym_fnc("object_a_802A9440", flag=table.GLOBL), # data
+    0x802A9460: table.sym_fnc("object_a_802A9460", flag=table.GLOBL), # data
     0x802A9498: table.sym("object_a_802A9498", table.GLOBL), # o callback
     0x802A94F8: table.sym("object_a_802A94F8", table.GLOBL), # o callback
     0x802A958C: table.sym("object_a_802A958C"),
     0x802A9708: table.sym("object_a_802A9708", table.GLOBL), # o callback
     0x802A973C: table.sym("object_a_802A973C"), # unused
     0x802A98C4: table.sym("object_a_802A98C4"),
-    0x802A9994: table.sym("object_a_802A9994", table.GLOBL), # data
-    0x802A9D08: table.sym("object_a_802A9D08", table.GLOBL), # data
-    0x802A9F54: table.sym("object_a_802A9F54", table.GLOBL), # data
-    0x802A9FC8: table.sym("object_a_802A9FC8", table.GLOBL), # data
+    0x802A9994: table.sym_fnc("object_a_802A9994", flag=table.GLOBL), # data
+    0x802A9D08: table.sym_fnc("object_a_802A9D08", flag=table.GLOBL), # data
+    0x802A9F54: table.sym_fnc("object_a_802A9F54", flag=table.GLOBL), # data
+    0x802A9FC8: table.sym_fnc("object_a_802A9FC8", flag=table.GLOBL), # data
     0x802AA02C: table.sym("object_a_802AA02C"),
     0x802AA0AC: table.sym("object_a_802AA0AC", table.GLOBL), # o callback
     0x802AA1B8: table.sym("object_a_802AA1B8", table.GLOBL), # o callback
@@ -3394,8 +4672,8 @@ sym_E0_t_main = {
     0x802ABE20: table.sym_fnc("L802ABE20", flag=table.GLOBL|table.LOCAL),
     0x802ABEE4: table.sym("object_a_802ABEE4", table.GLOBL), # o callback
     0x802ABF0C: table.sym("object_a_802ABF0C", table.GLOBL), # o callback
-    0x802AC068: table.sym("object_a_802AC068", table.GLOBL), # data
-    0x802AC15C: table.sym("object_a_802AC15C", table.GLOBL), # data
+    0x802AC068: table.sym_fnc("object_a_802AC068", flag=table.GLOBL), # data
+    0x802AC15C: table.sym_fnc("object_a_802AC15C", flag=table.GLOBL), # data
     0x802AC294: table.sym("object_a_802AC294", table.GLOBL), # o callback
     0x802AC2C0: table.sym("object_a_802AC2C0", table.GLOBL), # o callback
     0x802AC2EC: table.sym("object_a_802AC2EC", table.GLOBL), # o callback
@@ -3417,24 +4695,24 @@ sym_E0_t_main = {
     0x802ACBE8: table.sym_fnc("L802ACBE8", flag=table.GLOBL|table.LOCAL),
     0x802ACC3C: table.sym("object_a_802ACC3C", table.GLOBL), # o callback
     0x802ACE80: table.sym("object_a_802ACE80", table.GLOBL), # o callback
-    0x802AD078: table.sym("object_a_802AD078", table.GLOBL), # data
-    0x802AD10C: table.sym("object_a_802AD10C", table.GLOBL), # data
-    0x802AD1A4: table.sym("object_a_802AD1A4", table.GLOBL), # data
-    0x802AD238: table.sym("object_a_802AD238", table.GLOBL), # data
-    0x802AD2D0: table.sym("object_a_802AD2D0", table.GLOBL), # data
+    0x802AD078: table.sym_fnc("object_a_802AD078", flag=table.GLOBL), # data
+    0x802AD10C: table.sym_fnc("object_a_802AD10C", flag=table.GLOBL), # data
+    0x802AD1A4: table.sym_fnc("object_a_802AD1A4", flag=table.GLOBL), # data
+    0x802AD238: table.sym_fnc("object_a_802AD238", flag=table.GLOBL), # data
+    0x802AD2D0: table.sym_fnc("object_a_802AD2D0", flag=table.GLOBL), # data
     0x802AD34C: table.sym("object_a_802AD34C", table.GLOBL), # o callback
     0x802AD378: table.sym("object_a_802AD378", table.GLOBL), # o callback
-    0x802AD580: table.sym("object_a_802AD580", table.GLOBL), # data
-    0x802AD76C: table.sym("object_a_802AD76C", table.GLOBL), # data
-    0x802AD7F4: table.sym("object_a_802AD7F4", table.GLOBL), # data
-    0x802AD828: table.sym("object_a_802AD828", table.GLOBL), # data
+    0x802AD580: table.sym_fnc("object_a_802AD580", flag=table.GLOBL), # data
+    0x802AD76C: table.sym_fnc("object_a_802AD76C", flag=table.GLOBL), # data
+    0x802AD7F4: table.sym_fnc("object_a_802AD7F4", flag=table.GLOBL), # data
+    0x802AD828: table.sym_fnc("object_a_802AD828", flag=table.GLOBL), # data
     0x802AD890: table.sym("object_a_802AD890", table.GLOBL), # o callback
     0x802AD8BC: table.sym("object_a_802AD8BC"),
-    0x802AD8F0: table.sym("object_a_802AD8F0", table.GLOBL), # data
-    0x802ADA4C: table.sym("object_a_802ADA4C", table.GLOBL), # data
-    0x802ADB88: table.sym("object_a_802ADB88", table.GLOBL), # data
-    0x802ADCE4: table.sym("object_a_802ADCE4", table.GLOBL), # data
-    0x802ADD70: table.sym("object_a_802ADD70", table.GLOBL), # data
+    0x802AD8F0: table.sym_fnc("object_a_802AD8F0", flag=table.GLOBL), # data
+    0x802ADA4C: table.sym_fnc("object_a_802ADA4C", flag=table.GLOBL), # data
+    0x802ADB88: table.sym_fnc("object_a_802ADB88", flag=table.GLOBL), # data
+    0x802ADCE4: table.sym_fnc("object_a_802ADCE4", flag=table.GLOBL), # data
+    0x802ADD70: table.sym_fnc("object_a_802ADD70", flag=table.GLOBL), # data
     0x802ADDF8: table.sym("object_a_802ADDF8", table.GLOBL), # o callback
     0x802ADF6C: table.sym("object_a_802ADF6C", table.GLOBL), # o callback
     0x802ADF98: table.sym("object_a_802ADF98", table.GLOBL), # o callback
@@ -3451,10 +4729,10 @@ sym_E0_t_main = {
     0x802AE534: table.sym("object_a_802AE534", table.GLOBL), # o callback
     0x802AE85C: table.sym("object_a_802AE85C", table.GLOBL), # o callback
     0x802AE908: table.sym("object_a_802AE908", table.GLOBL), # o callback
-    0x802AEA6C: table.sym("object_a_802AEA6C", table.GLOBL), # data
-    0x802AEAB8: table.sym("object_a_802AEAB8", table.GLOBL), # data
-    0x802AEB1C: table.sym("object_a_802AEB1C", table.GLOBL), # data
-    0x802AEB74: table.sym("object_a_802AEB74", table.GLOBL), # data
+    0x802AEA6C: table.sym_fnc("object_a_802AEA6C", flag=table.GLOBL), # data
+    0x802AEAB8: table.sym_fnc("object_a_802AEAB8", flag=table.GLOBL), # data
+    0x802AEB1C: table.sym_fnc("object_a_802AEB1C", flag=table.GLOBL), # data
+    0x802AEB74: table.sym_fnc("object_a_802AEB74", flag=table.GLOBL), # data
     0x802AEB9C: table.sym("object_a_802AEB9C", table.GLOBL), # o callback
     0x802AEBC8: table.sym("object_a_802AEBC8", table.GLOBL), # o callback
     0x802AEC40: table.sym("object_a_802AEC40", table.GLOBL), # o callback
@@ -3507,20 +4785,20 @@ sym_E0_t_main = {
     0x802B19D8: table.sym("object_a_802B19D8"),
     0x802B1AE0: table.sym("object_a_802B1AE0", table.GLOBL), # o callback
     0x802B1B2C: table.sym("object_a_802B1B2C", table.GLOBL), # o callback
-    0x802B1BB0: table.sym("g_mario_pos_child", table.GLOBL), # g callback
+    0x802B1BB0: table.sym("s_mario_pos_child", table.GLOBL), # s callback
     0x802B1C54: table.sym("object_a_802B1C54", table.GLOBL), # o callback
-    0x802B1D7C: table.sym("object_a_802B1D7C", table.GLOBL), # data
-    0x802B1E6C: table.sym("object_a_802B1E6C", table.GLOBL), # data
-    0x802B1FF4: table.sym("object_a_802B1FF4", table.GLOBL), # data
-    0x802B20A0: table.sym("object_a_802B20A0", table.GLOBL), # data
+    0x802B1D7C: table.sym_fnc("object_a_802B1D7C", flag=table.GLOBL), # data
+    0x802B1E6C: table.sym_fnc("object_a_802B1E6C", flag=table.GLOBL), # data
+    0x802B1FF4: table.sym_fnc("object_a_802B1FF4", flag=table.GLOBL), # data
+    0x802B20A0: table.sym_fnc("object_a_802B20A0", flag=table.GLOBL), # data
     0x802B2154: table.sym("object_a_802B2154"),
     0x802B2278: table.sym("object_a_802B2278", table.GLOBL), # o callback
     0x802B2340: table.sym("object_a_802B2340", table.GLOBL), # o callback
     0x802B23E0: table.sym("object_a_802B23E0", table.GLOBL), # o callback
     0x802B2494: table.sym("object_a_802B2494", table.GLOBL), # o callback
     0x802B25AC: table.sym("object_a_802B25AC", table.GLOBL), # o callback
-    0x802B26A4: table.sym("object_a_802B26A4", table.GLOBL), # data
-    0x802B27D8: table.sym("object_a_802B27D8", table.GLOBL), # data
+    0x802B26A4: table.sym_fnc("object_a_802B26A4", flag=table.GLOBL), # data
+    0x802B27D8: table.sym_fnc("object_a_802B27D8", flag=table.GLOBL), # data
     0x802B2824: table.sym("object_a_802B2824"),
     0x802B288C: table.sym("object_a_802B288C", table.GLOBL), # o callback
     0x802B29B8: table.sym("object_a_802B29B8", table.GLOBL), # o callback
@@ -3531,9 +4809,9 @@ sym_E0_t_main = {
     0x802B2BA8: table.sym_fnc("L802B2BA8", flag=table.GLOBL|table.LOCAL),
     0x802B2BC8: table.sym("object_a_802B2BC8"),
     0x802B2D10: table.sym("object_a_802B2D10", table.GLOBL), # o callback
-    0x802B2DAC: table.sym("object_a_802B2DAC", table.GLOBL), # data
-    0x802B2F34: table.sym("object_a_802B2F34", table.GLOBL), # data
-    0x802B3064: table.sym("object_a_802B3064", table.GLOBL), # data
+    0x802B2DAC: table.sym_fnc("object_a_802B2DAC", flag=table.GLOBL), # data
+    0x802B2F34: table.sym_fnc("object_a_802B2F34", flag=table.GLOBL), # data
+    0x802B3064: table.sym_fnc("object_a_802B3064", flag=table.GLOBL), # data
     0x802B3108: table.sym("object_a_802B3108", table.GLOBL), # o callback
     0x802B3134: table.sym("object_a_802B3134"),
     0x802B3250: table.sym("object_a_802B3250"),
@@ -3541,15 +4819,15 @@ sym_E0_t_main = {
     0x802B3600: table.sym("object_a_802B3600", table.GLOBL), # o callback
     0x802B37B8: table.sym("object_a_802B37B8", table.GLOBL), # o callback
     0x802B3810: table.sym("object_a_802B3810", table.GLOBL), # o callback
-    0x802B3830: table.sym("object_a_802B3830", table.GLOBL), # data
-    0x802B38B8: table.sym("object_a_802B38B8", table.GLOBL), # data
-    0x802B394C: table.sym("object_a_802B394C", table.GLOBL), # data
-    0x802B3B08: table.sym("object_a_802B3B08", table.GLOBL), # data
-    0x802B3B24: table.sym("object_a_802B3B24", table.GLOBL), # data
+    0x802B3830: table.sym_fnc("object_a_802B3830", flag=table.GLOBL), # data
+    0x802B38B8: table.sym_fnc("object_a_802B38B8", flag=table.GLOBL), # data
+    0x802B394C: table.sym_fnc("object_a_802B394C", flag=table.GLOBL), # data
+    0x802B3B08: table.sym_fnc("object_a_802B3B08", flag=table.GLOBL), # data
+    0x802B3B24: table.sym_fnc("object_a_802B3B24", flag=table.GLOBL), # data
     0x802B3BE0: table.sym("object_a_802B3BE0", table.GLOBL), # o callback
-    0x802B3C2C: table.sym("object_a_802B3C2C", table.GLOBL), # data
-    0x802B3CDC: table.sym("object_a_802B3CDC", table.GLOBL), # data
-    0x802B3D10: table.sym("object_a_802B3D10", table.GLOBL), # data
+    0x802B3C2C: table.sym_fnc("object_a_802B3C2C", flag=table.GLOBL), # data
+    0x802B3CDC: table.sym_fnc("object_a_802B3CDC", flag=table.GLOBL), # data
+    0x802B3D10: table.sym_fnc("object_a_802B3D10", flag=table.GLOBL), # data
     0x802B3D74: table.sym("object_a_802B3D74", table.GLOBL), # o callback
     0x802B3DF4: table.sym("object_a_802B3DF4", table.GLOBL), # o callback
     0x802B4080: table.sym("object_a_802B4080", table.GLOBL), # o callback
@@ -3559,8 +4837,8 @@ sym_E0_t_main = {
     0x802B4300: table.sym("object_a_802B4300"),
     0x802B4368: table.sym("object_a_802B4368"),
     0x802B43DC: table.sym("object_a_802B43DC"),
-    0x802B4478: table.sym("object_a_802B4478", table.GLOBL), # data
-    0x802B44BC: table.sym("object_a_802B44BC", table.GLOBL), # data
+    0x802B4478: table.sym_fnc("object_a_802B4478", flag=table.GLOBL), # data
+    0x802B44BC: table.sym_fnc("object_a_802B44BC", flag=table.GLOBL), # data
     0x802B459C: table.sym("object_a_802B459C"), # unused
     0x802B45F4: table.sym("object_a_802B45F4"),
     0x802B473C: table.sym("object_a_802B473C"),
@@ -3568,28 +4846,28 @@ sym_E0_t_main = {
     0x802B4A1C: table.sym("object_a_802B4A1C"),
     0x802B4A3C: table.sym("object_a_802B4A3C"),
     0x802B4AF4: table.sym("object_a_802B4AF4"),
-    0x802B4BAC: table.sym("object_a_802B4BAC", table.GLOBL), # data
-    0x802B4BE8: table.sym("object_a_802B4BE8", table.GLOBL), # data
-    0x802B4CA4: table.sym("object_a_802B4CA4", table.GLOBL), # data
-    0x802B4D14: table.sym("object_a_802B4D14", table.GLOBL), # data
-    0x802B4F00: table.sym("object_a_802B4F00", table.GLOBL), # data
-    0x802B5104: table.sym("object_a_802B5104", table.GLOBL), # data
-    0x802B5218: table.sym("object_a_802B5218", table.GLOBL), # data
+    0x802B4BAC: table.sym_fnc("object_a_802B4BAC", flag=table.GLOBL), # data
+    0x802B4BE8: table.sym_fnc("object_a_802B4BE8", flag=table.GLOBL), # data
+    0x802B4CA4: table.sym_fnc("object_a_802B4CA4", flag=table.GLOBL), # data
+    0x802B4D14: table.sym_fnc("object_a_802B4D14", flag=table.GLOBL), # data
+    0x802B4F00: table.sym_fnc("object_a_802B4F00", flag=table.GLOBL), # data
+    0x802B5104: table.sym_fnc("object_a_802B5104", flag=table.GLOBL), # data
+    0x802B5218: table.sym_fnc("object_a_802B5218", flag=table.GLOBL), # data
     0x802B53F4: table.sym("object_a_802B53F4"),
     0x802B5444: table.sym("object_a_802B5444"),
     0x802B5554: table.sym("object_a_802B5554"),
-    0x802B55CC: table.sym("object_a_802B55CC", table.GLOBL), # data
-    0x802B5798: table.sym("object_a_802B5798", table.GLOBL), # data
-    0x802B58BC: table.sym("object_a_802B58BC", table.GLOBL), # data
-    0x802B59CC: table.sym("object_a_802B59CC", table.GLOBL), # data
+    0x802B55CC: table.sym_fnc("object_a_802B55CC", flag=table.GLOBL), # data
+    0x802B5798: table.sym_fnc("object_a_802B5798", flag=table.GLOBL), # data
+    0x802B58BC: table.sym_fnc("object_a_802B58BC", flag=table.GLOBL), # data
+    0x802B59CC: table.sym_fnc("object_a_802B59CC", flag=table.GLOBL), # data
     0x802B5AEC: table.sym("object_a_802B5AEC"),
-    0x802B5C00: table.sym("object_a_802B5C00", table.GLOBL), # data
-    0x802B5C40: table.sym("object_a_802B5C40", table.GLOBL), # data
+    0x802B5C00: table.sym_fnc("object_a_802B5C00", flag=table.GLOBL), # data
+    0x802B5C40: table.sym_fnc("object_a_802B5C40", flag=table.GLOBL), # data
     0x802B5F6C: table.sym("object_a_802B5F6C"),
-    0x802B5FEC: table.sym("object_a_802B5FEC", table.GLOBL), # data
+    0x802B5FEC: table.sym_fnc("object_a_802B5FEC", flag=table.GLOBL), # data
     0x802B611C: table.sym("object_a_802B611C"),
-    0x802B6190: table.sym("object_a_802B6190", table.GLOBL), # data
-    0x802B6568: table.sym("object_a_802B6568", table.GLOBL), # data
+    0x802B6190: table.sym_fnc("object_a_802B6190", flag=table.GLOBL), # data
+    0x802B6568: table.sym_fnc("object_a_802B6568", flag=table.GLOBL), # data
     0x802B65D0: table.sym("object_a_802B65D0"),
     0x802B6670: table.sym("object_a_802B6670"),
     0x802B6730: table.sym("object_a_802B6730"),
@@ -3598,7 +4876,7 @@ sym_E0_t_main = {
     0x802B6A10: table.sym("object_a_802B6A10"),
     0x802B6A78: table.sym("object_a_802B6A78"),
     0x802B6BAC: table.sym("object_a_802B6BAC"),
-    0x802B6CF0: table.sym("object_a_802B6CF0", table.GLOBL), # data
+    0x802B6CF0: table.sym_fnc("object_a_802B6CF0", flag=table.GLOBL), # data
     0x802B6D28: table.sym_fnc("L802B6D28", flag=table.GLOBL|table.LOCAL),
     0x802B6D38: table.sym_fnc("L802B6D38", flag=table.GLOBL|table.LOCAL),
     0x802B6D48: table.sym_fnc("L802B6D48", flag=table.GLOBL|table.LOCAL),
@@ -3608,14 +4886,14 @@ sym_E0_t_main = {
     0x802B6E20: table.sym_fnc("L802B6E20", flag=table.GLOBL|table.LOCAL),
     0x802B6E28: table.sym_fnc("L802B6E28", flag=table.GLOBL|table.LOCAL),
     0x802B6E40: table.sym("object_a_802B6E40"),
-    0x802B6EE0: table.sym("object_a_802B6EE0", table.GLOBL), # data
+    0x802B6EE0: table.sym_fnc("object_a_802B6EE0", flag=table.GLOBL), # data
     0x802B711C: table.sym("object_a_802B711C"),
     0x802B71E4: table.sym("object_a_802B71E4"),
     0x802B72D4: table.sym("object_a_802B72D4"),
     0x802B7418: table.sym("object_a_802B7418"),
     0x802B75A4: table.sym("object_a_802B75A4", table.GLOBL), # o callback
     0x802B7878: table.sym("object_a_802B7878", table.GLOBL), # o callback
-    0x802B798C: table.sym("object_a_802B798C", table.GLOBL), # g callback
+    0x802B798C: table.sym("s_object_a_802B798C", table.GLOBL), # s callback
     0x802B7A20: table.sym("object_a_802B7A20"),
     0x802B7A78: table.sym_fnc("L802B7A78", flag=table.GLOBL|table.LOCAL),
     0x802B7AE8: table.sym_fnc("L802B7AE8", flag=table.GLOBL|table.LOCAL),
@@ -3626,11 +4904,11 @@ sym_E0_t_main = {
     0x802B7BC0: table.sym_fnc("L802B7BC0", flag=table.GLOBL|table.LOCAL),
     0x802B7C00: table.sym_fnc("L802B7C00", flag=table.GLOBL|table.LOCAL),
     0x802B7C24: table.sym_fnc("L802B7C24", flag=table.GLOBL|table.LOCAL),
-    0x802B7C64: table.sym("object_a_802B7C64", table.GLOBL), # g callback
-    0x802B7D44: table.sym("object_a_802B7D44", table.GLOBL), # g callback
-    0x802B7E68: table.sym("object_a_802B7E68", table.GLOBL), # data
-    0x802B7EF0: table.sym("object_a_802B7EF0", table.GLOBL), # data
-    0x802B8024: table.sym("object_a_802B8024", table.GLOBL), # data
+    0x802B7C64: table.sym("s_object_a_802B7C64", table.GLOBL), # s callback
+    0x802B7D44: table.sym("s_object_a_802B7D44", table.GLOBL), # s callback
+    0x802B7E68: table.sym_fnc("object_a_802B7E68", flag=table.GLOBL), # data
+    0x802B7EF0: table.sym_fnc("object_a_802B7EF0", flag=table.GLOBL), # data
+    0x802B8024: table.sym_fnc("object_a_802B8024", flag=table.GLOBL), # data
     0x802B8384: table.sym("object_a_802B8384", table.GLOBL), # o callback
     0x802B83B0: table.sym("object_a_802B83B0"),
     0x802B8434: table.sym("object_a_802B8434"),
@@ -3672,7 +4950,7 @@ sym_E0_t_main = {
     0x802BA19C: table.sym("object_a_802BA19C", table.GLOBL), # o callback
     0x802BA1E0: table.sym("object_a_802BA1E0", table.GLOBL), # o callback
     0x802BA25C: table.sym("object_a_802BA25C", table.GLOBL), # o callback
-    0x802BA2B0: table.sym("object_a_802BA2B0", table.GLOBL), # g callback
+    0x802BA2B0: table.sym("s_object_a_802BA2B0", table.GLOBL), # s callback
     0x802BA2F8: table.sym("object_a_802BA2F8", table.GLOBL), # o callback
     0x802BA458: table.sym("object_a_802BA458", table.GLOBL), # o callback
     0x802BA5BC: table.sym("object_a_802BA5BC", table.GLOBL), # o callback
@@ -3681,14 +4959,14 @@ sym_E0_t_main = {
     0x802BA868: table.sym("object_a_802BA868"),
     0x802BA8C4: table.sym("object_a_802BA8C4"), # unused
     0x802BA958: table.sym("object_a_802BA958"),
-    0x802BAB7C: table.sym("object_a_802BAB7C", table.GLOBL), # data
-    0x802BAE40: table.sym("object_a_802BAE40", table.GLOBL), # data
-    0x802BAEC4: table.sym("object_a_802BAEC4", table.GLOBL), # data
-    0x802BAF10: table.sym("object_a_802BAF10", table.GLOBL), # data
-    0x802BAF64: table.sym("object_a_802BAF64", table.GLOBL), # data
-    0x802BB07C: table.sym("object_a_802BB07C", table.GLOBL), # data
-    0x802BB288: table.sym("object_a_802BB288", table.GLOBL), # data
-    0x802BB3B8: table.sym("object_a_802BB3B8", table.GLOBL), # data
+    0x802BAB7C: table.sym_fnc("object_a_802BAB7C", flag=table.GLOBL), # data
+    0x802BAE40: table.sym_fnc("object_a_802BAE40", flag=table.GLOBL), # data
+    0x802BAEC4: table.sym_fnc("object_a_802BAEC4", flag=table.GLOBL), # data
+    0x802BAF10: table.sym_fnc("object_a_802BAF10", flag=table.GLOBL), # data
+    0x802BAF64: table.sym_fnc("object_a_802BAF64", flag=table.GLOBL), # data
+    0x802BB07C: table.sym_fnc("object_a_802BB07C", flag=table.GLOBL), # data
+    0x802BB288: table.sym_fnc("object_a_802BB288", flag=table.GLOBL), # data
+    0x802BB3B8: table.sym_fnc("object_a_802BB3B8", flag=table.GLOBL), # data
     0x802BB468: table.sym_fnc("L802BB468", flag=table.GLOBL|table.LOCAL),
     0x802BB508: table.sym_fnc("L802BB508", flag=table.GLOBL|table.LOCAL),
     0x802BB564: table.sym_fnc("L802BB564", flag=table.GLOBL|table.LOCAL),
@@ -3715,10 +4993,10 @@ sym_E0_t_main = {
     0x802BC22C: table.sym("object_a_802BC22C", table.GLOBL), # o callback
     0x802BC294: table.sym("object_a_802BC294", table.GLOBL), # o callback
     0x802BC348: table.sym("object_a_802BC348"),
-    0x802BC4F4: table.sym("object_a_802BC4F4", table.GLOBL), # data
-    0x802BC538: table.sym("object_a_802BC538", table.GLOBL), # data
-    0x802BC590: table.sym("object_a_802BC590", table.GLOBL), # data
-    0x802BC5FC: table.sym("object_a_802BC5FC", table.GLOBL), # data
+    0x802BC4F4: table.sym_fnc("object_a_802BC4F4", flag=table.GLOBL), # data
+    0x802BC538: table.sym_fnc("object_a_802BC538", flag=table.GLOBL), # data
+    0x802BC590: table.sym_fnc("object_a_802BC590", flag=table.GLOBL), # data
+    0x802BC5FC: table.sym_fnc("object_a_802BC5FC", flag=table.GLOBL), # data
     0x802BC618: table.sym("object_a_802BC618", table.GLOBL), # o callback
     0x802BC660: table.sym("object_a_802BC660", table.GLOBL), # o callback
     0x802BC728: table.sym("object_a_802BC728", table.GLOBL), # o callback
@@ -3744,85 +5022,85 @@ sym_E0_t_main = {
     0x802BD680: table.sym("object_a_802BD680", table.GLOBL), # o callback
     0x802BD8D0: table.sym("object_a_802BD8D0"),
     0x802BD91C: table.sym("object_a_802BD91C"),
-    0x802BDB04: table.sym("object_a_802BDB04", table.GLOBL), # data
-    0x802BDB3C: table.sym("object_a_802BDB3C", table.GLOBL), # data
-    0x802BDB74: table.sym("object_a_802BDB74", table.GLOBL), # data
-    0x802BDBAC: table.sym("object_a_802BDBAC", table.GLOBL), # data
-    0x802BDBE4: table.sym("object_a_802BDBE4", table.GLOBL), # data
-    0x802BDC7C: table.sym("object_a_802BDC7C", table.GLOBL), # data
-    0x802BDCC8: table.sym("object_a_802BDCC8", table.GLOBL), # data
-    0x802BDD14: table.sym("object_a_802BDD14", table.GLOBL), # data
+    0x802BDB04: table.sym_fnc("object_a_802BDB04", flag=table.GLOBL), # data
+    0x802BDB3C: table.sym_fnc("object_a_802BDB3C", flag=table.GLOBL), # data
+    0x802BDB74: table.sym_fnc("object_a_802BDB74", flag=table.GLOBL), # data
+    0x802BDBAC: table.sym_fnc("object_a_802BDBAC", flag=table.GLOBL), # data
+    0x802BDBE4: table.sym_fnc("object_a_802BDBE4", flag=table.GLOBL), # data
+    0x802BDC7C: table.sym_fnc("object_a_802BDC7C", flag=table.GLOBL), # data
+    0x802BDCC8: table.sym_fnc("object_a_802BDCC8", flag=table.GLOBL), # data
+    0x802BDD14: table.sym_fnc("object_a_802BDD14", flag=table.GLOBL), # data
     0x802BDD68: table.sym("object_a_802BDD68", table.GLOBL), # o callback
-    0x802BDD9C: table.sym("object_a_802BDD9C", table.GLOBL), # data
+    0x802BDD9C: table.sym_fnc("object_a_802BDD9C", flag=table.GLOBL), # data
     0x802BDE10: table.sym("object_a_802BDE10"),
-    0x802BDEEC: table.sym("object_a_802BDEEC", table.GLOBL), # data
-    0x802BE034: table.sym("object_a_802BE034", table.GLOBL), # data
+    0x802BDEEC: table.sym_fnc("object_a_802BDEEC", flag=table.GLOBL), # data
+    0x802BE034: table.sym_fnc("object_a_802BE034", flag=table.GLOBL), # data
     0x802BE0B8: table.sym("object_a_802BE0B8"),
-    0x802BE0EC: table.sym("object_a_802BE0EC", table.GLOBL), # data
-    0x802BE150: table.sym("object_a_802BE150", table.GLOBL), # data
-    0x802BE234: table.sym("object_a_802BE234", table.GLOBL), # data
-    0x802BE278: table.sym("object_a_802BE278", table.GLOBL), # data
-    0x802BE350: table.sym("object_a_802BE350", table.GLOBL), # data
+    0x802BE0EC: table.sym_fnc("object_a_802BE0EC", flag=table.GLOBL), # data
+    0x802BE150: table.sym_fnc("object_a_802BE150", flag=table.GLOBL), # data
+    0x802BE234: table.sym_fnc("object_a_802BE234", flag=table.GLOBL), # data
+    0x802BE278: table.sym_fnc("object_a_802BE278", flag=table.GLOBL), # data
+    0x802BE350: table.sym_fnc("object_a_802BE350", flag=table.GLOBL), # data
     0x802BE49C: table.sym("object_a_802BE49C"),
-    0x802BE50C: table.sym("object_a_802BE50C", table.GLOBL), # data
+    0x802BE50C: table.sym_fnc("object_a_802BE50C", flag=table.GLOBL), # data
     0x802BE5A0: table.sym("object_a_802BE5A0", table.GLOBL), # o callback
     0x802BE628: table.sym("object_a_802BE628"),
     0x802BE6D4: table.sym("object_a_802BE6D4"),
     0x802BE79C: table.sym("object_a_802BE79C", table.GLOBL), # o callback
-    0x802BE8A8: table.sym("object_a_802BE8A8", table.GLOBL), # data
-    0x802BE8B8: table.sym("object_a_802BE8B8", table.GLOBL), # data
+    0x802BE8A8: table.sym_fnc("object_a_802BE8A8", flag=table.GLOBL), # data
+    0x802BE8B8: table.sym_fnc("object_a_802BE8B8", flag=table.GLOBL), # data
     0x802BE8F4: table.sym("object_a_802BE8F4"),
     0x802BE9DC: table.sym("object_a_802BE9DC"),
-    0x802BEB14: table.sym("object_a_802BEB14", table.GLOBL), # data
-    0x802BEB54: table.sym("object_a_802BEB54", table.GLOBL), # data
-    0x802BEB8C: table.sym("object_a_802BEB8C", table.GLOBL), # data
-    0x802BEBC4: table.sym("object_a_802BEBC4", table.GLOBL), # data
-    0x802BEBFC: table.sym("object_a_802BEBFC", table.GLOBL), # data
+    0x802BEB14: table.sym_fnc("object_a_802BEB14", flag=table.GLOBL), # data
+    0x802BEB54: table.sym_fnc("object_a_802BEB54", flag=table.GLOBL), # data
+    0x802BEB8C: table.sym_fnc("object_a_802BEB8C", flag=table.GLOBL), # data
+    0x802BEBC4: table.sym_fnc("object_a_802BEBC4", flag=table.GLOBL), # data
+    0x802BEBFC: table.sym_fnc("object_a_802BEBFC", flag=table.GLOBL), # data
     0x802BEC34: table.sym("object_a_802BEC34", table.GLOBL), # o callback
     0x802BECB0: table.sym("object_a_802BECB0"),
     0x802BED7C: table.sym("object_a_802BED7C", table.GLOBL),
-    0x802BEDEC: table.sym("object_a_802BEDEC", table.GLOBL), # data
-    0x802BEF8C: table.sym("object_a_802BEF8C", table.GLOBL), # data
-    0x802BF1D8: table.sym("object_a_802BF1D8", table.GLOBL), # data
+    0x802BEDEC: table.sym_fnc("object_a_802BEDEC", flag=table.GLOBL), # data
+    0x802BEF8C: table.sym_fnc("object_a_802BEF8C", flag=table.GLOBL), # data
+    0x802BF1D8: table.sym_fnc("object_a_802BF1D8", flag=table.GLOBL), # data
     0x802BF3C0: table.sym("object_a_802BF3C0", table.GLOBL), # o callback
     0x802BF424: table.sym("object_a_802BF424"),
-    0x802BF474: table.sym("object_a_802BF474", table.GLOBL), # data
-    0x802BF57C: table.sym("object_a_802BF57C", table.GLOBL), # data
-    0x802BF648: table.sym("object_a_802BF648", table.GLOBL), # data
-    0x802BF6E4: table.sym("object_a_802BF6E4", table.GLOBL), # data
-    0x802BF760: table.sym("object_a_802BF760", table.GLOBL), # data
-    0x802BF90C: table.sym("object_a_802BF90C", table.GLOBL), # data
+    0x802BF474: table.sym_fnc("object_a_802BF474", flag=table.GLOBL), # data
+    0x802BF57C: table.sym_fnc("object_a_802BF57C", flag=table.GLOBL), # data
+    0x802BF648: table.sym_fnc("object_a_802BF648", flag=table.GLOBL), # data
+    0x802BF6E4: table.sym_fnc("object_a_802BF6E4", flag=table.GLOBL), # data
+    0x802BF760: table.sym_fnc("object_a_802BF760", flag=table.GLOBL), # data
+    0x802BF90C: table.sym_fnc("object_a_802BF90C", flag=table.GLOBL), # data
     0x802BFA14: table.sym("object_a_802BFA14"),
     0x802BFA88: table.sym("object_a_802BFA88", table.GLOBL), # o callback
-    0x802BFBAC: table.sym("object_a_802BFBAC", table.GLOBL), # g callback
-    0x802BFCD8: table.sym("object_a_802BFCD8", table.GLOBL), # data
-    0x802BFEB8: table.sym("object_a_802BFEB8", table.GLOBL), # data
-    0x802BFF20: table.sym("object_a_802BFF20", table.GLOBL), # data
+    0x802BFBAC: table.sym("s_object_a_802BFBAC", table.GLOBL), # s callback
+    0x802BFCD8: table.sym_fnc("object_a_802BFCD8", flag=table.GLOBL), # data
+    0x802BFEB8: table.sym_fnc("object_a_802BFEB8", flag=table.GLOBL), # data
+    0x802BFF20: table.sym_fnc("object_a_802BFF20", flag=table.GLOBL), # data
     0x802BFF3C: table.sym("object_a_802BFF3C", table.GLOBL), # o callback
     0x802BFF68: table.sym("object_a_802BFF68"),
-    0x802C00B4: table.sym("object_a_802C00B4", table.GLOBL), # data
-    0x802C0348: table.sym("object_a_802C0348", table.GLOBL), # data
-    0x802C06A8: table.sym("object_a_802C06A8", table.GLOBL), # data
+    0x802C00B4: table.sym_fnc("object_a_802C00B4", flag=table.GLOBL), # data
+    0x802C0348: table.sym_fnc("object_a_802C0348", flag=table.GLOBL), # data
+    0x802C06A8: table.sym_fnc("object_a_802C06A8", flag=table.GLOBL), # data
     0x802C0768: table.sym("object_a_802C0768", table.GLOBL), # o callback
     0x802C08A8: table.sym("object_a_802C08A8", table.GLOBL), # o callback
-    0x802C0AAC: table.sym("object_a_802C0AAC", table.GLOBL), # data
-    0x802C0B50: table.sym("object_a_802C0B50", table.GLOBL), # data
-    0x802C0BA4: table.sym("object_a_802C0BA4", table.GLOBL), # data
-    0x802C0BC4: table.sym("object_a_802C0BC4", table.GLOBL), # data
+    0x802C0AAC: table.sym_fnc("object_a_802C0AAC", flag=table.GLOBL), # data
+    0x802C0B50: table.sym_fnc("object_a_802C0B50", flag=table.GLOBL), # data
+    0x802C0BA4: table.sym_fnc("object_a_802C0BA4", flag=table.GLOBL), # data
+    0x802C0BC4: table.sym_fnc("object_a_802C0BC4", flag=table.GLOBL), # data
     0x802C0BE0: table.sym("object_a_802C0BE0", table.GLOBL), # o callback
     0x802C0C0C: table.sym("object_a_802C0C0C"),
-    0x802C0CD4: table.sym("object_a_802C0CD4", table.GLOBL), # data
-    0x802C0D44: table.sym("object_a_802C0D44", table.GLOBL), # data
-    0x802C0F90: table.sym("object_a_802C0F90", table.GLOBL), # data
+    0x802C0CD4: table.sym_fnc("object_a_802C0CD4", flag=table.GLOBL), # data
+    0x802C0D44: table.sym_fnc("object_a_802C0D44", flag=table.GLOBL), # data
+    0x802C0F90: table.sym_fnc("object_a_802C0F90", flag=table.GLOBL), # data
     0x802C1204: table.sym("object_a_802C1204", table.GLOBL), # o callback
     0x802C12C0: table.sym("object_a_802C12C0", table.GLOBL), # o callback
-    0x802C1308: table.sym("object_a_802C1308", table.GLOBL), # data
-    0x802C13EC: table.sym("object_a_802C13EC", table.GLOBL), # data
-    0x802C14B0: table.sym("object_a_802C14B0", table.GLOBL), # data
-    0x802C15B8: table.sym("object_a_802C15B8", table.GLOBL), # data
+    0x802C1308: table.sym_fnc("object_a_802C1308", flag=table.GLOBL), # data
+    0x802C13EC: table.sym_fnc("object_a_802C13EC", flag=table.GLOBL), # data
+    0x802C14B0: table.sym_fnc("object_a_802C14B0", flag=table.GLOBL), # data
+    0x802C15B8: table.sym_fnc("object_a_802C15B8", flag=table.GLOBL), # data
     0x802C17BC: table.sym("object_a_802C17BC"),
-    0x802C18D0: table.sym("object_a_802C18D0", table.GLOBL), # data
-    0x802C1988: table.sym("object_a_802C1988", table.GLOBL), # data
+    0x802C18D0: table.sym_fnc("object_a_802C18D0", flag=table.GLOBL), # data
+    0x802C1988: table.sym_fnc("object_a_802C1988", flag=table.GLOBL), # data
     0x802C19C0: table.sym("object_a_802C19C0", table.GLOBL), # o callback
     0x802C19FC: table.sym("object_a_802C19FC", table.GLOBL), # o callback
     0x802C1A40: table.sym("object_a_802C1A40", table.GLOBL), # o callback
@@ -3840,9 +5118,9 @@ sym_E0_t_main = {
     0x802C2930: table.sym("object_a_802C2930", table.GLOBL), # o callback
     0x802C2A24: table.sym("object_a_802C2A24", table.GLOBL), # o callback
     0x802C2CE8: table.sym("object_a_802C2CE8"),
-    0x802C2EBC: table.sym("object_a_802C2EBC", table.GLOBL), # data
-    0x802C2FBC: table.sym("object_a_802C2FBC", table.GLOBL), # data
-    0x802C31C4: table.sym("object_a_802C31C4", table.GLOBL), # data
+    0x802C2EBC: table.sym_fnc("object_a_802C2EBC", flag=table.GLOBL), # data
+    0x802C2FBC: table.sym_fnc("object_a_802C2FBC", flag=table.GLOBL), # data
+    0x802C31C4: table.sym_fnc("object_a_802C31C4", flag=table.GLOBL), # data
     0x802C329C: table.sym("object_a_802C329C", table.GLOBL), # o callback
     0x802C32E8: table.sym("object_a_802C32E8", table.GLOBL), # o callback
     0x802C33F4: table.sym("object_a_802C33F4"),
@@ -3863,26 +5141,26 @@ sym_E0_t_main = {
     0x802C4118: table.sym("object_a_802C4118"),
     0x802C4158: table.sym("object_a_802C4158"),
     0x802C4210: table.sym("object_a_802C4210"),
-    0x802C43F4: table.sym("object_a_802C43F4", table.GLOBL), # data
-    0x802C4508: table.sym("object_a_802C4508", table.GLOBL), # data
-    0x802C45B0: table.sym("object_a_802C45B0", table.GLOBL), # data
-    0x802C46D8: table.sym("object_a_802C46D8", table.GLOBL), # data
-    0x802C4720: table.sym("object_a_802C4720", table.GLOBL), # data
-    0x802C4790: table.sym("object_a_802C4790", table.GLOBL), # data
+    0x802C43F4: table.sym_fnc("object_a_802C43F4", flag=table.GLOBL), # data
+    0x802C4508: table.sym_fnc("object_a_802C4508", flag=table.GLOBL), # data
+    0x802C45B0: table.sym_fnc("object_a_802C45B0", flag=table.GLOBL), # data
+    0x802C46D8: table.sym_fnc("object_a_802C46D8", flag=table.GLOBL), # data
+    0x802C4720: table.sym_fnc("object_a_802C4720", flag=table.GLOBL), # data
+    0x802C4790: table.sym_fnc("object_a_802C4790", flag=table.GLOBL), # data
     0x802C4824: table.sym("object_a_802C4824", table.GLOBL), # o callback
-    0x802C48C0: table.sym("object_a_802C48C0", table.GLOBL), # data
-    0x802C49F0: table.sym("object_a_802C49F0", table.GLOBL), # data
-    0x802C4B54: table.sym("object_a_802C4B54", table.GLOBL), # data
+    0x802C48C0: table.sym_fnc("object_a_802C48C0", flag=table.GLOBL), # data
+    0x802C49F0: table.sym_fnc("object_a_802C49F0", flag=table.GLOBL), # data
+    0x802C4B54: table.sym_fnc("object_a_802C4B54", flag=table.GLOBL), # data
     0x802C4B9C: table.sym("object_a_802C4B9C"),
     0x802C4BD4: table.sym("object_a_802C4BD4"),
     0x802C4C10: table.sym("object_a_802C4C10"),
-    0x802C4C70: table.sym("object_a_802C4C70", table.GLOBL), # data
-    0x802C4DD4: table.sym("object_a_802C4DD4", table.GLOBL), # data
+    0x802C4C70: table.sym_fnc("object_a_802C4C70", flag=table.GLOBL), # data
+    0x802C4DD4: table.sym_fnc("object_a_802C4DD4", flag=table.GLOBL), # data
     0x802C4F30: table.sym("object_a_802C4F30", table.GLOBL), # o callback
-    0x802C4FB0: table.sym("object_a_802C4FB0", table.GLOBL), # data
-    0x802C503C: table.sym("object_a_802C503C", table.GLOBL), # data
-    0x802C50D8: table.sym("object_a_802C50D8", table.GLOBL), # data
-    0x802C5120: table.sym("object_a_802C5120", table.GLOBL), # data
+    0x802C4FB0: table.sym_fnc("object_a_802C4FB0", flag=table.GLOBL), # data
+    0x802C503C: table.sym_fnc("object_a_802C503C", flag=table.GLOBL), # data
+    0x802C50D8: table.sym_fnc("object_a_802C50D8", flag=table.GLOBL), # data
+    0x802C5120: table.sym_fnc("object_a_802C5120", flag=table.GLOBL), # data
     0x802C515C: table.sym("object_a_802C515C", table.GLOBL), # o callback
     0x802C51D4: table.sym("object_a_802C51D4", table.GLOBL), # o callback
     0x802C5224: table.sym("object_a_802C5224", table.GLOBL), # o callback
@@ -3922,18 +5200,18 @@ sym_E0_t_main = {
     0x802C6A1C: table.sym_fnc("L802C6A1C", flag=table.GLOBL|table.LOCAL),
     0x802C6B6C: table.sym("object_a_802C6B6C", table.GLOBL), # o callback
     0x802C6CA0: table.sym("object_a_802C6CA0"),
-    0x802C6D6C: table.sym("object_a_802C6D6C", table.GLOBL), # data
-    0x802C6EC8: table.sym("object_a_802C6EC8", table.GLOBL), # data
-    0x802C6FB0: table.sym("object_a_802C6FB0", table.GLOBL), # data
-    0x802C710C: table.sym("object_a_802C710C", table.GLOBL), # data
-    0x802C7254: table.sym("object_a_802C7254", table.GLOBL), # data
-    0x802C72B4: table.sym("object_a_802C72B4", table.GLOBL), # data
-    0x802C7380: table.sym("object_a_802C7380", table.GLOBL), # data
+    0x802C6D6C: table.sym_fnc("object_a_802C6D6C", flag=table.GLOBL), # data
+    0x802C6EC8: table.sym_fnc("object_a_802C6EC8", flag=table.GLOBL), # data
+    0x802C6FB0: table.sym_fnc("object_a_802C6FB0", flag=table.GLOBL), # data
+    0x802C710C: table.sym_fnc("object_a_802C710C", flag=table.GLOBL), # data
+    0x802C7254: table.sym_fnc("object_a_802C7254", flag=table.GLOBL), # data
+    0x802C72B4: table.sym_fnc("object_a_802C72B4", flag=table.GLOBL), # data
+    0x802C7380: table.sym_fnc("object_a_802C7380", flag=table.GLOBL), # data
     0x802C7428: table.sym("object_a_802C7428"),
     0x802C75FC: table.sym("object_a_802C75FC"),
-    0x802C76D4: table.sym("object_a_802C76D4", table.GLOBL), # data
-    0x802C7858: table.sym("object_a_802C7858", table.GLOBL), # data
-    0x802C7998: table.sym("object_a_802C7998", table.GLOBL), # data
+    0x802C76D4: table.sym_fnc("object_a_802C76D4", flag=table.GLOBL), # data
+    0x802C7858: table.sym_fnc("object_a_802C7858", flag=table.GLOBL), # data
+    0x802C7998: table.sym_fnc("object_a_802C7998", flag=table.GLOBL), # data
     0x802C79D8: table.sym("object_a_802C79D8", table.GLOBL), # o callback
     0x802C7A70: table.sym("object_a_802C7A70", table.GLOBL), # o callback
     0x802C7B14: table.sym("object_a_802C7B14", table.GLOBL), # o callback
@@ -3948,81 +5226,81 @@ sym_E0_t_main = {
     0x802C85A4: table.sym("object_a_802C85A4"),
     0x802C863C: table.sym("object_a_802C863C", table.GLOBL), # o callback
 
-    # src/object_move.S
-    0x802C89F0: table.sym("object_move_802C89F0", table.GLOBL),
-    0x802C8B4C: table.sym("object_move_802C8B4C", table.GLOBL),
-    0x802C8B8C: table.sym("object_move_802C8B8C", table.GLOBL),
-    0x802C8BC8: table.sym("object_move_802C8BC8", table.GLOBL),
-    0x802C8EC0: table.sym("object_move_802C8EC0", table.GLOBL),
-    0x802C8F28: table.sym("object_move_802C8F28", table.GLOBL),
+    # src/obj_physics.S
+    0x802C89F0: table.sym("obj_physics_802C89F0", table.GLOBL),
+    0x802C8B4C: table.sym("obj_physics_802C8B4C", table.GLOBL),
+    0x802C8B8C: table.sym("obj_physics_802C8B8C", table.GLOBL),
+    0x802C8BC8: table.sym("obj_physics_802C8BC8", table.GLOBL),
+    0x802C8EC0: table.sym("obj_physics_802C8EC0", table.GLOBL),
+    0x802C8F28: table.sym("obj_physics_802C8F28", table.GLOBL),
 
-    # src/object_touch.S
-    0x802C8F40: table.sym("object_touch_802C8F40"), # unused
-    0x802C8FE4: table.sym("object_touch_802C8FE4"),
-    0x802C91EC: table.sym("object_touch_802C91EC"),
-    0x802C9388: table.sym("object_touch_802C9388"),
-    0x802C93F8: table.sym("object_touch_802C93F8"),
-    0x802C94AC: table.sym("object_touch_802C94AC"),
-    0x802C95B4: table.sym("object_touch_802C95B4"),
-    0x802C9630: table.sym("object_touch_802C9630"),
-    0x802C9724: table.sym("object_touch_802C9724", table.GLOBL),
+    # src/obj_collision.S
+    0x802C8F40: table.sym("obj_collision_802C8F40"), # unused
+    0x802C8FE4: table.sym("obj_collision_802C8FE4"),
+    0x802C91EC: table.sym("obj_collision_802C91EC"),
+    0x802C9388: table.sym("obj_collision_802C9388"),
+    0x802C93F8: table.sym("obj_collision_802C93F8"),
+    0x802C94AC: table.sym("obj_collision_802C94AC"),
+    0x802C95B4: table.sym("obj_collision_802C95B4"),
+    0x802C9630: table.sym("obj_collision_802C9630"),
+    0x802C9724: table.sym("obj_collision_802C9724", table.GLOBL),
 
-    # src/object_list.S
-    0x802C97D0: table.sym("object_list_802C97D0"), # unused
-    0x802C9840: table.sym("object_list_802C9840"), # unused
-    0x802C98A4: table.sym("object_list_802C98A4"),
-    0x802C9950: table.sym("object_list_802C9950"), # unused
-    0x802C9984: table.sym("object_list_802C9984"),
-    0x802C99B8: table.sym("object_list_802C99B8", table.GLOBL),
-    0x802C9A3C: table.sym("object_list_802C9A3C", table.GLOBL),
-    0x802C9AD8: table.sym("object_list_802C9AD8"),
-    0x802C9B68: table.sym("object_list_802C9B68", table.GLOBL),
-    0x802C9C00: table.sym("object_list_802C9C00"),
-    0x802C9E5C: table.sym("object_list_802C9E5C"),
-    0x802C9F04: table.sym("object_list_802C9F04", table.GLOBL),
-    0x802CA028: table.sym("object_list_802CA028", table.GLOBL),
+    # src/obj_list.S
+    0x802C97D0: table.sym("obj_list_802C97D0"), # unused
+    0x802C9840: table.sym("obj_list_802C9840"), # unused
+    0x802C98A4: table.sym("obj_list_802C98A4"),
+    0x802C9950: table.sym("obj_list_802C9950"), # unused
+    0x802C9984: table.sym("obj_list_802C9984"),
+    0x802C99B8: table.sym("obj_list_802C99B8", table.GLOBL),
+    0x802C9A3C: table.sym("obj_list_802C9A3C", table.GLOBL),
+    0x802C9AD8: table.sym("obj_list_802C9AD8"),
+    0x802C9B68: table.sym("obj_list_802C9B68", table.GLOBL),
+    0x802C9C00: table.sym("obj_list_802C9C00"),
+    0x802C9E5C: table.sym("obj_list_802C9E5C"),
+    0x802C9F04: table.sym("obj_list_802C9F04", table.GLOBL),
+    0x802CA028: table.sym("obj_list_802CA028", table.GLOBL),
 
-    # src/object_sfx.S
-    0x802CA040: table.sym("object_sfx_802CA040", table.GLOBL),
-    0x802CA144: table.sym("object_sfx_802CA144", table.GLOBL),
-    0x802CA190: table.sym("object_sfx_802CA190", table.GLOBL),
-    0x802CA1E0: table.sym("object_sfx_802CA1E0", table.GLOBL),
-    0x802CA230: table.sym("object_sfx_802CA230"), # unused
-    0x802CA2D4: table.sym("object_sfx_802CA2D4"), # unused
+    # src/obj_sfx.S
+    0x802CA040: table.sym("obj_sfx_802CA040", table.GLOBL),
+    0x802CA144: table.sym("obj_sfx_802CA144", table.GLOBL),
+    0x802CA190: table.sym("obj_sfx_802CA190", table.GLOBL),
+    0x802CA1E0: table.sym("obj_sfx_802CA1E0", table.GLOBL),
+    0x802CA230: table.sym("obj_sfx_802CA230"), # unused
+    0x802CA2D4: table.sym("obj_sfx_802CA2D4"), # unused
 
-    # src/object_debug.S
+    # src/obj_debug.S
     0x802CA370: table.sym("_802CA370"), # unused
     0x802CA380: table.sym("_802CA380"), # unused
     0x802CA390: table.sym("_802CA390"), # unused
     0x802CA3A0: table.sym("_802CA3A0"), # unused
-    0x802CA3B0: table.sym("object_debug_802CA3B0", table.GLOBL),
-    0x802CA3E0: table.sym("object_debug_802CA3E0", table.GLOBL),
-    0x802CA418: table.sym("object_debug_802CA418"),
-    0x802CA460: table.sym("object_debug_802CA460"),
-    0x802CA51C: table.sym("object_debug_802CA51C", table.GLOBL),
-    0x802CA568: table.sym("object_debug_802CA568", table.GLOBL),
-    0x802CA5B8: table.sym("object_debug_802CA5B8", table.GLOBL),
-    0x802CA618: table.sym("object_debug_802CA618", table.GLOBL),
-    0x802CA680: table.sym("object_debug_802CA680"),
-    0x802CA6D0: table.sym("object_debug_802CA6D0"),
-    0x802CA8E8: table.sym("object_debug_802CA8E8"),
-    0x802CA918: table.sym("object_debug_802CA918"),
-    0x802CA94C: table.sym("object_debug_802CA94C"),
-    0x802CA990: table.sym("object_debug_802CA990"),
-    0x802CAA6C: table.sym("object_debug_802CAA6C"),
-    0x802CAAA8: table.sym("object_debug_802CAAA8"),
-    0x802CAAE4: table.sym("object_debug_802CAAE4"),
-    0x802CABAC: table.sym("object_debug_802CABAC", table.GLOBL),
-    0x802CAC20: table.sym("object_debug_802CAC20", table.GLOBL),
-    0x802CACC8: table.sym("object_debug_802CACC8"), # unused
-    0x802CADC8: table.sym("object_debug_802CADC8"), # unused
-    0x802CAE9C: table.sym("object_debug_802CAE9C"), # unused
-    0x802CB0B0: table.sym("object_debug_802CB0B0", table.GLOBL),
-    0x802CB0C0: table.sym("object_debug_802CB0C0", table.GLOBL),
-    0x802CB1C0: table.sym("object_debug_802CB1C0", table.GLOBL), # o callback
-    0x802CB264: table.sym("object_debug_802CB264", table.GLOBL), # o callback
-    0x802CB394: table.sym("object_debug_802CB394"), # unused
-    0x802CB564: table.sym("object_debug_802CB564"), # unused
+    0x802CA3B0: table.sym("obj_debug_802CA3B0", table.GLOBL),
+    0x802CA3E0: table.sym("obj_debug_802CA3E0", table.GLOBL),
+    0x802CA418: table.sym("obj_debug_802CA418"),
+    0x802CA460: table.sym("obj_debug_802CA460"),
+    0x802CA51C: table.sym("obj_debug_802CA51C", table.GLOBL),
+    0x802CA568: table.sym("obj_debug_802CA568", table.GLOBL),
+    0x802CA5B8: table.sym("obj_debug_802CA5B8", table.GLOBL),
+    0x802CA618: table.sym("obj_debug_802CA618", table.GLOBL),
+    0x802CA680: table.sym("obj_debug_802CA680"),
+    0x802CA6D0: table.sym("obj_debug_802CA6D0"),
+    0x802CA8E8: table.sym("obj_debug_802CA8E8"),
+    0x802CA918: table.sym("obj_debug_802CA918"),
+    0x802CA94C: table.sym("obj_debug_802CA94C"),
+    0x802CA990: table.sym("obj_debug_802CA990"),
+    0x802CAA6C: table.sym("obj_debug_802CAA6C"),
+    0x802CAAA8: table.sym("obj_debug_802CAAA8"),
+    0x802CAAE4: table.sym("obj_debug_802CAAE4"),
+    0x802CABAC: table.sym("obj_debug_802CABAC", table.GLOBL),
+    0x802CAC20: table.sym("obj_debug_802CAC20", table.GLOBL),
+    0x802CACC8: table.sym("obj_debug_802CACC8"), # unused
+    0x802CADC8: table.sym("obj_debug_802CADC8"), # unused
+    0x802CAE9C: table.sym("obj_debug_802CAE9C"), # unused
+    0x802CB0B0: table.sym("obj_debug_802CB0B0", table.GLOBL),
+    0x802CB0C0: table.sym("obj_debug_802CB0C0", table.GLOBL),
+    0x802CB1C0: table.sym("obj_debug_802CB1C0", table.GLOBL), # o callback
+    0x802CB264: table.sym("obj_debug_802CB264", table.GLOBL), # o callback
+    0x802CB394: table.sym("obj_debug_802CB394"), # unused
+    0x802CB564: table.sym("obj_debug_802CB564"), # unused
 
     # src/wipe.S
     0x802CB5C0: table.sym("wipe_802CB5C0"),
@@ -4052,7 +5330,7 @@ sym_E0_t_main = {
     0x802CCD88: table.sym_fnc("L802CCD88", flag=table.GLOBL|table.LOCAL),
     0x802CCDB0: table.sym_fnc("L802CCDB0", flag=table.GLOBL|table.LOCAL),
     0x802CCDC8: table.sym("wipe_802CCDC8"),
-    0x802CD1E8: table.sym("wipe_802CD1E8", table.GLOBL), # g callback
+    0x802CD1E8: table.sym("s_wipe_802CD1E8", table.GLOBL), # s callback
 
     # src/shadow.S
     0x802CD280: table.sym("shadow_802CD280"),
@@ -4103,32 +5381,32 @@ sym_E0_t_main = {
     0x802CFEF4: table.sym("background_802CFEF4", table.GLOBL),
 
     # src/scroll.S
-    0x802D0080: table.sym("scroll_802D0080", table.GLOBL), # g callback
-    0x802D01E0: table.sym("scroll_802D01E0", table.GLOBL), # g callback
+    0x802D0080: table.sym("s_scroll_802D0080", table.GLOBL), # s callback
+    0x802D01E0: table.sym("s_scroll_802D01E0", table.GLOBL), # s callback
     0x802D0254: table.sym("scroll_802D0254"),
     0x802D0484: table.sym("scroll_802D0484"),
     0x802D0A84: table.sym("scroll_802D0A84"),
     0x802D0BB0: table.sym("scroll_802D0BB0"),
     0x802D0C84: table.sym("scroll_802D0C84"),
     0x802D0F28: table.sym("scroll_802D0F28"),
-    0x802D104C: table.sym("scroll_802D104C", table.GLOBL), # g callback
+    0x802D104C: table.sym("s_scroll_802D104C", table.GLOBL), # s callback
     0x802D1330: table.sym("scroll_802D1330"),
     0x802D13CC: table.sym("scroll_802D13CC"),
     0x802D1574: table.sym("scroll_802D1574"),
     0x802D18B4: table.sym("scroll_802D18B4"),
-    0x802D1B70: table.sym("scroll_802D1B70", table.GLOBL), # g callback
-    0x802D1CDC: table.sym("scroll_802D1CDC", table.GLOBL), # g callback
-    0x802D1E48: table.sym("scroll_802D1E48", table.GLOBL), # g callback
-    0x802D1FA8: table.sym("scroll_802D1FA8", table.GLOBL), # g callback
-    0x802D2108: table.sym("scroll_802D2108", table.GLOBL), # g callback
+    0x802D1B70: table.sym("s_scroll_802D1B70", table.GLOBL), # s callback
+    0x802D1CDC: table.sym("s_scroll_802D1CDC", table.GLOBL), # s callback
+    0x802D1E48: table.sym("s_scroll_802D1E48", table.GLOBL), # s callback
+    0x802D1FA8: table.sym("s_scroll_802D1FA8", table.GLOBL), # s callback
+    0x802D2108: table.sym("s_scroll_802D2108", table.GLOBL), # s callback
 
-    # src/object_gfx.S
-    0x802D2210: table.sym("object_gfx_802D2210", table.GLOBL),
-    0x802D22C4: table.sym("object_gfx_802D22C4", table.GLOBL),
-    0x802D2360: table.sym("object_gfx_802D2360", table.GLOBL), # g callback
-    0x802D2470: table.sym("object_gfx_802D2470", table.GLOBL), # g callback
-    0x802D2520: table.sym("object_gfx_802D2520", table.GLOBL), # g callback
-    0x802D28CC: table.sym("object_gfx_802D28CC", table.GLOBL), # g callback
+    # src/obj_shape.S
+    0x802D2210: table.sym("obj_shape_802D2210", table.GLOBL),
+    0x802D22C4: table.sym("obj_shape_802D22C4", table.GLOBL),
+    0x802D2360: table.sym("s_obj_shape_802D2360", table.GLOBL), # s callback
+    0x802D2470: table.sym("s_obj_shape_802D2470", table.GLOBL), # s callback
+    0x802D2520: table.sym("s_obj_shape_802D2520", table.GLOBL), # s callback
+    0x802D28CC: table.sym("s_obj_shape_802D28CC", table.GLOBL), # s callback
 
     # src/ripple.S
     0x802D29C0: table.sym("ripple_802D29C0"),
@@ -4167,8 +5445,8 @@ sym_E0_t_main = {
     0x802D593C: table.sym("ripple_802D593C"),
     0x802D59A8: table.sym("ripple_802D59A8"),
     0x802D5AA0: table.sym("ripple_802D5AA0"),
-    0x802D5B98: table.sym("ripple_802D5B98", table.GLOBL), # g callback
-    0x802D5D0C: table.sym("ripple_802D5D0C", table.GLOBL), # g callback
+    0x802D5B98: table.sym("s_ripple_802D5B98", table.GLOBL), # s callback
+    0x802D5D0C: table.sym("s_ripple_802D5D0C", table.GLOBL), # s callback
 
     # src/print.S
     0x802D5E00: table.sym_fnc("print_pow", "int", (
@@ -4299,46 +5577,46 @@ sym_E0_t_main = {
     0x802DDAE0: table.sym("message_802DDAE0"),
     0x802DDCA4: table.sym("message_802DDCA4", table.GLOBL),
 
-    # src/particle_snow.S
-    0x802DDDF0: table.sym("particle_snow_802DDDF0"),
-    0x802DDF38: table.sym("particle_snow_802DDF38"),
-    0x802DE0BC: table.sym("particle_snow_802DE0BC"),
-    0x802DE114: table.sym("particle_snow_802DE114", table.GLOBL),
-    0x802DE23C: table.sym("particle_snow_802DE23C"),
-    0x802DE360: table.sym("particle_snow_802DE360"),
-    0x802DE458: table.sym("particle_snow_802DE458"),
-    0x802DE888: table.sym("particle_snow_802DE888"),
-    0x802DECD4: table.sym("particle_snow_802DECD4"), # unused
-    0x802DED38: table.sym("particle_snow_802DED38"),
-    0x802DEF2C: table.sym("particle_snow_802DEF2C", table.GLOBL),
-    0x802DF334: table.sym("particle_snow_802DF334"),
-    0x802DF748: table.sym("particle_snow_802DF748"),
-    0x802DFBC8: table.sym("particle_snow_802DFBC8", table.GLOBL),
+    # src/weather_snow.S
+    0x802DDDF0: table.sym("weather_snow_802DDDF0"),
+    0x802DDF38: table.sym("weather_snow_802DDF38"),
+    0x802DE0BC: table.sym("weather_snow_802DE0BC"),
+    0x802DE114: table.sym("weather_snow_802DE114", table.GLOBL),
+    0x802DE23C: table.sym("weather_snow_802DE23C"),
+    0x802DE360: table.sym("weather_snow_802DE360"),
+    0x802DE458: table.sym("weather_snow_802DE458"),
+    0x802DE888: table.sym("weather_snow_802DE888"),
+    0x802DECD4: table.sym("weather_snow_802DECD4"), # unused
+    0x802DED38: table.sym("weather_snow_802DED38"),
+    0x802DEF2C: table.sym("weather_snow_802DEF2C", table.GLOBL),
+    0x802DF334: table.sym("weather_snow_802DF334"),
+    0x802DF748: table.sym("weather_snow_802DF748"),
+    0x802DFBC8: table.sym("weather_snow_802DFBC8", table.GLOBL),
 
-    # src/particle_lava.S
-    0x802DFD50: table.sym("particle_lava_802DFD50"),
-    0x802DFE00: table.sym("particle_lava_802DFE00"),
-    0x802DFE80: table.sym("particle_lava_802DFE80"),
-    0x802E0120: table.sym("particle_lava_802E0120"),
-    0x802E048C: table.sym("particle_lava_802E048C"),
-    0x802E065C: table.sym("particle_lava_802E065C"),
-    0x802E08A8: table.sym("particle_lava_802E08A8"),
-    0x802E0934: table.sym("particle_lava_802E0934"),
-    0x802E0E24: table.sym("particle_lava_802E0E24"),
-    0x802E0EB8: table.sym("particle_lava_802E0EB8"),
-    0x802E1238: table.sym("particle_lava_802E1238"),
+    # src/weather_lava.S
+    0x802DFD50: table.sym("weather_lava_802DFD50"),
+    0x802DFE00: table.sym("weather_lava_802DFE00"),
+    0x802DFE80: table.sym("weather_lava_802DFE80"),
+    0x802E0120: table.sym("weather_lava_802E0120"),
+    0x802E048C: table.sym("weather_lava_802E048C"),
+    0x802E065C: table.sym("weather_lava_802E065C"),
+    0x802E08A8: table.sym("weather_lava_802E08A8"),
+    0x802E0934: table.sym("weather_lava_802E0934"),
+    0x802E0E24: table.sym("weather_lava_802E0E24"),
+    0x802E0EB8: table.sym("weather_lava_802E0EB8"),
+    0x802E1238: table.sym("weather_lava_802E1238"),
     0x802E126C: table.sym_fnc("L802E126C", flag=table.GLOBL|table.LOCAL),
     0x802E1274: table.sym_fnc("L802E1274", flag=table.GLOBL|table.LOCAL),
     0x802E1294: table.sym_fnc("L802E1294", flag=table.GLOBL|table.LOCAL),
     0x802E12B4: table.sym_fnc("L802E12B4", flag=table.GLOBL|table.LOCAL),
     0x802E12C8: table.sym_fnc("L802E12C8", flag=table.GLOBL|table.LOCAL),
     0x802E12DC: table.sym_fnc("L802E12DC", flag=table.GLOBL|table.LOCAL),
-    0x802E1414: table.sym("particle_lava_802E1414"),
-    0x802E1618: table.sym("particle_lava_802E1618"),
-    0x802E1A20: table.sym("particle_lava_802E1A20"),
-    0x802E1BB8: table.sym("particle_lava_802E1BB8"),
-    0x802E1ED8: table.sym("particle_lava_802E1ED8"),
-    0x802E1F48: table.sym("particle_lava_802E1F48", table.GLOBL),
+    0x802E1414: table.sym("weather_lava_802E1414"),
+    0x802E1618: table.sym("weather_lava_802E1618"),
+    0x802E1A20: table.sym("weather_lava_802E1A20"),
+    0x802E1BB8: table.sym("weather_lava_802E1BB8"),
+    0x802E1ED8: table.sym("weather_lava_802E1ED8"),
+    0x802E1F48: table.sym("weather_lava_802E1F48", table.GLOBL),
 
     # src/obj_data.S
     0x802E20A0: table.sym("obj_data_802E20A0"),
@@ -5158,8 +6436,8 @@ sym_E0_t_main = {
     0x8030D598: table.sym("object_c_8030D598", table.GLOBL), # o callback
     0x8030D640: table.sym("object_c_8030D640", table.GLOBL), # o callback
     0x8030D8D4: table.sym("object_c_8030D8D4", table.GLOBL), # o callback
-    0x8030D93C: table.sym("object_c_8030D93C", table.GLOBL), # g callback
-    0x8030D9AC: table.sym("object_c_8030D9AC", table.GLOBL), # g callback
+    0x8030D93C: table.sym("s_object_c_8030D93C", table.GLOBL), # s callback
+    0x8030D9AC: table.sym("s_object_c_8030D9AC", table.GLOBL), # s callback
     0x8030DA14: table.sym("object_c_8030DA14"),
     0x8030DB38: table.sym("object_c_8030DB38"),
     0x8030DC70: table.sym("object_c_8030DC70", table.GLOBL), # o callback
@@ -5603,18 +6881,144 @@ sym_E0_t_main = {
     0x8032D5FA: table.sym("input_demo_record+demo__stick_y"),
     0x8032D5FB: table.sym("input_demo_record+demo__button"),
 
-    0x8032D950: table.sym("player_touch_table+player_touch__flag"),
-    0x8032D954: table.sym("player_touch_table+player_touch__callback"),
+    0x8032D950: table.sym("pl_collision_table+pl_collision__type"),
+    0x8032D954: table.sym("pl_collision_table+pl_collision__callback"),
 
     0x8032DADB: table.sym("player_8032DACC+1*15"),
     0x8032DAE0: table.sym("player_8032DAE0+0"),
     0x8032DAE4: table.sym("player_8032DAE0+4"),
 
-    0x8032DBE2: table.sym("player_demo_8032DC3C-1*90"),
-    0x8032DC36: table.sym("player_demo_8032DC34+2"),
-    0x8032DC3A: table.sym("player_demo_8032DC38+2"),
+    0x8032DBE2: table.sym("pl_demo_8032DC3C-1*90"),
+    0x8032DC36: table.sym("pl_demo_8032DC34+2"),
+    0x8032DC3A: table.sym("pl_demo_8032DC38+2"),
 
     0x8032DD97: table.sym("save_course-1"),
+
+    0x8032F4D4: table.sym("camdemo_8032F4D4+camdemo__callback"),
+    0x8032F4D8: table.sym("camdemo_8032F4D4+camdemo__time"),
+    0x8032F534: table.sym("camdemo_8032F534+camdemo__callback"),
+    0x8032F538: table.sym("camdemo_8032F534+camdemo__time"),
+    0x8032F544: table.sym("camdemo_8032F544+camdemo__callback"),
+    0x8032F548: table.sym("camdemo_8032F544+camdemo__time"),
+    0x8032F554: table.sym("camdemo_8032F554+camdemo__callback"),
+    0x8032F558: table.sym("camdemo_8032F554+camdemo__time"),
+    0x8032F564: table.sym("camdemo_8032F564+camdemo__callback"),
+    0x8032F568: table.sym("camdemo_8032F564+camdemo__time"),
+    0x8032F56C: table.sym("camdemo_8032F56C+camdemo__callback"),
+    0x8032F570: table.sym("camdemo_8032F56C+camdemo__time"),
+    0x8032F574: table.sym("camdemo_8032F574+camdemo__callback"),
+    0x8032F578: table.sym("camdemo_8032F574+camdemo__time"),
+    0x8032F59C: table.sym("camdemo_8032F59C+camdemo__callback"),
+    0x8032F5A0: table.sym("camdemo_8032F59C+camdemo__time"),
+    0x8032F5C4: table.sym("camdemo_8032F5C4+camdemo__callback"),
+    0x8032F5C8: table.sym("camdemo_8032F5C4+camdemo__time"),
+    0x8032F5DC: table.sym("camdemo_8032F5DC+camdemo__callback"),
+    0x8032F5E0: table.sym("camdemo_8032F5DC+camdemo__time"),
+    0x8032F5F4: table.sym("camdemo_8032F5F4+camdemo__callback"),
+    0x8032F5F8: table.sym("camdemo_8032F5F4+camdemo__time"),
+    0x8032F60C: table.sym("camdemo_8032F60C+camdemo__callback"),
+    0x8032F610: table.sym("camdemo_8032F60C+camdemo__time"),
+    0x8032F624: table.sym("camdemo_8032F624+camdemo__callback"),
+    0x8032F628: table.sym("camdemo_8032F624+camdemo__time"),
+    0x8032F634: table.sym("camdemo_8032F634+camdemo__callback"),
+    0x8032F638: table.sym("camdemo_8032F634+camdemo__time"),
+    0x8032F63C: table.sym("camdemo_8032F63C+camdemo__callback"),
+    0x8032F640: table.sym("camdemo_8032F63C+camdemo__time"),
+    0x8032F64C: table.sym("camdemo_8032F64C+camdemo__callback"),
+    0x8032F650: table.sym("camdemo_8032F64C+camdemo__time"),
+    0x8032F65C: table.sym("camdemo_8032F65C+camdemo__callback"),
+    0x8032F660: table.sym("camdemo_8032F65C+camdemo__time"),
+    0x8032F674: table.sym("camdemo_8032F674+camdemo__callback"),
+    0x8032F678: table.sym("camdemo_8032F674+camdemo__time"),
+    0x8032F69C: table.sym("camdemo_8032F69C+camdemo__callback"),
+    0x8032F6A0: table.sym("camdemo_8032F69C+camdemo__time"),
+    0x8032F6AC: table.sym("camdemo_8032F6AC+camdemo__callback"),
+    0x8032F6B0: table.sym("camdemo_8032F6AC+camdemo__time"),
+    0x8032F6BC: table.sym("camdemo_8032F6BC+camdemo__callback"),
+    0x8032F6C0: table.sym("camdemo_8032F6BC+camdemo__time"),
+    0x8032F6CC: table.sym("camdemo_8032F6CC+camdemo__callback"),
+    0x8032F6D0: table.sym("camdemo_8032F6CC+camdemo__time"),
+    0x8032F6DC: table.sym("camdemo_8032F6DC+camdemo__callback"),
+    0x8032F6E0: table.sym("camdemo_8032F6DC+camdemo__time"),
+    0x8032F6F4: table.sym("camdemo_8032F6F4+camdemo__callback"),
+    0x8032F6F8: table.sym("camdemo_8032F6F4+camdemo__time"),
+    0x8032F6FC: table.sym("camdemo_8032F6FC+camdemo__callback"),
+    0x8032F700: table.sym("camdemo_8032F6FC+camdemo__time"),
+    0x8032F70C: table.sym("camdemo_8032F70C+camdemo__callback"),
+    0x8032F710: table.sym("camdemo_8032F70C+camdemo__time"),
+    0x8032F714: table.sym("camdemo_8032F714+camdemo__callback"),
+    0x8032F718: table.sym("camdemo_8032F714+camdemo__time"),
+    0x8032F71C: table.sym("camdemo_8032F71C+camdemo__callback"),
+    0x8032F720: table.sym("camdemo_8032F71C+camdemo__time"),
+    0x8032F72C: table.sym("camdemo_8032F72C+camdemo__callback"),
+    0x8032F730: table.sym("camdemo_8032F72C+camdemo__time"),
+    0x8032F734: table.sym("camdemo_8032F734+camdemo__callback"),
+    0x8032F738: table.sym("camdemo_8032F734+camdemo__time"),
+    0x8032F74C: table.sym("camdemo_8032F74C+camdemo__callback"),
+    0x8032F750: table.sym("camdemo_8032F74C+camdemo__time"),
+    0x8032F754: table.sym("camdemo_8032F754+camdemo__callback"),
+    0x8032F758: table.sym("camdemo_8032F754+camdemo__time"),
+    0x8032F75C: table.sym("camdemo_8032F75C+camdemo__callback"),
+    0x8032F760: table.sym("camdemo_8032F75C+camdemo__time"),
+    0x8032F764: table.sym("camdemo_8032F764+camdemo__callback"),
+    0x8032F768: table.sym("camdemo_8032F764+camdemo__time"),
+    0x8032F76C: table.sym("camdemo_8032F76C+camdemo__callback"),
+    0x8032F770: table.sym("camdemo_8032F76C+camdemo__time"),
+    0x8032F774: table.sym("camdemo_8032F774+camdemo__callback"),
+    0x8032F778: table.sym("camdemo_8032F774+camdemo__time"),
+    0x8032F784: table.sym("camdemo_8032F784+camdemo__callback"),
+    0x8032F788: table.sym("camdemo_8032F784+camdemo__time"),
+    0x8032F794: table.sym("camdemo_8032F794+camdemo__callback"),
+    0x8032F798: table.sym("camdemo_8032F794+camdemo__time"),
+    0x8032F7A4: table.sym("camdemo_8032F7A4+camdemo__callback"),
+    0x8032F7A8: table.sym("camdemo_8032F7A4+camdemo__time"),
+    0x8032F7B4: table.sym("camdemo_8032F7B4+camdemo__callback"),
+    0x8032F7B8: table.sym("camdemo_8032F7B4+camdemo__time"),
+    0x8032F7C4: table.sym("camdemo_8032F7C4+camdemo__callback"),
+    0x8032F7C8: table.sym("camdemo_8032F7C4+camdemo__time"),
+    0x8032F7D4: table.sym("camdemo_8032F7D4+camdemo__callback"),
+    0x8032F7D8: table.sym("camdemo_8032F7D4+camdemo__time"),
+    0x8032F7EC: table.sym("camdemo_8032F7EC+camdemo__callback"),
+    0x8032F7F0: table.sym("camdemo_8032F7EC+camdemo__time"),
+
+    0x803301AA: table.sym("object_a_803301A8+object_a_1__scale"),
+    0x803301AC: table.sym("object_a_803301A8+object_a_1__map"),
+    0x803301B0: table.sym("object_a_803301A8+object_a_1__dist"),
+    0x803301D0: table.sym("object_a_803301D0+obj_pcl__arg"),
+    0x803301D1: table.sym("object_a_803301D0+obj_pcl__count"),
+    0x803301D3: table.sym("object_a_803301D0+obj_pcl__offset"),
+    0x803301DC: table.sym("object_a_803301D0+obj_pcl__s_add"),
+    0x803301E0: table.sym("object_a_803301D0+obj_pcl__s_mul"),
+    0x80330204: table.sym("object_a_80330204+2*0"),
+    0x80330206: table.sym("object_a_80330204+2*1"),
+    0x8033022C: table.sym("object_a_8033022C+2*0"),
+    0x8033022E: table.sym("object_a_8033022C+2*1"),
+    0x80330244: table.sym("object_a_80330244+2*0"),
+    0x80330246: table.sym("object_a_80330244+2*1"),
+    0x80330260: table.sym("object_a_80330260+4*0"),
+    0x80330264: table.sym("object_a_80330260+4*1"),
+    0x803302AC: table.sym("object_a_803302AC+object_a_2__count"),
+    0x803302B2: table.sym("object_a_803302AC+object_a_2__shape"),
+    0x803302B4: table.sym("object_a_803302AC+object_a_2__map"),
+    0x803302EC: table.sym("object_a_803302EC+2*0"),
+    0x803302EE: table.sym("object_a_803302EC+2*1"),
+    0x803302F0: table.sym("object_a_803302EC+2*2"),
+    0x803303C0: table.sym("object_a_803303C0+2*0"),
+    0x803303C2: table.sym("object_a_803303C0+2*1"),
+    0x8033047E: table.sym("object_a_80330480+2*(3*-1+2)"),
+    0x80330480: table.sym("object_a_80330480+2*0"),
+    0x80330482: table.sym("object_a_80330480+2*1"),
+    0x80330484: table.sym("object_a_80330480+2*2"),
+    0x803305F8: table.sym("object_a_803305F8+object_a_3__map"),
+    0x803305FC: table.sym("object_a_803305F8+object_a_3__px"),
+    0x803305FE: table.sym("object_a_803305F8+object_a_3__pz"),
+    0x80330600: table.sym("object_a_803305F8+object_a_3__ry"),
+    0x803306B4: table.sym("object_a_803306B4+object_a_4__offset"),
+    0x803306C4: table.sym("object_a_803306B4+object_a_4__vel"),
+    0x80330C48: table.sym("object_a_80330C48+object_a_7__offset"),
+    0x80330C4C: table.sym("object_a_80330C48+object_a_7__map"),
+    0x80330DAC: table.sym("object_a_80330DAC+object_a_8__time"),
+    0x80330DB4: table.sym("object_a_80330DAC+object_a_8__vel"),
 
     0x80330EE0: table.sym("shadow_rect_table+shadow_rect__sx"),
     0x80330EE4: table.sym("shadow_rect_table+shadow_rect__sz"),
@@ -5632,9 +7036,9 @@ sym_E0_t_main = {
     0x80331288: table.sym("scroll_table_c+scroll__data"),
     0x8033129C: table.sym("scroll_table_c+scroll__layer"),
 
-    0x803317E0: table.sym("obj_data_table+obj_data__script"),
-    0x803317E4: table.sym("obj_data_table+obj_data__shape"),
-    0x803317E6: table.sym("obj_data_table+obj_data__arg"),
+    0x803317E0: table.sym("prg_obj_table+prg_obj__script"),
+    0x803317E4: table.sym("prg_obj_table+prg_obj__shape"),
+    0x803317E6: table.sym("prg_obj_table+prg_obj__arg"),
 
     0x80332350: table.sym("map_obj_table+map_obj__index"),
     0x80332351: table.sym("map_obj_table+map_obj__type"),
@@ -5646,6 +7050,55 @@ sym_E0_t_main = {
     0x803325F2: table.sym("power+power__x"),
     0x803325F4: table.sym("power+power__y"),
 
+    0x8033282C: table.sym("object_b_8033282C+2*0"),
+    0x8033282E: table.sym("object_b_8033282C+2*1"),
+
+    0x80332860: table.sym("object_c_80332860+object_c_0__msg_start"),
+    0x80332862: table.sym("object_c_80332860+object_c_0__msg_win"),
+    0x80332864: table.sym("object_c_80332860+object_c_0__path"),
+    0x803328D0: table.sym("object_c_803328D0+object_c_1__scale"),
+    0x803328D4: table.sym("object_c_803328D0+object_c_1__sfx"),
+    0x803328D8: table.sym("object_c_803328D0+object_c_1__dist"),
+    0x803328DA: table.sym("object_c_803328D0+object_c_1__damage"),
+    0x80332934: table.sym("object_c_80332938+4*-1"),
+    0x80332984: table.sym("object_c_80332984+obj_pcl__arg"),
+    0x80332987: table.sym("object_c_80332984+obj_pcl__offset"),
+    0x8033298A: table.sym("object_c_80332984+obj_pcl__vy_add"),
+    0x80332A20: table.sym("object_c_80332A20+object_c_2__map"),
+    0x80332A24: table.sym("object_c_80332A20+object_c_2__p_map"),
+    0x80332A28: table.sym("object_c_80332A20+object_c_2__p_shape"),
+    0x80332A48: table.sym("object_c_80332A48+obj_pcl__arg"),
+    0x80332A4B: table.sym("object_c_80332A48+obj_pcl__offset"),
+    0x80332A4D: table.sym("object_c_80332A48+obj_pcl__vf_mul"),
+    0x80332A4E: table.sym("object_c_80332A48+obj_pcl__vy_add"),
+    0x80332AC0: table.sym("object_c_80332AC0+2*0"),
+    0x80332AC2: table.sym("object_c_80332AC0+2*1"),
+    0x80332B10: table.sym("object_c_80332B10+obj_pcl__arg"),
+    0x80332B11: table.sym("object_c_80332B10+obj_pcl__count"),
+    0x80332B13: table.sym("object_c_80332B10+obj_pcl__offset"),
+    0x80332B14: table.sym("object_c_80332B10+obj_pcl__vf_add"),
+    0x80332B16: table.sym("object_c_80332B10+obj_pcl__vy_add"),
+    0x80332B1C: table.sym("object_c_80332B10+obj_pcl__s_add"),
+    0x80332B64: table.sym("object_c_80332B64+object_c_3__map"),
+    0x80332B68: table.sym("object_c_80332B64+object_c_3__shape"),
+    0x80332CCC: table.sym("object_c_80332CCC+4*0"),
+    0x80332CD0: table.sym("object_c_80332CCC+4*1"),
+    0x80332CD4: table.sym("object_c_80332CCC+4*2"),
+    0x80332D10: table.sym("object_c_80332D10+2*0"),
+    0x80332D12: table.sym("object_c_80332D10+2*1"),
+    0x80332D58: table.sym("object_c_80332D58+2*0"),
+    0x80332D5A: table.sym("object_c_80332D58+2*1"),
+    0x80332D5C: table.sym("object_c_80332D58+2*2"),
+    0x80332E24: table.sym("object_c_80332E24+object_c_5__shape"),
+    0x80332E28: table.sym("object_c_80332E24+object_c_5__script"),
+    0x80332E2C: table.sym("object_c_80332E24+object_c_5__scale"),
+
+    0x80333794: table.sym("audio_data_80333598+4*0x7F"),
+    0x80333DF2: table.sym("audio_data_80333DE0+2*9"),
+    0x80333FF0: table.sym("audio_pan_0+4*0x7F"),
+    0x803341F0: table.sym("audio_pan_1+4*0x7F"),
+    0x803343F0: table.sym("audio_pan_2+4*0x7F"),
+
     # ==========================================================================
     # bss
     # ==========================================================================
@@ -5653,7 +7106,7 @@ sym_E0_t_main = {
     0x8033AFA4: table.sym("controller_table+controller__status"),
     0x8033AFA8: table.sym("controller_table+controller__pad"),
 
-    0x8033B098: table.sym("file_demo+file__dst"),
+    0x8033B098: table.sym("file_demo+file__buf"),
 
     0x8033B1A2: table.sym("player_table+player__rot_vel+2*0"),
     0x8033B1A4: table.sym("player_table+player__rot_vel+2*1"),
@@ -5679,18 +7132,18 @@ sym_E0_t_main = {
     0x8033B26A: table.sym("hud+hud__flag"),
     0x8033B26C: table.sym("hud+hud__timer"),
 
-    0x8033B364: table.sym("g_object_mirror+g_object__list"),
-    0x8033B368: table.sym("g_object_mirror+g_object__world"),
+    0x8033B364: table.sym("shape_object_mirror+shape_object__list"),
+    0x8033B368: table.sym("shape_object_mirror+shape_object__world"),
 
-    0x8033B3B7: table.sym("player_shape_table+player_shape__wing"),
+    0x8033B3B7: table.sym("pl_shape_table+pl_shape__wing"),
 
     0x8033B8D0: table.sym("world_data+world__index"),
     0x8033B8D1: table.sym("world_data+world___01"),
     0x8033B8D2: table.sym("world_data+world__env"),
-    0x8033B8D4: table.sym("world_data+world__g"),
-    0x8033B8D8: table.sym("world_data+world__map_data"),
-    0x8033B8DC: table.sym("world_data+world__area_data"),
-    0x8033B8E0: table.sym("world_data+world__obj_data"),
+    0x8033B8D4: table.sym("world_data+world__s"),
+    0x8033B8D8: table.sym("world_data+world__map"),
+    0x8033B8DC: table.sym("world_data+world__area"),
+    0x8033B8E0: table.sym("world_data+world__obj"),
     0x8033B8E4: table.sym("world_data+world__link"),
     0x8033B8E8: table.sym("world_data+world__linkbg"),
     0x8033B8EC: table.sym("world_data+world__connect"),
@@ -5704,7 +7157,7 @@ sym_E0_t_main = {
     0x8033B906: table.sym("world_data+world__bgm_arg"),
     0x8033B908: table.sym("world_data+world__bgm_index"),
 
-    0x8033BAB0: table.sym("wipe+wipe__active"),
+    0x8033BAB0: table.sym("wipe+wipe__flag"),
     0x8033BAB1: table.sym("wipe+wipe__type"),
     0x8033BAB2: table.sym("wipe+wipe___02"),
     0x8033BAB3: table.sym("wipe+wipe___03"),
@@ -5719,9 +7172,9 @@ sym_E0_t_main = {
     0x8033BAC2: table.sym("wipe+wipe___12"),
     0x8033BAC4: table.sym("wipe+wipe___14"),
 
-    0x8033BB18: table.sym("g_mf_stack+4*(4*3+0)"),
-    0x8033BB1C: table.sym("g_mf_stack+4*(4*3+1)"),
-    0x8033BB20: table.sym("g_mf_stack+4*(4*3+2)"),
+    0x8033BB18: table.sym("shape_mf_stack+4*(4*3+0)"),
+    0x8033BB1C: table.sym("shape_mf_stack+4*(4*3+1)"),
+    0x8033BB20: table.sym("shape_mf_stack+4*(4*3+2)"),
 
     0x8033C390: table.sym("time+time___00"),
     0x8033C392: table.sym("time+time___02"),
@@ -5731,9 +7184,9 @@ sym_E0_t_main = {
     0x8033C3C4: table.sym("time+time___30+4"),
 
     0x8033D4FC: table.sym("object_data+object__flag"),
-    0x80360EA0: table.sym("object_dummy+object__list+object_list__g+g_object__world"),
-    0x80360EA1: table.sym("object_dummy+object__list+object_list__g+g_object__shape"),
-    0x80361150: table.sym("object_list_free+object_list__next"),
+    0x80360EA0: table.sym("object_dummy+object__list+obj_list__s+shape_object__world"),
+    0x80360EA1: table.sym("object_dummy+object__list+obj_list__s+shape_object__shape"),
+    0x80361150: table.sym("obj_list_free+obj_list__next"),
     0x803611D8: table.sym("object_803611D8+1*0"),
     0x803611D9: table.sym("object_803611D8+1*1"),
 
@@ -5746,7 +7199,7 @@ sym_E0_t_main = {
     # ==========================================================================
 
     0x00108A40: table.sym("data_main_end"),
-    0x004EC000: table.sym("file_motion_start"),
+    0x004EC000: table.sym("file_anime_start"),
     0x00579C20: table.sym("file_demo_start"),
     0x0057B720: table.sym("file_audio_ctl_start"),
     0x00593560: table.sym("file_audio_tbl_start"),
@@ -5893,185 +7346,187 @@ dev_E0_t_main = {
     0x8031EA70: 0x000F52C0,
 }
 
+# todo: fmt_struct_*
+
 imm_E0_t_main = {
     # src/main.S
-    0x802462EC: "SEGMENT_MEM_START",
-    0x802462F8: "SEGMENT_MEM_END",
+    0x802462EC: ("SEGMENT_MEM_START",),
+    0x802462F8: ("SEGMENT_MEM_END",),
 
     # src/mem.S
-    0x80278074: "0x0F",
-    0x80278078: "~0x0F",
-    0x80278080: "sizeof__mem_link",
-    0x8027808C: "~0x0F",
-    0x80278094: "-sizeof__mem_link",
-    0x802780C8: "-sizeof__mem_link",
-    0x802780E8: "mem_link__prev",
-    0x802780F4: "mem_link__next",
-    0x80278100: "mem_link__prev",
-    0x8027810C: "mem_link__next",
-    0x80278128: "0x0F",
-    0x8027812C: "~0x0F",
-    0x80278138: "sizeof__mem_link",
-    0x80278190: "mem_link__next",
-    0x802781A0: "mem_link__prev",
-    0x802781A8: "mem_link__next",
-    0x802781B4: "sizeof__mem_link",
-    0x802781E8: "mem_link__prev",
-    0x802781F8: "mem_link__next",
-    0x80278200: "mem_link__prev",
-    0x80278218: "sizeof__mem_link",
-    0x8027823C: "-sizeof__mem_link",
-    0x80278244: "-sizeof__mem_link",
-    0x80278268: "mem_link__next",
-    0x80278278: "mem_link__next",
-    0x80278284: "mem_link__next",
-    0x802782A4: "mem_link__next",
-    0x802782D4: "mem_link__prev",
-    0x802782E4: "mem_link__prev",
-    0x802782F0: "mem_link__prev",
-    0x80278304: "mem_link__next",
-    0x80278314: "mem_link__prev",
-    0x80278370: "-sizeof__mem_link",
-    0x80278384: "mem_link__next",
-    0x802783A0: "MEM_ALLOC_L",
-    0x802783D4: "-sizeof__mem_link",
-    0x80278420: "sizeof__mem",
-    0x80278428: "MEM_ALLOC_L",
-    0x80278440: "mem__size",
-    0x80278450: "mem__l",
-    0x80278460: "mem__r",
-    0x80278470: "mem__mem",
-    0x802784A4: "mem__size",
-    0x802784B8: "mem__l",
-    0x802784CC: "mem__r",
-    0x802784E0: "mem__mem",
-    0x80278520: "~0x0F",
-    0x80278528: "0x0F",
-    0x8027858C: "OS_MESG_PRI_NORMAL",
-    0x80278590: "OS_READ",
-    0x802785B8: "OS_MESG_BLOCK",
-    0x8027862C: "~0x0F",
-    0x80278634: "0x0F",
-    0x80278710: "~0x0F",
-    0x80278718: "0x0F",
-    0x80278730: "~0x0F",
-    0x80278738: "0x0F",
-    0x80278760: "MEM_ALLOC_R",
-    0x802787F8: "~0x0F",
-    0x80278800: "0x0F",
-    0x80278814: "MEM_ALLOC_R",
-    0x80278848: "MEM_ALLOC_L",
-    0x802788D4: "~0x0F",
-    0x802788DC: "0x0F",
-    0x802788F0: "MEM_ALLOC_R",
-    0x80278980: "SEGMENT_MAIN2",
-    0x8027898C: "SEGMENT_CIMG-SEGMENT_MAIN2",
-    0x802789A8: "0x0F",
-    0x802789AC: "~0x0F",
-    0x80278A2C: "~0x03",
-    0x80278A30: "0x03",
-    0x80278A48: "sizeof__arena",
-    0x80278A6C: "arena__size",
-    0x80278A74: "arena__used",
-    0x80278A80: "sizeof__arena",
-    0x80278A84: "arena__start",
-    0x80278A90: "sizeof__arena",
-    0x80278A94: "arena__free",
-    0x80278AC0: "0x03",
-    0x80278AC4: "~0x03",
-    0x80278AD8: "arena__used",
-    0x80278ADC: "arena__size",
-    0x80278AF0: "arena__free",
-    0x80278AF8: "arena__free",
-    0x80278B00: "arena__free",
-    0x80278B04: "arena__used",
-    0x80278B0C: "arena__used",
-    0x80278B3C: "~0x03",
-    0x80278B40: "0x03",
-    0x80278B58: "sizeof__arena",
-    0x80278B74: "arena__size",
-    0x80278BB0: "~0x03",
-    0x80278BB4: "0x03",
-    0x80278BCC: "sizeof__heap",
-    0x80278BF0: "heap__size",
-    0x80278BFC: "sizeof__heap",
-    0x80278C00: "heap__start",
-    0x80278C0C: "sizeof__heap",
-    0x80278C10: "heap__free",
-    0x80278C18: "heap__start",
-    0x80278C24: "heap_link__next",
-    0x80278C30: "heap__size",
-    0x80278C34: "heap_link__size",
-    0x80278C5C: "heap__free",
-    0x80278C68: "0x03",
-    0x80278C6C: "~0x03",
-    0x80278C78: "sizeof__heap_link",
-    0x80278C94: "heap_link__size",
-    0x80278CAC: "sizeof__heap_link",
-    0x80278CBC: "heap_link__size",
-    0x80278CC4: "sizeof__heap_link+1",
-    0x80278CD8: "heap_link__next",
-    0x80278D00: "heap_link__size",
-    0x80278D08: "heap_link__size",
-    0x80278D18: "heap_link__next",
-    0x80278D1C: "heap_link__next",
-    0x80278D28: "heap_link__size",
-    0x80278D78: "-sizeof__heap_link",
-    0x80278D80: "heap__free",
-    0x80278D88: "heap__free",
-    0x80278D98: "heap__free",
-    0x80278DA4: "heap_link__next",
-    0x80278DAC: "heap__free",
-    0x80278DC0: "heap__free",
-    0x80278DC4: "heap_link__size",
-    0x80278DDC: "heap_link__size",
-    0x80278DE0: "heap_link__size",
-    0x80278DE8: "heap_link__size",
-    0x80278DF4: "heap_link__next",
-    0x80278DF8: "heap_link__next",
-    0x80278E04: "heap__free",
-    0x80278E08: "heap__free",
-    0x80278E10: "heap_link__next",
-    0x80278E18: "heap__free",
-    0x80278E28: "heap_link__next",
-    0x80278E48: "heap_link__next",
-    0x80278E64: "heap_link__next",
-    0x80278E70: "heap_link__next",
-    0x80278E84: "heap_link__size",
-    0x80278E9C: "heap_link__size",
-    0x80278EA0: "heap_link__size",
-    0x80278EA8: "heap_link__size",
-    0x80278EC0: "heap_link__next",
-    0x80278EC4: "heap_link__next",
-    0x80278ED0: "heap_link__next",
-    0x80278ED8: "heap_link__next",
-    0x80278EE4: "heap_link__size",
-    0x80278EF8: "heap_link__next",
-    0x80278EFC: "heap_link__size",
-    0x80278F00: "heap_link__size",
-    0x80278F08: "heap_link__size",
-    0x80278F10: "heap_link__next",
-    0x80278F14: "heap_link__next",
-    0x80278F18: "heap_link__next",
-    0x80278F34: "0x07",
-    0x80278F38: "~0x07",
-    0x80278FB0: "MEM_ALLOC_L",
-    0x80278FC8: "file_meta__len",
-    0x80278FD0: "sizeof__file_meta",
-    0x80278FE8: "MEM_ALLOC_L",
-    0x80279004: "file_meta__src",
-    0x80279054: "file__meta",
-    0x8027905C: "file__current",
-    0x80279068: "file__dst",
-    0x8027909C: "file__meta",
-    0x802790AC: "file_meta__len",
-    0x802790CC: "file_meta__table+file_meta__table__start",
-    0x802790D0: "file_meta__src",
-    0x802790EC: "file_meta__table+file_meta__table__size",
-    0x802790FC: "file__current",
-    0x80279118: "file__dst",
-    0x8027912C: "file__current",
-    0x80279130: "true",
+    0x80278074: (fmt_mask,),
+    0x80278078: (fmt_mask,),
+    0x80278080: ("sizeof__mem_link",),
+    0x8027808C: (fmt_mask,),
+    0x80278094: ("-sizeof__mem_link",),
+    0x802780C8: ("-sizeof__mem_link",),
+    0x802780E8: ("mem_link__prev",),
+    0x802780F4: ("mem_link__next",),
+    0x80278100: ("mem_link__prev",),
+    0x8027810C: ("mem_link__next",),
+    0x80278128: (fmt_mask,),
+    0x8027812C: (fmt_mask,),
+    0x80278138: ("sizeof__mem_link",),
+    0x80278190: ("mem_link__next",),
+    0x802781A0: ("mem_link__prev",),
+    0x802781A8: ("mem_link__next",),
+    0x802781B4: ("sizeof__mem_link",),
+    0x802781E8: ("mem_link__prev",),
+    0x802781F8: ("mem_link__next",),
+    0x80278200: ("mem_link__prev",),
+    0x80278218: ("sizeof__mem_link",),
+    0x8027823C: ("-sizeof__mem_link",),
+    0x80278244: ("-sizeof__mem_link",),
+    0x80278268: ("mem_link__next",),
+    0x80278278: ("mem_link__next",),
+    0x80278284: ("mem_link__next",),
+    0x802782A4: ("mem_link__next",),
+    0x802782D4: ("mem_link__prev",),
+    0x802782E4: ("mem_link__prev",),
+    0x802782F0: ("mem_link__prev",),
+    0x80278304: ("mem_link__next",),
+    0x80278314: ("mem_link__prev",),
+    0x80278370: ("-sizeof__mem_link",),
+    0x80278384: ("mem_link__next",),
+    0x802783A0: (fmt_mem_alloc,),
+    0x802783D4: ("-sizeof__mem_link",),
+    0x80278420: ("sizeof__mem",),
+    0x80278428: (fmt_mem_alloc,),
+    0x80278440: ("mem__size",),
+    0x80278450: ("mem__l",),
+    0x80278460: ("mem__r",),
+    0x80278470: ("mem__mem",),
+    0x802784A4: ("mem__size",),
+    0x802784B8: ("mem__l",),
+    0x802784CC: ("mem__r",),
+    0x802784E0: ("mem__mem",),
+    0x80278520: (fmt_mask,),
+    0x80278528: (fmt_mask,),
+    0x8027858C: (ultra.fmt_os_mesg_pri,),
+    0x80278590: (ultra.fmt_os_readwrite,),
+    0x802785B8: (ultra.fmt_os_mesg_flag,),
+    0x8027862C: (fmt_mask,),
+    0x80278634: (fmt_mask,),
+    0x80278710: (fmt_mask,),
+    0x80278718: (fmt_mask,),
+    0x80278730: (fmt_mask,),
+    0x80278738: (fmt_mask,),
+    0x80278760: (fmt_mem_alloc,),
+    0x802787F8: (fmt_mask,),
+    0x80278800: (fmt_mask,),
+    0x80278814: (fmt_mem_alloc,),
+    0x80278848: (fmt_mem_alloc,),
+    0x802788D4: (fmt_mask,),
+    0x802788DC: (fmt_mask,),
+    0x802788F0: (fmt_mem_alloc,),
+    0x80278980: ("SEGMENT_MAIN2",),
+    0x8027898C: ("SEGMENT_CIMG-SEGMENT_MAIN2",),
+    0x802789A8: (fmt_mask,),
+    0x802789AC: (fmt_mask,),
+    0x80278A2C: (fmt_mask,),
+    0x80278A30: (fmt_mask,),
+    0x80278A48: ("sizeof__arena",),
+    0x80278A6C: ("arena__size",),
+    0x80278A74: ("arena__used",),
+    0x80278A80: ("sizeof__arena",),
+    0x80278A84: ("arena__start",),
+    0x80278A90: ("sizeof__arena",),
+    0x80278A94: ("arena__free",),
+    0x80278AC0: (fmt_mask,),
+    0x80278AC4: (fmt_mask,),
+    0x80278AD8: ("arena__used",),
+    0x80278ADC: ("arena__size",),
+    0x80278AF0: ("arena__free",),
+    0x80278AF8: ("arena__free",),
+    0x80278B00: ("arena__free",),
+    0x80278B04: ("arena__used",),
+    0x80278B0C: ("arena__used",),
+    0x80278B3C: (fmt_mask,),
+    0x80278B40: (fmt_mask,),
+    0x80278B58: ("sizeof__arena",),
+    0x80278B74: ("arena__size",),
+    0x80278BB0: (fmt_mask,),
+    0x80278BB4: (fmt_mask,),
+    0x80278BCC: ("sizeof__heap",),
+    0x80278BF0: ("heap__size",),
+    0x80278BFC: ("sizeof__heap",),
+    0x80278C00: ("heap__start",),
+    0x80278C0C: ("sizeof__heap",),
+    0x80278C10: ("heap__free",),
+    0x80278C18: ("heap__start",),
+    0x80278C24: ("heap_link__next",),
+    0x80278C30: ("heap__size",),
+    0x80278C34: ("heap_link__size",),
+    0x80278C5C: ("heap__free",),
+    0x80278C68: (fmt_mask,),
+    0x80278C6C: (fmt_mask,),
+    0x80278C78: ("sizeof__heap_link",),
+    0x80278C94: ("heap_link__size",),
+    0x80278CAC: ("sizeof__heap_link",),
+    0x80278CBC: ("heap_link__size",),
+    0x80278CC4: ("sizeof__heap_link+1",),
+    0x80278CD8: ("heap_link__next",),
+    0x80278D00: ("heap_link__size",),
+    0x80278D08: ("heap_link__size",),
+    0x80278D18: ("heap_link__next",),
+    0x80278D1C: ("heap_link__next",),
+    0x80278D28: ("heap_link__size",),
+    0x80278D78: ("-sizeof__heap_link",),
+    0x80278D80: ("heap__free",),
+    0x80278D88: ("heap__free",),
+    0x80278D98: ("heap__free",),
+    0x80278DA4: ("heap_link__next",),
+    0x80278DAC: ("heap__free",),
+    0x80278DC0: ("heap__free",),
+    0x80278DC4: ("heap_link__size",),
+    0x80278DDC: ("heap_link__size",),
+    0x80278DE0: ("heap_link__size",),
+    0x80278DE8: ("heap_link__size",),
+    0x80278DF4: ("heap_link__next",),
+    0x80278DF8: ("heap_link__next",),
+    0x80278E04: ("heap__free",),
+    0x80278E08: ("heap__free",),
+    0x80278E10: ("heap_link__next",),
+    0x80278E18: ("heap__free",),
+    0x80278E28: ("heap_link__next",),
+    0x80278E48: ("heap_link__next",),
+    0x80278E64: ("heap_link__next",),
+    0x80278E70: ("heap_link__next",),
+    0x80278E84: ("heap_link__size",),
+    0x80278E9C: ("heap_link__size",),
+    0x80278EA0: ("heap_link__size",),
+    0x80278EA8: ("heap_link__size",),
+    0x80278EC0: ("heap_link__next",),
+    0x80278EC4: ("heap_link__next",),
+    0x80278ED0: ("heap_link__next",),
+    0x80278ED8: ("heap_link__next",),
+    0x80278EE4: ("heap_link__size",),
+    0x80278EF8: ("heap_link__next",),
+    0x80278EFC: ("heap_link__size",),
+    0x80278F00: ("heap_link__size",),
+    0x80278F08: ("heap_link__size",),
+    0x80278F10: ("heap_link__next",),
+    0x80278F14: ("heap_link__next",),
+    0x80278F18: ("heap_link__next",),
+    0x80278F34: (fmt_mask,),
+    0x80278F38: (fmt_mask,),
+    0x80278FB0: (fmt_mem_alloc,),
+    0x80278FC8: ("file_table__len",),
+    0x80278FD0: ("sizeof__file_table",),
+    0x80278FE8: (fmt_mem_alloc,),
+    0x80279004: ("file_table__src",),
+    0x80279054: ("file__table",),
+    0x8027905C: ("file__src",),
+    0x80279068: ("file__buf",),
+    0x8027909C: ("file__table",),
+    0x802790AC: ("file_table__len",),
+    0x802790CC: ("file_table__table+file_table__table__start",),
+    0x802790D0: ("file_table__src",),
+    0x802790EC: ("file_table__table+file_table__table__size",),
+    0x802790FC: ("file__src",),
+    0x80279118: ("file__buf",),
+    0x8027912C: ("file__src",),
+    0x80279130: (fmt_bool,),
 }
 
 sym_E0_d_main = {
@@ -6080,25 +7535,25 @@ sym_E0_d_main = {
     # ==========================================================================
 
     # src/main.data.c
-    0x8032D560: table.sym_var("scheduler_vq_audio",     "struct vq *",      flag=table.GLOBL|ultra.DALIGN),
-    0x8032D564: table.sym_var("scheduler_vq_video",     "struct vq *",      flag=table.GLOBL|ultra.DALIGN),
-    0x8032D568: table.sym_var("scheduler_task",         "struct sptask *",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D56C: table.sym_var("scheduler_audtask",      "struct sptask *",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D570: table.sym_var("scheduler_gfxtask",      "struct sptask *",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D574: table.sym_var("scheduler_audtask_next", "struct sptask *",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D578: table.sym_var("scheduler_gfxtask_next", "struct sptask *",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D57C: table.sym_var("scheduler_audio",        "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D580: table.sym_var("scheduler_vi",           "u32",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D584: table.sym_var("scheduler_reset",        "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D588: table.sym_var("scheduler_reset_timer",  "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D58C: table.sym_var("debug_stage",            "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D590: table.sym_var("debug_thread",           "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D594: table.sym_var("debug_time",             "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D598: table.sym_var("debug_mem",              "s8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D59C: table.sym_var("debug_time_table",       "u16", "[]",    table.GLOBL),
-    0x8032D5AC: table.sym_var("debug_mem_table",        "u16", "[]",    table.GLOBL),
-    0x8032D5BC: table.sym_var("debug_time_index",       "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D5C0: table.sym_var("debug_mem_index",        "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D560: table.sym_var("sc_client_1",        "struct sc_client *",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D564: table.sym_var("sc_client_2",        "struct sc_client *",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D568: table.sym_var("sc_task",            "struct sc_task *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D56C: table.sym_var("sc_audtask",         "struct sc_task *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D570: table.sym_var("sc_gfxtask",         "struct sc_task *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D574: table.sym_var("sc_audtask_next",    "struct sc_task *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D578: table.sym_var("sc_gfxtask_next",    "struct sc_task *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D57C: table.sym_var("sc_audio",           "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D580: table.sym_var("sc_vi",              "u32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D584: table.sym_var("reset_timer",        "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D588: table.sym_var("reset_frame",        "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D58C: table.sym_var("debug_stage",        "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D590: table.sym_var("debug_thread",       "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D594: table.sym_var("debug_time",         "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D598: table.sym_var("debug_mem",          "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D59C: table.sym_var("debug_time_table",   "u16", "[]",    table.GLOBL),
+    0x8032D5AC: table.sym_var("debug_mem_table",    "u16", "[]",    table.GLOBL),
+    0x8032D5BC: table.sym_var("debug_time_index",   "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D5C0: table.sym_var("debug_mem_index",    "s16",  flag=table.GLOBL|ultra.DALIGN),
 
     # src/app.data.c
     0x8032D5D0: table.sym_var("app_8032D5D0",       "u32",  flag=table.GLOBL|ultra.DALIGN), # unused
@@ -6125,12 +7580,12 @@ sym_E0_d_main = {
     0x8032D630: table.sym_var("audio_8032D630", "u32", "[]",    table.GLOBL),
     0x8032D6C0: table.sym_var("audio_8032D6C0", "s8",   flag=table.GLOBL|ultra.DALIGN),
 
-    # src/player_move.data.c
-    0x8032DAF0: table.sym_var("player_move_8032DAF0",   "s16", "[]",        table.GLOBL),
-    0x8032DAF8: table.sym_var("player_move_8032DAF8",   "struct map_face",  flag=table.GLOBL),
+    # src/pl_physics.data.c
+    0x8032DAF0: table.sym_var("pl_physics_8032DAF0",    "s16", "[]",        table.GLOBL),
+    0x8032DAF8: table.sym_var("pl_physics_8032DAF8",    "struct map_face",  flag=table.GLOBL),
 
-    # src/player_grab.data.c
-    0x8032DD40: table.sym_var("player_grab_8032DD40",   "s8", "[]", table.GLOBL),
+    # src/pl_grab.data.c
+    0x8032DD40: table.sym_var("pl_grab_8032DD40",   "s8", "[]", table.GLOBL),
 
     # src/game.data.c
     0x8032D6D0: table.sym_var("staff_01",   "static const char *", "[]"),
@@ -6158,51 +7613,51 @@ sym_E0_d_main = {
     0x8032D940: table.sym_var("game_8032D940",  "s16",  flag=table.GLOBL|ultra.DALIGN), # unused
     0x8032D944: table.sym_var("game_8032D944",  "s8",   flag=table.GLOBL|ultra.DALIGN),
 
-    # src/player_touch.data.c
-    0x8032D950: table.sym_var("player_touch_table",     "struct player_touch", "[]", table.GLOBL),
-    0x8032DA48: table.sym_var("player_touch_8032DA48",  "u32", "[]", table.GLOBL),
-    0x8032DA6C: table.sym_var("player_touch_8032DA6C",  "u32", "[]", table.GLOBL),
-    0x8032DA90: table.sym_var("player_touch_8032DA90",  "u8", flag=table.GLOBL|ultra.DALIGN),
-    0x8032DA94: table.sym_var("player_touch_8032DA94",  "u8", flag=table.GLOBL|ultra.DALIGN),
-    0x8032DA98: table.sym_var("player_touch_8032DA98",  "u8", flag=table.GLOBL|ultra.DALIGN),
+    # src/pl_collision.data.c
+    0x8032D950: table.sym_var("pl_collision_table",     "struct pl_collision", "[]", table.GLOBL),
+    0x8032DA48: table.sym_var("pl_collision_8032DA48",  "u32", "[]", table.GLOBL),
+    0x8032DA6C: table.sym_var("pl_collision_8032DA6C",  "u32", "[]", table.GLOBL),
+    0x8032DA90: table.sym_var("pl_collision_8032DA90",  "u8", flag=table.GLOBL|ultra.DALIGN),
+    0x8032DA94: table.sym_var("pl_collision_8032DA94",  "u8", flag=table.GLOBL|ultra.DALIGN),
+    0x8032DA98: table.sym_var("pl_collision_8032DA98",  "u8", flag=table.GLOBL|ultra.DALIGN),
 
     # src/player.data.c
     0x8032DAA0: table.sym_var("player_8032DAA0",    "s8",   "[][6]",    table.GLOBL),
     0x8032DACC: table.sym_var("player_8032DACC",    "u8",   "[]",       table.GLOBL),
     0x8032DAE0: table.sym_var("player_8032DAE0",    "u64",              flag=table.GLOBL),
 
-    # src/player_demo.data.c
-    0x8032DB30: table.sym_var("vp_player_demo",         "Vp",                   flag=table.GLOBL),
-    0x8032DB40: table.sym_var("player_demo_staff",      "struct staff *",       flag=table.GLOBL|ultra.DALIGN),
-    0x8032DB44: table.sym_var("player_demo_8032DB44",   "s8",                   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DB48: table.sym_var("player_demo_8032DB48",   "s8",                   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DB4C: table.sym_var("player_demo_8032DB4C",   "s8", "[]",             table.GLOBL),
-    0x8032DB54: table.sym_var("player_demo_8032DB54",   "u8", "[]",             table.GLOBL),
-    0x8032DB5C: table.sym_var("player_demo_8032DB5C",   "struct bspline", "[]", table.GLOBL),
-    0x8032DC34: table.sym_var("player_demo_8032DC34",   "s32",                  flag=table.GLOBL|ultra.DALIGN),
-    0x8032DC38: table.sym_var("player_demo_8032DC38",   "s32",                  flag=table.GLOBL|ultra.DALIGN),
-    0x8032DC3C: table.sym_var("player_demo_8032DC3C",   "u8", "[]",             table.GLOBL),
+    # src/pl_demo.data.c
+    0x8032DB30: table.sym_var("vp_pl_demo",         "Vp",                   flag=table.GLOBL),
+    0x8032DB40: table.sym_var("pl_demo_staff",      "struct staff *",       flag=table.GLOBL|ultra.DALIGN),
+    0x8032DB44: table.sym_var("pl_demo_8032DB44",   "s8",                   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DB48: table.sym_var("pl_demo_8032DB48",   "s8",                   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DB4C: table.sym_var("pl_demo_8032DB4C",   "s8", "[]",             table.GLOBL),
+    0x8032DB54: table.sym_var("pl_demo_8032DB54",   "u8", "[]",             table.GLOBL),
+    0x8032DB5C: table.sym_var("pl_demo_8032DB5C",   "struct bspline", "[]", table.GLOBL),
+    0x8032DC34: table.sym_var("pl_demo_8032DC34",   "s32",                  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DC38: table.sym_var("pl_demo_8032DC38",   "s32",                  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DC3C: table.sym_var("pl_demo_8032DC3C",   "u8", "[]",             table.GLOBL),
 
-    # src/player_ground.data.c
-    0x8032DC50: table.sym_var("player_ground_8032DC50", "struct player_ground", flag=table.GLOBL),
-    0x8032DC68: table.sym_var("player_ground_8032DC68", "struct player_ground", flag=table.GLOBL),
-    0x8032DC80: table.sym_var("player_ground_8032DC80", "struct player_ground", flag=table.GLOBL),
-    0x8032DC98: table.sym_var("player_ground_8032DC98", "struct player_ground", flag=table.GLOBL),
-    0x8032DCB0: table.sym_var("player_ground_8032DCB0", "struct player_ground", flag=table.GLOBL),
-    0x8032DCC8: table.sym_var("player_ground_8032DCC8", "struct player_ground", flag=table.GLOBL),
-    0x8032DCE0: table.sym_var("player_ground_8032DCE0", "struct player_ground", flag=table.GLOBL),
-    0x8032DCF8: table.sym_var("player_ground_8032DCF8", "struct player_ground", flag=table.GLOBL),
-    0x8032DD10: table.sym_var("player_ground_8032DD10", "struct player_ground", flag=table.GLOBL),
+    # src/pl_ground.data.c
+    0x8032DC50: table.sym_var("pl_ground_8032DC50", "struct pl_ground", flag=table.GLOBL),
+    0x8032DC68: table.sym_var("pl_ground_8032DC68", "struct pl_ground", flag=table.GLOBL),
+    0x8032DC80: table.sym_var("pl_ground_8032DC80", "struct pl_ground", flag=table.GLOBL),
+    0x8032DC98: table.sym_var("pl_ground_8032DC98", "struct pl_ground", flag=table.GLOBL),
+    0x8032DCB0: table.sym_var("pl_ground_8032DCB0", "struct pl_ground", flag=table.GLOBL),
+    0x8032DCC8: table.sym_var("pl_ground_8032DCC8", "struct pl_ground", flag=table.GLOBL),
+    0x8032DCE0: table.sym_var("pl_ground_8032DCE0", "struct pl_ground", flag=table.GLOBL),
+    0x8032DCF8: table.sym_var("pl_ground_8032DCF8", "struct pl_ground", flag=table.GLOBL),
+    0x8032DD10: table.sym_var("pl_ground_8032DD10", "struct pl_ground", flag=table.GLOBL),
 
-    # src/player_water.data.c
-    0x8032DD30: table.sym_var("player_water_8032DD30", "s16",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DD34: table.sym_var("player_water_8032DD34", "s16",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DD38: table.sym_var("player_water_8032DD38", "s16", "[]", table.GLOBL),
+    # src/pl_water.data.c
+    0x8032DD30: table.sym_var("pl_water_8032DD30", "s16",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DD34: table.sym_var("pl_water_8032DD34", "s16",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DD38: table.sym_var("pl_water_8032DD38", "s16", "[]", table.GLOBL),
 
-    # src/player_callback.data.c
-    0x8032DD50: table.sym_var("player_callback_8032DD50", "s8", "[]",   table.GLOBL),
-    0x8032DD58: table.sym_var("player_callback_8032DD58", "s8", "[]",   table.GLOBL),
-    0x8032DD6C: table.sym_var("player_callback_8032DD6C", "s16",    flag=table.GLOBL|ultra.DALIGN),
+    # src/pl_callback.data.c
+    0x8032DD50: table.sym_var("pl_callback_8032DD50", "s8", "[]",   table.GLOBL),
+    0x8032DD58: table.sym_var("pl_callback_8032DD58", "s8", "[]",   table.GLOBL),
+    0x8032DD6C: table.sym_var("pl_callback_8032DD6C", "s16",    flag=table.GLOBL|ultra.DALIGN),
 
     # src/mem.data.c
     0x8032DD70: table.sym_var("mem",    "struct mem *", flag=table.GLOBL|ultra.DALIGN),
@@ -6218,7 +7673,7 @@ sym_E0_d_main = {
 
     # src/world.data.c
     0x8032DDC0: table.sym_var("spawn_mario",        "struct spawn *",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DDC4: table.sym_var("shape_table",        "struct g **",      flag=table.GLOBL|ultra.DALIGN),
+    0x8032DDC4: table.sym_var("shape_table",        "struct shape **",  flag=table.GLOBL|ultra.DALIGN),
     0x8032DDC8: table.sym_var("world_table",        "struct world *",   flag=table.GLOBL|ultra.DALIGN),
     0x8032DDCC: table.sym_var("world",              "struct world *",   flag=table.GLOBL|ultra.DALIGN),
     0x8032DDD0: table.sym_var("staff",              "struct staff *",   flag=table.GLOBL|ultra.DALIGN),
@@ -6236,16 +7691,16 @@ sym_E0_d_main = {
     0x8032DE4C: table.sym_var("world_link_i",       "u8", "[]", table.GLOBL),
     0x8032DE60: table.sym_var("vp_default",         "Vp",   flag=table.GLOBL),
 
-    # src/g_draw.data.c
-    0x8032DE70: table.sym_var("g_rendermode_1", "u32", "[2][8]",    table.GLOBL),
-    0x8032DEB0: table.sym_var("g_rendermode_2", "u32", "[2][8]",    table.GLOBL),
-    0x8032DEF0: table.sym_var("g_world",        "struct g_world *",         flag=table.GLOBL|ultra.DALIGN),
-    0x8032DEF4: table.sym_var("g_layer",        "struct g_layer *",         flag=table.GLOBL|ultra.DALIGN),
-    0x8032DEF8: table.sym_var("g_perspective",  "struct g_perspective *",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032DEFC: table.sym_var("g_camera",       "struct g_camera *",        flag=table.GLOBL|ultra.DALIGN),
-    0x8032DF00: table.sym_var("g_object",       "struct g_object *",        flag=table.GLOBL|ultra.DALIGN),
-    0x8032DF04: table.sym_var("g_hand",         "struct g_hand *",          flag=table.GLOBL|ultra.DALIGN),
-    0x8032DF08: table.sym_var("g_timer",        "u16",  flag=table.GLOBL|ultra.DALIGN),
+    # src/shape_draw.data.c
+    0x8032DE70: table.sym_var("shape_rendermode_1", "u32", "[2][8]",    table.GLOBL),
+    0x8032DEB0: table.sym_var("shape_rendermode_2", "u32", "[2][8]",    table.GLOBL),
+    0x8032DEF0: table.sym_var("shape_world",        "struct shape_world *",         flag=table.GLOBL|ultra.DALIGN),
+    0x8032DEF4: table.sym_var("shape_layer",        "struct shape_layer *",         flag=table.GLOBL|ultra.DALIGN),
+    0x8032DEF8: table.sym_var("shape_perspective",  "struct shape_perspective *",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DEFC: table.sym_var("shape_camera",       "struct shape_camera *",        flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF00: table.sym_var("shape_object",       "struct shape_object *",        flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF04: table.sym_var("shape_hand",         "struct shape_hand *",          flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF08: table.sym_var("shape_timer",        "u16",  flag=table.GLOBL|ultra.DALIGN),
 
     # src/time.data.c
     0x8032DF10: table.sym_var("time_mode",      "s16",  flag=table.GLOBL|ultra.DALIGN),
@@ -6253,326 +7708,305 @@ sym_E0_d_main = {
     0x8032DF18: table.sym_var("time_index_b",   "s16",  flag=table.GLOBL|ultra.DALIGN),
 
     # src/camera.data.c
-    0x8032DF24: table.sym("_camera_data+0x04"),
-    0x8032DF28: table.sym("_camera_data+0x08"),
-    0x8032DF2C: table.sym("_camera_data+0x0C"),
-    0x8032DF30: table.sym("_camera_data+0x10"),
-    0x8032DF34: table.sym("_camera_data+0x14"),
-    0x8032DF38: table.sym("_camera_data+0x18"),
-    0x8032DF3C: table.sym("_camera_data+0x1C"),
-    0x8032DF4C: table.sym("_camera_data+0x2C"),
-    0x8032DF50: table.sym("_camera_data+0x30"),
-    0x8032DF54: table.sym("_camera_data+0x34"),
-    0x8032DF58: table.sym("_camera_data+0x38"),
-    0x8032DF5C: table.sym("_camera_data+0x3C"),
-    0x8032DF60: table.sym("_camera_data+0x40"),
-    0x8032DF64: table.sym("_camera_data+0x44"),
-    0x8032DF6C: table.sym("_camera_data+0x4C"), # la
-    0x8032DFA8: table.sym("_camera_data+0x88"),
-    0x8032DFF0: table.sym("_camera_data+0xD0"), # la
-    0x8032DFFC: table.sym("_camera_data+0xDC"), # la
-    0x8032E018: table.sym("_camera_data+0xF8"),
-    0x8032E050: table.sym("_camera_data+0x130"), # la
-    0x8032ECB0: table.sym("_camera_data+0xD90"),
-    0x8032ED50: table.sym("_camera_data+0xE30"), # la
-    0x8032EE08: table.sym("_camera_data+0xEE8"), # la
-    0x8032EEC0: table.sym("_camera_data+0xFA0"), # la
-    0x8032EF30: table.sym("_camera_data+0x1010"), # la
-    0x8032EFA0: table.sym("_camera_data+0x1080"), # la
-    0x8032EFF0: table.sym("_camera_data+0x10D0"), # la
-    0x8032F048: table.sym("_camera_data+0x1128"), # la
-    0x8032F0E8: table.sym("_camera_data+0x11C8"), # la
-    0x8032F130: table.sym("_camera_data+0x1210"), # la
-    0x8032F178: table.sym("_camera_data+0x1258"), # la
-    0x8032F1B8: table.sym("_camera_data+0x1298"), # la
-    0x8032F1F0: table.sym("_camera_data+0x12D0"), # la
-    0x8032F1FC: table.sym("_camera_data+0x12DC"), # la
-    0x8032F208: table.sym("_camera_data+0x12E8"), # la
-    0x8032F214: table.sym("_camera_data+0x12F4"), # la
-    0x8032F32C: table.sym("_camera_data+0x140C"), # la
-    0x8032F444: table.sym("_camera_data+0x1524"), # la
-    0x8032F48C: table.sym("_camera_data+0x156C"), # la
-    0x8032F4D4: table.sym("_camera_data+0x15B4"),
-    0x8032F4D8: table.sym("_camera_data+0x15B8"),
-    0x8032F534: table.sym("_camera_data+0x1614"),
-    0x8032F538: table.sym("_camera_data+0x1618"),
-    0x8032F544: table.sym("_camera_data+0x1624"),
-    0x8032F548: table.sym("_camera_data+0x1628"),
-    0x8032F554: table.sym("_camera_data+0x1634"),
-    0x8032F558: table.sym("_camera_data+0x1638"),
-    0x8032F564: table.sym("_camera_data+0x1644"),
-    0x8032F568: table.sym("_camera_data+0x1648"),
-    0x8032F56C: table.sym("_camera_data+0x164C"),
-    0x8032F570: table.sym("_camera_data+0x1650"),
-    0x8032F574: table.sym("_camera_data+0x1654"),
-    0x8032F578: table.sym("_camera_data+0x1658"),
-    0x8032F59C: table.sym("_camera_data+0x167C"),
-    0x8032F5A0: table.sym("_camera_data+0x1680"),
-    0x8032F5C4: table.sym("_camera_data+0x16A4"),
-    0x8032F5C8: table.sym("_camera_data+0x16A8"),
-    0x8032F5DC: table.sym("_camera_data+0x16BC"),
-    0x8032F5E0: table.sym("_camera_data+0x16C0"),
-    0x8032F5F4: table.sym("_camera_data+0x16D4"),
-    0x8032F5F8: table.sym("_camera_data+0x16D8"),
-    0x8032F60C: table.sym("_camera_data+0x16EC"),
-    0x8032F610: table.sym("_camera_data+0x16F0"),
-    0x8032F624: table.sym("_camera_data+0x1704"),
-    0x8032F628: table.sym("_camera_data+0x1708"),
-    0x8032F634: table.sym("_camera_data+0x1714"),
-    0x8032F638: table.sym("_camera_data+0x1718"),
-    0x8032F63C: table.sym("_camera_data+0x171C"),
-    0x8032F640: table.sym("_camera_data+0x1720"),
-    0x8032F64C: table.sym("_camera_data+0x172C"),
-    0x8032F650: table.sym("_camera_data+0x1730"),
-    0x8032F65C: table.sym("_camera_data+0x173C"),
-    0x8032F660: table.sym("_camera_data+0x1740"),
-    0x8032F674: table.sym("_camera_data+0x1754"),
-    0x8032F678: table.sym("_camera_data+0x1758"),
-    0x8032F69C: table.sym("_camera_data+0x177C"),
-    0x8032F6A0: table.sym("_camera_data+0x1780"),
-    0x8032F6AC: table.sym("_camera_data+0x178C"),
-    0x8032F6B0: table.sym("_camera_data+0x1790"),
-    0x8032F6BC: table.sym("_camera_data+0x179C"),
-    0x8032F6C0: table.sym("_camera_data+0x17A0"),
-    0x8032F6CC: table.sym("_camera_data+0x17AC"),
-    0x8032F6D0: table.sym("_camera_data+0x17B0"),
-    0x8032F6DC: table.sym("_camera_data+0x17BC"),
-    0x8032F6E0: table.sym("_camera_data+0x17C0"),
-    0x8032F6F4: table.sym("_camera_data+0x17D4"),
-    0x8032F6F8: table.sym("_camera_data+0x17D8"),
-    0x8032F6FC: table.sym("_camera_data+0x17DC"),
-    0x8032F700: table.sym("_camera_data+0x17E0"),
-    0x8032F70C: table.sym("_camera_data+0x17EC"),
-    0x8032F710: table.sym("_camera_data+0x17F0"),
-    0x8032F714: table.sym("_camera_data+0x17F4"),
-    0x8032F718: table.sym("_camera_data+0x17F8"),
-    0x8032F71C: table.sym("_camera_data+0x17FC"),
-    0x8032F720: table.sym("_camera_data+0x1800"),
-    0x8032F72C: table.sym("_camera_data+0x180C"),
-    0x8032F730: table.sym("_camera_data+0x1810"),
-    0x8032F734: table.sym("_camera_data+0x1814"),
-    0x8032F738: table.sym("_camera_data+0x1818"),
-    0x8032F74C: table.sym("_camera_data+0x182C"),
-    0x8032F750: table.sym("_camera_data+0x1830"),
-    0x8032F754: table.sym("_camera_data+0x1834"),
-    0x8032F758: table.sym("_camera_data+0x1838"),
-    0x8032F75C: table.sym("_camera_data+0x183C"),
-    0x8032F760: table.sym("_camera_data+0x1840"),
-    0x8032F764: table.sym("_camera_data+0x1844"),
-    0x8032F768: table.sym("_camera_data+0x1848"),
-    0x8032F76C: table.sym("_camera_data+0x184C"),
-    0x8032F770: table.sym("_camera_data+0x1850"),
-    0x8032F774: table.sym("_camera_data+0x1854"),
-    0x8032F778: table.sym("_camera_data+0x1858"),
-    0x8032F784: table.sym("_camera_data+0x1864"),
-    0x8032F788: table.sym("_camera_data+0x1868"),
-    0x8032F794: table.sym("_camera_data+0x1874"),
-    0x8032F798: table.sym("_camera_data+0x1878"),
-    0x8032F7A4: table.sym("_camera_data+0x1884"),
-    0x8032F7A8: table.sym("_camera_data+0x1888"),
-    0x8032F7B4: table.sym("_camera_data+0x1894"),
-    0x8032F7B8: table.sym("_camera_data+0x1898"),
-    0x8032F7C4: table.sym("_camera_data+0x18A4"),
-    0x8032F7C8: table.sym("_camera_data+0x18A8"),
-    0x8032F7D4: table.sym("_camera_data+0x18B4"),
-    0x8032F7D8: table.sym("_camera_data+0x18B8"),
-    0x8032F7EC: table.sym("_camera_data+0x18CC"),
-    0x8032F7F0: table.sym("_camera_data+0x18D0"),
-    0x8032F804: table.sym("_camera_data+0x18E4"),
-    0x8032F870: table.sym("_camera_data+0x1950"),
-    0x8032F884: table.sym("_camera_data+0x1964"), # la
-    0x8032F8AC: table.sym("_camera_data+0x198C"), # la
-    0x8032F8D4: table.sym("_camera_data+0x19B4"), # la
-    0x8032F8FC: table.sym("_camera_data+0x19DC"), # la
-    0x8032F924: table.sym("_camera_data+0x1A04"), # la
-    0x8032F94C: table.sym("_camera_data+0x1A2C"), # la
-    0x8032F974: table.sym("_camera_data+0x1A54"), # la
-    0x8032F99C: table.sym("_camera_data+0x1A7C"), # la
-    0x8032F9C4: table.sym("_camera_data+0x1AA4"), # la
-    0x8032F9E4: table.sym("_camera_data+0x1AC4"), # la
-    0x8032FA04: table.sym("_camera_data+0x1AE4"), # la
-    0x8032FA2C: table.sym("_camera_data+0x1B0C"), # la
-    0x8032FA54: table.sym("_camera_data+0x1B34"), # la
-    0x8032FA6C: table.sym("_camera_data+0x1B4C"), # la
-    0x8032FA84: table.sym("_camera_data+0x1B64"), # la
-    0x8032FAB4: table.sym("_camera_data+0x1B94"), # la
-    0x8032FAE4: table.sym("_camera_data+0x1BC4"), # la
-    0x8032FB14: table.sym("_camera_data+0x1BF4"), # la
-    0x8032FB44: table.sym("_camera_data+0x1C24"), # la
-    0x8032FB7C: table.sym("_camera_data+0x1C5C"), # la
-    0x8032FBB4: table.sym("_camera_data+0x1C94"), # la
-    0x8032FBD4: table.sym("_camera_data+0x1CB4"), # la
-    0x8032FBF4: table.sym("_camera_data+0x1CD4"), # la
-    0x8032FC14: table.sym("_camera_data+0x1CF4"), # la
-    0x8032FC34: table.sym("_camera_data+0x1D14"), # la
-    0x8032FC64: table.sym("_camera_data+0x1D44"), # la
-    0x8032FC94: table.sym("_camera_data+0x1D74"), # la
-    0x8032FCCC: table.sym("_camera_data+0x1DAC"), # la
-    0x8032FD04: table.sym("_camera_data+0x1DE4"), # la
-    0x8032FD24: table.sym("_camera_data+0x1E04"), # la
-    0x8032FD44: table.sym("_camera_data+0x1E24"), # la
-    0x8032FD64: table.sym("_camera_data+0x1E44"), # la
-    0x8032FD84: table.sym("_camera_data+0x1E64"), # la
-    0x8032FDAC: table.sym("_camera_data+0x1E8C"), # la
-    0x8032FDD4: table.sym("_camera_data+0x1EB4"), # la
-    0x8032FDFC: table.sym("_camera_data+0x1EDC"), # la
-    0x8032FE24: table.sym("_camera_data+0x1F04"), # la
-    0x8032FE4C: table.sym("_camera_data+0x1F2C"), # la
-    0x8032FE74: table.sym("_camera_data+0x1F54"), # la
-    0x8032FE94: table.sym("_camera_data+0x1F74"), # la
+    0x8032DF20: table.sym_var("camera_8032DF20",    "s32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032DF24: table.sym_var("camera_8032DF24",    "struct object *",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF28: table.sym_var("camera_8032DF28",    "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF2C: table.sym_var("camera_8032DF2C",    "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF30: table.sym_var("camera_8032DF30",    "struct object *",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF34: table.sym_var("camera_8032DF34",    "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF38: table.sym_var("camera_stageworld",  "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF3C: table.sym_var("camera_stage_prev",  "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF40: table.sym_var("camera_8032DF40",    "f32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032DF44: table.sym_var("camera_8032DF44",    "f32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032DF48: table.sym_var("camera_8032DF48",    "f32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032DF4C: table.sym_var("camera_8032DF4C",    "f32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF50: table.sym_var("camera_8032DF50",    "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF54: table.sym_var("camera_8032DF54",    "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF58: table.sym_var("camera_8032DF58",    "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF5C: table.sym_var("camera_8032DF5C",    "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032DF60: table.sym_var("camera_8032DF60",    "void *",   flag=table.GLOBL|ultra.DALIGN), # type
+    0x8032DF64: table.sym_var("camera_8032DF64",    "void *",   flag=table.GLOBL|ultra.DALIGN), # type
+    0x8032DF68: table.sym_var("camera_8032DF68",    "s32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032DF6C: table.sym_var("camera_8032DF6C",    "vecf", flag=table.GLOBL),
+    0x8032DF78: table.sym_var("camera_8032DF78",    "vecf", flag=table.GLOBL), # unused
+    0x8032DF84: table.sym_var("camera_8032DF84",    "vecf", flag=table.GLOBL), # unused
+    0x8032DF90: table.sym_var("camera_8032DF90",    "vecf", flag=table.GLOBL), # unused
+    0x8032DF9C: table.sym_var("camera_8032DF9C",    "vecf", flag=table.GLOBL), # unused
+    0x8032DFA8: table.sym_var_fnc("camera_8032DFA8", lst="[]", val="int", arg=(
+        "struct camera *",
+        "vecf",
+        "vecf",
+    ), flag=table.GLOBL),
+    0x8032DFF0: table.sym_var("camera_8032DFF0",    "vecf", flag=table.GLOBL),
+    0x8032DFFC: table.sym_var("camera_8032DFFC",    "vecf", flag=table.GLOBL),
+    0x8032E008: table.sym_var("camera_8032E008",    "u16",  "[]",   flag=table.GLOBL), # unused
+    0x8032E018: table.sym_var("camera_8032E018",    "u8",   "[]",   flag=table.GLOBL),
+    0x8032E020: table.sym_var("campos_bbh_library_test",    "struct campos", "[]", flag=table.GLOBL), # unused
+    0x8032E050: table.sym_var("campos_bbh_library",         "struct campos", "[]", flag=table.GLOBL),
+    0x8032E080: table.sym_var("camctl_null",    "struct camctl", "[]",  flag=table.GLOBL), # unused
+    0x8032E098: table.sym_var("camctl_sl",      "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E0E0: table.sym_var("camctl_thi",     "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E128: table.sym_var("camctl_hmc",     "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E1D0: table.sym_var("camctl_ssl",     "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E248: table.sym_var("camctl_rr",      "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E338: table.sym_var("camctl_cotmc",   "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E368: table.sym_var("camctl_ccm",     "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E3B0: table.sym_var("camctl_inside",  "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032E6F8: table.sym_var("camctl_bbh",     "struct camctl", "[]",  flag=table.GLOBL),
+    0x8032ECB0: table.sym_var("camctl_table",   "struct camctl *", "[]",    flag=table.GLOBL),
+    0x8032ED50: table.sym_var("campath_8032ED50",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032EE08: table.sym_var("campath_8032EE08",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032EEC0: table.sym_var("campath_8032EEC0",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032EF30: table.sym_var("campath_8032EF30",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032EFA0: table.sym_var("campath_8032EFA0",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032EFF0: table.sym_var("campath_8032EFF0",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F048: table.sym_var("campath_8032F048",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F0E8: table.sym_var("campath_8032F0E8",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F130: table.sym_var("campath_8032F130",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F178: table.sym_var("campath_8032F178",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F1B8: table.sym_var("campath_8032F1B8",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F1F0: table.sym_var("camera_8032F1F0",    "vecf", flag=table.GLOBL),
+    0x8032F1FC: table.sym_var("camera_8032F1FC",    "vecf", flag=table.GLOBL),
+    0x8032F208: table.sym_var("camera_8032F208",    "vecf", flag=table.GLOBL),
+    0x8032F214: table.sym_var("campath_8032F214",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F32C: table.sym_var("campath_8032F32C",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F444: table.sym_var("campath_8032F444",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F48C: table.sym_var("campath_8032F48C",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F4D4: table.sym_var("camdemo_8032F4D4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F534: table.sym_var("camdemo_8032F534",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F544: table.sym_var("camdemo_8032F544",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F554: table.sym_var("camdemo_8032F554",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F564: table.sym_var("camdemo_8032F564",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F56C: table.sym_var("camdemo_8032F56C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F574: table.sym_var("camdemo_8032F574",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F59C: table.sym_var("camdemo_8032F59C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F5C4: table.sym_var("camdemo_8032F5C4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F5DC: table.sym_var("camdemo_8032F5DC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F5F4: table.sym_var("camdemo_8032F5F4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F60C: table.sym_var("camdemo_8032F60C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F624: table.sym_var("camdemo_8032F624",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F634: table.sym_var("camdemo_8032F634",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F63C: table.sym_var("camdemo_8032F63C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F64C: table.sym_var("camdemo_8032F64C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F65C: table.sym_var("camdemo_8032F65C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F674: table.sym_var("camdemo_8032F674",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F69C: table.sym_var("camdemo_8032F69C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6AC: table.sym_var("camdemo_8032F6AC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6BC: table.sym_var("camdemo_8032F6BC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6CC: table.sym_var("camdemo_8032F6CC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6DC: table.sym_var("camdemo_8032F6DC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6F4: table.sym_var("camdemo_8032F6F4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F6FC: table.sym_var("camdemo_8032F6FC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F70C: table.sym_var("camdemo_8032F70C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F714: table.sym_var("camdemo_8032F714",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F71C: table.sym_var("camdemo_8032F71C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F72C: table.sym_var("camdemo_8032F72C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F734: table.sym_var("camdemo_8032F734",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F74C: table.sym_var("camdemo_8032F74C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F754: table.sym_var("camdemo_8032F754",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F75C: table.sym_var("camdemo_8032F75C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F764: table.sym_var("camdemo_8032F764",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F76C: table.sym_var("camdemo_8032F76C",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F774: table.sym_var("camdemo_8032F774",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F784: table.sym_var("camdemo_8032F784",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F794: table.sym_var("camdemo_8032F794",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F7A4: table.sym_var("camdemo_8032F7A4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F7B4: table.sym_var("camdemo_8032F7B4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F7C4: table.sym_var("camdemo_8032F7C4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F7D4: table.sym_var("camdemo_8032F7D4",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F7EC: table.sym_var("camdemo_8032F7EC",   "struct camdemo", "[]", flag=table.GLOBL),
+    0x8032F804: table.sym_var("camera_windemo_table",   "u8", "[][4]",  table.GLOBL),
+    0x8032F870: table.sym_var("camera_pause_table",     "u8", "[]",     table.GLOBL),
+    0x8032F884: table.sym_var("campath_bob1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F8AC: table.sym_var("campath_bob1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F8D4: table.sym_var("campath_wf1_eye",    "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F8FC: table.sym_var("campath_wf1_look",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F924: table.sym_var("campath_jrb1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F94C: table.sym_var("campath_jrb1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F974: table.sym_var("campath_ccm2_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F99C: table.sym_var("campath_ccm2_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F9C4: table.sym_var("campath_bbh1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032F9E4: table.sym_var("campath_bbh1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FA04: table.sym_var("campath_hmc1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FA2C: table.sym_var("campath_hmc1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FA54: table.sym_var("campath_thi3_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FA6C: table.sym_var("campath_thi3_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FA84: table.sym_var("campath_lll2_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FAB4: table.sym_var("campath_lll2_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FAE4: table.sym_var("campath_ssl1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FB14: table.sym_var("campath_ssl1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FB44: table.sym_var("campath_ddd1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FB7C: table.sym_var("campath_ddd1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FBB4: table.sym_var("campath_sl1_eye",    "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FBD4: table.sym_var("campath_sl1_look",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FBF4: table.sym_var("campath_wdw1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FC14: table.sym_var("campath_wdw1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FC34: table.sym_var("campath_ttm1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FC64: table.sym_var("campath_ttm1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FC94: table.sym_var("campath_thi1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FCCC: table.sym_var("campath_thi1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FD04: table.sym_var("campath_ttc1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FD24: table.sym_var("campath_ttc1_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FD44: table.sym_var("campath_rr1_eye",    "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FD64: table.sym_var("campath_rr1_look",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FD84: table.sym_var("campath_sa1_eye",    "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FDAC: table.sym_var("campath_sa1_look",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FDD4: table.sym_var("campath_cotmc1_eye",     "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FDFC: table.sym_var("campath_cotmc1_look",    "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FE24: table.sym_var("campath_ddd2_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FE4C: table.sym_var("campath_ddd2_look",  "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FE74: table.sym_var("campath_ccm1_eye",   "struct campath", "[]",   flag=table.GLOBL),
+    0x8032FE94: table.sym_var("campath_ccm1_look",  "struct campath", "[]",   flag=table.GLOBL),
 
     # src/object.data.c
-    0x8032FEC0: table.sym_var("object_8032FEC0",    "s8", "[]",                 table.GLOBL),
-    0x8032FECC: table.sym_var("particle_table",     "struct particle", "[]",    table.GLOBL),
+    0x8032FEC0: table.sym_var("object_8032FEC0",    "s8", "[]", table.GLOBL),
+    0x8032FECC: table.sym_var("pl_pcl_table",   "struct pl_pcl", "[]",  table.GLOBL),
 
-    # src/object_lib.data.c
-    0x80330000: table.sym_var("object_lib_80330000",    "s8",  "[]",    table.GLOBL),
-    0x80330004: table.sym_var("object_lib_80330004",    "s16", "[]",    table.GLOBL),
-    0x80330014: table.sym_var("object_lib_80330014",    "s8",  "[]",    table.GLOBL),
+    # src/obj_lib.data.c
+    0x80330000: table.sym_var("obj_lib_80330000",   "s8",  "[]",    table.GLOBL),
+    0x80330004: table.sym_var("obj_lib_80330004",   "s16", "[]",    table.GLOBL),
+    0x80330014: table.sym_var("obj_lib_80330014",   "s8",  "[]",    table.GLOBL),
 
     # src/object_a.data.c
-    0x80330020: table.sym("_object_a_data+0x00"),
-    0x8033002C: table.sym("_object_a_data+0x0C"),
-    0x8033006C: table.sym("_object_a_data+0x4C"), # la
-    0x80330074: table.sym("_object_a_data+0x54"), # la
-    0x80330084: table.sym("_object_a_data+0x64"), # la
-    0x80330094: table.sym("_object_a_data+0x74"), # la
-    0x803300AC: table.sym("_object_a_data+0x8C"), # la
-    0x803300BC: table.sym("_object_a_data+0x9C"), # la
-    0x803300E0: table.sym("_object_a_data+0xC0"), # la
-    0x80330140: table.sym("_object_a_data+0x120"), # la
-    0x80330198: table.sym("_object_a_data+0x178"), # la
-    0x803301AA: table.sym("_object_a_data+0x18A"),
-    0x803301AC: table.sym("_object_a_data+0x18C"),
-    0x803301B0: table.sym("_object_a_data+0x190"),
-    0x803301C0: table.sym("_object_a_data+0x1A0"), # la
-    0x803301D0: table.sym("_object_a_data+0x1B0"), # la
-    0x803301D1: table.sym("_object_a_data+0x1B1"),
-    0x803301D3: table.sym("_object_a_data+0x1B3"),
-    0x803301DC: table.sym("_object_a_data+0x1BC"),
-    0x803301E0: table.sym("_object_a_data+0x1C0"),
-    0x803301E4: table.sym("_object_a_data+0x1C4"), # la
-    0x803301F4: table.sym("_object_a_data+0x1D4"), # la
-    0x80330204: table.sym("_object_a_data+0x1E4"),
-    0x80330206: table.sym("_object_a_data+0x1E6"),
-    0x80330224: table.sym("_object_a_data+0x204"), # la
-    0x8033022C: table.sym("_object_a_data+0x20C"),
-    0x8033022E: table.sym("_object_a_data+0x20E"),
-    0x80330244: table.sym("_object_a_data+0x224"),
-    0x80330246: table.sym("_object_a_data+0x226"),
-    0x80330260: table.sym("_object_a_data+0x240"),
-    0x80330264: table.sym("_object_a_data+0x244"),
-    0x80330288: table.sym("_object_a_data+0x268"),
-    0x80330290: table.sym("_object_a_data+0x270"),
-    0x80330298: table.sym("_object_a_data+0x278"), # la
-    0x803302AC: table.sym("_object_a_data+0x28C"),
-    0x803302B2: table.sym("_object_a_data+0x292"),
-    0x803302B4: table.sym("_object_a_data+0x294"),
-    0x803302DC: table.sym("_object_a_data+0x2BC"), # la
-    0x803302EC: table.sym("_object_a_data+0x2CC"),
-    0x803302EE: table.sym("_object_a_data+0x2CE"),
-    0x803302F0: table.sym("_object_a_data+0x2D0"),
-    0x80330318: table.sym("_object_a_data+0x2F8"), # la
-    0x8033032C: table.sym("_object_a_data+0x30C"), # la
-    0x80330340: table.sym("_object_a_data+0x320"), # la
-    0x80330354: table.sym("_object_a_data+0x334"), # la
-    0x8033035C: table.sym("_object_a_data+0x33C"), # la
-    0x80330370: table.sym("_object_a_data+0x350"), # la
-    0x80330380: table.sym("_object_a_data+0x360"), # la
-    0x80330390: table.sym("_object_a_data+0x370"), # la
-    0x803303A0: table.sym("_object_a_data+0x380"), # la
-    0x803303B0: table.sym("_object_a_data+0x390"), # la
-    0x803303C0: table.sym("_object_a_data+0x3A0"),
-    0x803303C2: table.sym("_object_a_data+0x3A2"),
-    0x803303E8: table.sym("_object_a_data+0x3C8"), # la
-    0x803303F8: table.sym("_object_a_data+0x3D8"), # la
-    0x80330408: table.sym("_object_a_data+0x3E8"), # la
-    0x80330410: table.sym("_object_a_data+0x3F0"), # la
-    0x80330420: table.sym("_object_a_data+0x400"), # la
-    0x8033042C: table.sym("_object_a_data+0x40C"), # la
-    0x8033043C: table.sym("_object_a_data+0x41C"), # la
-    0x80330450: table.sym("_object_a_data+0x430"), # la
-    0x8033045C: table.sym("_object_a_data+0x43C"),
-    0x8033046C: table.sym("_object_a_data+0x44C"), # la
-    0x80330470: table.sym("_object_a_data+0x450"), # la
-    0x80330474: table.sym("_object_a_data+0x454"), # la
-    0x80330478: table.sym("_object_a_data+0x458"),
-    0x8033047E: table.sym("_object_a_data+0x45E"),
-    0x80330480: table.sym("_object_a_data+0x460"),
-    0x80330482: table.sym("_object_a_data+0x462"),
-    0x80330484: table.sym("_object_a_data+0x464"),
-    0x803304C8: table.sym("_object_a_data+0x4A8"), # la
-    0x80330518: table.sym("_object_a_data+0x4F8"), # la
-    0x803305F0: table.sym("_object_a_data+0x5D0"),
-    0x803305F4: table.sym("_object_a_data+0x5D4"),
-    0x803305F8: table.sym("_object_a_data+0x5D8"),
-    0x803305FC: table.sym("_object_a_data+0x5DC"),
-    0x803305FE: table.sym("_object_a_data+0x5DE"),
-    0x80330600: table.sym("_object_a_data+0x5E0"),
-    0x8033067C: table.sym("_object_a_data+0x65C"), # la
-    0x80330688: table.sym("_object_a_data+0x668"), # la
-    0x80330698: table.sym("_object_a_data+0x678"), # la
-    0x803306A8: table.sym("_object_a_data+0x688"),
-    0x803306B4: table.sym("_object_a_data+0x694"),
-    0x803306C4: table.sym("_object_a_data+0x6A4"),
-    0x803306DC: table.sym("_object_a_data+0x6BC"), # la
-    0x80330738: table.sym("_object_a_data+0x718"), # la
-    0x803307A0: table.sym("_object_a_data+0x780"), # la
-    0x80330828: table.sym("_object_a_data+0x808"),
-    0x80330830: table.sym("_object_a_data+0x810"), # la
-    0x80330840: table.sym("_object_a_data+0x820"), # la
-    0x803308CC: table.sym("_object_a_data+0x8AC"),
-    0x803308D8: table.sym("_object_a_data+0x8B8"), # la
-    0x803308F8: table.sym("_object_a_data+0x8D8"), # la
-    0x80330900: table.sym("_object_a_data+0x8E0"), # la
-    0x80330AAC: table.sym("_object_a_data+0xA8C"), # la
-    0x80330B1C: table.sym("_object_a_data+0xAFC"), # la
-    0x80330B38: table.sym("_object_a_data+0xB18"), # la
-    0x80330B44: table.sym("_object_a_data+0xB24"), # la
-    0x80330B5C: table.sym("_object_a_data+0xB3C"), # la
-    0x80330B68: table.sym("_object_a_data+0xB48"), # la
-    0x80330B74: table.sym("_object_a_data+0xB54"), # la
-    0x80330B84: table.sym("_object_a_data+0xB64"), # la
-    0x80330B90: table.sym("_object_a_data+0xB70"), # la
-    0x80330BA0: table.sym("_object_a_data+0xB80"), # la
-    0x80330C20: table.sym("_object_a_data+0xC00"), # la
-    0x80330C38: table.sym("_object_a_data+0xC18"), # la
-    0x80330C48: table.sym("_object_a_data+0xC28"), # la
-    0x80330C4C: table.sym("_object_a_data+0xC2C"),
-    0x80330C58: table.sym("_object_a_data+0xC38"), # la
-    0x80330C68: table.sym("_object_a_data+0xC48"), # la
-    0x80330C74: table.sym("_object_a_data+0xC54"), # la
-    0x80330C84: table.sym("_object_a_data+0xC64"), # la
-    0x80330C98: table.sym("_object_a_data+0xC78"), # la
-    0x80330CB0: table.sym("_object_a_data+0xC90"), # la
-    0x80330CC4: table.sym("_object_a_data+0xCA4"), # la
-    0x80330CD4: table.sym("_object_a_data+0xCB4"), # la
-    0x80330CE4: table.sym("_object_a_data+0xCC4"), # la
-    0x80330D0C: table.sym("_object_a_data+0xCEC"), # la
-    0x80330D30: table.sym("_object_a_data+0xD10"),
-    0x80330D54: table.sym("_object_a_data+0xD34"), # la
-    0x80330D78: table.sym("_object_a_data+0xD58"),
-    0x80330D9C: table.sym("_object_a_data+0xD7C"), # la
-    0x80330DAC: table.sym("_object_a_data+0xD8C"),
-    0x80330DB4: table.sym("_object_a_data+0xD94"),
+    0x80330020: table.sym_var("object_a_80330020",  "u32",  "[]",   table.GLOBL),
+    0x8033002C: table.sym_var("object_a_8033002C",  "s16",  "[]",   table.GLOBL),
+    0x8033006C: table.sym_var("object_a_8033006C",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330074: table.sym_var("object_a_80330074",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330084: table.sym_var("object_a_80330084",  "struct obj_col",   flag=table.GLOBL),
+    0x80330094: table.sym_var("object_a_80330094",  "struct obj_pcl",   flag=table.GLOBL),
+    0x803300A8: table.sym_var("object_a_803300A8",  "u8",   "[]",   table.GLOBL), # unused
+    0x803300AC: table.sym_var("object_a_803300AC",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803300BC: table.sym_var("object_a_803300BC",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803300E0: table.sym_var("object_a_803300E0",  "struct obj_sfx",   "[]",   table.GLOBL),
+    0x80330140: table.sym_var("object_a_80330140",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x8033015C: table.sym_var("object_a_8033015C",  "struct object_a_0",    "[]",   table.GLOBL), # unused
+    0x80330198: table.sym_var("object_a_80330198",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803301A8: table.sym_var("object_a_803301A8",  "struct object_a_1",    "[]",   table.GLOBL),
+    0x803301C0: table.sym_var("object_a_803301C0",  "struct obj_col",   flag=table.GLOBL),
+    0x803301D0: table.sym_var("object_a_803301D0",  "struct obj_pcl",   flag=table.GLOBL),
+    0x803301E4: table.sym_var("object_a_803301E4",  "struct obj_col",   flag=table.GLOBL),
+    0x803301F4: table.sym_var("object_a_803301F4",  "struct obj_col",   flag=table.GLOBL),
+    0x80330204: table.sym_var("object_a_80330204",  "s16",  "[][2]",    table.GLOBL),
+    0x80330224: table.sym_var("object_a_80330224",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x8033022C: table.sym_var("object_a_8033022C",  "s16",  "[][2]",    table.GLOBL),
+    0x80330244: table.sym_var("object_a_80330244",  "s16",  "[][2]",    table.GLOBL),
+    0x80330260: table.sym_var("object_a_80330260",  "s32",  "[][2]",    table.GLOBL),
+    0x80330288: table.sym_var("object_a_80330288",  "u32",  "[]",   table.GLOBL),
+    0x80330290: table.sym_var("object_a_80330290",  "u32",  "[]",   table.GLOBL),
+    0x80330298: table.sym_var("object_a_80330298",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803302AC: table.sym_var("object_a_803302AC",  "struct object_a_2",    "[]",   table.GLOBL),
+    0x803302DC: table.sym_var("object_a_803302DC",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803302EC: table.sym_var("object_a_803302EC",  "s16",  "[][3]",    table.GLOBL),
+    0x80330318: table.sym_var("object_a_80330318",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x8033032C: table.sym_var("object_a_8033032C",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80330340: table.sym_var("object_a_80330340",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80330354: table.sym_var("object_a_80330354",  "s16",  "[]",   table.GLOBL),
+    0x8033035C: table.sym_var("object_a_8033035C",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80330370: table.sym_var("object_a_80330370",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330380: table.sym_var("object_a_80330380",  "f32",  "[]",   table.GLOBL),
+    0x80330390: table.sym_var("object_a_80330390",  "struct obj_col",   flag=table.GLOBL),
+    0x803303A0: table.sym_var("object_a_803303A0",  "struct obj_col",   flag=table.GLOBL),
+    0x803303B0: table.sym_var("object_a_803303B0",  "struct obj_col",   flag=table.GLOBL),
+    0x803303C0: table.sym_var("object_a_803303C0",  "s16",  "[][2]",    table.GLOBL),
+    0x803303E8: table.sym_var("object_a_803303E8",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803303F8: table.sym_var("object_a_803303F8",  "struct obj_col",   flag=table.GLOBL),
+    0x80330408: table.sym_var("object_a_80330408",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330410: table.sym_var("object_a_80330410",  "struct obj_col",   flag=table.GLOBL),
+    0x80330420: table.sym_var("object_a_80330420",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x8033042C: table.sym_var("object_a_8033042C",  "struct obj_col",   flag=table.GLOBL),
+    0x8033043C: table.sym_var("object_a_8033043C",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330450: table.sym_var("object_a_80330450",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x8033045C: table.sym_var("object_a_8033045C",  "s8",   "[]",   table.GLOBL),
+    0x8033046C: table.sym_var("object_a_8033046C",  "s16",  "[]",   table.GLOBL),
+    0x80330470: table.sym_var("object_a_80330470",  "s16",  "[]",   table.GLOBL),
+    0x80330474: table.sym_var("object_a_80330474",  "s8",   "[]",   table.GLOBL),
+    0x80330478: table.sym_var("object_a_80330478",  "s16",  "[]",   table.GLOBL),
+    0x80330480: table.sym_var("object_a_80330480",  "s16",  "[][3]",    table.GLOBL),
+    0x803304C8: table.sym_var("object_a_803304C8",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330518: table.sym_var("object_a_80330518",  "struct obj_sfx",   "[]",   table.GLOBL),
+    0x803305F0: table.sym_var("object_a_803305F0",  "s8",   "[]",   table.GLOBL),
+    0x803305F4: table.sym_var("object_a_803305F4",  "s8",   "[]",   table.GLOBL),
+    0x803305F8: table.sym_var("object_a_803305F8",  "struct object_a_3",    "[]",   table.GLOBL),
+    0x8033067C: table.sym_var("object_a_8033067C",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330688: table.sym_var("object_a_80330688",  "struct obj_col",   flag=table.GLOBL),
+    0x80330698: table.sym_var("object_a_80330698",  "struct obj_col",   flag=table.GLOBL),
+    0x803306A8: table.sym_var("object_a_803306A8",  "f32",  "[]",   table.GLOBL),
+    0x803306B4: table.sym_var("object_a_803306B4",  "struct object_a_4",    "[]",   table.GLOBL),
+    0x803306DC: table.sym_var("object_a_803306DC",  "PATH_DATA",    "[]",   table.GLOBL),
+    0x80330738: table.sym_var("object_a_80330738",  "struct obj_sfx",   "[]",   table.GLOBL),
+    0x803307A0: table.sym_var("object_a_803307A0",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803307C0: table.sym_var("object_a_803307C0",  "static s16",   "[]"),
+    0x803307F4: table.sym_var("object_a_803307F4",  "static s16",   "[]"),
+    0x80330828: table.sym_var("object_a_80330828",  "s16 *",    "[]",   table.GLOBL),
+    0x80330830: table.sym_var("object_a_80330830",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330840: table.sym_var("object_a_80330840",  "struct obj_col",   flag=table.GLOBL),
+    0x80330850: table.sym_var("object_a_80330850",  "static s8",    "[]"),
+    0x80330884: table.sym_var("object_a_80330884",  "static s8",    "[]"),
+    0x803308A8: table.sym_var("object_a_803308A8",  "static s8",    "[]"),
+    0x803308CC: table.sym_var("object_a_803308CC",  "s8 *", "[]",   table.GLOBL),
+    0x803308D8: table.sym_var("object_a_803308D8",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x803308F8: table.sym_var("object_a_803308F8",  "s8",   "[]",   table.GLOBL),
+    0x80330900: table.sym_var("object_a_80330900",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330924: table.sym_var("object_a_80330924",  "static s8",    "[]"),
+    0x80330940: table.sym_var("object_a_80330940",  "static s8",    "[]"),
+    0x8033095C: table.sym_var("object_a_8033095C",  "static s8",    "[]"),
+    0x80330978: table.sym_var("object_a_80330978",  "static s8",    "[]"),
+    0x80330994: table.sym_var("object_a_80330994",  "static s8",    "[]"),
+    0x803309B0: table.sym_var("object_a_803309B0",  "static s8",    "[]"),
+    0x803309CC: table.sym_var("object_a_803309CC",  "static s8",    "[]"),
+    0x803309E8: table.sym_var("object_a_803309E8",  "static s8",    "[]"),
+    0x80330A04: table.sym_var("object_a_80330A04",  "static s8",    "[]"),
+    0x80330A20: table.sym_var("object_a_80330A20",  "static s8",    "[]"),
+    0x80330A3C: table.sym_var("object_a_80330A3C",  "static s8",    "[]"),
+    0x80330A58: table.sym_var("object_a_80330A58",  "static s8",    "[]"),
+    0x80330A74: table.sym_var("object_a_80330A74",  "static s8",    "[]"),
+    0x80330A90: table.sym_var("object_a_80330A90",  "static s8",    "[]"),
+    0x80330AAC: table.sym_var("object_a_80330AAC",  "struct object_a_5",    "[]",   table.GLOBL),
+    0x80330B1C: table.sym_var("object_a_80330B1C",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B38: table.sym_var("object_a_80330B38",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B44: table.sym_var("object_a_80330B44",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B5C: table.sym_var("object_a_80330B5C",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B68: table.sym_var("object_a_80330B68",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B74: table.sym_var("object_a_80330B74",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B84: table.sym_var("object_a_80330B84",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330B90: table.sym_var("object_a_80330B90",  "struct obj_col",   flag=table.GLOBL),
+    0x80330BA0: table.sym_var("object_a_80330BA0",  "struct object_a_6",    "[]",   flag=table.GLOBL),
+    0x80330C20: table.sym_var("object_a_80330C20",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330C38: table.sym_var("object_a_80330C38",  "struct obj_col",   flag=table.GLOBL),
+    0x80330C48: table.sym_var("object_a_80330C48",  "struct object_a_7",    "[]",   flag=table.GLOBL),
+    0x80330C58: table.sym_var("object_a_80330C58",  "struct obj_col",   flag=table.GLOBL),
+    0x80330C68: table.sym_var("object_a_80330C68",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330C74: table.sym_var("object_a_80330C74",  "struct obj_col",   flag=table.GLOBL),
+    0x80330C84: table.sym_var("object_a_80330C84",  "s16",  "[][3]",    table.GLOBL),
+    0x80330C98: table.sym_var("object_a_80330C98",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330CB0: table.sym_var("object_a_80330CB0",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330CC4: table.sym_var("object_a_80330CC4",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330CD4: table.sym_var("object_a_80330CD4",  "struct obj_col",   flag=table.GLOBL),
+    0x80330CE4: table.sym_var("object_a_80330CE4",  "O_CALLBACK *", "[]",   table.GLOBL),
+    0x80330D0C: table.sym_var("object_a_80330D0C",  "struct obj_splash",    flag=table.GLOBL),
+    0x80330D30: table.sym_var("object_a_80330D30",  "struct obj_splash",    flag=table.GLOBL),
+    0x80330D54: table.sym_var("object_a_80330D54",  "struct obj_splash",    flag=table.GLOBL),
+    0x80330D78: table.sym_var("object_a_80330D78",  "struct obj_splash",    flag=table.GLOBL),
+    0x80330D9C: table.sym_var("object_a_80330D9C",  "struct obj_col",   flag=table.GLOBL),
+    0x80330DAC: table.sym_var("object_a_80330DAC",  "struct object_a_8",    "[]",   table.GLOBL),
 
-    # src/object_move.data.c
-    0x80330E20: table.sym_var("object_move_80330E20",   "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x80330E24: table.sym_var("object_move_80330E24",   "u32", "[4]",   table.GLOBL), # unused
-    0x80330E34: table.sym_var("object_move",            "struct object *",  flag=table.GLOBL|ultra.DALIGN),
+    # src/obj_physics.data.c
+    0x80330E20: table.sym_var("obj_physics_80330E20",   "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x80330E24: table.sym_var("obj_physics_80330E24",   "u32", "[4]",   table.GLOBL), # unused
+    0x80330E34: table.sym_var("object_movebg",          "struct object *",  flag=table.GLOBL|ultra.DALIGN),
 
-    # src/object_debug.data.c
-    0x80330E40: table.sym("_object_debug_data+0x00"), # la
-    0x80330E64: table.sym("_object_debug_data+0x24"), # la
-    0x80330E88: table.sym("_object_debug_data+0x48"),
-    0x80330E8C: table.sym("_object_debug_data+0x4C"),
-    0x80330E90: table.sym("_object_debug_data+0x50"),
-    0x80330E94: table.sym("_object_debug_data+0x54"),
-    0x80330E98: table.sym("_object_debug_data+0x58"),
-    0x80330E9C: table.sym("_object_debug_data+0x5C"),
-    0x80330EA0: table.sym("_object_debug_data+0x60"),
-    0x80330EA4: table.sym("_object_debug_data+0x64"),
-    0x80330EA8: table.sym("_object_debug_data+0x68"), # la
+    # src/obj_debug.data.c
+    0x80330E40: table.sym_var("obj_debug_80330E40", "const char *", "[]",   table.GLOBL),
+    0x80330E64: table.sym_var("obj_debug_80330E64", "const char *", "[]",   table.GLOBL),
+    0x80330E88: table.sym_var("obj_debug_80330E88", "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x80330E8C: table.sym_var("obj_debug_80330E8C", "s32",  flag=table.GLOBL|ultra.DALIGN),
+    0x80330E90: table.sym_var("obj_debug_80330E90", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330E94: table.sym_var("obj_debug_80330E94", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330E98: table.sym_var("obj_debug_80330E98", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330E9C: table.sym_var("obj_debug_80330E9C", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330EA0: table.sym_var("obj_debug_80330EA0", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330EA4: table.sym_var("obj_debug_80330EA4", "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80330EA8: table.sym_var("obj_debug_80330EA8", "s16", "[]",    table.GLOBL),
 
     # src/wipe.data.c
     0x80330EC0: table.sym_var("wipe_80330EC0",  "u8",  "[4]",   table.GLOBL),
@@ -6598,10 +8032,10 @@ sym_E0_d_main = {
     0x8033127C: table.sym_var("scroll_table_c",     "struct scroll", "[]",  table.GLOBL),
     0x803312E8: table.sym_var("scroll_803312E8",    "s8", "[]",             table.GLOBL), # unused
 
-    # src/object_gfx.data.c
-    0x803312F0: table.sym_var("object_gfx_803312F0",    "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x803312F4: table.sym_var("object_gfx_803312F4",    "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x803312F8: table.sym_var("object_gfx_803312F8",    "s16",  flag=table.GLOBL|ultra.DALIGN),
+    # src/obj_shape.data.c
+    0x803312F0: table.sym_var("obj_shape_803312F0", "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x803312F4: table.sym_var("obj_shape_803312F4", "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x803312F8: table.sym_var("obj_shape_803312F8", "s16",  flag=table.GLOBL|ultra.DALIGN),
 
     # src/ripple.data.c
     0x80331300: table.sym_var("ripple_80331300",    "void *", "[]",     table.GLOBL), # type
@@ -6678,19 +8112,20 @@ sym_E0_d_main = {
     0x80331728: table.sym_var("str_80331728",   "u8", "[]", table.GLOBL), # SAVE & QUIT
     0x80331734: table.sym_var("str_80331734",   "u8", "[]", table.GLOBL), # CONTINUE, DON'T SAVE
 
-    # src/particle_snow.data.c
-    0x80331750: table.sym("_particle_snow_data+0x00"),
-    0x80331758: table.sym("_particle_snow_data+0x08"), # la
-    0x80331788: table.sym("_particle_snow_data+0x38"), # la
-    0x80331790: table.sym("_particle_snow_data+0x40"), # la
-    0x80331798: table.sym("_particle_snow_data+0x48"), # la
+    # src/weather_snow.data.c
+    0x80331750: table.sym_var("weather_snow_80331750",  "s8",           flag=table.GLOBL|ultra.DALIGN),
+    0x80331758: table.sym_var("vtx_weather_snow",       "Vtx", "[]",    table.GLOBL),
+    0x80331788: table.sym_var("weather_snow_80331788",  "vecs", flag=table.GLOBL),
+    0x80331790: table.sym_var("weather_snow_80331790",  "vecs", flag=table.GLOBL),
+    0x80331798: table.sym_var("weather_snow_80331798",  "vecs", flag=table.GLOBL),
 
-    # src/particle_lava.data.c
-    0x803317A8: table.sym("_particle_lava_data+0x08"), # la
+    # src/weather_lava.data.c
+    0x803317A0: table.sym_var("weather_lava_803317A0",  "s8",           flag=table.GLOBL|ultra.DALIGN),
+    0x803317A8: table.sym_var("vtx_weather_lava",       "Vtx", "[]",    table.GLOBL),
 
     # src/obj_data.data.c
-    0x803317E0: table.sym_var("obj_data_table", "struct obj_data", "[]",    table.GLOBL),
-    0x80332350: table.sym_var("map_obj_table",  "struct map_obj", "[]",     table.GLOBL),
+    0x803317E0: table.sym_var("prg_obj_table",  "struct prg_obj", "[]", table.GLOBL),
+    0x80332350: table.sym_var("map_obj_table",  "struct map_obj", "[]", table.GLOBL),
 
     # src/hud.data.c
     0x803325F0: table.sym_var("power",  "struct power", flag=table.GLOBL),
@@ -6700,212 +8135,198 @@ sym_E0_d_main = {
     0x80332608: table.sym_var("hud_80332608",   "s16",  flag=table.GLOBL|ultra.DALIGN),
 
     # src/object_b.data.c
-    0x80332610: table.sym("_object_b_data+0x00"),
-    0x80332614: table.sym("_object_b_data+0x04"),
-    0x80332618: table.sym("_object_b_data+0x08"),
-    0x8033261C: table.sym("_object_b_data+0x0C"),
-    0x80332620: table.sym("_object_b_data+0x10"),
-    0x80332624: table.sym("_object_b_data+0x14"), # la
-    0x80332634: table.sym("_object_b_data+0x24"), # la
-    0x80332644: table.sym("_object_b_data+0x34"), # la
-    0x80332654: table.sym("_object_b_data+0x44"), # la
-    0x80332664: table.sym("_object_b_data+0x54"), # la
-    0x80332674: table.sym("_object_b_data+0x64"), # la
-    0x80332684: table.sym("_object_b_data+0x74"), # la
-    0x80332694: table.sym("_object_b_data+0x84"), # la
-    0x803326A4: table.sym("_object_b_data+0x94"), # la
-    0x803326B4: table.sym("_object_b_data+0xA4"), # la
-    0x803326C4: table.sym("_object_b_data+0xB4"), # la
-    0x80332718: table.sym("_object_b_data+0x108"), # la
-    0x80332764: table.sym("_object_b_data+0x154"), # la
-    0x80332774: table.sym("_object_b_data+0x164"), # la
-    0x80332784: table.sym("_object_b_data+0x174"), # la
-    0x80332794: table.sym("_object_b_data+0x184"), # la
-    0x803327A4: table.sym("_object_b_data+0x194"),
-    0x803327A8: table.sym("_object_b_data+0x198"), # la
-    0x803327B8: table.sym("_object_b_data+0x1A8"), # la
-    0x803327FC: table.sym("_object_b_data+0x1EC"), # la
-    0x8033280C: table.sym("_object_b_data+0x1FC"), # la
-    0x8033281C: table.sym("_object_b_data+0x20C"), # la
-    0x8033282C: table.sym("_object_b_data+0x21C"),
-    0x8033282E: table.sym("_object_b_data+0x21E"),
+    0x80332610: table.sym_var("object_b_80332610",  "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332614: table.sym_var("object_b_80332614",  "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x80332618: table.sym_var("object_b_80332618",  "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8033261C: table.sym_var("object_b_8033261C",  "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332620: table.sym_var("object_b_80332620",  "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332624: table.sym_var("object_b_80332624",  "struct obj_col",   flag=table.GLOBL),
+    0x80332634: table.sym_var("object_b_80332634",  "struct obj_col",   flag=table.GLOBL),
+    0x80332644: table.sym_var("object_b_80332644",  "struct obj_col",   flag=table.GLOBL),
+    0x80332654: table.sym_var("object_b_80332654",  "struct obj_col",   flag=table.GLOBL),
+    0x80332664: table.sym_var("object_b_80332664",  "struct obj_col",   flag=table.GLOBL),
+    0x80332674: table.sym_var("object_b_80332674",  "struct obj_col",   flag=table.GLOBL),
+    0x80332684: table.sym_var("object_b_80332684",  "struct obj_col",   flag=table.GLOBL),
+    0x80332694: table.sym_var("object_b_80332694",  "struct obj_col",   flag=table.GLOBL),
+    0x803326A4: table.sym_var("object_b_803326A4",  "struct obj_col",   flag=table.GLOBL),
+    0x803326B4: table.sym_var("object_b_803326B4",  "struct obj_col",   flag=table.GLOBL),
+    0x803326C4: table.sym_var("object_b_803326C4",  "s16",  "[]",   table.GLOBL), # PATH_DATA
+    0x80332718: table.sym_var("object_b_80332718",  "s16",  "[]",   table.GLOBL), # PATH_DATA
+    0x80332764: table.sym_var("object_b_80332764",  "struct obj_col",   flag=table.GLOBL),
+    0x80332774: table.sym_var("object_b_80332774",  "struct obj_col",   flag=table.GLOBL),
+    0x80332784: table.sym_var("object_b_80332784",  "struct obj_col",   flag=table.GLOBL),
+    0x80332794: table.sym_var("object_b_80332794",  "struct obj_col",   flag=table.GLOBL),
+    0x803327A4: table.sym_var("object_b_803327A4",  "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x803327A8: table.sym_var("object_b_803327A8",  "struct obj_col",   flag=table.GLOBL),
+    0x803327B8: table.sym_var("object_b_803327B8",  "s16",  "[]",   table.GLOBL), # PATH_DATA
+    0x803327FC: table.sym_var("object_b_803327FC",  "struct obj_col",   flag=table.GLOBL),
+    0x8033280C: table.sym_var("object_b_8033280C",  "struct obj_col",   flag=table.GLOBL),
+    0x8033281C: table.sym_var("object_b_8033281C",  "struct obj_col",   flag=table.GLOBL),
+    0x8033282C: table.sym_var("object_b_8033282C",  "s16", "[][2]", table.GLOBL),
 
     # src/object_c.data.c
-    0x80332840: table.sym("_object_c_data+0x00"), # la
-    0x80332850: table.sym("_object_c_data+0x10"), # la
-    0x80332858: table.sym("_object_c_data+0x18"), # la
-    0x80332860: table.sym("_object_c_data+0x20"),
-    0x80332862: table.sym("_object_c_data+0x22"),
-    0x80332864: table.sym("_object_c_data+0x24"),
-    0x80332880: table.sym("_object_c_data+0x40"), # la
-    0x80332890: table.sym("_object_c_data+0x50"), # la
-    0x80332898: table.sym("_object_c_data+0x58"), # la
-    0x803328A8: table.sym("_object_c_data+0x68"), # la
-    0x803328B8: table.sym("_object_c_data+0x78"),
-    0x803328C0: table.sym("_object_c_data+0x80"), # la
-    0x803328D0: table.sym("_object_c_data+0x90"),
-    0x803328D4: table.sym("_object_c_data+0x94"),
-    0x803328D8: table.sym("_object_c_data+0x98"),
-    0x803328DA: table.sym("_object_c_data+0x9A"),
-    0x803328F4: table.sym("_object_c_data+0xB4"), # la
-    0x80332900: table.sym("_object_c_data+0xC0"), # la
-    0x80332910: table.sym("_object_c_data+0xD0"), # la
-    0x80332920: table.sym("_object_c_data+0xE0"), # la
-    0x80332930: table.sym("_object_c_data+0xF0"), # la
-    0x80332934: table.sym("_object_c_data+0xF4"),
-    0x80332948: table.sym("_object_c_data+0x108"), # la
-    0x80332954: table.sym("_object_c_data+0x114"), # la
-    0x80332964: table.sym("_object_c_data+0x124"), # la
-    0x8033296C: table.sym("_object_c_data+0x12C"), # la
-    0x8033297C: table.sym("_object_c_data+0x13C"),
-    0x80332984: table.sym("_object_c_data+0x144"), # la
-    0x80332987: table.sym("_object_c_data+0x147"),
-    0x8033298A: table.sym("_object_c_data+0x14A"),
-    0x80332998: table.sym("_object_c_data+0x158"), # la
-    0x803329A8: table.sym("_object_c_data+0x168"), # la
-    0x803329B8: table.sym("_object_c_data+0x178"), # la
-    0x803329CC: table.sym("_object_c_data+0x18C"),
-    0x803329DC: table.sym("_object_c_data+0x19C"),
-    0x80332A00: table.sym("_object_c_data+0x1C0"),
-    0x80332A20: table.sym("_object_c_data+0x1E0"),
-    0x80332A24: table.sym("_object_c_data+0x1E4"),
-    0x80332A28: table.sym("_object_c_data+0x1E8"),
-    0x80332A38: table.sym("_object_c_data+0x1F8"), # la
-    0x80332A48: table.sym("_object_c_data+0x208"), # la
-    0x80332A4B: table.sym("_object_c_data+0x20B"),
-    0x80332A4D: table.sym("_object_c_data+0x20D"),
-    0x80332A4E: table.sym("_object_c_data+0x20E"),
-    0x80332A5C: table.sym("_object_c_data+0x21C"), # la
-    0x80332A70: table.sym("_object_c_data+0x230"),
-    0x80332A78: table.sym("_object_c_data+0x238"),
-    0x80332A7C: table.sym("_object_c_data+0x23C"),
-    0x80332A8C: table.sym("_object_c_data+0x24C"),
-    0x80332A94: table.sym("_object_c_data+0x254"),
-    0x80332A9C: table.sym("_object_c_data+0x25C"),
-    0x80332AA4: table.sym("_object_c_data+0x264"),
-    0x80332AA8: table.sym("_object_c_data+0x268"),
-    0x80332AB0: table.sym("_object_c_data+0x270"),
-    0x80332AB4: table.sym("_object_c_data+0x274"),
-    0x80332AB8: table.sym("_object_c_data+0x278"),
-    0x80332AC0: table.sym("_object_c_data+0x280"),
-    0x80332AC2: table.sym("_object_c_data+0x282"),
-    0x80332AE0: table.sym("_object_c_data+0x2A0"),
-    0x80332AE4: table.sym("_object_c_data+0x2A4"),
-    0x80332AE8: table.sym("_object_c_data+0x2A8"),
-    0x80332AF8: table.sym("_object_c_data+0x2B8"),
-    0x80332B00: table.sym("_object_c_data+0x2C0"), # la
-    0x80332B10: table.sym("_object_c_data+0x2D0"), # la
-    0x80332B11: table.sym("_object_c_data+0x2D1"),
-    0x80332B13: table.sym("_object_c_data+0x2D3"),
-    0x80332B14: table.sym("_object_c_data+0x2D4"),
-    0x80332B16: table.sym("_object_c_data+0x2D6"),
-    0x80332B1C: table.sym("_object_c_data+0x2DC"),
-    0x80332B24: table.sym("_object_c_data+0x2E4"), # la
-    0x80332B34: table.sym("_object_c_data+0x2F4"),
-    0x80332B54: table.sym("_object_c_data+0x314"),
-    0x80332B5C: table.sym("_object_c_data+0x31C"),
-    0x80332B64: table.sym("_object_c_data+0x324"),
-    0x80332B68: table.sym("_object_c_data+0x328"),
-    0x80332BDC: table.sym("_object_c_data+0x39C"),
-    0x80332BE4: table.sym("_object_c_data+0x3A4"),
-    0x80332BF0: table.sym("_object_c_data+0x3B0"), # la
-    0x80332C00: table.sym("_object_c_data+0x3C0"), # la
-    0x80332C10: table.sym("_object_c_data+0x3D0"), # la
-    0x80332C20: table.sym("_object_c_data+0x3E0"), # la
-    0x80332C30: table.sym("_object_c_data+0x3F0"), # la
-    0x80332C40: table.sym("_object_c_data+0x400"), # la
-    0x80332C4C: table.sym("_object_c_data+0x40C"), # la
-    0x80332C5C: table.sym("_object_c_data+0x41C"), # la
-    0x80332C6C: table.sym("_object_c_data+0x42C"),
-    0x80332C74: table.sym("_object_c_data+0x434"), # la
-    0x80332C84: table.sym("_object_c_data+0x444"), # la
-    0x80332C94: table.sym("_object_c_data+0x454"), # la
-    0x80332CA4: table.sym("_object_c_data+0x464"), # la
-    0x80332CB4: table.sym("_object_c_data+0x474"),
-    0x80332CBC: table.sym("_object_c_data+0x47C"), # la
-    0x80332CCC: table.sym("_object_c_data+0x48C"),
-    0x80332CD0: table.sym("_object_c_data+0x490"),
-    0x80332CD4: table.sym("_object_c_data+0x494"),
-    0x80332CF0: table.sym("_object_c_data+0x4B0"), # la
-    0x80332CF8: table.sym("_object_c_data+0x4B8"),
-    0x80332D10: table.sym("_object_c_data+0x4D0"),
-    0x80332D12: table.sym("_object_c_data+0x4D2"),
-    0x80332D28: table.sym("_object_c_data+0x4E8"), # la
-    0x80332D38: table.sym("_object_c_data+0x4F8"), # la
-    0x80332D48: table.sym("_object_c_data+0x508"), # la
-    0x80332D58: table.sym("_object_c_data+0x518"),
-    0x80332D5A: table.sym("_object_c_data+0x51A"),
-    0x80332D5C: table.sym("_object_c_data+0x51C"),
-    0x80332E14: table.sym("_object_c_data+0x5D4"), # la
-    0x80332E24: table.sym("_object_c_data+0x5E4"),
-    0x80332E28: table.sym("_object_c_data+0x5E8"),
-    0x80332E2C: table.sym("_object_c_data+0x5EC"),
-    0x80332E3C: table.sym("_object_c_data+0x5FC"), # la
+    0x80332840: table.sym_var("object_c_80332840",  "struct obj_col",   flag=table.GLOBL),
+    0x80332850: table.sym_var("object_c_80332850",  "u8",   "[6]",  table.GLOBL), # template
+    0x80332858: table.sym_var("object_c_80332858",  "u8",   "[6]",  table.GLOBL), # template
+    0x80332860: table.sym_var("object_c_80332860",  "struct object_c_0",    "[]",   table.GLOBL),
+    0x80332880: table.sym_var("object_c_80332880",  "struct obj_col",   flag=table.GLOBL),
+    0x80332890: table.sym_var("object_c_80332890",  "u8",   "[6]",  table.GLOBL), # template
+    0x80332898: table.sym_var("object_c_80332898",  "struct obj_col",   flag=table.GLOBL),
+    0x803328A8: table.sym_var("object_c_803328A8",  "struct obj_col",   flag=table.GLOBL),
+    0x803328B8: table.sym_var("object_c_803328B8",  "s16",  "[]",   table.GLOBL),
+    0x803328C0: table.sym_var("object_c_803328C0",  "struct obj_col",   flag=table.GLOBL),
+    0x803328D0: table.sym_var("object_c_803328D0",  "struct object_c_1",    "[]",   table.GLOBL),
+    0x803328F4: table.sym_var("object_c_803328F4",  "u8",   "[][6]",    table.GLOBL), # template
+    0x80332900: table.sym_var("object_c_80332900",  "struct obj_col",   flag=table.GLOBL),
+    0x80332910: table.sym_var("object_c_80332910",  "struct obj_col",   flag=table.GLOBL),
+    0x80332920: table.sym_var("object_c_80332920",  "struct obj_col",   flag=table.GLOBL),
+    0x80332930: table.sym_var("object_c_80332930",  "u8",   "[6]",  table.GLOBL), # template
+    0x80332938: table.sym_var("object_c_80332938",  "f32",  "[]",   table.GLOBL),
+    0x80332948: table.sym_var("object_c_80332948",  "int",  "[]",   table.GLOBL),
+    0x80332954: table.sym_var("object_c_80332954",  "struct obj_col",   flag=table.GLOBL),
+    0x80332964: table.sym_var("object_c_80332964",  "u8",   "[6]",  table.GLOBL), # template
+    0x8033296C: table.sym_var("object_c_8033296C",  "struct obj_col",   flag=table.GLOBL),
+    0x8033297C: table.sym_var("object_c_8033297C",  "s8",   "[]",   table.GLOBL),
+    0x80332984: table.sym_var("object_c_80332984",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80332998: table.sym_var("object_c_80332998",  "struct obj_col",   flag=table.GLOBL),
+    0x803329A8: table.sym_var("object_c_803329A8",  "struct obj_col",   flag=table.GLOBL),
+    0x803329B8: table.sym_var("object_c_803329B8",  "struct obj_pcl",   flag=table.GLOBL),
+    0x803329CC: table.sym_var("object_c_803329CC",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x803329DC: table.sym_var("object_c_803329DC",  "const PATH_DATA *",    "[]",   table.GLOBL),
+    0x80332A00: table.sym_var("object_c_80332A00",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332A20: table.sym_var("object_c_80332A20",  "struct object_c_2",    "[]",   table.GLOBL),
+    0x80332A38: table.sym_var("object_c_80332A38",  "struct obj_col",   flag=table.GLOBL),
+    0x80332A48: table.sym_var("object_c_80332A48",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80332A5C: table.sym_var("object_c_80332A5C",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80332A70: table.sym_var("object_c_80332A70",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332A78: table.sym_var("object_c_80332A78",  "u8",   "[]",   table.GLOBL),
+    0x80332A7C: table.sym_var("object_c_80332A7C",  "f32",  "[]",   table.GLOBL),
+    0x80332A8C: table.sym_var("object_c_80332A8C",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332A94: table.sym_var("object_c_80332A94",  "s16",  "[]",   table.GLOBL),
+    0x80332A9C: table.sym_var("object_c_80332A9C",  "s16",  "[]",   table.GLOBL),
+    0x80332AA4: table.sym_var("object_c_80332AA4",  "s8",   "[]",   table.GLOBL),
+    0x80332AA8: table.sym_var("object_c_80332AA8",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332AB0: table.sym_var("object_c_80332AB0",  "s8",   "[]",   table.GLOBL),
+    0x80332AB4: table.sym_var("object_c_80332AB4",  "s16",  "[]",   table.GLOBL),
+    0x80332AB8: table.sym_var("object_c_80332AB8",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332AC0: table.sym_var("object_c_80332AC0",  "s16",  "[][2][2]", table.GLOBL),
+    0x80332AE0: table.sym_var("object_c_80332AE0",  "s8",   "[]",   table.GLOBL),
+    0x80332AE4: table.sym_var("object_c_80332AE4",  "s16",  "[]",   table.GLOBL),
+    0x80332AE8: table.sym_var("object_c_80332AE8",  "s16",  "[][4]",    table.GLOBL),
+    0x80332AF8: table.sym_var("object_c_80332AF8",  "s16",  "[]",   table.GLOBL),
+    0x80332B00: table.sym_var("object_c_80332B00",  "struct obj_col",   flag=table.GLOBL),
+    0x80332B10: table.sym_var("object_c_80332B10",  "struct obj_pcl",   flag=table.GLOBL),
+    0x80332B24: table.sym_var("object_c_80332B24",  "struct obj_col",   flag=table.GLOBL),
+    0x80332B34: table.sym_var("object_c_80332B34",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332B54: table.sym_var("object_c_80332B54",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332B5C: table.sym_var("object_c_80332B5C",  "s16",  "[]",   table.GLOBL),
+    0x80332B64: table.sym_var("object_c_80332B64",  "struct object_c_3",    "[][5]",    table.GLOBL),
+    0x80332BDC: table.sym_var("object_c_80332BDC",  "s16",  "[]",   table.GLOBL),
+    0x80332BE4: table.sym_var("object_c_80332BE4",  "const MAP_DATA *", "[]",   table.GLOBL),
+    0x80332BF0: table.sym_var("object_c_80332BF0",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C00: table.sym_var("object_c_80332C00",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C10: table.sym_var("object_c_80332C10",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C20: table.sym_var("object_c_80332C20",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C30: table.sym_var("object_c_80332C30",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C40: table.sym_var("object_c_80332C40",  "s16",  "[][2]",    table.GLOBL),
+    0x80332C4C: table.sym_var("object_c_80332C4C",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C5C: table.sym_var("object_c_80332C5C",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C6C: table.sym_var("object_c_80332C6C",  "f32",  "[]",   table.GLOBL),
+    0x80332C74: table.sym_var("object_c_80332C74",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C84: table.sym_var("object_c_80332C84",  "struct obj_col",   flag=table.GLOBL),
+    0x80332C94: table.sym_var("object_c_80332C94",  "struct obj_col",   flag=table.GLOBL),
+    0x80332CA4: table.sym_var("object_c_80332CA4",  "struct obj_col",   flag=table.GLOBL),
+    0x80332CB4: table.sym_var("object_c_80332CB4",  "s8",   "[]",   table.GLOBL),
+    0x80332CBC: table.sym_var("object_c_80332CBC",  "struct obj_col",   flag=table.GLOBL),
+    0x80332CCC: table.sym_var("object_c_80332CCC",  "vecf", "[]",   table.GLOBL),
+    0x80332CF0: table.sym_var("object_c_80332CF0",  "u8",   "[6]",  table.GLOBL), # template
+    0x80332CF8: table.sym_var("object_c_80332CF8",  "struct object_c_4",    "[]",   table.GLOBL),
+    0x80332D10: table.sym_var("object_c_80332D10",  "s16",  "[][2]",    table.GLOBL),
+    0x80332D28: table.sym_var("object_c_80332D28",  "struct obj_col",   flag=table.GLOBL),
+    0x80332D38: table.sym_var("object_c_80332D38",  "struct obj_col",   flag=table.GLOBL),
+    0x80332D48: table.sym_var("object_c_80332D48",  "s16",  "[][2]",    table.GLOBL),
+    0x80332D58: table.sym_var("object_c_80332D58",  "vecs", "[]",   table.GLOBL),
+    0x80332E14: table.sym_var("object_c_80332E14",  "struct obj_col",   flag=table.GLOBL),
+    0x80332E24: table.sym_var("object_c_80332E24",  "struct object_c_5",    "[]",   table.GLOBL),
+    0x80332E3C: table.sym_var("object_c_80332E3C",  "struct obj_col",   flag=table.GLOBL),
+
+    # src/audio/g.data.c
+    0x80332E50: table.sym_var("audio_g_80332E50",   "s32",  flag=table.GLOBL|ultra.DALIGN), # rng?
+    0x80332E54: table.sym_var("audio_g_80332E54",   "s32",  flag=table.GLOBL|ultra.DALIGN), # tick
+    0x80332E58: table.sym_var("audio_g_80332E58",   "u8",   "[]",   table.GLOBL), # message sfx index (msg len)
+    0x80332F04: table.sym_var("audio_g_80332F04",   "u32",  "[15]", table.GLOBL), # message sfx table
+    0x80332F40: table.sym_var("audio_g_80332F40",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332F44: table.sym_var("audio_g_80332F44",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332F48: table.sym_var("bgmctl_bbh",         "static s16", "[]"),
+    0x80332F54: table.sym_var("bgmctl_ddd",         "static s16", "[]"),
+    0x80332F6C: table.sym_var("bgmctl_jrb",         "static s16", "[]"),
+    0x80332F84: table.sym_var("bgmctl_unused",      "unused static s16", "[]"), # unused
+    0x80332F88: table.sym_var("bgmctl_wdw",         "static s16", "[]"),
+    0x80332F98: table.sym_var("bgmctl_hmc",         "static s16", "[]"),
+    0x80332FA8: table.sym_var("bgmctl_38",          "static s16", "[]"),
+    0x80332FB8: table.sym_var("bgmctl_null",        "static s16", "[]"),
+    0x80332FBC: table.sym_var("audio_g_80332FBC",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332FC0: table.sym_var("audio_g_80332FC0",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80332FC4: table.sym_var("bgmctl_table",       "s16 *", "[]",  table.GLOBL), # (stage len)
+    0x80333060: table.sym_var("bgmctl_data",        "struct bgmctl", "[]",  flag=table.GLOBL),
+    0x803330C0: table.sym_var("audio_g_803330C0",   "u8",   "[][3]",    table.GLOBL), # (stage len)
+    0x80333138: table.sym_var("audio_g_80333138",   "u16",  "[]",   table.GLOBL), # (stage len)
+    0x80333188: table.sym_var("audio_seq_vol_table",    "u8",   "[]",   table.GLOBL),
+    0x803331AC: table.sym_var("audio_g_803331AC",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x803331B0: table.sym_var("audio_g_803331B0",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x803331B4: table.sym_var("audio_g_803331B4",   "u8",   "[]",   table.GLOBL),
+    0x803331C0: table.sym_var("audio_g_803331C0",   "u8",   "[]",   table.GLOBL),
+    0x803331CC: table.sym_var("audio_g_803331CC",   "u8",   "[]",   table.GLOBL),
+    0x803331D8: table.sym_var("audio_g_803331D8",   "u8",   "[]",   table.GLOBL),
+    0x803331E4: table.sym_var("audio_g_803331E4",   "u8",   "[]",   table.GLOBL),
+    0x803331F0: table.sym_var("audio_0",            "vecf", flag=table.GLOBL),
+    0x803331FC: table.sym_var("audio_1",            "vecf", flag=table.GLOBL), # unused
+    0x80333208: table.sym_var("audio_g_80333208",   "u8",   "[]",   table.GLOBL),
+    0x80333214: table.sym_var("audio_g_80333214",   "u8",   flag=table.GLOBL|ultra.DALIGN), # unused
+    0x80333218: table.sym_var("audio_g_80333218",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8033321C: table.sym_var("audio_g_8033321C",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333220: table.sym_var("audio_g_80333220",   "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x80333224: table.sym_var("audio_g_80333224",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333228: table.sym_var("audio_g_80333228",   "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8033322C: table.sym_var("audio_g_8033322C",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333230: table.sym_var("audio_g_80333230",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333234: table.sym_var("audio_g_80333234",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333238: table.sym_var("audio_g_80333238",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8033323C: table.sym_var("audio_g_8033323C",   "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x80333240: table.sym_var("audio_g_80333240",   "u32",  "[]",   table.GLOBL),
+    0x80333280: table.sym_var("audio_g_80333280",   "u8",   "[]",   table.GLOBL),
+    0x80333290: table.sym_var("audio_g_80333290",   "u8",   "[]",   table.GLOBL),
 
     # src/audio/data.c
-    0x80332E50: table.sym("_audio_data+0x00"),
-    0x80332E54: table.sym("_audio_data+0x04"),
-    0x80332E58: table.sym("_audio_data+0x08"),
-    0x80332F04: table.sym("_audio_data+0xB4"),
-    0x80332F40: table.sym("_audio_data+0xF0"),
-    0x80332F44: table.sym("_audio_data+0xF4"),
-    0x80332FBC: table.sym("_audio_data+0x16C"),
-    0x80332FC0: table.sym("_audio_data+0x170"),
-    0x80332FC4: table.sym("_audio_data+0x174"),
-    0x80333060: table.sym("_audio_data+0x210"), # la
-    0x803330C0: table.sym("_audio_data+0x270"),
-    0x80333138: table.sym("_audio_data+0x2E8"),
-    0x80333188: table.sym("_audio_data+0x338"),
-    0x803331AC: table.sym("_audio_data+0x35C"),
-    0x803331B0: table.sym("_audio_data+0x360"),
-    0x803331B4: table.sym("_audio_data+0x364"), # la
-    0x803331C0: table.sym("_audio_data+0x370"), # la
-    0x803331CC: table.sym("_audio_data+0x37C"),
-    0x803331D8: table.sym("_audio_data+0x388"),
-    0x803331E4: table.sym("_audio_data+0x394"),
-    0x803331F0: table.sym("_audio_data+0x3A0"), # la
-    0x80333208: table.sym("_audio_data+0x3B8"),
-    0x80333218: table.sym("_audio_data+0x3C8"), # la
-    0x8033321C: table.sym("_audio_data+0x3CC"),
-    0x80333220: table.sym("_audio_data+0x3D0"),
-    0x80333224: table.sym("_audio_data+0x3D4"),
-    0x80333228: table.sym("_audio_data+0x3D8"),
-    0x8033322C: table.sym("_audio_data+0x3DC"),
-    0x80333230: table.sym("_audio_data+0x3E0"),
-    0x80333234: table.sym("_audio_data+0x3E4"),
-    0x80333238: table.sym("_audio_data+0x3E8"),
-    0x8033323C: table.sym("_audio_data+0x3EC"),
-    0x80333240: table.sym("_audio_data+0x3F0"), # la
-    0x80333280: table.sym("_audio_data+0x430"), # la
-    0x80333290: table.sym("_audio_data+0x440"), # la
-    0x803332A0: table.sym("_audio_data+0x450"), # la
-    0x80333598: table.sym("_audio_data+0x748"),
-    0x80333794: table.sym("_audio_data+0x944"),
-    0x80333994: table.sym("_audio_data+0xB44"), # la
-    0x80333B94: table.sym("_audio_data+0xD44"), # la
-    0x80333BA4: table.sym("_audio_data+0xD54"), # la
-    0x80333BB4: table.sym("_audio_data+0xD64"), # la
-    0x80333BC4: table.sym("_audio_data+0xD74"), # la
-    0x80333DD0: table.sym("_audio_data+0xF80"), # la
-    0x80333DE0: table.sym("_audio_data+0xF90"),
-    0x80333DF2: table.sym("_audio_data+0xFA2"),
-    0x80333DF4: table.sym("_audio_data+0xFA4"),
-    0x80333FF0: table.sym("_audio_data+0x11A0"),
-    0x80333FF4: table.sym("_audio_data+0x11A4"),
-    0x803341F0: table.sym("_audio_data+0x13A0"),
-    0x803341F4: table.sym("_audio_data+0x13A4"),
-    0x803343F0: table.sym("_audio_data+0x15A0"),
-    0x803343F4: table.sym("_audio_data+0x15A4"),
-    0x803345F4: table.sym("_audio_data+0x17A4"),
-    0x803347F4: table.sym("_audio_data+0x19A4"),
-    0x803349F4: table.sym("_audio_data+0x1BA4"),
-    0x80334BF4: table.sym("_audio_data+0x1DA4"),
-    0x80334DF4: table.sym("_audio_data+0x1FA4"),
-    0x80334FF4: table.sym("_audio_data+0x21A4"),
-    0x80334FF8: table.sym("_audio_data+0x21A8"),
-    0x80334FFC: table.sym("_audio_data+0x21AC"),
-    0x80335000: table.sym("_audio_data+0x21B0"),
-    0x80335004: table.sym("_audio_data+0x21B4"), # la
+    0x803332A0: table.sym_var("audio_cfg_table",    "struct audio_cfg", "[]",   table.GLOBL), # 18
+    0x80333498: table.sym_var("audio_data_80333498",    "s16",  "[]",   table.GLOBL), # unused
+    0x80333598: table.sym_var("audio_data_80333598",    "f32",  "[]",   table.GLOBL),
+    0x80333994: table.sym_var("audio_freq_table",       "f32",  "[]",   table.GLOBL),
+    0x80333B94: table.sym_var("audio_data_80333B94",    "u8",   "[]",   table.GLOBL),
+    0x80333BA4: table.sym_var("audio_data_80333BA4",    "u8",   "[]",   table.GLOBL),
+    0x80333BB4: table.sym_var("audio_data_80333BB4",    "s8",   "[]",   table.GLOBL),
+    0x80333BC4: table.sym_var("adsr_default",           "s16",  "[]",   table.GLOBL),
+    0x80333BD0: table.sym_var("wave_sine",      "static s16", "[]"),
+    0x80333C50: table.sym_var("wave_pulse",     "static s16", "[]"),
+    0x80333CD0: table.sym_var("wave_triangle",  "static s16", "[]"),
+    0x80333D50: table.sym_var("wave_saw",       "static s16", "[]"),
+    0x80333DD0: table.sym_var("wave_table",     "s16 *",    "[]",   table.GLOBL),
+    0x80333DE0: table.sym_var("audio_data_80333DE0",    "u16",  "[]",   table.GLOBL),
+    0x80333DF4: table.sym_var("audio_pan_0",    "f32",  "[]",   table.GLOBL),
+    0x80333FF4: table.sym_var("audio_pan_1",    "f32",  "[]",   table.GLOBL),
+    0x803341F4: table.sym_var("audio_pan_2",    "f32",  "[]",   table.GLOBL),
+    0x803343F4: table.sym_var("audio_pan_3",    "f32",  "[]",   table.GLOBL),
+    0x803345F4: table.sym_var("audio_pan_4",    "f32",  "[]",   table.GLOBL),
+    0x803347F4: table.sym_var("audio_pan_5",    "f32",  "[]",   table.GLOBL),
+    0x803349F4: table.sym_var("audio_pan_6",    "f32",  "[]",   table.GLOBL),
+    0x80334BF4: table.sym_var("audio_pan_7",    "f32",  "[]",   table.GLOBL),
+    0x80334DF4: table.sym_var("audio_pan_8",    "f32",  "[]",   table.GLOBL),
+    0x80334FF4: table.sym_var("audio_tick_rate",        "s16",          flag=table.GLOBL|ultra.DALIGN),
+    0x80334FF8: table.sym_var("audio_data_80334FF8",    "s8",           flag=table.GLOBL|ultra.DALIGN),
+    0x80334FFC: table.sym_var("audio_heap_size",        "size_t",       flag=table.GLOBL|ultra.DALIGN),
+    0x80335000: table.sym_var("audio_data_80335000",    "size_t",       flag=table.GLOBL|ultra.DALIGN),
+    0x80335004: table.sym_var("audio_data_80335004",    "volatile s32", flag=table.GLOBL|ultra.DALIGN),
+    0x80335008: table.sym_var("audio_data_80335008",    "s8",           flag=table.GLOBL|ultra.DALIGN), # unused
 
     # ==========================================================================
     # rodata
@@ -6990,13 +8411,13 @@ sym_E0_d_main = {
     0x8033617C: table.sym_var_fnc("game_8033617C", "const", "[]"),
     0x80336190: table.sym_var_fnc("game_80336190", "const", "[]"),
 
-    # src/player_touch.c
-    0x803361B0: table.sym_var_fnc("player_touch_803361B0", "const", "[]"),
-    0x80336230: table.sym_var_fnc("player_touch_80336230", "const", "[]"),
-    0x803362F8: table.sym_var_fnc("player_touch_803362F8", "const", "[]"),
-    0x80336410: table.sym_var("player_touch_80336410", "const float"),
-    0x80336414: table.sym_var("player_touch_80336414", "const float"),
-    0x80336418: table.sym_var("player_touch_80336418", "const float"),
+    # src/pl_collision.c
+    0x803361B0: table.sym_var_fnc("pl_collision_803361B0", "const", "[]"),
+    0x80336230: table.sym_var_fnc("pl_collision_80336230", "const", "[]"),
+    0x803362F8: table.sym_var_fnc("pl_collision_803362F8", "const", "[]"),
+    0x80336410: table.sym_var("pl_collision_80336410", "const float"),
+    0x80336414: table.sym_var("pl_collision_80336414", "const float"),
+    0x80336418: table.sym_var("pl_collision_80336418", "const float"),
 
     # src/player.data.c
     0x80336420: table.sym_var("str_player_ang", "const char", "[]"),
@@ -7026,144 +8447,144 @@ sym_E0_d_main = {
     0x80336664: table.sym_var("player_80336664", "const float"),
     0x80336668: table.sym_var("player_80336668", "const float"),
 
-    # src/player_move.data.c
-    0x80336670: table.sym_var("player_move_80336670", "const float"),
-    0x80336674: table.sym_var("player_move_80336674", "const float"),
-    0x80336678: table.sym_var_fnc("player_move_80336678", "const", "[]"),
-    0x803366AC: table.sym_var("player_move_803366AC", "const float"),
-    0x803366B0: table.sym_var("player_move_803366B0", "const float"),
-    0x803366B4: table.sym_var("player_move_803366B4", "const float"),
-    0x803366B8: table.sym_var("player_move_803366B8", "const float"),
-    0x803366BC: table.sym_var("player_move_803366BC", "const float"),
-    0x803366C0: table.sym_var("player_move_803366C0", "const float"),
+    # src/pl_physics.data.c
+    0x80336670: table.sym_var("pl_physics_80336670", "const float"),
+    0x80336674: table.sym_var("pl_physics_80336674", "const float"),
+    0x80336678: table.sym_var_fnc("pl_physics_80336678", "const", "[]"),
+    0x803366AC: table.sym_var("pl_physics_803366AC", "const float"),
+    0x803366B0: table.sym_var("pl_physics_803366B0", "const float"),
+    0x803366B4: table.sym_var("pl_physics_803366B4", "const float"),
+    0x803366B8: table.sym_var("pl_physics_803366B8", "const float"),
+    0x803366BC: table.sym_var("pl_physics_803366BC", "const float"),
+    0x803366C0: table.sym_var("pl_physics_803366C0", "const float"),
 
-    # src/player_demo.data.c
-    0x803366D0: table.sym_var("player_demo_803366D0", "const float"),
-    0x803366D4: table.sym_var_fnc("player_demo_803366D4", "const", "[]"),
-    0x803366E8: table.sym_var("player_demo_803366E8", "const float"),
-    0x803366EC: table.sym_var_fnc("player_demo_803366EC", "const", "[]"),
-    0x80336708: table.sym_var("player_demo_80336708", "const float"),
-    0x8033670C: table.sym_var("player_demo_8033670C", "const float"),
-    0x80336710: table.sym_var("player_demo_80336710", "const float"),
-    0x80336714: table.sym_var("player_demo_80336714", "const float"),
-    0x80336718: table.sym_var("player_demo_80336718", "const float"),
-    0x8033671C: table.sym_var("player_demo_8033671C", "const float"),
-    0x80336720: table.sym_var_fnc("player_demo_80336720", "const", "[]"),
-    0x80336754: table.sym_var_fnc("player_demo_80336754", "const", "[]"),
-    0x80336770: table.sym_var_fnc("player_demo_80336770", "const", "[]"),
-    0x80336784: table.sym_var_fnc("player_demo_80336784", "const", "[]"),
-    0x80336848: table.sym_var_fnc("player_demo_80336848", "const", "[]"),
+    # src/pl_demo.data.c
+    0x803366D0: table.sym_var("pl_demo_803366D0", "const float"),
+    0x803366D4: table.sym_var_fnc("pl_demo_803366D4", "const", "[]"),
+    0x803366E8: table.sym_var("pl_demo_803366E8", "const float"),
+    0x803366EC: table.sym_var_fnc("pl_demo_803366EC", "const", "[]"),
+    0x80336708: table.sym_var("pl_demo_80336708", "const float"),
+    0x8033670C: table.sym_var("pl_demo_8033670C", "const float"),
+    0x80336710: table.sym_var("pl_demo_80336710", "const float"),
+    0x80336714: table.sym_var("pl_demo_80336714", "const float"),
+    0x80336718: table.sym_var("pl_demo_80336718", "const float"),
+    0x8033671C: table.sym_var("pl_demo_8033671C", "const float"),
+    0x80336720: table.sym_var_fnc("pl_demo_80336720", "const", "[]"),
+    0x80336754: table.sym_var_fnc("pl_demo_80336754", "const", "[]"),
+    0x80336770: table.sym_var_fnc("pl_demo_80336770", "const", "[]"),
+    0x80336784: table.sym_var_fnc("pl_demo_80336784", "const", "[]"),
+    0x80336848: table.sym_var_fnc("pl_demo_80336848", "const", "[]"),
 
-    # src/player_hang.data.c
-    0x80336940: table.sym_var("player_hang_80336940", "const float"),
-    0x80336944: table.sym_var("player_hang_80336944", "const float"),
-    0x80336948: table.sym_var("player_hang_80336948", "const float"),
-    0x8033694C: table.sym_var("player_hang_8033694C", "const float"),
-    0x80336950: table.sym_var_fnc("player_hang_80336950", "const", "[]"),
+    # src/pl_hang.data.c
+    0x80336940: table.sym_var("pl_hang_80336940", "const float"),
+    0x80336944: table.sym_var("pl_hang_80336944", "const float"),
+    0x80336948: table.sym_var("pl_hang_80336948", "const float"),
+    0x8033694C: table.sym_var("pl_hang_8033694C", "const float"),
+    0x80336950: table.sym_var_fnc("pl_hang_80336950", "const", "[]"),
 
-    # src/player_stop.data.c
-    0x80336970: table.sym_var("player_stop_80336970", "const float"),
-    0x80336974: table.sym_var("player_stop_80336974", "const float"),
-    0x80336978: table.sym_var_fnc("player_stop_80336978", "const", "[]"),
-    0x803369A4: table.sym_var_fnc("player_stop_803369A4", "const", "[]"),
-    0x803369B8: table.sym_var_fnc("player_stop_803369B8", "const", "[]"),
-    0x80336A18: table.sym_var_fnc("player_stop_80336A18", "const", "[]"),
+    # src/pl_stop.data.c
+    0x80336970: table.sym_var("pl_stop_80336970", "const float"),
+    0x80336974: table.sym_var("pl_stop_80336974", "const float"),
+    0x80336978: table.sym_var_fnc("pl_stop_80336978", "const", "[]"),
+    0x803369A4: table.sym_var_fnc("pl_stop_803369A4", "const", "[]"),
+    0x803369B8: table.sym_var_fnc("pl_stop_803369B8", "const", "[]"),
+    0x80336A18: table.sym_var_fnc("pl_stop_80336A18", "const", "[]"),
 
-    # src/player_ground.data.c
-    0x80336A80: table.sym_var("player_ground_80336A80", "const float"),
-    0x80336A84: table.sym_var("player_ground_80336A84", "const float"),
-    0x80336A88: table.sym_var("player_ground_80336A88", "const float"),
-    0x80336A8C: table.sym_var("player_ground_80336A8C", "const float"),
-    0x80336A90: table.sym_var("player_ground_80336A90", "const float"),
-    0x80336A94: table.sym_var("player_ground_80336A94", "const float"),
-    0x80336A98: table.sym_var("player_ground_80336A98", "const float"),
-    0x80336A9C: table.sym_var("player_ground_80336A9C", "const float"),
-    0x80336AA0: table.sym_var("player_ground_80336AA0", "const float"),
-    0x80336AA4: table.sym_var("player_ground_80336AA4", "const float"),
-    0x80336AA8: table.sym_var("player_ground_80336AA8", "const float"),
-    0x80336AAC: table.sym_var("player_ground_80336AAC", "const float"),
-    0x80336AB0: table.sym_var("player_ground_80336AB0", "const float"),
-    0x80336AB4: table.sym_var("player_ground_80336AB4", "const float"),
-    0x80336AB8: table.sym_var("player_ground_80336AB8", "const float"),
-    0x80336ABC: table.sym_var("player_ground_80336ABC", "const float"),
-    0x80336AC0: table.sym_var("player_ground_80336AC0", "const float"),
-    0x80336AC4: table.sym_var("player_ground_80336AC4", "const float"),
-    0x80336AC8: table.sym_var("player_ground_80336AC8", "const float"),
-    0x80336ACC: table.sym_var("player_ground_80336ACC", "const float"),
-    0x80336AD0: table.sym_var("player_ground_80336AD0", "const float"),
-    0x80336AD4: table.sym_var("player_ground_80336AD4", "const float"),
-    0x80336AD8: table.sym_var("player_ground_80336AD8", "const float"),
-    0x80336ADC: table.sym_var("player_ground_80336ADC", "const float"),
-    0x80336AE0: table.sym_var("player_ground_80336AE0", "const float"),
-    0x80336AE4: table.sym_var("player_ground_80336AE4", "const float"),
-    0x80336AE8: table.sym_var("player_ground_80336AE8", "const float"),
-    0x80336AEC: table.sym_var("player_ground_80336AEC", "const float"),
-    0x80336AF0: table.sym_var("player_ground_80336AF0", "const float"),
-    0x80336AF8: table.sym_var("player_ground_80336AF8", "const double"),
-    0x80336B00: table.sym_var("player_ground_80336B00", "const float"),
-    0x80336B04: table.sym_var("player_ground_80336B04", "const float"),
-    0x80336B08: table.sym_var("player_ground_80336B08", "const float"),
-    0x80336B0C: table.sym_var_fnc("player_ground_80336B0C", "const", "[]"),
-    0x80336B38: table.sym_var_fnc("player_ground_80336B38", "const", "[]"),
-    0x80336BB4: table.sym_var_fnc("player_ground_80336BB4", "const", "[]"),
-    0x80336BCC: table.sym_var_fnc("player_ground_80336BCC", "const", "[]"),
+    # src/pl_ground.data.c
+    0x80336A80: table.sym_var("pl_ground_80336A80", "const float"),
+    0x80336A84: table.sym_var("pl_ground_80336A84", "const float"),
+    0x80336A88: table.sym_var("pl_ground_80336A88", "const float"),
+    0x80336A8C: table.sym_var("pl_ground_80336A8C", "const float"),
+    0x80336A90: table.sym_var("pl_ground_80336A90", "const float"),
+    0x80336A94: table.sym_var("pl_ground_80336A94", "const float"),
+    0x80336A98: table.sym_var("pl_ground_80336A98", "const float"),
+    0x80336A9C: table.sym_var("pl_ground_80336A9C", "const float"),
+    0x80336AA0: table.sym_var("pl_ground_80336AA0", "const float"),
+    0x80336AA4: table.sym_var("pl_ground_80336AA4", "const float"),
+    0x80336AA8: table.sym_var("pl_ground_80336AA8", "const float"),
+    0x80336AAC: table.sym_var("pl_ground_80336AAC", "const float"),
+    0x80336AB0: table.sym_var("pl_ground_80336AB0", "const float"),
+    0x80336AB4: table.sym_var("pl_ground_80336AB4", "const float"),
+    0x80336AB8: table.sym_var("pl_ground_80336AB8", "const float"),
+    0x80336ABC: table.sym_var("pl_ground_80336ABC", "const float"),
+    0x80336AC0: table.sym_var("pl_ground_80336AC0", "const float"),
+    0x80336AC4: table.sym_var("pl_ground_80336AC4", "const float"),
+    0x80336AC8: table.sym_var("pl_ground_80336AC8", "const float"),
+    0x80336ACC: table.sym_var("pl_ground_80336ACC", "const float"),
+    0x80336AD0: table.sym_var("pl_ground_80336AD0", "const float"),
+    0x80336AD4: table.sym_var("pl_ground_80336AD4", "const float"),
+    0x80336AD8: table.sym_var("pl_ground_80336AD8", "const float"),
+    0x80336ADC: table.sym_var("pl_ground_80336ADC", "const float"),
+    0x80336AE0: table.sym_var("pl_ground_80336AE0", "const float"),
+    0x80336AE4: table.sym_var("pl_ground_80336AE4", "const float"),
+    0x80336AE8: table.sym_var("pl_ground_80336AE8", "const float"),
+    0x80336AEC: table.sym_var("pl_ground_80336AEC", "const float"),
+    0x80336AF0: table.sym_var("pl_ground_80336AF0", "const float"),
+    0x80336AF8: table.sym_var("pl_ground_80336AF8", "const double"),
+    0x80336B00: table.sym_var("pl_ground_80336B00", "const float"),
+    0x80336B04: table.sym_var("pl_ground_80336B04", "const float"),
+    0x80336B08: table.sym_var("pl_ground_80336B08", "const float"),
+    0x80336B0C: table.sym_var_fnc("pl_ground_80336B0C", "const", "[]"),
+    0x80336B38: table.sym_var_fnc("pl_ground_80336B38", "const", "[]"),
+    0x80336BB4: table.sym_var_fnc("pl_ground_80336BB4", "const", "[]"),
+    0x80336BCC: table.sym_var_fnc("pl_ground_80336BCC", "const", "[]"),
 
-    # src/player_air.data.c
-    0x80336C00: table.sym_var("player_air_80336C00", "const float"),
-    0x80336C04: table.sym_var("player_air_80336C04", "const float"),
-    0x80336C08: table.sym_var("player_air_80336C08", "const float"),
-    0x80336C0C: table.sym_var("player_air_80336C0C", "const float"),
-    0x80336C10: table.sym_var("player_air_80336C10", "const float"),
-    0x80336C14: table.sym_var("player_air_80336C14", "const float"),
-    0x80336C18: table.sym_var("player_air_80336C18", "const float"),
-    0x80336C1C: table.sym_var_fnc("player_air_80336C1C", "const", "[]"),
-    0x80336C38: table.sym_var("player_air_80336C38", "const float"),
-    0x80336C3C: table.sym_var("player_air_80336C3C", "const float"),
-    0x80336C40: table.sym_var("player_air_80336C40", "const float"),
-    0x80336C44: table.sym_var("player_air_80336C44", "const float"),
-    0x80336C48: table.sym_var("player_air_80336C48", "const float"),
-    0x80336C4C: table.sym_var("player_air_80336C4C", "const float"),
-    0x80336C50: table.sym_var("player_air_80336C50", "const float"),
-    0x80336C54: table.sym_var("player_air_80336C54", "const float"),
-    0x80336C58: table.sym_var("player_air_80336C58", "const double"),
-    0x80336C60: table.sym_var_fnc("player_air_80336C60", "const", "[]"),
-    0x80336D20: table.sym_var_fnc("player_air_80336D20", "const", "[]"),
-    0x80336D5C: table.sym_var_fnc("player_air_80336D5C", "const", "[]"),
+    # src/pl_air.data.c
+    0x80336C00: table.sym_var("pl_air_80336C00", "const float"),
+    0x80336C04: table.sym_var("pl_air_80336C04", "const float"),
+    0x80336C08: table.sym_var("pl_air_80336C08", "const float"),
+    0x80336C0C: table.sym_var("pl_air_80336C0C", "const float"),
+    0x80336C10: table.sym_var("pl_air_80336C10", "const float"),
+    0x80336C14: table.sym_var("pl_air_80336C14", "const float"),
+    0x80336C18: table.sym_var("pl_air_80336C18", "const float"),
+    0x80336C1C: table.sym_var_fnc("pl_air_80336C1C", "const", "[]"),
+    0x80336C38: table.sym_var("pl_air_80336C38", "const float"),
+    0x80336C3C: table.sym_var("pl_air_80336C3C", "const float"),
+    0x80336C40: table.sym_var("pl_air_80336C40", "const float"),
+    0x80336C44: table.sym_var("pl_air_80336C44", "const float"),
+    0x80336C48: table.sym_var("pl_air_80336C48", "const float"),
+    0x80336C4C: table.sym_var("pl_air_80336C4C", "const float"),
+    0x80336C50: table.sym_var("pl_air_80336C50", "const float"),
+    0x80336C54: table.sym_var("pl_air_80336C54", "const float"),
+    0x80336C58: table.sym_var("pl_air_80336C58", "const double"),
+    0x80336C60: table.sym_var_fnc("pl_air_80336C60", "const", "[]"),
+    0x80336D20: table.sym_var_fnc("pl_air_80336D20", "const", "[]"),
+    0x80336D5C: table.sym_var_fnc("pl_air_80336D5C", "const", "[]"),
 
-    # src/player_water.data.c
-    0x80336E10: table.sym_var("player_water_80336E10", "const float"),
-    0x80336E14: table.sym_var_fnc("player_water_80336E14", "const", "[]"),
-    0x80336E2C: table.sym_var_fnc("player_water_80336E2C", "const", "[]"),
-    0x80336E44: table.sym_var("player_water_80336E44", "const float"),
-    0x80336E48: table.sym_var("player_water_80336E48", "const float"),
-    0x80336E4C: table.sym_var("player_water_80336E4C", "const float"),
-    0x80336E50: table.sym_var("player_water_80336E50", "const float"),
-    0x80336E54: table.sym_var("player_water_80336E54", "const float"),
-    0x80336E58: table.sym_var("player_water_80336E58", "const float"),
-    0x80336E5C: table.sym_var_fnc("player_water_80336E5C", "const", "[]"),
-    0x80336EA4: table.sym_var_fnc("player_water_80336EA4", "const", "[]"),
+    # src/pl_water.data.c
+    0x80336E10: table.sym_var("pl_water_80336E10", "const float"),
+    0x80336E14: table.sym_var_fnc("pl_water_80336E14", "const", "[]"),
+    0x80336E2C: table.sym_var_fnc("pl_water_80336E2C", "const", "[]"),
+    0x80336E44: table.sym_var("pl_water_80336E44", "const float"),
+    0x80336E48: table.sym_var("pl_water_80336E48", "const float"),
+    0x80336E4C: table.sym_var("pl_water_80336E4C", "const float"),
+    0x80336E50: table.sym_var("pl_water_80336E50", "const float"),
+    0x80336E54: table.sym_var("pl_water_80336E54", "const float"),
+    0x80336E58: table.sym_var("pl_water_80336E58", "const float"),
+    0x80336E5C: table.sym_var_fnc("pl_water_80336E5C", "const", "[]"),
+    0x80336EA4: table.sym_var_fnc("pl_water_80336EA4", "const", "[]"),
 
-    # src/player_grab.data.c
-    0x80336ED0: table.sym_var_fnc("player_grab_80336ED0", "const", "[]"),
-    0x80336EF8: table.sym_var_fnc("player_grab_80336EF8", "const", "[]"),
+    # src/pl_grab.data.c
+    0x80336ED0: table.sym_var_fnc("pl_grab_80336ED0", "const", "[]"),
+    0x80336EF8: table.sym_var_fnc("pl_grab_80336EF8", "const", "[]"),
 
-    # src/player_callback.data.c
-    0x80336F40: table.sym_var_fnc("player_callback_80336F40", "const", "[]"),
-    0x80336F54: table.sym_var("player_callback_80336F54", "const float"),
-    0x80336F58: table.sym_var("player_callback_80336F58", "const float"),
-    0x80336F60: table.sym_var("player_callback_80336F60", "const double"),
-    0x80336F68: table.sym_var("player_callback_80336F68", "const double"),
+    # src/pl_callback.data.c
+    0x80336F40: table.sym_var_fnc("pl_callback_80336F40", "const", "[]"),
+    0x80336F54: table.sym_var("pl_callback_80336F54", "const float"),
+    0x80336F58: table.sym_var("pl_callback_80336F58", "const float"),
+    0x80336F60: table.sym_var("pl_callback_80336F60", "const double"),
+    0x80336F68: table.sym_var("pl_callback_80336F68", "const double"),
 
     # src/world.data.c
     0x80336F70: table.sym_var("str_world_no_controller",  "const char", "[]"),
     0x80336F80: table.sym_var("str_world_press",          "const char", "[]"),
     0x80336F88: table.sym_var("str_world_start",          "const char", "[]"),
 
-    # src/g_draw.data.c
-    0x80336F90: table.sym_var("str_g_draw_mem", "const char", "[]"),
-    0x80336F98: table.sym_var("g_draw_80336F98", "const float"),
-    0x80336F9C: table.sym_var_fnc("g_draw_80336F9C", "const", "[]"),
-    0x8033704C: table.sym_var_fnc("g_draw_8033704C", "const", "[]"),
+    # src/shape_draw.data.c
+    0x80336F90: table.sym_var("str_shape_draw_mem", "const char", "[]"),
+    0x80336F98: table.sym_var("shape_draw_80336F98", "const float"),
+    0x80336F9C: table.sym_var_fnc("shape_draw_80336F9C", "const", "[]"),
+    0x8033704C: table.sym_var_fnc("shape_draw_8033704C", "const", "[]"),
 
     # src/camera.data.c
     0x803370F0: table.sym_var_fnc("camera_803370F0", "const", "[]"),
@@ -7325,32 +8746,32 @@ sym_E0_d_main = {
     0x803377A0: table.sym_var("object_803377A0", "const double"),
     0x803377A8: table.sym_var("object_803377A8", "const double"),
 
-    # src/object_lib.data.c
-    0x803377B0: table.sym_var("str_object_lib_areainfo", "const char", "[]"),
-    0x803377BC: table.sym_var("object_lib_803377BC", "const float"),
-    0x803377C0: table.sym_var("object_lib_803377C0", "const float"),
-    0x803377C4: table.sym_var("object_lib_803377C4", "const float"),
-    0x803377C8: table.sym_var("object_lib_803377C8", "const float"),
-    0x803377CC: table.sym_var("object_lib_803377CC", "const float"),
-    0x803377D0: table.sym_var("object_lib_803377D0", "const float"),
-    0x803377D8: table.sym_var("object_lib_803377D8", "const double"),
-    0x803377E0: table.sym_var("object_lib_803377E0", "const double"),
-    0x803377E8: table.sym_var("object_lib_803377E8", "const double"),
-    0x803377F0: table.sym_var("object_lib_803377F0", "const float"),
-    0x803377F4: table.sym_var("object_lib_803377F4", "const float"),
-    0x803377F8: table.sym_var("object_lib_803377F8", "const double"),
-    0x80337800: table.sym_var("object_lib_80337800", "const float"),
-    0x80337808: table.sym_var("object_lib_80337808", "const double"),
-    0x80337810: table.sym_var("object_lib_80337810", "const float"),
-    0x80337814: table.sym_var("object_lib_80337814", "const float"),
-    0x80337818: table.sym_var("object_lib_80337818", "const float"),
-    0x8033781C: table.sym_var("object_lib_8033781C", "const float"),
-    0x80337820: table.sym_var("object_lib_80337820", "const float"),
-    0x80337824: table.sym_var("object_lib_80337824", "const float"),
-    0x80337828: table.sym_var("object_lib_80337828", "const float"),
-    0x8033782C: table.sym_var("object_lib_8033782C", "const float"),
-    0x80337830: table.sym_var("object_lib_80337830", "const float"),
-    0x80337834: table.sym_var_fnc("object_lib_80337834", "const", "[]"),
+    # src/obj_lib.data.c
+    0x803377B0: table.sym_var("str_obj_lib_areainfo", "const char", "[]"),
+    0x803377BC: table.sym_var("obj_lib_803377BC", "const float"),
+    0x803377C0: table.sym_var("obj_lib_803377C0", "const float"),
+    0x803377C4: table.sym_var("obj_lib_803377C4", "const float"),
+    0x803377C8: table.sym_var("obj_lib_803377C8", "const float"),
+    0x803377CC: table.sym_var("obj_lib_803377CC", "const float"),
+    0x803377D0: table.sym_var("obj_lib_803377D0", "const float"),
+    0x803377D8: table.sym_var("obj_lib_803377D8", "const double"),
+    0x803377E0: table.sym_var("obj_lib_803377E0", "const double"),
+    0x803377E8: table.sym_var("obj_lib_803377E8", "const double"),
+    0x803377F0: table.sym_var("obj_lib_803377F0", "const float"),
+    0x803377F4: table.sym_var("obj_lib_803377F4", "const float"),
+    0x803377F8: table.sym_var("obj_lib_803377F8", "const double"),
+    0x80337800: table.sym_var("obj_lib_80337800", "const float"),
+    0x80337808: table.sym_var("obj_lib_80337808", "const double"),
+    0x80337810: table.sym_var("obj_lib_80337810", "const float"),
+    0x80337814: table.sym_var("obj_lib_80337814", "const float"),
+    0x80337818: table.sym_var("obj_lib_80337818", "const float"),
+    0x8033781C: table.sym_var("obj_lib_8033781C", "const float"),
+    0x80337820: table.sym_var("obj_lib_80337820", "const float"),
+    0x80337824: table.sym_var("obj_lib_80337824", "const float"),
+    0x80337828: table.sym_var("obj_lib_80337828", "const float"),
+    0x8033782C: table.sym_var("obj_lib_8033782C", "const float"),
+    0x80337830: table.sym_var("obj_lib_80337830", "const float"),
+    0x80337834: table.sym_var_fnc("obj_lib_80337834", "const", "[]"),
 
     # src/object_a.data.c
     0x80337850: table.sym_var("str_object_a_0_fmt",      "const char", "[]"),
@@ -7538,69 +8959,69 @@ sym_E0_d_main = {
     0x80337DE8: table.sym_var("object_a_80337DE8", "const float"),
     0x80337DEC: table.sym_var("object_a_80337DEC", "const float"),
 
-    # src/object_touch.data.c
-    0x80337DF0: table.sym_var("str_object_touch_on", "const char", "[]"),
+    # src/obj_collision.data.c
+    0x80337DF0: table.sym_var("str_obj_collision_on",   "const char", "[]"),
 
-    # src/object_list.data.c
-    0x80337E00: table.sym_var("object_list_80337E00", "const float"),
-    0x80337E04: table.sym_var("object_list_80337E04", "const float"),
-    0x80337E08: table.sym_var("object_list_80337E08", "const float"),
-    0x80337E0C: table.sym_var("object_list_80337E0C", "const float"),
+    # src/obj_list.data.c
+    0x80337E00: table.sym_var("obj_list_80337E00", "const float"),
+    0x80337E04: table.sym_var("obj_list_80337E04", "const float"),
+    0x80337E08: table.sym_var("obj_list_80337E08", "const float"),
+    0x80337E0C: table.sym_var("obj_list_80337E0C", "const float"),
 
-    # src/object_sfx.data.c
-    0x80337E10: table.sym_var("object_sfx_80337E10", "const float"),
-    0x80337E14: table.sym_var("object_sfx_80337E14", "const float"),
-    0x80337E18: table.sym_var("object_sfx_80337E18", "const float"),
+    # src/obj_sfx.data.c
+    0x80337E10: table.sym_var("obj_sfx_80337E10", "const float"),
+    0x80337E14: table.sym_var("obj_sfx_80337E14", "const float"),
+    0x80337E18: table.sym_var("obj_sfx_80337E18", "const float"),
 
-    # src/object_debug.data.c
-    0x80337E20: table.sym_var("str_object_debug_a0",            "const char", "[]"),
-    0x80337E28: table.sym_var("str_object_debug_a1",            "const char", "[]"),
-    0x80337E30: table.sym_var("str_object_debug_a2",            "const char", "[]"),
-    0x80337E38: table.sym_var("str_object_debug_a3",            "const char", "[]"),
-    0x80337E40: table.sym_var("str_object_debug_a4",            "const char", "[]"),
-    0x80337E48: table.sym_var("str_object_debug_a5",            "const char", "[]"),
-    0x80337E50: table.sym_var("str_object_debug_a6",            "const char", "[]"),
-    0x80337E58: table.sym_var("str_object_debug_a7",            "const char", "[]"),
-    0x80337E60: table.sym_var("str_object_debug_a",             "const char", "[]"),
-    0x80337E64: table.sym_var("str_object_debug_b0",            "const char", "[]"),
-    0x80337E6C: table.sym_var("str_object_debug_b1",            "const char", "[]"),
-    0x80337E74: table.sym_var("str_object_debug_b2",            "const char", "[]"),
-    0x80337E7C: table.sym_var("str_object_debug_b3",            "const char", "[]"),
-    0x80337E84: table.sym_var("str_object_debug_b4",            "const char", "[]"),
-    0x80337E8C: table.sym_var("str_object_debug_b5",            "const char", "[]"),
-    0x80337E94: table.sym_var("str_object_debug_b6",            "const char", "[]"),
-    0x80337E9C: table.sym_var("str_object_debug_b7",            "const char", "[]"),
-    0x80337EA4: table.sym_var("str_object_debug_b",             "const char", "[]"),
-    0x80337EA8: table.sym_var("str_object_debug_dprint_over",   "const char", "[]"),
-    0x80337EB4: table.sym_var("str_object_debug_mapinfo",       "const char", "[]"),
-    0x80337EBC: table.sym_var("str_object_debug_area",          "const char", "[]"),
-    0x80337EC4: table.sym_var("str_object_debug_wx",            "const char", "[]"),
-    0x80337ECC: table.sym_var("str_object_debug_wy",            "const char", "[]"),
-    0x80337ED4: table.sym_var("str_object_debug_wz",            "const char", "[]"),
-    0x80337EDC: table.sym_var("str_object_debug_bgy",           "const char", "[]"),
-    0x80337EE4: table.sym_var("str_object_debug_angy",          "const char", "[]"),
-    0x80337EEC: table.sym_var("str_object_debug_bgcode",        "const char", "[]"),
-    0x80337EF8: table.sym_var("str_object_debug_bgstatus",      "const char", "[]"),
-    0x80337F04: table.sym_var("str_object_debug_bgarea",        "const char", "[]"),
-    0x80337F10: table.sym_var("str_object_debug_water",         "const char", "[]"),
-    0x80337F1C: table.sym_var("str_object_debug_checkinfo",     "const char", "[]"),
-    0x80337F28: table.sym_var("str_object_debug_stageinfo",     "const char", "[]"),
-    0x80337F34: table.sym_var("str_object_debug_stage_param",   "const char", "[]"),
-    0x80337F44: table.sym_var("str_object_debug_effectinfo",    "const char", "[]"),
-    0x80337F50: table.sym_var("str_object_debug_enemyinfo",     "const char", "[]"),
-    0x80337F5C: table.sym_var("str_object_debug_obj",           "const char", "[]"),
-    0x80337F64: table.sym_var("str_object_debug_nullbg",        "const char", "[]"),
-    0x80337F70: table.sym_var("str_object_debug_wall",          "const char", "[]"),
-    0x80337F7C: table.sym_var("str_object_debug_bound",         "const char", "[]"),
-    0x80337F88: table.sym_var("str_object_debug_touch",         "const char", "[]"),
-    0x80337F94: table.sym_var("str_object_debug_takeoff",       "const char", "[]"),
-    0x80337FA0: table.sym_var("str_object_debug_dive",          "const char", "[]"),
-    0x80337FAC: table.sym_var("str_object_debug_s_water",       "const char", "[]"),
-    0x80337FB8: table.sym_var("str_object_debug_u_water",       "const char", "[]"),
-    0x80337FC4: table.sym_var("str_object_debug_b_water",       "const char", "[]"),
-    0x80337FD0: table.sym_var("str_object_debug_sky",           "const char", "[]"),
-    0x80337FDC: table.sym_var("str_object_debug_out_scope",     "const char", "[]"),
-    0x80337FF0: table.sym_var("object_debug_80337FF0",          "const double"),
+    # src/obj_debug.data.c
+    0x80337E20: table.sym_var("str_obj_debug_a0",           "const char", "[]"),
+    0x80337E28: table.sym_var("str_obj_debug_a1",           "const char", "[]"),
+    0x80337E30: table.sym_var("str_obj_debug_a2",           "const char", "[]"),
+    0x80337E38: table.sym_var("str_obj_debug_a3",           "const char", "[]"),
+    0x80337E40: table.sym_var("str_obj_debug_a4",           "const char", "[]"),
+    0x80337E48: table.sym_var("str_obj_debug_a5",           "const char", "[]"),
+    0x80337E50: table.sym_var("str_obj_debug_a6",           "const char", "[]"),
+    0x80337E58: table.sym_var("str_obj_debug_a7",           "const char", "[]"),
+    0x80337E60: table.sym_var("str_obj_debug_a",            "const char", "[]"),
+    0x80337E64: table.sym_var("str_obj_debug_b0",           "const char", "[]"),
+    0x80337E6C: table.sym_var("str_obj_debug_b1",           "const char", "[]"),
+    0x80337E74: table.sym_var("str_obj_debug_b2",           "const char", "[]"),
+    0x80337E7C: table.sym_var("str_obj_debug_b3",           "const char", "[]"),
+    0x80337E84: table.sym_var("str_obj_debug_b4",           "const char", "[]"),
+    0x80337E8C: table.sym_var("str_obj_debug_b5",           "const char", "[]"),
+    0x80337E94: table.sym_var("str_obj_debug_b6",           "const char", "[]"),
+    0x80337E9C: table.sym_var("str_obj_debug_b7",           "const char", "[]"),
+    0x80337EA4: table.sym_var("str_obj_debug_b",            "const char", "[]"),
+    0x80337EA8: table.sym_var("str_obj_debug_dprint_over",  "const char", "[]"),
+    0x80337EB4: table.sym_var("str_obj_debug_mapinfo",      "const char", "[]"),
+    0x80337EBC: table.sym_var("str_obj_debug_area",         "const char", "[]"),
+    0x80337EC4: table.sym_var("str_obj_debug_wx",           "const char", "[]"),
+    0x80337ECC: table.sym_var("str_obj_debug_wy",           "const char", "[]"),
+    0x80337ED4: table.sym_var("str_obj_debug_wz",           "const char", "[]"),
+    0x80337EDC: table.sym_var("str_obj_debug_bgy",          "const char", "[]"),
+    0x80337EE4: table.sym_var("str_obj_debug_angy",         "const char", "[]"),
+    0x80337EEC: table.sym_var("str_obj_debug_bgcode",       "const char", "[]"),
+    0x80337EF8: table.sym_var("str_obj_debug_bgstatus",     "const char", "[]"),
+    0x80337F04: table.sym_var("str_obj_debug_bgarea",       "const char", "[]"),
+    0x80337F10: table.sym_var("str_obj_debug_water",        "const char", "[]"),
+    0x80337F1C: table.sym_var("str_obj_debug_checkinfo",    "const char", "[]"),
+    0x80337F28: table.sym_var("str_obj_debug_stageinfo",    "const char", "[]"),
+    0x80337F34: table.sym_var("str_obj_debug_stage_param",  "const char", "[]"),
+    0x80337F44: table.sym_var("str_obj_debug_effectinfo",   "const char", "[]"),
+    0x80337F50: table.sym_var("str_obj_debug_enemyinfo",    "const char", "[]"),
+    0x80337F5C: table.sym_var("str_obj_debug_obj",          "const char", "[]"),
+    0x80337F64: table.sym_var("str_obj_debug_nullbg",       "const char", "[]"),
+    0x80337F70: table.sym_var("str_obj_debug_wall",         "const char", "[]"),
+    0x80337F7C: table.sym_var("str_obj_debug_bound",        "const char", "[]"),
+    0x80337F88: table.sym_var("str_obj_debug_touch",        "const char", "[]"),
+    0x80337F94: table.sym_var("str_obj_debug_takeoff",      "const char", "[]"),
+    0x80337FA0: table.sym_var("str_obj_debug_dive",         "const char", "[]"),
+    0x80337FAC: table.sym_var("str_obj_debug_s_water",      "const char", "[]"),
+    0x80337FB8: table.sym_var("str_obj_debug_u_water",      "const char", "[]"),
+    0x80337FC4: table.sym_var("str_obj_debug_b_water",      "const char", "[]"),
+    0x80337FD0: table.sym_var("str_obj_debug_sky",          "const char", "[]"),
+    0x80337FDC: table.sym_var("str_obj_debug_out_scope",    "const char", "[]"),
+    0x80337FF0: table.sym_var("obj_debug_80337FF0",         "const double"),
 
     # src/wipe.data.c
     0x80338000: table.sym_var("wipe_80338000", "const double"),
@@ -7653,22 +9074,22 @@ sym_E0_d_main = {
     0x803381B0: table.sym_var("message_803381B0", "const double"),
     0x803381B8: table.sym_var_fnc("message_803381B8", "const", "[]"),
 
-    # src/particle_snow.data.c
-    0x80338280: table.sym_var("particle_snow_80338280", "const double"),
-    0x80338288: table.sym_var("particle_snow_80338288", "const double"),
-    0x80338290: table.sym_var("particle_snow_80338290", "const double"),
-    0x80338298: table.sym_var("particle_snow_80338298", "const double"),
-    0x803382A0: table.sym_var("particle_snow_803382A0", "const double"),
-    0x803382A8: table.sym_var("particle_snow_803382A8", "const double"),
-    0x803382B0: table.sym_var("particle_snow_803382B0", "const double"),
+    # src/weather_snow.data.c
+    0x80338280: table.sym_var("weather_snow_80338280", "const double"),
+    0x80338288: table.sym_var("weather_snow_80338288", "const double"),
+    0x80338290: table.sym_var("weather_snow_80338290", "const double"),
+    0x80338298: table.sym_var("weather_snow_80338298", "const double"),
+    0x803382A0: table.sym_var("weather_snow_803382A0", "const double"),
+    0x803382A8: table.sym_var("weather_snow_803382A8", "const double"),
+    0x803382B0: table.sym_var("weather_snow_803382B0", "const double"),
 
-    # src/particle_lava.data.c
-    0x803382C0: table.sym_var("particle_lava_803382C0", "const float"),
-    0x803382C4: table.sym_var("particle_lava_803382C4", "const float"),
-    0x803382C8: table.sym_var("particle_lava_803382C8", "const float"),
-    0x803382CC: table.sym_var("particle_lava_803382CC", "const float"),
-    0x803382D0: table.sym_var("particle_lava_803382D0", "const float"),
-    0x803382D4: table.sym_var_fnc("particle_lava_803382D4", "const", "[]"),
+    # src/weather_lava.data.c
+    0x803382C0: table.sym_var("weather_lava_803382C0", "const float"),
+    0x803382C4: table.sym_var("weather_lava_803382C4", "const float"),
+    0x803382C8: table.sym_var("weather_lava_803382C8", "const float"),
+    0x803382CC: table.sym_var("weather_lava_803382CC", "const float"),
+    0x803382D0: table.sym_var("weather_lava_803382D0", "const float"),
+    0x803382D4: table.sym_var_fnc("weather_lava_803382D4", "const", "[]"),
 
     # src/obj_data.data.c
     0x80338310: table.sym_var_fnc("obj_data_80338310", "const", "[]"),
@@ -8142,23 +9563,23 @@ sym_E0_d_main = {
     # ==========================================================================
 
     # src/main.data.c
-    0x8033A580: table.sym_var("thread_fault",       "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033A730: table.sym_var("thread_idle",        "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033A8E0: table.sym_var("thread_scheduler",   "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033AA90: table.sym_var("thread_app",         "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033AC40: table.sym_var("thread_audio",       "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033ADF0: table.sym_var("mq_pi",              "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033AE08: table.sym_var("mq_scheduler",       "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033AE20: table.sym_var("mq_scheduler_task",  "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033AE38: table.sym_var("msg_app",            "OSMesg",           flag=table.GLOBL),
-    0x8033AE40: table.sym_var("msg_pi",             "OSMesg", "[32]",   table.GLOBL|ultra.BALIGN),
-    0x8033AEC0: table.sym_var("msg_si",             "OSMesg",           flag=table.GLOBL),
-    0x8033AEC8: table.sym_var("msg_scheduler",      "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
-    0x8033AF08: table.sym_var("msg_scheduler_task", "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
-    0x8033AF48: table.sym_var("iomesg_app",         "OSIoMesg",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033AF5C: table.sym_var("msg_null",           "OSMesg",           flag=table.GLOBL),
-    0x8033AF60: table.sym_var("mq_app",             "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033AF78: table.sym_var("mq_si",              "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033A580: table.sym_var("thread_fault",   "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033A730: table.sym_var("thread_idle",    "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033A8E0: table.sym_var("thread_sc",      "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AA90: table.sym_var("thread_app",     "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AC40: table.sym_var("thread_audio",   "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033ADF0: table.sym_var("mq_pi",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033AE08: table.sym_var("mq_sc",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033AE20: table.sym_var("mq_sc_task",     "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033AE38: table.sym_var("msg_app",        "OSMesg",           flag=table.GLOBL),
+    0x8033AE40: table.sym_var("msg_pi",         "OSMesg", "[32]",   table.GLOBL|ultra.BALIGN),
+    0x8033AEC0: table.sym_var("msg_si",         "OSMesg",           flag=table.GLOBL),
+    0x8033AEC8: table.sym_var("msg_sc",         "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
+    0x8033AF08: table.sym_var("msg_sc_task",    "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
+    0x8033AF48: table.sym_var("iomesg_app",     "OSIoMesg",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AF5C: table.sym_var("msg_null",       "OSMesg",           flag=table.GLOBL),
+    0x8033AF60: table.sym_var("mq_app",         "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033AF78: table.sym_var("mq_si",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
 
     # src/app.data.c
     0x8033AF90: table.sym_var("controller_table",   "struct controller",    "[3]",  table.GLOBL|ultra.BALIGN),
@@ -8168,26 +9589,26 @@ sym_E0_d_main = {
     0x8033B028: table.sym_var("mq_video_dp",        "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033B040: table.sym_var("msg_video_vi",       "OSMesg",           flag=table.GLOBL),
     0x8033B044: table.sym_var("msg_video_dp",       "OSMesg",           flag=table.GLOBL),
-    0x8033B048: table.sym_var("vq_video",           "struct vq",        flag=table.GLOBL|ultra.BALIGN),
+    0x8033B048: table.sym_var("sc_client_video",    "struct sc_client", flag=table.GLOBL|ultra.BALIGN),
     0x8033B050: table.sym_var("video_cimg",         "u16 *", "[3]",     table.GLOBL|ultra.BALIGN),
     0x8033B05C: table.sym_var("video_zimg",         "u16 *",            flag=table.GLOBL),
-    0x8033B060: table.sym_var("mem_motion",         "void *",           flag=table.GLOBL),
-    0x8033B064: table.sym_var("mem_demo",           "void *",           flag=table.GLOBL),
-    0x8033B068: table.sym_var("video_sptask",       "struct sptask *",  flag=table.GLOBL),
+    0x8033B060: table.sym_var("anime_buffer",       "s8 *",             flag=table.GLOBL),
+    0x8033B064: table.sym_var("demo_buffer",        "s8 *",             flag=table.GLOBL),
+    0x8033B068: table.sym_var("video_task",         "struct sc_task *", flag=table.GLOBL),
     0x8033B06C: table.sym_var("video_gfx",          "Gfx *",            flag=table.GLOBL),
     0x8033B070: table.sym_var("video_mem",          "u8 *",             flag=table.GLOBL),
     0x8033B074: table.sym_var("video",              "struct video *",   flag=table.GLOBL),
     0x8033B078: table.sym_var("input_flag",         "u8",               flag=table.GLOBL),
     0x8033B079: table.sym_var("eeprom_status",      "s8",               flag=table.GLOBL),
-    0x8033B080: table.sym_var("file_motion",        "struct file",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033B080: table.sym_var("file_anime",         "struct file",      flag=table.GLOBL|ultra.BALIGN),
     0x8033B090: table.sym_var("file_demo",          "struct file",      flag=table.GLOBL|ultra.BALIGN),
 
     # src/audio.data.c
-    0x8033B0A0: table.sym_var("audio_8033B0A0",     "u32", "[36]",  table.GLOBL), # unused
+    0x8033B0A0: table.sym_var("audio_8033B0A0",     "u32", "[36]",  table.GLOBL|ultra.BALIGN), # unused
     0x8033B130: table.sym_var("audio_vecf_0",       "vecf",         flag=table.GLOBL|ultra.BALIGN),
     0x8033B140: table.sym_var("mq_audio",           "OSMesgQueue",  flag=table.GLOBL|ultra.BALIGN),
     0x8033B158: table.sym_var("msg_audio",          "OSMesg",       flag=table.GLOBL),
-    0x8033B160: table.sym_var("vq_audio",           "struct vq",    flag=table.GLOBL|ultra.BALIGN),
+    0x8033B160: table.sym_var("sc_client_audio",    "struct sc_client", flag=table.GLOBL|ultra.BALIGN),
 
     # src/game.data.c
     0x8033B170: table.sym_var("player_table",   "struct player",    "[1]",  table.GLOBL|ultra.BALIGN),
@@ -8206,37 +9627,37 @@ sym_E0_d_main = {
     0x8033B260: table.sym_var("hud",            "struct hud",   flag=table.GLOBL|ultra.BALIGN),
     0x8033B26E: table.sym_var("game_8033B26E",  "s8",   flag=table.GLOBL),
 
-    # src/player_touch.data.c
-    0x8033B270: table.sym_var("player_touch_8033B270",  "u8",   flag=table.GLOBL),
-    0x8033B272: table.sym_var("player_touch_8033B272",  "s16",  flag=table.GLOBL),
+    # src/pl_collision.data.c
+    0x8033B270: table.sym_var("pl_collision_8033B270",  "u8",   flag=table.GLOBL),
+    0x8033B272: table.sym_var("pl_collision_8033B272",  "s16",  flag=table.GLOBL),
 
     # src/player.data.c
     0x8033B280: table.sym_var("player_8033B280",    "s32", flag=table.GLOBL),
 
-    # src/player_move.data.c
-    0x8033B290: table.sym_var("player_move_8033B290",   "s32", flag=table.GLOBL), # unused
+    # src/pl_physics.data.c
+    0x8033B290: table.sym_var("pl_physics_8033B290",    "s32", flag=table.GLOBL), # unused
 
-    # 0x8033B2A0 player_demo
-    0x8033B2A0: table.sym_var("player_demo_8033B2A0",   "struct object *",  flag=table.GLOBL),
-    0x8033B2A4: table.sym_var("player_demo_8033B2A4",   "struct object *",  flag=table.GLOBL),
-    0x8033B2A8: table.sym_var("player_demo_8033B2A8",   "struct object *",  flag=table.GLOBL),
-    0x8033B2AC: table.sym_var("player_demo_8033B2AC",   "struct object *",  flag=table.GLOBL),
-    0x8033B2B0: table.sym_var("player_demo_8033B2B0",   "struct object *",  flag=table.GLOBL),
-    0x8033B2B4: table.sym_var("player_demo_8033B2B4",   "struct object *",  flag=table.GLOBL), # unused
-    0x8033B2B8: table.sym_var("player_demo_8033B2B8",   "s16",  flag=table.GLOBL),
-    0x8033B2BC: table.sym_var("player_demo_8033B2BC",   "s16", "[2]",   table.GLOBL),
+    # src/pl_demo.data.c
+    0x8033B2A0: table.sym_var("pl_demo_8033B2A0",   "struct object *",  flag=table.GLOBL),
+    0x8033B2A4: table.sym_var("pl_demo_8033B2A4",   "struct object *",  flag=table.GLOBL),
+    0x8033B2A8: table.sym_var("pl_demo_8033B2A8",   "struct object *",  flag=table.GLOBL),
+    0x8033B2AC: table.sym_var("pl_demo_8033B2AC",   "struct object *",  flag=table.GLOBL),
+    0x8033B2B0: table.sym_var("pl_demo_8033B2B0",   "struct object *",  flag=table.GLOBL),
+    0x8033B2B4: table.sym_var("pl_demo_8033B2B4",   "struct object *",  flag=table.GLOBL), # unused
+    0x8033B2B8: table.sym_var("pl_demo_8033B2B8",   "s16",  flag=table.GLOBL),
+    0x8033B2BC: table.sym_var("pl_demo_8033B2BC",   "s16", "[2]",   table.GLOBL),
 
-    # 0x8033B2C0 player_ground
-    0x8033B2C0: table.sym_var("player_ground_8033B2C0", "mtxf", "[2]",  table.GLOBL),
+    # src/pl_ground.data.c
+    0x8033B2C0: table.sym_var("pl_ground_8033B2C0", "mtxf", "[2]",  table.GLOBL),
 
-    # src/player_water.data.c
-    0x8033B340: table.sym_var("player_water_8033B340",  "s16",  flag=table.GLOBL),
-    0x8033B342: table.sym_var("player_water_8033B342",  "s16",  flag=table.GLOBL),
-    0x8033B344: table.sym_var("player_water_8033B344",  "f32",  flag=table.GLOBL),
+    # src/pl_water.data.c
+    0x8033B340: table.sym_var("pl_water_8033B340",  "s16",  flag=table.GLOBL),
+    0x8033B342: table.sym_var("pl_water_8033B342",  "s16",  flag=table.GLOBL),
+    0x8033B344: table.sym_var("pl_water_8033B344",  "f32",  flag=table.GLOBL),
 
-    # src/player_callback.data.c
-    0x8033B350: table.sym_var("g_object_mirror",    "struct g_object",              flag=table.GLOBL|ultra.BALIGN),
-    0x8033B3B0: table.sym_var("player_shape_table", "struct player_shape", "[2]",   table.GLOBL|ultra.BALIGN),
+    # src/pl_callback.data.c
+    0x8033B350: table.sym_var("shape_object_mirror",    "struct shape_object",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033B3B0: table.sym_var("pl_shape_table", "struct pl_shape", "[2]",   table.GLOBL|ultra.BALIGN),
 
     # src/mem.data.c
     0x8033B400: table.sym_var("segment_table",  "uintptr_t", "[0x20]",  table.GLOBL|ultra.BALIGN),
@@ -8257,10 +9678,10 @@ sym_E0_d_main = {
     0x8033B4A6: table.sym_var("save_8033B4A6",  "s8",   flag=table.GLOBL),
 
     # src/world.data.c
-    0x8033B4B0: table.sym_var("spawn_player",       "struct spawn",  "[1]",     table.GLOBL|ultra.BALIGN),
-    0x8033B4D0: table.sym_var("shape_data",         "struct g *",    "[0x100]", table.GLOBL|ultra.BALIGN),
-    0x8033B8D0: table.sym_var("world_data",         "struct world",  "[8]",     table.GLOBL|ultra.BALIGN),
-    0x8033BAB0: table.sym_var("wipe",               "struct wipe",              flag=table.GLOBL|ultra.BALIGN),
+    0x8033B4B0: table.sym_var("spawn_player",       "struct spawn",     "[1]",     table.GLOBL|ultra.BALIGN),
+    0x8033B4D0: table.sym_var("shape_data",         "struct shape *",   "[0x100]", table.GLOBL|ultra.BALIGN),
+    0x8033B8D0: table.sym_var("world_data",         "struct world",     "[8]",     table.GLOBL|ultra.BALIGN),
+    0x8033BAB0: table.sym_var("wipe",               "struct wipe",  flag=table.GLOBL|ultra.BALIGN),
     0x8033BAC6: table.sym_var("world_course",       "s16",  flag=table.GLOBL),
     0x8033BAC8: table.sym_var("world_level",        "s16",  flag=table.GLOBL),
     0x8033BACA: table.sym_var("world_index",        "s16",  flag=table.GLOBL),
@@ -8268,29 +9689,30 @@ sym_E0_d_main = {
     0x8033BACE: table.sym_var("world_msg_code",     "s16",  flag=table.GLOBL),
     0x8033BAD0: table.sym_var("world_msg_prev",     "s16",  flag=table.GLOBL),
 
-    # src/g_draw.data.c
-    0x8033BAE0: table.sym_var("g_mtx_index",            "s16",  flag=table.GLOBL),
-    0x8033BAE8: table.sym_var("g_mf_stack",             "mtxf",  "[32]",    table.GLOBL|ultra.BALIGN),
-    0x8033C2E8: table.sym_var("g_mtx_stack",            "Mtx *", "[32]",    table.GLOBL|ultra.BALIGN),
-    0x8033C368: table.sym_var("g_joint_type_prev",      "u8",   flag=table.GLOBL),
-    0x8033C369: table.sym_var("g_joint_shadow_prev",    "u8",   flag=table.GLOBL),
-    0x8033C36A: table.sym_var("g_joint_frame_prev",     "s16",  flag=table.GLOBL),
-    0x8033C36C: table.sym_var("g_joint_scale_prev",     "f32",  flag=table.GLOBL),
-    0x8033C370: table.sym_var("g_joint_tbl_prev",       "const u16 *",  flag=table.GLOBL),
-    0x8033C374: table.sym_var("g_joint_val_prev",       "const s16 *",  flag=table.GLOBL),
-    0x8033C378: table.sym_var("g_joint_type",           "u8",   flag=table.GLOBL),
-    0x8033C379: table.sym_var("g_joint_shadow",         "u8",   flag=table.GLOBL),
-    0x8033C37A: table.sym_var("g_joint_frame",          "s16",  flag=table.GLOBL),
-    0x8033C37C: table.sym_var("g_joint_scale",          "f32",  flag=table.GLOBL),
-    0x8033C380: table.sym_var("g_joint_tbl",            "const u16 *",  flag=table.GLOBL),
-    0x8033C384: table.sym_var("g_joint_val",            "const s16 *",  flag=table.GLOBL),
-    0x8033C388: table.sym_var("g_draw_arena",           "struct arena *",   flag=table.GLOBL),
+    # src/shape_draw.data.c
+    0x8033BAE0: table.sym_var("shape_mtx_index",            "s16",  flag=table.GLOBL),
+    0x8033BAE8: table.sym_var("shape_mf_stack",             "mtxf",  "[32]",    table.GLOBL|ultra.BALIGN),
+    0x8033C2E8: table.sym_var("shape_mtx_stack",            "Mtx *", "[32]",    table.GLOBL|ultra.BALIGN),
+    0x8033C368: table.sym_var("shape_joint_type_prev",      "u8",   flag=table.GLOBL),
+    0x8033C369: table.sym_var("shape_joint_shadow_prev",    "u8",   flag=table.GLOBL),
+    0x8033C36A: table.sym_var("shape_joint_frame_prev",     "s16",  flag=table.GLOBL),
+    0x8033C36C: table.sym_var("shape_joint_scale_prev",     "f32",  flag=table.GLOBL),
+    0x8033C370: table.sym_var("shape_joint_tbl_prev",       "const u16 *",  flag=table.GLOBL),
+    0x8033C374: table.sym_var("shape_joint_val_prev",       "const s16 *",  flag=table.GLOBL),
+    0x8033C378: table.sym_var("shape_joint_type",           "u8",   flag=table.GLOBL),
+    0x8033C379: table.sym_var("shape_joint_shadow",         "u8",   flag=table.GLOBL),
+    0x8033C37A: table.sym_var("shape_joint_frame",          "s16",  flag=table.GLOBL),
+    0x8033C37C: table.sym_var("shape_joint_scale",          "f32",  flag=table.GLOBL),
+    0x8033C380: table.sym_var("shape_joint_tbl",            "const u16 *",  flag=table.GLOBL),
+    0x8033C384: table.sym_var("shape_joint_val",            "const s16 *",  flag=table.GLOBL),
+    0x8033C388: table.sym_var("shape_draw_arena",           "struct arena *",   flag=table.GLOBL),
 
     # src/time.data.c
     0x8033C390: table.sym_var("time",   "struct time", "[2]",   table.GLOBL|ultra.BALIGN),
 
     # 0x8033C520 camera
     0x8033C520: table.sym("_camera_bss+0x00"), # la
+    0x8033C544: table.sym("_camera_bss+0x24"), # data
     0x8033C568: table.sym("_camera_bss+0x48"), # la
     0x8033C578: table.sym("_camera_bss+0x58"), # la
     0x8033C588: table.sym("_camera_bss+0x68"), # la
@@ -8417,12 +9839,13 @@ sym_E0_d_main = {
     0x8033CBD0: table.sym("_camera_bss+0x6B0"),
 
     # src/object.data.c
-    0x8033CBE0: table.sym_var("object_list_data",   "struct object_list", "[16]",   table.GLOBL|ultra.BALIGN),
+    0x8033CBE0: table.sym_var("obj_list_data",  "struct obj_list", "[16]",  table.GLOBL|ultra.BALIGN),
     0x8033D260: table.sym_var("object_debug_flag",  "u32",  flag=table.GLOBL),
     0x8033D264: table.sym_var("object_8033D264",    "int",  flag=table.GLOBL), # "NULLBG"
     0x8033D268: table.sym_var("object_8033D268",    "int",  flag=table.GLOBL), # unused
     0x8033D26C: table.sym_var("object_8033D26C",    "int",  flag=table.GLOBL), # "WALL"
     0x8033D270: table.sym_var("object_8033D270",    "int",  flag=table.GLOBL), # "obj"
+    # struct
     0x8033D274: table.sym_var("object_8033D274",    "s16",  flag=table.GLOBL), # ground count
     0x8033D276: table.sym_var("object_8033D276",    "s16",  flag=table.GLOBL), # roof count
     0x8033D278: table.sym_var("object_8033D278",    "s16",  flag=table.GLOBL), # wall count
@@ -8431,8 +9854,8 @@ sym_E0_d_main = {
     0x8033D480: table.sym_var("object_8033D480",    "int",  flag=table.GLOBL), # obj freeze
     0x8033D488: table.sym_var("object_data",        "struct object", "[240]",   table.GLOBL|ultra.BALIGN),
     0x80360E88: table.sym_var("object_dummy",       "struct object",            flag=table.GLOBL|ultra.BALIGN),
-    0x803610E8: table.sym_var("object_list",        "struct object_list *",     flag=table.GLOBL),
-    0x803610F0: table.sym_var("object_list_free",   "struct object_list",       flag=table.GLOBL|ultra.BALIGN),
+    0x803610E8: table.sym_var("obj_list",           "struct obj_list *",    flag=table.GLOBL),
+    0x803610F0: table.sym_var("obj_list_free",      "struct obj_list",      flag=table.GLOBL|ultra.BALIGN),
     0x80361158: table.sym_var("object_mario",       "struct object *",  flag=table.GLOBL),
     0x8036115C: table.sym_var("object_luigi",       "struct object *",  flag=table.GLOBL),
     0x80361160: table.sym_var("object",             "struct object *",  flag=table.GLOBL),
@@ -8460,15 +9883,15 @@ sym_E0_d_main = {
     0x80361262: table.sym_var("object_80361262",    "s16",  flag=table.GLOBL),
     0x80361264: table.sym_var("object_80361264",    "s16",  flag=table.GLOBL),
 
-    # src/object_lib.data.c
-    0x80361270: table.sym_var("object_lib_80361270",    "s32",  flag=table.GLOBL),
+    # src/obj_lib.data.c
+    0x80361270: table.sym_var("obj_lib_80361270",   "s32",  flag=table.GLOBL),
 
     # src/object_a.data.c
     0x80361280: table.sym_var("object_a_80361280",  "s16",  flag=table.GLOBL),
 
-    # 0x80361290 object_debug
-    0x80361290: table.sym("_object_debug_bss+0x00"), # la
-    0x803612A0: table.sym("_object_debug_bss+0x10"), # la
+    # src/obj_debug.data.c
+    0x80361290: table.sym_var("obj_debug_80361290", "struct obj_debug",  flag=table.GLOBL|ultra.BALIGN),
+    0x803612A0: table.sym_var("obj_debug_803612A0", "struct obj_debug",  flag=table.GLOBL|ultra.BALIGN),
 
     # src/shadow.data.c
     0x803612B0: table.sym_var("shadow_803612B0",    "s8",   flag=table.GLOBL),
@@ -8476,14 +9899,14 @@ sym_E0_d_main = {
     0x803612B4: table.sym_var("shadow_803612B4",    "s8",   flag=table.GLOBL),
     0x803612B5: table.sym_var("shadow_803612B5",    "s8",   flag=table.GLOBL),
 
-    # 0x803612C0 background
+    # src/background.data.c
     0x803612C0: table.sym_var("background_803612C0",    "struct struct_803612C0", "[2]",    table.GLOBL),
 
     # src/scroll.data.c
     0x803612E0: table.sym_var("scroll_803612E0",    "s16",  flag=table.GLOBL),
 
-    # src/object_gfx.data.c
-    0x803612F0: table.sym_var("object_gfx_803612F0",    "s8", flag=table.GLOBL),
+    # src/obj_shape.data.c
+    0x803612F0: table.sym_var("obj_shape_803612F0", "s8", flag=table.GLOBL),
 
     # src/ripple.data.c
     0x80361300: table.sym_var("ripple_80361300",    "s16",      flag=table.GLOBL),
@@ -8507,19 +9930,19 @@ sym_E0_d_main = {
     0x803613FC: table.sym_var("message_803613FC",   "s16",  flag=table.GLOBL),
     0x803613FE: table.sym_var("message_803613FE",   "s8",   flag=table.GLOBL),
 
-    # 0x80361400 particle_snow
-    0x80361400: table.sym("_particle_snow_bss+0x00"),
-    0x80361408: table.sym("_particle_snow_bss+0x08"), # la
-    0x80361414: table.sym("_particle_snow_bss+0x14"),
-    0x80361416: table.sym("_particle_snow_bss+0x16"),
+    # src/weather_snow.data.c
+    0x80361400: table.sym_var("weather_snow",          "struct weather *",    flag=table.GLOBL),
+    0x80361408: table.sym_var("weather_snow_80361408", "s32", "[3]",   table.GLOBL|ultra.BALIGN),
+    0x80361414: table.sym_var("weather_snow_80361414", "s16",          flag=table.GLOBL),
+    0x80361416: table.sym_var("weather_snow_80361416", "s16",          flag=table.GLOBL),
 
-    # 0x80361420 particle_lava
-    0x80361420: table.sym("_particle_lava_bss+0x00"), # la
-    0x80361434: table.sym("_particle_lava_bss+0x14"),
-    0x80361438: table.sym("_particle_lava_bss+0x18"),
-    0x8036143C: table.sym("_particle_lava_bss+0x1C"),
+    # src/weather_lava.data.c
+    0x80361420: table.sym_var("weather_lava_80361420", "s16", "[10]",  table.GLOBL|ultra.BALIGN),
+    0x80361434: table.sym_var("gfx_weather_lava",      "Gfx *",        flag=table.GLOBL),
+    0x80361438: table.sym_var("weather_lava_80361438", "s32",          flag=table.GLOBL),
+    0x8036143C: table.sym_var("weather_lava_8036143C", "s32",          flag=table.GLOBL),
 
-    # 0x80361440 hud
+    # src/hud.data.c
     0x80361440: table.sym_var("hud_80361440",   "s16",  flag=table.GLOBL),
 
     # 0x80361450 object_b
@@ -8564,10 +9987,9 @@ sym_E0_d_main = {
     0x801C1000: table.sym_var("texture_buffer", "u16", "[13][2048]",    table.GLOBL|ultra.BALIGN),
 
     # src/audio/heap.c
-    0x801CE000: table.sym_var("audio_heap",     "u8", "[0x31200]",  table.GLOBL|ultra.BALIGN),
+    0x801CE000: table.sym_var("audio_heap",     "u8", "[0x32200]",  table.GLOBL|ultra.BALIGN),
 
     # src/buffer.c
-    0x801FF200: table.sym_var("stack_rmon",     "u64", "[0x1000/sizeof(u64)]",              table.GLOBL|ultra.BALIGN), # unused
     0x80200200: table.sym_var("stack_main",     "u64", "[0x400/sizeof(u64)]",               table.GLOBL|ultra.BALIGN),
     0x80200600: table.sym_var("stack_idle",     "u64", "[0x800/sizeof(u64)]",               table.GLOBL|ultra.BALIGN),
     0x80200E00: table.sym_var("stack_scheduler","u64", "[0x2000/sizeof(u64)]",              table.GLOBL|ultra.BALIGN),
@@ -8790,87 +10212,87 @@ sym_E0_t_main2 = {
         "vecf dst",
     ), table.GLOBL),
 
-    # src/g.S
-    0x8037B220: table.sym("g_8037B220"),
-    0x8037B24C: table.sym("g_8037B24C", table.GLOBL),
-    0x8037B30C: table.sym("g_8037B30C", table.GLOBL),
-    0x8037B380: table.sym("g_8037B380", table.GLOBL),
-    0x8037B448: table.sym("g_8037B448", table.GLOBL),
-    0x8037B4AC: table.sym("g_8037B4AC", table.GLOBL),
-    0x8037B530: table.sym("g_8037B530", table.GLOBL),
-    0x8037B5B4: table.sym("g_8037B5B4", table.GLOBL),
-    0x8037B670: table.sym("g_8037B670", table.GLOBL),
-    0x8037B744: table.sym("g_8037B744", table.GLOBL),
-    0x8037B7F8: table.sym("g_8037B7F8", table.GLOBL),
-    0x8037B89C: table.sym("g_8037B89C", table.GLOBL),
-    0x8037B940: table.sym("g_8037B940", table.GLOBL),
-    0x8037B9E0: table.sym("g_8037B9E0", table.GLOBL),
-    0x8037BAD4: table.sym("g_8037BAD4", table.GLOBL),
-    0x8037BB48: table.sym("g_8037BB48", table.GLOBL),
-    0x8037BBEC: table.sym("g_8037BBEC", table.GLOBL),
-    0x8037BC90: table.sym("g_8037BC90", table.GLOBL),
-    0x8037BD24: table.sym("g_8037BD24", table.GLOBL),
-    0x8037BDB4: table.sym("g_8037BDB4", table.GLOBL),
-    0x8037BE28: table.sym("g_8037BE28", table.GLOBL),
-    0x8037BECC: table.sym("g_8037BECC", table.GLOBL),
-    0x8037BF84: table.sym("g_8037BF84", table.GLOBL),
-    0x8037C044: table.sym("g_8037C044", table.GLOBL),
-    0x8037C0BC: table.sym("g_8037C0BC", table.GLOBL),
-    0x8037C138: table.sym("g_8037C138", table.GLOBL),
-    0x8037C1E4: table.sym("g_8037C1E4"),
-    0x8037C360: table.sym("g_8037C360", table.GLOBL),
-    0x8037C3D0: table.sym("g_8037C3D0", table.GLOBL),
-    0x8037C448: table.sym("g_8037C448", table.GLOBL),
-    0x8037C51C: table.sym("g_8037C51C", table.GLOBL),
-    0x8037C658: table.sym("g_8037C658", table.GLOBL),
-    0x8037C708: table.sym("g_8037C708", table.GLOBL),
-    0x8037C7D8: table.sym("g_8037C7D8", table.GLOBL),
-    0x8037C844: table.sym("g_8037C844", table.GLOBL),
-    0x8037C9E8: table.sym("g_8037C9E8"), # unused
-    0x8037CB10: table.sym("g_8037CB10"), # unused
-    0x8037CB60: table.sym("g_8037CB60", table.GLOBL),
-    0x8037CBC0: table.sym("g_8037CBC0", table.GLOBL),
-    0x8037CBFC: table.sym("g_8037CBFC", table.GLOBL),
-    0x8037CC74: table.sym("g_8037CC74", table.GLOBL),
-
-    # src/g_script.S
-    0x8037CD60: table.sym_fnc("g_script_00", flag=table.GLOBL), # data
-    0x8037CE24: table.sym_fnc("g_script_01", flag=table.GLOBL), # data
-    0x8037CEE8: table.sym_fnc("g_script_02", flag=table.GLOBL), # data
-    0x8037CF70: table.sym_fnc("g_script_03", flag=table.GLOBL), # data
-    0x8037CFC0: table.sym_fnc("g_script_04", flag=table.GLOBL), # data
-    0x8037D018: table.sym_fnc("g_script_05", flag=table.GLOBL), # data
-    0x8037D050: table.sym_fnc("g_script_06", flag=table.GLOBL), # data
-    0x8037D0D0: table.sym_fnc("g_script_07", flag=table.GLOBL), # data
-    0x8037D1D0: table.sym_fnc("g_script_08", flag=table.GLOBL), # data
-    0x8037D328: table.sym_fnc("g_script_09", flag=table.GLOBL), # data
-    0x8037D3A4: table.sym_fnc("g_script_0A", flag=table.GLOBL), # data
-    0x8037D48C: table.sym_fnc("g_script_0B", flag=table.GLOBL), # data
-    0x8037D4DC: table.sym_fnc("g_script_1F", flag=table.GLOBL), # data
-    0x8037D500: table.sym_fnc("g_script_0C", flag=table.GLOBL), # data
-    0x8037D55C: table.sym_fnc("g_script_0D", flag=table.GLOBL), # data
-    0x8037D5D4: table.sym_fnc("g_script_0E", flag=table.GLOBL), # data
-    0x8037D640: table.sym_fnc("g_script_0F", flag=table.GLOBL), # data
-    0x8037D6F0: table.sym_fnc("g_script_10", flag=table.GLOBL), # data
-    0x8037D8D4: table.sym_fnc("g_script_11", flag=table.GLOBL), # data
-    0x8037D998: table.sym_fnc("g_script_12", flag=table.GLOBL), # data
-    0x8037DA5C: table.sym_fnc("g_script_1D", flag=table.GLOBL), # data
-    0x8037DB50: table.sym_fnc("g_script_1E", flag=table.GLOBL), # data
-    0x8037DB74: table.sym_fnc("g_script_13", flag=table.GLOBL), # data
-    0x8037DC10: table.sym_fnc("g_script_14", flag=table.GLOBL), # data
-    0x8037DCD4: table.sym_fnc("g_script_15", flag=table.GLOBL), # data
-    0x8037DD4C: table.sym_fnc("g_script_16", flag=table.GLOBL), # data
-    0x8037DDDC: table.sym_fnc("g_script_17", flag=table.GLOBL), # data
-    0x8037DE34: table.sym_fnc("g_script_18", flag=table.GLOBL), # data
-    0x8037DE94: table.sym_fnc("g_script_19", flag=table.GLOBL), # data
-    0x8037DEF8: table.sym_fnc("g_script_1A", flag=table.GLOBL), # data
-    0x8037DF1C: table.sym_fnc("g_script_1B", flag=table.GLOBL), # data
-    0x8037DFD4: table.sym_fnc("g_script_1C", flag=table.GLOBL), # data
-    0x8037E058: table.sym_fnc("g_script_20", flag=table.GLOBL), # data
-    0x8037E0B4: table.sym("g_script_main", table.GLOBL),
+    # src/shape.S
+    0x8037B220: table.sym("shape_8037B220"),
+    0x8037B24C: table.sym("shape_8037B24C", table.GLOBL),
+    0x8037B30C: table.sym("shape_8037B30C", table.GLOBL),
+    0x8037B380: table.sym("shape_8037B380", table.GLOBL),
+    0x8037B448: table.sym("shape_8037B448", table.GLOBL),
+    0x8037B4AC: table.sym("shape_8037B4AC", table.GLOBL),
+    0x8037B530: table.sym("shape_8037B530", table.GLOBL),
+    0x8037B5B4: table.sym("shape_8037B5B4", table.GLOBL),
+    0x8037B670: table.sym("shape_8037B670", table.GLOBL),
+    0x8037B744: table.sym("shape_8037B744", table.GLOBL),
+    0x8037B7F8: table.sym("shape_8037B7F8", table.GLOBL),
+    0x8037B89C: table.sym("shape_8037B89C", table.GLOBL),
+    0x8037B940: table.sym("shape_8037B940", table.GLOBL),
+    0x8037B9E0: table.sym("shape_8037B9E0", table.GLOBL),
+    0x8037BAD4: table.sym("shape_8037BAD4", table.GLOBL),
+    0x8037BB48: table.sym("shape_8037BB48", table.GLOBL),
+    0x8037BBEC: table.sym("shape_8037BBEC", table.GLOBL),
+    0x8037BC90: table.sym("shape_8037BC90", table.GLOBL),
+    0x8037BD24: table.sym("shape_8037BD24", table.GLOBL),
+    0x8037BDB4: table.sym("shape_8037BDB4", table.GLOBL),
+    0x8037BE28: table.sym("shape_8037BE28", table.GLOBL),
+    0x8037BECC: table.sym("shape_8037BECC", table.GLOBL),
+    0x8037BF84: table.sym("shape_8037BF84", table.GLOBL),
+    0x8037C044: table.sym("shape_8037C044", table.GLOBL),
+    0x8037C0BC: table.sym("shape_8037C0BC", table.GLOBL),
+    0x8037C138: table.sym("shape_8037C138", table.GLOBL),
+    0x8037C1E4: table.sym("shape_8037C1E4"),
+    0x8037C360: table.sym("shape_8037C360", table.GLOBL),
+    0x8037C3D0: table.sym("shape_8037C3D0", table.GLOBL),
+    0x8037C448: table.sym("shape_8037C448", table.GLOBL),
+    0x8037C51C: table.sym("shape_8037C51C", table.GLOBL),
+    0x8037C658: table.sym("shape_8037C658", table.GLOBL),
+    0x8037C708: table.sym("shape_8037C708", table.GLOBL),
+    0x8037C7D8: table.sym("shape_8037C7D8", table.GLOBL),
+    0x8037C844: table.sym("shape_8037C844", table.GLOBL),
+    0x8037C9E8: table.sym("shape_8037C9E8"), # unused
+    0x8037CB10: table.sym("shape_8037CB10"), # unused
+    0x8037CB60: table.sym("shape_8037CB60", table.GLOBL),
+    0x8037CBC0: table.sym("shape_8037CBC0", table.GLOBL),
+    0x8037CBFC: table.sym("shape_8037CBFC", table.GLOBL),
+    0x8037CC74: table.sym("shape_8037CC74", table.GLOBL),
 
     # src/s_script.S
-    0x8037E1A0: table.sym_fnc("s_script_cmp", "int", (
+    0x8037CD60: table.sym_fnc("s_script_00", flag=table.GLOBL), # data
+    0x8037CE24: table.sym_fnc("s_script_01", flag=table.GLOBL), # data
+    0x8037CEE8: table.sym_fnc("s_script_02", flag=table.GLOBL), # data
+    0x8037CF70: table.sym_fnc("s_script_03", flag=table.GLOBL), # data
+    0x8037CFC0: table.sym_fnc("s_script_04", flag=table.GLOBL), # data
+    0x8037D018: table.sym_fnc("s_script_05", flag=table.GLOBL), # data
+    0x8037D050: table.sym_fnc("s_script_06", flag=table.GLOBL), # data
+    0x8037D0D0: table.sym_fnc("s_script_07", flag=table.GLOBL), # data
+    0x8037D1D0: table.sym_fnc("s_script_08", flag=table.GLOBL), # data
+    0x8037D328: table.sym_fnc("s_script_09", flag=table.GLOBL), # data
+    0x8037D3A4: table.sym_fnc("s_script_0A", flag=table.GLOBL), # data
+    0x8037D48C: table.sym_fnc("s_script_0B", flag=table.GLOBL), # data
+    0x8037D4DC: table.sym_fnc("s_script_1F", flag=table.GLOBL), # data
+    0x8037D500: table.sym_fnc("s_script_0C", flag=table.GLOBL), # data
+    0x8037D55C: table.sym_fnc("s_script_0D", flag=table.GLOBL), # data
+    0x8037D5D4: table.sym_fnc("s_script_0E", flag=table.GLOBL), # data
+    0x8037D640: table.sym_fnc("s_script_0F", flag=table.GLOBL), # data
+    0x8037D6F0: table.sym_fnc("s_script_10", flag=table.GLOBL), # data
+    0x8037D8D4: table.sym_fnc("s_script_11", flag=table.GLOBL), # data
+    0x8037D998: table.sym_fnc("s_script_12", flag=table.GLOBL), # data
+    0x8037DA5C: table.sym_fnc("s_script_1D", flag=table.GLOBL), # data
+    0x8037DB50: table.sym_fnc("s_script_1E", flag=table.GLOBL), # data
+    0x8037DB74: table.sym_fnc("s_script_13", flag=table.GLOBL), # data
+    0x8037DC10: table.sym_fnc("s_script_14", flag=table.GLOBL), # data
+    0x8037DCD4: table.sym_fnc("s_script_15", flag=table.GLOBL), # data
+    0x8037DD4C: table.sym_fnc("s_script_16", flag=table.GLOBL), # data
+    0x8037DDDC: table.sym_fnc("s_script_17", flag=table.GLOBL), # data
+    0x8037DE34: table.sym_fnc("s_script_18", flag=table.GLOBL), # data
+    0x8037DE94: table.sym_fnc("s_script_19", flag=table.GLOBL), # data
+    0x8037DEF8: table.sym_fnc("s_script_1A", flag=table.GLOBL), # data
+    0x8037DF1C: table.sym_fnc("s_script_1B", flag=table.GLOBL), # data
+    0x8037DFD4: table.sym_fnc("s_script_1C", flag=table.GLOBL), # data
+    0x8037E058: table.sym_fnc("s_script_20", flag=table.GLOBL), # data
+    0x8037E0B4: table.sym("s_script_main", table.GLOBL),
+
+    # src/p_script.S
+    0x8037E1A0: table.sym_fnc("p_script_cmp", "int", (
         "s8 cmp",
         "int x",
     )),
@@ -8882,67 +10304,67 @@ sym_E0_t_main2 = {
     0x8037E25C: table.sym_fnc("L8037E25C", flag=table.GLOBL|table.LOCAL),
     0x8037E278: table.sym_fnc("L8037E278", flag=table.GLOBL|table.LOCAL),
     0x8037E290: table.sym_fnc("L8037E290", flag=table.GLOBL|table.LOCAL),
-    0x8037E2C4: table.sym_fnc("s_script_00", flag=table.GLOBL), # data
-    0x8037E388: table.sym_fnc("s_script_01", flag=table.GLOBL), # data
-    0x8037E404: table.sym_fnc("s_script_02", flag=table.GLOBL), # data
-    0x8037E47C: table.sym_fnc("s_script_03", flag=table.GLOBL), # data
-    0x8037E4FC: table.sym_fnc("s_script_04", flag=table.GLOBL), # data
-    0x8037E580: table.sym_fnc("s_script_05", flag=table.GLOBL), # data
-    0x8037E5B8: table.sym_fnc("s_script_06", flag=table.GLOBL), # data
-    0x8037E620: table.sym_fnc("s_script_07", flag=table.GLOBL), # data
-    0x8037E650: table.sym_fnc("s_script_08", flag=table.GLOBL), # data
-    0x8037E6D4: table.sym_fnc("s_script_09", flag=table.GLOBL), # data
-    0x8037E780: table.sym_fnc("s_script_0A", flag=table.GLOBL), # data
-    0x8037E7F8: table.sym_fnc("s_script_0B", flag=table.GLOBL), # data
-    0x8037E878: table.sym_fnc("s_script_0C", flag=table.GLOBL), # data
-    0x8037E8E8: table.sym_fnc("s_script_0D", flag=table.GLOBL), # data
-    0x8037E988: table.sym_fnc("s_script_0E", flag=table.GLOBL), # data
-    0x8037EA18: table.sym_fnc("s_script_0F", flag=table.GLOBL), # data
-    0x8037EA70: table.sym_fnc("s_script_10", flag=table.GLOBL), # data
-    0x8037EA98: table.sym_fnc("s_script_11", flag=table.GLOBL), # data
-    0x8037EB04: table.sym_fnc("s_script_12", flag=table.GLOBL), # data
-    0x8037EB98: table.sym_fnc("s_script_13", flag=table.GLOBL), # data
-    0x8037EBD4: table.sym_fnc("s_script_14", flag=table.GLOBL), # data
-    0x8037EC14: table.sym_fnc("s_script_15", flag=table.GLOBL), # data
-    0x8037EC54: table.sym_fnc("s_script_16", flag=table.GLOBL), # data
-    0x8037ECA4: table.sym_fnc("s_script_17", flag=table.GLOBL), # data
-    0x8037ECF8: table.sym_fnc("s_script_18", flag=table.GLOBL), # data
-    0x8037ED48: table.sym_fnc("s_script_19", flag=table.GLOBL), # data
-    0x8037EDF8: table.sym_fnc("s_script_1A", flag=table.GLOBL), # data
-    0x8037EE48: table.sym_fnc("s_script_1B", flag=table.GLOBL), # data
-    0x8037EEA8: table.sym_fnc("s_script_1C", flag=table.GLOBL), # data
-    0x8037EF00: table.sym_fnc("s_script_1D", flag=table.GLOBL), # data
-    0x8037EF70: table.sym_fnc("s_script_1E", flag=table.GLOBL), # data
-    0x8037F010: table.sym_fnc("s_script_1F", flag=table.GLOBL), # data
-    0x8037F130: table.sym_fnc("s_script_20", flag=table.GLOBL), # data
-    0x8037F164: table.sym_fnc("s_script_21", flag=table.GLOBL), # data
-    0x8037F214: table.sym_fnc("s_script_22", flag=table.GLOBL), # data
-    0x8037F2A4: table.sym_fnc("s_script_23", flag=table.GLOBL), # data
-    0x8037F36C: table.sym_fnc("s_script_25", flag=table.GLOBL), # data
-    0x8037F45C: table.sym_fnc("s_script_24", flag=table.GLOBL), # data
-    0x8037F67C: table.sym_fnc("s_script_26", flag=table.GLOBL), # data
-    0x8037F790: table.sym_fnc("s_script_28", flag=table.GLOBL), # data
-    0x8037F920: table.sym_fnc("s_script_31", flag=table.GLOBL), # data
-    0x8037F994: table.sym_fnc("s_script_27", flag=table.GLOBL), # data
-    0x8037FB18: table.sym_fnc("s_script_3A", flag=table.GLOBL), # data
-    0x8037FC38: table.sym_fnc("s_script_3B", flag=table.GLOBL), # data
-    0x8037FDE4: table.sym_fnc("s_script_34", flag=table.GLOBL), # data
-    0x8037FE2C: table.sym_fnc("s_script_35", flag=table.GLOBL), # data
-    0x8037FE94: table.sym_fnc("s_script_2E", flag=table.GLOBL), # data
-    0x8037FF14: table.sym_fnc("s_script_2F", flag=table.GLOBL), # data
-    0x8037FF94: table.sym_fnc("s_script_39", flag=table.GLOBL), # data
-    0x80380014: table.sym_fnc("s_script_29", flag=table.GLOBL), # data
-    0x8038007C: table.sym_fnc("s_script_2A", flag=table.GLOBL), # data
-    0x803800BC: table.sym_fnc("s_script_2B", flag=table.GLOBL), # data
-    0x80380160: table.sym_fnc("s_script_2C", flag=table.GLOBL), # data
-    0x803801A0: table.sym_fnc("s_script_2D", flag=table.GLOBL), # data
-    0x803801E0: table.sym_fnc("s_script_33", flag=table.GLOBL), # data
-    0x8038024C: table.sym_fnc("s_script_32", flag=table.GLOBL), # data
-    0x80380274: table.sym_fnc("s_script_30", flag=table.GLOBL), # data
-    0x80380300: table.sym_fnc("s_script_36", flag=table.GLOBL), # data
-    0x8038039C: table.sym_fnc("s_script_37", flag=table.GLOBL), # data
-    0x803803EC: table.sym_fnc("s_script_38", flag=table.GLOBL), # data
-    0x80380434: table.sym_fnc("s_script_3C", flag=table.GLOBL), # data
+    0x8037E2C4: table.sym_fnc("p_script_00", flag=table.GLOBL), # data
+    0x8037E388: table.sym_fnc("p_script_01", flag=table.GLOBL), # data
+    0x8037E404: table.sym_fnc("p_script_02", flag=table.GLOBL), # data
+    0x8037E47C: table.sym_fnc("p_script_03", flag=table.GLOBL), # data
+    0x8037E4FC: table.sym_fnc("p_script_04", flag=table.GLOBL), # data
+    0x8037E580: table.sym_fnc("p_script_05", flag=table.GLOBL), # data
+    0x8037E5B8: table.sym_fnc("p_script_06", flag=table.GLOBL), # data
+    0x8037E620: table.sym_fnc("p_script_07", flag=table.GLOBL), # data
+    0x8037E650: table.sym_fnc("p_script_08", flag=table.GLOBL), # data
+    0x8037E6D4: table.sym_fnc("p_script_09", flag=table.GLOBL), # data
+    0x8037E780: table.sym_fnc("p_script_0A", flag=table.GLOBL), # data
+    0x8037E7F8: table.sym_fnc("p_script_0B", flag=table.GLOBL), # data
+    0x8037E878: table.sym_fnc("p_script_0C", flag=table.GLOBL), # data
+    0x8037E8E8: table.sym_fnc("p_script_0D", flag=table.GLOBL), # data
+    0x8037E988: table.sym_fnc("p_script_0E", flag=table.GLOBL), # data
+    0x8037EA18: table.sym_fnc("p_script_0F", flag=table.GLOBL), # data
+    0x8037EA70: table.sym_fnc("p_script_10", flag=table.GLOBL), # data
+    0x8037EA98: table.sym_fnc("p_script_11", flag=table.GLOBL), # data
+    0x8037EB04: table.sym_fnc("p_script_12", flag=table.GLOBL), # data
+    0x8037EB98: table.sym_fnc("p_script_13", flag=table.GLOBL), # data
+    0x8037EBD4: table.sym_fnc("p_script_14", flag=table.GLOBL), # data
+    0x8037EC14: table.sym_fnc("p_script_15", flag=table.GLOBL), # data
+    0x8037EC54: table.sym_fnc("p_script_16", flag=table.GLOBL), # data
+    0x8037ECA4: table.sym_fnc("p_script_17", flag=table.GLOBL), # data
+    0x8037ECF8: table.sym_fnc("p_script_18", flag=table.GLOBL), # data
+    0x8037ED48: table.sym_fnc("p_script_19", flag=table.GLOBL), # data
+    0x8037EDF8: table.sym_fnc("p_script_1A", flag=table.GLOBL), # data
+    0x8037EE48: table.sym_fnc("p_script_1B", flag=table.GLOBL), # data
+    0x8037EEA8: table.sym_fnc("p_script_1C", flag=table.GLOBL), # data
+    0x8037EF00: table.sym_fnc("p_script_1D", flag=table.GLOBL), # data
+    0x8037EF70: table.sym_fnc("p_script_1E", flag=table.GLOBL), # data
+    0x8037F010: table.sym_fnc("p_script_1F", flag=table.GLOBL), # data
+    0x8037F130: table.sym_fnc("p_script_20", flag=table.GLOBL), # data
+    0x8037F164: table.sym_fnc("p_script_21", flag=table.GLOBL), # data
+    0x8037F214: table.sym_fnc("p_script_22", flag=table.GLOBL), # data
+    0x8037F2A4: table.sym_fnc("p_script_23", flag=table.GLOBL), # data
+    0x8037F36C: table.sym_fnc("p_script_25", flag=table.GLOBL), # data
+    0x8037F45C: table.sym_fnc("p_script_24", flag=table.GLOBL), # data
+    0x8037F67C: table.sym_fnc("p_script_26", flag=table.GLOBL), # data
+    0x8037F790: table.sym_fnc("p_script_28", flag=table.GLOBL), # data
+    0x8037F920: table.sym_fnc("p_script_31", flag=table.GLOBL), # data
+    0x8037F994: table.sym_fnc("p_script_27", flag=table.GLOBL), # data
+    0x8037FB18: table.sym_fnc("p_script_3A", flag=table.GLOBL), # data
+    0x8037FC38: table.sym_fnc("p_script_3B", flag=table.GLOBL), # data
+    0x8037FDE4: table.sym_fnc("p_script_34", flag=table.GLOBL), # data
+    0x8037FE2C: table.sym_fnc("p_script_35", flag=table.GLOBL), # data
+    0x8037FE94: table.sym_fnc("p_script_2E", flag=table.GLOBL), # data
+    0x8037FF14: table.sym_fnc("p_script_2F", flag=table.GLOBL), # data
+    0x8037FF94: table.sym_fnc("p_script_39", flag=table.GLOBL), # data
+    0x80380014: table.sym_fnc("p_script_29", flag=table.GLOBL), # data
+    0x8038007C: table.sym_fnc("p_script_2A", flag=table.GLOBL), # data
+    0x803800BC: table.sym_fnc("p_script_2B", flag=table.GLOBL), # data
+    0x80380160: table.sym_fnc("p_script_2C", flag=table.GLOBL), # data
+    0x803801A0: table.sym_fnc("p_script_2D", flag=table.GLOBL), # data
+    0x803801E0: table.sym_fnc("p_script_33", flag=table.GLOBL), # data
+    0x8038024C: table.sym_fnc("p_script_32", flag=table.GLOBL), # data
+    0x80380274: table.sym_fnc("p_script_30", flag=table.GLOBL), # data
+    0x80380300: table.sym_fnc("p_script_36", flag=table.GLOBL), # data
+    0x8038039C: table.sym_fnc("p_script_37", flag=table.GLOBL), # data
+    0x803803EC: table.sym_fnc("p_script_38", flag=table.GLOBL), # data
+    0x80380434: table.sym_fnc("p_script_3C", flag=table.GLOBL), # data
     0x80380478: table.sym_fnc("L80380478", flag=table.GLOBL|table.LOCAL),
     0x80380490: table.sym_fnc("L80380490", flag=table.GLOBL|table.LOCAL),
     0x803804A8: table.sym_fnc("L803804A8", flag=table.GLOBL|table.LOCAL),
@@ -8953,7 +10375,7 @@ sym_E0_t_main2 = {
     0x80380558: table.sym_fnc("L80380558", flag=table.GLOBL|table.LOCAL),
     0x80380570: table.sym_fnc("L80380570", flag=table.GLOBL|table.LOCAL),
     0x80380588: table.sym_fnc("L80380588", flag=table.GLOBL|table.LOCAL),
-    0x803805C8: table.sym("s_script_main", table.GLOBL),
+    0x803805C8: table.sym("p_script_main", table.GLOBL),
 
     # src/map.S
     0x80380690: table.sym("map_80380690"),
@@ -9070,9 +10492,9 @@ sym_E0_t_main2 = {
     0x80385BF0: table.sym("o_script_80385BF0", table.GLOBL),
     0x80385C00: table.sym("o_script_main", table.GLOBL),
 
-    0x8038BCF4: table.sym("g_script_8038BCF8-4"),
+    0x8038BCF4: table.sym("s_script_8038BCF8-4"),
 
-    0x8038BD98: table.sym("g_script_8038BD88+g__child"),
+    0x8038BD98: table.sym("s_script_8038BD88+shape__child"),
 
     0x8038BE40: table.sym("map_8038BE30+0x10"),
     0x8038BE44: table.sym("map_8038BE30+0x14"),
@@ -9103,17 +10525,17 @@ sym_E0_d_main2 = {
     0x80387000: table.sym_var("math_cos",   "f32", "[]",    table.GLOBL),
     0x8038B000: table.sym_var("math_atan",  "s16", "[]",    table.GLOBL),
 
-    # src/g_script.data.c
-    0x8038B810: table.sym_var_fnc("g_script_table", lst="[]", flag=table.GLOBL),
-
     # src/s_script.data.c
-    0x8038B8A0: table.sym_var("s_script_arena",     "struct arena *",   flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8A4: table.sym_var("s_script_sleep",     "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8A8: table.sym_var("s_script_freeze",    "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8AC: table.sym_var("s_script_world",     "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8B0: table.sym_var("s_script_sp",        "void **",  flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8B4: table.sym_var("s_script_fp",        "void **",  flag=table.GLOBL|ultra.DALIGN),
-    0x8038B8B8: table.sym_var_fnc("s_script_table", lst="[]", flag=table.GLOBL),
+    0x8038B810: table.sym_var_fnc("s_script_table", lst="[]", flag=table.GLOBL),
+
+    # src/p_script.data.c
+    0x8038B8A0: table.sym_var("p_script_arena",     "struct arena *",   flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8A4: table.sym_var("p_script_sleep",     "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8A8: table.sym_var("p_script_freeze",    "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8AC: table.sym_var("p_script_world",     "s16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8B0: table.sym_var("p_script_sp",        "void **",  flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8B4: table.sym_var("p_script_fp",        "void **",  flag=table.GLOBL|ultra.DALIGN),
+    0x8038B8B8: table.sym_var_fnc("p_script_table", lst="[]", flag=table.GLOBL),
 
     # src/o_script.data.c
     0x8038B9B0: table.sym_var_fnc("o_script_table", lst="[]", val="int", flag=table.GLOBL),
@@ -9142,10 +10564,10 @@ sym_E0_d_main2 = {
     0x8038BAE4: table.sym_var("math_8038BAE4", "const f32"),
     0x8038BAE8: table.sym_var("math_8038BAE8", "const f32"),
 
-    # src/s_script.data.c
-    0x8038BAF0: table.sym_var_fnc("s_script_8038BAF0", "const", "[]"),
-    0x8038BB10: table.sym_var_fnc("s_script_8038BB10", "const", "[]"),
-    0x8038BB24: table.sym_var_fnc("s_script_8038BB24", "const", "[]"),
+    # src/p_script.data.c
+    0x8038BAF0: table.sym_var_fnc("p_script_8038BAF0", "const", "[]"),
+    0x8038BB10: table.sym_var_fnc("p_script_8038BB10", "const", "[]"),
+    0x8038BB24: table.sym_var_fnc("p_script_8038BB24", "const", "[]"),
 
     # src/map.data.c
     0x8038BB40: table.sym_var("str_map_area",   "const char", "[]"),
@@ -9184,26 +10606,26 @@ sym_E0_d_main2 = {
     0x8038BC94: table.sym_var("bspline_phase",  "f32",  flag=table.GLOBL),
     0x8038BC98: table.sym_var("bspline_mode",   "s32",  flag=table.GLOBL),
 
-    # src/g_script.data.c
-    0x8038BCA0: table.sym_var("g_script_arena",     "struct arena *",   flag=table.GLOBL),
-    0x8038BCA4: table.sym_var("g_script_8038BCA4",  "struct g *",       flag=table.GLOBL),
-    0x8038BCA8: table.sym_var("g_script_8038BCA8",  "struct g *",       flag=table.GLOBL),
-    0x8038BCAC: table.sym_var("g_script_8038BCAC",  "struct g **",      flag=table.GLOBL),
-    0x8038BCB0: table.sym_var("g_script_8038BCB0",  "u16",  flag=table.GLOBL),
-    0x8038BCB8: table.sym_var("g_script_8038BCB8",  "void *",       "[16]", table.GLOBL|ultra.BALIGN),
-    0x8038BCF8: table.sym_var("g_script_8038BCF8",  "struct g *",   "[32]", table.GLOBL|ultra.BALIGN),
-    0x8038BD78: table.sym_var("g_script_8038BD78",  "s16",  flag=table.GLOBL),
-    0x8038BD7A: table.sym_var("g_script_8038BD7A",  "s16",  flag=table.GLOBL),
-    0x8038BD7C: table.sym_var("g_script_8038BD7C",  "s16",  flag=table.GLOBL), # unused
-    0x8038BD7E: table.sym_var("g_script_8038BD7E",  "s16",  flag=table.GLOBL),
-    0x8038BD80: table.sym_var("g_script_8038BD80",  "u8 *", flag=table.GLOBL),
-    0x8038BD88: table.sym_var("g_script_8038BD88",  "struct g", flag=table.GLOBL|ultra.BALIGN),
-
     # src/s_script.data.c
-    0x8038BDA0: table.sym_var("s_script_stack", "void *", "[32]", table.GLOBL|ultra.BALIGN),
-    0x8038BE20: table.sym_var("s_script_state", "s16",  flag=table.GLOBL),
-    0x8038BE24: table.sym_var("s_script_code",  "int",  flag=table.GLOBL),
-    0x8038BE28: table.sym_var("s_script_pc",    "u8 *", flag=table.GLOBL),
+    0x8038BCA0: table.sym_var("s_script_arena",     "struct arena *",   flag=table.GLOBL),
+    0x8038BCA4: table.sym_var("s_script_8038BCA4",  "struct shape *",   flag=table.GLOBL),
+    0x8038BCA8: table.sym_var("s_script_8038BCA8",  "struct shape *",   flag=table.GLOBL),
+    0x8038BCAC: table.sym_var("s_script_8038BCAC",  "struct shape **",  flag=table.GLOBL),
+    0x8038BCB0: table.sym_var("s_script_8038BCB0",  "u16",  flag=table.GLOBL),
+    0x8038BCB8: table.sym_var("s_script_8038BCB8",  "void *",   "[16]", table.GLOBL|ultra.BALIGN),
+    0x8038BCF8: table.sym_var("s_script_8038BCF8",  "struct shape *",   "[32]", table.GLOBL|ultra.BALIGN),
+    0x8038BD78: table.sym_var("s_script_8038BD78",  "s16",  flag=table.GLOBL),
+    0x8038BD7A: table.sym_var("s_script_8038BD7A",  "s16",  flag=table.GLOBL),
+    0x8038BD7C: table.sym_var("s_script_8038BD7C",  "s16",  flag=table.GLOBL), # unused
+    0x8038BD7E: table.sym_var("s_script_8038BD7E",  "s16",  flag=table.GLOBL),
+    0x8038BD80: table.sym_var("s_script_8038BD80",  "u8 *", flag=table.GLOBL),
+    0x8038BD88: table.sym_var("s_script_8038BD88",  "struct shape", flag=table.GLOBL|ultra.BALIGN),
+
+    # src/p_script.data.c
+    0x8038BDA0: table.sym_var("p_script_stack", "void *", "[32]", table.GLOBL|ultra.BALIGN),
+    0x8038BE20: table.sym_var("p_script_state", "s16",  flag=table.GLOBL),
+    0x8038BE24: table.sym_var("p_script_code",  "int",  flag=table.GLOBL),
+    0x8038BE28: table.sym_var("p_script_pc",    "u8 *", flag=table.GLOBL),
 
     # src/map.data.c
     0x8038BE30: table.sym_var("map_8038BE30",   "u8", "[0x60]", table.GLOBL),
@@ -9234,14 +10656,14 @@ sym_E0_t_menu = {
     0x8016F3CC: table.sym("title_8016F3CC"),
     0x8016F4B0: table.sym("title_8016F4B0"),
     0x8016F564: table.sym("title_8016F564"),
-    0x8016F5B0: table.sym("title_8016F5B0", table.GLOBL), # s callback
+    0x8016F5B0: table.sym("p_title_8016F5B0", table.GLOBL), # p callback
 
     # src/title_bg.S
-    0x8016F670: table.sym("g_logo_shape", table.GLOBL), # g callback
-    0x8016F984: table.sym("g_logo_text", table.GLOBL), # g callback
+    0x8016F670: table.sym("s_logo_shape", table.GLOBL), # s callback
+    0x8016F984: table.sym("s_logo_text", table.GLOBL), # s callback
     0x8016FBB0: table.sym("title_bg_8016FBB0"),
-    0x8016FE70: table.sym("g_title_bg", table.GLOBL), # g callback
-    0x8016FFFC: table.sym("g_gameover_bg", table.GLOBL), # g callback
+    0x8016FE70: table.sym("s_title_bg", table.GLOBL), # s callback
+    0x8016FFFC: table.sym("s_gameover_bg", table.GLOBL), # s callback
 
     # src/file_select.S
     0x80170280: table.sym("file_select_80170280", table.GLOBL), # o callback
@@ -9367,9 +10789,9 @@ sym_E0_t_menu = {
     0x80176598: table.sym_fnc("L80176598", flag=table.GLOBL|table.LOCAL),
     0x801765A8: table.sym_fnc("L801765A8", flag=table.GLOBL|table.LOCAL),
     0x801765B8: table.sym_fnc("L801765B8", flag=table.GLOBL|table.LOCAL),
-    0x80176688: table.sym("g_file_select_main", table.GLOBL), # g callback
-    0x801766DC: table.sym("file_select_801766DC", table.GLOBL), # s callback
-    0x801768A0: table.sym("file_select_801768A0", table.GLOBL), # s callback
+    0x80176688: table.sym("s_file_select_main", table.GLOBL), # s callback
+    0x801766DC: table.sym("p_file_select_801766DC", table.GLOBL), # p callback
+    0x801768A0: table.sym("p_file_select_801768A0", table.GLOBL), # p callback
 
     # src/star_select.S
     0x801768E0: table.sym("star_select_801768E0", table.GLOBL), # o callback
@@ -9378,9 +10800,9 @@ sym_E0_t_menu = {
     0x80176DF0: table.sym("star_select_80176DF0", table.GLOBL), # o callback
     0x80176FC4: table.sym("star_select_80176FC4"),
     0x80177144: table.sym("star_select_80177144"),
-    0x80177518: table.sym("g_star_select_main", table.GLOBL), # g callback
-    0x80177560: table.sym("star_select_80177560", table.GLOBL), # s callback
-    0x80177610: table.sym("star_select_80177610", table.GLOBL), # s callback
+    0x80177518: table.sym("s_star_select_main", table.GLOBL), # s callback
+    0x80177560: table.sym("p_star_select_80177560", table.GLOBL), # p callback
+    0x80177610: table.sym("p_star_select_80177610", table.GLOBL), # p callback
 
     # src/face/main.S
     0x80177710: table.sym("face_main"), # unused
@@ -10373,120 +11795,126 @@ sym_E0_t_menu = {
 
     # ==========================================================================
 
-    # src/face/main.data.c
-    0x801A81E0: table.sym("_face_data+0x00"), #      main / object
-    0x801A81E8: table.sym("_face_data+0x08"), #      main / joint
-    0x801A81EC: table.sym("_face_data+0x0C"), #      draw
-
+    # addr
     # src/face/draw.data.c
-    0x801A8200: table.sym("_face_data+0x20"), # la   draw
-    0x801A820C: table.sym("_face_data+0x2C"), # la   draw
-    0x801A8218: table.sym("_face_data+0x38"), # la   draw
-    0x801A8224: table.sym("_face_data+0x44"), # la   draw
-    0x801A8230: table.sym("_face_data+0x50"), # la   draw
-    0x801A823C: table.sym("_face_data+0x5C"), # la   draw
-    0x801A8248: table.sym("_face_data+0x68"), # la   draw
-    0x801A8254: table.sym("_face_data+0x74"), # la   draw
-    0x801A8260: table.sym("_face_data+0x80"), # la   draw
-    0x801A826C: table.sym("_face_data+0x8C"), # la   draw
-    0x801A8278: table.sym("_face_data+0x98"), # la   draw
-    0x801A8284: table.sym("_face_data+0xA4"), #      draw
-    0x801A8288: table.sym("_face_data+0xA8"), #      draw / object / particle
-    0x801A8290: table.sym("_face_data+0xB0"), #      draw
-    0x801A8294: table.sym("_face_data+0xB4"), # la   draw
-    0x801A82A8: table.sym("_face_data+0xC8"), # la   draw
-    0x801A8330: table.sym("_face_data+0x150"), #     draw
+    0x801A8200: table.sym("_face_draw_data+0x00"), # la   draw
+    0x801A820C: table.sym("_face_draw_data+0x0C"), # la   draw
+    0x801A8218: table.sym("_face_draw_data+0x18"), # la   draw
+    0x801A8224: table.sym("_face_draw_data+0x24"), # la   draw
+    0x801A8230: table.sym("_face_draw_data+0x30"), # la   draw
+    0x801A823C: table.sym("_face_draw_data+0x3C"), # la   draw
+    0x801A8248: table.sym("_face_draw_data+0x48"), # la   draw
+    0x801A8254: table.sym("_face_draw_data+0x54"), # la   draw
+    0x801A8260: table.sym("_face_draw_data+0x60"), # la   draw
+    0x801A826C: table.sym("_face_draw_data+0x6C"), # la   draw
+    0x801A8278: table.sym("_face_draw_data+0x78"), # la   draw
+    0x801A8284: table.sym("_face_draw_data+0x84"), #      draw
+    0x801A8288: table.sym("_face_draw_data+0x88"), #      draw / object / particle
+    0x801A8290: table.sym("_face_draw_data+0x90"), #      draw
+    0x801A8294: table.sym("_face_draw_data+0x94"), # la   draw
+    0x801A82A8: table.sym("_face_draw_data+0xA8"), # la   draw
+    0x801A8330: table.sym("_face_draw_data+0x130"), #     draw
 
     # src/face/object.data.c
-    0x801A8350: table.sym("_face_data+0x170"), #     object
-    0x801A8354: table.sym("_face_data+0x174"), #     object
+    0x801A8350: table.sym("_face_object_data+0x10"), #     object
+    0x801A8354: table.sym("_face_object_data+0x14"), #     object
 
     # src/face/particle.data.c
-    0x801A8364: table.sym("_face_data+0x184"), #     particle
-    0x801A8368: table.sym("_face_data+0x188"), #     particle
-    0x801A836C: table.sym("_face_data+0x18C"), #     particle
-    0x801A8370: table.sym("_face_data+0x190"), #     particle
-    0x801A83C8: table.sym("_face_data+0x1E8"), #     particle
-    0x801A83CC: table.sym("_face_data+0x1EC"), #     particle
-    0x801A83D0: table.sym("_face_data+0x1F0"), #     particle
-    0x801A83D4: table.sym("_face_data+0x1F4"), #     particle
+    0x801A8364: table.sym("_face_particle_data+0x04"), #     particle
+    0x801A8368: table.sym("_face_particle_data+0x08"), #     particle
+    0x801A836C: table.sym("_face_particle_data+0x0C"), #     particle
+    0x801A8370: table.sym("_face_particle_data+0x10"), #     particle
+    0x801A83C8: table.sym("_face_particle_data+0x68"), #     particle
+    0x801A83CC: table.sym("_face_particle_data+0x6C"), #     particle
+    0x801A83D0: table.sym("_face_particle_data+0x70"), #     particle
+    0x801A83D4: table.sym("_face_particle_data+0x74"), #     particle
 
     # src/face/dynlist.data.c
-    0x801A83E0: table.sym("_face_data+0x200"), #     dynlist
-    0x801A83E4: table.sym("_face_data+0x204"), #     dynlist
-    0x801A83E8: table.sym("_face_data+0x208"), # la  dynlist
-    0x801A8400: table.sym("_face_data+0x220"), #     dynlist
+    0x801A83E0: table.sym("_face_dynlist_data+0x00"), #     dynlist
+    0x801A83E4: table.sym("_face_dynlist_data+0x04"), #     dynlist
+    0x801A83E8: table.sym("_face_dynlist_data+0x08"), # la  dynlist
+    0x801A8400: table.sym("_face_dynlist_data+0x20"), #     dynlist
 
     # src/face/stdio.data.c
-    0x801A8410: table.sym("_face_data+0x230"), #     stdio
-    0x801A8414: table.sym("_face_data+0x234"), #     stdio
-    0x801A8430: table.sym("_face_data+0x250"), #     stdio
-    0x801A8434: table.sym("_face_data+0x254"), #     stdio
-    0x801A8438: table.sym("_face_data+0x258"), #     stdio
-    0x801A843C: table.sym("_face_data+0x25C"), #     stdio
-    0x801A8450: table.sym("_face_data+0x270"), #     stdio
+    0x801A8410: table.sym("_face_stdio_data+0x00"), #     stdio
+    0x801A8414: table.sym("_face_stdio_data+0x04"), #     stdio
+    0x801A8430: table.sym("_face_stdio_data+0x20"), #     stdio
+    0x801A8434: table.sym("_face_stdio_data+0x24"), #     stdio
+    0x801A8438: table.sym("_face_stdio_data+0x28"), #     stdio
+    0x801A843C: table.sym("_face_stdio_data+0x2C"), #     stdio
+    0x801A8450: table.sym("_face_stdio_data+0x40"), #     stdio
 
     # src/face/joint.data.c
-    0x801A8460: table.sym("_face_data+0x280"), #     joint
-    0x801A8464: table.sym("_face_data+0x284"), #     joint
+    0x801A8460: table.sym("_face_joint_data+0x00"), #     joint
+    0x801A8464: table.sym("_face_joint_data+0x04"), #     joint
 
+    # addr
     # src/face/shape.data.c
-    0x801A8470: table.sym("_face_data+0x290"), #     shape / gfx
-    0x801A8474: table.sym("_face_data+0x294"), #     shape / draw
-    0x801A8478: table.sym("_face_data+0x298"), #     shape
-    0x801A847C: table.sym("_face_data+0x29C"), #     shape / gfx
-    0x801A8480: table.sym("_face_data+0x2A0"), #     shape / gfx
-    0x801A8484: table.sym("_face_data+0x2A4"), #     gfx
-    0x801A8488: table.sym("_face_data+0x2A8"), #     gfx
-    0x801A87F8: table.sym("_face_data+0x618+0"), #   shape
-    0x801A87FC: table.sym("_face_data+0x618+4"), #   shape
+    0x801A8470: table.sym("_face_shape_data+0x00"), #     shape / gfx
+    0x801A8474: table.sym("_face_shape_data+0x04"), #     shape / draw
+    0x801A8478: table.sym("_face_shape_data+0x08"), #     shape
+    0x801A847C: table.sym("_face_shape_data+0x0C"), #     shape / gfx
+    0x801A8480: table.sym("_face_shape_data+0x10"), #     shape / gfx
+    0x801A8484: table.sym("_face_shape_data+0x14"), #     gfx
+    0x801A8488: table.sym("_face_shape_data+0x18"), #     gfx
+    0x801A87F8: table.sym("_face_shape_data+0x388+0"), #   shape
+    0x801A87FC: table.sym("_face_shape_data+0x388+4"), #   shape
 
     # src/face/gfx.data.c
-    0x801A8804: table.sym("_face_data+0x624"), #     gfx
-    0x801A880C: table.sym("_face_data+0x62C"), #     gfx
-    0x801A8810: table.sym("_face_data+0x630"),
-    0x801A8814: table.sym("_face_data+0x634"),
-    0x801A8818: table.sym("_face_data+0x638"),
-    0x801A881C: table.sym("_face_data+0x63C"),
-    0x801A8820: table.sym("_face_data+0x640"),
-    0x801A8824: table.sym("_face_data+0x644"),
-    0x801A8828: table.sym("_face_data+0x648"),
-    0x801A882C: table.sym("_face_data+0x64C"),
-    0x801A8830: table.sym("_face_data+0x650"),
-    0x801A8834: table.sym("_face_data+0x654"),
-    0x801A8838: table.sym("_face_data+0x658"),
-    0x801A883C: table.sym("_face_data+0x65C"),
-    0x801A8840: table.sym("_face_data+0x660"), # gfx / draw
-    0x801A8848: table.sym("_face_data+0x668"),
-    0x801A884C: table.sym("_face_data+0x66C"),
-    0x801A8850: table.sym("_face_data+0x670"),
-    0x801A8858: table.sym("_face_data+0x678"),
-    0x801A885C: table.sym("_face_data+0x67C"),
-    0x801A8860: table.sym("_face_data+0x680"),
-    0x801A8864: table.sym("_face_data+0x684"),
-    0x801A8868: table.sym("_face_data+0x688"),
-    0x801A886C: table.sym("_face_data+0x68C"),
-    0x801A8870: table.sym("_face_data+0x690"),
-    0x801A8874: table.sym("_face_data+0x694"),
-    0x801A8878: table.sym("_face_data+0x698"),
-    0x801A887C: table.sym("_face_data+0x69C"),
-    0x801A8880: table.sym("_face_data+0x6A0"),
-    0x801A8884: table.sym("_face_data+0x6A4"),
-    0x801A888C: table.sym("_face_data+0x6AC"),
-    0x801A8890: table.sym("_face_data+0x6B0"),
-    0x801A8894: table.sym("_face_data+0x6B4"),
-    0x801A8898: table.sym("_face_data+0x6B8"),
-    0x801A88C0: table.sym("_face_data+0x6E0"), # la
-    0x801A90C8: table.sym("_face_data+0xEE8"), # la
-    0x801B1B48: table.sym("_face_data+0x9968"), # la
-    0x801B1B88: table.sym("_face_data+0x99A8"), # la
-    0x801B4E28: table.sym("_face_data+0xCC48"), # la
-    0x801B4E58: table.sym("_face_data+0xCC78"), # la
-    0x801B5290: table.sym("_face_data+0xD0B0"), # la
-    0x801B5300: table.sym("_face_data+0xD120"), # la
-    0x801B5318: table.sym("_face_data+0xD138"), # la
-    0x801B539C: table.sym("_face_data+0xD1BC"),
-    0x801B5468: table.sym("_face_data+0xD288"), # la
+    # 00
+    0x801A8804: table.sym("_face_gfx_data+0x04"), #     gfx
+    # 08
+    0x801A880C: table.sym("_face_gfx_data+0x0C"), #     gfx
+    0x801A8810: table.sym("_face_gfx_data+0x10"),
+    0x801A8814: table.sym("_face_gfx_data+0x14"),
+    0x801A8818: table.sym("_face_gfx_data+0x18"),
+    0x801A881C: table.sym("_face_gfx_data+0x1C"),
+    0x801A8820: table.sym("_face_gfx_data+0x20"),
+    0x801A8824: table.sym("_face_gfx_data+0x24"),
+    0x801A8828: table.sym("_face_gfx_data+0x28"),
+    0x801A882C: table.sym("_face_gfx_data+0x2C"),
+    0x801A8830: table.sym("_face_gfx_data+0x30"),
+    0x801A8834: table.sym("_face_gfx_data+0x34"),
+    0x801A8838: table.sym("_face_gfx_data+0x38"),
+    0x801A883C: table.sym("_face_gfx_data+0x3C"),
+    0x801A8840: table.sym("_face_gfx_data+0x40"), # gfx / draw
+    # 44
+    0x801A8848: table.sym("_face_gfx_data+0x48"),
+    0x801A884C: table.sym("_face_gfx_data+0x4C"),
+    0x801A8850: table.sym("_face_gfx_data+0x50"),
+    # 54
+    0x801A8858: table.sym("_face_gfx_data+0x58"),
+    0x801A885C: table.sym("_face_gfx_data+0x5C"),
+    0x801A8860: table.sym("_face_gfx_data+0x60"),
+    0x801A8864: table.sym("_face_gfx_data+0x64"),
+    0x801A8868: table.sym("_face_gfx_data+0x68"),
+    0x801A886C: table.sym("_face_gfx_data+0x6C"),
+    0x801A8870: table.sym("_face_gfx_data+0x70"),
+    0x801A8874: table.sym("_face_gfx_data+0x74"),
+    0x801A8878: table.sym("_face_gfx_data+0x78"),
+    0x801A887C: table.sym("_face_gfx_data+0x7C"),
+    0x801A8880: table.sym("_face_gfx_data+0x80"),
+    0x801A8884: table.sym("_face_gfx_data+0x84"),
+    # 88
+    0x801A888C: table.sym("_face_gfx_data+0x8C"),
+    0x801A8890: table.sym("_face_gfx_data+0x90"),
+    0x801A8894: table.sym("_face_gfx_data+0x94"),
+    0x801A8898: table.sym("_face_gfx_data+0x98"),
+    # 9C ... B8
+
+    # addr
+    # 0x801A88B8: # unused
+    0x801A88C0: table.sym("_face_gfx_data+0xC0"), # la
+    0x801A90C8: table.sym("_face_gfx_data+0x8C8"), # la
+    0x801B1B48: table.sym("_face_gfx_data+0x9348"), # la
+    0x801B1B88: table.sym("_face_gfx_data+0x9388"), # la
+    0x801B4E28: table.sym("_face_gfx_data+0xC628"), # la
+    0x801B4E58: table.sym("_face_gfx_data+0xC658"), # la
+    0x801B5290: table.sym("_face_gfx_data+0xCA90"), # la
+    0x801B5300: table.sym("_face_gfx_data+0xCB00"), # la
+    0x801B5318: table.sym("_face_gfx_data+0xCB18"), # la
+    0x801B539C: table.sym("_face_gfx_data+0xCB9C"),
+    0x801B5468: table.sym("_face_gfx_data+0xCC68"), # la
 
     0x801B9AB0: table.sym("_face_bss+0x00"),
     0x801B9AD8: table.sym("_face_bss+0x28"),
@@ -10751,17 +12179,20 @@ sym_E0_t_menu = {
 }
 
 sym_E0_d_menu = {
+    # data
     # src/title.data.c
     0x801A7830: table.sym_var("str_stage",  "char", "[64][16]", table.GLOBL),
     0x801A7C30: table.sym_var("title_801A7C30", "u16",  flag=table.GLOBL|ultra.DALIGN),
     0x801A7C34: table.sym_var("title_801A7C34", "s16",  flag=table.GLOBL|ultra.DALIGN),
     0x801A7C38: table.sym_var("title_801A7C38", "s16",  flag=table.GLOBL|ultra.DALIGN),
 
+    # rodata
     # src/title.data.c
     0x801A7C40: table.sym_var("str_title_select_stage",         "const char", "[]"),
     0x801A7C50: table.sym_var("str_title_press_start_button",   "const char", "[]"),
     0x801A7C64: table.sym_var("str_title_stage_fmt",            "const char", "[]"),
 
+    # data
     # src/title_bg.data.c
     0x801A7C70: table.sym_var("gfx_title_bg",       "const Gfx *", "[]",    table.GLOBL),
     0x801A7C80: table.sym_var("title_bg_x",         "f32", "[]",    table.GLOBL),
@@ -10772,6 +12203,7 @@ sym_E0_d_menu = {
     0x801A7CF8: table.sym_var("title_bg_gameover",  "s8", "[]", table.GLOBL),
     0x801A7D04: table.sym_var("title_bg_flip",      "s8", "[]", table.GLOBL),
 
+    # data
     # src/file_select.data.c
     0x801A7D10: table.sym_var("file_select_801A7D10",   "s8",   flag=table.GLOBL|ultra.DALIGN),
     0x801A7D14: table.sym_var("file_select_801A7D14",   "s8",   flag=table.GLOBL|ultra.DALIGN),
@@ -10830,6 +12262,7 @@ sym_E0_d_menu = {
     0x801A7F30: table.sym_var("str_801A7F30",   "u8", "[]", table.GLOBL), # MY SCORE
     0x801A7F3C: table.sym_var("file_select_801A7F3C",   "s16",  flag=table.GLOBL|ultra.DALIGN),
 
+    # rodata
     # src/file_select.data.c
     0x801A7F40: table.sym_var("file_select_801A7F40", "const float"),
     0x801A7F48: table.sym_var("file_select_801A7F48", "const double"),
@@ -10870,6 +12303,7 @@ sym_E0_d_menu = {
     0x801A8108: table.sym_var_fnc("file_select_801A8108", "const", "[]"),
     0x801A811C: table.sym_var_fnc("file_select_801A811C", "const", "[]"),
 
+    # data
     # src/star_select.data.c
     0x801A81A0: table.sym_var("star_select_801A81A0",   "s8",   flag=table.GLOBL|ultra.DALIGN),
     0x801A81A4: table.sym_var("star_select_801A81A4",   "s8",   flag=table.GLOBL|ultra.DALIGN),
@@ -10877,12 +12311,17 @@ sym_E0_d_menu = {
     0x801A81AC: table.sym_var("str_801A81AC",   "u8", "[]", table.GLOBL), # MYSCORE
     0x801A81B4: table.sym_var("star_select_801A81B4",   "u16",  flag=table.GLOBL|ultra.DALIGN),
 
+    # rodata
     # src/star_select.data.c
     0x801A81C0: table.sym_var("star_select_801A81C0", "const double"),
     0x801A81C8: table.sym_var("star_select_801A81C8", "const double"),
     0x801A81D0: table.sym_var("star_select_801A81D0", "const double"),
     0x801A81D8: table.sym_var("star_select_801A81D8", "const float"),
     0x801A81DC: table.sym_var("star_select_801A81DC", "const float"),
+
+    # ==========================================================================
+    # bss
+    # ==========================================================================
 
     # src/title_bg.data.c
     0x801B99E0: table.sym_var("title_bg_801B99E0",  "u32",   flag=table.GLOBL),
@@ -10902,71 +12341,87 @@ sym_E0_d_menu = {
     0x801B9AA2: table.sym_var("star_select_801B9AA2",   "s8",   flag=table.GLOBL),
     0x801B9AA3: table.sym_var("star_select_801B9AA3",   "u8",   flag=table.GLOBL),
 
+    # ==========================================================================
+    # data
+    # ==========================================================================
+
     # src/face/main.data.c
-    0x801B54C0: table.sym_var("str_801B54C0", "const char", "[]"),
-    0x801B54C8: table.sym_var("str_801B54C8", "const char", "[]"),
-    0x801B54D0: table.sym_var("str_801B54D0", "const char", "[]"),
-    0x801B54E4: table.sym_var("str_801B54E4", "const char", "[]"),
-    0x801B54EC: table.sym_var("str_801B54EC", "const char", "[]"),
+    0x801A81E0: table.sym_var("face_movement",      "int",  flag=table.GLOBL|ultra.DALIGN),
+    0x801A81E4: table.sym_var("face_config_1",      "int",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x801A81E8: table.sym_var("face_config_2",      "f32",  flag=table.GLOBL|ultra.DALIGN),
+    0x801A81EC: table.sym_var("face_shade_smooth",  "int",  flag=table.GLOBL|ultra.DALIGN),
+    0x801A81F0: table.sym_var("face_window_w",      "int",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x801A81F4: table.sym_var("face_window_h",      "int",  flag=table.GLOBL|ultra.DALIGN), # unused
+
+    # ==========================================================================
+    # rodata
+    # ==========================================================================
+
+    # src/face/main.data.c
+    0x801B54C0: table.sym_var("str_face_main_801B54C0", "const char", "[]"),
+    0x801B54C8: table.sym_var("str_face_main_801B54C8", "const char", "[]"),
+    0x801B54D0: table.sym_var("str_face_main_801B54D0", "const char", "[]"),
+    0x801B54E4: table.sym_var("str_face_main_801B54E4", "const char", "[]"),
+    0x801B54EC: table.sym_var("str_face_main_801B54EC", "const char", "[]"),
     0x801B54F4: table.sym_var("face_main_801B54F4", "const float"),
 
     # src/face/mem.data.c
-    0x801B5500: table.sym_var("str_801B5500", "const char", "[]"),
-    0x801B5524: table.sym_var("str_801B5524", "const char", "[]"),
-    0x801B553C: table.sym_var("str_801B553C", "const char", "[]"),
-    0x801B555C: table.sym_var("str_801B555C", "const char", "[]"),
-    0x801B5574: table.sym_var("str_801B5574", "const char", "[]"),
-    0x801B559C: table.sym_var("str_801B559C", "const char", "[]"),
-    0x801B55B0: table.sym_var("str_801B55B0", "const char", "[]"),
-    0x801B55B4: table.sym_var("str_801B55B4", "const char", "[]"),
-    0x801B55C8: table.sym_var("str_801B55C8", "const char", "[]"),
-    0x801B55CC: table.sym_var("str_801B55CC", "const char", "[]"),
-    0x801B55E0: table.sym_var("str_801B55E0", "const char", "[]"),
-    0x801B55E4: table.sym_var("str_801B55E4", "const char", "[]"),
-    0x801B55F8: table.sym_var("str_801B55F8", "const char", "[]"),
-    0x801B55FC: table.sym_var("str_801B55FC", "const char", "[]"),
+    0x801B5500: table.sym_var("str_face_mem_801B5500", "const char", "[]"),
+    0x801B5524: table.sym_var("str_face_mem_801B5524", "const char", "[]"),
+    0x801B553C: table.sym_var("str_face_mem_801B553C", "const char", "[]"),
+    0x801B555C: table.sym_var("str_face_mem_801B555C", "const char", "[]"),
+    0x801B5574: table.sym_var("str_face_mem_801B5574", "const char", "[]"),
+    0x801B559C: table.sym_var("str_face_mem_801B559C", "const char", "[]"),
+    0x801B55B0: table.sym_var("str_face_mem_801B55B0", "const char", "[]"),
+    0x801B55B4: table.sym_var("str_face_mem_801B55B4", "const char", "[]"),
+    0x801B55C8: table.sym_var("str_face_mem_801B55C8", "const char", "[]"),
+    0x801B55CC: table.sym_var("str_face_mem_801B55CC", "const char", "[]"),
+    0x801B55E0: table.sym_var("str_face_mem_801B55E0", "const char", "[]"),
+    0x801B55E4: table.sym_var("str_face_mem_801B55E4", "const char", "[]"),
+    0x801B55F8: table.sym_var("str_face_mem_801B55F8", "const char", "[]"),
+    0x801B55FC: table.sym_var("str_face_mem_801B55FC", "const char", "[]"),
 
     # src/face/draw.data.c
-    0x801B5610: table.sym_var("str_801B5610", "const char", "[]"),
-    0x801B561C: table.sym_var("str_801B561C", "const char", "[]"),
-    0x801B5638: table.sym_var("str_801B5638", "const char", "[]"),
-    0x801B5644: table.sym_var("str_801B5644", "const char", "[]"),
-    0x801B5650: table.sym_var("str_801B5650", "const char", "[]"),
-    0x801B565C: table.sym_var("str_801B565C", "const char", "[]"),
-    0x801B5688: table.sym_var("str_801B5688", "const char", "[]"),
-    0x801B5690: table.sym_var("str_801B5690", "const char", "[]"),
-    0x801B56A4: table.sym_var("str_801B56A4", "const char", "[]"),
-    0x801B56B0: table.sym_var("str_801B56B0", "const char", "[]"),
-    0x801B56B8: table.sym_var("str_801B56B8", "const char", "[]"),
-    0x801B56C0: table.sym_var("str_801B56C0", "const char", "[]"),
-    0x801B56CC: table.sym_var("str_801B56CC", "const char", "[]"),
-    0x801B56F0: table.sym_var("str_801B56F0", "const char", "[]"),
-    0x801B56FC: table.sym_var("str_801B56FC", "const char", "[]"),
-    0x801B570C: table.sym_var("str_801B570C", "const char", "[]"),
-    0x801B5714: table.sym_var("str_801B5714", "const char", "[]"),
-    0x801B571C: table.sym_var("str_801B571C", "const char", "[]"),
-    0x801B5724: table.sym_var("str_801B5724", "const char", "[]"),
-    0x801B5734: table.sym_var("str_801B5734", "const char", "[]"),
-    0x801B573C: table.sym_var("str_801B573C", "const char", "[]"),
-    0x801B5748: table.sym_var("str_801B5748", "const char", "[]"),
-    0x801B576C: table.sym_var("str_801B576C", "const char", "[]"),
-    0x801B5778: table.sym_var("str_801B5778", "const char", "[]"),
-    0x801B5788: table.sym_var("str_801B5788", "const char", "[]"),
-    0x801B5798: table.sym_var("str_801B5798", "const char", "[]"),
-    0x801B57C4: table.sym_var("str_801B57C4", "const char", "[]"),
-    0x801B57F4: table.sym_var("str_801B57F4", "const char", "[]"),
-    0x801B580C: table.sym_var("str_801B580C", "const char", "[]"),
-    0x801B5834: table.sym_var("str_801B5834", "const char", "[]"),
-    0x801B5844: table.sym_var("str_801B5844", "const char", "[]"),
-    0x801B5854: table.sym_var("str_801B5854", "const char", "[]"),
-    0x801B585C: table.sym_var("str_801B585C", "const char", "[]"),
-    0x801B5868: table.sym_var("str_801B5868", "const char", "[]"),
-    0x801B5874: table.sym_var("str_801B5874", "const char", "[]"),
-    0x801B587C: table.sym_var("str_801B587C", "const char", "[]"),
-    0x801B58A0: table.sym_var("str_801B58A0", "const char", "[]"),
-    0x801B58A4: table.sym_var("str_801B58A4", "const char", "[]"),
-    0x801B58A8: table.sym_var("str_801B58A8", "const char", "[]"),
-    0x801B58AC: table.sym_var("str_801B58AC", "const char", "[]"),
+    0x801B5610: table.sym_var("str_face_draw_801B5610", "const char", "[]"),
+    0x801B561C: table.sym_var("str_face_draw_801B561C", "const char", "[]"),
+    0x801B5638: table.sym_var("str_face_draw_801B5638", "const char", "[]"),
+    0x801B5644: table.sym_var("str_face_draw_801B5644", "const char", "[]"),
+    0x801B5650: table.sym_var("str_face_draw_801B5650", "const char", "[]"),
+    0x801B565C: table.sym_var("str_face_draw_801B565C", "const char", "[]"),
+    0x801B5688: table.sym_var("str_face_draw_801B5688", "const char", "[]"),
+    0x801B5690: table.sym_var("str_face_draw_801B5690", "const char", "[]"),
+    0x801B56A4: table.sym_var("str_face_draw_801B56A4", "const char", "[]"),
+    0x801B56B0: table.sym_var("str_face_draw_801B56B0", "const char", "[]"),
+    0x801B56B8: table.sym_var("str_face_draw_801B56B8", "const char", "[]"),
+    0x801B56C0: table.sym_var("str_face_draw_801B56C0", "const char", "[]"),
+    0x801B56CC: table.sym_var("str_face_draw_801B56CC", "const char", "[]"),
+    0x801B56F0: table.sym_var("str_face_draw_801B56F0", "const char", "[]"),
+    0x801B56FC: table.sym_var("str_face_draw_801B56FC", "const char", "[]"),
+    0x801B570C: table.sym_var("str_face_draw_801B570C", "const char", "[]"),
+    0x801B5714: table.sym_var("str_face_draw_801B5714", "const char", "[]"),
+    0x801B571C: table.sym_var("str_face_draw_801B571C", "const char", "[]"),
+    0x801B5724: table.sym_var("str_face_draw_801B5724", "const char", "[]"),
+    0x801B5734: table.sym_var("str_face_draw_801B5734", "const char", "[]"),
+    0x801B573C: table.sym_var("str_face_draw_801B573C", "const char", "[]"),
+    0x801B5748: table.sym_var("str_face_draw_801B5748", "const char", "[]"),
+    0x801B576C: table.sym_var("str_face_draw_801B576C", "const char", "[]"),
+    0x801B5778: table.sym_var("str_face_draw_801B5778", "const char", "[]"),
+    0x801B5788: table.sym_var("str_face_draw_801B5788", "const char", "[]"),
+    0x801B5798: table.sym_var("str_face_draw_801B5798", "const char", "[]"),
+    0x801B57C4: table.sym_var("str_face_draw_801B57C4", "const char", "[]"),
+    0x801B57F4: table.sym_var("str_face_draw_801B57F4", "const char", "[]"),
+    0x801B580C: table.sym_var("str_face_draw_801B580C", "const char", "[]"),
+    0x801B5834: table.sym_var("str_face_draw_801B5834", "const char", "[]"),
+    0x801B5844: table.sym_var("str_face_draw_801B5844", "const char", "[]"),
+    0x801B5854: table.sym_var("str_face_draw_801B5854", "const char", "[]"),
+    0x801B585C: table.sym_var("str_face_draw_801B585C", "const char", "[]"),
+    0x801B5868: table.sym_var("str_face_draw_801B5868", "const char", "[]"),
+    0x801B5874: table.sym_var("str_face_draw_801B5874", "const char", "[]"),
+    0x801B587C: table.sym_var("str_face_draw_801B587C", "const char", "[]"),
+    0x801B58A0: table.sym_var("str_face_draw_801B58A0", "const char", "[]"),
+    0x801B58A4: table.sym_var("str_face_draw_801B58A4", "const char", "[]"),
+    0x801B58A8: table.sym_var("str_face_draw_801B58A8", "const char", "[]"),
+    0x801B58AC: table.sym_var("str_face_draw_801B58AC", "const char", "[]"),
     0x801B58B0: table.sym_var("face_draw_801B58B0", "const double"),
     0x801B58B8: table.sym_var("face_draw_801B58B8", "const double"),
     0x801B58C0: table.sym_var_fnc("face_draw_801B58C0", "const", "[]"),
@@ -10977,88 +12432,88 @@ sym_E0_d_menu = {
     0x801B5910: table.sym_var("face_draw_801B5910", "const float"),
 
     # src/face/object.data.c
-    0x801B5920: table.sym_var("str_801B5920", "const char", "[]"),
-    0x801B5928: table.sym_var("str_801B5928", "const char", "[]"),
-    0x801B5930: table.sym_var("str_801B5930", "const char", "[]"),
-    0x801B5938: table.sym_var("str_801B5938", "const char", "[]"),
-    0x801B5944: table.sym_var("str_801B5944", "const char", "[]"),
-    0x801B594C: table.sym_var("str_801B594C", "const char", "[]"),
-    0x801B5954: table.sym_var("str_801B5954", "const char", "[]"),
-    0x801B595C: table.sym_var("str_801B595C", "const char", "[]"),
-    0x801B5968: table.sym_var("str_801B5968", "const char", "[]"),
-    0x801B5970: table.sym_var("str_801B5970", "const char", "[]"),
-    0x801B5978: table.sym_var("str_801B5978", "const char", "[]"),
-    0x801B5984: table.sym_var("str_801B5984", "const char", "[]"),
-    0x801B598C: table.sym_var("str_801B598C", "const char", "[]"),
-    0x801B5994: table.sym_var("str_801B5994", "const char", "[]"),
-    0x801B599C: table.sym_var("str_801B599C", "const char", "[]"),
-    0x801B59A4: table.sym_var("str_801B59A4", "const char", "[]"),
-    0x801B59AC: table.sym_var("str_801B59AC", "const char", "[]"),
-    0x801B59B8: table.sym_var("str_801B59B8", "const char", "[]"),
-    0x801B59C0: table.sym_var("str_801B59C0", "const char", "[]"),
-    0x801B59C8: table.sym_var("str_801B59C8", "const char", "[]"),
-    0x801B59D0: table.sym_var("str_801B59D0", "const char", "[]"),
-    0x801B59DC: table.sym_var("str_801B59DC", "const char", "[]"),
-    0x801B59FC: table.sym_var("str_801B59FC", "const char", "[]"),
-    0x801B5A20: table.sym_var("str_801B5A20", "const char", "[]"),
-    0x801B5A28: table.sym_var("str_801B5A28", "const char", "[]"),
-    0x801B5A44: table.sym_var("str_801B5A44", "const char", "[]"),
-    0x801B5A4C: table.sym_var("str_801B5A4C", "const char", "[]"),
-    0x801B5A68: table.sym_var("str_801B5A68", "const char", "[]"),
-    0x801B5A70: table.sym_var("str_801B5A70", "const char", "[]"),
-    0x801B5A7C: table.sym_var("str_801B5A7C", "const char", "[]"),
-    0x801B5A84: table.sym_var("str_801B5A84", "const char", "[]"),
-    0x801B5A8C: table.sym_var("str_801B5A8C", "const char", "[]"),
-    0x801B5A94: table.sym_var("str_801B5A94", "const char", "[]"),
-    0x801B5A9C: table.sym_var("str_801B5A9C", "const char", "[]"),
-    0x801B5AA4: table.sym_var("str_801B5AA4", "const char", "[]"),
-    0x801B5AAC: table.sym_var("str_801B5AAC", "const char", "[]"),
-    0x801B5AB8: table.sym_var("str_801B5AB8", "const char", "[]"),
-    0x801B5AC0: table.sym_var("str_801B5AC0", "const char", "[]"),
-    0x801B5ACC: table.sym_var("str_801B5ACC", "const char", "[]"),
-    0x801B5AD4: table.sym_var("str_801B5AD4", "const char", "[]"),
-    0x801B5ADC: table.sym_var("str_801B5ADC", "const char", "[]"),
-    0x801B5AF0: table.sym_var("str_801B5AF0", "const char", "[]"),
-    0x801B5B0C: table.sym_var("str_801B5B0C", "const char", "[]"),
-    0x801B5B24: table.sym_var("str_801B5B24", "const char", "[]"),
-    0x801B5B28: table.sym_var("str_801B5B28", "const char", "[]"),
-    0x801B5B2C: table.sym_var("str_801B5B2C", "const char", "[]"),
-    0x801B5B38: table.sym_var("str_801B5B38", "const char", "[]"),
-    0x801B5B40: table.sym_var("str_801B5B40", "const char", "[]"),
-    0x801B5B44: table.sym_var("str_801B5B44", "const char", "[]"),
-    0x801B5B4C: table.sym_var("str_801B5B4C", "const char", "[]"),
-    0x801B5B50: table.sym_var("str_801B5B50", "const char", "[]"),
-    0x801B5B54: table.sym_var("str_801B5B54", "const char", "[]"),
-    0x801B5B68: table.sym_var("str_801B5B68", "const char", "[]"),
-    0x801B5B7C: table.sym_var("str_801B5B7C", "const char", "[]"),
-    0x801B5B84: table.sym_var("str_801B5B84", "const char", "[]"),
-    0x801B5B8C: table.sym_var("str_801B5B8C", "const char", "[]"),
-    0x801B5B94: table.sym_var("str_801B5B94", "const char", "[]"),
-    0x801B5BA0: table.sym_var("str_801B5BA0", "const char", "[]"),
-    0x801B5BB0: table.sym_var("str_801B5BB0", "const char", "[]"),
-    0x801B5BBC: table.sym_var("str_801B5BBC", "const char", "[]"),
-    0x801B5BC4: table.sym_var("str_801B5BC4", "const char", "[]"),
-    0x801B5BCC: table.sym_var("str_801B5BCC", "const char", "[]"),
-    0x801B5BD4: table.sym_var("str_801B5BD4", "const char", "[]"),
-    0x801B5BE0: table.sym_var("str_801B5BE0", "const char", "[]"),
-    0x801B5BEC: table.sym_var("str_801B5BEC", "const char", "[]"),
-    0x801B5BF4: table.sym_var("str_801B5BF4", "const char", "[]"),
-    0x801B5C00: table.sym_var("str_801B5C00", "const char", "[]"),
-    0x801B5C08: table.sym_var("str_801B5C08", "const char", "[]"),
-    0x801B5C10: table.sym_var("str_801B5C10", "const char", "[]"),
-    0x801B5C18: table.sym_var("str_801B5C18", "const char", "[]"),
-    0x801B5C1C: table.sym_var("str_801B5C1C", "const char", "[]"),
-    0x801B5C20: table.sym_var("str_801B5C20", "const char", "[]"),
-    0x801B5C2C: table.sym_var("str_801B5C2C", "const char", "[]"),
-    0x801B5C30: table.sym_var("str_801B5C30", "const char", "[]"),
-    0x801B5C34: table.sym_var("str_801B5C34", "const char", "[]"),
-    0x801B5C40: table.sym_var("str_801B5C40", "const char", "[]"),
-    0x801B5C44: table.sym_var("str_801B5C44", "const char", "[]"),
-    0x801B5C48: table.sym_var("str_801B5C48", "const char", "[]"),
-    0x801B5C64: table.sym_var("str_801B5C64", "const char", "[]"),
-    0x801B5C90: table.sym_var("str_801B5C90", "const char", "[]"),
-    0x801B5CA0: table.sym_var("str_801B5CA0", "const char", "[]"),
-    0x801B5CB0: table.sym_var("str_801B5CB0", "const char", "[]"),
+    0x801B5920: table.sym_var("str_face_object_801B5920", "const char", "[]"),
+    0x801B5928: table.sym_var("str_face_object_801B5928", "const char", "[]"),
+    0x801B5930: table.sym_var("str_face_object_801B5930", "const char", "[]"),
+    0x801B5938: table.sym_var("str_face_object_801B5938", "const char", "[]"),
+    0x801B5944: table.sym_var("str_face_object_801B5944", "const char", "[]"),
+    0x801B594C: table.sym_var("str_face_object_801B594C", "const char", "[]"),
+    0x801B5954: table.sym_var("str_face_object_801B5954", "const char", "[]"),
+    0x801B595C: table.sym_var("str_face_object_801B595C", "const char", "[]"),
+    0x801B5968: table.sym_var("str_face_object_801B5968", "const char", "[]"),
+    0x801B5970: table.sym_var("str_face_object_801B5970", "const char", "[]"),
+    0x801B5978: table.sym_var("str_face_object_801B5978", "const char", "[]"),
+    0x801B5984: table.sym_var("str_face_object_801B5984", "const char", "[]"),
+    0x801B598C: table.sym_var("str_face_object_801B598C", "const char", "[]"),
+    0x801B5994: table.sym_var("str_face_object_801B5994", "const char", "[]"),
+    0x801B599C: table.sym_var("str_face_object_801B599C", "const char", "[]"),
+    0x801B59A4: table.sym_var("str_face_object_801B59A4", "const char", "[]"),
+    0x801B59AC: table.sym_var("str_face_object_801B59AC", "const char", "[]"),
+    0x801B59B8: table.sym_var("str_face_object_801B59B8", "const char", "[]"),
+    0x801B59C0: table.sym_var("str_face_object_801B59C0", "const char", "[]"),
+    0x801B59C8: table.sym_var("str_face_object_801B59C8", "const char", "[]"),
+    0x801B59D0: table.sym_var("str_face_object_801B59D0", "const char", "[]"),
+    0x801B59DC: table.sym_var("str_face_object_801B59DC", "const char", "[]"),
+    0x801B59FC: table.sym_var("str_face_object_801B59FC", "const char", "[]"),
+    0x801B5A20: table.sym_var("str_face_object_801B5A20", "const char", "[]"),
+    0x801B5A28: table.sym_var("str_face_object_801B5A28", "const char", "[]"),
+    0x801B5A44: table.sym_var("str_face_object_801B5A44", "const char", "[]"),
+    0x801B5A4C: table.sym_var("str_face_object_801B5A4C", "const char", "[]"),
+    0x801B5A68: table.sym_var("str_face_object_801B5A68", "const char", "[]"),
+    0x801B5A70: table.sym_var("str_face_object_801B5A70", "const char", "[]"),
+    0x801B5A7C: table.sym_var("str_face_object_801B5A7C", "const char", "[]"),
+    0x801B5A84: table.sym_var("str_face_object_801B5A84", "const char", "[]"),
+    0x801B5A8C: table.sym_var("str_face_object_801B5A8C", "const char", "[]"),
+    0x801B5A94: table.sym_var("str_face_object_801B5A94", "const char", "[]"),
+    0x801B5A9C: table.sym_var("str_face_object_801B5A9C", "const char", "[]"),
+    0x801B5AA4: table.sym_var("str_face_object_801B5AA4", "const char", "[]"),
+    0x801B5AAC: table.sym_var("str_face_object_801B5AAC", "const char", "[]"),
+    0x801B5AB8: table.sym_var("str_face_object_801B5AB8", "const char", "[]"),
+    0x801B5AC0: table.sym_var("str_face_object_801B5AC0", "const char", "[]"),
+    0x801B5ACC: table.sym_var("str_face_object_801B5ACC", "const char", "[]"),
+    0x801B5AD4: table.sym_var("str_face_object_801B5AD4", "const char", "[]"),
+    0x801B5ADC: table.sym_var("str_face_object_801B5ADC", "const char", "[]"),
+    0x801B5AF0: table.sym_var("str_face_object_801B5AF0", "const char", "[]"),
+    0x801B5B0C: table.sym_var("str_face_object_801B5B0C", "const char", "[]"),
+    0x801B5B24: table.sym_var("str_face_object_801B5B24", "const char", "[]"),
+    0x801B5B28: table.sym_var("str_face_object_801B5B28", "const char", "[]"),
+    0x801B5B2C: table.sym_var("str_face_object_801B5B2C", "const char", "[]"),
+    0x801B5B38: table.sym_var("str_face_object_801B5B38", "const char", "[]"),
+    0x801B5B40: table.sym_var("str_face_object_801B5B40", "const char", "[]"),
+    0x801B5B44: table.sym_var("str_face_object_801B5B44", "const char", "[]"),
+    0x801B5B4C: table.sym_var("str_face_object_801B5B4C", "const char", "[]"),
+    0x801B5B50: table.sym_var("str_face_object_801B5B50", "const char", "[]"),
+    0x801B5B54: table.sym_var("str_face_object_801B5B54", "const char", "[]"),
+    0x801B5B68: table.sym_var("str_face_object_801B5B68", "const char", "[]"),
+    0x801B5B7C: table.sym_var("str_face_object_801B5B7C", "const char", "[]"),
+    0x801B5B84: table.sym_var("str_face_object_801B5B84", "const char", "[]"),
+    0x801B5B8C: table.sym_var("str_face_object_801B5B8C", "const char", "[]"),
+    0x801B5B94: table.sym_var("str_face_object_801B5B94", "const char", "[]"),
+    0x801B5BA0: table.sym_var("str_face_object_801B5BA0", "const char", "[]"),
+    0x801B5BB0: table.sym_var("str_face_object_801B5BB0", "const char", "[]"),
+    0x801B5BBC: table.sym_var("str_face_object_801B5BBC", "const char", "[]"),
+    0x801B5BC4: table.sym_var("str_face_object_801B5BC4", "const char", "[]"),
+    0x801B5BCC: table.sym_var("str_face_object_801B5BCC", "const char", "[]"),
+    0x801B5BD4: table.sym_var("str_face_object_801B5BD4", "const char", "[]"),
+    0x801B5BE0: table.sym_var("str_face_object_801B5BE0", "const char", "[]"),
+    0x801B5BEC: table.sym_var("str_face_object_801B5BEC", "const char", "[]"),
+    0x801B5BF4: table.sym_var("str_face_object_801B5BF4", "const char", "[]"),
+    0x801B5C00: table.sym_var("str_face_object_801B5C00", "const char", "[]"),
+    0x801B5C08: table.sym_var("str_face_object_801B5C08", "const char", "[]"),
+    0x801B5C10: table.sym_var("str_face_object_801B5C10", "const char", "[]"),
+    0x801B5C18: table.sym_var("str_face_object_801B5C18", "const char", "[]"),
+    0x801B5C1C: table.sym_var("str_face_object_801B5C1C", "const char", "[]"),
+    0x801B5C20: table.sym_var("str_face_object_801B5C20", "const char", "[]"),
+    0x801B5C2C: table.sym_var("str_face_object_801B5C2C", "const char", "[]"),
+    0x801B5C30: table.sym_var("str_face_object_801B5C30", "const char", "[]"),
+    0x801B5C34: table.sym_var("str_face_object_801B5C34", "const char", "[]"),
+    0x801B5C40: table.sym_var("str_face_object_801B5C40", "const char", "[]"),
+    0x801B5C44: table.sym_var("str_face_object_801B5C44", "const char", "[]"),
+    0x801B5C48: table.sym_var("str_face_object_801B5C48", "const char", "[]"),
+    0x801B5C64: table.sym_var("str_face_object_801B5C64", "const char", "[]"),
+    0x801B5C90: table.sym_var("str_face_object_801B5C90", "const char", "[]"),
+    0x801B5CA0: table.sym_var("str_face_object_801B5CA0", "const char", "[]"),
+    0x801B5CB0: table.sym_var("str_face_object_801B5CB0", "const char", "[]"),
     0x801B5CBC: table.sym_var("face_object_801B5CBC", "const float"),
     0x801B5CC0: table.sym_var("face_object_801B5CC0", "const float"),
     0x801B5CC4: table.sym_var("face_object_801B5CC4", "const float"),
@@ -11083,16 +12538,16 @@ sym_E0_d_menu = {
     0x801B5ED0: table.sym_var("face_object_801B5ED0", "const double"),
 
     # src/face/skin.data.c
-    0x801B5EE0: table.sym_var("str_801B5EE0", "const char", "[]"),
-    0x801B5F0C: table.sym_var("str_801B5F0C", "const char", "[]"),
+    0x801B5EE0: table.sym_var("str_face_skin_801B5EE0", "const char", "[]"),
+    0x801B5F0C: table.sym_var("str_face_skin_801B5F0C", "const char", "[]"),
 
     # src/face/particle.data.c
-    0x801B5F40: table.sym_var("str_801B5F40", "const char", "[]"),
-    0x801B5F64: table.sym_var("str_801B5F64", "const char", "[]"),
-    0x801B5F70: table.sym_var("str_801B5F70", "const char", "[]"),
-    0x801B5F7C: table.sym_var("str_801B5F7C", "const char", "[]"),
-    0x801B5F84: table.sym_var("str_801B5F84", "const char", "[]"),
-    0x801B5F8C: table.sym_var("str_801B5F8C", "const char", "[]"),
+    0x801B5F40: table.sym_var("str_face_particle_801B5F40", "const char", "[]"),
+    0x801B5F64: table.sym_var("str_face_particle_801B5F64", "const char", "[]"),
+    0x801B5F70: table.sym_var("str_face_particle_801B5F70", "const char", "[]"),
+    0x801B5F7C: table.sym_var("str_face_particle_801B5F7C", "const char", "[]"),
+    0x801B5F84: table.sym_var("str_face_particle_801B5F84", "const char", "[]"),
+    0x801B5F8C: table.sym_var("str_face_particle_801B5F8C", "const char", "[]"),
     0x801B5F90: table.sym_var("face_particle_801B5F90", "const double"),
     0x801B5F98: table.sym_var("face_particle_801B5F98", "const double"),
     0x801B5FA0: table.sym_var("face_particle_801B5FA0", "const double"),
@@ -11104,247 +12559,247 @@ sym_E0_d_menu = {
     0x801B5FD0: table.sym_var("face_particle_801B5FD0", "const double"),
 
     # src/face/dynlist.data.c
-    0x801B5FE0: table.sym_var("str_801B5FE0", "const char", "[]"),
-    0x801B5FE8: table.sym_var("str_801B5FE8", "const char", "[]"),
-    0x801B600C: table.sym_var("str_801B600C", "const char", "[]"),
-    0x801B602C: table.sym_var("str_801B602C", "const char", "[]"),
-    0x801B6034: table.sym_var("str_801B6034", "const char", "[]"),
-    0x801B603C: table.sym_var("str_801B603C", "const char", "[]"),
-    0x801B6040: table.sym_var("str_801B6040", "const char", "[]"),
-    0x801B6044: table.sym_var("str_801B6044", "const char", "[]"),
-    0x801B6070: table.sym_var("str_801B6070", "const char", "[]"),
-    0x801B608C: table.sym_var("str_801B608C", "const char", "[]"),
-    0x801B6094: table.sym_var("str_801B6094", "const char", "[]"),
-    0x801B60C0: table.sym_var("str_801B60C0", "const char", "[]"),
-    0x801B60C8: table.sym_var("str_801B60C8", "const char", "[]"),
-    0x801B60CC: table.sym_var("str_801B60CC", "const char", "[]"),
-    0x801B60D0: table.sym_var("str_801B60D0", "const char", "[]"),
-    0x801B6108: table.sym_var("str_801B6108", "const char", "[]"),
-    0x801B6128: table.sym_var("str_801B6128", "const char", "[]"),
-    0x801B6150: table.sym_var("str_801B6150", "const char", "[]"),
-    0x801B6154: table.sym_var("str_801B6154", "const char", "[]"),
-    0x801B617C: table.sym_var("str_801B617C", "const char", "[]"),
-    0x801B619C: table.sym_var("str_801B619C", "const char", "[]"),
-    0x801B61C0: table.sym_var("str_801B61C0", "const char", "[]"),
-    0x801B61E0: table.sym_var("str_801B61E0", "const char", "[]"),
-    0x801B6214: table.sym_var("str_801B6214", "const char", "[]"),
-    0x801B6220: table.sym_var("str_801B6220", "const char", "[]"),
-    0x801B6244: table.sym_var("str_801B6244", "const char", "[]"),
-    0x801B6278: table.sym_var("str_801B6278", "const char", "[]"),
-    0x801B6284: table.sym_var("str_801B6284", "const char", "[]"),
-    0x801B62B8: table.sym_var("str_801B62B8", "const char", "[]"),
-    0x801B62C4: table.sym_var("str_801B62C4", "const char", "[]"),
-    0x801B62E8: table.sym_var("str_801B62E8", "const char", "[]"),
-    0x801B630C: table.sym_var("str_801B630C", "const char", "[]"),
-    0x801B6318: table.sym_var("str_801B6318", "const char", "[]"),
-    0x801B6328: table.sym_var("str_801B6328", "const char", "[]"),
-    0x801B633C: table.sym_var("str_801B633C", "const char", "[]"),
-    0x801B635C: table.sym_var("str_801B635C", "const char", "[]"),
-    0x801B6380: table.sym_var("str_801B6380", "const char", "[]"),
-    0x801B63A0: table.sym_var("str_801B63A0", "const char", "[]"),
-    0x801B63AC: table.sym_var("str_801B63AC", "const char", "[]"),
-    0x801B63BC: table.sym_var("str_801B63BC", "const char", "[]"),
-    0x801B63CC: table.sym_var("str_801B63CC", "const char", "[]"),
-    0x801B63E4: table.sym_var("str_801B63E4", "const char", "[]"),
-    0x801B63FC: table.sym_var("str_801B63FC", "const char", "[]"),
-    0x801B641C: table.sym_var("str_801B641C", "const char", "[]"),
-    0x801B6450: table.sym_var("str_801B6450", "const char", "[]"),
-    0x801B6460: table.sym_var("str_801B6460", "const char", "[]"),
-    0x801B6484: table.sym_var("str_801B6484", "const char", "[]"),
-    0x801B64AC: table.sym_var("str_801B64AC", "const char", "[]"),
-    0x801B64E0: table.sym_var("str_801B64E0", "const char", "[]"),
-    0x801B64F0: table.sym_var("str_801B64F0", "const char", "[]"),
-    0x801B6514: table.sym_var("str_801B6514", "const char", "[]"),
-    0x801B6538: table.sym_var("str_801B6538", "const char", "[]"),
-    0x801B656C: table.sym_var("str_801B656C", "const char", "[]"),
-    0x801B657C: table.sym_var("str_801B657C", "const char", "[]"),
-    0x801B65A0: table.sym_var("str_801B65A0", "const char", "[]"),
-    0x801B65D4: table.sym_var("str_801B65D4", "const char", "[]"),
-    0x801B65E4: table.sym_var("str_801B65E4", "const char", "[]"),
-    0x801B6608: table.sym_var("str_801B6608", "const char", "[]"),
-    0x801B663C: table.sym_var("str_801B663C", "const char", "[]"),
-    0x801B664C: table.sym_var("str_801B664C", "const char", "[]"),
-    0x801B6670: table.sym_var("str_801B6670", "const char", "[]"),
-    0x801B6698: table.sym_var("str_801B6698", "const char", "[]"),
-    0x801B66CC: table.sym_var("str_801B66CC", "const char", "[]"),
-    0x801B66DC: table.sym_var("str_801B66DC", "const char", "[]"),
-    0x801B6700: table.sym_var("str_801B6700", "const char", "[]"),
-    0x801B6728: table.sym_var("str_801B6728", "const char", "[]"),
-    0x801B674C: table.sym_var("str_801B674C", "const char", "[]"),
-    0x801B6770: table.sym_var("str_801B6770", "const char", "[]"),
-    0x801B6794: table.sym_var("str_801B6794", "const char", "[]"),
-    0x801B67BC: table.sym_var("str_801B67BC", "const char", "[]"),
-    0x801B67F0: table.sym_var("str_801B67F0", "const char", "[]"),
-    0x801B6804: table.sym_var("str_801B6804", "const char", "[]"),
-    0x801B6828: table.sym_var("str_801B6828", "const char", "[]"),
-    0x801B685C: table.sym_var("str_801B685C", "const char", "[]"),
-    0x801B6870: table.sym_var("str_801B6870", "const char", "[]"),
-    0x801B6898: table.sym_var("str_801B6898", "const char", "[]"),
-    0x801B68CC: table.sym_var("str_801B68CC", "const char", "[]"),
-    0x801B68DC: table.sym_var("str_801B68DC", "const char", "[]"),
-    0x801B68FC: table.sym_var("str_801B68FC", "const char", "[]"),
-    0x801B6920: table.sym_var("str_801B6920", "const char", "[]"),
-    0x801B6944: table.sym_var("str_801B6944", "const char", "[]"),
-    0x801B6968: table.sym_var("str_801B6968", "const char", "[]"),
-    0x801B699C: table.sym_var("str_801B699C", "const char", "[]"),
-    0x801B69AC: table.sym_var("str_801B69AC", "const char", "[]"),
-    0x801B69D0: table.sym_var("str_801B69D0", "const char", "[]"),
-    0x801B6A04: table.sym_var("str_801B6A04", "const char", "[]"),
-    0x801B6A14: table.sym_var("str_801B6A14", "const char", "[]"),
-    0x801B6A38: table.sym_var("str_801B6A38", "const char", "[]"),
-    0x801B6A5C: table.sym_var("str_801B6A5C", "const char", "[]"),
-    0x801B6A90: table.sym_var("str_801B6A90", "const char", "[]"),
-    0x801B6AA0: table.sym_var("str_801B6AA0", "const char", "[]"),
-    0x801B6AC4: table.sym_var("str_801B6AC4", "const char", "[]"),
-    0x801B6AF8: table.sym_var("str_801B6AF8", "const char", "[]"),
-    0x801B6B08: table.sym_var("str_801B6B08", "const char", "[]"),
-    0x801B6B2C: table.sym_var("str_801B6B2C", "const char", "[]"),
-    0x801B6B60: table.sym_var("str_801B6B60", "const char", "[]"),
-    0x801B6B70: table.sym_var("str_801B6B70", "const char", "[]"),
-    0x801B6B94: table.sym_var("str_801B6B94", "const char", "[]"),
-    0x801B6BC8: table.sym_var("str_801B6BC8", "const char", "[]"),
-    0x801B6BD8: table.sym_var("str_801B6BD8", "const char", "[]"),
-    0x801B6BFC: table.sym_var("str_801B6BFC", "const char", "[]"),
-    0x801B6C30: table.sym_var("str_801B6C30", "const char", "[]"),
-    0x801B6C40: table.sym_var("str_801B6C40", "const char", "[]"),
-    0x801B6C64: table.sym_var("str_801B6C64", "const char", "[]"),
-    0x801B6C98: table.sym_var("str_801B6C98", "const char", "[]"),
-    0x801B6CA8: table.sym_var("str_801B6CA8", "const char", "[]"),
-    0x801B6CCC: table.sym_var("str_801B6CCC", "const char", "[]"),
-    0x801B6D00: table.sym_var("str_801B6D00", "const char", "[]"),
-    0x801B6D14: table.sym_var("str_801B6D14", "const char", "[]"),
-    0x801B6D38: table.sym_var("str_801B6D38", "const char", "[]"),
-    0x801B6D6C: table.sym_var("str_801B6D6C", "const char", "[]"),
-    0x801B6D7C: table.sym_var("str_801B6D7C", "const char", "[]"),
-    0x801B6DA0: table.sym_var("str_801B6DA0", "const char", "[]"),
-    0x801B6DD4: table.sym_var("str_801B6DD4", "const char", "[]"),
-    0x801B6DE0: table.sym_var("str_801B6DE0", "const char", "[]"),
-    0x801B6E04: table.sym_var("str_801B6E04", "const char", "[]"),
-    0x801B6E38: table.sym_var("str_801B6E38", "const char", "[]"),
-    0x801B6E48: table.sym_var("str_801B6E48", "const char", "[]"),
-    0x801B6E6C: table.sym_var("str_801B6E6C", "const char", "[]"),
-    0x801B6EA0: table.sym_var("str_801B6EA0", "const char", "[]"),
-    0x801B6EB4: table.sym_var("str_801B6EB4", "const char", "[]"),
-    0x801B6EEC: table.sym_var("str_801B6EEC", "const char", "[]"),
-    0x801B6F10: table.sym_var("str_801B6F10", "const char", "[]"),
-    0x801B6F44: table.sym_var("str_801B6F44", "const char", "[]"),
-    0x801B6F54: table.sym_var("str_801B6F54", "const char", "[]"),
-    0x801B6F78: table.sym_var("str_801B6F78", "const char", "[]"),
-    0x801B6FAC: table.sym_var("str_801B6FAC", "const char", "[]"),
-    0x801B6FBC: table.sym_var("str_801B6FBC", "const char", "[]"),
-    0x801B6FE0: table.sym_var("str_801B6FE0", "const char", "[]"),
-    0x801B7014: table.sym_var("str_801B7014", "const char", "[]"),
-    0x801B7024: table.sym_var("str_801B7024", "const char", "[]"),
-    0x801B7048: table.sym_var("str_801B7048", "const char", "[]"),
-    0x801B707C: table.sym_var("str_801B707C", "const char", "[]"),
-    0x801B708C: table.sym_var("str_801B708C", "const char", "[]"),
-    0x801B70B0: table.sym_var("str_801B70B0", "const char", "[]"),
-    0x801B70E4: table.sym_var("str_801B70E4", "const char", "[]"),
-    0x801B70F8: table.sym_var("str_801B70F8", "const char", "[]"),
-    0x801B711C: table.sym_var("str_801B711C", "const char", "[]"),
-    0x801B7150: table.sym_var("str_801B7150", "const char", "[]"),
-    0x801B7160: table.sym_var("str_801B7160", "const char", "[]"),
-    0x801B7184: table.sym_var("str_801B7184", "const char", "[]"),
-    0x801B71B8: table.sym_var("str_801B71B8", "const char", "[]"),
-    0x801B71C4: table.sym_var("str_801B71C4", "const char", "[]"),
-    0x801B71E8: table.sym_var("str_801B71E8", "const char", "[]"),
-    0x801B721C: table.sym_var("str_801B721C", "const char", "[]"),
-    0x801B722C: table.sym_var("str_801B722C", "const char", "[]"),
-    0x801B7250: table.sym_var("str_801B7250", "const char", "[]"),
-    0x801B7284: table.sym_var("str_801B7284", "const char", "[]"),
-    0x801B728C: table.sym_var("str_801B728C", "const char", "[]"),
-    0x801B72B0: table.sym_var("str_801B72B0", "const char", "[]"),
-    0x801B72E4: table.sym_var("str_801B72E4", "const char", "[]"),
-    0x801B72F4: table.sym_var("str_801B72F4", "const char", "[]"),
-    0x801B7318: table.sym_var("str_801B7318", "const char", "[]"),
-    0x801B733C: table.sym_var("str_801B733C", "const char", "[]"),
-    0x801B7370: table.sym_var("str_801B7370", "const char", "[]"),
-    0x801B7380: table.sym_var("str_801B7380", "const char", "[]"),
-    0x801B73A4: table.sym_var("str_801B73A4", "const char", "[]"),
-    0x801B73D8: table.sym_var("str_801B73D8", "const char", "[]"),
-    0x801B73E8: table.sym_var("str_801B73E8", "const char", "[]"),
-    0x801B740C: table.sym_var("str_801B740C", "const char", "[]"),
-    0x801B741C: table.sym_var("str_801B741C", "const char", "[]"),
-    0x801B742C: table.sym_var("str_801B742C", "const char", "[]"),
-    0x801B7460: table.sym_var("str_801B7460", "const char", "[]"),
-    0x801B7470: table.sym_var("str_801B7470", "const char", "[]"),
-    0x801B7494: table.sym_var("str_801B7494", "const char", "[]"),
-    0x801B74B8: table.sym_var("str_801B74B8", "const char", "[]"),
-    0x801B74DC: table.sym_var("str_801B74DC", "const char", "[]"),
-    0x801B7510: table.sym_var("str_801B7510", "const char", "[]"),
-    0x801B751C: table.sym_var("str_801B751C", "const char", "[]"),
-    0x801B7540: table.sym_var("str_801B7540", "const char", "[]"),
-    0x801B7574: table.sym_var("str_801B7574", "const char", "[]"),
-    0x801B7580: table.sym_var("str_801B7580", "const char", "[]"),
-    0x801B75A4: table.sym_var("str_801B75A4", "const char", "[]"),
-    0x801B75D8: table.sym_var("str_801B75D8", "const char", "[]"),
-    0x801B75F8: table.sym_var("str_801B75F8", "const char", "[]"),
-    0x801B762C: table.sym_var("str_801B762C", "const char", "[]"),
-    0x801B764C: table.sym_var("str_801B764C", "const char", "[]"),
-    0x801B7680: table.sym_var("str_801B7680", "const char", "[]"),
-    0x801B76A0: table.sym_var("str_801B76A0", "const char", "[]"),
-    0x801B76D4: table.sym_var("str_801B76D4", "const char", "[]"),
-    0x801B76E0: table.sym_var("str_801B76E0", "const char", "[]"),
-    0x801B7704: table.sym_var("str_801B7704", "const char", "[]"),
-    0x801B7710: table.sym_var("str_801B7710", "const char", "[]"),
-    0x801B771C: table.sym_var("str_801B771C", "const char", "[]"),
-    0x801B7738: table.sym_var("str_801B7738", "const char", "[]"),
-    0x801B7744: table.sym_var("str_801B7744", "const char", "[]"),
-    0x801B7778: table.sym_var("str_801B7778", "const char", "[]"),
-    0x801B7784: table.sym_var("str_801B7784", "const char", "[]"),
-    0x801B77A8: table.sym_var("str_801B77A8", "const char", "[]"),
-    0x801B77CC: table.sym_var("str_801B77CC", "const char", "[]"),
-    0x801B7800: table.sym_var("str_801B7800", "const char", "[]"),
-    0x801B780C: table.sym_var("str_801B780C", "const char", "[]"),
-    0x801B7830: table.sym_var("str_801B7830", "const char", "[]"),
-    0x801B7864: table.sym_var("str_801B7864", "const char", "[]"),
-    0x801B7870: table.sym_var("str_801B7870", "const char", "[]"),
-    0x801B7894: table.sym_var("str_801B7894", "const char", "[]"),
-    0x801B78B8: table.sym_var("str_801B78B8", "const char", "[]"),
-    0x801B78EC: table.sym_var("str_801B78EC", "const char", "[]"),
-    0x801B78FC: table.sym_var("str_801B78FC", "const char", "[]"),
-    0x801B7920: table.sym_var("str_801B7920", "const char", "[]"),
-    0x801B7954: table.sym_var("str_801B7954", "const char", "[]"),
-    0x801B7964: table.sym_var("str_801B7964", "const char", "[]"),
-    0x801B7988: table.sym_var("str_801B7988", "const char", "[]"),
-    0x801B79BC: table.sym_var("str_801B79BC", "const char", "[]"),
-    0x801B79C8: table.sym_var("str_801B79C8", "const char", "[]"),
-    0x801B79EC: table.sym_var("str_801B79EC", "const char", "[]"),
-    0x801B7A20: table.sym_var("str_801B7A20", "const char", "[]"),
-    0x801B7A30: table.sym_var("str_801B7A30", "const char", "[]"),
-    0x801B7A54: table.sym_var("str_801B7A54", "const char", "[]"),
-    0x801B7A88: table.sym_var("str_801B7A88", "const char", "[]"),
-    0x801B7A98: table.sym_var("str_801B7A98", "const char", "[]"),
-    0x801B7ABC: table.sym_var("str_801B7ABC", "const char", "[]"),
-    0x801B7AF0: table.sym_var("str_801B7AF0", "const char", "[]"),
-    0x801B7B00: table.sym_var("str_801B7B00", "const char", "[]"),
-    0x801B7B24: table.sym_var("str_801B7B24", "const char", "[]"),
-    0x801B7B58: table.sym_var("str_801B7B58", "const char", "[]"),
-    0x801B7B68: table.sym_var("str_801B7B68", "const char", "[]"),
-    0x801B7B8C: table.sym_var("str_801B7B8C", "const char", "[]"),
-    0x801B7BB0: table.sym_var("str_801B7BB0", "const char", "[]"),
-    0x801B7BE4: table.sym_var("str_801B7BE4", "const char", "[]"),
-    0x801B7BF4: table.sym_var("str_801B7BF4", "const char", "[]"),
-    0x801B7C18: table.sym_var("str_801B7C18", "const char", "[]"),
-    0x801B7C4C: table.sym_var("str_801B7C4C", "const char", "[]"),
-    0x801B7C5C: table.sym_var("str_801B7C5C", "const char", "[]"),
-    0x801B7C80: table.sym_var("str_801B7C80", "const char", "[]"),
-    0x801B7CB4: table.sym_var("str_801B7CB4", "const char", "[]"),
-    0x801B7CC4: table.sym_var("str_801B7CC4", "const char", "[]"),
-    0x801B7CE8: table.sym_var("str_801B7CE8", "const char", "[]"),
-    0x801B7D1C: table.sym_var("str_801B7D1C", "const char", "[]"),
-    0x801B7D30: table.sym_var("str_801B7D30", "const char", "[]"),
-    0x801B7D54: table.sym_var("str_801B7D54", "const char", "[]"),
-    0x801B7D88: table.sym_var("str_801B7D88", "const char", "[]"),
-    0x801B7D98: table.sym_var("str_801B7D98", "const char", "[]"),
-    0x801B7DBC: table.sym_var("str_801B7DBC", "const char", "[]"),
-    0x801B7DF0: table.sym_var("str_801B7DF0", "const char", "[]"),
-    0x801B7E00: table.sym_var("str_801B7E00", "const char", "[]"),
-    0x801B7E24: table.sym_var("str_801B7E24", "const char", "[]"),
-    0x801B7E58: table.sym_var("str_801B7E58", "const char", "[]"),
-    0x801B7E6C: table.sym_var("str_801B7E6C", "const char", "[]"),
-    0x801B7E90: table.sym_var("str_801B7E90", "const char", "[]"),
-    0x801B7EC4: table.sym_var("str_801B7EC4", "const char", "[]"),
+    0x801B5FE0: table.sym_var("str_face_dynlist_801B5FE0", "const char", "[]"),
+    0x801B5FE8: table.sym_var("str_face_dynlist_801B5FE8", "const char", "[]"),
+    0x801B600C: table.sym_var("str_face_dynlist_801B600C", "const char", "[]"),
+    0x801B602C: table.sym_var("str_face_dynlist_801B602C", "const char", "[]"),
+    0x801B6034: table.sym_var("str_face_dynlist_801B6034", "const char", "[]"),
+    0x801B603C: table.sym_var("str_face_dynlist_801B603C", "const char", "[]"),
+    0x801B6040: table.sym_var("str_face_dynlist_801B6040", "const char", "[]"),
+    0x801B6044: table.sym_var("str_face_dynlist_801B6044", "const char", "[]"),
+    0x801B6070: table.sym_var("str_face_dynlist_801B6070", "const char", "[]"),
+    0x801B608C: table.sym_var("str_face_dynlist_801B608C", "const char", "[]"),
+    0x801B6094: table.sym_var("str_face_dynlist_801B6094", "const char", "[]"),
+    0x801B60C0: table.sym_var("str_face_dynlist_801B60C0", "const char", "[]"),
+    0x801B60C8: table.sym_var("str_face_dynlist_801B60C8", "const char", "[]"),
+    0x801B60CC: table.sym_var("str_face_dynlist_801B60CC", "const char", "[]"),
+    0x801B60D0: table.sym_var("str_face_dynlist_801B60D0", "const char", "[]"),
+    0x801B6108: table.sym_var("str_face_dynlist_801B6108", "const char", "[]"),
+    0x801B6128: table.sym_var("str_face_dynlist_801B6128", "const char", "[]"),
+    0x801B6150: table.sym_var("str_face_dynlist_801B6150", "const char", "[]"),
+    0x801B6154: table.sym_var("str_face_dynlist_801B6154", "const char", "[]"),
+    0x801B617C: table.sym_var("str_face_dynlist_801B617C", "const char", "[]"),
+    0x801B619C: table.sym_var("str_face_dynlist_801B619C", "const char", "[]"),
+    0x801B61C0: table.sym_var("str_face_dynlist_801B61C0", "const char", "[]"),
+    0x801B61E0: table.sym_var("str_face_dynlist_801B61E0", "const char", "[]"),
+    0x801B6214: table.sym_var("str_face_dynlist_801B6214", "const char", "[]"),
+    0x801B6220: table.sym_var("str_face_dynlist_801B6220", "const char", "[]"),
+    0x801B6244: table.sym_var("str_face_dynlist_801B6244", "const char", "[]"),
+    0x801B6278: table.sym_var("str_face_dynlist_801B6278", "const char", "[]"),
+    0x801B6284: table.sym_var("str_face_dynlist_801B6284", "const char", "[]"),
+    0x801B62B8: table.sym_var("str_face_dynlist_801B62B8", "const char", "[]"),
+    0x801B62C4: table.sym_var("str_face_dynlist_801B62C4", "const char", "[]"),
+    0x801B62E8: table.sym_var("str_face_dynlist_801B62E8", "const char", "[]"),
+    0x801B630C: table.sym_var("str_face_dynlist_801B630C", "const char", "[]"),
+    0x801B6318: table.sym_var("str_face_dynlist_801B6318", "const char", "[]"),
+    0x801B6328: table.sym_var("str_face_dynlist_801B6328", "const char", "[]"),
+    0x801B633C: table.sym_var("str_face_dynlist_801B633C", "const char", "[]"),
+    0x801B635C: table.sym_var("str_face_dynlist_801B635C", "const char", "[]"),
+    0x801B6380: table.sym_var("str_face_dynlist_801B6380", "const char", "[]"),
+    0x801B63A0: table.sym_var("str_face_dynlist_801B63A0", "const char", "[]"),
+    0x801B63AC: table.sym_var("str_face_dynlist_801B63AC", "const char", "[]"),
+    0x801B63BC: table.sym_var("str_face_dynlist_801B63BC", "const char", "[]"),
+    0x801B63CC: table.sym_var("str_face_dynlist_801B63CC", "const char", "[]"),
+    0x801B63E4: table.sym_var("str_face_dynlist_801B63E4", "const char", "[]"),
+    0x801B63FC: table.sym_var("str_face_dynlist_801B63FC", "const char", "[]"),
+    0x801B641C: table.sym_var("str_face_dynlist_801B641C", "const char", "[]"),
+    0x801B6450: table.sym_var("str_face_dynlist_801B6450", "const char", "[]"),
+    0x801B6460: table.sym_var("str_face_dynlist_801B6460", "const char", "[]"),
+    0x801B6484: table.sym_var("str_face_dynlist_801B6484", "const char", "[]"),
+    0x801B64AC: table.sym_var("str_face_dynlist_801B64AC", "const char", "[]"),
+    0x801B64E0: table.sym_var("str_face_dynlist_801B64E0", "const char", "[]"),
+    0x801B64F0: table.sym_var("str_face_dynlist_801B64F0", "const char", "[]"),
+    0x801B6514: table.sym_var("str_face_dynlist_801B6514", "const char", "[]"),
+    0x801B6538: table.sym_var("str_face_dynlist_801B6538", "const char", "[]"),
+    0x801B656C: table.sym_var("str_face_dynlist_801B656C", "const char", "[]"),
+    0x801B657C: table.sym_var("str_face_dynlist_801B657C", "const char", "[]"),
+    0x801B65A0: table.sym_var("str_face_dynlist_801B65A0", "const char", "[]"),
+    0x801B65D4: table.sym_var("str_face_dynlist_801B65D4", "const char", "[]"),
+    0x801B65E4: table.sym_var("str_face_dynlist_801B65E4", "const char", "[]"),
+    0x801B6608: table.sym_var("str_face_dynlist_801B6608", "const char", "[]"),
+    0x801B663C: table.sym_var("str_face_dynlist_801B663C", "const char", "[]"),
+    0x801B664C: table.sym_var("str_face_dynlist_801B664C", "const char", "[]"),
+    0x801B6670: table.sym_var("str_face_dynlist_801B6670", "const char", "[]"),
+    0x801B6698: table.sym_var("str_face_dynlist_801B6698", "const char", "[]"),
+    0x801B66CC: table.sym_var("str_face_dynlist_801B66CC", "const char", "[]"),
+    0x801B66DC: table.sym_var("str_face_dynlist_801B66DC", "const char", "[]"),
+    0x801B6700: table.sym_var("str_face_dynlist_801B6700", "const char", "[]"),
+    0x801B6728: table.sym_var("str_face_dynlist_801B6728", "const char", "[]"),
+    0x801B674C: table.sym_var("str_face_dynlist_801B674C", "const char", "[]"),
+    0x801B6770: table.sym_var("str_face_dynlist_801B6770", "const char", "[]"),
+    0x801B6794: table.sym_var("str_face_dynlist_801B6794", "const char", "[]"),
+    0x801B67BC: table.sym_var("str_face_dynlist_801B67BC", "const char", "[]"),
+    0x801B67F0: table.sym_var("str_face_dynlist_801B67F0", "const char", "[]"),
+    0x801B6804: table.sym_var("str_face_dynlist_801B6804", "const char", "[]"),
+    0x801B6828: table.sym_var("str_face_dynlist_801B6828", "const char", "[]"),
+    0x801B685C: table.sym_var("str_face_dynlist_801B685C", "const char", "[]"),
+    0x801B6870: table.sym_var("str_face_dynlist_801B6870", "const char", "[]"),
+    0x801B6898: table.sym_var("str_face_dynlist_801B6898", "const char", "[]"),
+    0x801B68CC: table.sym_var("str_face_dynlist_801B68CC", "const char", "[]"),
+    0x801B68DC: table.sym_var("str_face_dynlist_801B68DC", "const char", "[]"),
+    0x801B68FC: table.sym_var("str_face_dynlist_801B68FC", "const char", "[]"),
+    0x801B6920: table.sym_var("str_face_dynlist_801B6920", "const char", "[]"),
+    0x801B6944: table.sym_var("str_face_dynlist_801B6944", "const char", "[]"),
+    0x801B6968: table.sym_var("str_face_dynlist_801B6968", "const char", "[]"),
+    0x801B699C: table.sym_var("str_face_dynlist_801B699C", "const char", "[]"),
+    0x801B69AC: table.sym_var("str_face_dynlist_801B69AC", "const char", "[]"),
+    0x801B69D0: table.sym_var("str_face_dynlist_801B69D0", "const char", "[]"),
+    0x801B6A04: table.sym_var("str_face_dynlist_801B6A04", "const char", "[]"),
+    0x801B6A14: table.sym_var("str_face_dynlist_801B6A14", "const char", "[]"),
+    0x801B6A38: table.sym_var("str_face_dynlist_801B6A38", "const char", "[]"),
+    0x801B6A5C: table.sym_var("str_face_dynlist_801B6A5C", "const char", "[]"),
+    0x801B6A90: table.sym_var("str_face_dynlist_801B6A90", "const char", "[]"),
+    0x801B6AA0: table.sym_var("str_face_dynlist_801B6AA0", "const char", "[]"),
+    0x801B6AC4: table.sym_var("str_face_dynlist_801B6AC4", "const char", "[]"),
+    0x801B6AF8: table.sym_var("str_face_dynlist_801B6AF8", "const char", "[]"),
+    0x801B6B08: table.sym_var("str_face_dynlist_801B6B08", "const char", "[]"),
+    0x801B6B2C: table.sym_var("str_face_dynlist_801B6B2C", "const char", "[]"),
+    0x801B6B60: table.sym_var("str_face_dynlist_801B6B60", "const char", "[]"),
+    0x801B6B70: table.sym_var("str_face_dynlist_801B6B70", "const char", "[]"),
+    0x801B6B94: table.sym_var("str_face_dynlist_801B6B94", "const char", "[]"),
+    0x801B6BC8: table.sym_var("str_face_dynlist_801B6BC8", "const char", "[]"),
+    0x801B6BD8: table.sym_var("str_face_dynlist_801B6BD8", "const char", "[]"),
+    0x801B6BFC: table.sym_var("str_face_dynlist_801B6BFC", "const char", "[]"),
+    0x801B6C30: table.sym_var("str_face_dynlist_801B6C30", "const char", "[]"),
+    0x801B6C40: table.sym_var("str_face_dynlist_801B6C40", "const char", "[]"),
+    0x801B6C64: table.sym_var("str_face_dynlist_801B6C64", "const char", "[]"),
+    0x801B6C98: table.sym_var("str_face_dynlist_801B6C98", "const char", "[]"),
+    0x801B6CA8: table.sym_var("str_face_dynlist_801B6CA8", "const char", "[]"),
+    0x801B6CCC: table.sym_var("str_face_dynlist_801B6CCC", "const char", "[]"),
+    0x801B6D00: table.sym_var("str_face_dynlist_801B6D00", "const char", "[]"),
+    0x801B6D14: table.sym_var("str_face_dynlist_801B6D14", "const char", "[]"),
+    0x801B6D38: table.sym_var("str_face_dynlist_801B6D38", "const char", "[]"),
+    0x801B6D6C: table.sym_var("str_face_dynlist_801B6D6C", "const char", "[]"),
+    0x801B6D7C: table.sym_var("str_face_dynlist_801B6D7C", "const char", "[]"),
+    0x801B6DA0: table.sym_var("str_face_dynlist_801B6DA0", "const char", "[]"),
+    0x801B6DD4: table.sym_var("str_face_dynlist_801B6DD4", "const char", "[]"),
+    0x801B6DE0: table.sym_var("str_face_dynlist_801B6DE0", "const char", "[]"),
+    0x801B6E04: table.sym_var("str_face_dynlist_801B6E04", "const char", "[]"),
+    0x801B6E38: table.sym_var("str_face_dynlist_801B6E38", "const char", "[]"),
+    0x801B6E48: table.sym_var("str_face_dynlist_801B6E48", "const char", "[]"),
+    0x801B6E6C: table.sym_var("str_face_dynlist_801B6E6C", "const char", "[]"),
+    0x801B6EA0: table.sym_var("str_face_dynlist_801B6EA0", "const char", "[]"),
+    0x801B6EB4: table.sym_var("str_face_dynlist_801B6EB4", "const char", "[]"),
+    0x801B6EEC: table.sym_var("str_face_dynlist_801B6EEC", "const char", "[]"),
+    0x801B6F10: table.sym_var("str_face_dynlist_801B6F10", "const char", "[]"),
+    0x801B6F44: table.sym_var("str_face_dynlist_801B6F44", "const char", "[]"),
+    0x801B6F54: table.sym_var("str_face_dynlist_801B6F54", "const char", "[]"),
+    0x801B6F78: table.sym_var("str_face_dynlist_801B6F78", "const char", "[]"),
+    0x801B6FAC: table.sym_var("str_face_dynlist_801B6FAC", "const char", "[]"),
+    0x801B6FBC: table.sym_var("str_face_dynlist_801B6FBC", "const char", "[]"),
+    0x801B6FE0: table.sym_var("str_face_dynlist_801B6FE0", "const char", "[]"),
+    0x801B7014: table.sym_var("str_face_dynlist_801B7014", "const char", "[]"),
+    0x801B7024: table.sym_var("str_face_dynlist_801B7024", "const char", "[]"),
+    0x801B7048: table.sym_var("str_face_dynlist_801B7048", "const char", "[]"),
+    0x801B707C: table.sym_var("str_face_dynlist_801B707C", "const char", "[]"),
+    0x801B708C: table.sym_var("str_face_dynlist_801B708C", "const char", "[]"),
+    0x801B70B0: table.sym_var("str_face_dynlist_801B70B0", "const char", "[]"),
+    0x801B70E4: table.sym_var("str_face_dynlist_801B70E4", "const char", "[]"),
+    0x801B70F8: table.sym_var("str_face_dynlist_801B70F8", "const char", "[]"),
+    0x801B711C: table.sym_var("str_face_dynlist_801B711C", "const char", "[]"),
+    0x801B7150: table.sym_var("str_face_dynlist_801B7150", "const char", "[]"),
+    0x801B7160: table.sym_var("str_face_dynlist_801B7160", "const char", "[]"),
+    0x801B7184: table.sym_var("str_face_dynlist_801B7184", "const char", "[]"),
+    0x801B71B8: table.sym_var("str_face_dynlist_801B71B8", "const char", "[]"),
+    0x801B71C4: table.sym_var("str_face_dynlist_801B71C4", "const char", "[]"),
+    0x801B71E8: table.sym_var("str_face_dynlist_801B71E8", "const char", "[]"),
+    0x801B721C: table.sym_var("str_face_dynlist_801B721C", "const char", "[]"),
+    0x801B722C: table.sym_var("str_face_dynlist_801B722C", "const char", "[]"),
+    0x801B7250: table.sym_var("str_face_dynlist_801B7250", "const char", "[]"),
+    0x801B7284: table.sym_var("str_face_dynlist_801B7284", "const char", "[]"),
+    0x801B728C: table.sym_var("str_face_dynlist_801B728C", "const char", "[]"),
+    0x801B72B0: table.sym_var("str_face_dynlist_801B72B0", "const char", "[]"),
+    0x801B72E4: table.sym_var("str_face_dynlist_801B72E4", "const char", "[]"),
+    0x801B72F4: table.sym_var("str_face_dynlist_801B72F4", "const char", "[]"),
+    0x801B7318: table.sym_var("str_face_dynlist_801B7318", "const char", "[]"),
+    0x801B733C: table.sym_var("str_face_dynlist_801B733C", "const char", "[]"),
+    0x801B7370: table.sym_var("str_face_dynlist_801B7370", "const char", "[]"),
+    0x801B7380: table.sym_var("str_face_dynlist_801B7380", "const char", "[]"),
+    0x801B73A4: table.sym_var("str_face_dynlist_801B73A4", "const char", "[]"),
+    0x801B73D8: table.sym_var("str_face_dynlist_801B73D8", "const char", "[]"),
+    0x801B73E8: table.sym_var("str_face_dynlist_801B73E8", "const char", "[]"),
+    0x801B740C: table.sym_var("str_face_dynlist_801B740C", "const char", "[]"),
+    0x801B741C: table.sym_var("str_face_dynlist_801B741C", "const char", "[]"),
+    0x801B742C: table.sym_var("str_face_dynlist_801B742C", "const char", "[]"),
+    0x801B7460: table.sym_var("str_face_dynlist_801B7460", "const char", "[]"),
+    0x801B7470: table.sym_var("str_face_dynlist_801B7470", "const char", "[]"),
+    0x801B7494: table.sym_var("str_face_dynlist_801B7494", "const char", "[]"),
+    0x801B74B8: table.sym_var("str_face_dynlist_801B74B8", "const char", "[]"),
+    0x801B74DC: table.sym_var("str_face_dynlist_801B74DC", "const char", "[]"),
+    0x801B7510: table.sym_var("str_face_dynlist_801B7510", "const char", "[]"),
+    0x801B751C: table.sym_var("str_face_dynlist_801B751C", "const char", "[]"),
+    0x801B7540: table.sym_var("str_face_dynlist_801B7540", "const char", "[]"),
+    0x801B7574: table.sym_var("str_face_dynlist_801B7574", "const char", "[]"),
+    0x801B7580: table.sym_var("str_face_dynlist_801B7580", "const char", "[]"),
+    0x801B75A4: table.sym_var("str_face_dynlist_801B75A4", "const char", "[]"),
+    0x801B75D8: table.sym_var("str_face_dynlist_801B75D8", "const char", "[]"),
+    0x801B75F8: table.sym_var("str_face_dynlist_801B75F8", "const char", "[]"),
+    0x801B762C: table.sym_var("str_face_dynlist_801B762C", "const char", "[]"),
+    0x801B764C: table.sym_var("str_face_dynlist_801B764C", "const char", "[]"),
+    0x801B7680: table.sym_var("str_face_dynlist_801B7680", "const char", "[]"),
+    0x801B76A0: table.sym_var("str_face_dynlist_801B76A0", "const char", "[]"),
+    0x801B76D4: table.sym_var("str_face_dynlist_801B76D4", "const char", "[]"),
+    0x801B76E0: table.sym_var("str_face_dynlist_801B76E0", "const char", "[]"),
+    0x801B7704: table.sym_var("str_face_dynlist_801B7704", "const char", "[]"),
+    0x801B7710: table.sym_var("str_face_dynlist_801B7710", "const char", "[]"),
+    0x801B771C: table.sym_var("str_face_dynlist_801B771C", "const char", "[]"),
+    0x801B7738: table.sym_var("str_face_dynlist_801B7738", "const char", "[]"),
+    0x801B7744: table.sym_var("str_face_dynlist_801B7744", "const char", "[]"),
+    0x801B7778: table.sym_var("str_face_dynlist_801B7778", "const char", "[]"),
+    0x801B7784: table.sym_var("str_face_dynlist_801B7784", "const char", "[]"),
+    0x801B77A8: table.sym_var("str_face_dynlist_801B77A8", "const char", "[]"),
+    0x801B77CC: table.sym_var("str_face_dynlist_801B77CC", "const char", "[]"),
+    0x801B7800: table.sym_var("str_face_dynlist_801B7800", "const char", "[]"),
+    0x801B780C: table.sym_var("str_face_dynlist_801B780C", "const char", "[]"),
+    0x801B7830: table.sym_var("str_face_dynlist_801B7830", "const char", "[]"),
+    0x801B7864: table.sym_var("str_face_dynlist_801B7864", "const char", "[]"),
+    0x801B7870: table.sym_var("str_face_dynlist_801B7870", "const char", "[]"),
+    0x801B7894: table.sym_var("str_face_dynlist_801B7894", "const char", "[]"),
+    0x801B78B8: table.sym_var("str_face_dynlist_801B78B8", "const char", "[]"),
+    0x801B78EC: table.sym_var("str_face_dynlist_801B78EC", "const char", "[]"),
+    0x801B78FC: table.sym_var("str_face_dynlist_801B78FC", "const char", "[]"),
+    0x801B7920: table.sym_var("str_face_dynlist_801B7920", "const char", "[]"),
+    0x801B7954: table.sym_var("str_face_dynlist_801B7954", "const char", "[]"),
+    0x801B7964: table.sym_var("str_face_dynlist_801B7964", "const char", "[]"),
+    0x801B7988: table.sym_var("str_face_dynlist_801B7988", "const char", "[]"),
+    0x801B79BC: table.sym_var("str_face_dynlist_801B79BC", "const char", "[]"),
+    0x801B79C8: table.sym_var("str_face_dynlist_801B79C8", "const char", "[]"),
+    0x801B79EC: table.sym_var("str_face_dynlist_801B79EC", "const char", "[]"),
+    0x801B7A20: table.sym_var("str_face_dynlist_801B7A20", "const char", "[]"),
+    0x801B7A30: table.sym_var("str_face_dynlist_801B7A30", "const char", "[]"),
+    0x801B7A54: table.sym_var("str_face_dynlist_801B7A54", "const char", "[]"),
+    0x801B7A88: table.sym_var("str_face_dynlist_801B7A88", "const char", "[]"),
+    0x801B7A98: table.sym_var("str_face_dynlist_801B7A98", "const char", "[]"),
+    0x801B7ABC: table.sym_var("str_face_dynlist_801B7ABC", "const char", "[]"),
+    0x801B7AF0: table.sym_var("str_face_dynlist_801B7AF0", "const char", "[]"),
+    0x801B7B00: table.sym_var("str_face_dynlist_801B7B00", "const char", "[]"),
+    0x801B7B24: table.sym_var("str_face_dynlist_801B7B24", "const char", "[]"),
+    0x801B7B58: table.sym_var("str_face_dynlist_801B7B58", "const char", "[]"),
+    0x801B7B68: table.sym_var("str_face_dynlist_801B7B68", "const char", "[]"),
+    0x801B7B8C: table.sym_var("str_face_dynlist_801B7B8C", "const char", "[]"),
+    0x801B7BB0: table.sym_var("str_face_dynlist_801B7BB0", "const char", "[]"),
+    0x801B7BE4: table.sym_var("str_face_dynlist_801B7BE4", "const char", "[]"),
+    0x801B7BF4: table.sym_var("str_face_dynlist_801B7BF4", "const char", "[]"),
+    0x801B7C18: table.sym_var("str_face_dynlist_801B7C18", "const char", "[]"),
+    0x801B7C4C: table.sym_var("str_face_dynlist_801B7C4C", "const char", "[]"),
+    0x801B7C5C: table.sym_var("str_face_dynlist_801B7C5C", "const char", "[]"),
+    0x801B7C80: table.sym_var("str_face_dynlist_801B7C80", "const char", "[]"),
+    0x801B7CB4: table.sym_var("str_face_dynlist_801B7CB4", "const char", "[]"),
+    0x801B7CC4: table.sym_var("str_face_dynlist_801B7CC4", "const char", "[]"),
+    0x801B7CE8: table.sym_var("str_face_dynlist_801B7CE8", "const char", "[]"),
+    0x801B7D1C: table.sym_var("str_face_dynlist_801B7D1C", "const char", "[]"),
+    0x801B7D30: table.sym_var("str_face_dynlist_801B7D30", "const char", "[]"),
+    0x801B7D54: table.sym_var("str_face_dynlist_801B7D54", "const char", "[]"),
+    0x801B7D88: table.sym_var("str_face_dynlist_801B7D88", "const char", "[]"),
+    0x801B7D98: table.sym_var("str_face_dynlist_801B7D98", "const char", "[]"),
+    0x801B7DBC: table.sym_var("str_face_dynlist_801B7DBC", "const char", "[]"),
+    0x801B7DF0: table.sym_var("str_face_dynlist_801B7DF0", "const char", "[]"),
+    0x801B7E00: table.sym_var("str_face_dynlist_801B7E00", "const char", "[]"),
+    0x801B7E24: table.sym_var("str_face_dynlist_801B7E24", "const char", "[]"),
+    0x801B7E58: table.sym_var("str_face_dynlist_801B7E58", "const char", "[]"),
+    0x801B7E6C: table.sym_var("str_face_dynlist_801B7E6C", "const char", "[]"),
+    0x801B7E90: table.sym_var("str_face_dynlist_801B7E90", "const char", "[]"),
+    0x801B7EC4: table.sym_var("str_face_dynlist_801B7EC4", "const char", "[]"),
     0x801B7ED8: table.sym_var_fnc("face_dynlist_801B7ED8", "const", "[]"),
     0x801B7FB8: table.sym_var_fnc("face_dynlist_801B7FB8", "const", "[]"),
     0x801B8004: table.sym_var("face_dynlist_801B8004", "const float"),
@@ -11353,76 +12808,76 @@ sym_E0_d_menu = {
     0x801B80B0: table.sym_var_fnc("face_dynlist_801B80B0", "const", "[]"),
 
     # src/face/gadget.data.c
-    0x801B8130: table.sym_var("str_801B8130", "const char", "[]"),
-    0x801B8148: table.sym_var("str_801B8148", "const char", "[]"),
-    0x801B8158: table.sym_var("str_801B8158", "const char", "[]"),
-    0x801B8164: table.sym_var("str_801B8164", "const char", "[]"),
-    0x801B817C: table.sym_var("str_801B817C", "const char", "[]"),
-    0x801B81C8: table.sym_var("str_801B81C8", "const char", "[]"),
-    0x801B8240: table.sym_var("str_801B8240", "const char", "[]"),
-    0x801B8258: table.sym_var("str_801B8258", "const char", "[]"),
-    0x801B8268: table.sym_var("str_801B8268", "const char", "[]"),
-    0x801B8280: table.sym_var("str_801B8280", "const char", "[]"),
-    0x801B8290: table.sym_var("str_801B8290", "const char", "[]"),
-    0x801B82B4: table.sym_var("str_801B82B4", "const char", "[]"),
-    0x801B82CC: table.sym_var("str_801B82CC", "const char", "[]"),
+    0x801B8130: table.sym_var("str_face_gadget_801B8130", "const char", "[]"),
+    0x801B8148: table.sym_var("str_face_gadget_801B8148", "const char", "[]"),
+    0x801B8158: table.sym_var("str_face_gadget_801B8158", "const char", "[]"),
+    0x801B8164: table.sym_var("str_face_gadget_801B8164", "const char", "[]"),
+    0x801B817C: table.sym_var("str_face_gadget_801B817C", "const char", "[]"),
+    0x801B81C8: table.sym_var("str_face_gadget_801B81C8", "const char", "[]"),
+    0x801B8240: table.sym_var("str_face_gadget_801B8240", "const char", "[]"),
+    0x801B8258: table.sym_var("str_face_gadget_801B8258", "const char", "[]"),
+    0x801B8268: table.sym_var("str_face_gadget_801B8268", "const char", "[]"),
+    0x801B8280: table.sym_var("str_face_gadget_801B8280", "const char", "[]"),
+    0x801B8290: table.sym_var("str_face_gadget_801B8290", "const char", "[]"),
+    0x801B82B4: table.sym_var("str_face_gadget_801B82B4", "const char", "[]"),
+    0x801B82CC: table.sym_var("str_face_gadget_801B82CC", "const char", "[]"),
     0x801B82E0: table.sym_var("face_gadget_801B82E0", "const double"),
     0x801B82E8: table.sym_var("face_gadget_801B82E8", "const double"),
 
     # src/face/stdio.data.c
-    0x801B82F0: table.sym_var("str_801B82F0", "const char", "[]"),
-    0x801B8310: table.sym_var("str_801B8310", "const char", "[]"),
-    0x801B832C: table.sym_var("str_801B832C", "const char", "[]"),
-    0x801B8330: table.sym_var("str_801B8330", "const char", "[]"),
-    0x801B8348: table.sym_var("str_801B8348", "const char", "[]"),
-    0x801B8364: table.sym_var("str_801B8364", "const char", "[]"),
-    0x801B8370: table.sym_var("str_801B8370", "const char", "[]"),
-    0x801B837C: table.sym_var("str_801B837C", "const char", "[]"),
-    0x801B838C: table.sym_var("str_801B838C", "const char", "[]"),
-    0x801B83A4: table.sym_var("str_801B83A4", "const char", "[]"),
-    0x801B83DC: table.sym_var("str_801B83DC", "const char", "[]"),
-    0x801B8408: table.sym_var("str_801B8408", "const char", "[]"),
-    0x801B8434: table.sym_var("str_801B8434", "const char", "[]"),
-    0x801B8440: table.sym_var("str_801B8440", "const char", "[]"),
-    0x801B8444: table.sym_var("str_801B8444", "const char", "[]"),
-    0x801B8448: table.sym_var("str_801B8448", "const char", "[]"),
-    0x801B844C: table.sym_var("str_801B844C", "const char", "[]"),
-    0x801B8450: table.sym_var("str_801B8450", "const char", "[]"),
-    0x801B8454: table.sym_var("str_801B8454", "const char", "[]"),
-    0x801B8458: table.sym_var("str_801B8458", "const char", "[]"),
-    0x801B845C: table.sym_var("str_801B845C", "const char", "[]"),
-    0x801B8460: table.sym_var("str_801B8460", "const char", "[]"),
-    0x801B8464: table.sym_var("str_801B8464", "const char", "[]"),
-    0x801B8468: table.sym_var("str_801B8468", "const char", "[]"),
-    0x801B846C: table.sym_var("str_801B846C", "const char", "[]"),
-    0x801B8488: table.sym_var("str_801B8488", "const char", "[]"),
-    0x801B8490: table.sym_var("str_801B8490", "const char", "[]"),
-    0x801B84B8: table.sym_var("str_801B84B8", "const char", "[]"),
-    0x801B84D4: table.sym_var("str_801B84D4", "const char", "[]"),
-    0x801B84E0: table.sym_var("str_801B84E0", "const char", "[]"),
-    0x801B84FC: table.sym_var("str_801B84FC", "const char", "[]"),
-    0x801B851C: table.sym_var("str_801B851C", "const char", "[]"),
-    0x801B8544: table.sym_var("str_801B8544", "const char", "[]"),
-    0x801B8548: table.sym_var("str_801B8548", "const char", "[]"),
+    0x801B82F0: table.sym_var("str_face_stdio_801B82F0", "const char", "[]"),
+    0x801B8310: table.sym_var("str_face_stdio_801B8310", "const char", "[]"),
+    0x801B832C: table.sym_var("str_face_stdio_801B832C", "const char", "[]"),
+    0x801B8330: table.sym_var("str_face_stdio_801B8330", "const char", "[]"),
+    0x801B8348: table.sym_var("str_face_stdio_801B8348", "const char", "[]"),
+    0x801B8364: table.sym_var("str_face_stdio_801B8364", "const char", "[]"),
+    0x801B8370: table.sym_var("str_face_stdio_801B8370", "const char", "[]"),
+    0x801B837C: table.sym_var("str_face_stdio_801B837C", "const char", "[]"),
+    0x801B838C: table.sym_var("str_face_stdio_801B838C", "const char", "[]"),
+    0x801B83A4: table.sym_var("str_face_stdio_801B83A4", "const char", "[]"),
+    0x801B83DC: table.sym_var("str_face_stdio_801B83DC", "const char", "[]"),
+    0x801B8408: table.sym_var("str_face_stdio_801B8408", "const char", "[]"),
+    0x801B8434: table.sym_var("str_face_stdio_801B8434", "const char", "[]"),
+    0x801B8440: table.sym_var("str_face_stdio_801B8440", "const char", "[]"),
+    0x801B8444: table.sym_var("str_face_stdio_801B8444", "const char", "[]"),
+    0x801B8448: table.sym_var("str_face_stdio_801B8448", "const char", "[]"),
+    0x801B844C: table.sym_var("str_face_stdio_801B844C", "const char", "[]"),
+    0x801B8450: table.sym_var("str_face_stdio_801B8450", "const char", "[]"),
+    0x801B8454: table.sym_var("str_face_stdio_801B8454", "const char", "[]"),
+    0x801B8458: table.sym_var("str_face_stdio_801B8458", "const char", "[]"),
+    0x801B845C: table.sym_var("str_face_stdio_801B845C", "const char", "[]"),
+    0x801B8460: table.sym_var("str_face_stdio_801B8460", "const char", "[]"),
+    0x801B8464: table.sym_var("str_face_stdio_801B8464", "const char", "[]"),
+    0x801B8468: table.sym_var("str_face_stdio_801B8468", "const char", "[]"),
+    0x801B846C: table.sym_var("str_face_stdio_801B846C", "const char", "[]"),
+    0x801B8488: table.sym_var("str_face_stdio_801B8488", "const char", "[]"),
+    0x801B8490: table.sym_var("str_face_stdio_801B8490", "const char", "[]"),
+    0x801B84B8: table.sym_var("str_face_stdio_801B84B8", "const char", "[]"),
+    0x801B84D4: table.sym_var("str_face_stdio_801B84D4", "const char", "[]"),
+    0x801B84E0: table.sym_var("str_face_stdio_801B84E0", "const char", "[]"),
+    0x801B84FC: table.sym_var("str_face_stdio_801B84FC", "const char", "[]"),
+    0x801B851C: table.sym_var("str_face_stdio_801B851C", "const char", "[]"),
+    0x801B8544: table.sym_var("str_face_stdio_801B8544", "const char", "[]"),
+    0x801B8548: table.sym_var("str_face_stdio_801B8548", "const char", "[]"),
     0x801B854C: table.sym_var_fnc("face_stdio_801B854C", "const", "[]"),
     0x801B85A8: table.sym_var("face_stdio_801B85A8", "const double"),
 
     # src/face/joint.data.c
-    0x801B85B0: table.sym_var("str_801B85B0", "const char", "[]"),
-    0x801B85E0: table.sym_var("str_801B85E0", "const char", "[]"),
-    0x801B85F0: table.sym_var("str_801B85F0", "const char", "[]"),
-    0x801B85F4: table.sym_var("str_801B85F4", "const char", "[]"),
-    0x801B8608: table.sym_var("str_801B8608", "const char", "[]"),
-    0x801B860C: table.sym_var("str_801B860C", "const char", "[]"),
-    0x801B861C: table.sym_var("str_801B861C", "const char", "[]"),
-    0x801B863C: table.sym_var("str_801B863C", "const char", "[]"),
-    0x801B8658: table.sym_var("str_801B8658", "const char", "[]"),
-    0x801B8660: table.sym_var("str_801B8660", "const char", "[]"),
-    0x801B8668: table.sym_var("str_801B8668", "const char", "[]"),
-    0x801B866C: table.sym_var("str_801B866C", "const char", "[]"),
-    0x801B8670: table.sym_var("str_801B8670", "const char", "[]"),
-    0x801B8674: table.sym_var("str_801B8674", "const char", "[]"),
-    0x801B8694: table.sym_var("str_801B8694", "const char", "[]"),
+    0x801B85B0: table.sym_var("str_face_joint_801B85B0", "const char", "[]"),
+    0x801B85E0: table.sym_var("str_face_joint_801B85E0", "const char", "[]"),
+    0x801B85F0: table.sym_var("str_face_joint_801B85F0", "const char", "[]"),
+    0x801B85F4: table.sym_var("str_face_joint_801B85F4", "const char", "[]"),
+    0x801B8608: table.sym_var("str_face_joint_801B8608", "const char", "[]"),
+    0x801B860C: table.sym_var("str_face_joint_801B860C", "const char", "[]"),
+    0x801B861C: table.sym_var("str_face_joint_801B861C", "const char", "[]"),
+    0x801B863C: table.sym_var("str_face_joint_801B863C", "const char", "[]"),
+    0x801B8658: table.sym_var("str_face_joint_801B8658", "const char", "[]"),
+    0x801B8660: table.sym_var("str_face_joint_801B8660", "const char", "[]"),
+    0x801B8668: table.sym_var("str_face_joint_801B8668", "const char", "[]"),
+    0x801B866C: table.sym_var("str_face_joint_801B866C", "const char", "[]"),
+    0x801B8670: table.sym_var("str_face_joint_801B8670", "const char", "[]"),
+    0x801B8674: table.sym_var("str_face_joint_801B8674", "const char", "[]"),
+    0x801B8694: table.sym_var("str_face_joint_801B8694", "const char", "[]"),
     0x801B86B8: table.sym_var("face_joint_801B86B8", "const double"),
     0x801B86C0: table.sym_var("face_joint_801B86C0", "const double"),
     0x801B86C8: table.sym_var("face_joint_801B86C8", "const double"),
@@ -11441,62 +12896,62 @@ sym_E0_d_menu = {
     0x801B8728: table.sym_var("face_joint_801B8728", "const double"),
 
     # src/face/net.data.c
-    0x801B8730: table.sym_var("str_801B8730", "const char", "[]"),
-    0x801B8740: table.sym_var("str_801B8740", "const char", "[]"),
-    0x801B874C: table.sym_var("str_801B874C", "const char", "[]"),
-    0x801B8758: table.sym_var("str_801B8758", "const char", "[]"),
-    0x801B8764: table.sym_var("str_801B8764", "const char", "[]"),
-    0x801B8770: table.sym_var("str_801B8770", "const char", "[]"),
-    0x801B8780: table.sym_var("str_801B8780", "const char", "[]"),
-    0x801B878C: table.sym_var("str_801B878C", "const char", "[]"),
-    0x801B8798: table.sym_var("str_801B8798", "const char", "[]"),
-    0x801B87A4: table.sym_var("str_801B87A4", "const char", "[]"),
-    0x801B87B0: table.sym_var("str_801B87B0", "const char", "[]"),
-    0x801B87D8: table.sym_var("str_801B87D8", "const char", "[]"),
-    0x801B87E4: table.sym_var("str_801B87E4", "const char", "[]"),
-    0x801B87F0: table.sym_var("str_801B87F0", "const char", "[]"),
-    0x801B87FC: table.sym_var("str_801B87FC", "const char", "[]"),
-    0x801B8808: table.sym_var("str_801B8808", "const char", "[]"),
-    0x801B8810: table.sym_var("str_801B8810", "const char", "[]"),
-    0x801B8818: table.sym_var("str_801B8818", "const char", "[]"),
-    0x801B8820: table.sym_var("str_801B8820", "const char", "[]"),
-    0x801B8828: table.sym_var("str_801B8828", "const char", "[]"),
-    0x801B8834: table.sym_var("str_801B8834", "const char", "[]"),
-    0x801B8840: table.sym_var("str_801B8840", "const char", "[]"),
-    0x801B8850: table.sym_var("str_801B8850", "const char", "[]"),
-    0x801B8860: table.sym_var("str_801B8860", "const char", "[]"),
-    0x801B8868: table.sym_var("str_801B8868", "const char", "[]"),
-    0x801B8870: table.sym_var("str_801B8870", "const char", "[]"),
-    0x801B887C: table.sym_var("str_801B887C", "const char", "[]"),
-    0x801B888C: table.sym_var("str_801B888C", "const char", "[]"),
-    0x801B889C: table.sym_var("str_801B889C", "const char", "[]"),
-    0x801B88AC: table.sym_var("str_801B88AC", "const char", "[]"),
-    0x801B88B4: table.sym_var("str_801B88B4", "const char", "[]"),
-    0x801B88C8: table.sym_var("str_801B88C8", "const char", "[]"),
-    0x801B88D8: table.sym_var("str_801B88D8", "const char", "[]"),
-    0x801B88E0: table.sym_var("str_801B88E0", "const char", "[]"),
-    0x801B88EC: table.sym_var("str_801B88EC", "const char", "[]"),
-    0x801B88FC: table.sym_var("str_801B88FC", "const char", "[]"),
-    0x801B890C: table.sym_var("str_801B890C", "const char", "[]"),
-    0x801B891C: table.sym_var("str_801B891C", "const char", "[]"),
+    0x801B8730: table.sym_var("str_face_net_801B8730", "const char", "[]"),
+    0x801B8740: table.sym_var("str_face_net_801B8740", "const char", "[]"),
+    0x801B874C: table.sym_var("str_face_net_801B874C", "const char", "[]"),
+    0x801B8758: table.sym_var("str_face_net_801B8758", "const char", "[]"),
+    0x801B8764: table.sym_var("str_face_net_801B8764", "const char", "[]"),
+    0x801B8770: table.sym_var("str_face_net_801B8770", "const char", "[]"),
+    0x801B8780: table.sym_var("str_face_net_801B8780", "const char", "[]"),
+    0x801B878C: table.sym_var("str_face_net_801B878C", "const char", "[]"),
+    0x801B8798: table.sym_var("str_face_net_801B8798", "const char", "[]"),
+    0x801B87A4: table.sym_var("str_face_net_801B87A4", "const char", "[]"),
+    0x801B87B0: table.sym_var("str_face_net_801B87B0", "const char", "[]"),
+    0x801B87D8: table.sym_var("str_face_net_801B87D8", "const char", "[]"),
+    0x801B87E4: table.sym_var("str_face_net_801B87E4", "const char", "[]"),
+    0x801B87F0: table.sym_var("str_face_net_801B87F0", "const char", "[]"),
+    0x801B87FC: table.sym_var("str_face_net_801B87FC", "const char", "[]"),
+    0x801B8808: table.sym_var("str_face_net_801B8808", "const char", "[]"),
+    0x801B8810: table.sym_var("str_face_net_801B8810", "const char", "[]"),
+    0x801B8818: table.sym_var("str_face_net_801B8818", "const char", "[]"),
+    0x801B8820: table.sym_var("str_face_net_801B8820", "const char", "[]"),
+    0x801B8828: table.sym_var("str_face_net_801B8828", "const char", "[]"),
+    0x801B8834: table.sym_var("str_face_net_801B8834", "const char", "[]"),
+    0x801B8840: table.sym_var("str_face_net_801B8840", "const char", "[]"),
+    0x801B8850: table.sym_var("str_face_net_801B8850", "const char", "[]"),
+    0x801B8860: table.sym_var("str_face_net_801B8860", "const char", "[]"),
+    0x801B8868: table.sym_var("str_face_net_801B8868", "const char", "[]"),
+    0x801B8870: table.sym_var("str_face_net_801B8870", "const char", "[]"),
+    0x801B887C: table.sym_var("str_face_net_801B887C", "const char", "[]"),
+    0x801B888C: table.sym_var("str_face_net_801B888C", "const char", "[]"),
+    0x801B889C: table.sym_var("str_face_net_801B889C", "const char", "[]"),
+    0x801B88AC: table.sym_var("str_face_net_801B88AC", "const char", "[]"),
+    0x801B88B4: table.sym_var("str_face_net_801B88B4", "const char", "[]"),
+    0x801B88C8: table.sym_var("str_face_net_801B88C8", "const char", "[]"),
+    0x801B88D8: table.sym_var("str_face_net_801B88D8", "const char", "[]"),
+    0x801B88E0: table.sym_var("str_face_net_801B88E0", "const char", "[]"),
+    0x801B88EC: table.sym_var("str_face_net_801B88EC", "const char", "[]"),
+    0x801B88FC: table.sym_var("str_face_net_801B88FC", "const char", "[]"),
+    0x801B890C: table.sym_var("str_face_net_801B890C", "const char", "[]"),
+    0x801B891C: table.sym_var("str_face_net_801B891C", "const char", "[]"),
     0x801B8930: table.sym_var("face_net_801B8930", "const double"),
     0x801B8938: table.sym_var("face_net_801B8938", "const double"),
     0x801B8940: table.sym_var("face_net_801B8940", "const double"),
     0x801B8948: table.sym_var_fnc("face_net_801B8948", "const", "[]"),
 
     # src/face/math.data.c
-    0x801B8970: table.sym_var("str_801B8970", "const char", "[]"),
-    0x801B8990: table.sym_var("str_801B8990", "const char", "[]"),
-    0x801B89B4: table.sym_var("str_801B89B4", "const char", "[]"),
-    0x801B89C0: table.sym_var("str_801B89C0", "const char", "[]"),
-    0x801B89C4: table.sym_var("str_801B89C4", "const char", "[]"),
-    0x801B89E0: table.sym_var("str_801B89E0", "const char", "[]"),
-    0x801B89FC: table.sym_var("str_801B89FC", "const char", "[]"),
-    0x801B8A18: table.sym_var("str_801B8A18", "const char", "[]"),
-    0x801B8A1C: table.sym_var("str_801B8A1C", "const char", "[]"),
-    0x801B8A20: table.sym_var("str_801B8A20", "const char", "[]"),
-    0x801B8A24: table.sym_var("str_801B8A24", "const char", "[]"),
-    0x801B8A28: table.sym_var("str_801B8A28", "const char", "[]"),
+    0x801B8970: table.sym_var("str_face_math_801B8970", "const char", "[]"),
+    0x801B8990: table.sym_var("str_face_math_801B8990", "const char", "[]"),
+    0x801B89B4: table.sym_var("str_face_math_801B89B4", "const char", "[]"),
+    0x801B89C0: table.sym_var("str_face_math_801B89C0", "const char", "[]"),
+    0x801B89C4: table.sym_var("str_face_math_801B89C4", "const char", "[]"),
+    0x801B89E0: table.sym_var("str_face_math_801B89E0", "const char", "[]"),
+    0x801B89FC: table.sym_var("str_face_math_801B89FC", "const char", "[]"),
+    0x801B8A18: table.sym_var("str_face_math_801B8A18", "const char", "[]"),
+    0x801B8A1C: table.sym_var("str_face_math_801B8A1C", "const char", "[]"),
+    0x801B8A20: table.sym_var("str_face_math_801B8A20", "const char", "[]"),
+    0x801B8A24: table.sym_var("str_face_math_801B8A24", "const char", "[]"),
+    0x801B8A28: table.sym_var("str_face_math_801B8A28", "const char", "[]"),
     0x801B8A2C: table.sym_var("face_math_801B8A2C", "const float"),
     0x801B8A30: table.sym_var("face_math_801B8A30", "const float"),
     0x801B8A34: table.sym_var("face_math_801B8A34", "const float"),
@@ -11508,67 +12963,67 @@ sym_E0_d_menu = {
     0x801B8A58: table.sym_var("face_math_801B8A58", "const double"),
 
     # src/face/shape.data.c
-    0x801B8A60: table.sym_var("str_801B8A60", "const char", "[]"),
-    0x801B8A68: table.sym_var("str_801B8A68", "const char", "[]"),
-    0x801B8A70: table.sym_var("str_801B8A70", "const char", "[]"),
-    0x801B8A78: table.sym_var("str_801B8A78", "const char", "[]"),
-    0x801B8A80: table.sym_var("str_801B8A80", "const char", "[]"),
-    0x801B8A90: table.sym_var("str_801B8A90", "const char", "[]"),
-    0x801B8A9C: table.sym_var("str_801B8A9C", "const char", "[]"),
-    0x801B8AA4: table.sym_var("str_801B8AA4", "const char", "[]"),
-    0x801B8AB0: table.sym_var("str_801B8AB0", "const char", "[]"),
-    0x801B8ACC: table.sym_var("str_801B8ACC", "const char", "[]"),
-    0x801B8AD4: table.sym_var("str_801B8AD4", "const char", "[]"),
-    0x801B8AF0: table.sym_var("str_801B8AF0", "const char", "[]"),
-    0x801B8AF8: table.sym_var("str_801B8AF8", "const char", "[]"),
-    0x801B8AFC: table.sym_var("str_801B8AFC", "const char", "[]"),
-    0x801B8B0C: table.sym_var("str_801B8B0C", "const char", "[]"),
-    0x801B8B28: table.sym_var("str_801B8B28", "const char", "[]"),
-    0x801B8B48: table.sym_var("str_801B8B48", "const char", "[]"),
-    0x801B8B6C: table.sym_var("str_801B8B6C", "const char", "[]"),
-    0x801B8B8C: table.sym_var("str_801B8B8C", "const char", "[]"),
-    0x801B8BAC: table.sym_var("str_801B8BAC", "const char", "[]"),
-    0x801B8BCC: table.sym_var("str_801B8BCC", "const char", "[]"),
-    0x801B8BEC: table.sym_var("str_801B8BEC", "const char", "[]"),
-    0x801B8C0C: table.sym_var("str_801B8C0C", "const char", "[]"),
-    0x801B8C2C: table.sym_var("str_801B8C2C", "const char", "[]"),
-    0x801B8C4C: table.sym_var("str_801B8C4C", "const char", "[]"),
-    0x801B8C50: table.sym_var("str_801B8C50", "const char", "[]"),
-    0x801B8C68: table.sym_var("str_801B8C68", "const char", "[]"),
-    0x801B8C88: table.sym_var("str_801B8C88", "const char", "[]"),
-    0x801B8C98: table.sym_var("str_801B8C98", "const char", "[]"),
-    0x801B8CA0: table.sym_var("str_801B8CA0", "const char", "[]"),
-    0x801B8CA4: table.sym_var("str_801B8CA4", "const char", "[]"),
-    0x801B8CBC: table.sym_var("str_801B8CBC", "const char", "[]"),
-    0x801B8CC4: table.sym_var("str_801B8CC4", "const char", "[]"),
-    0x801B8CD8: table.sym_var("str_801B8CD8", "const char", "[]"),
-    0x801B8CE8: table.sym_var("str_801B8CE8", "const char", "[]"),
-    0x801B8CEC: table.sym_var("str_801B8CEC", "const char", "[]"),
-    0x801B8CF4: table.sym_var("str_801B8CF4", "const char", "[]"),
-    0x801B8D10: table.sym_var("str_801B8D10", "const char", "[]"),
-    0x801B8D34: table.sym_var("str_801B8D34", "const char", "[]"),
-    0x801B8D40: table.sym_var("str_801B8D40", "const char", "[]"),
-    0x801B8D44: table.sym_var("str_801B8D44", "const char", "[]"),
-    0x801B8D50: table.sym_var("str_801B8D50", "const char", "[]"),
-    0x801B8D58: table.sym_var("str_801B8D58", "const char", "[]"),
-    0x801B8D60: table.sym_var("str_801B8D60", "const char", "[]"),
-    0x801B8D68: table.sym_var("str_801B8D68", "const char", "[]"),
-    0x801B8D70: table.sym_var("str_801B8D70", "const char", "[]"),
-    0x801B8D78: table.sym_var("str_801B8D78", "const char", "[]"),
-    0x801B8D80: table.sym_var("str_801B8D80", "const char", "[]"),
-    0x801B8D88: table.sym_var("str_801B8D88", "const char", "[]"),
-    0x801B8D90: table.sym_var("str_801B8D90", "const char", "[]"),
-    0x801B8D98: table.sym_var("str_801B8D98", "const char", "[]"),
-    0x801B8DA0: table.sym_var("str_801B8DA0", "const char", "[]"),
-    0x801B8DA8: table.sym_var("str_801B8DA8", "const char", "[]"),
-    0x801B8DB0: table.sym_var("str_801B8DB0", "const char", "[]"),
-    0x801B8DB8: table.sym_var("str_801B8DB8", "const char", "[]"),
-    0x801B8DC0: table.sym_var("str_801B8DC0", "const char", "[]"),
-    0x801B8DC8: table.sym_var("str_801B8DC8", "const char", "[]"),
-    0x801B8DCC: table.sym_var("str_801B8DCC", "const char", "[]"),
-    0x801B8DD4: table.sym_var("str_801B8DD4", "const char", "[]"),
-    0x801B8DDC: table.sym_var("str_801B8DDC", "const char", "[]"),
-    0x801B8DEC: table.sym_var("str_801B8DEC", "const char", "[]"),
+    0x801B8A60: table.sym_var("str_face_shape_801B8A60", "const char", "[]"),
+    0x801B8A68: table.sym_var("str_face_shape_801B8A68", "const char", "[]"),
+    0x801B8A70: table.sym_var("str_face_shape_801B8A70", "const char", "[]"),
+    0x801B8A78: table.sym_var("str_face_shape_801B8A78", "const char", "[]"),
+    0x801B8A80: table.sym_var("str_face_shape_801B8A80", "const char", "[]"),
+    0x801B8A90: table.sym_var("str_face_shape_801B8A90", "const char", "[]"),
+    0x801B8A9C: table.sym_var("str_face_shape_801B8A9C", "const char", "[]"),
+    0x801B8AA4: table.sym_var("str_face_shape_801B8AA4", "const char", "[]"),
+    0x801B8AB0: table.sym_var("str_face_shape_801B8AB0", "const char", "[]"),
+    0x801B8ACC: table.sym_var("str_face_shape_801B8ACC", "const char", "[]"),
+    0x801B8AD4: table.sym_var("str_face_shape_801B8AD4", "const char", "[]"),
+    0x801B8AF0: table.sym_var("str_face_shape_801B8AF0", "const char", "[]"),
+    0x801B8AF8: table.sym_var("str_face_shape_801B8AF8", "const char", "[]"),
+    0x801B8AFC: table.sym_var("str_face_shape_801B8AFC", "const char", "[]"),
+    0x801B8B0C: table.sym_var("str_face_shape_801B8B0C", "const char", "[]"),
+    0x801B8B28: table.sym_var("str_face_shape_801B8B28", "const char", "[]"),
+    0x801B8B48: table.sym_var("str_face_shape_801B8B48", "const char", "[]"),
+    0x801B8B6C: table.sym_var("str_face_shape_801B8B6C", "const char", "[]"),
+    0x801B8B8C: table.sym_var("str_face_shape_801B8B8C", "const char", "[]"),
+    0x801B8BAC: table.sym_var("str_face_shape_801B8BAC", "const char", "[]"),
+    0x801B8BCC: table.sym_var("str_face_shape_801B8BCC", "const char", "[]"),
+    0x801B8BEC: table.sym_var("str_face_shape_801B8BEC", "const char", "[]"),
+    0x801B8C0C: table.sym_var("str_face_shape_801B8C0C", "const char", "[]"),
+    0x801B8C2C: table.sym_var("str_face_shape_801B8C2C", "const char", "[]"),
+    0x801B8C4C: table.sym_var("str_face_shape_801B8C4C", "const char", "[]"),
+    0x801B8C50: table.sym_var("str_face_shape_801B8C50", "const char", "[]"),
+    0x801B8C68: table.sym_var("str_face_shape_801B8C68", "const char", "[]"),
+    0x801B8C88: table.sym_var("str_face_shape_801B8C88", "const char", "[]"),
+    0x801B8C98: table.sym_var("str_face_shape_801B8C98", "const char", "[]"),
+    0x801B8CA0: table.sym_var("str_face_shape_801B8CA0", "const char", "[]"),
+    0x801B8CA4: table.sym_var("str_face_shape_801B8CA4", "const char", "[]"),
+    0x801B8CBC: table.sym_var("str_face_shape_801B8CBC", "const char", "[]"),
+    0x801B8CC4: table.sym_var("str_face_shape_801B8CC4", "const char", "[]"),
+    0x801B8CD8: table.sym_var("str_face_shape_801B8CD8", "const char", "[]"),
+    0x801B8CE8: table.sym_var("str_face_shape_801B8CE8", "const char", "[]"),
+    0x801B8CEC: table.sym_var("str_face_shape_801B8CEC", "const char", "[]"),
+    0x801B8CF4: table.sym_var("str_face_shape_801B8CF4", "const char", "[]"),
+    0x801B8D10: table.sym_var("str_face_shape_801B8D10", "const char", "[]"),
+    0x801B8D34: table.sym_var("str_face_shape_801B8D34", "const char", "[]"),
+    0x801B8D40: table.sym_var("str_face_shape_801B8D40", "const char", "[]"),
+    0x801B8D44: table.sym_var("str_face_shape_801B8D44", "const char", "[]"),
+    0x801B8D50: table.sym_var("str_face_shape_801B8D50", "const char", "[]"),
+    0x801B8D58: table.sym_var("str_face_shape_801B8D58", "const char", "[]"),
+    0x801B8D60: table.sym_var("str_face_shape_801B8D60", "const char", "[]"),
+    0x801B8D68: table.sym_var("str_face_shape_801B8D68", "const char", "[]"),
+    0x801B8D70: table.sym_var("str_face_shape_801B8D70", "const char", "[]"),
+    0x801B8D78: table.sym_var("str_face_shape_801B8D78", "const char", "[]"),
+    0x801B8D80: table.sym_var("str_face_shape_801B8D80", "const char", "[]"),
+    0x801B8D88: table.sym_var("str_face_shape_801B8D88", "const char", "[]"),
+    0x801B8D90: table.sym_var("str_face_shape_801B8D90", "const char", "[]"),
+    0x801B8D98: table.sym_var("str_face_shape_801B8D98", "const char", "[]"),
+    0x801B8DA0: table.sym_var("str_face_shape_801B8DA0", "const char", "[]"),
+    0x801B8DA8: table.sym_var("str_face_shape_801B8DA8", "const char", "[]"),
+    0x801B8DB0: table.sym_var("str_face_shape_801B8DB0", "const char", "[]"),
+    0x801B8DB8: table.sym_var("str_face_shape_801B8DB8", "const char", "[]"),
+    0x801B8DC0: table.sym_var("str_face_shape_801B8DC0", "const char", "[]"),
+    0x801B8DC8: table.sym_var("str_face_shape_801B8DC8", "const char", "[]"),
+    0x801B8DCC: table.sym_var("str_face_shape_801B8DCC", "const char", "[]"),
+    0x801B8DD4: table.sym_var("str_face_shape_801B8DD4", "const char", "[]"),
+    0x801B8DDC: table.sym_var("str_face_shape_801B8DDC", "const char", "[]"),
+    0x801B8DEC: table.sym_var("str_face_shape_801B8DEC", "const char", "[]"),
     0x801B8DF4: table.sym_var_fnc("face_shape_801B8DF4", "const", "[]"),
     0x801B8E14: table.sym_var("face_shape_801B8E14", "const float"),
     0x801B8E18: table.sym_var("face_shape_801B8E18", "const float"),
@@ -11577,174 +13032,174 @@ sym_E0_d_menu = {
     0x801B8E24: table.sym_var("face_shape_801B8E24", "const float"),
 
     # src/face/gfx.data.c
-    0x801B8E30: table.sym_var("str_801B8E30", "const char", "[]"),
-    0x801B8E34: table.sym_var("str_801B8E34", "const char", "[]"),
-    0x801B8E64: table.sym_var("str_801B8E64", "const char", "[]"),
-    0x801B8E78: table.sym_var("str_801B8E78", "const char", "[]"),
-    0x801B8E8C: table.sym_var("str_801B8E8C", "const char", "[]"),
-    0x801B8EA0: table.sym_var("str_801B8EA0", "const char", "[]"),
-    0x801B8EB4: table.sym_var("str_801B8EB4", "const char", "[]"),
-    0x801B8EC8: table.sym_var("str_801B8EC8", "const char", "[]"),
-    0x801B8ED8: table.sym_var("str_801B8ED8", "const char", "[]"),
-    0x801B8EE0: table.sym_var("str_801B8EE0", "const char", "[]"),
-    0x801B8F14: table.sym_var("str_801B8F14", "const char", "[]"),
-    0x801B8F44: table.sym_var("str_801B8F44", "const char", "[]"),
-    0x801B8F4C: table.sym_var("str_801B8F4C", "const char", "[]"),
-    0x801B8F7C: table.sym_var("str_801B8F7C", "const char", "[]"),
-    0x801B8FA8: table.sym_var("str_801B8FA8", "const char", "[]"),
-    0x801B8FB0: table.sym_var("str_801B8FB0", "const char", "[]"),
-    0x801B8FBC: table.sym_var("str_801B8FBC", "const char", "[]"),
-    0x801B8FC4: table.sym_var("str_801B8FC4", "const char", "[]"),
-    0x801B8FCC: table.sym_var("str_801B8FCC", "const char", "[]"),
-    0x801B8FDC: table.sym_var("str_801B8FDC", "const char", "[]"),
-    0x801B8FEC: table.sym_var("str_801B8FEC", "const char", "[]"),
-    0x801B8FF8: table.sym_var("str_801B8FF8", "const char", "[]"),
-    0x801B9004: table.sym_var("str_801B9004", "const char", "[]"),
-    0x801B900C: table.sym_var("str_801B900C", "const char", "[]"),
-    0x801B9014: table.sym_var("str_801B9014", "const char", "[]"),
-    0x801B9020: table.sym_var("str_801B9020", "const char", "[]"),
-    0x801B902C: table.sym_var("str_801B902C", "const char", "[]"),
-    0x801B9038: table.sym_var("str_801B9038", "const char", "[]"),
-    0x801B9040: table.sym_var("str_801B9040", "const char", "[]"),
-    0x801B904C: table.sym_var("str_801B904C", "const char", "[]"),
-    0x801B9058: table.sym_var("str_801B9058", "const char", "[]"),
-    0x801B9068: table.sym_var("str_801B9068", "const char", "[]"),
-    0x801B9074: table.sym_var("str_801B9074", "const char", "[]"),
-    0x801B9084: table.sym_var("str_801B9084", "const char", "[]"),
-    0x801B9090: table.sym_var("str_801B9090", "const char", "[]"),
-    0x801B909C: table.sym_var("str_801B909C", "const char", "[]"),
-    0x801B90A4: table.sym_var("str_801B90A4", "const char", "[]"),
-    0x801B90B0: table.sym_var("str_801B90B0", "const char", "[]"),
-    0x801B90BC: table.sym_var("str_801B90BC", "const char", "[]"),
-    0x801B90C8: table.sym_var("str_801B90C8", "const char", "[]"),
-    0x801B90D4: table.sym_var("str_801B90D4", "const char", "[]"),
-    0x801B90E0: table.sym_var("str_801B90E0", "const char", "[]"),
-    0x801B90EC: table.sym_var("str_801B90EC", "const char", "[]"),
-    0x801B90F4: table.sym_var("str_801B90F4", "const char", "[]"),
-    0x801B90FC: table.sym_var("str_801B90FC", "const char", "[]"),
-    0x801B9108: table.sym_var("str_801B9108", "const char", "[]"),
-    0x801B9114: table.sym_var("str_801B9114", "const char", "[]"),
-    0x801B9120: table.sym_var("str_801B9120", "const char", "[]"),
-    0x801B912C: table.sym_var("str_801B912C", "const char", "[]"),
-    0x801B9134: table.sym_var("str_801B9134", "const char", "[]"),
-    0x801B9144: table.sym_var("str_801B9144", "const char", "[]"),
-    0x801B914C: table.sym_var("str_801B914C", "const char", "[]"),
-    0x801B915C: table.sym_var("str_801B915C", "const char", "[]"),
-    0x801B9168: table.sym_var("str_801B9168", "const char", "[]"),
-    0x801B9170: table.sym_var("str_801B9170", "const char", "[]"),
-    0x801B9178: table.sym_var("str_801B9178", "const char", "[]"),
-    0x801B9184: table.sym_var("str_801B9184", "const char", "[]"),
-    0x801B91A4: table.sym_var("str_801B91A4", "const char", "[]"),
-    0x801B91A8: table.sym_var("str_801B91A8", "const char", "[]"),
-    0x801B91B0: table.sym_var("str_801B91B0", "const char", "[]"),
-    0x801B91D8: table.sym_var("str_801B91D8", "const char", "[]"),
-    0x801B91E4: table.sym_var("str_801B91E4", "const char", "[]"),
-    0x801B920C: table.sym_var("str_801B920C", "const char", "[]"),
-    0x801B9218: table.sym_var("str_801B9218", "const char", "[]"),
-    0x801B9240: table.sym_var("str_801B9240", "const char", "[]"),
-    0x801B924C: table.sym_var("str_801B924C", "const char", "[]"),
-    0x801B9258: table.sym_var("str_801B9258", "const char", "[]"),
-    0x801B9270: table.sym_var("str_801B9270", "const char", "[]"),
-    0x801B9294: table.sym_var("str_801B9294", "const char", "[]"),
-    0x801B92A4: table.sym_var("str_801B92A4", "const char", "[]"),
-    0x801B92AC: table.sym_var("str_801B92AC", "const char", "[]"),
-    0x801B92B8: table.sym_var("str_801B92B8", "const char", "[]"),
-    0x801B92D8: table.sym_var("str_801B92D8", "const char", "[]"),
-    0x801B92E8: table.sym_var("str_801B92E8", "const char", "[]"),
-    0x801B9320: table.sym_var("str_801B9320", "const char", "[]"),
-    0x801B9350: table.sym_var("str_801B9350", "const char", "[]"),
-    0x801B9378: table.sym_var("str_801B9378", "const char", "[]"),
-    0x801B9390: table.sym_var("str_801B9390", "const char", "[]"),
-    0x801B93A4: table.sym_var("str_801B93A4", "const char", "[]"),
-    0x801B93B8: table.sym_var("str_801B93B8", "const char", "[]"),
-    0x801B93DC: table.sym_var("str_801B93DC", "const char", "[]"),
-    0x801B9400: table.sym_var("str_801B9400", "const char", "[]"),
-    0x801B9414: table.sym_var("str_801B9414", "const char", "[]"),
-    0x801B9428: table.sym_var("str_801B9428", "const char", "[]"),
-    0x801B944C: table.sym_var("str_801B944C", "const char", "[]"),
-    0x801B9454: table.sym_var("str_801B9454", "const char", "[]"),
-    0x801B9478: table.sym_var("str_801B9478", "const char", "[]"),
-    0x801B9480: table.sym_var("str_801B9480", "const char", "[]"),
-    0x801B94A0: table.sym_var("str_801B94A0", "const char", "[]"),
-    0x801B94BC: table.sym_var("str_801B94BC", "const char", "[]"),
-    0x801B94D8: table.sym_var("str_801B94D8", "const char", "[]"),
-    0x801B94F8: table.sym_var("str_801B94F8", "const char", "[]"),
-    0x801B94FC: table.sym_var("str_801B94FC", "const char", "[]"),
-    0x801B9510: table.sym_var("str_801B9510", "const char", "[]"),
-    0x801B9534: table.sym_var("str_801B9534", "const char", "[]"),
-    0x801B9554: table.sym_var("str_801B9554", "const char", "[]"),
-    0x801B957C: table.sym_var("str_801B957C", "const char", "[]"),
-    0x801B9584: table.sym_var("str_801B9584", "const char", "[]"),
-    0x801B9588: table.sym_var("str_801B9588", "const char", "[]"),
-    0x801B9594: table.sym_var("str_801B9594", "const char", "[]"),
-    0x801B959C: table.sym_var("str_801B959C", "const char", "[]"),
-    0x801B95A0: table.sym_var("str_801B95A0", "const char", "[]"),
-    0x801B95A8: table.sym_var("str_801B95A8", "const char", "[]"),
-    0x801B95B0: table.sym_var("str_801B95B0", "const char", "[]"),
-    0x801B95B8: table.sym_var("str_801B95B8", "const char", "[]"),
-    0x801B95C0: table.sym_var("str_801B95C0", "const char", "[]"),
-    0x801B95C4: table.sym_var("str_801B95C4", "const char", "[]"),
-    0x801B95C8: table.sym_var("str_801B95C8", "const char", "[]"),
-    0x801B95D0: table.sym_var("str_801B95D0", "const char", "[]"),
-    0x801B95D8: table.sym_var("str_801B95D8", "const char", "[]"),
-    0x801B95DC: table.sym_var("str_801B95DC", "const char", "[]"),
-    0x801B95E4: table.sym_var("str_801B95E4", "const char", "[]"),
-    0x801B95EC: table.sym_var("str_801B95EC", "const char", "[]"),
-    0x801B95F8: table.sym_var("str_801B95F8", "const char", "[]"),
-    0x801B9604: table.sym_var("str_801B9604", "const char", "[]"),
-    0x801B9610: table.sym_var("str_801B9610", "const char", "[]"),
-    0x801B961C: table.sym_var("str_801B961C", "const char", "[]"),
-    0x801B9628: table.sym_var("str_801B9628", "const char", "[]"),
-    0x801B9630: table.sym_var("str_801B9630", "const char", "[]"),
-    0x801B963C: table.sym_var("str_801B963C", "const char", "[]"),
-    0x801B9644: table.sym_var("str_801B9644", "const char", "[]"),
-    0x801B964C: table.sym_var("str_801B964C", "const char", "[]"),
-    0x801B9658: table.sym_var("str_801B9658", "const char", "[]"),
-    0x801B9660: table.sym_var("str_801B9660", "const char", "[]"),
-    0x801B966C: table.sym_var("str_801B966C", "const char", "[]"),
-    0x801B9674: table.sym_var("str_801B9674", "const char", "[]"),
-    0x801B967C: table.sym_var("str_801B967C", "const char", "[]"),
-    0x801B9684: table.sym_var("str_801B9684", "const char", "[]"),
-    0x801B968C: table.sym_var("str_801B968C", "const char", "[]"),
-    0x801B9694: table.sym_var("str_801B9694", "const char", "[]"),
-    0x801B969C: table.sym_var("str_801B969C", "const char", "[]"),
-    0x801B96A4: table.sym_var("str_801B96A4", "const char", "[]"),
-    0x801B96AC: table.sym_var("str_801B96AC", "const char", "[]"),
-    0x801B96B4: table.sym_var("str_801B96B4", "const char", "[]"),
-    0x801B96BC: table.sym_var("str_801B96BC", "const char", "[]"),
-    0x801B96C4: table.sym_var("str_801B96C4", "const char", "[]"),
-    0x801B96CC: table.sym_var("str_801B96CC", "const char", "[]"),
-    0x801B96D4: table.sym_var("str_801B96D4", "const char", "[]"),
-    0x801B96E0: table.sym_var("str_801B96E0", "const char", "[]"),
-    0x801B96E8: table.sym_var("str_801B96E8", "const char", "[]"),
-    0x801B96F0: table.sym_var("str_801B96F0", "const char", "[]"),
-    0x801B96F8: table.sym_var("str_801B96F8", "const char", "[]"),
-    0x801B9700: table.sym_var("str_801B9700", "const char", "[]"),
-    0x801B970C: table.sym_var("str_801B970C", "const char", "[]"),
-    0x801B9714: table.sym_var("str_801B9714", "const char", "[]"),
-    0x801B971C: table.sym_var("str_801B971C", "const char", "[]"),
-    0x801B9724: table.sym_var("str_801B9724", "const char", "[]"),
-    0x801B972C: table.sym_var("str_801B972C", "const char", "[]"),
-    0x801B9734: table.sym_var("str_801B9734", "const char", "[]"),
-    0x801B973C: table.sym_var("str_801B973C", "const char", "[]"),
-    0x801B9744: table.sym_var("str_801B9744", "const char", "[]"),
-    0x801B974C: table.sym_var("str_801B974C", "const char", "[]"),
-    0x801B9754: table.sym_var("str_801B9754", "const char", "[]"),
-    0x801B975C: table.sym_var("str_801B975C", "const char", "[]"),
-    0x801B9764: table.sym_var("str_801B9764", "const char", "[]"),
-    0x801B976C: table.sym_var("str_801B976C", "const char", "[]"),
-    0x801B9774: table.sym_var("str_801B9774", "const char", "[]"),
-    0x801B977C: table.sym_var("str_801B977C", "const char", "[]"),
-    0x801B9784: table.sym_var("str_801B9784", "const char", "[]"),
-    0x801B978C: table.sym_var("str_801B978C", "const char", "[]"),
-    0x801B9798: table.sym_var("str_801B9798", "const char", "[]"),
-    0x801B97C4: table.sym_var("str_801B97C4", "const char", "[]"),
-    0x801B97E0: table.sym_var("str_801B97E0", "const char", "[]"),
-    0x801B9804: table.sym_var("str_801B9804", "const char", "[]"),
-    0x801B9824: table.sym_var("str_801B9824", "const char", "[]"),
-    0x801B983C: table.sym_var("str_801B983C", "const char", "[]"),
-    0x801B9858: table.sym_var("str_801B9858", "const char", "[]"),
-    0x801B9860: table.sym_var("str_801B9860", "const char", "[]"),
+    0x801B8E30: table.sym_var("str_face_gfx_801B8E30", "const char", "[]"),
+    0x801B8E34: table.sym_var("str_face_gfx_801B8E34", "const char", "[]"),
+    0x801B8E64: table.sym_var("str_face_gfx_801B8E64", "const char", "[]"),
+    0x801B8E78: table.sym_var("str_face_gfx_801B8E78", "const char", "[]"),
+    0x801B8E8C: table.sym_var("str_face_gfx_801B8E8C", "const char", "[]"),
+    0x801B8EA0: table.sym_var("str_face_gfx_801B8EA0", "const char", "[]"),
+    0x801B8EB4: table.sym_var("str_face_gfx_801B8EB4", "const char", "[]"),
+    0x801B8EC8: table.sym_var("str_face_gfx_801B8EC8", "const char", "[]"),
+    0x801B8ED8: table.sym_var("str_face_gfx_801B8ED8", "const char", "[]"),
+    0x801B8EE0: table.sym_var("str_face_gfx_801B8EE0", "const char", "[]"),
+    0x801B8F14: table.sym_var("str_face_gfx_801B8F14", "const char", "[]"),
+    0x801B8F44: table.sym_var("str_face_gfx_801B8F44", "const char", "[]"),
+    0x801B8F4C: table.sym_var("str_face_gfx_801B8F4C", "const char", "[]"),
+    0x801B8F7C: table.sym_var("str_face_gfx_801B8F7C", "const char", "[]"),
+    0x801B8FA8: table.sym_var("str_face_gfx_801B8FA8", "const char", "[]"),
+    0x801B8FB0: table.sym_var("str_face_gfx_801B8FB0", "const char", "[]"),
+    0x801B8FBC: table.sym_var("str_face_gfx_801B8FBC", "const char", "[]"),
+    0x801B8FC4: table.sym_var("str_face_gfx_801B8FC4", "const char", "[]"),
+    0x801B8FCC: table.sym_var("str_face_gfx_801B8FCC", "const char", "[]"),
+    0x801B8FDC: table.sym_var("str_face_gfx_801B8FDC", "const char", "[]"),
+    0x801B8FEC: table.sym_var("str_face_gfx_801B8FEC", "const char", "[]"),
+    0x801B8FF8: table.sym_var("str_face_gfx_801B8FF8", "const char", "[]"),
+    0x801B9004: table.sym_var("str_face_gfx_801B9004", "const char", "[]"),
+    0x801B900C: table.sym_var("str_face_gfx_801B900C", "const char", "[]"),
+    0x801B9014: table.sym_var("str_face_gfx_801B9014", "const char", "[]"),
+    0x801B9020: table.sym_var("str_face_gfx_801B9020", "const char", "[]"),
+    0x801B902C: table.sym_var("str_face_gfx_801B902C", "const char", "[]"),
+    0x801B9038: table.sym_var("str_face_gfx_801B9038", "const char", "[]"),
+    0x801B9040: table.sym_var("str_face_gfx_801B9040", "const char", "[]"),
+    0x801B904C: table.sym_var("str_face_gfx_801B904C", "const char", "[]"),
+    0x801B9058: table.sym_var("str_face_gfx_801B9058", "const char", "[]"),
+    0x801B9068: table.sym_var("str_face_gfx_801B9068", "const char", "[]"),
+    0x801B9074: table.sym_var("str_face_gfx_801B9074", "const char", "[]"),
+    0x801B9084: table.sym_var("str_face_gfx_801B9084", "const char", "[]"),
+    0x801B9090: table.sym_var("str_face_gfx_801B9090", "const char", "[]"),
+    0x801B909C: table.sym_var("str_face_gfx_801B909C", "const char", "[]"),
+    0x801B90A4: table.sym_var("str_face_gfx_801B90A4", "const char", "[]"),
+    0x801B90B0: table.sym_var("str_face_gfx_801B90B0", "const char", "[]"),
+    0x801B90BC: table.sym_var("str_face_gfx_801B90BC", "const char", "[]"),
+    0x801B90C8: table.sym_var("str_face_gfx_801B90C8", "const char", "[]"),
+    0x801B90D4: table.sym_var("str_face_gfx_801B90D4", "const char", "[]"),
+    0x801B90E0: table.sym_var("str_face_gfx_801B90E0", "const char", "[]"),
+    0x801B90EC: table.sym_var("str_face_gfx_801B90EC", "const char", "[]"),
+    0x801B90F4: table.sym_var("str_face_gfx_801B90F4", "const char", "[]"),
+    0x801B90FC: table.sym_var("str_face_gfx_801B90FC", "const char", "[]"),
+    0x801B9108: table.sym_var("str_face_gfx_801B9108", "const char", "[]"),
+    0x801B9114: table.sym_var("str_face_gfx_801B9114", "const char", "[]"),
+    0x801B9120: table.sym_var("str_face_gfx_801B9120", "const char", "[]"),
+    0x801B912C: table.sym_var("str_face_gfx_801B912C", "const char", "[]"),
+    0x801B9134: table.sym_var("str_face_gfx_801B9134", "const char", "[]"),
+    0x801B9144: table.sym_var("str_face_gfx_801B9144", "const char", "[]"),
+    0x801B914C: table.sym_var("str_face_gfx_801B914C", "const char", "[]"),
+    0x801B915C: table.sym_var("str_face_gfx_801B915C", "const char", "[]"),
+    0x801B9168: table.sym_var("str_face_gfx_801B9168", "const char", "[]"),
+    0x801B9170: table.sym_var("str_face_gfx_801B9170", "const char", "[]"),
+    0x801B9178: table.sym_var("str_face_gfx_801B9178", "const char", "[]"),
+    0x801B9184: table.sym_var("str_face_gfx_801B9184", "const char", "[]"),
+    0x801B91A4: table.sym_var("str_face_gfx_801B91A4", "const char", "[]"),
+    0x801B91A8: table.sym_var("str_face_gfx_801B91A8", "const char", "[]"),
+    0x801B91B0: table.sym_var("str_face_gfx_801B91B0", "const char", "[]"),
+    0x801B91D8: table.sym_var("str_face_gfx_801B91D8", "const char", "[]"),
+    0x801B91E4: table.sym_var("str_face_gfx_801B91E4", "const char", "[]"),
+    0x801B920C: table.sym_var("str_face_gfx_801B920C", "const char", "[]"),
+    0x801B9218: table.sym_var("str_face_gfx_801B9218", "const char", "[]"),
+    0x801B9240: table.sym_var("str_face_gfx_801B9240", "const char", "[]"),
+    0x801B924C: table.sym_var("str_face_gfx_801B924C", "const char", "[]"),
+    0x801B9258: table.sym_var("str_face_gfx_801B9258", "const char", "[]"),
+    0x801B9270: table.sym_var("str_face_gfx_801B9270", "const char", "[]"),
+    0x801B9294: table.sym_var("str_face_gfx_801B9294", "const char", "[]"),
+    0x801B92A4: table.sym_var("str_face_gfx_801B92A4", "const char", "[]"),
+    0x801B92AC: table.sym_var("str_face_gfx_801B92AC", "const char", "[]"),
+    0x801B92B8: table.sym_var("str_face_gfx_801B92B8", "const char", "[]"),
+    0x801B92D8: table.sym_var("str_face_gfx_801B92D8", "const char", "[]"),
+    0x801B92E8: table.sym_var("str_face_gfx_801B92E8", "const char", "[]"),
+    0x801B9320: table.sym_var("str_face_gfx_801B9320", "const char", "[]"),
+    0x801B9350: table.sym_var("str_face_gfx_801B9350", "const char", "[]"),
+    0x801B9378: table.sym_var("str_face_gfx_801B9378", "const char", "[]"),
+    0x801B9390: table.sym_var("str_face_gfx_801B9390", "const char", "[]"),
+    0x801B93A4: table.sym_var("str_face_gfx_801B93A4", "const char", "[]"),
+    0x801B93B8: table.sym_var("str_face_gfx_801B93B8", "const char", "[]"),
+    0x801B93DC: table.sym_var("str_face_gfx_801B93DC", "const char", "[]"),
+    0x801B9400: table.sym_var("str_face_gfx_801B9400", "const char", "[]"),
+    0x801B9414: table.sym_var("str_face_gfx_801B9414", "const char", "[]"),
+    0x801B9428: table.sym_var("str_face_gfx_801B9428", "const char", "[]"),
+    0x801B944C: table.sym_var("str_face_gfx_801B944C", "const char", "[]"),
+    0x801B9454: table.sym_var("str_face_gfx_801B9454", "const char", "[]"),
+    0x801B9478: table.sym_var("str_face_gfx_801B9478", "const char", "[]"),
+    0x801B9480: table.sym_var("str_face_gfx_801B9480", "const char", "[]"),
+    0x801B94A0: table.sym_var("str_face_gfx_801B94A0", "const char", "[]"),
+    0x801B94BC: table.sym_var("str_face_gfx_801B94BC", "const char", "[]"),
+    0x801B94D8: table.sym_var("str_face_gfx_801B94D8", "const char", "[]"),
+    0x801B94F8: table.sym_var("str_face_gfx_801B94F8", "const char", "[]"),
+    0x801B94FC: table.sym_var("str_face_gfx_801B94FC", "const char", "[]"),
+    0x801B9510: table.sym_var("str_face_gfx_801B9510", "const char", "[]"),
+    0x801B9534: table.sym_var("str_face_gfx_801B9534", "const char", "[]"),
+    0x801B9554: table.sym_var("str_face_gfx_801B9554", "const char", "[]"),
+    0x801B957C: table.sym_var("str_face_gfx_801B957C", "const char", "[]"),
+    0x801B9584: table.sym_var("str_face_gfx_801B9584", "const char", "[]"),
+    0x801B9588: table.sym_var("str_face_gfx_801B9588", "const char", "[]"),
+    0x801B9594: table.sym_var("str_face_gfx_801B9594", "const char", "[]"),
+    0x801B959C: table.sym_var("str_face_gfx_801B959C", "const char", "[]"),
+    0x801B95A0: table.sym_var("str_face_gfx_801B95A0", "const char", "[]"),
+    0x801B95A8: table.sym_var("str_face_gfx_801B95A8", "const char", "[]"),
+    0x801B95B0: table.sym_var("str_face_gfx_801B95B0", "const char", "[]"),
+    0x801B95B8: table.sym_var("str_face_gfx_801B95B8", "const char", "[]"),
+    0x801B95C0: table.sym_var("str_face_gfx_801B95C0", "const char", "[]"),
+    0x801B95C4: table.sym_var("str_face_gfx_801B95C4", "const char", "[]"),
+    0x801B95C8: table.sym_var("str_face_gfx_801B95C8", "const char", "[]"),
+    0x801B95D0: table.sym_var("str_face_gfx_801B95D0", "const char", "[]"),
+    0x801B95D8: table.sym_var("str_face_gfx_801B95D8", "const char", "[]"),
+    0x801B95DC: table.sym_var("str_face_gfx_801B95DC", "const char", "[]"),
+    0x801B95E4: table.sym_var("str_face_gfx_801B95E4", "const char", "[]"),
+    0x801B95EC: table.sym_var("str_face_gfx_801B95EC", "const char", "[]"),
+    0x801B95F8: table.sym_var("str_face_gfx_801B95F8", "const char", "[]"),
+    0x801B9604: table.sym_var("str_face_gfx_801B9604", "const char", "[]"),
+    0x801B9610: table.sym_var("str_face_gfx_801B9610", "const char", "[]"),
+    0x801B961C: table.sym_var("str_face_gfx_801B961C", "const char", "[]"),
+    0x801B9628: table.sym_var("str_face_gfx_801B9628", "const char", "[]"),
+    0x801B9630: table.sym_var("str_face_gfx_801B9630", "const char", "[]"),
+    0x801B963C: table.sym_var("str_face_gfx_801B963C", "const char", "[]"),
+    0x801B9644: table.sym_var("str_face_gfx_801B9644", "const char", "[]"),
+    0x801B964C: table.sym_var("str_face_gfx_801B964C", "const char", "[]"),
+    0x801B9658: table.sym_var("str_face_gfx_801B9658", "const char", "[]"),
+    0x801B9660: table.sym_var("str_face_gfx_801B9660", "const char", "[]"),
+    0x801B966C: table.sym_var("str_face_gfx_801B966C", "const char", "[]"),
+    0x801B9674: table.sym_var("str_face_gfx_801B9674", "const char", "[]"),
+    0x801B967C: table.sym_var("str_face_gfx_801B967C", "const char", "[]"),
+    0x801B9684: table.sym_var("str_face_gfx_801B9684", "const char", "[]"),
+    0x801B968C: table.sym_var("str_face_gfx_801B968C", "const char", "[]"),
+    0x801B9694: table.sym_var("str_face_gfx_801B9694", "const char", "[]"),
+    0x801B969C: table.sym_var("str_face_gfx_801B969C", "const char", "[]"),
+    0x801B96A4: table.sym_var("str_face_gfx_801B96A4", "const char", "[]"),
+    0x801B96AC: table.sym_var("str_face_gfx_801B96AC", "const char", "[]"),
+    0x801B96B4: table.sym_var("str_face_gfx_801B96B4", "const char", "[]"),
+    0x801B96BC: table.sym_var("str_face_gfx_801B96BC", "const char", "[]"),
+    0x801B96C4: table.sym_var("str_face_gfx_801B96C4", "const char", "[]"),
+    0x801B96CC: table.sym_var("str_face_gfx_801B96CC", "const char", "[]"),
+    0x801B96D4: table.sym_var("str_face_gfx_801B96D4", "const char", "[]"),
+    0x801B96E0: table.sym_var("str_face_gfx_801B96E0", "const char", "[]"),
+    0x801B96E8: table.sym_var("str_face_gfx_801B96E8", "const char", "[]"),
+    0x801B96F0: table.sym_var("str_face_gfx_801B96F0", "const char", "[]"),
+    0x801B96F8: table.sym_var("str_face_gfx_801B96F8", "const char", "[]"),
+    0x801B9700: table.sym_var("str_face_gfx_801B9700", "const char", "[]"),
+    0x801B970C: table.sym_var("str_face_gfx_801B970C", "const char", "[]"),
+    0x801B9714: table.sym_var("str_face_gfx_801B9714", "const char", "[]"),
+    0x801B971C: table.sym_var("str_face_gfx_801B971C", "const char", "[]"),
+    0x801B9724: table.sym_var("str_face_gfx_801B9724", "const char", "[]"),
+    0x801B972C: table.sym_var("str_face_gfx_801B972C", "const char", "[]"),
+    0x801B9734: table.sym_var("str_face_gfx_801B9734", "const char", "[]"),
+    0x801B973C: table.sym_var("str_face_gfx_801B973C", "const char", "[]"),
+    0x801B9744: table.sym_var("str_face_gfx_801B9744", "const char", "[]"),
+    0x801B974C: table.sym_var("str_face_gfx_801B974C", "const char", "[]"),
+    0x801B9754: table.sym_var("str_face_gfx_801B9754", "const char", "[]"),
+    0x801B975C: table.sym_var("str_face_gfx_801B975C", "const char", "[]"),
+    0x801B9764: table.sym_var("str_face_gfx_801B9764", "const char", "[]"),
+    0x801B976C: table.sym_var("str_face_gfx_801B976C", "const char", "[]"),
+    0x801B9774: table.sym_var("str_face_gfx_801B9774", "const char", "[]"),
+    0x801B977C: table.sym_var("str_face_gfx_801B977C", "const char", "[]"),
+    0x801B9784: table.sym_var("str_face_gfx_801B9784", "const char", "[]"),
+    0x801B978C: table.sym_var("str_face_gfx_801B978C", "const char", "[]"),
+    0x801B9798: table.sym_var("str_face_gfx_801B9798", "const char", "[]"),
+    0x801B97C4: table.sym_var("str_face_gfx_801B97C4", "const char", "[]"),
+    0x801B97E0: table.sym_var("str_face_gfx_801B97E0", "const char", "[]"),
+    0x801B9804: table.sym_var("str_face_gfx_801B9804", "const char", "[]"),
+    0x801B9824: table.sym_var("str_face_gfx_801B9824", "const char", "[]"),
+    0x801B983C: table.sym_var("str_face_gfx_801B983C", "const char", "[]"),
+    0x801B9858: table.sym_var("str_face_gfx_801B9858", "const char", "[]"),
+    0x801B9860: table.sym_var("str_face_gfx_801B9860", "const char", "[]"),
     0x801B9878: table.sym_var("face_gfx_801B9878", "const double"),
     0x801B9880: table.sym_var_fnc("face_gfx_801B9880", "const", "[]"),
     0x801B98D8: table.sym_var_fnc("face_gfx_801B98D8", "const", "[]"),
@@ -11767,13 +13222,17 @@ sym_E0_d_menu = {
     0x801B9980: table.sym_var("face_gfx_801B9980", "const double"),
     0x801B9988: table.sym_var_fnc("face_gfx_801B9988", "const", "[]"),
     0x801B99D8: table.sym_var("face_gfx_801B99D8", "const double"),
+
+    # ==========================================================================
+    # bss
+    # ==========================================================================
 }
 
 sym_E0_main = {
     0x00108A10: table.sym("data_main_start"),
     0x00108A40: table.sym("szp_main_start"),
     0x00114750: table.sym("szp_main_end"),
-    0x10000000: table.sym("s_main", table.GLOBL),
+    0x10000000: table.sym("p_main", table.GLOBL),
 
     0x02000000: table.sym_var("texture_print_0", "static u16", "[]"),
     0x02000200: table.sym_var("texture_print_1", "static u16", "[]"),
@@ -12381,93 +13840,93 @@ sym_E0_shp_pl = {
     0x04035360: table.sym_var("gfx_glow_4", "Gfx", "[]"),
 
     # bubble
-    0x17000000: table.sym_var("g_bubble_a", "G_SCRIPT", "[]", table.GLOBL), # 168
-    0x1700001C: table.sym_var("g_bubble_b", "G_SCRIPT", "[]", table.GLOBL), # 170
+    0x17000000: table.sym_var("s_bubble_a", "S_SCRIPT", "[]", table.GLOBL), # 168
+    0x1700001C: table.sym_var("s_bubble_b", "S_SCRIPT", "[]", table.GLOBL), # 170
 
     # dust
-    0x17000038: table.sym_var("g_dust", "G_SCRIPT", "[]", table.GLOBL), # 150
+    0x17000038: table.sym_var("s_dust", "S_SCRIPT", "[]", table.GLOBL), # 150
 
     # smoke
-    0x17000084: table.sym_var("g_smoke", "G_SCRIPT", "[]", table.GLOBL), # 148, 156
+    0x17000084: table.sym_var("s_smoke", "S_SCRIPT", "[]", table.GLOBL), # 148, 156
 
     # wave
-    0x1700009C: table.sym_var("g_wave_white", "G_SCRIPT", "[]", table.GLOBL), # 165
-    0x170000E0: table.sym_var("g_wave_red", "G_SCRIPT", "[]"), # unused
+    0x1700009C: table.sym_var("s_wave_white", "S_SCRIPT", "[]", table.GLOBL), # 165
+    0x170000E0: table.sym_var("s_wave_red", "S_SCRIPT", "[]"), # unused
 
     # ripple
-    0x17000124: table.sym_var("g_ripple_stop", "G_SCRIPT", "[]", table.GLOBL), # 166
-    0x17000168: table.sym_var("g_ripple_move", "G_SCRIPT", "[]", table.GLOBL), # 163
+    0x17000124: table.sym_var("s_ripple_stop", "S_SCRIPT", "[]", table.GLOBL), # 166
+    0x17000168: table.sym_var("s_ripple_move", "S_SCRIPT", "[]", table.GLOBL), # 163
 
     # sparkle
-    0x170001BC: table.sym_var("g_sparkle", "G_SCRIPT", "[]", table.GLOBL), # 149
+    0x170001BC: table.sym_var("s_sparkle", "S_SCRIPT", "[]", table.GLOBL), # 149
 
     # splash
-    0x17000230: table.sym_var("g_splash", "G_SCRIPT", "[]", table.GLOBL), # 167
+    0x17000230: table.sym_var("s_splash", "S_SCRIPT", "[]", table.GLOBL), # 167
 
     # glow
-    0x17000284: table.sym_var("g_glow", "G_SCRIPT", "[]", table.GLOBL), # 143
+    0x17000284: table.sym_var("s_glow", "S_SCRIPT", "[]", table.GLOBL), # 143
 
     # mario
-    0x170002E0: table.sym_var("g_mario_hso_head",   "static G_SCRIPT", "[]"),
-    0x1700041C: table.sym_var("g_mario_hso_gloveL", "static G_SCRIPT", "[]"),
-    0x17000494: table.sym_var("g_mario_hso_gloveR", "static G_SCRIPT", "[]"),
-    0x1700053C: table.sym_var("g_mario_hso",        "static G_SCRIPT", "[]"),
-    0x170006F8: table.sym_var("g_mario_mso_gloveL", "static G_SCRIPT", "[]"),
-    0x17000770: table.sym_var("g_mario_mso_gloveR", "static G_SCRIPT", "[]"),
-    0x17000818: table.sym_var("g_mario_mso",        "static G_SCRIPT", "[]"),
-    0x170009D4: table.sym_var("g_mario_lso_head",   "static G_SCRIPT", "[]"),
-    0x17000B10: table.sym_var("g_mario_lso_gloveL", "static G_SCRIPT", "[]"),
-    0x17000B88: table.sym_var("g_mario_lso_gloveR", "static G_SCRIPT", "[]"),
-    0x17000C30: table.sym_var("g_mario_lso",        "static G_SCRIPT", "[]"),
-    0x17000DEC: table.sym_var("g_mario_hsx_head",   "static G_SCRIPT", "[]"),
-    0x17000F28: table.sym_var("g_mario_hsx_gloveL", "static G_SCRIPT", "[]"),
-    0x17000FA0: table.sym_var("g_mario_hsx_gloveR", "static G_SCRIPT", "[]"),
-    0x17001048: table.sym_var("g_mario_hsx",        "static G_SCRIPT", "[]"),
-    0x17001204: table.sym_var("g_mario_msx_gloveL", "static G_SCRIPT", "[]"),
-    0x1700127C: table.sym_var("g_mario_msx_gloveR", "static G_SCRIPT", "[]"),
-    0x17001324: table.sym_var("g_mario_msx",        "static G_SCRIPT", "[]"),
-    0x170014E0: table.sym_var("g_mario_lsx_head",   "static G_SCRIPT", "[]"),
-    0x1700161C: table.sym_var("g_mario_lsx_gloveL", "static G_SCRIPT", "[]"),
-    0x17001694: table.sym_var("g_mario_lsx_gloveR", "static G_SCRIPT", "[]"),
-    0x1700173C: table.sym_var("g_mario_lsx",        "static G_SCRIPT", "[]"),
-    0x170018F8: table.sym_var("g_mario_heo_head",   "static G_SCRIPT", "[]"),
-    0x170019A4: table.sym_var("g_mario_heo_gloveL", "static G_SCRIPT", "[]"),
-    0x17001A1C: table.sym_var("g_mario_heo_gloveR", "static G_SCRIPT", "[]"),
-    0x17001AC4: table.sym_var("g_mario_heo",        "static G_SCRIPT", "[]"),
-    0x17001C80: table.sym_var("g_mario_meo_gloveL", "static G_SCRIPT", "[]"),
-    0x17001CF8: table.sym_var("g_mario_meo_gloveR", "static G_SCRIPT", "[]"),
-    0x17001DA0: table.sym_var("g_mario_meo",        "static G_SCRIPT", "[]"),
-    0x17001F5C: table.sym_var("g_mario_leo_head",   "static G_SCRIPT", "[]"),
-    0x17002008: table.sym_var("g_mario_leo_gloveL", "static G_SCRIPT", "[]"),
-    0x17002080: table.sym_var("g_mario_leo_gloveR", "static G_SCRIPT", "[]"),
-    0x17002128: table.sym_var("g_mario_leo",        "static G_SCRIPT", "[]"),
-    0x170022E4: table.sym_var("g_mario_hex_head",   "static G_SCRIPT", "[]"),
-    0x17002390: table.sym_var("g_mario_hex_gloveL", "static G_SCRIPT", "[]"),
-    0x17002408: table.sym_var("g_mario_hex_gloveR", "static G_SCRIPT", "[]"),
-    0x170024B0: table.sym_var("g_mario_hex",        "static G_SCRIPT", "[]"),
-    0x1700266C: table.sym_var("g_mario_mex_gloveL", "static G_SCRIPT", "[]"),
-    0x170026E4: table.sym_var("g_mario_mex_gloveR", "static G_SCRIPT", "[]"),
-    0x1700278C: table.sym_var("g_mario_mex",        "static G_SCRIPT", "[]"),
-    0x17002958: table.sym_var("g_mario_lex_head",   "static G_SCRIPT", "[]"),
-    0x17002A04: table.sym_var("g_mario_lex_gloveL", "static G_SCRIPT", "[]"),
-    0x17002A7C: table.sym_var("g_mario_lex_gloveR", "static G_SCRIPT", "[]"),
-    0x17002B24: table.sym_var("g_mario_lex",        "static G_SCRIPT", "[]"),
-    0x17002CE0: table.sym_var("g_mario_h",          "static G_SCRIPT", "[]"),
-    0x17002D14: table.sym_var("g_mario_m",          "static G_SCRIPT", "[]"),
-    0x17002D48: table.sym_var("g_mario_l",          "static G_SCRIPT", "[]"),
-    0x17002D7C: table.sym_var("g_mario_lod",        "static G_SCRIPT", "[]"),
-    0x17002DD4: table.sym_var("g_mario", "G_SCRIPT", "[]", table.GLOBL), # 1
+    0x170002E0: table.sym_var("s_mario_hso_head",   "static S_SCRIPT", "[]"),
+    0x1700041C: table.sym_var("s_mario_hso_gloveL", "static S_SCRIPT", "[]"),
+    0x17000494: table.sym_var("s_mario_hso_gloveR", "static S_SCRIPT", "[]"),
+    0x1700053C: table.sym_var("s_mario_hso",        "static S_SCRIPT", "[]"),
+    0x170006F8: table.sym_var("s_mario_mso_gloveL", "static S_SCRIPT", "[]"),
+    0x17000770: table.sym_var("s_mario_mso_gloveR", "static S_SCRIPT", "[]"),
+    0x17000818: table.sym_var("s_mario_mso",        "static S_SCRIPT", "[]"),
+    0x170009D4: table.sym_var("s_mario_lso_head",   "static S_SCRIPT", "[]"),
+    0x17000B10: table.sym_var("s_mario_lso_gloveL", "static S_SCRIPT", "[]"),
+    0x17000B88: table.sym_var("s_mario_lso_gloveR", "static S_SCRIPT", "[]"),
+    0x17000C30: table.sym_var("s_mario_lso",        "static S_SCRIPT", "[]"),
+    0x17000DEC: table.sym_var("s_mario_hsx_head",   "static S_SCRIPT", "[]"),
+    0x17000F28: table.sym_var("s_mario_hsx_gloveL", "static S_SCRIPT", "[]"),
+    0x17000FA0: table.sym_var("s_mario_hsx_gloveR", "static S_SCRIPT", "[]"),
+    0x17001048: table.sym_var("s_mario_hsx",        "static S_SCRIPT", "[]"),
+    0x17001204: table.sym_var("s_mario_msx_gloveL", "static S_SCRIPT", "[]"),
+    0x1700127C: table.sym_var("s_mario_msx_gloveR", "static S_SCRIPT", "[]"),
+    0x17001324: table.sym_var("s_mario_msx",        "static S_SCRIPT", "[]"),
+    0x170014E0: table.sym_var("s_mario_lsx_head",   "static S_SCRIPT", "[]"),
+    0x1700161C: table.sym_var("s_mario_lsx_gloveL", "static S_SCRIPT", "[]"),
+    0x17001694: table.sym_var("s_mario_lsx_gloveR", "static S_SCRIPT", "[]"),
+    0x1700173C: table.sym_var("s_mario_lsx",        "static S_SCRIPT", "[]"),
+    0x170018F8: table.sym_var("s_mario_heo_head",   "static S_SCRIPT", "[]"),
+    0x170019A4: table.sym_var("s_mario_heo_gloveL", "static S_SCRIPT", "[]"),
+    0x17001A1C: table.sym_var("s_mario_heo_gloveR", "static S_SCRIPT", "[]"),
+    0x17001AC4: table.sym_var("s_mario_heo",        "static S_SCRIPT", "[]"),
+    0x17001C80: table.sym_var("s_mario_meo_gloveL", "static S_SCRIPT", "[]"),
+    0x17001CF8: table.sym_var("s_mario_meo_gloveR", "static S_SCRIPT", "[]"),
+    0x17001DA0: table.sym_var("s_mario_meo",        "static S_SCRIPT", "[]"),
+    0x17001F5C: table.sym_var("s_mario_leo_head",   "static S_SCRIPT", "[]"),
+    0x17002008: table.sym_var("s_mario_leo_gloveL", "static S_SCRIPT", "[]"),
+    0x17002080: table.sym_var("s_mario_leo_gloveR", "static S_SCRIPT", "[]"),
+    0x17002128: table.sym_var("s_mario_leo",        "static S_SCRIPT", "[]"),
+    0x170022E4: table.sym_var("s_mario_hex_head",   "static S_SCRIPT", "[]"),
+    0x17002390: table.sym_var("s_mario_hex_gloveL", "static S_SCRIPT", "[]"),
+    0x17002408: table.sym_var("s_mario_hex_gloveR", "static S_SCRIPT", "[]"),
+    0x170024B0: table.sym_var("s_mario_hex",        "static S_SCRIPT", "[]"),
+    0x1700266C: table.sym_var("s_mario_mex_gloveL", "static S_SCRIPT", "[]"),
+    0x170026E4: table.sym_var("s_mario_mex_gloveR", "static S_SCRIPT", "[]"),
+    0x1700278C: table.sym_var("s_mario_mex",        "static S_SCRIPT", "[]"),
+    0x17002958: table.sym_var("s_mario_lex_head",   "static S_SCRIPT", "[]"),
+    0x17002A04: table.sym_var("s_mario_lex_gloveL", "static S_SCRIPT", "[]"),
+    0x17002A7C: table.sym_var("s_mario_lex_gloveR", "static S_SCRIPT", "[]"),
+    0x17002B24: table.sym_var("s_mario_lex",        "static S_SCRIPT", "[]"),
+    0x17002CE0: table.sym_var("s_mario_h",          "static S_SCRIPT", "[]"),
+    0x17002D14: table.sym_var("s_mario_m",          "static S_SCRIPT", "[]"),
+    0x17002D48: table.sym_var("s_mario_l",          "static S_SCRIPT", "[]"),
+    0x17002D7C: table.sym_var("s_mario_lod",        "static S_SCRIPT", "[]"),
+    0x17002DD4: table.sym_var("s_mario", "S_SCRIPT", "[]", table.GLOBL), # 1
 }
 
 sym_E0_shp_a0 = {
     0x0012A7E0: table.sym("szp_shape_a0_start"),
     0x00132850: table.sym("data_shape_a0_start"),
-    0x0C000000: table.sym_var("g_a0_85", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000018: table.sym_var("g_a0_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0001E4: table.sym_var("g_a0_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000248: table.sym_var("g_a0_88", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000264: table.sym_var("g_a0_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C00028C: table.sym_var("g_a0_89", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a0_85", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000018: table.sym_var("s_a0_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0001E4: table.sym_var("s_a0_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000248: table.sym_var("s_a0_88", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000264: table.sym_var("s_a0_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C00028C: table.sym_var("s_a0_89", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a1 = {
@@ -12480,245 +13939,245 @@ sym_E0_shp_a1 = {
     0x05004720: table.sym_var("align_0", "unused static u64"),
     0x05004728: table.sym_var("_05004728", "unused static u8", "[]"),
     0x05006178: table.sym_var("align_1", "unused static u64"),
-    0x0C000000: table.sym_var("g_a1_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000120: table.sym_var("g_a1_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000240: table.sym_var("g_a1_84", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a1_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000120: table.sym_var("s_a1_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000240: table.sym_var("s_a1_84", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a2 = {
     0x00134D20: table.sym("szp_shape_a2_start"),
     0x0013B5D0: table.sym("data_shape_a2_start"),
-    0x0C000000: table.sym_var("g_a2_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000308: table.sym_var("g_a2_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000328: table.sym_var("g_a2_85", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a2_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000308: table.sym_var("s_a2_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000328: table.sym_var("s_a2_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a3 = {
     0x0013B910: table.sym("szp_shape_a3_start"),
     0x00145C10: table.sym("data_shape_a3_start"),
-    0x0C000000: table.sym_var("g_a3_88", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000068: table.sym_var("g_a3_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C00010C: table.sym_var("g_a3_85", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a3_88", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000068: table.sym_var("s_a3_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C00010C: table.sym_var("s_a3_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a4 = {
     0x00145E90: table.sym("szp_shape_a4_start"),
     0x00151B70: table.sym("data_shape_a4_start"),
-    0x0C000000: table.sym_var("g_a4_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0002AC: table.sym_var("g_a4_0C0002AC", "static G_SCRIPT", "[]"),
-    0x0C0005E4: table.sym_var("g_a4_89", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0005A8: table.sym_var("g_a4_88", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000610: table.sym_var("g_a4_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000644: table.sym_var("g_a4_85", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a4_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0002AC: table.sym_var("s_a4_0C0002AC", "static S_SCRIPT", "[]"),
+    0x0C0005E4: table.sym_var("s_a4_89", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0005A8: table.sym_var("s_a4_88", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000610: table.sym_var("s_a4_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000644: table.sym_var("s_a4_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a5 = {
     0x001521D0: table.sym("szp_shape_a5_start"),
     0x001602E0: table.sym("data_shape_a5_start"),
-    0x0C000000: table.sym_var("g_a5_85", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000110: table.sym_var("g_a5_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C00036C: table.sym_var("g_a5_87", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a5_85", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000110: table.sym_var("s_a5_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C00036C: table.sym_var("s_a5_87", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a6 = {
     0x00160670: table.sym("szp_shape_a6_start"),
     0x001656E0: table.sym("data_shape_a6_start"),
-    0x0C000000: table.sym_var("g_a6_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000104: table.sym_var("g_a6_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C00021C: table.sym_var("g_a6_85", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000348: table.sym_var("g_a6_86", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a6_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000104: table.sym_var("s_a6_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C00021C: table.sym_var("s_a6_85", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000348: table.sym_var("s_a6_86", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a7 = {
     0x00165A50: table.sym("szp_shape_a7_start"),
     0x00166BD0: table.sym("data_shape_a7_start"),
-    0x0C000000: table.sym_var("g_a7_0C000000", "G_SCRIPT", "[]"), # unused
-    0x0C000018: table.sym_var("g_a7_0C000018", "G_SCRIPT", "[]"), # unused
-    0x0C000030: table.sym_var("g_a7_0C000030", "G_SCRIPT", "[]"), # unused
-    0x0C000048: table.sym_var("g_a7_85", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a7_0C000000", "S_SCRIPT", "[]"), # unused
+    0x0C000018: table.sym_var("s_a7_0C000018", "S_SCRIPT", "[]"), # unused
+    0x0C000030: table.sym_var("s_a7_0C000030", "S_SCRIPT", "[]"), # unused
+    0x0C000048: table.sym_var("s_a7_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a8 = {
     0x00166C60: table.sym("szp_shape_a8_start"),
     0x0016D5C0: table.sym("data_shape_a8_start"),
-    0x0C000000: table.sym_var("g_a8_88", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0000C0: table.sym_var("g_a8_89", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0000D8: table.sym_var("g_a8_86", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000188: table.sym_var("g_a8_85", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0001B4: table.sym_var("g_a8_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000224: table.sym_var("g_a8_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000274: table.sym_var("g_a8_90", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a8_88", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0000C0: table.sym_var("s_a8_89", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0000D8: table.sym_var("s_a8_86", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000188: table.sym_var("s_a8_85", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0001B4: table.sym_var("s_a8_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000224: table.sym_var("s_a8_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000274: table.sym_var("s_a8_90", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a9 = {
     0x0016D870: table.sym("szp_shape_a9_start"),
     0x00180540: table.sym("data_shape_a9_start"),
-    0x0C000000: table.sym_var("g_a9_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000098: table.sym_var("g_a9_0C000098", "static G_SCRIPT", "[]"),
-    0x0C000254: table.sym_var("g_a9_0C000254", "static G_SCRIPT", "[]"),
-    0x0C000410: table.sym_var("g_a9_222", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000468: table.sym_var("g_a9_85", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a9_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000098: table.sym_var("s_a9_0C000098", "static S_SCRIPT", "[]"),
+    0x0C000254: table.sym_var("s_a9_0C000254", "static S_SCRIPT", "[]"),
+    0x0C000410: table.sym_var("s_a9_222", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000468: table.sym_var("s_a9_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_a10 = {
     0x00180BB0: table.sym("szp_shape_a10_start"),
     0x00187FA0: table.sym("data_shape_a10_start"),
-    0x0C000000: table.sym_var("g_a10_89", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000030: table.sym_var("g_a10_87", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C0001BC: table.sym_var("g_a10_84", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000290: table.sym_var("g_a10_85", "G_SCRIPT", "[]", table.GLOBL),
-    0x0C000328: table.sym_var("g_a10_86", "G_SCRIPT", "[]", table.GLOBL),
+    0x0C000000: table.sym_var("s_a10_89", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000030: table.sym_var("s_a10_87", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C0001BC: table.sym_var("s_a10_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000290: table.sym_var("s_a10_85", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000328: table.sym_var("s_a10_86", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b0 = {
     0x00188440: table.sym("szp_shape_b0_start"),
     0x001B9070: table.sym("data_shape_b0_start"),
-    0x0D000000: table.sym_var("g_b0_103", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000090: table.sym_var("g_b0_104", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0000B0: table.sym_var("g_b0_3", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x0D0000D8: table.sym_var("g_b0_0D0000D8", "static G_SCRIPT", "[]"),
-    0x0D000424: table.sym_var("g_b0_0D000424", "static G_SCRIPT", "[]"),
-    0x0D000770: table.sym_var("g_b0_0D000770", "static G_SCRIPT", "[]"),
-    0x0D000AB8: table.sym_var("g_b0_0D000AB8", "static G_SCRIPT", "[]"),
-    0x0D000AC4: table.sym_var("g_b0_100", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000B40: table.sym_var("g_b0_105", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000BBC: table.sym_var("g_b0_101_179", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000BFC: table.sym_var("g_b0_102", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b0_103", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000090: table.sym_var("s_b0_104", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0000B0: table.sym_var("s_b0_3", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x0D0000D8: table.sym_var("s_b0_0D0000D8", "static S_SCRIPT", "[]"),
+    0x0D000424: table.sym_var("s_b0_0D000424", "static S_SCRIPT", "[]"),
+    0x0D000770: table.sym_var("s_b0_0D000770", "static S_SCRIPT", "[]"),
+    0x0D000AB8: table.sym_var("s_b0_0D000AB8", "static S_SCRIPT", "[]"),
+    0x0D000AC4: table.sym_var("s_b0_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000B40: table.sym_var("s_b0_105", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000BBC: table.sym_var("s_b0_101_179", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000BFC: table.sym_var("s_b0_102", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b1 = {
     0x001B9CC0: table.sym("szp_shape_b1_start"),
     0x001C3DB0: table.sym("data_shape_b1_start"),
-    0x0D000000: table.sym_var("g_b1_105", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000284: table.sym_var("g_b1_193", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0002F4: table.sym_var("g_b1_179", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000324: table.sym_var("g_b1_103", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D00038C: table.sym_var("g_b1_100", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000414: table.sym_var("g_b1_104", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000450: table.sym_var("g_b1_101", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000468: table.sym_var("g_b1_102", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b1_105", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000284: table.sym_var("s_b1_193", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0002F4: table.sym_var("s_b1_179", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000324: table.sym_var("s_b1_103", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D00038C: table.sym_var("s_b1_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000414: table.sym_var("s_b1_104", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000450: table.sym_var("s_b1_101", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000468: table.sym_var("s_b1_102", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b2 = {
     0x001C4230: table.sym("szp_shape_b2_start"),
     0x001D7C90: table.sym("data_shape_b2_start"),
-    0x0D000000: table.sym_var("g_b2_106", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0000B8: table.sym_var("g_b2_107", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0000D0: table.sym_var("g_b2_191", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000214: table.sym_var("g_b2_104", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000358: table.sym_var("g_b2_100", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000480: table.sym_var("g_b2_103", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0005D0: table.sym_var("g_b2_101", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0005EC: table.sym_var("g_b2_102", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b2_106", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0000B8: table.sym_var("s_b2_107", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0000D0: table.sym_var("s_b2_191", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000214: table.sym_var("s_b2_104", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000358: table.sym_var("s_b2_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000480: table.sym_var("s_b2_103", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0005D0: table.sym_var("s_b2_101", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0005EC: table.sym_var("s_b2_102", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b3 = {
     0x001D8310: table.sym("szp_shape_b3_start"),
     0x001E4BF0: table.sym("data_shape_b3_start"),
-    0x0D000000: table.sym_var("g_b3_102", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000114: table.sym_var("g_b3_0D000114", "static G_SCRIPT", "[]"),
-    0x0D00027C: table.sym_var("g_b3_0D00027C", "static G_SCRIPT", "[]"),
-    0x0D0003E4: table.sym_var("g_b3_221", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000448: table.sym_var("g_b3_100", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0005B0: table.sym_var("g_b3_101", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b3_102", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000114: table.sym_var("s_b3_0D000114", "static S_SCRIPT", "[]"),
+    0x0D00027C: table.sym_var("s_b3_0D00027C", "static S_SCRIPT", "[]"),
+    0x0D0003E4: table.sym_var("s_b3_221", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000448: table.sym_var("s_b3_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0005B0: table.sym_var("s_b3_101", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b4 = {
     0x001E51F0: table.sym("szp_shape_b4_start"),
     0x001E7D90: table.sym("data_shape_b4_start"),
-    0x0D000000: table.sym_var("g_b4_0D000000", "static G_SCRIPT", "[]"),
-    0x0D000078: table.sym_var("g_b4_0D000078", "static G_SCRIPT", "[]"),
-    0x0D0000F0: table.sym_var("g_b4_102", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b4_0D000000", "static S_SCRIPT", "[]"),
+    0x0D000078: table.sym_var("s_b4_0D000078", "static S_SCRIPT", "[]"),
+    0x0D0000F0: table.sym_var("s_b4_102", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_b5 = {
     0x001E7EE0: table.sym("szp_shape_b5_start"),
     0x001F1B30: table.sym("data_shape_b5_start"),
-    0x0D000000: table.sym_var("g_b5_103", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D00001C: table.sym_var("g_b5_102", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0000DC: table.sym_var("g_b5_100", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D0001A0: table.sym_var("g_b5_206", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000230: table.sym_var("g_b5_104", "G_SCRIPT", "[]", table.GLOBL),
-    0x0D000394: table.sym_var("g_b5_101", "G_SCRIPT", "[]", table.GLOBL),
+    0x0D000000: table.sym_var("s_b5_103", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D00001C: table.sym_var("s_b5_102", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0000DC: table.sym_var("s_b5_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0001A0: table.sym_var("s_b5_206", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000230: table.sym_var("s_b5_104", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000394: table.sym_var("s_b5_101", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_shp_c0 = {
     0x001F2200: table.sym("szp_shape_c0_start"),
     0x002008D0: table.sym("data_shape_c0_start"),
-    0x0F000000: table.sym_var("g_c0_140", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000028: table.sym_var("g_c0_194", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0001A8: table.sym_var("g_c0_128", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0001C0: table.sym_var("g_c0_127", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0001D8: table.sym_var("g_c0_223", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0004CC: table.sym_var("g_c0_207", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0004E4: table.sym_var("g_c0_202", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0004FC: table.sym_var("g_c0_120", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000518: table.sym_var("g_c0_220", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0005D0: table.sym_var("g_c0_129", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000610: table.sym_var("g_c0_130", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000640: table.sym_var("g_c0_180", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F00066C: table.sym_var("g_c0_225", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000694: table.sym_var("g_c0_137", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0006E4: table.sym_var("g_c0_192", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0007B8: table.sym_var("g_c0_188", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F0008F4: table.sym_var("g_c0_195", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000A30: table.sym_var("g_c0_217", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000A58: table.sym_var("g_c0_131", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000AB0: table.sym_var("g_c0_190", "G_SCRIPT", "[]", table.GLOBL),
-    0x0F000ADC: table.sym_var("g_c0_0F000ADC", "G_SCRIPT", "[]"), # unused
-    0x0F000B08: table.sym_var("g_c0_0F000B08", "G_SCRIPT", "[]"), # unused
+    0x0F000000: table.sym_var("s_c0_140", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000028: table.sym_var("s_c0_194", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0001A8: table.sym_var("s_c0_128", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0001C0: table.sym_var("s_c0_127", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0001D8: table.sym_var("s_c0_223", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0004CC: table.sym_var("s_c0_207", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0004E4: table.sym_var("s_c0_202", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0004FC: table.sym_var("s_c0_120", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000518: table.sym_var("s_c0_220", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0005D0: table.sym_var("s_c0_129", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000610: table.sym_var("s_c0_130", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000640: table.sym_var("s_c0_180", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F00066C: table.sym_var("s_c0_225", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000694: table.sym_var("s_c0_137", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0006E4: table.sym_var("s_c0_192", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0007B8: table.sym_var("s_c0_188", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0008F4: table.sym_var("s_c0_195", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000A30: table.sym_var("s_c0_217", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000A58: table.sym_var("s_c0_131", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000AB0: table.sym_var("s_c0_190", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000ADC: table.sym_var("s_c0_0F000ADC", "S_SCRIPT", "[]"), # unused
+    0x0F000B08: table.sym_var("s_c0_0F000B08", "S_SCRIPT", "[]"), # unused
 }
 
 sym_E0_shp_en = {
     0x00201410: table.sym("szp_shape_entity_start"),
     0x00218DA0: table.sym("data_shape_entity_start"),
-    0x16000000: table.sym_var("g_entity_142", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000020: table.sym_var("g_entity_224", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000040: table.sym_var("g_entity_205", "G_SCRIPT", "[]", table.GLOBL),
-    0x160000A8: table.sym_var("g_entity_187", "G_SCRIPT", "[]", table.GLOBL),
-    0x1600013C: table.sym_var("g_entity_116", "G_SCRIPT", "[]", table.GLOBL),
-    0x160001A0: table.sym_var("g_entity_117", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000200: table.sym_var("g_entity_118", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000264: table.sym_var("g_entity_119", "G_SCRIPT", "[]", table.GLOBL),
-    0x160002C4: table.sym_var("g_entity_215", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000328: table.sym_var("g_entity_216", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000388: table.sym_var("g_entity_18_22_73", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x160003A8: table.sym_var("g_entity_28_38", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x1600043C: table.sym_var("g_entity_39", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x160004D0: table.sym_var("g_entity_29_39", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16000564: table.sym_var("g_entity_16000564", "G_SCRIPT", "[]"), # unused
-    0x160005F8: table.sym_var("g_entity_31_41", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x1600068C: table.sym_var("g_entity_32", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16000720: table.sym_var("g_entity_29", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x160007B4: table.sym_var("g_entity_34", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16000868: table.sym_var("g_entity_35", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x1600091C: table.sym_var("g_entity_36", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x160009D0: table.sym_var("g_entity_37", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16000A84: table.sym_var("g_entity_204", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000AB0: table.sym_var("g_entity_200", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000B10: table.sym_var("g_entity_203", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000B2C: table.sym_var("g_entity_144", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000B8C: table.sym_var("g_entity_145", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000BEC: table.sym_var("g_entity_186", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000C44: table.sym_var("g_entity_185", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000C8C: table.sym_var("g_entity_162", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000CA4: table.sym_var("g_entity_136", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000CF0: table.sym_var("g_entity_134", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000D3C: table.sym_var("g_entity_135", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000DA8: table.sym_var("g_entity_133", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000E14: table.sym_var("g_digit", "G_SCRIPT", "[]", table.GLOBL), # 219
-    0x16000E84: table.sym_var("g_entity_212", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000EA0: table.sym_var("g_entity_122", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000ED4: table.sym_var("g_entity_138", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000F24: table.sym_var("g_entity_139", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000F6C: table.sym_var("g_entity_121", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000F98: table.sym_var("g_entity_160", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000FB4: table.sym_var("g_entity_124", "G_SCRIPT", "[]", table.GLOBL),
-    0x16000FE8: table.sym_var("g_entity_23", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16001000: table.sym_var("g_entity_24", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16001018: table.sym_var("g_entity_25", "G_SCRIPT", "[]", table.GLOBL), # local
-    0x16001030: table.sym_var("g_entity_16001030", "G_SCRIPT", "[]"), # unused
-    0x16001048: table.sym_var("g_entity_27", "G_SCRIPT", "[]", table.GLOBL), # local
+    0x16000000: table.sym_var("s_entity_142", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000020: table.sym_var("s_entity_224", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000040: table.sym_var("s_entity_205", "S_SCRIPT", "[]", table.GLOBL),
+    0x160000A8: table.sym_var("s_entity_187", "S_SCRIPT", "[]", table.GLOBL),
+    0x1600013C: table.sym_var("s_entity_116", "S_SCRIPT", "[]", table.GLOBL),
+    0x160001A0: table.sym_var("s_entity_117", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000200: table.sym_var("s_entity_118", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000264: table.sym_var("s_entity_119", "S_SCRIPT", "[]", table.GLOBL),
+    0x160002C4: table.sym_var("s_entity_215", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000328: table.sym_var("s_entity_216", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000388: table.sym_var("s_entity_18_22_73", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x160003A8: table.sym_var("s_entity_28_38", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x1600043C: table.sym_var("s_entity_39", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x160004D0: table.sym_var("s_entity_29_39", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16000564: table.sym_var("s_entity_16000564", "S_SCRIPT", "[]"), # unused
+    0x160005F8: table.sym_var("s_entity_31_41", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x1600068C: table.sym_var("s_entity_32", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16000720: table.sym_var("s_entity_29", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x160007B4: table.sym_var("s_entity_34", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16000868: table.sym_var("s_entity_35", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x1600091C: table.sym_var("s_entity_36", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x160009D0: table.sym_var("s_entity_37", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16000A84: table.sym_var("s_entity_204", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000AB0: table.sym_var("s_entity_200", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000B10: table.sym_var("s_entity_203", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000B2C: table.sym_var("s_entity_144", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000B8C: table.sym_var("s_entity_145", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000BEC: table.sym_var("s_entity_186", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000C44: table.sym_var("s_entity_185", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000C8C: table.sym_var("s_entity_162", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000CA4: table.sym_var("s_entity_136", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000CF0: table.sym_var("s_entity_134", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000D3C: table.sym_var("s_entity_135", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000DA8: table.sym_var("s_entity_133", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000E14: table.sym_var("s_digit", "S_SCRIPT", "[]", table.GLOBL), # 219
+    0x16000E84: table.sym_var("s_entity_212", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000EA0: table.sym_var("s_entity_122", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000ED4: table.sym_var("s_entity_138", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000F24: table.sym_var("s_entity_139", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000F6C: table.sym_var("s_entity_121", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000F98: table.sym_var("s_entity_160", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000FB4: table.sym_var("s_entity_124", "S_SCRIPT", "[]", table.GLOBL),
+    0x16000FE8: table.sym_var("s_entity_23", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16001000: table.sym_var("s_entity_24", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16001018: table.sym_var("s_entity_25", "S_SCRIPT", "[]", table.GLOBL), # local
+    0x16001030: table.sym_var("s_entity_16001030", "S_SCRIPT", "[]"), # unused
+    0x16001048: table.sym_var("s_entity_27", "S_SCRIPT", "[]", table.GLOBL), # local
 }
 
 sym_E0_object = {
@@ -13237,14 +14696,14 @@ sym_E0_m_title = {
     0x0026A3A0: table.sym("szp_menu_title_logo_start"),
     0x0026F420: table.sym("szp_menu_title_selectstage_start"),
     0x002708C0: table.sym("szp_background_title_start"),
-    0x14000000: table.sym("s_logo", table.GLOBL),
-    0x14000078: table.sym("s_title", table.GLOBL),
-    0x14000104: table.sym("s_gameover", table.GLOBL),
-    0x14000190: table.sym("s_selectstage", table.GLOBL),
-    0x140002D0: table.sym_var("g_logo", "G_SCRIPT", "[]", table.GLOBL),
-    0x1400035C: table.sym_var("g_title", "G_SCRIPT", "[]", table.GLOBL),
-    0x140003B8: table.sym_var("g_gameover", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000414: table.sym_var("g_selectstage", "G_SCRIPT", "[]", table.GLOBL),
+    0x14000000: table.sym("p_logo", table.GLOBL),
+    0x14000078: table.sym("p_title", table.GLOBL),
+    0x14000104: table.sym("p_gameover", table.GLOBL),
+    0x14000190: table.sym("p_selectstage", table.GLOBL),
+    0x140002D0: table.sym_var("s_logo", "S_SCRIPT", "[]", table.GLOBL),
+    0x1400035C: table.sym_var("s_title", "S_SCRIPT", "[]", table.GLOBL),
+    0x140003B8: table.sym_var("s_gameover", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000414: table.sym_var("s_selectstage", "S_SCRIPT", "[]", table.GLOBL),
     # 0x0A000000: table.sym_var("vtx_title_bg", "static Vtx", "[]"),
     # 0x0A000100: table.sym_var("gfx_title_bg_start", "Gfx", "[]"),
     # 0x0A000118: table.sym_var("gfx_title_bg_vtx", "Gfx", "[]"),
@@ -13271,44 +14730,44 @@ sym_E0_m_title = {
 sym_E0_m_select = {
     0x002A6120: table.sym("data_menu_select_start"),
     0x002A65B0: table.sym("szp_menu_select_start"),
-    0x14000000: table.sym("s_file_select", table.GLOBL),
-    0x14000118: table.sym("s_star_select", table.GLOBL),
-    0x140001D0: table.sym_var("g_menu_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000200: table.sym_var("g_menu_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000230: table.sym_var("g_menu_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000260: table.sym_var("g_menu_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000290: table.sym_var("g_menu_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x140002B8: table.sym_var("g_menu_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x140002E0: table.sym_var("g_menu_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000308: table.sym_var("g_menu_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000330: table.sym_var("g_menu_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000358: table.sym_var("g_menu_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000380: table.sym_var("g_file_select", "G_SCRIPT", "[]", table.GLOBL),
-    0x14000408: table.sym_var("g_star_select", "G_SCRIPT", "[]", table.GLOBL),
+    0x14000000: table.sym("p_file_select", table.GLOBL),
+    0x14000118: table.sym("p_star_select", table.GLOBL),
+    0x140001D0: table.sym_var("s_menu_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000200: table.sym_var("s_menu_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000230: table.sym_var("s_menu_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000260: table.sym_var("s_menu_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000290: table.sym_var("s_menu_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x140002B8: table.sym_var("s_menu_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x140002E0: table.sym_var("s_menu_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000308: table.sym_var("s_menu_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000330: table.sym_var("s_menu_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000358: table.sym_var("s_menu_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000380: table.sym_var("s_file_select", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000408: table.sym_var("s_star_select", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_game = {
     0x002ABCA0: table.sym("data_game_start"),
-    0x15000000: table.sym("s_game", table.GLOBL),
-    0x15000278: table.sym("s_game_stage"),
-    0x15000660: table.sym("s_shape_c0", table.GLOBL),
-    0x1500071C: table.sym("s_shape_a0", table.GLOBL),
-    0x15000750: table.sym("s_shape_a1", table.GLOBL),
-    0x1500076C: table.sym("s_shape_a2", table.GLOBL),
-    0x15000788: table.sym("s_shape_a3", table.GLOBL),
-    0x150007B4: table.sym("s_shape_a4", table.GLOBL),
-    0x150007E8: table.sym("s_shape_a5", table.GLOBL),
-    0x1500080C: table.sym("s_shape_a6", table.GLOBL),
-    0x15000830: table.sym("s_shape_a7", table.GLOBL),
-    0x1500084C: table.sym("s_shape_a8", table.GLOBL),
-    0x15000888: table.sym("s_shape_a9", table.GLOBL),
-    0x150008A4: table.sym("s_shape_a10", table.GLOBL),
-    0x150008D8: table.sym("s_shape_b0", table.GLOBL),
-    0x15000914: table.sym("s_shape_b1", table.GLOBL),
-    0x15000958: table.sym("s_shape_b2", table.GLOBL),
-    0x1500099C: table.sym("s_shape_b3", table.GLOBL),
-    0x150009C0: table.sym("s_shape_b4", table.GLOBL),
-    0x150009DC: table.sym("s_shape_b5", table.GLOBL),
+    0x15000000: table.sym("p_game", table.GLOBL),
+    0x15000278: table.sym("p_game_stage"),
+    0x15000660: table.sym("p_shape_c0", table.GLOBL),
+    0x1500071C: table.sym("p_shape_a0", table.GLOBL),
+    0x15000750: table.sym("p_shape_a1", table.GLOBL),
+    0x1500076C: table.sym("p_shape_a2", table.GLOBL),
+    0x15000788: table.sym("p_shape_a3", table.GLOBL),
+    0x150007B4: table.sym("p_shape_a4", table.GLOBL),
+    0x150007E8: table.sym("p_shape_a5", table.GLOBL),
+    0x1500080C: table.sym("p_shape_a6", table.GLOBL),
+    0x15000830: table.sym("p_shape_a7", table.GLOBL),
+    0x1500084C: table.sym("p_shape_a8", table.GLOBL),
+    0x15000888: table.sym("p_shape_a9", table.GLOBL),
+    0x150008A4: table.sym("p_shape_a10", table.GLOBL),
+    0x150008D8: table.sym("p_shape_b0", table.GLOBL),
+    0x15000914: table.sym("p_shape_b1", table.GLOBL),
+    0x15000958: table.sym("p_shape_b2", table.GLOBL),
+    0x1500099C: table.sym("p_shape_b3", table.GLOBL),
+    0x150009C0: table.sym("p_shape_b4", table.GLOBL),
+    0x150009DC: table.sym("p_shape_b5", table.GLOBL),
 }
 
 dev_E0_game = {
@@ -13418,785 +14877,785 @@ sym_E0_txt_l = {
     0x00365980: table.sym("szp_texture_l_start"),
 }
 
-sym_E0_pcl_a = {
-    0x0036F530: table.sym("szp_particle_a_start"),
+sym_E0_weather = {
+    0x0036F530: table.sym("szp_weather_start"),
     0x0B000000: table.sym_var("align_0", "unused static u64"),
-    0x0B000008: table.sym_var("texture_particle_flower_0", "static u16", "[]"),
-    0x0B000808: table.sym_var("texture_particle_flower_1", "static u16", "[]"),
-    0x0B001008: table.sym_var("texture_particle_flower_2", "static u16", "[]"),
-    0x0B001808: table.sym_var("texture_particle_flower_3", "static u16", "[]"),
-    0x0B002008: table.sym_var("texture_particle_flower", "u16 *", "[]"),
-    0x0B002020: table.sym_var("texture_particle_lava_0", "static u16", "[]"),
-    0x0B002820: table.sym_var("texture_particle_lava_1", "static u16", "[]"),
-    0x0B003020: table.sym_var("texture_particle_lava_2", "static u16", "[]"),
-    0x0B003820: table.sym_var("texture_particle_lava_3", "static u16", "[]"),
-    0x0B004020: table.sym_var("texture_particle_lava_4", "static u16", "[]"),
-    0x0B004820: table.sym_var("texture_particle_lava_5", "static u16", "[]"),
-    0x0B005020: table.sym_var("texture_particle_lava_6", "static u16", "[]"),
-    0x0B005820: table.sym_var("texture_particle_lava_7", "static u16", "[]"),
-    0x0B006020: table.sym_var("texture_particle_lava", "u16 *", "[]"),
-    0x0B006048: table.sym_var("texture_particle_bubble_0", "static u16", "[]"),
-    0x0B006848: table.sym_var("texture_particle_bubble", "u16 *", "[]"),
-    0x0B00684C: table.sym_var("texture_particle_snow_a", "static u16", "[]"),
-    0x0B006A50: table.sym_var("gfx_particle_snow_a", "Gfx", "[]"),
-    0x0B006AB0: table.sym_var("gfx_particle_end", "Gfx", "[]"),
-    0x0B006AD8: table.sym_var("texture_particle_snow_b", "static u16", "[]"),
-    0x0B006CD8: table.sym_var("gfx_particle_snow_b", "Gfx", "[]"),
-    0x0B006D38: table.sym_var("gfx_particle_lava_start", "Gfx", "[]"),
-    0x0B006D68: table.sym_var("gfx_particle_lava_texture", "Gfx", "[]"),
+    0x0B000008: table.sym_var("texture_weather_flower_0", "static u16", "[]"),
+    0x0B000808: table.sym_var("texture_weather_flower_1", "static u16", "[]"),
+    0x0B001008: table.sym_var("texture_weather_flower_2", "static u16", "[]"),
+    0x0B001808: table.sym_var("texture_weather_flower_3", "static u16", "[]"),
+    0x0B002008: table.sym_var("texture_weather_flower", "u16 *", "[]"),
+    0x0B002020: table.sym_var("texture_weather_lava_0", "static u16", "[]"),
+    0x0B002820: table.sym_var("texture_weather_lava_1", "static u16", "[]"),
+    0x0B003020: table.sym_var("texture_weather_lava_2", "static u16", "[]"),
+    0x0B003820: table.sym_var("texture_weather_lava_3", "static u16", "[]"),
+    0x0B004020: table.sym_var("texture_weather_lava_4", "static u16", "[]"),
+    0x0B004820: table.sym_var("texture_weather_lava_5", "static u16", "[]"),
+    0x0B005020: table.sym_var("texture_weather_lava_6", "static u16", "[]"),
+    0x0B005820: table.sym_var("texture_weather_lava_7", "static u16", "[]"),
+    0x0B006020: table.sym_var("texture_weather_lava", "u16 *", "[]"),
+    0x0B006048: table.sym_var("texture_weather_bubble_0", "static u16", "[]"),
+    0x0B006848: table.sym_var("texture_weather_bubble", "u16 *", "[]"),
+    0x0B00684C: table.sym_var("texture_weather_snow_a", "static u16", "[]"),
+    0x0B006A50: table.sym_var("gfx_weather_snow_a", "Gfx", "[]"),
+    0x0B006AB0: table.sym_var("gfx_weather_end", "Gfx", "[]"),
+    0x0B006AD8: table.sym_var("texture_weather_snow_b", "static u16", "[]"),
+    0x0B006CD8: table.sym_var("gfx_weather_snow_b", "Gfx", "[]"),
+    0x0B006D38: table.sym_var("gfx_weather_lava_start", "Gfx", "[]"),
+    0x0B006D68: table.sym_var("gfx_weather_lava_texture", "Gfx", "[]"),
 }
 
 sym_E0_s_bbh = {
     0x00371C40: table.sym("szp_stage_bbh_start"),
     0x003828C0: table.sym("data_stage_bbh_start"),
-    0x0E000000: table.sym("s_bbh_0E000000"),
-    0x0E000094: table.sym("s_bbh_0E000094"),
-    0x0E000128: table.sym("s_bbh_0E000128"),
-    0x0E0003CC: table.sym("s_bbh_0E0003CC"),
-    0x0E000418: table.sym("s_bbh", table.GLOBL),
-    0x0E0005B0: table.sym_var("g_bbh_53", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005C8: table.sym_var("g_bbh_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E0: table.sym_var("g_bbh_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005F8: table.sym_var("g_bbh_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000610: table.sym_var("g_bbh_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000628: table.sym_var("g_bbh_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000640: table.sym_var("g_bbh_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000658: table.sym_var("g_bbh_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000670: table.sym_var("g_bbh1_1", "static G_SCRIPT", "[]"),
-    0x0E0006B0: table.sym_var("g_bbh1_2", "static G_SCRIPT", "[]"),
-    0x0E0006E8: table.sym_var("g_bbh1_3", "static G_SCRIPT", "[]"),
-    0x0E000730: table.sym_var("g_bbh1_4", "static G_SCRIPT", "[]"),
-    0x0E000750: table.sym_var("g_bbh1_5", "static G_SCRIPT", "[]"),
-    0x0E000768: table.sym_var("g_bbh1_6", "static G_SCRIPT", "[]"),
-    0x0E0007B0: table.sym_var("g_bbh1_7", "static G_SCRIPT", "[]"),
-    0x0E0007D0: table.sym_var("g_bbh1_8", "static G_SCRIPT", "[]"),
-    0x0E000800: table.sym_var("g_bbh1_9", "static G_SCRIPT", "[]"),
-    0x0E000828: table.sym_var("g_bbh1_10", "static G_SCRIPT", "[]"),
-    0x0E000860: table.sym_var("g_bbh1_11", "static G_SCRIPT", "[]"),
-    0x0E000888: table.sym_var("g_bbh1_12", "static G_SCRIPT", "[]"),
-    0x0E0008B0: table.sym_var("g_bbh1_13", "static G_SCRIPT", "[]"),
-    0x0E0008E8: table.sym_var("g_bbh1_14", "static G_SCRIPT", "[]"),
-    0x0E000950: table.sym_var("g_bbh1_15", "static G_SCRIPT", "[]"),
-    0x0E0009C8: table.sym_var("g_bbh1_16", "static G_SCRIPT", "[]"),
-    0x0E000A18: table.sym_var("g_bbh1_17", "static G_SCRIPT", "[]"),
-    0x0E000A60: table.sym_var("g_bbh1_18", "static G_SCRIPT", "[]"),
-    0x0E000AD8: table.sym_var("g_bbh1_19", "static G_SCRIPT", "[]"),
-    0x0E000B28: table.sym_var("g_bbh1_20", "static G_SCRIPT", "[]"),
-    0x0E000B88: table.sym_var("g_bbh1_21", "static G_SCRIPT", "[]"),
-    0x0E000BF0: table.sym_var("g_bbh1_22", "static G_SCRIPT", "[]"),
-    0x0E000C38: table.sym_var("g_bbh1_23", "static G_SCRIPT", "[]"),
-    0x0E000C88: table.sym_var("g_bbh1_24", "static G_SCRIPT", "[]"),
-    0x0E000CE8: table.sym_var("g_bbh1_25", "static G_SCRIPT", "[]"),
-    0x0E000D20: table.sym_var("g_bbh1_26", "static G_SCRIPT", "[]"),
-    0x0E000D68: table.sym_var("g_bbh1_27", "static G_SCRIPT", "[]"),
-    0x0E000DB0: table.sym_var("g_bbh1_28", "static G_SCRIPT", "[]"),
-    0x0E000DF0: table.sym_var("g_bbh1_29", "static G_SCRIPT", "[]"),
-    0x0E000E40: table.sym_var("g_bbh1_30", "static G_SCRIPT", "[]"),
-    0x0E000E80: table.sym_var("g_bbh1_31", "static G_SCRIPT", "[]"),
-    0x0E000EB0: table.sym_var("g_bbh1_32", "static G_SCRIPT", "[]"),
-    0x0E000F00: table.sym_var("g_bbh", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bbh_0E000000"),
+    0x0E000094: table.sym("p_bbh_0E000094"),
+    0x0E000128: table.sym("p_bbh_0E000128"),
+    0x0E0003CC: table.sym("p_bbh_0E0003CC"),
+    0x0E000418: table.sym("p_bbh", table.GLOBL),
+    0x0E0005B0: table.sym_var("s_bbh_53", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005C8: table.sym_var("s_bbh_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E0: table.sym_var("s_bbh_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005F8: table.sym_var("s_bbh_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000610: table.sym_var("s_bbh_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000628: table.sym_var("s_bbh_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000640: table.sym_var("s_bbh_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000658: table.sym_var("s_bbh_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000670: table.sym_var("s_bbh1_1", "static S_SCRIPT", "[]"),
+    0x0E0006B0: table.sym_var("s_bbh1_2", "static S_SCRIPT", "[]"),
+    0x0E0006E8: table.sym_var("s_bbh1_3", "static S_SCRIPT", "[]"),
+    0x0E000730: table.sym_var("s_bbh1_4", "static S_SCRIPT", "[]"),
+    0x0E000750: table.sym_var("s_bbh1_5", "static S_SCRIPT", "[]"),
+    0x0E000768: table.sym_var("s_bbh1_6", "static S_SCRIPT", "[]"),
+    0x0E0007B0: table.sym_var("s_bbh1_7", "static S_SCRIPT", "[]"),
+    0x0E0007D0: table.sym_var("s_bbh1_8", "static S_SCRIPT", "[]"),
+    0x0E000800: table.sym_var("s_bbh1_9", "static S_SCRIPT", "[]"),
+    0x0E000828: table.sym_var("s_bbh1_10", "static S_SCRIPT", "[]"),
+    0x0E000860: table.sym_var("s_bbh1_11", "static S_SCRIPT", "[]"),
+    0x0E000888: table.sym_var("s_bbh1_12", "static S_SCRIPT", "[]"),
+    0x0E0008B0: table.sym_var("s_bbh1_13", "static S_SCRIPT", "[]"),
+    0x0E0008E8: table.sym_var("s_bbh1_14", "static S_SCRIPT", "[]"),
+    0x0E000950: table.sym_var("s_bbh1_15", "static S_SCRIPT", "[]"),
+    0x0E0009C8: table.sym_var("s_bbh1_16", "static S_SCRIPT", "[]"),
+    0x0E000A18: table.sym_var("s_bbh1_17", "static S_SCRIPT", "[]"),
+    0x0E000A60: table.sym_var("s_bbh1_18", "static S_SCRIPT", "[]"),
+    0x0E000AD8: table.sym_var("s_bbh1_19", "static S_SCRIPT", "[]"),
+    0x0E000B28: table.sym_var("s_bbh1_20", "static S_SCRIPT", "[]"),
+    0x0E000B88: table.sym_var("s_bbh1_21", "static S_SCRIPT", "[]"),
+    0x0E000BF0: table.sym_var("s_bbh1_22", "static S_SCRIPT", "[]"),
+    0x0E000C38: table.sym_var("s_bbh1_23", "static S_SCRIPT", "[]"),
+    0x0E000C88: table.sym_var("s_bbh1_24", "static S_SCRIPT", "[]"),
+    0x0E000CE8: table.sym_var("s_bbh1_25", "static S_SCRIPT", "[]"),
+    0x0E000D20: table.sym_var("s_bbh1_26", "static S_SCRIPT", "[]"),
+    0x0E000D68: table.sym_var("s_bbh1_27", "static S_SCRIPT", "[]"),
+    0x0E000DB0: table.sym_var("s_bbh1_28", "static S_SCRIPT", "[]"),
+    0x0E000DF0: table.sym_var("s_bbh1_29", "static S_SCRIPT", "[]"),
+    0x0E000E40: table.sym_var("s_bbh1_30", "static S_SCRIPT", "[]"),
+    0x0E000E80: table.sym_var("s_bbh1_31", "static S_SCRIPT", "[]"),
+    0x0E000EB0: table.sym_var("s_bbh1_32", "static S_SCRIPT", "[]"),
+    0x0E000F00: table.sym_var("s_bbh", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ccm = {
     0x00383950: table.sym("szp_stage_ccm_start"),
     0x00395C90: table.sym("data_stage_ccm_start"),
-    0x0E000000: table.sym("s_ccm_0E000000"),
-    0x0E00001C: table.sym("s_ccm_0E00001C"),
-    0x0E000098: table.sym("s_ccm_0E000098"),
-    0x0E000114: table.sym("s_ccm_0E000114"),
-    0x0E000178: table.sym("s_ccm", table.GLOBL),
-    0x0E0003E0: table.sym_var("g_ccm_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000400: table.sym_var("g_ccm_210", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00041C: table.sym_var("g_ccm_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00043C: table.sym_var("g_ccm_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00046C: table.sym_var("g_ccm_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004A4: table.sym_var("g_ccm_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004CC: table.sym_var("g_ccm_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004F4: table.sym_var("g_ccm_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00052C: table.sym_var("g_ccm1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005F8: table.sym_var("g_ccm2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_ccm_0E000000"),
+    0x0E00001C: table.sym("p_ccm_0E00001C"),
+    0x0E000098: table.sym("p_ccm_0E000098"),
+    0x0E000114: table.sym("p_ccm_0E000114"),
+    0x0E000178: table.sym("p_ccm", table.GLOBL),
+    0x0E0003E0: table.sym_var("s_ccm_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000400: table.sym_var("s_ccm_210", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00041C: table.sym_var("s_ccm_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00043C: table.sym_var("s_ccm_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00046C: table.sym_var("s_ccm_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004A4: table.sym_var("s_ccm_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004CC: table.sym_var("s_ccm_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004F4: table.sym_var("s_ccm_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00052C: table.sym_var("s_ccm1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005F8: table.sym_var("s_ccm2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_inside = {
     0x00396340: table.sym("szp_stage_inside_start"),
     0x003CF0D0: table.sym("data_stage_inside_start"),
-    0x0E000000: table.sym("s_inside_0E000000"),
-    0x0E0003F4: table.sym("s_inside_0E0003F4"),
-    0x0E000790: table.sym("s_inside_0E000790"),
-    0x0E0009BC: table.sym("s_inside_0E0009BC"),
-    0x0E000AF8: table.sym("s_inside", table.GLOBL),
-    0x0E000F00: table.sym_var("g_inside_208_209_213_214", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000F18: table.sym_var("g_inside_53", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000F30: table.sym_var("g_inside1_1", "static G_SCRIPT", "[]"),
-    0x0E000F70: table.sym_var("g_inside1_2", "static G_SCRIPT", "[]"),
-    0x0E000F88: table.sym_var("g_inside1_3", "static G_SCRIPT", "[]"),
-    0x0E000FA8: table.sym_var("g_inside1_4", "static G_SCRIPT", "[]"),
-    0x0E000FD0: table.sym_var("g_inside1_5", "static G_SCRIPT", "[]"),
-    0x0E001000: table.sym_var("g_inside1_6", "static G_SCRIPT", "[]"),
-    0x0E001038: table.sym_var("g_inside1_7", "static G_SCRIPT", "[]"),
-    0x0E001088: table.sym_var("g_inside1_8", "static G_SCRIPT", "[]"),
-    0x0E0010C8: table.sym_var("g_inside1_9", "static G_SCRIPT", "[]"),
-    0x0E001110: table.sym_var("g_inside1_10", "static G_SCRIPT", "[]"),
-    0x0E001158: table.sym_var("g_inside1_11", "static G_SCRIPT", "[]"),
-    0x0E0011A8: table.sym_var("g_inside1_12", "static G_SCRIPT", "[]"),
-    0x0E001200: table.sym_var("g_inside1_13", "static G_SCRIPT", "[]"),
-    0x0E001260: table.sym_var("g_inside1_14", "static G_SCRIPT", "[]"),
-    0x0E0012C8: table.sym_var("g_inside1_15", "static G_SCRIPT", "[]"),
-    0x0E001348: table.sym_var("g_inside1_16", "static G_SCRIPT", "[]"),
-    0x0E0013B8: table.sym_var("g_inside1_17", "static G_SCRIPT", "[]"),
-    0x0E001400: table.sym_var("g_inside1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001518: table.sym_var("g_inside_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001530: table.sym_var("g_inside_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001548: table.sym_var("g_inside_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001560: table.sym_var("g_inside2_1", "static G_SCRIPT", "[]"),
-    0x0E001578: table.sym_var("g_inside2_2", "static G_SCRIPT", "[]"),
-    0x0E0015B8: table.sym_var("g_inside2_3", "static G_SCRIPT", "[]"),
-    0x0E0015F8: table.sym_var("g_inside2_4", "static G_SCRIPT", "[]"),
-    0x0E001628: table.sym_var("g_inside2_5", "static G_SCRIPT", "[]"),
-    0x0E001668: table.sym_var("g_inside2_6", "static G_SCRIPT", "[]"),
-    0x0E001690: table.sym_var("g_inside2_7", "static G_SCRIPT", "[]"),
-    0x0E0016D8: table.sym_var("g_inside2_8", "static G_SCRIPT", "[]"),
-    0x0E001740: table.sym_var("g_inside2_9", "static G_SCRIPT", "[]"),
-    0x0E001798: table.sym_var("g_inside2_10", "static G_SCRIPT", "[]"),
-    0x0E001800: table.sym_var("g_inside2_11", "static G_SCRIPT", "[]"),
-    0x0E001858: table.sym_var("g_inside2", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001940: table.sym_var("g_inside_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E001958: table.sym_var("g_inside3_1", "static G_SCRIPT", "[]"),
-    0x0E001980: table.sym_var("g_inside3_2", "static G_SCRIPT", "[]"),
-    0x0E0019C8: table.sym_var("g_inside3_3", "static G_SCRIPT", "[]"),
-    0x0E0019F8: table.sym_var("g_inside3_4", "static G_SCRIPT", "[]"),
-    0x0E001A30: table.sym_var("g_inside3_5", "static G_SCRIPT", "[]"),
-    0x0E001A58: table.sym_var("g_inside3_6", "static G_SCRIPT", "[]"),
-    0x0E001AB8: table.sym_var("g_inside3_7", "static G_SCRIPT", "[]"),
-    0x0E001AF8: table.sym_var("g_inside3_8", "static G_SCRIPT", "[]"),
-    0x0E001B48: table.sym_var("g_inside3_9", "static G_SCRIPT", "[]"),
-    0x0E001BB0: table.sym_var("g_inside3_10", "static G_SCRIPT", "[]"),
-    0x0E001C10: table.sym_var("g_inside3", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_inside_0E000000"),
+    0x0E0003F4: table.sym("p_inside_0E0003F4"),
+    0x0E000790: table.sym("p_inside_0E000790"),
+    0x0E0009BC: table.sym("p_inside_0E0009BC"),
+    0x0E000AF8: table.sym("p_inside", table.GLOBL),
+    0x0E000F00: table.sym_var("s_inside_208_209_213_214", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000F18: table.sym_var("s_inside_53", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000F30: table.sym_var("s_inside1_1", "static S_SCRIPT", "[]"),
+    0x0E000F70: table.sym_var("s_inside1_2", "static S_SCRIPT", "[]"),
+    0x0E000F88: table.sym_var("s_inside1_3", "static S_SCRIPT", "[]"),
+    0x0E000FA8: table.sym_var("s_inside1_4", "static S_SCRIPT", "[]"),
+    0x0E000FD0: table.sym_var("s_inside1_5", "static S_SCRIPT", "[]"),
+    0x0E001000: table.sym_var("s_inside1_6", "static S_SCRIPT", "[]"),
+    0x0E001038: table.sym_var("s_inside1_7", "static S_SCRIPT", "[]"),
+    0x0E001088: table.sym_var("s_inside1_8", "static S_SCRIPT", "[]"),
+    0x0E0010C8: table.sym_var("s_inside1_9", "static S_SCRIPT", "[]"),
+    0x0E001110: table.sym_var("s_inside1_10", "static S_SCRIPT", "[]"),
+    0x0E001158: table.sym_var("s_inside1_11", "static S_SCRIPT", "[]"),
+    0x0E0011A8: table.sym_var("s_inside1_12", "static S_SCRIPT", "[]"),
+    0x0E001200: table.sym_var("s_inside1_13", "static S_SCRIPT", "[]"),
+    0x0E001260: table.sym_var("s_inside1_14", "static S_SCRIPT", "[]"),
+    0x0E0012C8: table.sym_var("s_inside1_15", "static S_SCRIPT", "[]"),
+    0x0E001348: table.sym_var("s_inside1_16", "static S_SCRIPT", "[]"),
+    0x0E0013B8: table.sym_var("s_inside1_17", "static S_SCRIPT", "[]"),
+    0x0E001400: table.sym_var("s_inside1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001518: table.sym_var("s_inside_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001530: table.sym_var("s_inside_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001548: table.sym_var("s_inside_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001560: table.sym_var("s_inside2_1", "static S_SCRIPT", "[]"),
+    0x0E001578: table.sym_var("s_inside2_2", "static S_SCRIPT", "[]"),
+    0x0E0015B8: table.sym_var("s_inside2_3", "static S_SCRIPT", "[]"),
+    0x0E0015F8: table.sym_var("s_inside2_4", "static S_SCRIPT", "[]"),
+    0x0E001628: table.sym_var("s_inside2_5", "static S_SCRIPT", "[]"),
+    0x0E001668: table.sym_var("s_inside2_6", "static S_SCRIPT", "[]"),
+    0x0E001690: table.sym_var("s_inside2_7", "static S_SCRIPT", "[]"),
+    0x0E0016D8: table.sym_var("s_inside2_8", "static S_SCRIPT", "[]"),
+    0x0E001740: table.sym_var("s_inside2_9", "static S_SCRIPT", "[]"),
+    0x0E001798: table.sym_var("s_inside2_10", "static S_SCRIPT", "[]"),
+    0x0E001800: table.sym_var("s_inside2_11", "static S_SCRIPT", "[]"),
+    0x0E001858: table.sym_var("s_inside2", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001940: table.sym_var("s_inside_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E001958: table.sym_var("s_inside3_1", "static S_SCRIPT", "[]"),
+    0x0E001980: table.sym_var("s_inside3_2", "static S_SCRIPT", "[]"),
+    0x0E0019C8: table.sym_var("s_inside3_3", "static S_SCRIPT", "[]"),
+    0x0E0019F8: table.sym_var("s_inside3_4", "static S_SCRIPT", "[]"),
+    0x0E001A30: table.sym_var("s_inside3_5", "static S_SCRIPT", "[]"),
+    0x0E001A58: table.sym_var("s_inside3_6", "static S_SCRIPT", "[]"),
+    0x0E001AB8: table.sym_var("s_inside3_7", "static S_SCRIPT", "[]"),
+    0x0E001AF8: table.sym_var("s_inside3_8", "static S_SCRIPT", "[]"),
+    0x0E001B48: table.sym_var("s_inside3_9", "static S_SCRIPT", "[]"),
+    0x0E001BB0: table.sym_var("s_inside3_10", "static S_SCRIPT", "[]"),
+    0x0E001C10: table.sym_var("s_inside3", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_hmc = {
     0x003D0DC0: table.sym("szp_stage_hmc_start"),
     0x003E6A00: table.sym("data_stage_hmc_start"),
-    0x0E000000: table.sym("s_hmc_0E000000"),
-    0x0E0001CC: table.sym("s_hmc_0E0001CC"),
-    0x0E000290: table.sym("s_hmc_0E000290"),
-    0x0E0002F4: table.sym("s_hmc_0E0002F4"),
-    0x0E000388: table.sym("s_hmc", table.GLOBL),
-    0x0E000530: table.sym_var("g_hmc_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000548: table.sym_var("g_hmc_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000570: table.sym_var("g_hmc_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000588: table.sym_var("g_hmc_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005A0: table.sym_var("g_hmc_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005B8: table.sym_var("g_hmc_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005D0: table.sym_var("g_hmc_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E8: table.sym_var("g_hmc1_1", "static G_SCRIPT", "[]"),
-    0x0E000618: table.sym_var("g_hmc1_2", "static G_SCRIPT", "[]"),
-    0x0E000658: table.sym_var("g_hmc1_3", "static G_SCRIPT", "[]"),
-    0x0E0006A8: table.sym_var("g_hmc1_4", "static G_SCRIPT", "[]"),
-    0x0E0006E0: table.sym_var("g_hmc1_5", "static G_SCRIPT", "[]"),
-    0x0E000700: table.sym_var("g_hmc1_6", "static G_SCRIPT", "[]"),
-    0x0E000748: table.sym_var("g_hmc1_7", "static G_SCRIPT", "[]"),
-    0x0E000770: table.sym_var("g_hmc1_8", "static G_SCRIPT", "[]"),
-    0x0E000798: table.sym_var("g_hmc1_9", "static G_SCRIPT", "[]"),
-    0x0E0007F8: table.sym_var("g_hmc1_10", "static G_SCRIPT", "[]"),
-    0x0E000850: table.sym_var("g_hmc1_11", "static G_SCRIPT", "[]"),
-    0x0E0008D0: table.sym_var("g_hmc1_12", "static G_SCRIPT", "[]"),
-    0x0E000938: table.sym_var("g_hmc1_13", "static G_SCRIPT", "[]"),
-    0x0E000998: table.sym_var("g_hmc1_14", "static G_SCRIPT", "[]"),
-    0x0E000A18: table.sym_var("g_hmc1_15", "static G_SCRIPT", "[]"),
-    0x0E000A88: table.sym_var("g_hmc1_16", "static G_SCRIPT", "[]"),
-    0x0E000AE8: table.sym_var("g_hmc1_17", "static G_SCRIPT", "[]"),
-    0x0E000B48: table.sym_var("g_hmc1_18", "static G_SCRIPT", "[]"),
-    0x0E000B90: table.sym_var("g_hmc1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_hmc_0E000000"),
+    0x0E0001CC: table.sym("p_hmc_0E0001CC"),
+    0x0E000290: table.sym("p_hmc_0E000290"),
+    0x0E0002F4: table.sym("p_hmc_0E0002F4"),
+    0x0E000388: table.sym("p_hmc", table.GLOBL),
+    0x0E000530: table.sym_var("s_hmc_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000548: table.sym_var("s_hmc_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000570: table.sym_var("s_hmc_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000588: table.sym_var("s_hmc_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005A0: table.sym_var("s_hmc_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005B8: table.sym_var("s_hmc_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005D0: table.sym_var("s_hmc_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E8: table.sym_var("s_hmc1_1", "static S_SCRIPT", "[]"),
+    0x0E000618: table.sym_var("s_hmc1_2", "static S_SCRIPT", "[]"),
+    0x0E000658: table.sym_var("s_hmc1_3", "static S_SCRIPT", "[]"),
+    0x0E0006A8: table.sym_var("s_hmc1_4", "static S_SCRIPT", "[]"),
+    0x0E0006E0: table.sym_var("s_hmc1_5", "static S_SCRIPT", "[]"),
+    0x0E000700: table.sym_var("s_hmc1_6", "static S_SCRIPT", "[]"),
+    0x0E000748: table.sym_var("s_hmc1_7", "static S_SCRIPT", "[]"),
+    0x0E000770: table.sym_var("s_hmc1_8", "static S_SCRIPT", "[]"),
+    0x0E000798: table.sym_var("s_hmc1_9", "static S_SCRIPT", "[]"),
+    0x0E0007F8: table.sym_var("s_hmc1_10", "static S_SCRIPT", "[]"),
+    0x0E000850: table.sym_var("s_hmc1_11", "static S_SCRIPT", "[]"),
+    0x0E0008D0: table.sym_var("s_hmc1_12", "static S_SCRIPT", "[]"),
+    0x0E000938: table.sym_var("s_hmc1_13", "static S_SCRIPT", "[]"),
+    0x0E000998: table.sym_var("s_hmc1_14", "static S_SCRIPT", "[]"),
+    0x0E000A18: table.sym_var("s_hmc1_15", "static S_SCRIPT", "[]"),
+    0x0E000A88: table.sym_var("s_hmc1_16", "static S_SCRIPT", "[]"),
+    0x0E000AE8: table.sym_var("s_hmc1_17", "static S_SCRIPT", "[]"),
+    0x0E000B48: table.sym_var("s_hmc1_18", "static S_SCRIPT", "[]"),
+    0x0E000B90: table.sym_var("s_hmc1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ssl = {
     0x003E76B0: table.sym("szp_stage_ssl_start"),
     0x003FB990: table.sym("data_stage_ssl_start"),
-    0x0E000000: table.sym("s_ssl_0E000000"),
-    0x0E00001C: table.sym("s_ssl_0E00001C"),
-    0x0E0000E0: table.sym("s_ssl_0E0000E0"),
-    0x0E000114: table.sym("s_ssl_0E000114"),
-    0x0E000268: table.sym("s_ssl_0E000268"),
-    0x0E00029C: table.sym("s_ssl_0E00029C"),
-    0x0E0002B8: table.sym("s_ssl", table.GLOBL),
-    0x0E0005C0: table.sym_var("g_ssl_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005D8: table.sym_var("g_ssl_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000618: table.sym_var("g_ssl_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000630: table.sym_var("g_ssl_199", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000648: table.sym_var("g_ssl1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000734: table.sym_var("g_ssl_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000764: table.sym_var("g_ssl_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000794: table.sym_var("g_ssl_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007AC: table.sym_var("g_ssl_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007CC: table.sym_var("g_ssl2", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00088C: table.sym_var("g_ssl3", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_ssl_0E000000"),
+    0x0E00001C: table.sym("p_ssl_0E00001C"),
+    0x0E0000E0: table.sym("p_ssl_0E0000E0"),
+    0x0E000114: table.sym("p_ssl_0E000114"),
+    0x0E000268: table.sym("p_ssl_0E000268"),
+    0x0E00029C: table.sym("p_ssl_0E00029C"),
+    0x0E0002B8: table.sym("p_ssl", table.GLOBL),
+    0x0E0005C0: table.sym_var("s_ssl_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005D8: table.sym_var("s_ssl_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000618: table.sym_var("s_ssl_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000630: table.sym_var("s_ssl_199", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000648: table.sym_var("s_ssl1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000734: table.sym_var("s_ssl_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000764: table.sym_var("s_ssl_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000794: table.sym_var("s_ssl_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007AC: table.sym_var("s_ssl_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007CC: table.sym_var("s_ssl2", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00088C: table.sym_var("s_ssl3", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bob = {
     0x003FC2B0: table.sym("szp_stage_bob_start"),
     0x00405A60: table.sym("data_stage_bob_start"),
-    0x0E000000: table.sym("s_bob_0E000000"),
-    0x0E00007C: table.sym("s_bob_0E00007C"),
-    0x0E0001E8: table.sym("s_bob_0E0001E8"),
-    0x0E000264: table.sym("s_bob", table.GLOBL),
-    0x0E000440: table.sym_var("g_bob_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000458: table.sym_var("g_bob_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000470: table.sym_var("g_bob_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000488: table.sym_var("g_bob1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bob_0E000000"),
+    0x0E00007C: table.sym("p_bob_0E00007C"),
+    0x0E0001E8: table.sym("p_bob_0E0001E8"),
+    0x0E000264: table.sym("p_bob", table.GLOBL),
+    0x0E000440: table.sym_var("s_bob_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000458: table.sym_var("s_bob_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000470: table.sym_var("s_bob_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000488: table.sym_var("s_bob1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_sl = {
     0x00405FB0: table.sym("szp_stage_sl_start"),
     0x0040E840: table.sym("data_stage_sl_start"),
-    0x0E000000: table.sym("s_sl_0E000000"),
-    0x0E00004C: table.sym("s_sl_0E00004C"),
-    0x0E000068: table.sym("s_sl_0E000068"),
-    0x0E0000E4: table.sym("s_sl_0E0000E4"),
-    0x0E000100: table.sym("s_sl", table.GLOBL),
-    0x0E000360: table.sym_var("g_sl_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000378: table.sym_var("g_sl_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000390: table.sym_var("g_sl_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0003A8: table.sym_var("g_sl1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000484: table.sym_var("g_sl2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_sl_0E000000"),
+    0x0E00004C: table.sym("p_sl_0E00004C"),
+    0x0E000068: table.sym("p_sl_0E000068"),
+    0x0E0000E4: table.sym("p_sl_0E0000E4"),
+    0x0E000100: table.sym("p_sl", table.GLOBL),
+    0x0E000360: table.sym_var("s_sl_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000378: table.sym_var("s_sl_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000390: table.sym_var("s_sl_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0003A8: table.sym_var("s_sl1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000484: table.sym_var("s_sl2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_wdw = {
     0x0040ED70: table.sym("szp_stage_wdw_start"),
     0x00419F90: table.sym("data_stage_wdw_start"),
-    0x0E000000: table.sym("s_wdw_0E000000"),
-    0x0E0002A4: table.sym("s_wdw_0E0002A4"),
-    0x0E000308: table.sym("s_wdw_0E000308"),
-    0x0E00033C: table.sym("s_wdw_0E00033C"),
-    0x0E000370: table.sym("s_wdw", table.GLOBL),
-    0x0E000580: table.sym_var("g_wdw_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000598: table.sym_var("g_wdw_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005C0: table.sym_var("g_wdw_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E8: table.sym_var("g_wdw_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000610: table.sym_var("g_wdw_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000628: table.sym_var("g_wdw_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000640: table.sym_var("g_wdw_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000658: table.sym_var("g_wdw1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000724: table.sym_var("g_wdw2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_wdw_0E000000"),
+    0x0E0002A4: table.sym("p_wdw_0E0002A4"),
+    0x0E000308: table.sym("p_wdw_0E000308"),
+    0x0E00033C: table.sym("p_wdw_0E00033C"),
+    0x0E000370: table.sym("p_wdw", table.GLOBL),
+    0x0E000580: table.sym_var("s_wdw_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000598: table.sym_var("s_wdw_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005C0: table.sym_var("s_wdw_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E8: table.sym_var("s_wdw_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000610: table.sym_var("s_wdw_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000628: table.sym_var("s_wdw_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000640: table.sym_var("s_wdw_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000658: table.sym_var("s_wdw1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000724: table.sym_var("s_wdw2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_jrb = {
     0x0041A760: table.sym("szp_stage_jrb_start"),
     0x00423B20: table.sym("data_stage_jrb_start"),
-    0x0E000000: table.sym("s_jrb_0E000000"),
-    0x0E0001B4: table.sym("s_jrb_0E0001B4"),
-    0x0E000680: table.sym("s_jrb_0E000680"),
-    0x0E0006CC: table.sym("s_jrb_0E0006CC"),
-    0x0E0006E8: table.sym("s_jrb_0E0006E8"),
-    0x0E0006EC: table.sym("s_jrb", table.GLOBL),
-    0x0E000900: table.sym_var("g_jrb_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000918: table.sym_var("g_jrb_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000930: table.sym_var("g_jrb_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000948: table.sym_var("g_jrb_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000960: table.sym_var("g_jrb_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000978: table.sym_var("g_jrb_53", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000990: table.sym_var("g_jrb_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009C8: table.sym_var("g_jrb_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009B0: table.sym_var("g_jrb_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009E8: table.sym_var("g_jrb_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A00: table.sym_var("g_jrb_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A18: table.sym_var("g_jrb1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AFC: table.sym_var("g_jrb2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_jrb_0E000000"),
+    0x0E0001B4: table.sym("p_jrb_0E0001B4"),
+    0x0E000680: table.sym("p_jrb_0E000680"),
+    0x0E0006CC: table.sym("p_jrb_0E0006CC"),
+    0x0E0006E8: table.sym("p_jrb_0E0006E8"),
+    0x0E0006EC: table.sym("p_jrb", table.GLOBL),
+    0x0E000900: table.sym_var("s_jrb_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000918: table.sym_var("s_jrb_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000930: table.sym_var("s_jrb_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000948: table.sym_var("s_jrb_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000960: table.sym_var("s_jrb_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000978: table.sym_var("s_jrb_53", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000990: table.sym_var("s_jrb_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009C8: table.sym_var("s_jrb_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009B0: table.sym_var("s_jrb_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009E8: table.sym_var("s_jrb_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A00: table.sym_var("s_jrb_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A18: table.sym_var("s_jrb1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AFC: table.sym_var("s_jrb2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_thi = {
     0x004246D0: table.sym("szp_stage_thi_start"),
     0x0042C6E0: table.sym("data_stage_thi_start"),
-    0x0E000000: table.sym("s_thi_0E000000"),
-    0x0E000004: table.sym("s_thi_0E000004"),
-    0x0E000020: table.sym("s_thi_0E000020"),
-    0x0E000054: table.sym("s_thi_0E000054"),
-    0x0E000178: table.sym("s_thi_0E000178"),
-    0x0E000194: table.sym("s_thi_0E000194"),
-    0x0E0001C8: table.sym("s_thi_0E0001C8"),
-    0x0E00022C: table.sym("s_thi_0E00022C"),
-    0x0E000290: table.sym("s_thi", table.GLOBL),
-    0x0E0005B0: table.sym_var("g_thi_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005C8: table.sym_var("g_thi_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005F0: table.sym_var("g_thi_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000608: table.sym_var("g_thi1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006D4: table.sym_var("g_thi2", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00079C: table.sym_var("g_thi3", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_thi_0E000000"),
+    0x0E000004: table.sym("p_thi_0E000004"),
+    0x0E000020: table.sym("p_thi_0E000020"),
+    0x0E000054: table.sym("p_thi_0E000054"),
+    0x0E000178: table.sym("p_thi_0E000178"),
+    0x0E000194: table.sym("p_thi_0E000194"),
+    0x0E0001C8: table.sym("p_thi_0E0001C8"),
+    0x0E00022C: table.sym("p_thi_0E00022C"),
+    0x0E000290: table.sym("p_thi", table.GLOBL),
+    0x0E0005B0: table.sym_var("s_thi_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005C8: table.sym_var("s_thi_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005F0: table.sym_var("s_thi_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000608: table.sym_var("s_thi1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006D4: table.sym_var("s_thi2", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00079C: table.sym_var("s_thi3", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ttc = {
     0x0042CF20: table.sym("szp_stage_ttc_start"),
     0x00437400: table.sym("data_stage_ttc_start"),
-    0x0E000000: table.sym("s_ttc_0E000000"),
-    0x0E000034: table.sym("s_ttc_0E000034"),
-    0x0E0000C8: table.sym("s_ttc", table.GLOBL),
-    0x0E000240: table.sym_var("g_ttc_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000258: table.sym_var("g_ttc_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000270: table.sym_var("g_ttc_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000288: table.sym_var("g_ttc_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002A8: table.sym_var("g_ttc_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002C8: table.sym_var("g_ttc_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002E0: table.sym_var("g_ttc_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002F8: table.sym_var("g_ttc_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000310: table.sym_var("g_ttc_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000328: table.sym_var("g_ttc_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000340: table.sym_var("g_ttc_64", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000358: table.sym_var("g_ttc_65", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000370: table.sym_var("g_ttc_66", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000388: table.sym_var("g_ttc_67", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0003A0: table.sym_var("g_ttc_68", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0003B8: table.sym_var("g_ttc1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_ttc_0E000000"),
+    0x0E000034: table.sym("p_ttc_0E000034"),
+    0x0E0000C8: table.sym("p_ttc", table.GLOBL),
+    0x0E000240: table.sym_var("s_ttc_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000258: table.sym_var("s_ttc_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000270: table.sym_var("s_ttc_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000288: table.sym_var("s_ttc_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002A8: table.sym_var("s_ttc_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002C8: table.sym_var("s_ttc_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002E0: table.sym_var("s_ttc_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002F8: table.sym_var("s_ttc_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000310: table.sym_var("s_ttc_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000328: table.sym_var("s_ttc_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000340: table.sym_var("s_ttc_64", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000358: table.sym_var("s_ttc_65", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000370: table.sym_var("s_ttc_66", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000388: table.sym_var("s_ttc_67", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0003A0: table.sym_var("s_ttc_68", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0003B8: table.sym_var("s_ttc1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_rr = {
     0x00437870: table.sym("szp_stage_rr_start"),
     0x0044A140: table.sym("data_stage_rr_start"),
-    0x0E000000: table.sym("s_rr_0E000000"),
-    0x0E0002EC: table.sym("s_rr_0E0002EC"),
-    0x0E000368: table.sym("s_rr_0E000368"),
-    0x0E0003E4: table.sym("s_rr", table.GLOBL),
-    0x0E000660: table.sym_var("g_rr_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000678: table.sym_var("g_rr_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000690: table.sym_var("g_rr_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006A8: table.sym_var("g_rr_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006C0: table.sym_var("g_rr_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006D8: table.sym_var("g_rr_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006F0: table.sym_var("g_rr_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000708: table.sym_var("g_rr_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000720: table.sym_var("g_rr_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000738: table.sym_var("g_rr_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000758: table.sym_var("g_rr_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000770: table.sym_var("g_rr_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000788: table.sym_var("g_rr_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007A0: table.sym_var("g_rr_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007B8: table.sym_var("g_rr_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007D0: table.sym_var("g_rr_18", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007E8: table.sym_var("g_rr_19", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000800: table.sym_var("g_rr_20", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000818: table.sym_var("g_rr_21", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000830: table.sym_var("g_rr_22", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000848: table.sym_var("g_rr_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000860: table.sym_var("g_rr_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000878: table.sym_var("g_rr_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000890: table.sym_var("g_rr_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008A8: table.sym_var("g_rr_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008C0: table.sym_var("g_rr_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008D8: table.sym_var("g_rr_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008F0: table.sym_var("g_rr_64", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000908: table.sym_var("g_rr_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000920: table.sym_var("g_rr_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000940: table.sym_var("g_rr_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000958: table.sym_var("g_rr_65", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000970: table.sym_var("g_rr_66", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000988: table.sym_var("g_rr_67", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009A0: table.sym_var("g_rr_68", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009B8: table.sym_var("g_rr_69", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009D0: table.sym_var("g_rr1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_rr_0E000000"),
+    0x0E0002EC: table.sym("p_rr_0E0002EC"),
+    0x0E000368: table.sym("p_rr_0E000368"),
+    0x0E0003E4: table.sym("p_rr", table.GLOBL),
+    0x0E000660: table.sym_var("s_rr_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000678: table.sym_var("s_rr_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000690: table.sym_var("s_rr_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006A8: table.sym_var("s_rr_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006C0: table.sym_var("s_rr_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006D8: table.sym_var("s_rr_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006F0: table.sym_var("s_rr_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000708: table.sym_var("s_rr_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000720: table.sym_var("s_rr_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000738: table.sym_var("s_rr_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000758: table.sym_var("s_rr_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000770: table.sym_var("s_rr_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000788: table.sym_var("s_rr_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007A0: table.sym_var("s_rr_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007B8: table.sym_var("s_rr_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007D0: table.sym_var("s_rr_18", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007E8: table.sym_var("s_rr_19", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000800: table.sym_var("s_rr_20", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000818: table.sym_var("s_rr_21", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000830: table.sym_var("s_rr_22", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000848: table.sym_var("s_rr_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000860: table.sym_var("s_rr_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000878: table.sym_var("s_rr_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000890: table.sym_var("s_rr_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008A8: table.sym_var("s_rr_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008C0: table.sym_var("s_rr_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008D8: table.sym_var("s_rr_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008F0: table.sym_var("s_rr_64", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000908: table.sym_var("s_rr_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000920: table.sym_var("s_rr_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000940: table.sym_var("s_rr_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000958: table.sym_var("s_rr_65", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000970: table.sym_var("s_rr_66", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000988: table.sym_var("s_rr_67", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009A0: table.sym_var("s_rr_68", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009B8: table.sym_var("s_rr_69", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009D0: table.sym_var("s_rr1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ground = {
     0x0044ABC0: table.sym("szp_stage_grounds_start"),
     0x004545E0: table.sym("data_stage_grounds_start"),
-    0x0E000000: table.sym("s_grounds_0E000000"),
-    0x0E00013C: table.sym("s_grounds_0E00013C"),
-    0x0E000368: table.sym("s_grounds_0E000368"),
-    0x0E0003CC: table.sym("s_grounds_0E0003CC", table.GLOBL),
-    0x0E000508: table.sym("s_grounds", table.GLOBL),
-    0x0E000660: table.sym_var("g_grounds_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006F4: table.sym_var("g_grounds_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00070C: table.sym_var("g_grounds_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000724: table.sym_var("g_grounds_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E00073C: table.sym_var("g_grounds1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_grounds_0E000000"),
+    0x0E00013C: table.sym("p_grounds_0E00013C"),
+    0x0E000368: table.sym("p_grounds_0E000368"),
+    0x0E0003CC: table.sym("p_grounds_0E0003CC", table.GLOBL),
+    0x0E000508: table.sym("p_grounds", table.GLOBL),
+    0x0E000660: table.sym_var("s_grounds_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006F4: table.sym_var("s_grounds_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00070C: table.sym_var("s_grounds_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000724: table.sym_var("s_grounds_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E00073C: table.sym_var("s_grounds1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bitdw = {
     0x00454E00: table.sym("szp_stage_bitdw_start"),
     0x0045BF60: table.sym("data_stage_bitdw_start"),
-    0x0E000000: table.sym("s_bitdw_0E000000"),
-    0x0E000124: table.sym("s_bitdw_0E000124"),
-    0x0E000158: table.sym("s_bitdw_0E000158"),
-    0x0E000174: table.sym("s_bitdw", table.GLOBL),
-    0x0E0003C0: table.sym_var("g_bitdw_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0003D8: table.sym_var("g_bitdw_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0003F0: table.sym_var("g_bitdw_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000408: table.sym_var("g_bitdw_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000420: table.sym_var("g_bitdw_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000438: table.sym_var("g_bitdw_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000450: table.sym_var("g_bitdw_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000468: table.sym_var("g_bitdw_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000480: table.sym_var("g_bitdw_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000498: table.sym_var("g_bitdw_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004B0: table.sym_var("g_bitdw_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004C8: table.sym_var("g_bitdw_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004E0: table.sym_var("g_bitdw_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004F8: table.sym_var("g_bitdw_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000510: table.sym_var("g_bitdw_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000528: table.sym_var("g_bitdw_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000540: table.sym_var("g_bitdw_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000558: table.sym_var("g_bitdw_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000570: table.sym_var("g_bitdw_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000588: table.sym_var("g_bitdw_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005A0: table.sym_var("g_bitdw_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005B8: table.sym_var("g_bitdw_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005D0: table.sym_var("g_bitdw_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E8: table.sym_var("g_bitdw_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000600: table.sym_var("g_bitdw_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000618: table.sym_var("g_bitdw1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bitdw_0E000000"),
+    0x0E000124: table.sym("p_bitdw_0E000124"),
+    0x0E000158: table.sym("p_bitdw_0E000158"),
+    0x0E000174: table.sym("p_bitdw", table.GLOBL),
+    0x0E0003C0: table.sym_var("s_bitdw_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0003D8: table.sym_var("s_bitdw_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0003F0: table.sym_var("s_bitdw_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000408: table.sym_var("s_bitdw_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000420: table.sym_var("s_bitdw_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000438: table.sym_var("s_bitdw_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000450: table.sym_var("s_bitdw_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000468: table.sym_var("s_bitdw_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000480: table.sym_var("s_bitdw_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000498: table.sym_var("s_bitdw_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004B0: table.sym_var("s_bitdw_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004C8: table.sym_var("s_bitdw_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004E0: table.sym_var("s_bitdw_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004F8: table.sym_var("s_bitdw_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000510: table.sym_var("s_bitdw_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000528: table.sym_var("s_bitdw_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000540: table.sym_var("s_bitdw_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000558: table.sym_var("s_bitdw_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000570: table.sym_var("s_bitdw_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000588: table.sym_var("s_bitdw_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005A0: table.sym_var("s_bitdw_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005B8: table.sym_var("s_bitdw_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005D0: table.sym_var("s_bitdw_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E8: table.sym_var("s_bitdw_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000600: table.sym_var("s_bitdw_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000618: table.sym_var("s_bitdw1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_vcutm = {
     0x0045C600: table.sym("szp_stage_vcutm_start"),
     0x00461220: table.sym("data_stage_vcutm_start"),
-    0x0E0000B0: table.sym("s_vcutm_0E0000B0"),
-    0x0E000000: table.sym("s_vcutm_0E000000"),
-    0x0E000094: table.sym("s_vcutm_0E000094"),
-    0x0E0000CC: table.sym("s_vcutm", table.GLOBL),
-    0x0E0001F0: table.sym_var("g_vcutm_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000208: table.sym_var("g_vcutm1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E0000B0: table.sym("p_vcutm_0E0000B0"),
+    0x0E000000: table.sym("p_vcutm_0E000000"),
+    0x0E000094: table.sym("p_vcutm_0E000094"),
+    0x0E0000CC: table.sym("p_vcutm", table.GLOBL),
+    0x0E0001F0: table.sym_var("s_vcutm_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000208: table.sym_var("s_vcutm1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bitfs = {
     0x004614D0: table.sym("szp_stage_bitfs_start"),
     0x0046A840: table.sym("data_stage_bitfs_start"),
-    0x0E000000: table.sym("s_bitfs_0E000000"),
-    0x0E0001CC: table.sym("s_bitfs_0E0001CC"),
-    0x0E000218: table.sym("s_bitfs_0E000218"),
-    0x0E000234: table.sym("s_bitfs", table.GLOBL),
-    0x0E0004B0: table.sym_var("g_bitfs_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004C8: table.sym_var("g_bitfs_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004E0: table.sym_var("g_bitfs_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004F8: table.sym_var("g_bitfs_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000510: table.sym_var("g_bitfs_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000528: table.sym_var("g_bitfs_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000540: table.sym_var("g_bitfs_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000558: table.sym_var("g_bitfs_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000570: table.sym_var("g_bitfs_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000588: table.sym_var("g_bitfs_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005A0: table.sym_var("g_bitfs_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005B8: table.sym_var("g_bitfs_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005D0: table.sym_var("g_bitfs_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E8: table.sym_var("g_bitfs_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000600: table.sym_var("g_bitfs_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000618: table.sym_var("g_bitfs_18", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000630: table.sym_var("g_bitfs_19", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000648: table.sym_var("g_bitfs_20", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000660: table.sym_var("g_bitfs_21", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000678: table.sym_var("g_bitfs_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000690: table.sym_var("g_bitfs_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006A8: table.sym_var("g_bitfs_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006C0: table.sym_var("g_bitfs_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006D8: table.sym_var("g_bitfs_64", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006F0: table.sym_var("g_bitfs_65", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000708: table.sym_var("g_bitfs_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000728: table.sym_var("g_bitfs_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000740: table.sym_var("g_bitfs_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000758: table.sym_var("g_bitfs_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000770: table.sym_var("g_bitfs_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000788: table.sym_var("g_bitfs_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007A0: table.sym_var("g_bitfs1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bitfs_0E000000"),
+    0x0E0001CC: table.sym("p_bitfs_0E0001CC"),
+    0x0E000218: table.sym("p_bitfs_0E000218"),
+    0x0E000234: table.sym("p_bitfs", table.GLOBL),
+    0x0E0004B0: table.sym_var("s_bitfs_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004C8: table.sym_var("s_bitfs_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004E0: table.sym_var("s_bitfs_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004F8: table.sym_var("s_bitfs_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000510: table.sym_var("s_bitfs_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000528: table.sym_var("s_bitfs_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000540: table.sym_var("s_bitfs_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000558: table.sym_var("s_bitfs_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000570: table.sym_var("s_bitfs_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000588: table.sym_var("s_bitfs_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005A0: table.sym_var("s_bitfs_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005B8: table.sym_var("s_bitfs_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005D0: table.sym_var("s_bitfs_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E8: table.sym_var("s_bitfs_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000600: table.sym_var("s_bitfs_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000618: table.sym_var("s_bitfs_18", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000630: table.sym_var("s_bitfs_19", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000648: table.sym_var("s_bitfs_20", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000660: table.sym_var("s_bitfs_21", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000678: table.sym_var("s_bitfs_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000690: table.sym_var("s_bitfs_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006A8: table.sym_var("s_bitfs_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006C0: table.sym_var("s_bitfs_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006D8: table.sym_var("s_bitfs_64", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006F0: table.sym_var("s_bitfs_65", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000708: table.sym_var("s_bitfs_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000728: table.sym_var("s_bitfs_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000740: table.sym_var("s_bitfs_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000758: table.sym_var("s_bitfs_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000770: table.sym_var("s_bitfs_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000788: table.sym_var("s_bitfs_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007A0: table.sym_var("s_bitfs1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_sa = {
     0x0046B090: table.sym("szp_stage_sa_start"),
     0x0046C1A0: table.sym("data_stage_sa_start"),
-    0x0E000000: table.sym("s_sa_0E000000"),
-    0x0E000034: table.sym("s_sa_0E000034"),
-    0x0E000050: table.sym("s_sa", table.GLOBL),
-    0x0E000170: table.sym_var("g_sa1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_sa_0E000000"),
+    0x0E000034: table.sym("p_sa_0E000034"),
+    0x0E000050: table.sym("p_sa", table.GLOBL),
+    0x0E000170: table.sym_var("s_sa1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bits = {
     0x0046C3A0: table.sym("szp_stage_bits_start"),
     0x00477D00: table.sym("data_stage_bits_start"),
-    0x0E000000: table.sym("s_bits_0E000000"),
-    0x0E0001CC: table.sym("s_bits_0E0001CC"),
-    0x0E0001E8: table.sym("s_bits", table.GLOBL),
-    0x0E000430: table.sym_var("g_bits_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000448: table.sym_var("g_bits_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000460: table.sym_var("g_bits_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000478: table.sym_var("g_bits_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000490: table.sym_var("g_bits_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004A8: table.sym_var("g_bits_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004C0: table.sym_var("g_bits_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004D8: table.sym_var("g_bits_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004F0: table.sym_var("g_bits_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000508: table.sym_var("g_bits_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000520: table.sym_var("g_bits_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000538: table.sym_var("g_bits_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000550: table.sym_var("g_bits_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000568: table.sym_var("g_bits_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000580: table.sym_var("g_bits_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000598: table.sym_var("g_bits_18", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005B0: table.sym_var("g_bits_19", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005C8: table.sym_var("g_bits_20", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005E0: table.sym_var("g_bits_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0005F8: table.sym_var("g_bits_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000610: table.sym_var("g_bits_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000628: table.sym_var("g_bits_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000640: table.sym_var("g_bits_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000658: table.sym_var("g_bits_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000670: table.sym_var("g_bits_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000688: table.sym_var("g_bits_64", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006A0: table.sym_var("g_bits_65", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006B8: table.sym_var("g_bits_66", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006D0: table.sym_var("g_bits_67", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0006E8: table.sym_var("g_bits_68", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000700: table.sym_var("g_bits_69", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000718: table.sym_var("g_bits1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bits_0E000000"),
+    0x0E0001CC: table.sym("p_bits_0E0001CC"),
+    0x0E0001E8: table.sym("p_bits", table.GLOBL),
+    0x0E000430: table.sym_var("s_bits_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000448: table.sym_var("s_bits_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000460: table.sym_var("s_bits_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000478: table.sym_var("s_bits_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000490: table.sym_var("s_bits_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004A8: table.sym_var("s_bits_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004C0: table.sym_var("s_bits_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004D8: table.sym_var("s_bits_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004F0: table.sym_var("s_bits_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000508: table.sym_var("s_bits_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000520: table.sym_var("s_bits_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000538: table.sym_var("s_bits_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000550: table.sym_var("s_bits_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000568: table.sym_var("s_bits_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000580: table.sym_var("s_bits_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000598: table.sym_var("s_bits_18", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005B0: table.sym_var("s_bits_19", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005C8: table.sym_var("s_bits_20", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005E0: table.sym_var("s_bits_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0005F8: table.sym_var("s_bits_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000610: table.sym_var("s_bits_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000628: table.sym_var("s_bits_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000640: table.sym_var("s_bits_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000658: table.sym_var("s_bits_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000670: table.sym_var("s_bits_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000688: table.sym_var("s_bits_64", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006A0: table.sym_var("s_bits_65", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006B8: table.sym_var("s_bits_66", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006D0: table.sym_var("s_bits_67", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0006E8: table.sym_var("s_bits_68", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000700: table.sym_var("s_bits_69", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000718: table.sym_var("s_bits1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_lll = {
     0x004784A0: table.sym("szp_stage_lll_start"),
     0x0048C9B0: table.sym("data_stage_lll_start"),
-    0x0E000000: table.sym("s_lll_0E000000"),
-    0x0E000154: table.sym("s_lll_0E000154"),
-    0x0E000290: table.sym("s_lll_0E000290"),
-    0x0E000324: table.sym("s_lll_0E000324"),
-    0x0E0004C0: table.sym("s_lll_0E0004C0"),
-    0x0E0004F4: table.sym("s_lll_0E0004F4"),
-    0x0E000648: table.sym("s_lll_0E000648"),
-    0x0E00067C: table.sym("s_lll", table.GLOBL),
-    0x0E0009E0: table.sym_var("g_lll_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009F8: table.sym_var("g_lll_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A10: table.sym_var("g_lll_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A28: table.sym_var("g_lll_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A40: table.sym_var("g_lll_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A60: table.sym_var("g_lll_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A78: table.sym_var("g_lll_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A90: table.sym_var("g_lll_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AA8: table.sym_var("g_lll_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AC0: table.sym_var("g_lll_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AD8: table.sym_var("g_lll_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AF0: table.sym_var("g_lll_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B08: table.sym_var("g_lll_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B20: table.sym_var("g_lll_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B38: table.sym_var("g_lll_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B50: table.sym_var("g_lll_53", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B68: table.sym_var("g_lll_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B80: table.sym_var("g_lll_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B98: table.sym_var("g_lll_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BB0: table.sym_var("g_lll_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BC8: table.sym_var("g_lll_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BE0: table.sym_var("g_lll_64", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BF8: table.sym_var("g_lll_65", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C10: table.sym_var("g_lll_67", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C30: table.sym_var("g_lll_68", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C50: table.sym_var("g_lll_69", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C70: table.sym_var("g_lll_70", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C90: table.sym_var("g_lll_71", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000CB0: table.sym_var("g_lll_72", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000CD0: table.sym_var("g_lll_73", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000CF0: table.sym_var("g_lll_74", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D10: table.sym_var("g_lll_75", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D30: table.sym_var("g_lll_76", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D50: table.sym_var("g_lll_77", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D70: table.sym_var("g_lll_78", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D90: table.sym_var("g_lll_79", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000DB0: table.sym_var("g_lll_80", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000DD0: table.sym_var("g_lll_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000DE8: table.sym_var("g_lll_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000E00: table.sym_var("g_lll1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000EA8: table.sym_var("g_lll_83", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000EC0: table.sym_var("g_lll2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_lll_0E000000"),
+    0x0E000154: table.sym("p_lll_0E000154"),
+    0x0E000290: table.sym("p_lll_0E000290"),
+    0x0E000324: table.sym("p_lll_0E000324"),
+    0x0E0004C0: table.sym("p_lll_0E0004C0"),
+    0x0E0004F4: table.sym("p_lll_0E0004F4"),
+    0x0E000648: table.sym("p_lll_0E000648"),
+    0x0E00067C: table.sym("p_lll", table.GLOBL),
+    0x0E0009E0: table.sym_var("s_lll_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009F8: table.sym_var("s_lll_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A10: table.sym_var("s_lll_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A28: table.sym_var("s_lll_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A40: table.sym_var("s_lll_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A60: table.sym_var("s_lll_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A78: table.sym_var("s_lll_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A90: table.sym_var("s_lll_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AA8: table.sym_var("s_lll_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AC0: table.sym_var("s_lll_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AD8: table.sym_var("s_lll_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AF0: table.sym_var("s_lll_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B08: table.sym_var("s_lll_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B20: table.sym_var("s_lll_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B38: table.sym_var("s_lll_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B50: table.sym_var("s_lll_53", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B68: table.sym_var("s_lll_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B80: table.sym_var("s_lll_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B98: table.sym_var("s_lll_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BB0: table.sym_var("s_lll_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BC8: table.sym_var("s_lll_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BE0: table.sym_var("s_lll_64", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BF8: table.sym_var("s_lll_65", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C10: table.sym_var("s_lll_67", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C30: table.sym_var("s_lll_68", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C50: table.sym_var("s_lll_69", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C70: table.sym_var("s_lll_70", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C90: table.sym_var("s_lll_71", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000CB0: table.sym_var("s_lll_72", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000CD0: table.sym_var("s_lll_73", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000CF0: table.sym_var("s_lll_74", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D10: table.sym_var("s_lll_75", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D30: table.sym_var("s_lll_76", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D50: table.sym_var("s_lll_77", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D70: table.sym_var("s_lll_78", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D90: table.sym_var("s_lll_79", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000DB0: table.sym_var("s_lll_80", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000DD0: table.sym_var("s_lll_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000DE8: table.sym_var("s_lll_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000E00: table.sym_var("s_lll1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000EA8: table.sym_var("s_lll_83", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000EC0: table.sym_var("s_lll2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ddd = {
     0x0048D930: table.sym("szp_stage_ddd_start"),
     0x00495A60: table.sym("data_stage_ddd_start"),
-    0x0E000000: table.sym("s_ddd_0E000000"),
-    0x0E0000AC: table.sym("s_ddd_0E0000AC"),
-    0x0E0000E0: table.sym("s_ddd_0E0000E0"),
-    0x0E0001EC: table.sym("s_ddd_0E0001EC"),
-    0x0E000208: table.sym("s_ddd_0E000208"),
-    0x0E00026C: table.sym("s_ddd", table.GLOBL),
-    0x0E000450: table.sym_var("g_ddd_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000478: table.sym_var("g_ddd_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004A0: table.sym_var("g_ddd_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0004C0: table.sym_var("g_ddd1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000570: table.sym_var("g_ddd2", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_ddd_0E000000"),
+    0x0E0000AC: table.sym("p_ddd_0E0000AC"),
+    0x0E0000E0: table.sym("p_ddd_0E0000E0"),
+    0x0E0001EC: table.sym("p_ddd_0E0001EC"),
+    0x0E000208: table.sym("p_ddd_0E000208"),
+    0x0E00026C: table.sym("p_ddd", table.GLOBL),
+    0x0E000450: table.sym_var("s_ddd_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000478: table.sym_var("s_ddd_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004A0: table.sym_var("s_ddd_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0004C0: table.sym_var("s_ddd1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000570: table.sym_var("s_ddd2", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_wf = {
     0x00496090: table.sym("szp_stage_wf_start"),
     0x0049DA50: table.sym("data_stage_wf_start"),
-    0x0E000000: table.sym("s_wf_0E000000"),
-    0x0E0000DC: table.sym("s_wf_0E0000DC"),
-    0x0E000260: table.sym("s_wf_0E000260"),
-    0x0E0004D4: table.sym("s_wf_0E0004D4"),
-    0x0E000568: table.sym("s_wf", table.GLOBL),
-    0x0E0007E0: table.sym_var("g_wf_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000820: table.sym_var("g_wf_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000860: table.sym_var("g_wf_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000878: table.sym_var("g_wf_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000890: table.sym_var("g_wf_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008A8: table.sym_var("g_wf_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008E8: table.sym_var("g_wf_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000900: table.sym_var("g_wf_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000940: table.sym_var("g_wf_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000958: table.sym_var("g_wf_14", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009A0: table.sym_var("g_wf_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009B8: table.sym_var("g_wf_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009D0: table.sym_var("g_wf_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009E8: table.sym_var("g_wf_18", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A00: table.sym_var("g_wf_174", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A40: table.sym_var("g_wf_177", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A58: table.sym_var("g_wf_175", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A98: table.sym_var("g_wf_173", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AB0: table.sym_var("g_wf_176", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AC8: table.sym_var("g_wf_178", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AE0: table.sym_var("g_wf_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000AF8: table.sym_var("g_wf_44", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B10: table.sym_var("g_wf_45", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B38: table.sym_var("g_wf_46", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B60: table.sym_var("g_wf_47", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B78: table.sym_var("g_wf_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B90: table.sym_var("g_wf_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BA8: table.sym_var("g_wf_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BC8: table.sym_var("g_wf_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BE0: table.sym_var("g_wf_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BF8: table.sym_var("g_wf1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_wf_0E000000"),
+    0x0E0000DC: table.sym("p_wf_0E0000DC"),
+    0x0E000260: table.sym("p_wf_0E000260"),
+    0x0E0004D4: table.sym("p_wf_0E0004D4"),
+    0x0E000568: table.sym("p_wf", table.GLOBL),
+    0x0E0007E0: table.sym_var("s_wf_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000820: table.sym_var("s_wf_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000860: table.sym_var("s_wf_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000878: table.sym_var("s_wf_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000890: table.sym_var("s_wf_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008A8: table.sym_var("s_wf_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008E8: table.sym_var("s_wf_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000900: table.sym_var("s_wf_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000940: table.sym_var("s_wf_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000958: table.sym_var("s_wf_14", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009A0: table.sym_var("s_wf_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009B8: table.sym_var("s_wf_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009D0: table.sym_var("s_wf_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009E8: table.sym_var("s_wf_18", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A00: table.sym_var("s_wf_174", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A40: table.sym_var("s_wf_177", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A58: table.sym_var("s_wf_175", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A98: table.sym_var("s_wf_173", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AB0: table.sym_var("s_wf_176", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AC8: table.sym_var("s_wf_178", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AE0: table.sym_var("s_wf_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000AF8: table.sym_var("s_wf_44", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B10: table.sym_var("s_wf_45", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B38: table.sym_var("s_wf_46", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B60: table.sym_var("s_wf_47", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B78: table.sym_var("s_wf_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B90: table.sym_var("s_wf_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BA8: table.sym_var("s_wf_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BC8: table.sym_var("s_wf_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BE0: table.sym_var("s_wf_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BF8: table.sym_var("s_wf1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_end = {
     0x0049E710: table.sym("szp_stage_end_start"),
     0x004AC4B0: table.sym("data_stage_end_start"),
-    0x0E000000: table.sym("s_end", table.GLOBL),
-    0x0E000050: table.sym_var("g_end1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_end", table.GLOBL),
+    0x0E000050: table.sym_var("s_end1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_courty = {
     0x004AC570: table.sym("szp_stage_courtyard_start"),
     0x004AF670: table.sym("data_stage_courtyard_start"),
-    0x0E000000: table.sym("s_courtyard_0E000000"),
-    0x0E00004C: table.sym("s_courtyard_0E00004C"),
-    0x0E000098: table.sym("s_courtyard", table.GLOBL),
-    0x0E000200: table.sym_var("g_courtyard_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000218: table.sym_var("g_courtyard1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_courtyard_0E000000"),
+    0x0E00004C: table.sym("p_courtyard_0E00004C"),
+    0x0E000098: table.sym("p_courtyard", table.GLOBL),
+    0x0E000200: table.sym_var("s_courtyard_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000218: table.sym_var("s_courtyard1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_pss = {
     0x004AF930: table.sym("szp_stage_pss_start"),
     0x004B7F10: table.sym("data_stage_pss_start"),
-    0x0E000000: table.sym("s_pss", table.GLOBL),
-    0x0E000100: table.sym_var("g_pss1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_pss", table.GLOBL),
+    0x0E000100: table.sym_var("s_pss1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_cotmc = {
     0x004B80D0: table.sym("szp_stage_cotmc_start"),
     0x004BE9E0: table.sym("data_stage_cotmc_start"),
-    0x0E000000: table.sym("s_cotmc_0E000000"),
-    0x0E00004C: table.sym("s_cotmc_0E00004C"),
-    0x0E000068: table.sym("s_cotmc", table.GLOBL),
-    0x0E0001A0: table.sym_var("g_cotmc1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_cotmc_0E000000"),
+    0x0E00004C: table.sym("p_cotmc_0E00004C"),
+    0x0E000068: table.sym("p_cotmc", table.GLOBL),
+    0x0E0001A0: table.sym_var("s_cotmc1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_totwc = {
     0x004BEC30: table.sym("szp_stage_totwc_start"),
     0x004C2700: table.sym("data_stage_totwc_start"),
-    0x0E000000: table.sym("s_totwc_0E000000"),
-    0x0E00001C: table.sym("s_totwc_0E00001C"),
-    0x0E000038: table.sym("s_totwc", table.GLOBL),
-    0x0E000160: table.sym_var("g_totwc_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000188: table.sym_var("g_totwc1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_totwc_0E000000"),
+    0x0E00001C: table.sym("p_totwc_0E00001C"),
+    0x0E000038: table.sym("p_totwc", table.GLOBL),
+    0x0E000160: table.sym_var("s_totwc_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000188: table.sym_var("s_totwc1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bitdwa = {
     0x004C2920: table.sym("szp_stage_bitdwa_start"),
     0x004C41C0: table.sym("data_stage_bitdwa_start"),
-    0x0E000000: table.sym("s_bitdwa", table.GLOBL),
-    0x0E0000D0: table.sym_var("g_bitdwa1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bitdwa", table.GLOBL),
+    0x0E0000D0: table.sym_var("s_bitdwa1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_wmotr = {
     0x004C4320: table.sym("szp_stage_wmotr_start"),
     0x004CD930: table.sym("data_stage_wmotr_start"),
-    0x0E000000: table.sym("s_wmotr_0E000000"),
-    0x0E000094: table.sym("s_wmotr_0E000094"),
-    0x0E0000B0: table.sym("s_wmotr", table.GLOBL),
-    0x0E0001F0: table.sym_var("g_wmotr1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_wmotr_0E000000"),
+    0x0E000094: table.sym("p_wmotr_0E000094"),
+    0x0E0000B0: table.sym("p_wmotr", table.GLOBL),
+    0x0E0001F0: table.sym_var("s_wmotr1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bitfsa = {
     0x004CDBD0: table.sym("szp_stage_bitfsa_start"),
     0x004CE9F0: table.sym("data_stage_bitfsa_start"),
-    0x0E000000: table.sym("s_bitfsa_0E000000"),
-    0x0E00007C: table.sym("s_bitfsa", table.GLOBL),
-    0x0E000170: table.sym_var("g_bitfsa_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000188: table.sym_var("g_bitfsa1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bitfsa_0E000000"),
+    0x0E00007C: table.sym("p_bitfsa", table.GLOBL),
+    0x0E000170: table.sym_var("s_bitfsa_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000188: table.sym_var("s_bitfsa1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_bitsa = {
     0x004CEC00: table.sym("szp_stage_bitsa_start"),
     0x004D14F0: table.sym("data_stage_bitsa_start"),
-    0x0E000000: table.sym("s_bitsa_0E000000"),
-    0x0E00016C: table.sym("s_bitsa", table.GLOBL),
-    0x0E000290: table.sym_var("g_bitsa_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002A8: table.sym_var("g_bitsa_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002C0: table.sym_var("g_bitsa_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002D8: table.sym_var("g_bitsa_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0002F0: table.sym_var("g_bitsa_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000308: table.sym_var("g_bitsa_59", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000320: table.sym_var("g_bitsa_60", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000338: table.sym_var("g_bitsa_61", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000350: table.sym_var("g_bitsa_62", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000368: table.sym_var("g_bitsa_63", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000380: table.sym_var("g_bitsa_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000398: table.sym_var("g_bitsa1", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_bitsa_0E000000"),
+    0x0E00016C: table.sym("p_bitsa", table.GLOBL),
+    0x0E000290: table.sym_var("s_bitsa_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002A8: table.sym_var("s_bitsa_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002C0: table.sym_var("s_bitsa_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002D8: table.sym_var("s_bitsa_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0002F0: table.sym_var("s_bitsa_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000308: table.sym_var("s_bitsa_59", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000320: table.sym_var("s_bitsa_60", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000338: table.sym_var("s_bitsa_61", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000350: table.sym_var("s_bitsa_62", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000368: table.sym_var("s_bitsa_63", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000380: table.sym_var("s_bitsa_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000398: table.sym_var("s_bitsa1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_ttm = {
     0x004D1910: table.sym("szp_stage_ttm_start"),
     0x004EB1F0: table.sym("data_stage_ttm_start"),
-    0x0E000000: table.sym("s_ttm_0E000000"),
-    0x0E00001C: table.sym("s_ttm_0E00001C"),
-    0x0E0001B8: table.sym("s_ttm_0E0001B8"),
-    0x0E00024C: table.sym("s_ttm_0E00024C"),
-    0x0E0002B0: table.sym("s_ttm_0E0002B0"),
-    0x0E000344: table.sym("s_ttm_0E000344"),
-    0x0E000390: table.sym("s_ttm_0E000390"),
-    0x0E000394: table.sym("s_ttm", table.GLOBL),
-    0x0E000710: table.sym_var("g_ttm_54", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000730: table.sym_var("g_ttm_53", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000748: table.sym_var("g_ttm_3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000778: table.sym_var("g_ttm_4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007A8: table.sym_var("g_ttm_5", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0007D8: table.sym_var("g_ttm_6", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000808: table.sym_var("g_ttm_7", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000830: table.sym_var("g_ttm_8", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000858: table.sym_var("g_ttm_9", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000880: table.sym_var("g_ttm_10", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008A8: table.sym_var("g_ttm_11", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008D0: table.sym_var("g_ttm_12", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0008F8: table.sym_var("g_ttm_13", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000920: table.sym_var("g_ttm_15", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000948: table.sym_var("g_ttm_16", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000970: table.sym_var("g_ttm_17", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000990: table.sym_var("g_ttm_18", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009C0: table.sym_var("g_ttm_19", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E0009F0: table.sym_var("g_ttm_20", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A18: table.sym_var("g_ttm_21", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A40: table.sym_var("g_ttm_22", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000A70: table.sym_var("g_ttm1", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000B5C: table.sym_var("g_ttm2", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000BEC: table.sym_var("g_ttm3", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000C84: table.sym_var("g_ttm4", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D14: table.sym_var("g_ttm_55", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D4C: table.sym_var("g_ttm_56", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000D84: table.sym_var("g_ttm_57", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000DBC: table.sym_var("g_ttm_58", "G_SCRIPT", "[]", table.GLOBL),
-    0x0E000DF4: table.sym_var("g_ttm_123", "G_SCRIPT", "[]", table.GLOBL),
+    0x0E000000: table.sym("p_ttm_0E000000"),
+    0x0E00001C: table.sym("p_ttm_0E00001C"),
+    0x0E0001B8: table.sym("p_ttm_0E0001B8"),
+    0x0E00024C: table.sym("p_ttm_0E00024C"),
+    0x0E0002B0: table.sym("p_ttm_0E0002B0"),
+    0x0E000344: table.sym("p_ttm_0E000344"),
+    0x0E000390: table.sym("p_ttm_0E000390"),
+    0x0E000394: table.sym("p_ttm", table.GLOBL),
+    0x0E000710: table.sym_var("s_ttm_54", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000730: table.sym_var("s_ttm_53", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000748: table.sym_var("s_ttm_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000778: table.sym_var("s_ttm_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007A8: table.sym_var("s_ttm_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0007D8: table.sym_var("s_ttm_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000808: table.sym_var("s_ttm_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000830: table.sym_var("s_ttm_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000858: table.sym_var("s_ttm_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000880: table.sym_var("s_ttm_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008A8: table.sym_var("s_ttm_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008D0: table.sym_var("s_ttm_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0008F8: table.sym_var("s_ttm_13", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000920: table.sym_var("s_ttm_15", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000948: table.sym_var("s_ttm_16", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000970: table.sym_var("s_ttm_17", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000990: table.sym_var("s_ttm_18", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009C0: table.sym_var("s_ttm_19", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E0009F0: table.sym_var("s_ttm_20", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A18: table.sym_var("s_ttm_21", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A40: table.sym_var("s_ttm_22", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000A70: table.sym_var("s_ttm1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000B5C: table.sym_var("s_ttm2", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000BEC: table.sym_var("s_ttm3", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000C84: table.sym_var("s_ttm4", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D14: table.sym_var("s_ttm_55", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D4C: table.sym_var("s_ttm_56", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000D84: table.sym_var("s_ttm_57", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000DBC: table.sym_var("s_ttm_58", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000DF4: table.sym_var("s_ttm_123", "S_SCRIPT", "[]", table.GLOBL),
 }
 
-table = [
+tbl = [
+    (0x00000040, 0x00001000, "E0", sym_E0_t_ipl3,   {}, {}),
     (0x00001000, 0x00001050, "E0", sym_E0_t_crt0,   {}, imm_E0_t_crt0),
     (0x00001050, 0x000DD370, "E0", sym_E0_t_main, dev_E0_t_main, imm_E0_t_main),
     (0x000DD370, 0x000E6260, "E0", sym_E0_t_ultra,  {}, {}),
-    (0x000E6260, 0x000E6330, "E0", sym_E0_t_spboot, {}, {}),
-    (0x000E6330, 0x000E7290, "E0", sym_E0_t_gF3D_0, {}, {}),
-    (0x000E7290, 0x000E7318, "E0", sym_E0_t_gF3D_1, {}, {}),
+    (0x000E6260, 0x000E6330, "E0", sym_E0_t_spboot, {}, imm_E0_t_spboot),
+    (0x000E6330, 0x000E7318, "E0", sym_E0_t_gF3D_0, {}, {}),
     (0x000E7318, 0x000E7538, "E0", sym_E0_t_gF3D_2, {}, {}),
     (0x000E7538, 0x000E76D0, "E0", sym_E0_t_gF3D_3, {}, {}),
-    (0x000E76D0, 0x000E7740, "E0", sym_E0_t_gF3D_4, {}, {}),
+    (0x000E76D0, 0x000E7740, "E0", sym_E0_t_gF3D_4, {}, imm_E0_t_gF3D_4),
     (0x000E7740, 0x000E8560, "E0", sym_E0_t_aMain,  {}, {}),
     (0x000E8560, 0x000F0010, "E0", sym_E0_d_main,   {}, {}),
     (0x000F0010, 0x000F0B60, "E0", sym_E0_d_ultra,  {}, {}),
@@ -14255,7 +15714,7 @@ table = [
     (0x00357350, 0x0035ED10, "E0", sym_E0_txt_j,    {}, {}),
     (0x0035ED10, 0x00365980, "E0", sym_E0_txt_k,    {}, {}),
     (0x00365980, 0x0036F530, "E0", sym_E0_txt_l,    {}, {}),
-    (0x0036F530, 0x00371C40, "E0", sym_E0_pcl_a,    {}, {}),
+    (0x0036F530, 0x00371C40, "E0", sym_E0_weather,  {}, {}),
     (0x00371C40, 0x00383950, "E0", sym_E0_s_bbh,    {}, {}),
     (0x00383950, 0x00396340, "E0", sym_E0_s_ccm,    {}, {}),
     (0x00396340, 0x003D0DC0, "E0", sym_E0_s_inside, {}, {}),
