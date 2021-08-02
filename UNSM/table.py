@@ -1550,8 +1550,8 @@ sym_E0_d_ultra = {
 
     # ultra/src/vi.data.c
     0x803359C0: table.sym_var("vi", "__OSViContext",  "[2]"),
-    0x80335A20: table.sym_var("__osViCurr", "OSViContext *",    flag=ultra.DALIGN),
-    0x80335A24: table.sym_var("__osViNext", "OSViContext *",    flag=ultra.DALIGN),
+    0x80335A20: table.sym_var("__osViCurr", "__OSViContext *",  flag=ultra.DALIGN),
+    0x80335A24: table.sym_var("__osViNext", "__OSViContext *",  flag=ultra.DALIGN),
     0x80335A28: table.sym_var("ultra_data_80335A28",    "u32",  flag=ultra.DALIGN),
     0x80335A2C: table.sym_var("ultra_data_80335A2C",    "u32",  flag=ultra.DALIGN),
 
