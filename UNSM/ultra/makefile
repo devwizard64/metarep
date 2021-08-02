@@ -6,11 +6,11 @@ SRC_OBJ := \
 	build/src/unmaptlball.o         \
 	build/src/sprintf.o             \
 	build/src/createmesgqueue.o     \
-	build/src/seteventmesg.o        \
+	build/src/seteventmesg.o        build/src/seteventmesg.data.o       \
 	build/src/visetevent.o          \
 	build/src/createthread.o        \
 	build/src/recvmesg.o            \
-	build/src/sptask.o              \
+	build/src/sptask.o              build/src/sptask.data.o             \
 	build/src/sptaskyield.o         \
 	build/src/sendmesg.o            \
 	build/src/sptaskyielded.o       \
@@ -84,7 +84,7 @@ SRC_OBJ := \
 	build/src/conteepwrite.o        \
 	build/src/jammesg.o             \
 	build/src/pigetcmdq.o           \
-	build/src/conteepread.o         \
+	build/src/conteepread.o         build/src/conteepread.data.o        \
 	build/src/mtx.o                 \
 	build/src/normalize.o           \
 	build/src/ai.o                  \
@@ -101,8 +101,7 @@ SRC_OBJ := \
 	build/src/si.o                  \
 	build/src/ldiv.o                \
 	build/src/getcause.o            \
-	build/src/atomic.o              \
-	build/src/data.o
+	build/src/atomic.o
 
 OBJ := \
 	lib/PR/header.o         \

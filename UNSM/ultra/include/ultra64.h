@@ -373,10 +373,10 @@ OSContPad;
 #define OS_PHYSICAL_TO_K0(x)    (void *)(((u32)(x)+0x80000000))
 
 /* sptask.h */
-#define osSpTaskStart(tp)                                                      \
-{                                                                              \
-    osSpTaskLoad((tp));                                                        \
-    osSpTaskStartGo((tp));                                                     \
+#define osSpTaskStart(tp)   \
+{                           \
+    osSpTaskLoad((tp));     \
+    osSpTaskStartGo((tp));  \
 }
 typedef struct
 {
@@ -431,20 +431,21 @@ typedef struct
 }
 OSViContext;
 
-struct ultra_0
+typedef struct
 {
-    u32   _00;
-    void *_04;
-    void *_08;
-    void *_0C;
-    void *_10;
-    void *_14;
-};
+    s32                 active;
+    OSThread           *thread;
+    OSMesgQueue        *cmdQueue;
+    OSMesgQueue        *evtQueue;
+    OSMesgQueue        *acsQueue;
+    s32               (*dma)(s32, u32, void *, u32);
+}
+OSDevMgr;
 
-struct ultra_1
+struct os_event_state
 {
-    void *_00;
-    s32   _04;
+    OSMesgQueue        *mq;
+    OSMesg              msg;
 };
 
 /* 0x80000300 */ extern s32 osTvType;
@@ -558,43 +559,14 @@ struct ultra_1
 /* 0x8032D560 */ extern u64 aspMainTextEnd[];
 
 /* 0x80335010 */ extern OSViMode osViModeTable[];
-/* 0x80335010 */ extern OSViMode osViModeNtscLpn1;
-/* 0x80335060 */ extern OSViMode osViModeNtscLpf1;
-/* 0x803350B0 */ extern OSViMode osViModeNtscLan1;
-/* 0x80335100 */ extern OSViMode osViModeNtscLaf1;
-/* 0x80335150 */ extern OSViMode osViModeNtscLpn2;
-/* 0x803351A0 */ extern OSViMode osViModeNtscLpf2;
-/* 0x803351F0 */ extern OSViMode osViModeNtscLan2;
-/* 0x80335240 */ extern OSViMode osViModeNtscLaf2;
-/* 0x80335290 */ extern OSViMode osViModeNtscHpn1;
-/* 0x803352E0 */ extern OSViMode osViModeNtscHpf1;
-/* 0x80335330 */ extern OSViMode osViModeNtscHan1;
-/* 0x80335380 */ extern OSViMode osViModeNtscHaf1;
-/* 0x803353D0 */ extern OSViMode osViModeNtscHpn2;
-/* 0x80335420 */ extern OSViMode osViModeNtscHpf2;
-/* 0x80335470 */ extern OSViMode osViModePalLpn1;
-/* 0x803354C0 */ extern OSViMode osViModePalLpf1;
-/* 0x80335510 */ extern OSViMode osViModePalLan1;
-/* 0x80335560 */ extern OSViMode osViModePalLaf1;
-/* 0x803355B0 */ extern OSViMode osViModePalLpn2;
-/* 0x80335600 */ extern OSViMode osViModePalLpf2;
-/* 0x80335650 */ extern OSViMode osViModePalLan2;
-/* 0x803356A0 */ extern OSViMode osViModePalLaf2;
-/* 0x803356F0 */ extern OSViMode osViModePalHpn1;
-/* 0x80335740 */ extern OSViMode osViModePalHpf1;
-/* 0x80335790 */ extern OSViMode osViModePalHan1;
-/* 0x803357E0 */ extern OSViMode osViModePalHaf1;
-/* 0x80335830 */ extern OSViMode osViModePalHpn2;
-/* 0x80335880 */ extern OSViMode osViModePalHpf2;
 /* 0x80335910 */ extern u64 osClockRate;
-/* 0x803359B4 */ extern OSThread *libultra_data_803359B4;
+/* 0x80335AA0 */ extern OSViMode osViModeNtscLan1;
+/* 0x80335AF0 */ extern OSViMode osViModePalLan1;
 
 /* 0x80339AC0 */ extern u64 gspFast3D_fifoDataStart[];
 /* 0x8033A2C0 */ extern u64 gspFast3D_fifoDataEnd[];
 /* 0x8033A2C0 */ extern u64 aspMainDataStart[];
 /* 0x8033A580 */ extern u64 aspMainDataEnd[];
-
-/* 0x80364BA0 */ extern u8 _ultra_bss[];
 
 #else /* __ASSEMBLER__ */
 

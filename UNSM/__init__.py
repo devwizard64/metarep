@@ -267,6 +267,7 @@ str_code_d = str_code_u + ".set gp = 64\n"
 
 str_data_u = """
 #include <ultra64.h>
+#include "internal.h"
 
 """
 
@@ -400,17 +401,14 @@ def s_writepop():
         [main.s_pop],
     ]]
 
-def s_ifdef(s, l=0, r=0):
-    return [main.s_str, "%s#ifdef %s%s" % ("\n"*l, s, "\n"*(1+r))]
+def s_def(s, l=0, r=0):
+    return [main.s_str, "\n"*l + s + "\n"*(1+r)]
 
-def s_ifndef(s, l=0, r=0):
-    return [main.s_str, "%s#ifndef %s%s" % ("\n"*l, s, "\n"*(1+r))]
-
-def s_else(s, l=0, r=0):
-    return [main.s_str, "%s#else /* %s */%s" % ("\n"*l, s, "\n"*(1+r))]
-
-def s_endif(s, l=0, r=0):
-    return [main.s_str, "%s#endif /* %s */%s" % ("\n"*l, s, "\n"*(1+r))]
+def s_ifdef(s, l=0, r=0):   return s_def("#ifdef %s"        % s, l, r)
+def s_ifndef(s, l=0, r=0):  return s_def("#ifndef %s"       % s, l, r)
+def s_define(s, l=0, r=0):  return s_def("#define %s"       % s, l, r)
+def s_else(s, l=0, r=0):    return s_def("#else /* %s */"   % s, l, r)
+def s_endif(s, l=0, r=0):   return s_def("#endif /* %s */"  % s, l, r)
 
 def s_script_ifndef():
     return s_ifndef("__SCRIPT__", 1, 1)
@@ -848,6 +846,14 @@ stbl_demo = [
 ]
 
 ultra_src = [
+    [main.s_file, "internal.h"],
+        s_ifndef("__ULTRA_INTERNAL_H__", 0, 0),
+        s_define("__ULTRA_INTERNAL_H__", 0, 1),
+        s_ifndef("__ASSEMBLER__", 1, 1),
+            [main.s_str, header.str_ultra_internal_c],
+        s_endif("__ASSEMBLER__", 1, 1),
+        s_endif("__ULTRA_INTERNAL_H__", 1, 0),
+    [main.s_write],
     [main.s_file, "parameters.S"],
         [main.s_str, header.str_ultra_parameters],
     [main.s_write],
@@ -952,17 +958,21 @@ ultra_src = [
     s_data(0x80335010, 0x803358D0, 0x803397B0, 0x803397B0, 0, 0, "vitbl", [
         [1, -28, ultra.c.d_OSViMode],
     ], [], str_data_u),
-    s_data(0x803358D0, 0x803358E8, 0x803397B0, 0x803397B0, 0, 0, "vimgr.data", [
+    s_data(0x803358D0, 0x803358D0, 0x803397B0, 0x803397B0, 0x80364BA0, 0x80364C18, "seteventmesg.data", [
+    ], [], str_data_u),
+    s_data(0x803358D0, 0x803358D0, 0x803397B0, 0x803397B0, 0x80364C20, 0x80364C60, "sptask.data", [
+    ], [], str_data_u),
+    s_data(0x803358D0, 0x803358E8, 0x803397B0, 0x803397B0, 0x80364C60, 0x80365E6E, "vimgr.data", [
         [1, 1, 1, ultra.c.d_str, 0x18, "0"],
     ], [], str_data_u),
-    s_data(0x803358F0, 0x80335908, 0x803397B0, 0x803397B0, 0, 0, "pimgr.data", [
+    s_data(0x803358F0, 0x80335908, 0x803397B0, 0x803397B0, 0x80365E70, 0x8036703C, "pimgr.data", [
         [1, 1, 1, ultra.c.d_str, 0x18, "0"],
     ], [], str_data_u),
-    s_data(0x80335910, 0x8033591C, 0x803397B0, 0x803397B0, 0, 0, "initialize.data", [
+    s_data(0x80335910, 0x8033591C, 0x803397B0, 0x803397B0, 0x80367040, 0x80367044, "initialize.data", [
         [0, 1, 1, ultra.c.d_u64],
         [0, 1, 1, ultra.c.d_u32],
     ], [], str_data_u),
-    s_data(0x80335920, 0x80335924, 0x803397B0, 0x803397B0, 0, 0, "controller.data", [
+    s_data(0x80335920, 0x80335924, 0x803397B0, 0x803397B0, 0x80367050, 0x803670D4, "controller.data", [
         [0, 1, 1, ultra.c.d_u32],
     ], [], str_data_u),
     s_data(0x80335930, 0x80335930, 0x803397B0, 0x803397B8, 0, 0, "perspective.data", [], [
@@ -981,14 +991,14 @@ ultra_src = [
         [0,  3, 1, ultra.c.d_f64],
         [0,  1, 1, ultra.c.d_f32],
     ], str_data_u),
-    s_data(0x80335930, 0x80335930, 0x80339870, 0x80339874, 0, 0, "rotate.data", [], [
+    s_data(0x80335930, 0x80335930, 0x80339870, 0x80339874, 0x803670E0, 0x803670E4, "rotate.data", [], [
         [0, 1, 1, ultra.c.d_f32],
     ], str_data_u),
     s_data(0x80335930, 0x80335931, 0x80339880, 0x80339880, 0, 0, "aisetnextbuf.data", [
         [0, 1, 1, ultra.c.d_u8],
     ], [], str_data_u),
-    s_data(0x80335940, 0x80335944, 0x80339880, 0x80339880, 0, 0, "timerintr.data", [
-        [0, 1, 1, ultra.c.d_addr, 0],
+    s_data(0x80335940, 0x80335944, 0x80339880, 0x80339880, 0x803670F0, 0x80367124, "timerintr.data", [
+        [0, 1, 1, ultra.c.d_addr, ultra.A_ADDR],
     ], [], str_data_u),
     s_data(0x80335950, 0x80335994, 0x80339880, 0x80339974, 0, 0, "xprintf.data", [
         [0, 2, 36, "str"],
@@ -1028,11 +1038,13 @@ ultra_src = [
     s_data(0x80335A50, 0x80335A50, 0x803399D0, 0x803399D4, 0, 0, "libm_vals", [], [
         [0, 1, 1, ultra.c.d_u32, "0x%08X"],
     ], str_data_u),
-    s_data(0x80335A50, 0x80335A54, 0x803399E0, 0x803399E0, 0, 0, "piacs.data", [
+    s_data(0x80335A50, 0x80335A54, 0x803399E0, 0x803399E0, 0x80367130, 0x80367150, "piacs.data", [
         [0, 1, 1, ultra.c.d_u32],
     ], [], str_data_u),
-    s_data(0x80335A60, 0x80335A64, 0x803399E0, 0x803399E0, 0, 0, "siacs.data", [
+    s_data(0x80335A60, 0x80335A64, 0x803399E0, 0x803399E0, 0x80367150, 0x80367170, "siacs.data", [
         [0, 1, 1, ultra.c.d_u32],
+    ], [], str_data_u),
+    s_data(0x80335A70, 0x80335A70, 0x803399E0, 0x803399E0, 0x80367170, 0x803671B0, "conteepread.data", [
     ], [], str_data_u),
     s_data(0x80335A70, 0x80335A98, 0x803399E0, 0x803399E0, 0, 0, "xlitob.data", [
         [0, 2, 20, "str"],
@@ -1048,7 +1060,7 @@ ultra_src = [
     s_data(0x80335AF0, 0x80335B40, 0x80339A40, 0x80339A40, 0, 0, "vimodepallan1", [
         [0, 1, ultra.c.d_OSViMode],
     ], [], str_data_u),
-    s_data(0x80335B40, 0x80335B4C, 0x80339A40, 0x80339A40, 0, 0, "kdebugserver.data", [
+    s_data(0x80335B40, 0x80335B4C, 0x80339A40, 0x80339A40, 0x803671B0, 0x80367460, "kdebugserver.data", [
         [0, 3, 1, ultra.c.d_u32],
     ], [], str_data_u),
     s_data(0x80335B50, 0x80335B58, 0x80339A40, 0x80339A40, 0, 0, "syncputchars.data", [
@@ -1057,15 +1069,6 @@ ultra_src = [
     s_data(0x80335B60, 0x80335B60, 0x80339A40, 0x80339AC0, 0, 0, "setintmask.data", [], [
         [0, -8, 8, ultra.c.d_u16, "0x%04X"],
     ], str_data_u),
-    [main.s_file, "data.S"],
-        [main.s_str, """
-.bss
-
-.globl _ultra_bss
-_ultra_bss:
-    .space 0x28C0
-"""],
-    [main.s_write],
 ]
 
 ultra_PR = [

@@ -1,5 +1,10 @@
 import table
 
+str_ultra_internal_c = """
+#define dalign                  __attribute__((aligned(4)))
+#define balign                  __attribute__((aligned(8)))
+"""
+
 str_ultra_parameters = """
 .globl osTvType;        osTvType        = 0x80000300
 .globl osRomType;       osRomType       = 0x80000304

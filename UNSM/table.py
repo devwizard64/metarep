@@ -1494,69 +1494,20 @@ sym_E0_t_ultra = {
     0x80335910: table.sym("osClockRate+0"),
     0x80335914: table.sym("osClockRate+4"),
 
-    # seteventmesg.o
-    0x80364BA0: table.sym("_ultra_bss+0x0000"), # <0x80>    __osEventStateTab
+    0x80365E40: table.sym("viRetraceMsg+0"),
+    0x80365E42: table.sym("viRetraceMsg+2"),
+    0x80365E44: table.sym("viRetraceMsg+4"),
 
-    # sptask.o
-    0x80364C20: table.sym("_ultra_bss+0x0080"), # OSTask    tmp_task
+    0x80365E58: table.sym("viCounterMsg+0"),
+    0x80365E5A: table.sym("viCounterMsg+2"),
+    0x80365E5C: table.sym("viCounterMsg+4"),
 
-    # vimgr.o
-    0x80364C60: table.sym("_ultra_bss+0x00C0"), # OSThread      viThread
-    0x80364E10: table.sym("_ultra_bss+0x0270"), # u64[512]      viThreadStack
-    0x80365E10: table.sym("_ultra_bss+0x1270"), # OSMesgQueue   viEventQueue
-    0x80365E28: table.sym("_ultra_bss+0x1288"), # OSMesg[5]     viEventBuf
-    0x80365E40: table.sym("_ultra_bss+0x12A0+0"),   # <0x16>    viRetraceMsg
-    0x80365E42: table.sym("_ultra_bss+0x12A0+2"),
-    0x80365E44: table.sym("_ultra_bss+0x12A0+4"),
-    0x80365E58: table.sym("_ultra_bss+0x12B8+0"),   # <0x16>    viCounterMsg
-    0x80365E5A: table.sym("_ultra_bss+0x12B8+2"),
-    0x80365E5C: table.sym("_ultra_bss+0x12B8+4"),
-    0x80365E6C: table.sym("_ultra_bss+0x12B8+0x14"),
+    0x8036708C: table.sym("__osContPifRam+0x3C"),
 
-    # pimgr.o
-    0x80365E70: table.sym("_ultra_bss+0x12D0"), # OSThread      piThread
-    0x80366020: table.sym("_ultra_bss+0x1480"), # u64[512]      piThreadStack
-    0x80367020: table.sym("_ultra_bss+0x2480"), # OSMesgQueue   piEventQueue
-    0x80367038: table.sym("_ultra_bss+0x2498"), # OSMesg[1]     piEventBuf
+    0x80367110: table.sym("__osCurrentTime+0"),
+    0x80367114: table.sym("__osCurrentTime+4"),
 
-    # initialize.o
-    0x80367040: table.sym("_ultra_bss+0x24A0"), # int   __osFinalrom
-
-    # controller.o
-    0x80367050: table.sym("_ultra_bss+0x24B0"), # u32[16]       __osContPifRam
-    0x8036708C: table.sym("_ultra_bss+0x24B0+0x3C"),
-    0x80367090: table.sym("_ultra_bss+0x24F0"), # u8            __osContLastCmd
-    0x80367091: table.sym("_ultra_bss+0x24F1"), # u8            __osMaxControllers
-    0x80367098: table.sym("_ultra_bss+0x24F8"), # OSTimer       __osEepromTimer
-    0x803670B8: table.sym("_ultra_bss+0x2518"), # OSMesgQueue   __osEepromTimerQ
-    0x803670D0: table.sym("_ultra_bss+0x2530"), # OSMesg[1]     __osEepromTimerMsg
-
-    # rotate.o
-    0x803670E0: table.sym("_ultra_bss+0x2540"), # float <static>
-
-    # timerintr.o
-    0x803670F0: table.sym("_ultra_bss+0x2550"), # OSTimer   __osBaseTimer
-    0x80367110: table.sym("_ultra_bss+0x2570+0"), # OSTime  __osCurrentTime
-    0x80367114: table.sym("_ultra_bss+0x2570+4"),
-    0x80367118: table.sym("_ultra_bss+0x2578"), # u32   __osBaseCounter
-    0x8036711C: table.sym("_ultra_bss+0x257C"), # u32   __osViIntrCount
-    0x80367120: table.sym("_ultra_bss+0x2580"), # u32   __osTimerCounter
-
-    # piacs.o
-    0x80367130: table.sym("_ultra_bss+0x2590"), # OSMesg[1]     piAccessBuf
-    0x80367138: table.sym("_ultra_bss+0x2598"), # OSMesgQueue   __osPiAccessQueue
-
-    # siacs.o
-    0x80367150: table.sym("_ultra_bss+0x25B0"), # OSMesg[1]     siAccessBuf
-    0x80367158: table.sym("_ultra_bss+0x25B8"), # OSMesgQueue   __osSiAccessQueue
-
-    # conteepread.o
-    0x80367170: table.sym("_ultra_bss+0x25D0"), # u32[16]   __osEepPifRam
-    0x803671AC: table.sym("_ultra_bss+0x25D0+0x3C"),
-
-    # kdebugserver.o
-    0x803671B0: table.sym("_ultra_bss+0x2610"), # u8[0x100] buffer
-    0x803672B0: table.sym("_ultra_bss+0x2710"), # OSThread  __osThreadSave
+    0x803671AC: table.sym("__osEepPifRam+0x3C"),
 }
 
 sym_E0_d_ultra = {
@@ -1565,44 +1516,44 @@ sym_E0_d_ultra = {
     # ==========================================================================
 
     # ultra/src/vitbl.c
-    0x80335010: table.sym_var("osViModeTable", "OSViMode", "[]"),
+    0x80335010: table.sym_var("osViModeTable",  "OSViMode", "[]"),
 
     # ultra/src/vimgr.data.c
-    0x803358D0: table.sym_var("__osViDevMgr", "struct ultra_0"),
+    0x803358D0: table.sym_var("__osViDevMgr",   "OSDevMgr"),
 
     # ultra/src/pimgr.data.c
-    0x803358F0: table.sym_var("__osPiDevMgr", "struct ultra_0"),
+    0x803358F0: table.sym_var("__osPiDevMgr",   "OSDevMgr"),
 
     # ultra/src/initialize.data.c
-    0x80335910: table.sym_var("osClockRate", "u64"),
-    0x80335918: table.sym_var("osViClock", "u32"),
+    0x80335910: table.sym_var("osClockRate",    "u64"),
+    0x80335918: table.sym_var("osViClock",      "u32",  flag=ultra.DALIGN),
 
     # ultra/src/controller.data.c
-    0x80335920: table.sym_var("__osContinitialized", "u32"),
+    0x80335920: table.sym_var("__osContinitialized",    "u32",  flag=ultra.DALIGN),
 
     # ultra/src/aisetnextbuf.data.c
-    0x80335930: table.sym_var("hdwrBugFlag", "u8"),
+    0x80335930: table.sym_var("hdwrBugFlag",    "u8",   flag=ultra.DALIGN),
 
     # ultra/src/timerintr.c
-    0x80335940: table.sym_var("__osTimerList", "void *"),
+    0x80335940: table.sym_var("__osTimerList",  "OSTimer *",    flag=ultra.DALIGN),
 
     # ultra/src/xprintf.data.c
     0x80335950: table.sym_var("spaces", "char", "[]"),
     0x80335974: table.sym_var("zeroes", "char", "[]"),
 
     # ultra/src/thread.data.c
-    0x803359A0: table.sym_var("__osThreadTail", "__OSThreadTail"),
-    0x803359A8: table.sym_var("__osRunQueue", "OSThread *"),
-    0x803359AC: table.sym_var("__osActiveQueue", "OSThread *"),
-    0x803359B0: table.sym_var("__osRunningThread", "OSThread *"),
-    0x803359B4: table.sym_var("__osFaultedThread", "OSThread *"),
+    0x803359A0: table.sym_var("__osThreadTail",     "__OSThreadTail"),
+    0x803359A8: table.sym_var("__osRunQueue",       "OSThread *",  flag=ultra.DALIGN),
+    0x803359AC: table.sym_var("__osActiveQueue",    "OSThread *",  flag=ultra.DALIGN),
+    0x803359B0: table.sym_var("__osRunningThread",  "OSThread *",  flag=ultra.DALIGN),
+    0x803359B4: table.sym_var("__osFaultedThread",  "OSThread *",  flag=ultra.DALIGN),
 
     # ultra/src/vi.data.c
-    0x803359C0: table.sym_var("vi", "OSViContext", "[2]"),
-    0x80335A20: table.sym_var("__osViCurr", "OSViContext *"),
-    0x80335A24: table.sym_var("__osViNext", "OSViContext *"),
-    0x80335A28: table.sym_var("ultra_data_80335A28", "u32"),
-    0x80335A2C: table.sym_var("ultra_data_80335A2C", "u32"),
+    0x803359C0: table.sym_var("vi", "OSViContext",  "[2]"),
+    0x80335A20: table.sym_var("__osViCurr", "OSViContext *",    flag=ultra.DALIGN),
+    0x80335A24: table.sym_var("__osViNext", "OSViContext *",    flag=ultra.DALIGN),
+    0x80335A28: table.sym_var("ultra_data_80335A28",    "u32",  flag=ultra.DALIGN),
+    0x80335A2C: table.sym_var("ultra_data_80335A2C",    "u32",  flag=ultra.DALIGN),
 
     # ultra/src/exceptasm.S
     0x80335A30: table.sym("__osHwIntTable"),
@@ -1610,29 +1561,29 @@ sym_E0_d_ultra = {
     0x80335A48: table.sym("ultra_data_80335A48"), # rdb IP6 trigger (read)
 
     # ultra/src/piacs.data.c
-    0x80335A50: table.sym_var("__osPiAccessQueueEnabled", "u32"),
+    0x80335A50: table.sym_var("__osPiAccessQueueEnabled",   "u32",  flag=ultra.DALIGN),
 
     # ultra/src/siacs.data.c
-    0x80335A60: table.sym_var("__osSiAccessQueueEnabled", "u32"),
+    0x80335A60: table.sym_var("__osSiAccessQueueEnabled",   "u32",  flag=ultra.DALIGN),
 
     # ultra/src/xlitob.data.c
     0x80335A70: table.sym_var("ldigs",  "char", "[]"),
     0x80335A84: table.sym_var("udigs",  "char", "[]"),
 
     # ultra/src/vimodentsclan1.c
-    0x80335AA0: table.sym_var("osViModeNtscLan1", "OSViMode"),
+    0x80335AA0: table.sym_var("osViModeNtscLan1",   "OSViMode"),
 
     # ultra/src/vimodepallan1.c
-    0x80335AF0: table.sym_var("osViModePalLan1", "OSViMode"),
+    0x80335AF0: table.sym_var("osViModePalLan1",    "OSViMode"),
 
     # ultra/src/kdebugserver.data.c
-    0x80335B40: table.sym_var("ultra_data_80335B40", "u32"), # numChars ?
-    0x80335B44: table.sym_var("ultra_data_80335B44", "u32"),
-    0x80335B48: table.sym_var("ultra_data_80335B48", "u32"),
+    0x80335B40: table.sym_var("ultra_data_80335B40",    "u32",  flag=ultra.DALIGN), # numChars ?
+    0x80335B44: table.sym_var("ultra_data_80335B44",    "u32",  flag=ultra.DALIGN),
+    0x80335B48: table.sym_var("ultra_data_80335B48",    "u32",  flag=ultra.DALIGN),
 
     # ultra/src/syncputchars.data.c
-    0x80335B50: table.sym_var("__osRdbSendMessage", "u32", flag=table.GLOBL),
-    0x80335B54: table.sym_var("__osRdbWriteOK",     "u32", flag=table.GLOBL),
+    0x80335B50: table.sym_var("__osRdbSendMessage", "u32",  flag=ultra.DALIGN),
+    0x80335B54: table.sym_var("__osRdbWriteOK",     "u32",  flag=ultra.DALIGN),
 
     # ==========================================================================
     # rodata
@@ -1688,6 +1639,63 @@ sym_E0_d_ultra = {
     # ==========================================================================
     # bss
     # ==========================================================================
+
+    # ultra/src/seteventmesg.data.c
+    0x80364BA0: table.sym_var("__osEventStateTab",  "struct os_event_state",    "[OS_NUM_EVENTS]",  ultra.BALIGN),
+
+    # ultra/src/sptask.data.c
+    0x80364C20: table.sym_var("tmp_task",   "OSTask",   flag=ultra.BALIGN),
+
+    # ultra/src/vimgr.data.c
+    0x80364C60: table.sym_var("viThread",       "OSThread", flag=ultra.BALIGN),
+    0x80364E10: table.sym_var("viThreadStack",  "u64",  "[0x1000/sizeof(u64)]", ultra.BALIGN),
+    0x80365E10: table.sym_var("viEventQueue",   "OSMesgQueue",  flag=ultra.BALIGN),
+    0x80365E28: table.sym_var("viEventBuf",     "OSMesg",   "[5]",  ultra.BALIGN),
+    0x80365E40: table.sym_var("viRetraceMsg",   "OSIoMesg", flag=ultra.BALIGN),
+    0x80365E58: table.sym_var("viCounterMsg",   "OSIoMesg", flag=ultra.BALIGN),
+    0x80365E6C: table.sym_var("retrace",        "u16"),
+
+    # ultra/src/pimgr.data.c
+    0x80365E70: table.sym_var("piThread",       "OSThread", flag=ultra.BALIGN),
+    0x80366020: table.sym_var("piThreadStack",  "u64",  "[0x1000/sizeof(u64)]", ultra.BALIGN),
+    0x80367020: table.sym_var("piEventQueue",   "OSMesgQueue",  flag=ultra.BALIGN),
+    0x80367038: table.sym_var("piEventBuf",     "OSMesg",   "[1]",  ultra.BALIGN),
+
+    # ultra/src/initialize.data.c
+    0x80367040: table.sym_var("__osFinalrom",   "int"),
+
+    # ultra/src/controller.data.c
+    0x80367050: table.sym_var("__osContPifRam",     "u32",  "[0x40/sizeof(u32)]",   ultra.BALIGN),
+    0x80367090: table.sym_var("__osContLastCmd",    "u8"),
+    0x80367091: table.sym_var("__osMaxControllers", "u8"),
+    0x80367098: table.sym_var("__osEepromTimer",    "OSTimer",  flag=ultra.BALIGN),
+    0x803670B8: table.sym_var("__osEepromTimerQ",   "OSMesgQueue",  flag=ultra.BALIGN),
+    0x803670D0: table.sym_var("__osEepromTimerMsg", "OSMesg",   "[1]",  ultra.BALIGN),
+
+    # ultra/src/rotate.data.c
+    0x803670E0: table.sym_var("dtor",   "float",    flag=table.GLOBL),
+
+    # ultra/src/timerintr.data.c
+    0x803670F0: table.sym_var("__osBaseTimer",      "OSTimer",  flag=ultra.BALIGN),
+    0x80367110: table.sym_var("__osCurrentTime",    "OSTime"),
+    0x80367118: table.sym_var("__osBaseCounter",    "u32"),
+    0x8036711C: table.sym_var("__osViIntrCount",    "u32"),
+    0x80367120: table.sym_var("__osTimerCounter",   "u32"),
+
+    # ultra/src/piacs.data.c
+    0x80367130: table.sym_var("piAccessBuf",        "OSMesg",   "[1]",  ultra.BALIGN),
+    0x80367138: table.sym_var("__osPiAccessQueue",  "OSMesgQueue",  flag=ultra.BALIGN),
+
+    # ultra/src/siacs.data.c
+    0x80367150: table.sym_var("siAccessBuf",        "OSMesg",   "[1]",  ultra.BALIGN),
+    0x80367158: table.sym_var("__osSiAccessQueue",  "OSMesgQueue",  flag=ultra.BALIGN),
+
+    # ultra/src/conteepread.data.c
+    0x80367170: table.sym_var("__osEepPifRam",  "u32",  "[0x40/sizeof(u32)]",   ultra.BALIGN),
+
+    # ultra/src/kdebugserver.data.c
+    0x803671B0: table.sym_var("buffer", "u8",   "[0x100]",  ultra.BALIGN),
+    0x803672B0: table.sym_var("__osThreadSave", "OSThread", flag=ultra.BALIGN),
 }
 
 sym_E0_t_spboot = {
