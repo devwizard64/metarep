@@ -1673,7 +1673,7 @@ sym_E0_d_ultra = {
     0x803670D0: table.sym_var("__osEepromTimerMsg", "OSMesg",   "[1]",  ultra.BALIGN),
 
     # ultra/src/rotate.data.c
-    0x803670E0: table.sym_var("dtor",   "float",    flag=table.GLOBL),
+    0x803670E0: table.sym_var("dtor",   "float"),
 
     # ultra/src/timerintr.data.c
     0x803670F0: table.sym_var("__osBaseTimer",      "OSTimer",  flag=ultra.BALIGN),
@@ -1738,7 +1738,7 @@ sym_E0_t_gF3D_0 = {
     0x040010A8: table.sym("cmd_next"),
     0x040010B8: table.sym("cmd_cont"),
     0x040010C8: table.sym("task_exit"),
-    0x040010CC: table.sym("task_yield"),
+    0x040010CC: table.sym(".task_yield", table.LOCAL),
     0x040010D4: table.sym("cmd_load"),
     0x040010F8: table.sym("prg_load"),
     0x040010FC: table.sym("prg_jump"),
@@ -2090,18 +2090,30 @@ sym_E0_t_main = {
     0x8024B7C0: table.sym("game_8024B7C0"),
     0x8024B880: table.sym("game_8024B880"),
     0x8024B940: table.sym("game_8024B940"), # unused
-    0x8024B9B8: table.sym("game_8024B9B8"),
+    0x8024B9B8: table.sym_fnc("game_update", "int"),
     0x8024B9EC: table.sym_fnc("L8024B9EC", flag=table.GLOBL|table.LOCAL),
     0x8024BA00: table.sym_fnc("L8024BA00", flag=table.GLOBL|table.LOCAL),
     0x8024BA14: table.sym_fnc("L8024BA14", flag=table.GLOBL|table.LOCAL),
     0x8024BA28: table.sym_fnc("L8024BA28", flag=table.GLOBL|table.LOCAL),
     0x8024BA3C: table.sym_fnc("L8024BA3C", flag=table.GLOBL|table.LOCAL),
     0x8024BA50: table.sym_fnc("L8024BA50", flag=table.GLOBL|table.LOCAL),
-    0x8024BA8C: table.sym("game_8024BA8C"),
-    0x8024BCD8: table.sym("p_game_8024BCD8", table.GLOBL), # p callback
-    0x8024BD5C: table.sym("p_game_8024BD5C", table.GLOBL), # p callback
-    0x8024BE14: table.sym("p_game_8024BE14", table.GLOBL), # p callback
-    0x8024BFA0: table.sym("p_game_8024BFA0", table.GLOBL), # p callback
+    0x8024BA8C: table.sym_fnc("game_init", "int"),
+    0x8024BCD8: table.sym_fnc("p_game_main", "int", (
+        "s16 arg",
+        "int code",
+    ), table.GLOBL), # p callback
+    0x8024BD5C: table.sym_fnc("p_game_init", "int", (
+        "s16 arg",
+        "int code",
+    ), table.GLOBL), # p callback
+    0x8024BE14: table.sym_fnc("p_game_select", "int", (
+        "s16 arg",
+        "int code",
+    ), table.GLOBL), # p callback
+    0x8024BFA0: table.sym_fnc("p_end_sfx", "int", (
+        "s16 arg",
+        "int code",
+    ), table.GLOBL), # p callback
 
     # src/pl_collision.S
     0x8024BFF0: table.sym("pl_collision_8024BFF0"),
@@ -7191,6 +7203,9 @@ sym_E0_t_main = {
     0x8033C3C0: table.sym("time+time___30+0"),
     0x8033C3C4: table.sym("time+time___30+4"),
 
+    0x8033D274: table.sym("object_8033D274+struct_8033D274__ground"),
+    0x8033D276: table.sym("object_8033D274+struct_8033D274__roof"),
+    0x8033D278: table.sym("object_8033D274+struct_8033D274__wall"),
     0x8033D4FC: table.sym("object_data+object__flag"),
     0x80360EA0: table.sym("object_dummy+object__list+obj_list__s+shape_object__world"),
     0x80360EA1: table.sym("object_dummy+object__list+obj_list__s+shape_object__shape"),
@@ -8158,15 +8173,15 @@ sym_E0_d_main = {
     0x80332694: table.sym_var("object_b_80332694",  "struct obj_col",   flag=table.GLOBL),
     0x803326A4: table.sym_var("object_b_803326A4",  "struct obj_col",   flag=table.GLOBL),
     0x803326B4: table.sym_var("object_b_803326B4",  "struct obj_col",   flag=table.GLOBL),
-    0x803326C4: table.sym_var("object_b_803326C4",  "s16",  "[]",   table.GLOBL), # PATH_DATA
-    0x80332718: table.sym_var("object_b_80332718",  "s16",  "[]",   table.GLOBL), # PATH_DATA
+    0x803326C4: table.sym_var("object_b_803326C4",  "PATH_DATA",    "[]",   table.GLOBL),
+    0x80332718: table.sym_var("object_b_80332718",  "PATH_DATA",    "[]",   table.GLOBL),
     0x80332764: table.sym_var("object_b_80332764",  "struct obj_col",   flag=table.GLOBL),
     0x80332774: table.sym_var("object_b_80332774",  "struct obj_col",   flag=table.GLOBL),
     0x80332784: table.sym_var("object_b_80332784",  "struct obj_col",   flag=table.GLOBL),
     0x80332794: table.sym_var("object_b_80332794",  "struct obj_col",   flag=table.GLOBL),
     0x803327A4: table.sym_var("object_b_803327A4",  "s8",   flag=table.GLOBL|ultra.DALIGN),
     0x803327A8: table.sym_var("object_b_803327A8",  "struct obj_col",   flag=table.GLOBL),
-    0x803327B8: table.sym_var("object_b_803327B8",  "s16",  "[]",   table.GLOBL), # PATH_DATA
+    0x803327B8: table.sym_var("object_b_803327B8",  "PATH_DATA",    "[]",   table.GLOBL),
     0x803327FC: table.sym_var("object_b_803327FC",  "struct obj_col",   flag=table.GLOBL),
     0x8033280C: table.sym_var("object_b_8033280C",  "struct obj_col",   flag=table.GLOBL),
     0x8033281C: table.sym_var("object_b_8033281C",  "struct obj_col",   flag=table.GLOBL),
@@ -9853,10 +9868,7 @@ sym_E0_d_main = {
     0x8033D268: table.sym_var("object_8033D268",    "int",  flag=table.GLOBL), # unused
     0x8033D26C: table.sym_var("object_8033D26C",    "int",  flag=table.GLOBL), # "WALL"
     0x8033D270: table.sym_var("object_8033D270",    "int",  flag=table.GLOBL), # "obj"
-    # struct
-    0x8033D274: table.sym_var("object_8033D274",    "s16",  flag=table.GLOBL), # ground count
-    0x8033D276: table.sym_var("object_8033D276",    "s16",  flag=table.GLOBL), # roof count
-    0x8033D278: table.sym_var("object_8033D278",    "s16",  flag=table.GLOBL), # wall count
+    0x8033D274: table.sym_var("object_8033D274",    "struct struct_8033D274",   flag=table.GLOBL), # no balign?
     0x8033D280: table.sym_var("object_8033D280",    "s16", "[16][8]", table.GLOBL|ultra.BALIGN),
     0x8033D380: table.sym_var("object_8033D380",    "s16", "[16][8]", table.GLOBL|ultra.BALIGN),
     0x8033D480: table.sym_var("object_8033D480",    "int",  flag=table.GLOBL), # obj freeze
@@ -10664,7 +10676,7 @@ sym_E0_t_menu = {
     0x8016F3CC: table.sym("title_8016F3CC"),
     0x8016F4B0: table.sym("title_8016F4B0"),
     0x8016F564: table.sym("title_8016F564"),
-    0x8016F5B0: table.sym("p_title_8016F5B0", table.GLOBL), # p callback
+    0x8016F5B0: table.sym("p_title_main", table.GLOBL), # p callback
 
     # src/title_bg.S
     0x8016F670: table.sym("s_logo_shape", table.GLOBL), # s callback
@@ -10798,8 +10810,8 @@ sym_E0_t_menu = {
     0x801765A8: table.sym_fnc("L801765A8", flag=table.GLOBL|table.LOCAL),
     0x801765B8: table.sym_fnc("L801765B8", flag=table.GLOBL|table.LOCAL),
     0x80176688: table.sym("s_file_select_main", table.GLOBL), # s callback
-    0x801766DC: table.sym("p_file_select_801766DC", table.GLOBL), # p callback
-    0x801768A0: table.sym("p_file_select_801768A0", table.GLOBL), # p callback
+    0x801766DC: table.sym("p_file_select_init", table.GLOBL), # p callback
+    0x801768A0: table.sym("p_file_select_update", table.GLOBL), # p callback
 
     # src/star_select.S
     0x801768E0: table.sym("star_select_801768E0", table.GLOBL), # o callback
@@ -10809,8 +10821,8 @@ sym_E0_t_menu = {
     0x80176FC4: table.sym("star_select_80176FC4"),
     0x80177144: table.sym("star_select_80177144"),
     0x80177518: table.sym("s_star_select_main", table.GLOBL), # s callback
-    0x80177560: table.sym("p_star_select_80177560", table.GLOBL), # p callback
-    0x80177610: table.sym("p_star_select_80177610", table.GLOBL), # p callback
+    0x80177560: table.sym("p_star_select_init", table.GLOBL), # p callback
+    0x80177610: table.sym("p_star_select_update", table.GLOBL), # p callback
 
     # src/face/main.S
     0x80177710: table.sym("face_main"), # unused
@@ -14024,6 +14036,7 @@ sym_E0_shp_a9 = {
     0x0C000098: table.sym_var("s_a9_0C000098", "static S_SCRIPT", "[]"),
     0x0C000254: table.sym_var("s_a9_0C000254", "static S_SCRIPT", "[]"),
     0x0C000410: table.sym_var("s_a9_222", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000460: table.sym_var("_0C000460", "unused static u64"),
     0x0C000468: table.sym_var("s_a9_85", "S_SCRIPT", "[]", table.GLOBL),
 }
 
@@ -14086,7 +14099,9 @@ sym_E0_shp_b3 = {
     0x0D000114: table.sym_var("s_b3_0D000114", "static S_SCRIPT", "[]"),
     0x0D00027C: table.sym_var("s_b3_0D00027C", "static S_SCRIPT", "[]"),
     0x0D0003E4: table.sym_var("s_b3_221", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D000440: table.sym_var("_0D000440", "unused static u64"),
     0x0D000448: table.sym_var("s_b3_100", "S_SCRIPT", "[]", table.GLOBL),
+    0x0D0005A8: table.sym_var("_0D0005A8", "unused static u64"),
     0x0D0005B0: table.sym_var("s_b3_101", "S_SCRIPT", "[]", table.GLOBL),
 }
 
@@ -14113,7 +14128,9 @@ sym_E0_shp_c0 = {
     0x001F2200: table.sym("szp_shape_c0_start"),
     0x002008D0: table.sym("data_shape_c0_start"),
     0x0F000000: table.sym_var("s_c0_140", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F000020: table.sym_var("_0F000020", "unused static u64"),
     0x0F000028: table.sym_var("s_c0_194", "S_SCRIPT", "[]", table.GLOBL),
+    0x0F0001A0: table.sym_var("_0F0001A0", "unused static u64"),
     0x0F0001A8: table.sym_var("s_c0_128", "S_SCRIPT", "[]", table.GLOBL),
     0x0F0001C0: table.sym_var("s_c0_127", "S_SCRIPT", "[]", table.GLOBL),
     0x0F0001D8: table.sym_var("s_c0_223", "S_SCRIPT", "[]", table.GLOBL),

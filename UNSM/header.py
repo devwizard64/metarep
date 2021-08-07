@@ -2056,6 +2056,11 @@ struct_object = [
         (0x08, table.sym_var("shape",   "u8")),
         (0x0C, table.sym_var("script",  "const O_SCRIPT *")),
     ]],
+    [0x06, "struct_8033D274", [
+        (0x00, table.sym_var("ground",  "s16")),
+        (0x02, table.sym_var("roof",    "s16")),
+        (0x04, table.sym_var("wall",    "s16")),
+    ]],
 ]
 
 struct_obj_lib = [

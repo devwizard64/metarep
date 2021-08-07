@@ -508,14 +508,14 @@ def s_gfx(start, end, a, name, lst):
         [main.s_pop],
     ]]
 
-def s_shapebin(start, end, size, ssize, b, name):
+def s_shapebin(start, end, size, ssize, b, name, shape):
     return [main.s_call, [
         [main.s_dir, name],
             s_szpbin(start, end, size, "gfx"),
             [main.s_addr, (b << 24) - end],
             [main.s_file, "shape.c"],
                 [main.s_str, str_s_script],
-                [c.s_script_s, b << 24, (b << 24) + ssize, "E0"],
+                [ultra.c.s_data, b << 24, (b << 24) + ssize, "E0", shape],
             [main.s_write],
             [main.s_addr, 0],
         [main.s_pop],
@@ -553,7 +553,9 @@ def s_script(start, end, addr, size):
         [main.s_write],
         [main.s_file, "shape.c"],
             [main.s_str, str_s_script],
-            [c.s_script_s, s_start, s_end, "E0"],
+            [ultra.c.s_data, s_start, s_end, "E0", [
+                [0, 1, 1, c.d_s_script, s_end],
+            ]],
         [main.s_write],
         [main.s_addr, 0],
     ]]
@@ -1108,14 +1110,14 @@ ultra_PR = [
 .globl gspFast3D_fifoTextStart
 gspFast3D_fifoTextStart:
 
-main_start:
+init_start:
 .incbin "build/PR/gspFast3D.fifo.init.bin"
 .incbin "build/PR/gspFast3D.fifo.main.bin", 0x88
-main_end:
+init_end:
 
-main2_start:
+main_start:
 .incbin "build/PR/gspFast3D.fifo.main.bin", 0, 0x88
-main2_end:
+main_end:
 
 clip_start:
 .incbin "build/PR/gspFast3D.fifo.clip.bin"
@@ -1146,8 +1148,8 @@ gspFast3D_fifoDataStart:
     .set DATA, DATA+8
 .endm
 
+prg init
 prg main
-prg main2
 prg clip
 prg light
 prg exit
@@ -1328,6 +1330,7 @@ include_main = [
 """),
     s_header_code(0x80256E00, 0x8025DD68, 0x8032DB30, 0x8032DC50, 0x8033B2A0, 0x8033B2C0, "pl_demo", header.struct_pl_demo, """
 #include <sm64/types.h>
+#include <sm64/math.h>
 """),
     s_header_code(0x8025DD70, 0x802608AC, 0x8032DC50, 0x8032DC50, 0, 0, "pl_hang", header.struct_pl_hang, """
 #include <sm64/types.h>
@@ -1718,7 +1721,10 @@ src_main = [
 #include <sm64/object.h>
 """ + str_code),
     s_code(0x802CA040, 0x802CA370, "obj_sfx"),
-    s_code(0x802CA370, 0x802CB5B4, "obj_debug"),
+    s_code(0x802CA370, 0x802CB5B4, "obj_debug", """
+#include <sm64/types.h>
+#include <sm64/object.h>
+""" + str_code),
 
     s_code(0x802CB5C0, 0x802CD27C, "wipe"),
     s_code(0x802CD280, 0x802CF5A4, "shadow", """
@@ -2738,7 +2744,10 @@ src_main2 = [
 #include <sm64/types.h>
 #include <sm64/world.h>
 """ + str_code),
-    s_code(0x80380690, 0x8038248C, "map"),
+    s_code(0x80380690, 0x8038248C, "map", """
+#include <sm64/types.h>
+#include <sm64/object.h>
+""" + str_code),
     s_code(0x80382490, 0x80383B6C, "map_data"),
     s_code(0x80383B70, 0x80385F88, "o_script"),
 
@@ -2755,6 +2764,8 @@ src_main2 = [
     ], str_gfx),
     [main.s_file, "math_table.S"],
         [main.s_str, """
+#include <sm64/types.h>
+
 .data
 
 """],
@@ -4497,42 +4508,60 @@ data_player_gfx = [
 
 data_player_shape = [
     s_dirfile("bubble", "shape.c"),
-        [c.s_script_s, 0x17000000, 0x17000038, "E0"],
+        [ultra.c.s_data, 0x17000000, 0x17000038, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17000038],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("dust", "shape.c"),
-        [c.s_script_s, 0x17000038, 0x17000084, "E0"],
+        [ultra.c.s_data, 0x17000038, 0x17000084, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17000084],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("smoke", "shape.c"),
-        [c.s_script_s, 0x17000084, 0x1700009C, "E0"],
+        [ultra.c.s_data, 0x17000084, 0x1700009C, "E0", [
+            [0, 1, 1, c.d_s_script, 0x1700009C],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("wave", "shape.c"),
-        [c.s_script_s, 0x1700009C, 0x17000124, "E0"],
+        [ultra.c.s_data, 0x1700009C, 0x17000124, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17000124],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("ripple", "shape.c"),
-        [c.s_script_s, 0x17000124, 0x170001BC, "E0"],
+        [ultra.c.s_data, 0x17000124, 0x170001BC, "E0", [
+            [0, 1, 1, c.d_s_script, 0x170001BC],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("sparkle", "shape.c"),
-        [c.s_script_s, 0x170001BC, 0x17000230, "E0"],
+        [ultra.c.s_data, 0x170001BC, 0x17000230, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17000230],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("splash", "shape.c"),
-        [c.s_script_s, 0x17000230, 0x17000284, "E0"],
+        [ultra.c.s_data, 0x17000230, 0x17000284, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17000284],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("droplet", "shape.c"),
         s_script_endif(),
     s_writepop(),
     s_dirfile("glow", "shape.c"),
-        [c.s_script_s, 0x17000284, 0x170002E0, "E0"],
+        [ultra.c.s_data, 0x17000284, 0x170002E0, "E0", [
+            [0, 1, 1, c.d_s_script, 0x170002E0],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("mario", "shape.c"),
-        [c.s_script_s, 0x170002E0, 0x17002E30, "E0"],
+        [ultra.c.s_data, 0x170002E0, 0x17002E30, "E0", [
+            [0, 1, 1, c.d_s_script, 0x17002E30],
+        ]],
         s_script_endif(),
     s_writepop(),
 ]
@@ -4567,11 +4596,15 @@ data_a1_gfx = [
 
 data_a1_shape = [
     s_dirfile("bully", "shape.c"),
-        [c.s_script_s, 0x0C000000, 0x0C000240, "E0"],
+        [ultra.c.s_data, 0x0C000000, 0x0C000240, "E0", [
+            [0, 1, 1, c.d_s_script, 0x0C000240],
+        ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("blargg", "shape.c"),
-        [c.s_script_s, 0x0C000240, 0x0C0002B0, "E0"],
+        [ultra.c.s_data, 0x0C000240, 0x0C0002B0, "E0", [
+            [0, 1, 1, c.d_s_script, 0x0C0002B0],
+        ]],
         s_script_endif(),
     s_writepop(),
 ]
@@ -4662,10 +4695,19 @@ data_weather = [
 ]
 
 lst = [
+    [main.s_data, "J0", ["donor", "UNSMJ0.z64"]],
     [main.s_data, "E0", ["donor", "UNSME0.z64"]],
+    # [main.s_file, "J0.S"],
+    #     [main.s_addr, 0x80246000-0x00001000],
+    #     [ultra.asm.s_code, 0x80246000, 0x8032A320, "J0", 0, True, True],
+    #     [main.s_addr, 0x80378800-0x000F4210],
+    #     [ultra.asm.s_code, 0x80378800, 0x80385F90, "J0", 0, True, True],
+    # [main.s_write],
     [main.s_dir, "include"],
         [main.s_file, "sm64.inc"],
+            [main.s_str, ".ifdef __E0__\n"],
             [ultra.asm.s_definelabel, "E0"],
+            [main.s_str, ".endif /* __E0__ */\n"],
         [main.s_write],
         s_header(
             "sm64",
@@ -4745,84 +4787,77 @@ lst = [
         [main.s_write],
         s_gfx(0x00108A40, 0x00114750, 0x02, "main", data_main_gfx),
         [main.s_dir, "shape"],
-            s_shape(
-                0x00114750, 0x001279B0, 0x04, 0x17, "player",
-                data_player_gfx, data_player_shape
-            ),
-            s_shapebin(0x0012A7E0, 0x00132850, 0x00015360, 0x0410, 0x0C, "a0"),
-            s_shape(
-                0x00132C60, 0x00134A70, 0x05, 0x0C, "a1",
-                data_a1_gfx, data_a1_shape
-            ),
-            s_shapebin(0x00134D20, 0x0013B5D0, 0x000110A0, 0x0340, 0x0C, "a2"),
-            s_shapebin(0x0013B910, 0x00145C10, 0x00013D30, 0x0280, 0x0C, "a3"),
-            s_shapebin(0x00145E90, 0x00151B70, 0x00014650, 0x0660, 0x0C, "a4"),
-            s_shapebin(0x001521D0, 0x001602E0, 0x000160B8, 0x0384, 0x0C, "a5"),
-            s_shapebin(0x00160670, 0x001656E0, 0x0000D130, 0x0364, 0x0C, "a6"),
-            s_shapebin(0x00165A50, 0x00166BD0, 0x000034C8, 0x0090, 0x0C, "a7"),
-            s_shapebin(0x00166C60, 0x0016D5C0, 0x00010178, 0x02AC, 0x0C, "a8"),
-            [main.s_dir, "a9"],
-                s_szpbin(0x0016D870, 0x00180540, 0x00024200, "gfx"),
-                [main.s_addr, 0x0C000000-0x00180540],
-                [main.s_file, "shape.c"],
-                    [main.s_str, str_s_script],
-                    [c.s_script_s, 0x0C000000, 0x0C00045C, "E0"],
-                    [main.s_str, "\nunused static u64 _0C000460 = 0;\n\n"],
-                    [c.s_script_s, 0x0C000468, 0x0C000664, "E0"],
-                [main.s_write],
-                [main.s_addr, 0],
-            [main.s_pop],
-            s_shapebin(0x00180BB0, 0x00187FA0, 0x00016EC0, 0x04A0, 0x0C, "a10"),
-            s_shapebin(0x00188440, 0x001B9070, 0x00062F10, 0x0C4C, 0x0D, "b0"),
-            s_shapebin(0x001B9CC0, 0x001C3DB0, 0x00017960, 0x0480, 0x0D, "b1"),
-            s_shapebin(0x001C4230, 0x001D7C90, 0x00025188, 0x0678, 0x0D, "b2"),
-            [main.s_dir, "b3"],
-                s_szpbin(0x001D8310, 0x001E4BF0, 0x00017E78, "gfx"),
-                [main.s_addr, 0x0D000000-0x001E4BF0],
-                [main.s_file, "shape.c"],
-                    [main.s_str, str_s_script],
-                    [c.s_script_s, 0x0D000000, 0x0D00043C, "E0"],
-                    [main.s_str, "\nunused static u64 _0D000440 = 0;\n\n"],
-                    [c.s_script_s, 0x0D000448, 0x0D0005A4, "E0"],
-                    [main.s_str, "\nunused static u64 _0D0005A8 = 0;\n\n"],
-                    [c.s_script_s, 0x0D0005B0, 0x0D000600, "E0"],
-                [main.s_write],
-                [main.s_addr, 0],
-            [main.s_pop],
-            [main.s_dir, "b4"],
-                s_szpbin(0x001E51F0, 0x001E7D90, 0x00005E78, "gfx"),
-                [main.s_addr, 0x0D000000-0x001E7D90],
-                [main.s_file, "shape.c"],
-                    [main.s_str, str_s_script],
-                    [c.s_script_s, 0x0D000000, 0x0D000140, "E0"],
-                    [main.s_str, "\nunused static u64 _0D000140 = 0;\n\n"],
-                [main.s_write],
-                [main.s_addr, 0],
-            [main.s_pop],
-            s_shapebin(0x001E7EE0, 0x001F1B30, 0x00015070, 0x000006D0, 0x0D, "b5"),
-            [main.s_dir, "c0"],
-                s_szpbin(0x001F2200, 0x002008D0, 0x00028BF0, "gfx"),
-                [main.s_addr, 0x0F000000-0x002008D0],
-                [main.s_file, "shape.c"],
-                    [main.s_str, str_s_script],
-                    [c.s_script_s, 0x0F000000, 0x0F000020, "E0"],
-                    [main.s_str, "\nunused static u64 _0F000020 = 0;\n\n"],
-                    [c.s_script_s, 0x0F000028, 0x0F00019C, "E0"],
-                    [main.s_str, "\nunused static u64 _0F0001A0 = 0;\n\n"],
-                    [c.s_script_s, 0x0F0001A8, 0x0F000B34, "E0"],
-                [main.s_write],
-                [main.s_addr, 0],
-            [main.s_pop],
-            [main.s_dir, "entity"],
-                s_szpbin(0x00201410, 0x00218DA0, 0x00033308, "gfx"),
-                [main.s_addr, 0x16000000-0x00218DA0],
-                [main.s_file, "shape.c"],
-                    [main.s_str, str_s_script],
-                    [main.s_str, "\nextern S_SCRIPT s_entity_144[];\n\n"],
-                    [c.s_script_s, 0x16000000, 0x16001060, "E0"],
-                [main.s_write],
-                [main.s_addr, 0],
-            [main.s_pop],
+            s_shape(0x00114750, 0x001279B0, 0x04, 0x17, "player", data_player_gfx, data_player_shape),
+            s_shapebin(0x0012A7E0, 0x00132850, 0x00015360, 0x0410, 0x0C, "a0", [
+                [0, 1, 1, c.d_s_script, 0x0C000410],
+            ]),
+            s_shape(0x00132C60, 0x00134A70, 0x05, 0x0C, "a1", data_a1_gfx, data_a1_shape),
+            s_shapebin(0x00134D20, 0x0013B5D0, 0x000110A0, 0x0340, 0x0C, "a2", [
+                [0, 1, 1, c.d_s_script, 0x0C000340],
+            ]),
+            s_shapebin(0x0013B910, 0x00145C10, 0x00013D30, 0x0280, 0x0C, "a3", [
+                [0, 1, 1, c.d_s_script, 0x0C000280],
+            ]),
+            s_shapebin(0x00145E90, 0x00151B70, 0x00014650, 0x0660, 0x0C, "a4", [
+                [0, 1, 1, c.d_s_script, 0x0C000660],
+            ]),
+            s_shapebin(0x001521D0, 0x001602E0, 0x000160B8, 0x0384, 0x0C, "a5", [
+                [0, 1, 1, c.d_s_script, 0x0C000384],
+            ]),
+            s_shapebin(0x00160670, 0x001656E0, 0x0000D130, 0x0364, 0x0C, "a6", [
+                [0, 1, 1, c.d_s_script, 0x0C000364],
+            ]),
+            s_shapebin(0x00165A50, 0x00166BD0, 0x000034C8, 0x0090, 0x0C, "a7", [
+                [0, 1, 1, c.d_s_script, 0x0C000090],
+            ]),
+            s_shapebin(0x00166C60, 0x0016D5C0, 0x00010178, 0x02AC, 0x0C, "a8", [
+                [0, 1, 1, c.d_s_script, 0x0C0002AC],
+            ]),
+            s_shapebin(0x0016D870, 0x00180540, 0x00024200, 0x0664, 0x0C, "a9", [
+                [0, 1, 1, c.d_s_script, 0x0C00045C],
+                [0, 1, 4, None],
+                [0, 1, 1, ultra.c.d_u64],
+                [0, 1, 1, c.d_s_script, 0x0C000664],
+            ]),
+            s_shapebin(0x00180BB0, 0x00187FA0, 0x00016EC0, 0x04A0, 0x0C, "a10", [
+                [0, 1, 1, c.d_s_script, 0x0C0004A0],
+            ]),
+            s_shapebin(0x00188440, 0x001B9070, 0x00062F10, 0x0C4C, 0x0D, "b0", [
+                [0, 1, 1, c.d_s_script, 0x0D000C4C],
+            ]),
+            s_shapebin(0x001B9CC0, 0x001C3DB0, 0x00017960, 0x0480, 0x0D, "b1", [
+                [0, 1, 1, c.d_s_script, 0x0D000480],
+            ]),
+            s_shapebin(0x001C4230, 0x001D7C90, 0x00025188, 0x0678, 0x0D, "b2", [
+                [0, 1, 1, c.d_s_script, 0x0D000678],
+            ]),
+            s_shapebin(0x001D8310, 0x001E4BF0, 0x00017E78, 0x0600, 0x0D, "b3", [
+                [0, 1, 1, c.d_s_script, 0x0D00043C],
+                [0, 1, 4, None],
+                [0, 1, 1, ultra.c.d_u64],
+                [0, 1, 1, c.d_s_script, 0x0D0005A4],
+                [0, 1, 4, None],
+                [0, 1, 1, ultra.c.d_u64],
+                [0, 1, 1, c.d_s_script, 0x0D000600],
+            ]),
+            s_shapebin(0x001E51F0, 0x001E7D90, 0x00005E78, 0x0148, 0x0D, "b4", [
+                [0, 1, 1, c.d_s_script, 0x0D000140],
+                [0, 1, 1, ultra.c.d_u64],
+            ]),
+            s_shapebin(0x001E7EE0, 0x001F1B30, 0x00015070, 0x06D0, 0x0D, "b5", [
+                [0, 1, 1, c.d_s_script, 0x0D0006D0],
+            ]),
+            s_shapebin(0x001F2200, 0x002008D0, 0x00028BF0, 0x0B34, 0x0F, "c0", [
+                [0, 1, 1, c.d_s_script, 0x0F000020],
+                [0, 1, 1, ultra.c.d_u64],
+                [0, 1, 1, c.d_s_script, 0x0F00019C],
+                [0, 1, 4, None],
+                [0, 1, 1, ultra.c.d_u64],
+                [0, 1, 1, c.d_s_script, 0x0F000B34],
+            ]),
+            s_shapebin(0x00201410, 0x00218DA0, 0x00033308, 0x1060, 0x16, "entity", [
+                [0, 1, 1, c.d_s_script, 0x16001060],
+            ]),
         [main.s_pop],
         [main.s_dir, "object"],
             [main.s_addr, 0x13000000-0x00219E00],

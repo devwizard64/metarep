@@ -742,6 +742,8 @@ def lst_push(self, line):
     if sym != None and not (len(line) > 0 and line[-1][1] == sym):
         extern = set()
         line.append((self.c_dst, sym, extern, []))
+        return True
+    return False
 
 def s_data_lst(self, line, lst, tab):
     for argv in lst:

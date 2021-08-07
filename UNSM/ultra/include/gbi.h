@@ -148,7 +148,7 @@
 #define G_RDPHALF_1             (G_IMMFIRST-11)
 #define G_RDPHALF_2             (G_IMMFIRST-12)
 #else
-#define G_PERSPNORM             (G_IMMFIRST-11)
+#define G_PERSPNORMALIZE        (G_IMMFIRST-11)
 #define G_RDPHALF_1             (G_IMMFIRST-12)
 #define G_RDPHALF_2             (G_IMMFIRST-13)
 #endif
@@ -2803,8 +2803,8 @@ typedef union {
 #define gSPPerspNormalize(pkt, s)       gMoveWd(pkt, G_MW_PERSPNORM, 0, (s))
 #define gsSPPerspNormalize(s)           gsMoveWd(    G_MW_PERSPNORM, 0, (s))
 #else
-#define gSPPerspNormalize(pkt, s)       gImmp1(pkt, G_PERSPNORM, (s))
-#define gsSPPerspNormalize(s)           gsImmp1(    G_PERSPNORM, (s))
+#define gSPPerspNormalize(pkt, s)       gImmp1(pkt, G_PERSPNORMALIZE, s)
+#define gsSPPerspNormalize(s)           gsImmp1(G_PERSPNORMALIZE, s)
 #endif
 
 #ifdef  F3DEX_GBI_2

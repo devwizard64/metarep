@@ -1137,7 +1137,7 @@ def s_msg(self, argv):
 def s_call(argv):
     arg = ultra.ub()
     ultra.script.c_addr += 2
-    script = ultra.c.aw()
+    script = ultra.c.aw(extern=ultra.script.c_dst == 0x16000B1C)
     if arg == 1:
         return ("call", script)
     return (None, script)
@@ -1390,31 +1390,25 @@ s_fnc = (
     (s_arg,), # 0x20
 )
 
-def s_script_s(self, argv):
-    start, end, data = argv
-    ultra.c.init(self, start, data)
-    ultra.c.extern = set()
-    line = []
+def d_s_script_prc(self, line, tab, argv):
+    end, = argv
+    t = 0
     while self.c_addr < end:
-        self.c_push()
-        sym = table.sym_addr(self, self.c_dst, rej=True)
-        if sym != None:
-            tab = 0
-            line.append((
-                self.c_dst, sym, set() if len(line) > 0 else ultra.c.extern, []
-            ))
+        if ultra.c.lst_push(self, line):
+            t = 0
         c = ultra.ub()
         f = s_fnc[c]
         argv = f[0](f[1:])
         s = argv[0] if argv[0] != None else s_str[c]
         if self.addr == 0x0E000000-0x004EB1F0 and self.c_dst == 0x0E00093C:
             c = 0x05
-        if c in {0x05} and tab > 0:
-            tab -= 1
+        if c in {0x05} and t > 0:
+            t -= 1
         if c in {0x01}:
-            tab = 0
-        ln = "%ss_%s(%s)," % ("\t"*tab, s, ", ".join(argv[1:]))
+            t = 0
+        line[-1][-1].append(
+            tab + "\t"*t + "s_" + s + "(" + ", ".join(argv[1:]) + "),"
+        )
         if c in {0x04}:
-            tab += 1
-        line[-1][-1].append(ln)
-    ultra.c.fmt(self, line)
+            t += 1
+d_s_script = [True, d_s_script_prc]

@@ -3,12 +3,7 @@ import os
 import importlib
 
 def mkdir(fn):
-    path = []
-    for f in fn.split(os.path.sep)[:-1]:
-        path.append(f)
-        p = os.path.sep.join(path)
-        if p != "" and not os.path.isdir(p):
-            os.mkdir(p)
+    os.makedirs(fn.rpartition(os.path.sep)[0], exist_ok=True)
 
 def path_join(path):
     fn = path.pop(0)
