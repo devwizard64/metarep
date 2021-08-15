@@ -1623,8 +1623,8 @@ sym_E0_d_ultra = {
     0x80339980: table.sym("__osIntOffTable"),
     0x803399A0: table.sym("__osIntTable"),
 
-    # ultra/src/libm_vals.c
-    0x803399D0: table.sym_var("__libm_qnan_f", "const u32"),
+    # ultra/src/libm_vals.S
+    0x803399D0: table.sym("__libm_qnan_f",  table.GLOBL),
 
     # ultra/src/xldtob.data.c
     0x803399E0: table.sym_var("ultra_rodata_803399E0", "const f64", "[]"),

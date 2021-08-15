@@ -1037,9 +1037,17 @@ ultra_src = [
             [9, 1, ultra.asm.d_waddr],
         ]],
     [main.s_write],
-    s_data(0x80335A50, 0x80335A50, 0x803399D0, 0x803399D4, 0, 0, "libm_vals", [], [
-        [0, 1, 1, ultra.c.d_u32, "0x%08X"],
-    ], str_data_u),
+    [main.s_file, "libm_vals.S"],
+        [main.s_str, """
+#include <ultra64.h>
+
+.rdata
+
+"""],
+        [ultra.asm.s_data, 0x803399D0, 0x803399D4, "E0", [
+            [1, 1, ultra.asm.d_uword, "0x%08X"],
+        ]],
+    [main.s_write],
     s_data(0x80335A50, 0x80335A54, 0x803399E0, 0x803399E0, 0x80367130, 0x80367150, "piacs.data", [
         [0, 1, 1, ultra.c.d_u32],
     ], [], str_data_u),

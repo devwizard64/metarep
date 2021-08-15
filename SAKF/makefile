@@ -5,7 +5,7 @@ CC65    := $(HOME)/sm64/cc65-2.19
 AS      := $(CC65)/bin/ca65
 LD      := $(CC65)/bin/ld65
 
-FLAG    := -D __$(VERSION)__ -I $(BUILD) -I include
+FLAG    := --Iinclude I$(BUILD) -D__$(VERSION)__
 AS      += --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 EXE     := exe
