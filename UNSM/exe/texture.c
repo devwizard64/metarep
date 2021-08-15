@@ -4,10 +4,11 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "lodepng.h"
+#include "lodepng/lodepng.h"
+#include "lodepng/lodepng.cpp"
 
-typedef uint8_t u8;
 typedef unsigned int uint;
+typedef uint8_t u8;
 #define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 #ifdef __GNUC__
 #define unused                  __attribute__((unused))

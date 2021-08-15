@@ -3,17 +3,29 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef uint8_t  u8;
 typedef unsigned int uint;
+typedef uint8_t u8;
+
+static void crc(char *buf, const u8 *data, uint size)
+{
+    uint sum = 0;
+    uint i;
+    for (i = 0; i < size; i++)
+    {
+        sum += data[i];
+    }
+    buf[2] = sum >> 0;
+    buf[3] = sum >> 8;
+    buf[0] = ~buf[2];
+    buf[1] = ~buf[3];
+}
 
 int main(int argc, const char **argv)
 {
     FILE  *f;
     u8    *data;
     size_t size;
-    uint   i;
-    uint   sum;
-    u8     buf[4];
+    char   buf[4];
     if (argc != 2)
     {
         fprintf(stderr, "usage: %s <image>\n", argv[0]);
@@ -30,15 +42,7 @@ int main(int argc, const char **argv)
     data = malloc(size);
     fseek(f, 0, SEEK_SET);
     fread(data, 1, size, f);
-    sum = 0;
-    for (i = 0; i < size; i++)
-    {
-        sum += data[i];
-    }
-    buf[2] = sum >> 0;
-    buf[3] = sum >> 8;
-    buf[0] = buf[2] ^ 0xFF;
-    buf[1] = buf[3] ^ 0xFF;
+    crc(buf, data, size);
     free(data);
     fseek(f, 0x7FDC, SEEK_SET);
     fwrite(buf, 1, sizeof(buf), f);

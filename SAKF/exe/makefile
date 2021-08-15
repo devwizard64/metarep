@@ -1,4 +1,4 @@
-OBJ     := crc
+OBJ     := mask
 
 CC      := cc -Wall -Wextra -Wpedantic -O2
 

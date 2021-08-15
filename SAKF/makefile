@@ -1,11 +1,10 @@
 VERSION ?= J0
 BUILD   := build/$(VERSION)
 
-CC65    := $(HOME)/sm64/cc65-2.19
-AS      := $(CC65)/bin/ca65
-LD      := $(CC65)/bin/ld65
+AS      := ca65
+LD      := ld65
 
-FLAG    := --Iinclude I$(BUILD) -D__$(VERSION)__
+FLAG    := -Iinclude -I$(BUILD) -D__$(VERSION)__
 AS      += --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 EXE     := exe
@@ -20,7 +19,7 @@ OBJ := \
 
 $(BUILD)/app.sfc: make/main.ld $(OBJ)
 	$(LD) -m $(@:.sfc=.map) -o $@ -C $^
-	$(EXE)/crc $@
+	$(EXE)/mask $@
 
 -include $(OBJ:.o=.d)
 

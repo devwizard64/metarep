@@ -8,8 +8,8 @@
 #define true    1
 #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #define MAX(a, b)               ((a) > (b) ? (a) : (b))
-typedef uint8_t u8;
 typedef unsigned int uint;
+typedef uint8_t u8;
 
 #define SIG_0   'M'
 #define SIG_1   'I'

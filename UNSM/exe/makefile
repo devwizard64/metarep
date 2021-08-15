@@ -8,9 +8,6 @@ default: $(OBJ)
 %: %.c
 	$(CC) -o $@ $^
 
-texture: texture.c lodepng/lodepng.c
-	$(CC) -I lodepng -o $@ $^
-
 .PHONY: clean
 clean:
 	rm -rf $(OBJ) __pycache__ *.pyc

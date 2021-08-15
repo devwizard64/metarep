@@ -9,10 +9,19 @@ hvc.meta.c_data = "J0"
 hvc.meta.c_type = 1
 import SAKF.table
 
-def mc_jsx(arg, argv):
-    op, = arg
-    lo, hi, ba = argv
-    return [(hvc.script.c_dst, "%s %s" % (op, hvc.sym_lhb(lo, hi, ba)))]
+jxx_table = {
+    (0x22, "code_008C3F"): "jss ",
+    (0x5C, "code_008C3F"): "jms ",
+    (0x22, "code_008C6D"): "jsc ",
+    (0x5C, "code_008C6D"): "jmc ",
+}
+
+def mc_jxx(arg, argv):
+    lo, hi, ba, op, l, h = argv
+    i = (op, hvc.sym_lhb(l, h, 0x00))
+    if i in jxx_table:
+        return [(hvc.script.c_dst, jxx_table[i] + hvc.sym_lhb(lo, hi, ba))]
+    return None
 
 def mc_ldf(arg, argv):
     lo, hi, ba = argv
@@ -23,17 +32,11 @@ def mc_ldf(arg, argv):
         return None
     return [(hvc.script.c_dst, "ldf %s" % sym)]
 
-mm_jss = [0xA9, None, None, 0xA2, None, 0x00, 0x22, 0x3F, 0x8C, 0x00]
-mm_jms = [0xA9, None, None, 0xA2, None, 0x00, 0x5C, 0x3F, 0x8C, 0x00]
-mm_jsc = [0xA9, None, None, 0xA2, None, 0x00, 0x22, 0x6D, 0x8C, 0x00]
-mm_jmc = [0xA9, None, None, 0xA2, None, 0x00, 0x5C, 0x6D, 0x8C, 0x00]
+mm_jxx = [0xA9, None, None, 0xA2, None, 0x00, None, None, None, 0x00]
 mm_ldf = [0xA9, None, None, 0xA2, None, 0x00]
 
 macro = [
-    (mc_jsx, ("jss",), mm_jss),
-    (mc_jsx, ("jms",), mm_jms),
-    (mc_jsx, ("jsc",), mm_jsc),
-    (mc_jsx, ("jmc",), mm_jmc),
+    (mc_jxx, (), mm_jxx),
     (mc_ldf, (), mm_ldf),
 ]
 

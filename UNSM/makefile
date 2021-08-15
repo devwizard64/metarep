@@ -94,8 +94,8 @@ SRC_OBJ     := $(MAIN_OBJ) $(MAIN2_OBJ) $(FACE_OBJ)
 ULTRA   := ultra
 EXE     := exe
 
-OBJ != make -C $(ULTRA)
-OBJ != make -C $(EXE)
+RES != make -C $(ULTRA)
+RES != make -C $(EXE)
 
 CC      := mips-linux-gnu-gcc
 LD      := mips-linux-gnu-ld

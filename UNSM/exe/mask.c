@@ -5,9 +5,9 @@
 #include <string.h>
 
 #define MIN(a, b)               ((a) < (b) ? (a) : (b))
-typedef uint8_t  u8;
-typedef uint32_t u32;
 typedef unsigned int uint;
+typedef uint8_t u8;
+typedef uint32_t u32;
 
 static void crc(char *buf, const u8 *data, uint size)
 {
@@ -55,9 +55,9 @@ static void crc(char *buf, const u8 *data, uint size)
 int main(int argc, const char **argv)
 {
     FILE *f;
-    char  buf[0x30];
     u8   *data;
     uint  size;
+    char  buf[0x30];
     if (argc != 4)
     {
         fprintf(stderr, "usage: %s <image> <label> <code>\n", argv[0]);

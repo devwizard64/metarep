@@ -115,12 +115,13 @@ OBJ := \
 CC      := mips-linux-gnu-gcc
 CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CC      += -fno-toplevel-reorder -G 0
+CC      += -fno-toplevel-reorder -G0
 
-CC      += -I include -Wall -Wextra -Wpedantic -O2
+CC      += -Iinclude -Wall -Wextra -Wpedantic -O2
 
-ARMIPS  := $(HOME)/sm64/exe/armips
+ARMIPS  := armips/build/armips
 
+.PHONY: default
 default: $(OBJ)
 
 lib/libultra_rom.a: $(SRC_OBJ) | lib
@@ -134,7 +135,7 @@ build/src/%.o: src/%.c | build/src
 
 lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
 
-lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
+lib/PR/%.o: PR/%.asm PR/rsp.inc $(ARMIPS) | build/PR lib/PR
 	$(ARMIPS) $<
 	$(CC) -c -o $@ $(<:.asm=.S)
 
@@ -144,7 +145,10 @@ lib/PR/%.o: PR/%.S | lib/PR
 build/src build/PR lib lib/PR:
 	mkdir -p $@
 
+.PHONY: clean
 clean:
 	rm -rf build lib
 
-.PHONY: default clean
+$(ARMIPS):
+	mkdir -p $(dir $@)
+	cd $(dir $@) && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
