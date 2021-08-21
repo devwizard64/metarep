@@ -1,6 +1,3 @@
 [submodule "UNSM/exe/lodepng"]
 	path = UNSM/exe/lodepng
 	url = https://github.com/lvandeve/lodepng
-[submodule "UNSM/ultra/armips"]
-	path = UNSM/ultra/armips
-	url = https://github.com/Kingcom/armips

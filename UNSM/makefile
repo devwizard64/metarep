@@ -111,6 +111,8 @@ FLAG    += -D__$(VERSION)__ -DBUILD=$(BUILD)
 CC      += $(FLAG) -Wall -Wextra -Wpedantic -Wno-variadic-macros -O2
 CPP     += $(FLAG) -DULTRA=$(ULTRA)
 
+ARMIPS  := armips
+
 OBJ := $(filter $(BUILD)/%, $(sort \
 	$(shell $(CPP) -P -o - make/obj.mk | tr "\n" " ")))
 SEQ := $(shell $(CPP) -P -o - make/seq.mk | tr "\n" " ")
@@ -160,6 +162,13 @@ $(BUILD)/%.szp.o: %.bin
 
 $(BUILD)/%.szp.d: %.bin
 	touch $@
+
+$(BUILD)/%.o: %.asm
+	$(ARMIPS) -strequ BUILD $(BUILD) $<
+	$(CC) -MMD -MP -c -o $@ $(<:.asm=.S)
+
+$(BUILD)/%.d: %.asm
+	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.S
 	$(CC) -MMD -MP -c -o $@ $<

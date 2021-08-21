@@ -137,7 +137,7 @@ def p_world_start(argv):
 # 21
 def p_shape_gfx(argv):
     x = ultra.uh()
-    layer = UNSM.table.fmt_slayer[x >> 12][8:]
+    layer = UNSM.table.fmt_s_layer_x[x >> 12]
     shape = UNSM.table.fmt_shape(x & 0x0FFF)
     ultra.tag = "gfx"
     gfx = ultra.aw()
@@ -513,7 +513,7 @@ def mb():
 
 # 00
 def o_init(argv):
-    type_ = UNSM.table.fmt_otype[ultra.ub()][7:]
+    type_ = UNSM.table.fmt_o_type_x[ultra.ub()]
     ultra.script.c_addr += 2
     return (None, type_)
 

@@ -2155,7 +2155,7 @@ src_main = [
 u8 _camera_bss[0x6C0];
 """),
     s_data(0x8032FEC0, 0x8032FFFC, 0x803377A0, 0x803377B0, 0x8033CBE0, 0x80361266, "object.data", [
-        [0, -10, 1, ultra.c.d_s8, table.fmt_otype],
+        [0, -10, 1, ultra.c.d_s8, table.fmt_o_type],
         [0,  -1, 1, ultra.c.d_s8],
         [0,   1, 1, None],
         [0, -19, 1, c.d_pl_pcl],

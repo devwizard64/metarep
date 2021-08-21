@@ -118,6 +118,8 @@ def macro_prc(self):
                 if byte != x:
                     break
         else:
-            return callback(arg, argv)
+            x = callback(arg, argv)
+            if x != None:
+                return x
         self.c_pull()
     return None

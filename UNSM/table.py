@@ -3,37 +3,56 @@ import ultra
 
 fmt_bool = ["false", "true"]
 
+def fmt_mask(x):
+    return "~0x%02X" % ~x if x < 0 else "0x%02X" % x
+
+def fmt_time(x):
+    if x >= 30:
+        s = "30*%d" % (x//30)
+        x %= 30
+        if x != 0:
+            s += "+%d" % x
+        return s
+    else:
+        return "%d" % x
+
 fmt_mem_alloc = [
     "MEM_ALLOC_L",
     "MEM_ALLOC_R",
 ]
 
-fmt_slayer = (
-    "S_LAYER_BACKGROUND",
-    "S_LAYER_OPA_SURF",
-    "S_LAYER_OPA_DECAL",
-    "S_LAYER_OPA_INTER",
-    "S_LAYER_TEX_EDGE",
-    "S_LAYER_XLU_SURF",
-    "S_LAYER_XLU_DECAL",
-    "S_LAYER_XLU_INTER",
-)
-
-fmt_otype = [
-    "O_TYPE_PLAYER",
-    "O_TYPE_1",
-    "O_TYPE_PLAYERATTACK",
-    "O_TYPE_3",
-    "O_TYPE_OBJECTA",
-    "O_TYPE_OBJECTB",
-    "O_TYPE_ITEM",
-    "O_TYPE_7",
-    "O_TYPE_DEFAULT",
-    "O_TYPE_MOVEBG",
-    "O_TYPE_PLAYERUSE",
-    "O_TYPE_SYSTEM",
-    "O_TYPE_EFFECT",
+fmt_s_layer_x = [
+    "BACKGROUND",
+    "OPA_SURF",
+    "OPA_DECAL",
+    "OPA_INTER",
+    "TEX_EDGE",
+    "XLU_SURF",
+    "XLU_DECAL",
+    "XLU_INTER",
 ]
+
+def fmt_s_layer(x):
+    return "S_LAYER_" + fmt_s_layer_x[x]
+
+fmt_o_type_x = [
+    "PLAYER",
+    "1",
+    "PLAYERATTACK",
+    "3",
+    "OBJECTA",
+    "OBJECTB",
+    "ITEM",
+    "7",
+    "DEFAULT",
+    "MOVEBG",
+    "PLAYERUSE",
+    "SYSTEM",
+    "EFFECT",
+]
+
+def fmt_o_type(x):
+    return "O_TYPE_" + fmt_o_type_x[x]
 
 shp_game = {
     1: "MARIO",
@@ -761,19 +780,6 @@ shp_table = (
     (0x004CEC00, 0x004D1910, shp_game,                  shp_b0, shp_bitsa),
     (0x004D1910, 0x004EC000, shp_game, shp_c0, shp_a5,          shp_ttm),
 )
-
-def fmt_mask(x):
-    return "~0x%02X" % ~x if x < 0 else "0x%02X" % x
-
-def fmt_time(x):
-    if x >= 30:
-        s = "30*%d" % (x//30)
-        x %= 30
-        if x != 0:
-            s += "+%d" % x
-        return s
-    else:
-        return "%d" % x
 
 def fmt_shape(x):
     if x == 0:

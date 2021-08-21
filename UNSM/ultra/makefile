@@ -119,7 +119,7 @@ CC      += -fno-toplevel-reorder -G0
 
 CC      += -Iinclude -Wall -Wextra -Wpedantic -O2
 
-ARMIPS  := armips/build/armips
+ARMIPS  := armips
 
 .PHONY: default
 default: $(OBJ)
@@ -135,7 +135,7 @@ build/src/%.o: src/%.c | build/src
 
 lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
 
-lib/PR/%.o: PR/%.asm PR/rsp.inc $(ARMIPS) | build/PR lib/PR
+lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
 	$(ARMIPS) $<
 	$(CC) -c -o $@ $(<:.asm=.S)
 
@@ -148,7 +148,3 @@ build/src build/PR lib lib/PR:
 .PHONY: clean
 clean:
 	rm -rf build lib
-
-$(ARMIPS):
-	mkdir -p $(dir $@)
-	cd $(dir $@) && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .

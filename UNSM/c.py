@@ -360,7 +360,7 @@ def d_scroll_prc(argv):
     layer   = ultra.sw()
     arg0    = (index, texture, len_, data)
     arg1    = (start, end, draw)
-    arg2    = (r, g, b, a, UNSM.table.fmt_slayer[layer])
+    arg2    = (r, g, b, a, UNSM.table.fmt_s_layer(layer))
     if arg0+arg1+arg2 == (
         0, 0, 0, "NULL",
         "NULL", "NULL", "NULL",
@@ -1238,7 +1238,7 @@ def s_gfx_posrot(argv):
         s = "pry"
         a = (ry,)
     if arg & 0x80:
-        layer = UNSM.table.fmt_slayer[arg & 0x0F][8:]
+        layer = UNSM.table.fmt_s_layer_x[arg & 0x0F]
         ultra.tag = "gfx"
         gfx = ultra.aw(extern=True)
         return ("gfx_"+s, layer, gfx) + a
@@ -1262,7 +1262,7 @@ def s_gfx_arg(argv):
         ))
         a = (s,)
     if arg & 0x80:
-        layer = UNSM.table.fmt_slayer[arg & 0x0F][8:]
+        layer = UNSM.table.fmt_s_layer_x[arg & 0x0F]
         ultra.tag = "gfx"
         gfx = ultra.aw(extern=True)
         return (c, layer, gfx) + a
@@ -1270,7 +1270,7 @@ def s_gfx_arg(argv):
 
 # 13
 def s_gfx_pos(argv):
-    layer = UNSM.table.fmt_slayer[ultra.ub()][8:]
+    layer = UNSM.table.fmt_s_layer_x[ultra.ub()]
     x = "%d" % ultra.sh()
     y = "%d" % ultra.sh()
     z = "%d" % ultra.sh()
@@ -1280,7 +1280,7 @@ def s_gfx_pos(argv):
 
 # 15
 def s_gfx(argv):
-    layer = UNSM.table.fmt_slayer[ultra.ub()][8:]
+    layer = UNSM.table.fmt_s_layer_x[ultra.ub()]
     ultra.script.c_addr += 2
     ultra.tag = "gfx"
     gfx = ultra.aw(extern=True)
