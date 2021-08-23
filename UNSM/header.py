@@ -484,7 +484,7 @@ str_s_script_globl = """
 #define S_A0_88                 88
 #define S_A0_89                 89
 
-#define S_A1_84                 84
+#define S_BLARGG                84
 #define S_A1_86                 86
 #define S_A1_87                 87
 

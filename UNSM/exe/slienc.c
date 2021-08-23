@@ -10,6 +10,7 @@
 #define MAX(a, b)               ((a) > (b) ? (a) : (b))
 typedef unsigned int uint;
 typedef uint8_t u8;
+#define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
 #define SIG_0   'M'
 #define SIG_1   'I'
@@ -69,8 +70,9 @@ static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
 
 int main(int argc, const char **argv)
 {
+    char  str[0x1000];
     FILE *f;
-    char *str;
+    FILE *h;
     u8   *data;
     u8   *tbl;
     u8   *pkt;
@@ -85,41 +87,47 @@ int main(int argc, const char **argv)
     uint  po;
     uint  co;
     u8    buf[0x10];
-    if (argc != 4)
+    if (argc != 5)
     {
-        fprintf(stderr, "usage: %s <output> <input> <sym>\n", argv[0]);
+        fprintf(stderr, "usage: %s <output> <header> <input> <sym>\n", argv[0]);
         return EXIT_FAILURE;
     }
-    f = fopen(argv[3], "r");
+    f = fopen(argv[4], "r");
+    if (f == NULL)
+    {
+        fprintf(stderr, "error: could not read '%s'\n", argv[4]);
+        return EXIT_FAILURE;
+    }
+    h = fopen(argv[2], "w");
+    if (h == NULL)
+    {
+        fprintf(stderr, "error: could not write '%s'\n", argv[2]);
+        return EXIT_FAILURE;
+    }
+    i    = ~0;
+    size = 0;
+    while (fgets(str, lenof(str), f) != NULL)
+    {
+        char sym[lenof(str)];
+        char sec;
+        uint adr;
+        uint siz;
+        sscanf(str, "%s %c %x %x", sym, &sec, &adr, &siz);
+        if (i    > adr    ) i    = adr;
+        if (size < adr+siz) size = adr+siz;
+        if (sec < 'a')
+        {
+            fprintf(h, "#define %s 0x%08X\n", sym, adr);
+        }
+    }
+    fclose(f);
+    fclose(h);
+    size -= i;
+    data = malloc(size);
+    f = fopen(argv[3], "rb");
     if (f == NULL)
     {
         fprintf(stderr, "error: could not read '%s'\n", argv[3]);
-        return EXIT_FAILURE;
-    }
-    str = malloc(0x1000);
-    i    = ~0;
-    size = 0;
-    while (fgets(str, 0x1000, f) != NULL)
-    {
-        uint x;
-        uint y;
-        sscanf(str, "%*s %*s %X %X", &x, &y);
-        if (i > x)
-        {
-            i = x;
-        }
-        if (size < x+y)
-        {
-            size = x+y;
-        }
-    }
-    free(str);
-    size -= i;
-    data = malloc(size);
-    f = fopen(argv[2], "rb");
-    if (f == NULL)
-    {
-        fprintf(stderr, "error: could not read '%s'\n", argv[2]);
         return EXIT_FAILURE;
     }
     fread(data, 1, size, f);

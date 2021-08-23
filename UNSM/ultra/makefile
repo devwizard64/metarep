@@ -95,7 +95,7 @@ SRC_OBJ := \
 	build/src/vimodepallan1.o       \
 	build/src/kdebugserver.o        build/src/kdebugserver.data.o       \
 	build/src/syncputchars.o        build/src/syncputchars.data.o       \
-	build/src/setintmask.o          build/src/setintmask.data.o         \
+	build/src/setintmask.o          \
 	build/src/destroythread.o       \
 	build/src/probetlb.o            \
 	build/src/si.o                  \
@@ -136,7 +136,7 @@ build/src/%.o: src/%.c | build/src
 lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
 
 lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
-	$(ARMIPS) $<
+	$(ARMIPS) -sym build/$(<:.asm=.sym) $<
 	$(CC) -c -o $@ $(<:.asm=.S)
 
 lib/PR/%.o: PR/%.S | lib/PR

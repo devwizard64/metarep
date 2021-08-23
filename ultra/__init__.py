@@ -154,6 +154,12 @@ def fmt_float(x, end="", strip=True):
     x = str(x)
     return x[:-2] if strip and x.endswith(".0") else x+end
 
+def fmt_f32(x):
+    return fmt_float(x, "F")
+
+def fmt_f64(x):
+    return fmt_float(x)
+
 def fmt_str(x):
     for old, new in (
         ("\\", "\\\\"),

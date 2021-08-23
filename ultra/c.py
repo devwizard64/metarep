@@ -61,11 +61,11 @@ d_s32 = d_fnc(ultra.sw)
 d_u32 = d_fnc(ultra.uw)
 d_s64 = d_fnc(ultra.sd)
 d_u64 = d_fnc(ultra.ud)
+d_f32 = d_fnc(ultra.f, ultra.fmt_f32)
+d_f64 = d_fnc(ultra.d, ultra.fmt_f64)
 d_flag8  = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.ub())]]
 d_flag16 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uh())]]
 d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
-d_f32 = [False, lambda argv: [ultra.fmt_float(ultra.f(), "F", len(argv)==0)]]
-d_f64 = [False, lambda argv: [ultra.fmt_float(ultra.d(), "",  len(argv)==0)]]
 d_align_s8  = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
 d_align_u8  = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
 d_align_s16 = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
@@ -300,6 +300,7 @@ g_setothermode_l = {
     3: ("DPSetRenderMode", {
         0x00552078: "G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2",
         0x00553078: "G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2",
+        0x00552048: "G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2",
         0x005041C8: "G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2",
         0x0F0A4000: "G_RM_OPA_SURF, G_RM_OPA_SURF2",
         0x00504240: "G_RM_XLU_SURF, G_RM_XLU_SURF2",

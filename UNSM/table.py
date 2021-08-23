@@ -139,7 +139,7 @@ shp_a0 = {
 }
 
 shp_a1 = {
-    84: "A1_84",
+    84: "BLARGG",
     86: "A1_86",
     87: "A1_87",
 }
@@ -1532,7 +1532,7 @@ sym_E0_d_ultra = {
 
     # ultra/src/initialize.data.c
     0x80335910: table.sym_var("osClockRate",    "u64"),
-    0x80335918: table.sym_var("osViClock",      "u32",  flag=ultra.DALIGN),
+    0x80335918: table.sym_var("__osShutdown",   "u32",  flag=ultra.DALIGN),
 
     # ultra/src/controller.data.c
     0x80335920: table.sym_var("__osContinitialized",    "u32",  flag=ultra.DALIGN),
@@ -1558,13 +1558,13 @@ sym_E0_d_ultra = {
     0x803359C0: table.sym_var("vi", "__OSViContext",  "[2]"),
     0x80335A20: table.sym_var("__osViCurr", "__OSViContext *",  flag=ultra.DALIGN),
     0x80335A24: table.sym_var("__osViNext", "__OSViContext *",  flag=ultra.DALIGN),
-    0x80335A28: table.sym_var("ultra_data_80335A28",    "u32",  flag=ultra.DALIGN),
-    0x80335A2C: table.sym_var("ultra_data_80335A2C",    "u32",  flag=ultra.DALIGN),
+    0x80335A28: table.sym_var("osViNtscEnabled",    "u32",  flag=ultra.DALIGN),
+    0x80335A2C: table.sym_var("osViClock",  "u32",  flag=ultra.DALIGN),
 
     # ultra/src/exceptasm.S
     0x80335A30: table.sym("__osHwIntTable"),
-    0x80335A44: table.sym("ultra_data_80335A44"), # rdb IP7 trigger (write)
-    0x80335A48: table.sym("ultra_data_80335A48"), # rdb IP6 trigger (read)
+    0x80335A44: table.sym("__osIsRdbWrite"),
+    0x80335A48: table.sym("__osIsRdbRead"),
 
     # ultra/src/piacs.data.c
     0x80335A50: table.sym_var("__osPiAccessQueueEnabled",   "u32",  flag=ultra.DALIGN),
@@ -1583,9 +1583,9 @@ sym_E0_d_ultra = {
     0x80335AF0: table.sym_var("osViModePalLan1",    "OSViMode"),
 
     # ultra/src/kdebugserver.data.c
-    0x80335B40: table.sym_var("ultra_data_80335B40",    "u32",  flag=ultra.DALIGN), # numChars ?
-    0x80335B44: table.sym_var("ultra_data_80335B44",    "u32",  flag=ultra.DALIGN),
-    0x80335B48: table.sym_var("ultra_data_80335B48",    "u32",  flag=ultra.DALIGN),
+    0x80335B40: table.sym_var("debug_state",        "u32",  flag=ultra.DALIGN),
+    0x80335B44: table.sym_var("numChars",           "u32",  flag=ultra.DALIGN),
+    0x80335B48: table.sym_var("numCharsToReceive",  "u32",  flag=ultra.DALIGN),
 
     # ultra/src/syncputchars.data.c
     0x80335B50: table.sym_var("__osRdbSendMessage", "u32",  flag=ultra.DALIGN),
@@ -1596,34 +1596,34 @@ sym_E0_d_ultra = {
     # ==========================================================================
 
     # ultra/src/perspective.data.c
-    0x803397B0: table.sym_var("ultra_rodata_803397B0", "const double"),
+    0x803397B0: table.sym_var("guPerspectiveF__803397B0", "const double"),
 
     # ultra/src/llcvt.data.c
-    0x803397C0: table.sym_var("ultra_rodata_803397C0", "const u64"),
-    0x803397C8: table.sym_var("ultra_rodata_803397C8", "const u64"),
+    0x803397C0: table.sym_var("__d_to_ull__803397C0", "const u64"),
+    0x803397C8: table.sym_var("__f_to_ull__803397C8", "const u64"),
 
     # ultra/src/cosf.data.c
-    0x803397D0: table.sym_var("ultra_rodata_803397D0", "const double", "[]"),
-    0x803397F8: table.sym_var("ultra_rodata_803397F8", "const double"),
-    0x80339800: table.sym_var("ultra_rodata_80339800", "const double"),
-    0x80339808: table.sym_var("ultra_rodata_80339808", "const double"),
-    0x80339810: table.sym_var("ultra_rodata_80339810", "const float"),
+    0x803397D0: table.sym_var("cosf__P",    "const double", "[]"),
+    0x803397F8: table.sym_var("cosf__rpi",  "const double"),
+    0x80339800: table.sym_var("cosf__pihi", "const double"),
+    0x80339808: table.sym_var("cosf__pilo", "const double"),
+    0x80339810: table.sym_var("cosf__zero", "const float"),
 
     # ultra/src/sinf.data.c
-    0x80339820: table.sym_var("ultra_rodata_80339820", "const double", "[]"),
-    0x80339848: table.sym_var("ultra_rodata_80339848", "const double"),
-    0x80339850: table.sym_var("ultra_rodata_80339850", "const double"),
-    0x80339858: table.sym_var("ultra_rodata_80339858", "const double"),
-    0x80339860: table.sym_var("ultra_rodata_80339860", "const double"),
+    0x80339820: table.sym_var("sinf__P",    "const double", "[]"),
+    0x80339848: table.sym_var("sinf__rpi",  "const double"),
+    0x80339850: table.sym_var("sinf__pihi", "const double"),
+    0x80339858: table.sym_var("sinf__pilo", "const double"),
+    0x80339860: table.sym_var("sinf__zero", "const float"),
 
     # ultra/src/rotate.data.c
-    0x80339870: table.sym_var("ultra_rodata_80339870", "const float"),
+    0x80339870: table.sym_var("guRotateF__80339870", "const float"),
 
     # ultra/src/xprintf.data.c
-    0x80339880: table.sym_var("ultra_rodata_80339880", "const char", "[]"),
-    0x80339884: table.sym_var("ultra_rodata_80339884", "const char", "[]"),
-    0x8033988C: table.sym_var("ultra_rodata_8033988C", "const u32", "[]"),
-    0x803398A4: table.sym_var_fnc("ultra_rodata_803398A4", "const", "[]"),
+    0x80339880: table.sym_var("_Printf__80339880", "const char", "[]"),
+    0x80339884: table.sym_var("fchar",  "const char", "[]"),
+    0x8033988C: table.sym_var("fbit",   "const u32", "[]"),
+    0x803398A4: table.sym_var_fnc("_Putfld__803398A4", "const", "[]"),
 
     # ultra/src/exceptasm.S
     0x80339980: table.sym("__osIntOffTable"),
@@ -1633,14 +1633,14 @@ sym_E0_d_ultra = {
     0x803399D0: table.sym("__libm_qnan_f",  table.GLOBL),
 
     # ultra/src/xldtob.data.c
-    0x803399E0: table.sym_var("ultra_rodata_803399E0", "const f64", "[]"),
-    0x80339A28: table.sym_var("ultra_rodata_80339A28", "const char", "[]"),
-    0x80339A2C: table.sym_var("ultra_rodata_80339A2C", "const char", "[]"),
-    0x80339A30: table.sym_var("ultra_rodata_80339A30", "const char", "[]"),
-    0x80339A38: table.sym_var("ultra_rodata_80339A38", "const double"),
+    0x803399E0: table.sym_var("pows",   "const f64", "[]"),
+    0x80339A28: table.sym_var("_Ldtob__80339A28", "const char", "[]"),
+    0x80339A2C: table.sym_var("_Ldtob__80339A2C", "const char", "[]"),
+    0x80339A30: table.sym_var("_Genld__80339A30", "const char", "[]"),
+    0x80339A38: table.sym_var("_Ldtob__80339A38", "const double"),
 
-    # ultra/src/setintmask.data.c
-    0x80339A40: table.sym_var("__osRcpImTable", "const u16", "[]"),
+    # ultra/src/setintmask.S
+    0x80339A40: table.sym("__osRcpImTable", table.GLOBL),
 
     # ==========================================================================
     # bss
@@ -1659,7 +1659,7 @@ sym_E0_d_ultra = {
     0x80365E28: table.sym_var("viEventBuf",     "OSMesg",   "[5]",  ultra.BALIGN),
     0x80365E40: table.sym_var("viRetraceMsg",   "OSIoMesg", flag=ultra.BALIGN),
     0x80365E58: table.sym_var("viCounterMsg",   "OSIoMesg", flag=ultra.BALIGN),
-    0x80365E6C: table.sym_var("retrace",        "u16"),
+    0x80365E6C: table.sym_var("viMgrMain__retrace", "u16"), # static
 
     # ultra/src/pimgr.data.c
     0x80365E70: table.sym_var("piThread",       "OSThread", flag=ultra.BALIGN),
@@ -1679,7 +1679,7 @@ sym_E0_d_ultra = {
     0x803670D0: table.sym_var("__osEepromTimerMsg", "OSMesg",   "[1]",  ultra.BALIGN),
 
     # ultra/src/rotate.data.c
-    0x803670E0: table.sym_var("dtor",   "float"),
+    0x803670E0: table.sym_var("guRotateF__dtor",    "float"), # static
 
     # ultra/src/timerintr.data.c
     0x803670F0: table.sym_var("__osBaseTimer",      "OSTimer",  flag=ultra.BALIGN),
@@ -1700,7 +1700,7 @@ sym_E0_d_ultra = {
     0x80367170: table.sym_var("__osEepPifRam",  "u32",  "[0x40/sizeof(u32)]",   ultra.BALIGN),
 
     # ultra/src/kdebugserver.data.c
-    0x803671B0: table.sym_var("buffer", "u8",   "[0x100]",  ultra.BALIGN),
+    0x803671B0: table.sym_var("kdebugserver__buffer",   "u8",   "[0x100]",  ultra.BALIGN), # static
     0x803672B0: table.sym_var("__osThreadSave", "OSThread", flag=ultra.BALIGN),
 }
 
@@ -13428,8 +13428,8 @@ sym_E0_main = {
     0x020077E8: table.sym_var("texture_message",    "u8 *", "[]"),
     0x02007BE8: table.sym_var("texture_credit",     "u16 *", "[]"),
     0x02007C7C: table.sym_var("texture_camera",     "u16 *", "[]"),
-    0x02007D28: table.sym_var("msg_select", "struct msg *", "[]"),
-    0x02010A68: table.sym_var("msg_en_us", "struct msg *", "[]"),
+    0x02007D28: table.sym_var("msg_select", "MSG *", "[]"),
+    0x02010A68: table.sym_var("msg_en_us",  "MSG *", "[]"),
     0x02010F68: table.sym_var("str_course", "u8 *", "[]"),
     0x0201192C: table.sym_var("str_level", "u8 *", "[]"),
     0x02011AB8: table.sym_var("align_0", "unused static u64"),
@@ -13958,16 +13958,64 @@ sym_E0_shp_a0 = {
 sym_E0_shp_a1 = {
     0x00132C60: table.sym("szp_shape_a1_start"),
     0x00134A70: table.sym("data_shape_a1_start"),
+
+    # bully
     0x050000E0: table.sym_var("texture_bully_horn", "static u16", "[]"),
-    0x050002E0: table.sym_var("gfx_bully_horn", "static Gfx", "[]"),
-    0x05000398: table.sym_var("gfx_bully_horn_s", "Gfx", "[]"),
-    0x05000408: table.sym_var("_05000408", "unused static u8", "[]"),
+    0x050002E0: table.sym_var("gfx_bully_horn",     "static Gfx", "[]"),
+    0x05000398: table.sym_var("gfx_bully_horn_s",   "Gfx", "[]"),
+    0x05000408: table.sym_var("light_bully",        "static Lights1", "[]"),
+    0x05000468: table.sym_var("texture_bully_body_l",   "static u16", "[]"),
+    0x05001468: table.sym_var("texture_bully_body_r",   "static u16", "[]"),
+    0x05002468: table.sym_var("texture_bully_eye",  "static u16", "[]"),
+    0x05003708: table.sym_var("gfx_bully_shoeL",    "Gfx", "[]"),
+    0x050037A0: table.sym_var("gfx_bully_shoeR",    "Gfx", "[]"),
+    0x05003838: table.sym_var("gfx_bully_eye_old",  "Gfx", "[]"), # unused
+    0x05003878: table.sym_var("gfx_bully_body_old", "Gfx", "[]"), # unused
+    0x05003C50: table.sym_var("vtx_bully_body_86_l", "static Vtx", "[]"),
+    0x05003C90: table.sym_var("vtx_bully_body_86_r", "static Vtx", "[]"),
+    0x05003CD0: table.sym_var("gfx_bully_body_86_l", "static Gfx", "[]"),
+    0x05003D08: table.sym_var("gfx_bully_body_86_r", "static Gfx", "[]"),
+    0x05003D40: table.sym_var("gfx_bully_body_86_s", "Gfx", "[]"),
+    0x05003DB8: table.sym_var("vtx_bully_body_87_l", "static Vtx", "[]"),
+    0x05003DF8: table.sym_var("vtx_bully_body_87_r", "static Vtx", "[]"),
+    0x05003E38: table.sym_var("gfx_bully_body_87_l", "static Gfx", "[]"),
+    0x05003E70: table.sym_var("gfx_bully_body_87_r", "static Gfx", "[]"),
+    0x05003EA8: table.sym_var("gfx_bully_body_87_s", "Gfx", "[]"),
+    0x05003F20: table.sym_var("vtx_bully_eye",      "static Vtx", "[]"),
+    0x05003F80: table.sym_var("gfx_bully_eye",      "static Gfx", "[]"),
+    0x05003FC8: table.sym_var("gfx_bully_eye_s",    "Gfx", "[]"),
+    0x050042A4: table.sym_var("anime_bully_2",  "static ANIME"),
+    0x050043D8: table.sym_var("anime_bully_1",  "static ANIME"),
+    0x05004598: table.sym_var("anime_bully_0",  "static ANIME"),
+    0x050046F4: table.sym_var("anime_bully_3",  "static ANIME"),
+    0x0500470C: table.sym_var("anime_bully",    "ANIME *",  "[]"),
     0x05004720: table.sym_var("align_0", "unused static u64"),
-    0x05004728: table.sym_var("_05004728", "unused static u8", "[]"),
+
+    # blargg
+    0x05004728: table.sym_var("light_blargg",   "static Lights1", "[]"),
+    0x050058D0: table.sym_var("gfx_blargg_upper_jaw",   "Gfx", "[]"),
+    0x05005A60: table.sym_var("gfx_blargg_lower_jaw",   "Gfx", "[]"),
+    0x05005D00: table.sym_var("gfx_blargg_body",    "Gfx", "[]"),
+    0x05006070: table.sym_var("anime_blargg_1", "static ANIME"),
+    0x05006154: table.sym_var("anime_blargg_0", "static ANIME"),
+    0x0500616C: table.sym_var("anime_blargg",   "ANIME *",  "[]"), # unused
     0x05006178: table.sym_var("align_1", "unused static u64"),
+
     0x0C000000: table.sym_var("s_a1_86", "S_SCRIPT", "[]", table.GLOBL),
     0x0C000120: table.sym_var("s_a1_87", "S_SCRIPT", "[]", table.GLOBL),
-    0x0C000240: table.sym_var("s_a1_84", "S_SCRIPT", "[]", table.GLOBL),
+    0x0C000240: table.sym_var("s_blargg",   "S_SCRIPT", "[]", table.GLOBL), # 84
+}
+
+imm_E0_shp_a1 = {
+    0x05003708: 0x05000408,
+    0x050037A0: 0x05000408,
+    0x05003838: 0x05000408,
+    0x05003878: 0x05000408,
+    0x050058D0: 0x05004728,
+    0x05005998: 0x05004728,
+    0x05005A60: 0x05004728,
+    0x05005B28: 0x05004728,
+    0x05005D00: 0x05004728,
 }
 
 sym_E0_shp_a2 = {
@@ -13989,6 +14037,7 @@ sym_E0_shp_a3 = {
 sym_E0_shp_a4 = {
     0x00145E90: table.sym("szp_shape_a4_start"),
     0x00151B70: table.sym("data_shape_a4_start"),
+    0x05003F20: table.sym("0x05003F20"),
     0x0C000000: table.sym_var("s_a4_87", "S_SCRIPT", "[]", table.GLOBL),
     0x0C0002AC: table.sym_var("s_a4_0C0002AC", "static S_SCRIPT", "[]"),
     0x0C0005E4: table.sym_var("s_a4_89", "S_SCRIPT", "[]", table.GLOBL),
@@ -14735,25 +14784,25 @@ sym_E0_m_title = {
     0x1400035C: table.sym_var("s_title", "S_SCRIPT", "[]", table.GLOBL),
     0x140003B8: table.sym_var("s_gameover", "S_SCRIPT", "[]", table.GLOBL),
     0x14000414: table.sym_var("s_selectstage", "S_SCRIPT", "[]", table.GLOBL),
-    # 0x0A000000: table.sym_var("vtx_title_bg", "static Vtx", "[]"),
-    # 0x0A000100: table.sym_var("gfx_title_bg_start", "Gfx", "[]"),
-    # 0x0A000118: table.sym_var("gfx_title_bg_vtx", "Gfx", "[]"),
-    # 0x0A000130: table.sym_var("gfx_title_bg_0", "Gfx", "[]"),
-    # 0x0A000148: table.sym_var("gfx_title_bg_1", "Gfx", "[]"),
-    # 0x0A000160: table.sym_var("gfx_title_bg_2", "Gfx", "[]"),
-    # 0x0A000178: table.sym_var("gfx_title_bg_3", "Gfx", "[]"),
-    # 0x0A000190: table.sym_var("gfx_title_bg_end", "Gfx", "[]"),
-    # 0x0A0001C0: table.sym_var("texture_title_bg_mario_0", "static u16", "[]"),
-    # 0x0A000E40: table.sym_var("texture_title_bg_mario_1", "static u16", "[]"),
-    # 0x0A001AC0: table.sym_var("texture_title_bg_mario_2", "static u16", "[]"),
-    # 0x0A002740: table.sym_var("texture_title_bg_mario_3", "static u16", "[]"),
-    # 0x0A0033C0: table.sym_var("texture_title_bg_gameover_0", "static u16", "[]"),
-    # 0x0A004040: table.sym_var("texture_title_bg_gameover_1", "static u16", "[]"),
-    # 0x0A004CC0: table.sym_var("texture_title_bg_gameover_2", "static u16", "[]"),
-    # 0x0A005940: table.sym_var("texture_title_bg_gameover_3", "static u16", "[]"),
-    # 0x0A0065C0: table.sym_var("texture_title_bg_mario", "u16 *", "[]"),
-    # 0x0A0065D0: table.sym_var("texture_title_bg_gameover", "u16 *", "[]"),
-    # 0x0A0065E0: table.sym_var("align_0", "unused static u64"),
+    0x0A000000: table.sym_var("vtx_title_bg", "static Vtx", "[]"),
+    0x0A000100: table.sym_var("gfx_title_bg_start", "Gfx", "[]"),
+    0x0A000118: table.sym_var("gfx_title_bg_vtx", "Gfx", "[]"),
+    0x0A000130: table.sym_var("gfx_title_bg_0", "Gfx", "[]"),
+    0x0A000148: table.sym_var("gfx_title_bg_1", "Gfx", "[]"),
+    0x0A000160: table.sym_var("gfx_title_bg_2", "Gfx", "[]"),
+    0x0A000178: table.sym_var("gfx_title_bg_3", "Gfx", "[]"),
+    0x0A000190: table.sym_var("gfx_title_bg_end", "Gfx", "[]"),
+    0x0A0001C0: table.sym_var("texture_title_bg_mario_0", "static u16", "[]"),
+    0x0A000E40: table.sym_var("texture_title_bg_mario_1", "static u16", "[]"),
+    0x0A001AC0: table.sym_var("texture_title_bg_mario_2", "static u16", "[]"),
+    0x0A002740: table.sym_var("texture_title_bg_mario_3", "static u16", "[]"),
+    0x0A0033C0: table.sym_var("texture_title_bg_gameover_0", "static u16", "[]"),
+    0x0A004040: table.sym_var("texture_title_bg_gameover_1", "static u16", "[]"),
+    0x0A004CC0: table.sym_var("texture_title_bg_gameover_2", "static u16", "[]"),
+    0x0A005940: table.sym_var("texture_title_bg_gameover_3", "static u16", "[]"),
+    0x0A0065C0: table.sym_var("texture_title_bg_mario", "u16 *", "[]"),
+    0x0A0065D0: table.sym_var("texture_title_bg_gameover", "u16 *", "[]"),
+    0x0A0065E0: table.sym_var("align_0", "unused static u64"),
 }
 
 # face/data
@@ -15699,7 +15748,7 @@ tbl = [
     (0x00108A10, 0x00114750, "E0", sym_E0_main,     {}, {}),
     (0x00114750, 0x0012A7E0, "E0", sym_E0_shp_pl,   {}, {}),
     (0x0012A7E0, 0x00132C60, "E0", sym_E0_shp_a0,   {}, {}),
-    (0x00132C60, 0x00134D20, "E0", sym_E0_shp_a1,   {}, {}),
+    (0x00132C60, 0x00134D20, "E0", sym_E0_shp_a1,   {}, imm_E0_shp_a1),
     (0x00134D20, 0x0013B910, "E0", sym_E0_shp_a2,   {}, {}),
     (0x0013B910, 0x00145E90, "E0", sym_E0_shp_a3,   {}, {}),
     (0x00145E90, 0x001521D0, "E0", sym_E0_shp_a4,   {}, {}),

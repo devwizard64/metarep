@@ -11,13 +11,13 @@ typedef uint32_t u32;
 
 static void crc(char *buf, const u8 *data, uint size)
 {
-    u32   c0;
-    u32   c1;
-    u32   c0a;
-    u32   c0b;
-    u32   c1a;
-    u32   c1b;
-    uint  i;
+    u32  c0;
+    u32  c1;
+    u32  c0a;
+    u32  c0b;
+    u32  c1a;
+    u32  c1b;
+    uint i;
     c0 = c1 = c0a = c0b = c1a = c1b = 0xF8CA4DDC;
     for (i = 0; i < size; i += 4)
     {

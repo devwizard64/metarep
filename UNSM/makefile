@@ -148,7 +148,7 @@ $(BUILD)/%.szp.o: %.c make/szp.ld
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $@.elf $@.o
 	$(OBJCOPY) -O binary $@.elf $@.bin
 	$(NM) -f posix $@.elf > $@.sym
-	$(EXE)/slienc $@.szp $@.bin $@.sym
+	$(EXE)/slienc $@.szp $(@:.o=.h) $@.bin $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@.szp.o
 	$(LD) --accept-unknown-input-arch -r -o $@ -R $@.elf $@.szp.o
 
@@ -156,15 +156,17 @@ $(BUILD)/%.szp.d: %.c
 	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.szp.o: %.bin
-	printf "a D 0 %X\n" $(shell stat --printf="%s" $<) > $@.sym
-	$(EXE)/slienc $@.szp $< $@.sym
+	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $@.sym
+	$(EXE)/slienc $@.szp $(@:.o=.h) $< $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@
 
 $(BUILD)/%.szp.d: %.bin
 	touch $@
 
+$(BUILD)/%.szp.h: $(BUILD)/%.szp.o
+
 $(BUILD)/%.o: %.asm
-	$(ARMIPS) -strequ BUILD $(BUILD) $<
+	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
 	$(CC) -MMD -MP -c -o $@ $(<:.asm=.S)
 
 $(BUILD)/%.d: %.asm
@@ -202,7 +204,7 @@ $(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
 	$(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
-BUILD_OBJ := $(call obj,*.S *.c *.bin *.png *.ply *.obj *.txt *.seq)
+BUILD_OBJ := $(call obj,*.asm *.S *.c *.bin *.png *.ply *.obj *.txt *.seq)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
 $(BUILD)/make $(BUILD)/src $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@

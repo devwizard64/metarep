@@ -82,14 +82,14 @@ def main(argv):
     data = ""
     for label, t, lst in ctbl:
         if type(t) == tuple:
-            data += "%s u8 str_%s[][%s] =\n{\n%s};\n" % (
+            data += "%su8 str_%s[][%s] =\n{\n%s};\n" % (
                 t[1], label, t[0], "".join([
                     "    {%s},\n" % fmt_str(lst)
                     for lst in list_split(list_rstrip(lst, 0xFE), 0xFE)
                 ])
             )
         else:
-            data +=  "%s u8 str_%s[] = {%s};\n" % (
+            data +=  "%su8 str_%s[] = {%s};\n" % (
                 t, label, fmt_str(list_rstrip(lst, 0xFE))
             )
     if len(stbl) > 0:
@@ -98,9 +98,9 @@ def main(argv):
         ]) + "    NULL,\n};\n"
     if len(mtbl) > 0:
         data += "\n" + "".join([
-            "static struct msg msg_%s = {%s, str_%s};\n" % (label, arg, label)
+            "static MSG msg_%s = {%s, str_%s};\n" % (label, arg, label)
             for label, arg in mtbl
-        ]) + ("\nstruct msg *msg_%s[] =\n{\n" % name) + "".join([
+        ]) + ("\nMSG *msg_%s[] =\n{\n" % name) + "".join([
             "    &msg_%s,\n" % label for label, arg in mtbl
         ]) + "    NULL,\n};\n"
     with open(path + ".h", "w") as f:
@@ -113,7 +113,7 @@ def main(argv):
             if len(arg) > 1 and arg[1] != "":
                 s = arg[1]
                 i = 0
-            line.append("#define %s ((%s)+%d)\n" % (arg[0].ljust(63), s, i))
+            line.append("#define %s ((%s)+%d)\n" % (arg[0].ljust(23), s, i))
         i += 1
     if len(line) > 0:
         hn = "".join([
@@ -121,12 +121,12 @@ def main(argv):
             for x in (name+".inc.h").upper()
         ])
         data = (
-            "#ifndef _%s_\n"
-            "#define _%s_\n"
+            "#ifndef __%s__\n"
+            "#define __%s__\n"
             "\n"
         ) % (hn, hn) + "".join(line) + (
             "\n"
-            "#endif /* _%s_ */\n"
+            "#endif /* __%s__ */\n"
         ) % hn
         with open(path + ".inc.h", "w") as f:
             f.write(data)

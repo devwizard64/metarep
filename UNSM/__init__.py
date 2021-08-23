@@ -321,6 +321,13 @@ str_gfx = """
 
 """
 
+str_shape = """
+#include <sm64/types.h>
+#include <sm64/gbi_ext.h>
+#include <sm64/shape.h>
+
+"""
+
 str_s_script = """
 #include <sm64/types.h>
 #include <sm64/s_script.h>
@@ -527,7 +534,7 @@ def s_shape(start, end, a, b, name, gfx, shape):
             [s_szp, start, end, "E0"],
             [main.s_addr, (a << 24)],
             [main.s_file, "gfx.c"],
-                [main.s_str, str_gfx],
+                [main.s_str, str_shape],
                 [main.s_call, gfx],
             [main.s_write],
             [main.s_dev, None],
@@ -1060,8 +1067,9 @@ ultra_src = [
         [0, 2, 20, "str"],
     ], [], str_data_u),
     s_data(0x80335AA0, 0x80335AA0, 0x803399E0, 0x80339A40, 0, 0, "xldtob.data", [], [
-        [0, -9, 1, ultra.c.d_f64],
-        [0, 4, 4, "str"],
+        [0, -9, 1, ultra.c.d_f64, "%.0E"],
+        [0, 3, 4, "str"],
+        [0, 1, 4, None],
         [0, 1, 1, ultra.c.d_f64],
     ], str_data_u),
     s_data(0x80335AA0, 0x80335AF0, 0x80339A40, 0x80339A40, 0, 0, "vimodentsclan1", [
@@ -1076,9 +1084,15 @@ ultra_src = [
     s_data(0x80335B50, 0x80335B58, 0x80339A40, 0x80339A40, 0, 0, "syncputchars.data", [
         [0, 2, 1, ultra.c.d_u32],
     ], [], str_data_u),
-    s_data(0x80335B60, 0x80335B60, 0x80339A40, 0x80339AC0, 0, 0, "setintmask.data", [], [
-        [0, -8, 8, ultra.c.d_u16, "0x%04X"],
-    ], str_data_u),
+    [main.s_file, "setintmask.S"],
+        [main.s_str, """
+.rdata
+
+"""],
+        [ultra.asm.s_data, 0x80339A40, 0x80339AC0, "E0", [
+            [8, 8, ultra.asm.d_uhalf, "0x%03X"],
+        ]],
+    [main.s_write],
 ]
 
 ultra_PR = [
@@ -2479,10 +2493,10 @@ u8 _camera_bss[0x6C0];
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 3, None],
         ]],
         [c.s_msg, 0x803314B0, 0x803314C0, "E0", 0, "message_a", None, [
-            (0, "en_p", "803314B0"),
-            (0, "en_p", "803314B4"),
-            (0, "en_p", "803314B8"),
-            (0, "en_p", "803314BC"),
+            (0, "en.p", "803314B0"),
+            (0, "en.p", "803314B4"),
+            (0, "en.p", "803314B8"),
+            (0, "en.p", "803314BC"),
         ]],
         [ultra.c.s_data, 0x803314C0, 0x803314FC, "E0", [
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 1, None],
@@ -2524,12 +2538,12 @@ u8 _camera_bss[0x6C0];
         [c.s_msg, 0x803316D8, 0x8033174C, "E0", 0, "message_d", None, [
             (0, "en",   "803316D8"),
             (0, "en",   "803316E4"),
-            (0, "en_p", "803316F4"),
-            (0, "en_p", "803316F8"),
+            (0, "en.p", "803316F4"),
+            (0, "en.p", "803316F8"),
             (0, "en",   "803316FC"),
             (0, "en",   "80331704"),
             (0, "en",   "8033170C"),
-            (0, "en_p", "80331714"),
+            (0, "en.p", "80331714"),
             (0, "en",   "80331718"),
             (0, "en",   "80331728"),
             (0, "en",   "80331734"),
@@ -2881,8 +2895,8 @@ src_menu = [
             (0, "en",   "801A7DA8"),
             (0, "en",   "801A7DB0"),
             (0, "en",   "801A7DB8"),
-            (0, "en_p", "801A7DBC"),
-            (0, "en_p", "801A7DC0"),
+            (0, "en.p", "801A7DBC"),
+            (0, "en.p", "801A7DC0"),
             (0, "en",   "801A7DC4"),
             (0, "en",   "801A7DD0"),
             (0, "en",   "801A7DD8"),
@@ -2906,7 +2920,7 @@ src_menu = [
             (0, "en",   "801A7EE8"),
             (0, "en",   "801A7EEC"),
             (0, "en",   "801A7EF0"),
-            (1, "en_s", "801A7EF4", 8, 5),
+            (1, "en.s", "801A7EF4", 8, 5),
             (0, "en",   "801A7F1C"),
             (0, "en",   "801A7F24"),
             (0, "en",   "801A7F30"),
@@ -4111,9 +4125,9 @@ data_main_gfx = [
     s_writepop(),
     [main.s_str, "\n"],
     [c.s_msg, 0x02007D28, 0x02007D34, "E0.szp", 2, "select", "jp",   None],
-    [c.s_msg, 0x02010A68, 0x02010D14, "E0.szp", 2, "en_us",  "en_m", msg_table],
-    [c.s_msg, 0x02010F68, 0x02010FD4, "E0.szp", 1, "course", "en_m", msg_course],
-    [c.s_msg, 0x0201192C, 0x02011AB4, "E0.szp", 1, "level",  "en_m", None],
+    [c.s_msg, 0x02010A68, 0x02010D14, "E0.szp", 2, "en_us",  "en.m", msg_table],
+    [c.s_msg, 0x02010F68, 0x02010FD4, "E0.szp", 1, "course", "en.m", msg_course],
+    [c.s_msg, 0x0201192C, 0x02011AB4, "E0.szp", 1, "level",  "en.m", None],
     [main.s_str, "\n"],
     [ultra.c.s_data, 0x02011AB8, 0x02011AC0, "E0.szp", [
         [0, 1, 1, ultra.c.d_u64],
@@ -4578,12 +4592,41 @@ data_a1_gfx = [
     s_dirfile("bully", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "horn"],
-        [ultra.c.s_data, 0x050000E0, 0x05004720, "E0.szp", [
+        [ultra.c.s_data, 0x050000E0, 0x05002C68, "E0.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "horn"],
             [0, 1, 1, ultra.c.d_Gfx, 0x050002F8],
             [0, 1, 1, c.d_ply_gfx, 0x05000390, "horn", False, (16, 16)],
             [0, 1, 1, ultra.c.d_Gfx, 0x05000408],
-            [0, (0x05000408-0x05004720)//8, 8, ultra.c.d_u8, "0x%02X"],
+            [0, -4, 1, c.d_light, 0.25],
+            [0, 1, 1, c.d_texture, "rgba16", 32, 64, "body_l"],
+            [0, 1, 1, c.d_texture, "rgba16", 32, 64, "body_r"],
+            [0, 1, 1, c.d_texture, "rgba16", 32, 32, "eye"],
+        ]],
+        [c.s_ply_vtx, "shoeL"],
+        [c.s_ply_vtx, "shoeR"],
+        [c.s_ply_vtx, "eye_old"],
+        [c.s_ply_vtx, "body_old"],
+        [ultra.c.s_data, 0x05003708, 0x05004720, "E0.szp", [
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003718],
+            [0, 1, 1, c.d_ply_gfx, 0x05003798, "shoeL", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x050037B0],
+            [0, 1, 1, c.d_ply_gfx, 0x05003830, "shoeR", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003848],
+            [0, 1, 1, c.d_ply_gfx, 0x05003870, "eye_old", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003888],
+            [0, 1, 1, c.d_ply_gfx, 0x05003C48, "body_old", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003C50],
+            [0, -8, 1, ultra.c.d_Vtx, False],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003DB8],
+            [0, -8, 1, ultra.c.d_Vtx, True],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05003F20],
+            [0, -6, 1, ultra.c.d_Vtx, True],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05004038],
+            [0, 1, 1, c.d_anime, 0x050042A4],
+            [0, 1, 1, c.d_anime, 0x050043D8],
+            [0, 1, 1, c.d_anime, 0x05004598],
+            [0, 1, 1, c.d_anime, 0x050046F4],
+            [0, -5, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
         s_script_else(),
     s_writepop(),
@@ -4592,8 +4635,29 @@ data_a1_gfx = [
     ]],
     s_dirfile("blargg", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x05004728, 0x05006178, "E0.szp", [
-            [0, (0x05004728-0x05006178)//8, 8, ultra.c.d_u8, "0x%02X"],
+        [ultra.c.s_data, 0x05004728, 0x050047A0, "E0.szp", [
+            [0, -5, 1, c.d_light, 0.25],
+        ]],
+        [c.s_ply_vtx, "upper_teeth"],
+        [c.s_ply_vtx, "upper_jaw"],
+        [c.s_ply_vtx, "lower_teeth"],
+        [c.s_ply_vtx, "lower_jaw"],
+        [c.s_ply_vtx, "body"],
+        [ultra.c.s_data, 0x050058D0, 0x05006178, "E0.szp", [
+            [0, 1, 1, ultra.c.d_Gfx, 0x050058E0],
+            [0, 1, 1, c.d_ply_gfx, 0x05005998, "upper_teeth", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x050059A8],
+            [0, 1, 1, c.d_ply_gfx, 0x05005A58, "upper_jaw", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05005A70],
+            [0, 1, 1, c.d_ply_gfx, 0x05005B28, "lower_teeth", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05005B38],
+            [0, 1, 1, c.d_ply_gfx, 0x05005CF8, "lower_jaw", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05005D10],
+            [0, 1, 1, c.d_ply_gfx, 0x05005EB0, "body", True, None],
+            [0, 1, 1, ultra.c.d_Gfx, 0x05005EB8],
+            [0, 1, 1, c.d_anime, 0x05006070],
+            [0, 1, 1, c.d_anime, 0x05006154],
+            [0, -3, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
         s_script_else(),
     s_writepop(),
@@ -4663,12 +4727,20 @@ data_game = [
     s_shape_p(0x150009DC, 0x15000A10, "b5"),
 ]
 
-data_weather = [
-    [main.s_str, """
-#include <sm64/types.h>
-#include <sm64/gbi_ext.h>
+data_background_title = [
+    [main.s_str, str_gfx],
+    [ultra.c.s_data, 0x0A000000, 0x0A0065E8, "E0.szp", [
+        [0, -16, 1, ultra.c.d_Vtx, False],
+        [0, 1, 1, ultra.c.d_Gfx, 0x0A0001C0],
+        d_texture_n("rgba16", 80, 20, 4, "mario_%d"),
+        d_texture_n("rgba16", 80, 20, 4, "gameover_%d"),
+        [0, -8, 1, ultra.c.d_addr, 0],
+        [0, 1, 1, ultra.c.d_u64],
+    ]],
+]
 
-"""],
+data_weather = [
+    [main.s_str, str_gfx],
     [ultra.c.s_data, 0x0B000000, 0x0B000008, "E0.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
@@ -4896,8 +4968,7 @@ lst = [
         [main.s_write],
         [main.s_addr, 0],
         [main.s_dir, "background"],
-            # s_gfx(0x002708C0, 0x002739A0, "title", data_background_title),
-            s_szpbin(0x002708C0, 0x002739A0, 0x000065E8, "title/gfx"),
+            s_gfx(0x002708C0, 0x002739A0, 0x0A, "title", data_background_title),
             s_szpbin(0x002AC6B0, 0x002B8F10, 0x00020140, "a/gfx"), # 20000 + 140
             s_szpbin(0x002B8F10, 0x002C73D0, 0x00020140, "b/gfx"), # 20000 + 140
             s_szpbin(0x002C73D0, 0x002D0040, 0x00014940, "c/gfx"), # 14800 + 140

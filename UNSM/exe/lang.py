@@ -112,9 +112,9 @@ en_p = [
 
 table = {
     "jp":   jp,
-    "jp_p": jp_p,
+    "jp.p": jp_p,
     "en":   en,
-    "en_m": en_m,
-    "en_s": en_s,
-    "en_p": en_p,
+    "en.m": en_m,
+    "en.s": en_s,
+    "en.p": en_p,
 }

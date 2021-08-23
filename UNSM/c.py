@@ -506,9 +506,58 @@ def d_bspline_prc(argv):
     y    = ultra.sh()
     z    = ultra.sh()
     return ["{%2d, {%5d, %5d, %5d}}" % (time, x, y, z)]
-d_bspline = [None, d_bspline_prc]
+d_bspline = [False, d_bspline_prc]
 
 # shape.h
+
+def d_anime_prc(self, line, tab, argv):
+    anime, = argv
+    self.c_addr = anime
+    flag    = ultra.sh()
+    waist   = ultra.sh()
+    start   = ultra.sh()
+    end     = ultra.sh()
+    frame   = ultra.sh()
+    joint   = ultra.sh()
+    val     = ultra.uw()
+    tbl     = ultra.uw()
+    size    = ultra.uw()
+    self.c_push()
+    self.c_addr = tbl
+    tbl_data = [(ultra.uh(), ultra.uh()) for _ in range(3*(1+joint))]
+    self.c_addr = val
+    val_data = [ultra.sh() for _ in range(max([f+i for f, i in tbl_data]))]
+    sym_anime = table.sym_addr(self, anime, rej=True)
+    sym_val = table.sym_var(sym_anime.label+"_val", "static s16", "[]")
+    sym_tbl = table.sym_var(sym_anime.label+"_tbl", "static u16", "[]")
+    line.append((val, sym_val, set(), [
+        " ".join([
+            "-0x%04X," % -x if x < 0 else " 0x%04X," % x
+            for x in val_data[i:i+8]
+        ])
+        for i in range(0, len(val_data), 8)
+    ]))
+    line.append((tbl, sym_tbl, set(), [
+        " ".join([
+            "%5d, %5d," % x
+            for x in tbl_data[i:i+3]
+        ])
+        for i in range(0, len(tbl_data), 3)
+    ]))
+    line.append((anime, sym_anime, set(), [
+        "/* flag     */  0x%04X," % flag,
+        "/* waist    */  %d," % waist,
+        "/* start    */  %d," % start,
+        "/* end      */  %d," % end,
+        "/* frame    */  %d," % frame,
+        "/* joint    */  %d," % joint,
+        "%s," % sym_val.label,
+        "%s," % sym_tbl.label,
+        ("0x%X," if size > 0 else "%d,") % size,
+    ]))
+    self.c_pull()
+d_anime = [True, d_anime_prc]
+
 # s_script.h
 # p_script.h
 
@@ -861,7 +910,11 @@ def g_movemem(argv):
     d0_0 = ultra.uw()
     d0_1 = ultra.uw()
     if a_0 == 0x03860010 and d0_0 == 0x03880010 and a_1-d0_1 == 8:
-        light = ultra.sym(d0_1)
+        imm = table.imm_addr(ultra.script, ultra.script.c_dst)
+        if imm != None:
+            light = ultra.fmt_addr(d0_1, array=(imm, 0x18))
+        else:
+            light = ultra.sym(d0_1)
         return ("SPSetLights1N", light)
     return None
 
