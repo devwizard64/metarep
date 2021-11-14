@@ -23,21 +23,28 @@ def mc_jxx(arg, argv):
         return [(hvc.script.c_dst, jxx_table[i] + hvc.sym_lhb(lo, hi, ba))]
     return None
 
-def mc_ldf(arg, argv):
-    lo, hi, ba = argv
-    if hvc.script.c_dst+3 in hvc.asm.btbl:
-        return None
+def mc_ld(arg, lo, hi, ba, ma, mb):
+    oa, ob = arg
     sym = hvc.sym_lhb(lo, hi, ba)
-    if sym.startswith("$"):
-        return None
-    return [(hvc.script.c_dst, "ldf %s" % sym)]
+    if sym.startswith("$"): return None
+    return [
+        (hvc.script.c_dst+0, "%s #.%sword(%s)" % (oa, ma, sym)),
+        (hvc.script.c_dst+3, "%s #.%sword(%s)" % (ob, mb, sym)),
+    ]
 
-mm_jxx = [0xA9, None, None, 0xA2, None, 0x00, None, None, None, 0x00]
-mm_ldf = [0xA9, None, None, 0xA2, None, 0x00]
+def mc_ld_hl(arg, argv):
+    ba, lo, hi = argv
+    return mc_ld(arg, lo, hi, ba, "hi", "lo")
+
+def mc_ld_lh(arg, argv):
+    lo, hi, ba = argv
+    return mc_ld(arg, lo, hi, ba, "lo", "hi")
 
 macro = [
-    (mc_jxx, (), mm_jxx),
-    (mc_ldf, (), mm_ldf),
+    (mc_jxx, (), [0xA9, None, None, 0xA2, None, 0x00, None, None, None, 0x00]),
+    (mc_ld_hl, ("ldx", "lda"), [0xA2, None, 0x00, 0xA9, None, None]),
+    (mc_ld_hl, ("lda", "ldy"), [0xA9, None, 0x00, 0xA0, None, None]),
+    (mc_ld_lh, ("lda", "ldx"), [0xA9, None, None, 0xA2, None, 0x00]),
 ]
 
 def hal_decode(src):
@@ -144,7 +151,7 @@ def d_mem_n(n):
 
 src_code = [
     s_str_code(),
-    s_code(0x008000, 0x0083E6),
+    s_code(0x008000, 0x0083E6, p=0x30),
     s_data(0x0083E6, 0x00842C, [
         [1, 2, "lhb"],
         [16, 1, hvc.asm.d_faraddr],
@@ -166,10 +173,10 @@ src_code = [
         [1, 8, hvc.asm.d_byte],
     ]),
     s_code(0x008B8D, 0x008D12),
-    s_ifndef("__J0__", 1, -1),
+    s_ifndef("__J0__", 1, 0),
         s_code(0x008D37, 0x008D4F, "E0"),
         s_data(0x008D4F, 0x008D6F, [[4, 4, hvc.asm.d_word]], "E0"),
-    s_endif("__J0__"),
+    s_endif("__J0__", 0, 1),
     s_data(0x008D12, 0x008D28, "addr"),
     s_code(0x008D28, 0x008F5A),
     s_data(0x008F5A, 0x008F62, "addr"),
@@ -410,16 +417,68 @@ src_code_01 = [
         [1, 8, hvc.asm.d_byte],
         [64, 4, hvc.asm.d_word],
     ]),
-    s_data(0x01D186, 0x01DF4E), #
+    s_data(0x01D186, 0x01DE76), #
+    s_ifdef("__J0__", 1, 0),
+        s_data(0x01DE76, 0x01DF4E, [
+            [27, 8, hvc.asm.d_byte], # struct: w, w, b, b, b, b
+        ]),
+    # tmp
+    s_else("__J0__"),
+        [main.s_str, "data_01DE76 = $01DE76\n"],
+    s_endif("__J0__", 0, 1),
     s_code(0x01DF4E, 0x01E06C),
     s_data(0x01E06C, 0x01E06E),
     s_code(0x01E06E, 0x01E0D6),
     s_data(0x01E0D6, 0x01E116, "addr"),
-    s_code(0x01E116, 0x01E51C),
+    s_code(0x01E116, 0x01E11E),
+    s_ifndef("__J0__"),
+        s_code(0x01E046, 0x01E04B, "E0"),
+        s_code(0x01E04B, 0x01E04B, "E0"),
+    s_endif("__J0__"),
+    s_code(0x01E11E, 0x01E144),
+    s_ifndef("__J0__"),
+        s_code(0x01E071, 0x01E077, "E0"),
+    s_endif("__J0__"),
+    s_code(0x01E144, 0x01E14F),
+    s_code(0x01E14F, 0x01E14F),
+    s_ifdef("__J0__"),
+        s_code(0x01E14F, 0x01E154),
+    s_endif("__J0__"),
+    s_code(0x01E154, 0x01E15D),
+    s_ifdef("__J0__"),
+        s_code(0x01E15D, 0x01E160),
+    s_else("__J0__"),
+        s_code(0x01E08B, 0x01E08E, "E0"),
+    s_endif("__J0__"),
+    s_code(0x01E160, 0x01E167),
+    s_ifdef("__J0__"),
+        s_code(0x01E167, 0x01E16A),
+    s_else("__J0__"),
+        s_code(0x01E095, 0x01E098, "E0"),
+    s_endif("__J0__"),
+    s_code(0x01E16A, 0x01E1F7),
+    s_ifdef("__J0__"),
+        s_code(0x01E1F7, 0x01E1F8, p=0x20),
+    s_endif("__J0__"),
+    s_code(0x01E1F8, 0x01E204, p=0x20),
+    s_ifdef("__J0__"),
+        s_code(0x01E204, 0x01E205, p=0x20),
+    s_else("__J0__"),
+        s_code(0x01E131, 0x01E132, "E0", p=0x20),
+    s_endif("__J0__"),
+    s_code(0x01E205, 0x01E51C, p=0x20),
+
+    s_ifndef("__J0__"),
+        [main.s_str, 34*"nop ; PAD\n"],
+    s_endif("__J0__"),
+
     s_data(0x01E51C, 0x01E534, "word"),
     s_code(0x01E534, 0x01E71B),
     s_data(0x01E71B, 0x01E73F, [[6, 3, hvc.asm.d_word]]),
     s_code(0x01E73F, 0x01E911),
+    s_ifndef("__J0__"),
+        s_data(0x01E860, 0x01E920, [[24, 8, hvc.asm.d_byte]], "E0"),
+    s_endif("__J0__"),
     s_data(0x01E911, 0x01E912, "byte"),
     s_code(0x01E912, 0x01EA6E),
     s_data(0x01EA6E, 0x01EA84, "addr"),
@@ -514,6 +573,10 @@ lst = [
     [main.s_data, "J0", ["donor", "SAKFJ0.sfc"]],
     [main.s_data, "E0", ["donor", "SAKFE0.sfc"]],
     [main.s_data, "P0", ["donor", "SAKFP0.sfc"]],
+    [main.s_copy, ["exe"],      ["exe"]],
+    [main.s_copy, ["makefile"], ["makefile"]],
+    [main.s_copy, ["make"],     ["make"]],
+    [main.s_copy, ["include"],  ["include"]],
     [main.s_dir, "src"],
         s_file(0x008000-0x000000, "code.s",    src_code),
         s_file(0x008000-0x000000, "header.s",  src_header),

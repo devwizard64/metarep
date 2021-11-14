@@ -189,25 +189,39 @@ def round_cvt(dec, enc, data):
             return r
     return x
 
-def addr_chk(seg, dev, addr):
+def addr_chk(seg, addr, dev):
     return False
     if dev < 0x1000: return False
-    if seg in {0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A}: return False
-    if seg == 0x00: return False
+    if seg in {0x03, 0x05, 0x06, 0x07, 0x08}: return False
     if seg >= 0x20: return False
     return True
 
+def dev_chk(seg, addr, src, dev, sym):
+    return False
+    if seg in {0x05, 0x06, 0x07, 0x09, 0x0A, 0x0C, 0x0D, 0x0E, 0x14}:
+        if table.sym_addr(script, addr, src, True) == None:
+            if table.dev_addr(script, src, True) == None:
+                return True
+    return False
+
 def sym(addr, src=None, fmt="0x%08X", extern=False):
     sym = table.sym_addr(script, addr, src)
+    # debug
+    seg = addr >> 24
+    dev = script.c_dev(src)
+    #
     if sym != None:
         if extern and hasattr(sym, "fmt"):
             c.extern.add((addr, sym))
+        # debug
+        if dev_chk(seg, addr, src, dev, sym):
+            print("    0x%08X: 0x%08X," % (dev, addr))
+        #
         return sym.label
+    # debug
     if addr >= 0x80000010 and addr < 0x80400000:
         print("    0x%08X: table.sym(\"_%08X\")," % (addr, addr))
-    dev = script.c_dev(src)
-    seg = addr >> 24
-    if addr_chk(seg, dev, addr):
+    if addr_chk(seg, addr, dev):
         global tag
         sym = table.sym_addr(script, dev)
         if sym != None:
@@ -225,14 +239,15 @@ def sym(addr, src=None, fmt="0x%08X", extern=False):
             "map": ("MAP_DATA", "[]"),
             "area": ("AREA_DATA", "[]"),
             "obj": ("OBJ_DATA", "[]"),
-            "anime": ("struct anime *", "[]"),
-            "splash": ("struct splash"),
+            "anime": ("ANIME *", "[]"),
+            "splash": ("struct obj_splash"),
         }[tag]
         a, b = ("_var", ", \"%s\", \"%s\"" % va) if va != None else ("", "")
         print("    0x%08X: table.sym%s(\"%s_%s%08X\"%s)," % (
             addr, a, tag if tag != "" else "data", name, addr, b
         ))
         tag = ""
+    #
     return fmt % addr
 
 def sb():

@@ -552,7 +552,7 @@ op_shvc = [
 
 op_table = None
 fmt_addr = None
-btbl = set()
+btbl = {}
 
 def init(self, start, data, i):
     global op_table
@@ -563,7 +563,7 @@ def init(self, start, data, i):
     fmt_addr = "%%0%dX" % (2*(2+i))
     op = None
 
-def fmt(self, line, code=False):
+def fmt(self, line, btbl, code=False):
     f = self.file[-1][1]
     last = None
     for addr, ln in line:
@@ -577,25 +577,31 @@ def fmt(self, line, code=False):
                     if sym.flag & I16:  f.append(".i16\n")
                     if sym.flag & I8:   f.append(".i8\n")
                     if not sym.label.startswith("_"):
-                        f.append("\n; $%s\n" % (fmt_addr % addr))
+                        if last != None:
+                            f.append("\n")
+                        f.append("; $%s\n" % (fmt_addr % addr))
                     if sym.flag & table.GLOBL:
                         f.append(".global %s\n" % sym.label)
                     f.append("%s:\n" % sym.label)
             elif addr in btbl:
                 f.append("_%s:\n" % (fmt_addr % addr))
             last = addr
-        if 0 and not 0xFFB0 <= addr < 0x10000:
+        if 1 and not 0xFFB0 <= addr < 0x10000:
             f.append("/*%s*/  " % (fmt_addr % addr))
         else:
             f.append("\t")
         f.append("%s\n" % ln)
+    if last == None and self.c_addr in btbl:
+        f.append("_%s:\n" % (fmt_addr % self.c_addr))
+        btbl.remove(self.c_addr)
 
 def s_code(self, argv):
     global op
-    start, end, data, i = argv
+    start, end, data, i, p = argv
     init(self, start, data, i)
+    if data not in btbl:
+        btbl[data] = set()
     line = []
-    p = 0
     while self.c_addr < end:
         self.c_push()
         sym = table.sym_addr(self, self.c_dst)
@@ -649,7 +655,7 @@ def s_code(self, argv):
                     if sym != None:
                         lst.append(sym.label)
                     else:
-                        btbl.add(bdst)
+                        btbl[data].add(bdst)
                         lst.append("_%s" % (fmt_addr % bdst))
                 elif arg == A_XB: lst.append("[%s]" % hvc.ab())
                 elif arg == A_XW: lst.append("[%s]" % hvc.aw())
@@ -690,7 +696,7 @@ def s_code(self, argv):
                     fmt_addr % self.c_dst, op, p
                 )
             )
-    fmt(self, line, True)
+    fmt(self, line, btbl[data], True)
 
 d_byte    = [".byte",    lambda: "$%02X" % hvc.ub()]
 d_sbyte   = [".byte",    lambda: "%d"    % hvc.sb()]
@@ -759,4 +765,4 @@ def s_data(self, argv):
             if r > 0:
                 lst.append([1, r, f])
     lst_main(self, line, lst)
-    fmt(self, line)
+    fmt(self, line, set())

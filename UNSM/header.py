@@ -178,6 +178,9 @@ str_types_asm = """
 """
 
 str_gbi_ext_c = """
+#undef G_BL_CLR_FOG
+#define G_BL_CLR_FOG 3U
+
 #define G_CC_SHADE_ENV          0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT
 #define G_CC_MODULATERGB_ENVA   TEXEL0, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT
 #define G_CC_MODULATERGBA_ENVA  TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0
@@ -324,27 +327,27 @@ str_segment_globl = """
 
 #define SEGMENT_VIDEO           0x01000000
 #define SEGMENT_SZP_MAIN        0x02000000
-#define SEGMENT_SZP_ENTITY      0x03000000
+#define SEGMENT_SZP_GLOBAL      0x03000000
 #define SEGMENT_SZP_PLAYER      0x04000000
-#define SEGMENT_SZP_SHAPEA      0x05000000
-#define SEGMENT_SZP_SHAPEB      0x06000000
+#define SEGMENT_SZP_SHAPE1      0x05000000
+#define SEGMENT_SZP_SHAPE2      0x06000000
 #define SEGMENT_SZP_STAGE       0x07000000
 #define SEGMENT_SZP_MENU        0x07000000
-#define SEGMENT_SZP_SHAPEC      0x08000000
+#define SEGMENT_SZP_SHAPE3      0x08000000
 #define SEGMENT_SZP_TEXTURE     0x09000000
 #define SEGMENT_SZP_BACKGROUND  0x0A000000
 #define SEGMENT_SZP_WEATHER     0x0B000000
-#define SEGMENT_DATA_SHAPEA     0x0C000000
-#define SEGMENT_DATA_SHAPEB     0x0D000000
+#define SEGMENT_DATA_SHAPE1     0x0C000000
+#define SEGMENT_DATA_SHAPE2     0x0D000000
 #define SEGMENT_DATA_STAGE      0x0E000000
-#define SEGMENT_DATA_SHAPEC     0x0F000000
+#define SEGMENT_DATA_SHAPE3     0x0F000000
 #define SEGMENT_DATA_MAIN       0x10000000
 #define SEGMENT_ANIME_MARIO     0x11000000
 #define SEGMENT_ANIME_LUIGI     0x12000000
 #define SEGMENT_DATA_OBJECT     0x13000000
 #define SEGMENT_DATA_MENU       0x14000000
 #define SEGMENT_DATA_GAME       0x15000000
-#define SEGMENT_DATA_ENTITY     0x16000000
+#define SEGMENT_DATA_GLOBAL     0x16000000
 #define SEGMENT_DATA_PLAYER     0x17000000
 #define SEGMENT_DEMO            0x18000000
 """
@@ -367,19 +370,272 @@ str_script_asm = """
 """
 
 str_obj_data_globl = """
-#define P_OBJ_END               30
-#define P_OBJ_COIN              31
-#define P_OBJ_REDCOIN           35
-#define P_OBJ_CORKBOX           100
-#define P_OBJ_CORKBOXCOIN       101
-#define P_OBJ_METALBOX          102
-#define P_OBJ_SMALLBOX          103
+#define P_OBJ_END               (31+(-1))
+#define P_OBJ_COIN              0
+#define P_OBJ_1                 1
+#define P_OBJ_2                 2
+#define P_OBJ_3                 3
+#define P_OBJ_REDCOIN           4
+#define P_OBJ_6                 6
+#define P_OBJ_7                 7
+#define P_OBJ_8                 8
+#define P_OBJ_9                 9
+#define P_OBJ_10                10
+#define P_OBJ_11                11
+#define P_OBJ_12                12
+#define P_OBJ_13                13
+#define P_OBJ_14                14
+#define P_OBJ_20                20
+#define P_OBJ_SIGNPOST          21
+#define P_OBJ_22                22
+#define P_OBJ_23                23
+#define P_OBJ_24                24
+#define P_OBJ_25                25
+#define P_OBJ_26                26
+#define P_OBJ_27                27
+#define P_OBJ_28                28
+#define P_OBJ_29                29
+#define P_OBJ_30                30
+#define P_OBJ_31                31
+#define P_OBJ_32                32
+#define P_OBJ_33                33
+#define P_OBJ_34                34
+#define P_OBJ_35                35
+#define P_OBJ_36                36
+#define P_OBJ_37                37
+#define P_OBJ_38                38
+#define P_OBJ_39                39
+#define P_OBJ_40                40
+#define P_OBJ_41                41
+#define P_OBJ_42                42
+#define P_OBJ_43                43
+#define P_OBJ_44                44
+#define P_OBJ_45                45
+#define P_OBJ_46                46
+#define P_OBJ_47                47
+#define P_OBJ_48                48
+#define P_OBJ_49                49
+#define P_OBJ_50                50
+#define P_OBJ_51                51
+#define P_OBJ_53                53
+#define P_OBJ_54                54
+#define P_OBJ_55                55
+#define P_OBJ_56                56
+#define P_OBJ_57                57
+#define P_OBJ_58                58
+#define P_OBJ_59                59
+#define P_OBJ_60                60
+#define P_OBJ_61                61
+#define P_OBJ_62                62
+#define P_OBJ_63                63
+#define P_OBJ_64                64
+#define P_OBJ_65                65
+#define P_OBJ_66                66
+#define P_OBJ_67                67
+#define P_OBJ_68                68
+#define P_OBJ_69                69  /* CORKBOX */
+#define P_OBJ_70                70  /* CORKBOXCOIN */
+#define P_OBJ_71                71  /* METALBOX */
+#define P_OBJ_72                72  /* SMALLBOX */
+#define P_OBJ_73                73
+#define P_OBJ_74                74
+#define P_OBJ_75                75
+#define P_OBJ_76                76
+#define P_OBJ_77                77
+#define P_OBJ_78                78
+#define P_OBJ_79                79
+#define P_OBJ_81                81
+#define P_OBJ_82                82
+#define P_OBJ_84                84
+#define P_OBJ_85                85
+#define P_OBJ_86                86
+#define P_OBJ_87                87
+#define P_OBJ_88                88
+#define P_OBJ_89                89
+#define P_OBJ_93                93
+#define P_OBJ_94                94
+#define P_OBJ_96                96
+#define P_OBJ_97                97
+#define P_OBJ_98                98
+#define P_OBJ_106               106
+#define P_OBJ_107               107
+#define P_OBJ_108               108
+#define P_OBJ_109               109
+#define P_OBJ_110               110
+#define P_OBJ_111               111
+#define P_OBJ_112               112
+#define P_OBJ_113               113
+#define P_OBJ_114               114
+#define P_OBJ_115               115
+#define P_OBJ_123               123
+#define P_OBJ_125               125
+#define P_OBJ_126               126
+#define P_OBJ_137               137
+#define P_OBJ_138               138
+#define P_OBJ_139               139
+#define P_OBJ_140               140
+#define P_OBJ_141               141
+#define P_OBJ_151               151
+#define P_OBJ_152               152
+#define P_OBJ_153               153
+#define P_OBJ_154               154
+#define P_OBJ_156               156
+#define P_OBJ_165               165
+#define P_OBJ_166               166
+#define P_OBJ_167               167
+#define P_OBJ_169               169
+#define P_OBJ_170               170
+#define P_OBJ_171               171
+#define P_OBJ_172               172
+#define P_OBJ_189               189
+#define P_OBJ_190               190
+#define P_OBJ_191               191
+#define P_OBJ_192               192
+#define P_OBJ_193               193
+#define P_OBJ_194               194
+#define P_OBJ_195               195
+#define P_OBJ_196               196
+#define P_OBJ_234               234
+#define P_OBJ_235               235
+#define P_OBJ_236               236
+#define P_OBJ_237               237
+#define P_OBJ_238               238
+#define P_OBJ_239               239
+#define P_OBJ_240               240
+#define P_OBJ_241               241
+#define P_OBJ_242               242
+#define P_OBJ_243               243
+#define P_OBJ_251               251
+#define P_OBJ_252               252
+#define P_OBJ_253               253
+#define P_OBJ_255               255
+#define P_OBJ_256               256
+#define P_OBJ_258               258
+#define P_OBJ_259               259
+#define P_OBJ_260               260
+#define P_OBJ_261               261
+#define P_OBJ_262               262
+#define P_OBJ_263               263
+#define P_OBJ_281               281
+#define P_OBJ_289               289
+#define P_OBJ_290               290
+#define P_OBJ_291               291
+#define P_OBJ_292               292
+#define P_OBJ_293               293
+#define P_OBJ_303               303
+#define P_OBJ_313               313
+#define P_OBJ_314               314
+#define P_OBJ_315               315
+#define P_OBJ_316               316
+#define P_OBJ_317               317
+#define P_OBJ_318               318
+#define P_OBJ_319               319
+#define P_OBJ_320               320
+#define P_OBJ_321               321
+#define P_OBJ_322               322
+#define P_OBJ_323               323
+#define P_OBJ_324               324
+#define P_OBJ_325               325
+#define P_OBJ_326               326
+#define P_OBJ_327               327
+#define P_OBJ_328               328
+#define P_OBJ_329               329
+#define P_OBJ_339               339
+#define P_OBJ_340               340
+#define P_OBJ_341               341
+#define P_OBJ_342               342
+#define P_OBJ_343               343
+#define P_OBJ_350               350
+#define P_OBJ_351               351
+#define P_OBJ_352               352
+#define P_OBJ_353               353
+#define P_OBJ_354               354
+#define P_OBJ_357               357
+#define P_OBJ_358               358
+#define P_OBJ_359               359
+#define P_OBJ_360               360
 
+#define M_OBJ_PLAYER            0
 #define M_OBJ_COIN              1
+#define M_OBJ_2                 2
+#define M_OBJ_3                 3
+#define M_OBJ_4                 4
+#define M_OBJ_5                 5
+#define M_OBJ_6                 6
+#define M_OBJ_7                 7
+#define M_OBJ_8                 8
+#define M_OBJ_10                10
+#define M_OBJ_11                11
+#define M_OBJ_12                12
+#define M_OBJ_13                13
+#define M_OBJ_14                14
+#define M_OBJ_15                15
+#define M_OBJ_16                16
+#define M_OBJ_17                17
+#define M_OBJ_18                18
+#define M_OBJ_BULLY             19
+#define M_OBJ_20                20
+#define M_OBJ_26                26
+#define M_OBJ_27                27
+#define M_OBJ_28                28
+#define M_OBJ_29                29
+#define M_OBJ_BUTTERFLY         32
+#define M_OBJ_33                33
+#define M_OBJ_34                34
+#define M_OBJ_35                35
+#define M_OBJ_36                36
+#define M_OBJ_37                37
+#define M_OBJ_38                38
+#define M_OBJ_39                39
+#define M_OBJ_40                40
+#define M_OBJ_101               101
+#define M_OBJ_102               102
+#define M_OBJ_103               103
+#define M_OBJ_104               104
+#define M_OBJ_105               105
+#define M_OBJ_106               106
+#define M_OBJ_107               107
+#define M_OBJ_108               108
+#define M_OBJ_109               109
+#define M_OBJ_110               110
+#define M_OBJ_111               111
+#define M_OBJ_112               112
+#define M_OBJ_113               113
+#define M_OBJ_114               114
+#define M_OBJ_115               115
+#define M_OBJ_116               116
+#define M_OBJ_117               117
+#define M_OBJ_118               118
+#define M_OBJ_119               119
+#define M_OBJ_120               120
+#define M_OBJ_TREE_A            121
+#define M_OBJ_TREE_B            122
+#define M_OBJ_TREE_C            123
+#define M_OBJ_TREE_D            124
+#define M_OBJ_TREE_E            125
+#define M_OBJ_DOOR_A            137
+#define M_OBJ_DOOR_B            126
+#define M_OBJ_DOOR_C            127
+#define M_OBJ_DOOR_D            128
+#define M_OBJ_DOOR_E            129
+#define M_OBJ_DOOR_F            130
+#define M_OBJ_STARDOOR          138
+#define M_OBJ_STARDOOR1         139
+#define M_OBJ_STARDOOR3         140
+#define M_OBJ_KEYDOOR           141
+#define M_OBJ_LINKDOOR_A        136
+#define M_OBJ_LINKDOOR_B        131
+#define M_OBJ_LINKDOOR_C        132
+#define M_OBJ_LINKDOOR_D        133
+#define M_OBJ_LINKDOOR_E        134
+#define M_OBJ_LINKDOOR_F        135
 """
 
 str_obj_data_c = """
 typedef s16 OBJ_DATA;
+
+#define P_OBJ(obj, ry, px, py, pz, arg) \\
+    (OBJ_DATA)((31+P_OBJ_##obj) | (ry) << 9), px, py, pz, arg
 """
 
 str_s_script_globl = """
@@ -392,196 +648,200 @@ str_s_script_globl = """
 #define S_DUST                  150
 #define S_SMOKE2                156
 #define S_RIPPLE_MOVE           163
-#define S_DROPLET_WHITE         164
-#define S_WAVE_WHITE            165
+#define S_DROPLET               164
+#define S_WAVE                  165
 #define S_RIPPLE_STOP           166
 #define S_SPLASH                167
 #define S_BUBBLE_A              168
 #define S_BUBBLE_B              170
 
 /* local */
-#define S_ENTITY_18             18
-#define S_ENTITY_22             22
-#define S_ENTITY_23             23
-#define S_ENTITY_24             24
-#define S_ENTITY_25             25
-#define S_ENTITY_27             27
-#define S_ENTITY_28             28
-#define S_ENTITY_29             29
-#define S_ENTITY_31             31
-#define S_ENTITY_32             32
-#define S_ENTITY_34             34
-#define S_ENTITY_35             35
-#define S_ENTITY_36             36
-#define S_ENTITY_37             37
-#define S_ENTITY_38             38
-#define S_ENTITY_39             39
-#define S_ENTITY_41             41
-#define S_ENTITY_73             73
+#define S_PIPE                  22
 
-#define S_ENTITY_116            116
-#define S_ENTITY_117            117
-#define S_ENTITY_118            118
-#define S_ENTITY_119            119
-#define S_ENTITY_121            121
-#define S_ENTITY_122            122
-#define S_ENTITY_124            124
-#define S_ENTITY_133            133
-#define S_ENTITY_134            134
-#define S_ENTITY_135            135
-#define S_ENTITY_136            136
-#define S_ENTITY_138            138
-#define S_ENTITY_139            139
-#define S_ENTITY_142            142
-#define S_ENTITY_144            144
-#define S_ENTITY_145            145
-#define S_ENTITY_158            158
-#define S_ENTITY_159            159
-#define S_ENTITY_160            160
-#define S_ENTITY_161            161
-#define S_ENTITY_162            162
-#define S_ENTITY_185            185
-#define S_ENTITY_186            186
-#define S_ENTITY_187            187
-#define S_ENTITY_200            200
-#define S_ENTITY_203            203
-#define S_ENTITY_204            204
-#define S_ENTITY_205            205
-#define S_ENTITY_212            212
-#define S_ENTITY_215            215
-#define S_ENTITY_216            216
-#define S_DIGIT                 219
-#define S_ENTITY_224            224
+#define S_TREE_A                23
+#define S_TREE_B                24
+#define S_TREE_C                25
+#define S_TREE_D                26
+#define S_TREE_E                27
+#define S_DOOR_A                28
+#define S_DOOR_B                29
+#define S_DOOR_C                30
+#define S_DOOR_D                31
+#define S_DOOR_E                32
+#define S_DOOR_F                33
+#define S_STARDOOR              34
+#define S_STARDOOR1             35
+#define S_STARDOOR3             36
+#define S_KEYDOOR               37
+#define S_LINKDOOR_A            38
+#define S_LINKDOOR_B            39
+#define S_LINKDOOR_C            40
+#define S_LINKDOOR_D            41
+#define S_LINKDOOR_E            42
+#define S_LINKDOOR_F            43
+#define S_COIN                  116
+#define S_COIN_NOSHADOW         117
+#define S_BLUECOIN              118
+#define S_BLUECOIN_NOSHADOW     119
+#define S_SHADOWSTAR            121
+#define S_POWERSTAR             122
+#define S_SIGNPOST              124
+#define S_WINGCAP_E             133
+#define S_CAP_E                 134
+#define S_WINGCAP_S             135
+#define S_CAP_S                 136
+#define S_SHARD                 138
+#define S_STAR                  139
+#define S_WHITEPUFF             142
+#define S_FLAME                 144
+#define S_BLUEFLAME             145
+#define S_SNOWBALL_NOSHADOW     158
+#define S_SAND                  159
+#define S_SNOWBALL              160
+#define S_STONE                 161
+#define S_LEAF                  162
+#define S_FISH_NOSHADOW         185
+#define S_FISH                  186
+#define S_BUTTERFLY             187
+#define S_DOORKEY               200
+#define S_FLAME_SHADOW          203
+#define S_BOWSERKEY             204
+#define S_EXPLOSION             205
+#define S_1UP                   212
+#define S_REDCOIN               215
+#define S_REDCOIN_NOSHADOW      216
+#define S_NUMBER                219
+#define S_BLACKPUFF             224
 
-#define S_C0_120                120
-#define S_C0_127                127
-#define S_C0_128                128
-#define S_C0_129                129
-#define S_C0_130                130
-#define S_C0_131                131
-#define S_C0_132                132
-#define S_C0_137                137
-#define S_C0_140                140
-#define S_C0_180                180
-#define S_C0_188                188
-#define S_C0_190                190
-#define S_C0_192                192
-#define S_C0_194                194
-#define S_C0_195                195
-#define S_C0_201                201
-#define S_C0_202                202
-#define S_C0_207                207
-#define S_C0_217                217
-#define S_C0_218                218
-#define S_C0_220                220
-#define S_C0_223                223
-#define S_C0_225                225
+#define S_3A_120                120
+#define S_3A_127                127
+#define S_3A_128                128
+#define S_3A_129                129
+#define S_3A_130                130
+#define S_3A_131                131
+#define S_3A_132                132
+#define S_3A_137                137
+#define S_3A_140                140
+#define S_3A_180                180
+#define S_3A_188                188
+#define S_3A_190                190
+#define S_3A_192                192
+#define S_3A_194                194
+#define S_3A_195                195
+#define S_3A_201                201
+#define S_3A_202                202
+#define S_3A_207                207
+#define S_3A_217                217
+#define S_3A_218                218
+#define S_3A_220                220
+#define S_3A_223                223
+#define S_3A_225                225
 
-#define S_A0_84                 84
-#define S_A0_85                 85
-#define S_A0_86                 86
-#define S_A0_87                 87
-#define S_A0_88                 88
-#define S_A0_89                 89
+#define S_1A_84                 84
+#define S_1A_85                 85
+#define S_1A_86                 86
+#define S_1A_87                 87
+#define S_1A_88                 88
+#define S_1A_89                 89
 
 #define S_BLARGG                84
-#define S_A1_86                 86
-#define S_A1_87                 87
+#define S_BULLY                 86
+#define S_BIGBULLY              87
 
-#define S_A2_84                 84
-#define S_A2_85                 85
-#define S_A2_86                 86
+#define S_1C_84                 84
+#define S_1C_85                 85
+#define S_1C_86                 86
 
-#define S_A3_84                 84
-#define S_A3_85                 85
-#define S_A3_86                 86
-#define S_A3_87                 87
-#define S_A3_88                 88
+#define S_1D_84                 84
+#define S_1D_85                 85
+#define S_1D_86                 86
+#define S_1D_87                 87
+#define S_1D_88                 88
 
-#define S_A4_84                 84
-#define S_A4_85                 85
-#define S_A4_86                 86
-#define S_A4_87                 87
-#define S_A4_88                 88
-#define S_A4_89                 89
+#define S_1E_84                 84
+#define S_1E_85                 85
+#define S_1E_86                 86
+#define S_1E_87                 87
+#define S_1E_88                 88
+#define S_1E_89                 89
 
-#define S_A5_84                 84
-#define S_A5_85                 85
-#define S_A5_86                 86
-#define S_A5_87                 87
+#define S_1F_84                 84
+#define S_1F_85                 85
+#define S_1F_86                 86
+#define S_1F_87                 87
 
-#define S_A6_84                 84
-#define S_A6_85                 85
-#define S_A6_86                 86
-#define S_A6_87                 87
+#define S_1G_84                 84
+#define S_1G_85                 85
+#define S_1G_86                 86
+#define S_1G_87                 87
 
-#define S_A7_84                 84
-#define S_A7_85                 85
-#define S_A7_86                 86
+#define S_1H_84                 84
+#define S_1H_85                 85
+#define S_1H_86                 86
 
-#define S_A8_84                 84
-#define S_A8_85                 85
-#define S_A8_86                 86
-#define S_A8_87                 87
-#define S_A8_88                 88
-#define S_A8_89                 89
-#define S_A8_90                 90
+#define S_1I_84                 84
+#define S_1I_85                 85
+#define S_1I_86                 86
+#define S_1I_87                 87
+#define S_1I_88                 88
+#define S_1I_89                 89
+#define S_1I_90                 90
 
-#define S_A9_84                 84
-#define S_A9_85                 85
-#define S_A9_222                222
+#define S_1J_84                 84
+#define S_1J_85                 85
+#define S_1J_222                222
 
-#define S_A10_84                84
-#define S_A10_85                85
-#define S_A10_86                86
-#define S_A10_87                87
-#define S_A10_88                88
-#define S_A10_89                89
+#define S_1K_84                 84
+#define S_1K_85                 85
+#define S_1K_86                 86
+#define S_1K_87                 87
+#define S_1K_88                 88
+#define S_1K_89                 89
 
 /* local */
-#define S_B0_3                  3
+#define S_2A_3                  3
 
-#define S_B0_100                100
-#define S_B0_101                101
-#define S_B0_102                102
-#define S_B0_103                103
-#define S_B0_104                104
-#define S_B0_105                105
-#define S_B0_179                179
+#define S_2A_100                100
+#define S_2A_101                101
+#define S_2A_102                102
+#define S_2A_103                103
+#define S_2A_104                104
+#define S_2A_105                105
+#define S_2A_179                179
 
-#define S_B1_100                100
-#define S_B1_101                101
-#define S_B1_102                102
-#define S_B1_103                103
-#define S_B1_104                104
-#define S_B1_105                105
-#define S_B1_179                179
-#define S_B1_193                193
+#define S_2B_100                100
+#define S_2B_101                101
+#define S_2B_102                102
+#define S_2B_103                103
+#define S_2B_104                104
+#define S_2B_105                105
+#define S_2B_179                179
+#define S_2B_193                193
 
-#define S_B2_100                100
-#define S_B2_101                101
-#define S_B2_102                102
-#define S_B2_103                103
-#define S_B2_104                104
-#define S_B2_106                106
-#define S_B2_107                107
-#define S_B2_191                191
+#define S_2C_100                100
+#define S_2C_101                101
+#define S_2C_102                102
+#define S_2C_103                103
+#define S_2C_104                104
+#define S_2C_106                106
+#define S_2C_107                107
+#define S_2C_191                191
 
-#define S_B3_100                100
-#define S_B3_101                101
-#define S_B3_102                102
-#define S_B3_221                221
+#define S_2D_100                100
+#define S_2D_101                101
+#define S_2D_102                102
+#define S_2D_221                221
 
-#define S_B4_100                100
-#define S_B4_101                101
-#define S_B4_102                102
+#define S_2E_100                100
+#define S_2E_101                101
+#define S_2E_102                102
 
-#define S_B5_100                100
-#define S_B5_101                101
-#define S_B5_102                102
-#define S_B5_103                103
-#define S_B5_104                104
-#define S_B5_206                206
+#define S_2F_100                100
+#define S_2F_101                101
+#define S_2F_102                102
+#define S_2F_103                103
+#define S_2F_104                104
+#define S_2F_206                206
 
 #define S_SELECT_3              3
 #define S_SELECT_4              4
@@ -744,6 +1004,7 @@ str_s_script_globl = """
 #define S_BITDW_15              15
 #define S_BITDW_16              16
 #define S_BITDW_17              17
+#define S_BITDW_PIPE            18
 #define S_BITDW_54              54
 #define S_BITDW_55              55
 #define S_BITDW_56              56
@@ -756,6 +1017,7 @@ str_s_script_globl = """
 #define S_BITDW_63              63
 
 #define S_VCUTM_54              54
+#define S_VCUTM_55              55
 
 #define S_BITFS_3               3
 #define S_BITFS_4               4
@@ -820,6 +1082,7 @@ str_s_script_globl = """
 #define S_BITS_67               67
 #define S_BITS_68               68
 #define S_BITS_69               69
+#define S_BITS_PIPE             73
 
 #define S_LLL_3                 3
 #define S_LLL_4                 4
@@ -956,7 +1219,7 @@ str_s_script_c = """
 #define s_script(script)                        \\
     _C(0x00, 0, 0),                             \\
     _P(script)
-#define s_exit()                                \\
+#define s_end()                                 \\
     _C(0x01, 0, 0)
 #define s_jump(script)                          \\
     _C(0x02, 0, 0),                             \\
@@ -970,8 +1233,14 @@ str_s_script_c = """
     _C(0x04, 0, 0)
 #define s_pull()                                \\
     _C(0x05, 0, 0)
-/* 0x06 */
-/* 0x07 */
+#define s_store(index)                          \\
+    _C(0x06, 0, index)
+#define s_flag(flag)                            \\
+    _C(0x07, 0, flag)
+#define s_setflag(flag)                         \\
+    _C(0x07, 1, flag)
+#define s_clrflag(flag)                         \\
+    _C(0x07, 2, flag)
 #define s_world(x, y, w, h, n)                  \\
     _C(0x08, 0, n),                             \\
     _H(x, y),                                   \\
@@ -1070,7 +1339,8 @@ str_s_script_c = """
     _C(0x19, 0, arg),                           \\
     _P(callback)
 /* 0x1A */
-/* 0x1B */
+#define s_load(index)                           \\
+    _C(0x1B, 0, index)
 #define s_hand(px, py, pz, arg, callback)       \\
     _C(0x1C, arg, px),                          \\
     _H(py, pz),                                 \\
@@ -1166,6 +1436,14 @@ str_p_script_globl = """
 #define P_CMP_GE                5
 #define P_CMP_LT                6
 #define P_CMP_LE                7
+
+#define P_ENV_GRASS             0
+#define P_ENV_ROCK              1
+#define P_ENV_SNOW              2
+#define P_ENV_SAND              3
+#define P_ENV_GHOST             4
+#define P_ENV_WATER             5
+#define P_ENV_SLIDER            6
 
 #define P_VAR_SAVE              0
 #define P_VAR_COURSE            1
@@ -1281,16 +1559,20 @@ str_p_script_asm = """
     _C(0x23, 0x08, S_LAYER_##layer << 12 | (shape));    \\
     _P(gfx);                                    \\
     _F(scale)
-#define p_object(m, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)   \
-\\
-    _B(0x24, 0x18, m, shape);                   \\
+#define p_object(                               \\
+    mask, shape, px, py, pz, rx, ry, rz,        \\
+    arg0, arg1, flag, script                    \\
+)                                               \\
+    _B(0x24, 0x18, mask, shape);                \\
     _H(px, py);                                 \\
     _H(pz, rx);                                 \\
     _H(ry, rz);                                 \\
     _C(arg0, arg1, flag);                       \\
     _P(script)
-#define p_object_all(shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)  \
-\\
+#define p_object_globl(                         \\
+    shape, px, py, pz, rx, ry, rz,              \\
+    arg0, arg1, flag, script                    \\
+)                                               \\
     p_object(0x1F, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
 #define p_player(shape, arg0, arg1, flag, script)   \\
     _B(0x25, 0x0C, 0, shape);                   \\
@@ -1334,7 +1616,7 @@ str_p_script_asm = """
 #define p_msg(type, msg)                        \\
     _B(0x30, 0x04, type, msg)
 #define p_env(env)                              \\
-    _C(0x31, 0x04, env)
+    _C(0x31, 0x04, P_ENV_##env)
 /* 0x32 */
 #define p_wipe(type, time, r, g, b)             \\
     _B(0x33, 0x08, type, time);                 \\
@@ -1460,15 +1742,15 @@ str_o_script_globl = """
 
 #define O_TYPE_PLAYER           0
 #define O_TYPE_1                1
-#define O_TYPE_PLAYERATTACK     2
+#define O_TYPE_PL_ATTACK        2
 #define O_TYPE_3                3
-#define O_TYPE_OBJECTA          4
-#define O_TYPE_OBJECTB          5
+#define O_TYPE_ENEMYA           4
+#define O_TYPE_ENEMYB           5
 #define O_TYPE_ITEM             6
 #define O_TYPE_7                7
 #define O_TYPE_DEFAULT          8
 #define O_TYPE_MOVEBG           9
-#define O_TYPE_PLAYERUSE        10
+#define O_TYPE_PL_USE           10
 #define O_TYPE_SYSTEM           11
 #define O_TYPE_EFFECT           12
 """
@@ -2294,7 +2576,7 @@ struct_hud = [
         (0x0A, table.sym_var("flag",    "s16")),
         (0x0C, table.sym_var("timer",   "u16")),
     ]],
-    [0x0C, "power", [
+    [0x0C, "meter", [
         (0x00, table.sym_var("mode",    "s8")),
         (0x02, table.sym_var("x",       "s16")),
         (0x04, table.sym_var("y",       "s16")),

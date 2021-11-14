@@ -355,6 +355,10 @@ sym_J0_00 = {
     0x00B6C1: table.sym("code_00B6C1"),
     0x00B6C9: table.sym("_00B6C9"),
     0x00B74A: table.sym("code_00B74A"),
+    0x00B762: table.sym("data_00B762"),
+    0x00B767: table.sym("data_00B767"),
+    0x00B76C: table.sym("data_00B76C"),
+    0x00B771: table.sym("data_00B771"),
     0x00B7D8: table.sym("code_00B7D8"),
     0x00B7F0: table.sym("data_00B7F0"),
     0x00B7F2: table.sym("data_00B7F0+2"),
@@ -1032,11 +1036,11 @@ sym_J0_01 = {
     0x01CF86: table.sym("data_01CF86"),
     0x01D086: table.sym("data_01D086"),
     0x01DE76: table.sym("data_01DE76"),
-    0x01DE78: table.sym("data_01DE78"),
-    0x01DE7A: table.sym("data_01DE7A"),
-    0x01DE7B: table.sym("data_01DE7B"),
-    0x01DE7C: table.sym("data_01DE7C"),
-    0x01DE7D: table.sym("data_01DE7D"),
+    0x01DE78: table.sym("data_01DE76+2"),
+    0x01DE7A: table.sym("data_01DE76+4"),
+    0x01DE7B: table.sym("data_01DE76+5"),
+    0x01DE7C: table.sym("data_01DE76+6"),
+    0x01DE7D: table.sym("data_01DE76+7"),
     0x01DF4E: table.sym("code_01DF4E", table.GLOBL),
     0x01DF7F: table.sym("code_01DF7F"),
     0x01E08B: table.sym("code_01E08B"),
@@ -1049,6 +1053,7 @@ sym_J0_01 = {
     0x01E12E: table.sym("code_01E12E"),
     0x01E13A: table.sym("code_01E13A"),
     0x01E176: table.sym("_01E176"),
+    0x01E1F8: table.sym("_01E1F8"),
     0x01E3BE: table.sym("_01E3BE"),
     0x01E3FB: table.sym("code_01E3FB"),
     0x01E3FE: table.sym("code_01E3FE"),
@@ -1235,6 +1240,11 @@ sym_J0_05 = {
     0x059D1F: table.sym("code_059D1F", table.GLOBL),
     0x05A26C: table.sym("code_05A26C", table.GLOBL),
     0x05EBC4: table.sym("code_05EBC4", table.GLOBL),
+    0x05EE86: table.sym("data_05EE86", table.GLOBL),
+}
+
+sym_J0_C7 = {
+    0xC792FC: table.sym("_C792FC"),
 }
 
 sym_J0_C9 = {
@@ -1263,7 +1273,7 @@ sym_J0_D3 = {
 }
 
 sym_E0_D4 = {
-    0xD4FB90: table.sym("code_D4FB90_E0", table.GLOBL),
+    0xD4FB90: table.sym("code_CFB35D", table.GLOBL),
 }
 
 sym_J0_D5 = {
@@ -1272,15 +1282,32 @@ sym_J0_D5 = {
 
 sym_J0_bss = {
     0x00760D: table.sym("bss_760D"),
+    0x007637: table.sym("bss_7637"),
+    0x007639: table.sym("bss_7639"),
+    0x00763B: table.sym("bss_763B"),
+    0x00763D: table.sym("bss_763D"),
     0x007659: table.sym("bss_7659"),
     0x00765D: table.sym("bss_765D"),
     0x007661: table.sym("bss_7661"),
     0x007665: table.sym("bss_7665"),
+    0x007671: table.sym("bss_7671"),
     0x007691: table.sym("bss_7691"),
     0x007695: table.sym("bss_7695"),
     0x007699: table.sym("bss_7699"),
     0x00769D: table.sym("bss_769D"),
+    0x0076A1: table.sym("bss_76A1"),
+    0x0076A5: table.sym("bss_76A5"),
+    0x0076A9: table.sym("bss_76A9"),
+    0x0076AD: table.sym("bss_76AD"),
+    0x00770D: table.sym("bss_770D"),
     0x007934: table.sym("bss_7934"),
+    0x007A00: table.sym("bss_7A00"),
+    0x007A2F: table.sym("bss_7A2F"),
+    0x007A61: table.sym("bss_7A61"),
+    0x007A8F: table.sym("bss_7A8F"),
+    0x007A95: table.sym("bss_7A95"),
+    0x007ABF: table.sym("bss_7ABF"),
+    0x007B2B: table.sym("bss_7B2B"),
 }
 
 imm_J0_00 = {
@@ -1291,29 +1318,30 @@ imm_J0_00 = {
     0x008D3A: (i_aa,),
     0x008E41: (i_aa,),
     0x008E47: (i_aa,),
-    0x009104: ("bss_7934",),
     0x009202: (i_aa,),
     0x0093FA: (i_aa,),
-    0x00C03C: i_hiword(sym_J0_01, 0x018479),
-    0x00C03F: i_loword(sym_J0_01, 0x018479),
-    0x00CCA3: i_hiword(sym_J0_00, 0x00CD05),
-    0x00CCA6: i_loword(sym_J0_00, 0x00CD05),
-}
-
-imm_J0_01 = {
-    0x0183CA: i_hiword(sym_J0_01, 0x018479),
-    0x0183CD: i_loword(sym_J0_01, 0x018479),
+    0x00AF6A: i_loword(sym_J0_C7, 0xC792FC),
+    0x00AF6F: i_hiword(sym_J0_C7, 0xC792FC),
+    0x00B085: i_loword(sym_J0_C7, 0xC792FC),
+    0x00B08A: i_hiword(sym_J0_C7, 0xC792FC),
+    0x00B125: i_loword(sym_J0_C7, 0xC792FC),
+    0x00B12A: i_hiword(sym_J0_C7, 0xC792FC),
+    0x00B374: i_loword(sym_J0_C7, 0xC792FC),
+    0x00B379: i_hiword(sym_J0_C7, 0xC792FC),
+    0x00B455: i_loword(sym_J0_C7, 0xC792FC),
+    0x00B45A: i_hiword(sym_J0_C7, 0xC792FC),
 }
 
 tbl = [
     (0x000000, 0x008000, "J0", sym_J0_00, {}, imm_J0_00),
     (0x000000, 0x008000, "E0", sym_E0_00, {}, {}),
-    (0x008000, 0x010000, "J0", sym_J0_01, {}, imm_J0_01),
+    (0x008000, 0x010000, "J0", sym_J0_01, {}, {}),
     (0x008000, 0x010000, "E0", sym_E0_01, {}, {}),
     (0x010000, 0x018000, "J0", sym_J0_02, {}, {}),
     (0x018000, 0x020000, "J0", sym_J0_03, {}, {}),
     (0x020000, 0x028000, "J0", sym_J0_04, {}, {}),
     (0x028000, 0x030000, "J0", sym_J0_05, {}, {}),
+    (0x070000, 0x080000, "J0", sym_J0_C7, {}, {}),
     (0x090000, 0x0A0000, "J0", sym_J0_C9, {}, {}),
     (0x0F0000, 0x100000, "J0", sym_J0_CF, {}, {}),
     (0x100000, 0x110000, "J0", sym_J0_D0, {}, {}),

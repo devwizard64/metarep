@@ -11,8 +11,7 @@ ply_p = {
 }
 
 def ply_read(fn):
-    with open(fn, "r") as f:
-        data = f.read()
+    with open(fn, "r") as f: data = f.read()
     line = data.split("\n")
     i = 0
     element = []
@@ -49,22 +48,19 @@ def ply_read(fn):
             ply[name].append(obj)
     return ply
 
-def gfx_flush(buf, name, vs):
+def gfx_flush(buf, name):
     if len(buf[2]) > 0:
-        buf[1].append("gsSPVertex(&vtx_%s[%d], %d, %d),\n" % (
-            name, len(buf[0]), len(buf[2]), vs
+        buf[1].append("gsSPVertex(&vtx_%s[%d], %d, 0),\n" % (
+            name, len(buf[0]), len(buf[2])
         ))
     for i in range(0, len(buf[3]) & ~1, 2):
-        v0, v1, v2 = buf[3][i+0]
-        v3, v4, v5 = buf[3][i+1]
-        arg = (vs+v0, vs+v1, vs+v2, vs+v3, vs+v4, vs+v5)
         buf[1].append(
-            "gsSP2Triangles(%2d, %2d, %2d, 0, %2d, %2d, %2d, 0),\n" % arg
+            "gsSP2Triangles(%2d, %2d, %2d, 0, %2d, %2d, %2d, 0),\n" % tuple(
+                buf[3][i+0] + buf[3][i+1]
+            )
         )
     if len(buf[3]) & 1:
-        v0, v1, v2 = buf[3][-1]
-        arg = (vs+v0, vs+v1, vs+v2)
-        buf[1].append("gsSP1Triangle(%2d, %2d, %2d, 0),\n" % arg)
+        buf[1].append("gsSP1Triangle(%2d, %2d, %2d, 0),\n" % tuple(buf[3][-1]))
     buf[0] += buf[2]
     buf[2] = []
     buf[3] = []
@@ -88,9 +84,7 @@ gfx_v_table = {
 def gfx_v(x):
     return gfx_v_table[x] if x in gfx_v_table else lambda v: x
 
-def gfx_write(path, name, ply, ini):
-    ss, st, ts, tt = [float(x) for x in ini["t"]]
-    vs, ve = [int(x) for x in ini["v"]]
+def gfx_write(arg, path, name, ply, ini):
     vtx = ply["vertex"]
     tri = []
     for face in ply["face"]:
@@ -99,21 +93,21 @@ def gfx_write(path, name, ply, ini):
             tri.append((face[0], face[1+i], face[2+i]))
     buf = [[], [], [], []]
     for t in tri:
-        cnt = ve-vs - 3
+        cnt = arg["-v"] - 3
         for v in t:
-            if v in buf[2]:
+            if not arg["-g"] and v in buf[2]:
                 cnt += 1
-        if len(buf[2]) > cnt:
-            gfx_flush(buf, name, vs)
+        if len(buf[2]) > cnt: gfx_flush(buf, name)
         lst = []
         for v in t:
-            if v in buf[2]:
+            if not arg["-g"] and v in buf[2]:
                 lst.append(buf[2].index(v))
             else:
                 lst.append(len(buf[2]))
                 buf[2].append(v)
         buf[3].append(lst)
-    gfx_flush(buf, name, vs)
+    gfx_flush(buf, name)
+    ss, st, ts, tt = [float(x) for x in ini["t"]]
     r = gfx_v(ini["s"][0])
     g = gfx_v(ini["s"][1])
     b = gfx_v(ini["s"][2])
@@ -132,36 +126,51 @@ def gfx_write(path, name, ply, ini):
         )
         for v in buf[0]
     ]) + "};\n"
-    with open(path + ".vtx.h", "w") as f:
-        f.write(data)
+    with open(path + ".vtx.h", "w") as f: f.write(data)
     data = "".join(buf[1])
-    with open(path + ".h", "w") as f:
-        f.write(data)
+    with open(path + ".h", "w") as f: f.write(data)
 
 def main(argv):
-    if len(argv) != 3:
-        print("usage: %s <output> <input>\n" % argv[0])
-        return 1
-    path = argv[1].rpartition(".")[0]
+    arg = {
+        None: "",
+        "-o": "",
+        "-v": 16,
+        "-g": False,
+    }
+    i = 1
+    while i < len(argv):
+        x = argv[i]
+        i += 1
+        if x in arg:
+            if type(arg[x]) == bool:
+                arg[x] = True
+            elif type(arg[x]) in {int, str}:
+                try:
+                    arg[x] = type(arg[x])(argv[i])
+                    i += 1
+                except:
+                    print("error: bad arg '%s'" % " ".join(argv[i-1:i+1]))
+                    return 1
+        else:
+            arg[None] = x
+    path = arg["-o"].rpartition(".")[0]
     obj, _, name = path.rpartition(os.path.sep)
     name = obj.rpartition(os.path.sep)[-1] + "_" + name
-    ply = ply_read(argv[2])
+    ply = ply_read(arg[None])
     ini = {
         "v": ["0", "16"],
         "t": ["0", "0", "0", "0"],
         "s": ["x", "y", "z", "a"],
     }
-    fn = argv[2].rpartition(".")[0] + ".ini"
+    fn = arg[None].rpartition(".")[0] + ".ini"
     if os.path.isfile(fn):
-        with open(fn, "r") as f:
-            data = f.read()
+        with open(fn, "r") as f: data = f.read()
         for line in data.split("\n"):
             i, _, lst = line.partition("=")
             ini[i] = lst.split(",")
-        data = "%s: %s\n" % (argv[1], fn)
-        with open(path + ".d", "w") as f:
-            f.write(data)
-    gfx_write(path, name, ply, ini)
+        data = "%s: %s\n" % (arg["-o"], fn)
+        with open(path + ".d", "w") as f: f.write(data)
+    gfx_write(arg, path, name, ply, ini)
     return 0
 
 if __name__ == "__main__":

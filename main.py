@@ -1,14 +1,14 @@
 import sys
 import os
+import shutil
 import importlib
 
 def mkdir(fn):
     os.makedirs(fn.rpartition(os.path.sep)[0], exist_ok=True)
 
 def path_join(path):
-    fn = path.pop(0)
-    for p in path:
-        fn = os.path.join(fn, p)
+    fn = path[0]
+    for p in path[1:]: fn = os.path.join(fn, p)
     return fn
 
 def arg_repr(x):
@@ -27,9 +27,18 @@ def arg_repr(x):
 def s_call(self, argv):
     lst, = argv
     for argv in lst:
-        if argv[0] != s_call:
-            print("[%s]" % ", ".join([arg_repr(x) for x in argv]))
+        # if argv[0] != s_call:
+        #     print("[%s]" % ", ".join([arg_repr(x) for x in argv]))
         argv[0](self, argv[1:])
+
+def s_copy(self, argv):
+    src, dst = argv
+    src = path_join([self.name] + src)
+    dst = self.path_join(dst)
+    if os.path.isdir(src):
+        shutil.copytree(src, dst)
+    else:
+        shutil.copy2(src, dst)
 
 def s_dir(self, argv):
     fn, = argv
@@ -49,31 +58,26 @@ def s_dev(self, argv):
 def s_data(self, argv):
     data, path = argv
     fn = path_join(path)
-    with open(fn, "rb") as f:
-        self.data[data] = f.read()
+    with open(fn, "rb") as f: self.data[data] = f.read()
 
 def s_file(self, argv):
     fn, = argv
     self.file.append((self.path_join([fn]), []))
     if os.path.isfile(self.file[-1][0]):
-        with open(self.file[-1][0], "r") as f:
-            self.file[-1][1].append(f.read())
+        with open(self.file[-1][0], "r") as f: self.file[-1][1].append(f.read())
 
 def line_prc(line):
-    data = "".join(line)
-    while "\n\n\n" in data:
-        data = data.replace("\n\n\n", "\n\n")
-    data = data.strip("\n").replace("\t", "    ")
-    if len(data) > 0:
-        data += "\n"
+    data = "".join(line).strip("\n")
+    while "\n\n\n" in data: data = data.replace("\n\n\n", "\n\n")
+    data = data.replace("\t", "    ")
+    if len(data) > 0: data += "\n"
     return data
 
 def s_write(self, argv):
     fn, line = self.file.pop()
     data = line_prc(line)
     mkdir(fn)
-    with open(fn, "w") as f:
-        f.write(data)
+    with open(fn, "w") as f: f.write(data)
 
 def s_bin(self, argv):
     start, end, data, path = argv
@@ -81,8 +85,7 @@ def s_bin(self, argv):
     end   -= self.addr
     fn = self.path_join(path)
     mkdir(fn)
-    with open(fn, "wb") as f:
-        f.write(self.data[data][start:end])
+    with open(fn, "wb") as f: f.write(self.data[data][start:end])
 
 def s_str(self, argv):
     self.file[argv[1] if len(argv) > 1 else -1][1].append(argv[0])
@@ -102,26 +105,30 @@ class script:
         self.c_dst  = None
 
     def main(self):
-        s_call(self, [self.meta.lst])
+        if os.path.isdir(self.root): shutil.rmtree(self.root)
+        try:
+            s_call(self, [self.meta.lst])
+        except:
+            if len(self.file) > 0:
+                fn, line = self.file[-1]
+                data = line_prc(line)
+                print("%s\n%s%s\nFILE:'%s'" % ("+"*40, data, "+"*40, fn))
+            raise
     def path_join(self, path, i=0):
         return path_join(([self.root] + self.path + path)[i:])
 
     def cache(self, start, end, data, callback=None):
         fn = os.path.join(".cache", "%s%s_%08X.bin" % (self.name, data, start))
         if os.path.isfile(fn):
-            with open(fn, "rb") as f:
-                data = f.read()
+            with open(fn, "rb") as f: data = f.read()
         else:
             data = self.data[data][start:end]
-            if callback != None:
-                data = callback(data)
-            with open(fn, "wb") as f:
-                f.write(data)
+            if callback != None: data = callback(data)
+            with open(fn, "wb") as f: f.write(data)
         return data
 
     def c_dev(self, src=None):
-        if src == None:
-            src = self.c_dst
+        if src == None: src = self.c_dst
         return self.dev if self.dev != None else src-self.addr
 
     def c_init(self, start, data):
@@ -135,8 +142,7 @@ class script:
         i = self.c_addr - self.addr
         self.c_addr += n
         data = self.data[self.c_data][i:i+n]
-        if len(data) < n:
-            data += B"\x00" * (n-len(data))
+        if len(data) < n: data += B"\x00" * (n-len(data))
         return data
 
 def main(argv):

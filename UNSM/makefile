@@ -102,20 +102,20 @@ LD      := mips-linux-gnu-ld
 CPP     := mips-linux-gnu-cpp
 OBJCOPY := mips-linux-gnu-objcopy
 NM      := mips-linux-gnu-nm
-CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
-CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CC      += -fno-toplevel-reorder -G0
 
 FLAG    := -I$(ULTRA)/include -Iinclude -I.
 FLAG    += -D__$(VERSION)__ -DBUILD=$(BUILD)
-CC      += $(FLAG) -Wall -Wextra -Wpedantic -Wno-variadic-macros -O2
-CPP     += $(FLAG) -DULTRA=$(ULTRA)
+CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
+CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
+CCFLAG  += -fno-toplevel-reorder -G0
+CCFLAG  += $(FLAG) -Wall -Wextra -Wpedantic -Wno-variadic-macros -O2
+CPPFLAG := $(FLAG) -DULTRA=$(ULTRA)
 
 ARMIPS  := armips
 
 OBJ := $(filter $(BUILD)/%, $(sort \
-	$(shell $(CPP) -P -o - make/obj.mk | tr "\n" " ")))
-SEQ := $(shell $(CPP) -P -o - make/seq.mk | tr "\n" " ")
+	$(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk | tr "\n" " ")))
+SEQ := $(shell $(CPP) $(CPPFLAG) -P -o - make/seq.mk | tr "\n" " ")
 
 $(BUILD)/app.z64: $(BUILD)/app.elf
 	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
@@ -129,7 +129,7 @@ include $(addsuffix .d,$(basename $(SRC_OBJ) $(OBJ)))
 -include $(BUILD)/make/main.d
 -include $(BUILD)/make/segment.d
 $(BUILD)/make/%: make/% | $(BUILD)/make
-	$(CPP) -MMD -MP -MT $@ -P -o $@ $<
+	$(CPP) $(CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
 
 $(BUILD)/src/main.ld.o: $(MAIN_OBJ)
 	$(LD) --whole-archive -L$(ULTRA)/lib -r -o $@ $^ -lultra_rom
@@ -138,64 +138,61 @@ $(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
 $(BUILD)/src/face.ld.o:  $(FACE_OBJ)
 $(BUILD)/src/%.ld.o: | $(BUILD)/src
 	$(LD) -r -o $@ $^
-
 $(BUILD)/src/%.ld.d: | $(BUILD)/src
 	touch $@
 
 include $(BUILD)/make/segment.mk
+$(BUILD)/%.szp.h: $(BUILD)/%.szp.o;
 $(BUILD)/%.szp.o: %.c make/szp.ld
-	$(CC) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $@.o $<
+	$(CC) $(CCFLAG) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $@.o $<
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $@.elf $@.o
 	$(OBJCOPY) -O binary $@.elf $@.bin
 	$(NM) -f posix $@.elf > $@.sym
 	$(EXE)/slienc $@.szp $(@:.o=.h) $@.bin $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@.szp.o
 	$(LD) --accept-unknown-input-arch -r -o $@ -R $@.elf $@.szp.o
-
 $(BUILD)/%.szp.d: %.c
-	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.szp.o: %.bin
 	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $@.sym
 	$(EXE)/slienc $@.szp $(@:.o=.h) $< $@.sym
 	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@
-
 $(BUILD)/%.szp.d: %.bin
 	touch $@
 
-$(BUILD)/%.szp.h: $(BUILD)/%.szp.o
-
 $(BUILD)/%.o: %.asm
 	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(CC) -MMD -MP -c -o $@ $(<:.asm=.S)
-
+	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $(<:.asm=.S)
 $(BUILD)/%.d: %.asm
-	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.S
-	$(CC) -MMD -MP -c -o $@ $<
-
+	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $<
 $(BUILD)/%.d: %.S
-	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.c
-	$(CC) -MMD -MP -c -o $@ $<
-
+	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $<
 $(BUILD)/%.d: %.c
-	$(CC) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.h: %.png
 	$(EXE)/texture $@ $^
 
 -include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
+$(BUILD)/data/shape/global/butterfly/%.h: GFXFLAG += -g
+$(BUILD)/data/menu/title/debug/%.h: GFXFLAG += -g
 $(BUILD)/%.h: %.ply
-	$(EXE)/gfx $@ $<
+	$(EXE)/gfx $(GFXFLAG) -o $@ $<
 
 $(BUILD)/%.h: %.obj
 	$(EXE)/map $@ $<
 
 $(BUILD)/%.h: %.txt
 	$(EXE)/msg $@ $<
+
+data/%.S: data/%.bin
 
 $(BUILD)/data/audio/seq.o: $(SEQ)
 $(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq

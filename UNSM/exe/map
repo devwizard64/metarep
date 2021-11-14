@@ -59,9 +59,8 @@ def main(argv):
             for face in obj
         ])
     data += "M_FACEEND,\n"
-    with open(argv[1], "w") as f:
+    with open(path + ".h", "w") as f:
         f.write(data)
-
     return 0
 
 if __name__ == "__main__":

@@ -113,11 +113,12 @@ OBJ := \
 	lib/libultra_rom.a
 
 CC      := mips-linux-gnu-gcc
-CC      += -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
-CC      += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CC      += -fno-toplevel-reorder -G0
+AR      := mips-linux-gnu-ar
 
-CC      += -Iinclude -Wall -Wextra -Wpedantic -O2
+CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
+CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
+CCFLAG  += -fno-toplevel-reorder -G0
+CCFLAG  += -Iinclude -Wall -Wextra -Wpedantic -O2
 
 ARMIPS  := armips
 
@@ -128,19 +129,19 @@ lib/libultra_rom.a: $(SRC_OBJ) | lib
 	$(AR) rc $@ $^
 
 build/src/%.o: src/%.S | build/src
-	$(CC) -c -o $@ $<
+	$(CC) $(CCFLAG) -c -o $@ $<
 
 build/src/%.o: src/%.c | build/src
-	$(CC) -c -o $@ $<
+	$(CC) $(CCFLAG) -c -o $@ $<
 
 lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
 
 lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
 	$(ARMIPS) -sym build/$(<:.asm=.sym) $<
-	$(CC) -c -o $@ $(<:.asm=.S)
+	$(CC) $(CCFLAG) -c -o $@ $(<:.asm=.S)
 
 lib/PR/%.o: PR/%.S | lib/PR
-	$(CC) -c -o $@ $<
+	$(CC) $(CCFLAG) -c -o $@ $<
 
 build/src build/PR lib lib/PR:
 	mkdir -p $@

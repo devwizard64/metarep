@@ -409,24 +409,54 @@ d_ripple_shade = [False, d_ripple_shade_prc]
 # obj_data.h
 
 def d_prg_obj_prc(argv):
+    start, = argv
+    i       = (ultra.script.c_dst-start) // 8
     script  = ultra.aw(extern=True)
     shape   = UNSM.table.fmt_shape(ultra.sh())
     arg     = ultra.sh()
-    return ["{%s, %s, %d}" % (script, shape, arg)]
+    return ["/* %3d */   {%s, %s, %d}" % (i, script, shape, arg)]
 d_prg_obj = [False, d_prg_obj_prc]
 
+map_obj_type = {}
+
 def d_map_obj_prc(argv):
-    index   = ultra.ub() # T:enum(m_obj)
+    index   = ultra.ub()
     type_   = ultra.ub()
     arg     = ultra.ub()
     shape   = UNSM.table.fmt_shape(ultra.ub())
     script  = ultra.aw(extern=True)
-    return ["{%3d, %d, %d, %s, %s}" % (index, type_, arg, shape, script)]
+    map_obj_type[index] = type_
+    index   = UNSM.table.fmt_m_obj(index)
+    return ["{%s, %d, %d, %s, %s}" % (index, type_, arg, shape, script)]
 d_map_obj = [False, d_map_obj_prc]
+
+def d_obj_data_prc(argv):
+    lst = []
+    while True:
+        x = ultra.uh()
+        o = (x & 0x1FF) - 31
+        ry = x >> 9
+        if o == -1:
+            lst.append("P_OBJ_END,")
+            break
+        elif o < 0:
+            lst.append("%d," % x)
+            break
+        else:
+            px  = ultra.sh()
+            py  = ultra.sh()
+            pz  = ultra.sh()
+            arg = ultra.sh()
+            lst.append("P_OBJ(%s, %d, %d, %d, %d, %d)," % (
+                UNSM.table.fmt_p_obj_x[o], ry, px, py, pz, arg,
+            ))
+    ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
+    return lst
+d_obj_data = [False, d_obj_data_prc]
 
 # hud.h
 
-def d_power_prc(argv):
+def d_meter_prc(argv):
     mode    = ultra.sb()
     ultra.script.c_addr += 1
     x       = ultra.sh()
@@ -434,7 +464,7 @@ def d_power_prc(argv):
     ultra.script.c_addr += 2
     scale   = ultra.fmt_float(ultra.f())
     return ["{%d, %d, %d, %s}" % (mode, x, y, scale)]
-d_power = [False, d_power_prc]
+d_meter = [False, d_meter_prc]
 
 # object_b.h
 
@@ -512,6 +542,7 @@ d_bspline = [False, d_bspline_prc]
 
 def d_anime_prc(self, line, tab, argv):
     anime, = argv
+    shared = self.c_addr == anime
     self.c_addr = anime
     flag    = ultra.sh()
     waist   = ultra.sh()
@@ -522,28 +553,33 @@ def d_anime_prc(self, line, tab, argv):
     val     = ultra.uw()
     tbl     = ultra.uw()
     size    = ultra.uw()
-    self.c_push()
-    self.c_addr = tbl
-    tbl_data = [(ultra.uh(), ultra.uh()) for _ in range(3*(1+joint))]
-    self.c_addr = val
-    val_data = [ultra.sh() for _ in range(max([f+i for f, i in tbl_data]))]
     sym_anime = table.sym_addr(self, anime, rej=True)
-    sym_val = table.sym_var(sym_anime.label+"_val", "static s16", "[]")
-    sym_tbl = table.sym_var(sym_anime.label+"_tbl", "static u16", "[]")
-    line.append((val, sym_val, set(), [
-        " ".join([
-            "-0x%04X," % -x if x < 0 else " 0x%04X," % x
-            for x in val_data[i:i+8]
-        ])
-        for i in range(0, len(val_data), 8)
-    ]))
-    line.append((tbl, sym_tbl, set(), [
-        " ".join([
-            "%5d, %5d," % x
-            for x in tbl_data[i:i+3]
-        ])
-        for i in range(0, len(tbl_data), 3)
-    ]))
+    if shared:
+        sym_val = table.sym_addr(self, val, rej=True)
+        sym_tbl = table.sym_addr(self, tbl, rej=True)
+    else:
+        self.c_push()
+        self.c_addr = tbl
+        tbl_data = [(ultra.uh(), ultra.uh()) for _ in range(3*(1+joint))]
+        self.c_addr = val
+        val_data = [ultra.sh() for _ in range(max([f+i for f, i in tbl_data]))]
+        sym_val = table.sym_var(sym_anime.label+"_val", "static s16", "[]")
+        sym_tbl = table.sym_var(sym_anime.label+"_tbl", "static u16", "[]")
+        line.append((val, sym_val, set(), [
+            " ".join([
+                "-0x%04X," % -x if x < 0 else " 0x%04X," % x
+                for x in val_data[i:i+8]
+            ])
+            for i in range(0, len(val_data), 8)
+        ]))
+        line.append((tbl, sym_tbl, set(), [
+            " ".join([
+                "%5d, %5d," % x
+                for x in tbl_data[i:i+3]
+            ])
+            for i in range(0, len(tbl_data), 3)
+        ]))
+        self.c_pull()
     line.append((anime, sym_anime, set(), [
         "/* flag     */  0x%04X," % flag,
         "/* waist    */  %d," % waist,
@@ -555,7 +591,6 @@ def d_anime_prc(self, line, tab, argv):
         "%s," % sym_tbl.label,
         ("0x%X," if size > 0 else "%d,") % size,
     ]))
-    self.c_pull()
 d_anime = [True, d_anime_prc]
 
 # s_script.h
@@ -573,6 +608,57 @@ d_map_face = [
 ]
 
 # map_data.h
+
+def d_map_data_prc(argv):
+    lst = []
+    while True:
+        x = ultra.sh()
+        if x == 0x40:
+            name = argv.pop(0)
+            data = (
+                "# metarep (UNSM) - %s_%s\n"
+            ) % (ultra.script.path[-1], name) + "".join([
+                "v %d %d %d\n" % (ultra.sh(), ultra.sh(), ultra.sh())
+                for _ in range(ultra.sh())
+            ])
+        elif x == 0x41:
+            fn = ultra.script.path_join([name + ".obj"])
+            main.mkdir(fn)
+            with open(fn, "w") as f: f.write(data)
+            lst.append(
+                "#include ASSET(%s.h)" % ultra.script.path_join([name], 1)
+            )
+        elif x == 0x42:
+            lst.append("M_END,")
+            break
+        elif x == 0x43:
+            n = ultra.sh()
+            lst.append("M_OBJ, %d," % n)
+            for _ in range(n):
+                o = ultra.sh()
+                n = (3, 4, 5, 6, 4)[map_obj_type[o]]
+                o = UNSM.table.fmt_m_obj(o)
+                lst.append(" ".join(
+                    [o + ","] + ["%d," % ultra.sh() for _ in range(n)]
+                ))
+        elif x == 0x44:
+            n = ultra.sh()
+            lst.append("M_WATER, %d," % n)
+            for _ in range(n):
+                lst.append(" ".join(["%d," % ultra.sh() for _ in range(6)]))
+        else:
+            if x in {4, 14, 36, 37, 39, 44, 45}:
+                raise RuntimeError("map face arg unimplemented (%d)" % x)
+            data += (
+                "o %d\n" # T:enum(M_FACE)
+            ) % x + "".join([
+                "f %d %d %d\n" % (1+ultra.sh(), 1+ultra.sh(), 1+ultra.sh())
+                for _ in range(ultra.sh())
+            ])
+    ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
+    return lst
+d_map_data = [False, d_map_data_prc]
+
 # o_script.h
 
 # audio/g.h
@@ -641,6 +727,23 @@ def d_audio_cfg_prc(argv):
         "0x%04X, 0x%04X, 0x%04X, 0x%04X}"
     ) % arg]
 d_audio_cfg = [False, d_audio_cfg_prc]
+
+# ?
+
+def d_path_data_prc(argv):
+    lst = []
+    while True:
+        x = ultra.sh()
+        if x < 0:
+            lst.append("%d," % x)
+            break
+        else:
+            lst.append("%d, %d, %d, %d," % (
+                x, ultra.sh(), ultra.sh(), ultra.sh(),
+            ))
+    ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
+    return lst
+d_path_data = [False, d_path_data_prc]
 
 # ========
 
@@ -739,7 +842,7 @@ texture_cvt_ia16 = [
 ]
 
 def d_texture_prc(argv):
-    fmt, w, h, name = argv
+    fmt, w, h, path = argv
     g, a, n, f, s, c = {
         "rgba16":   texture_cvt_rgba16,
         "ia4":      texture_cvt_ia4,
@@ -752,13 +855,11 @@ def d_texture_prc(argv):
             for _ in range(h)
         ]
         writer = png.Writer(w, h, greyscale=g, alpha=a)
-        fn = ultra.script.path_join(["%s.%s.png" % (name, fmt)])
+        if type(path) == str: path = ultra.script.path + [path]
+        fn = "%s.%s.png" % (main.path_join([ultra.script.root] + path), fmt)
         main.mkdir(fn)
-        with open(fn, "wb") as f:
-            writer.write(f, data)
-        return ["#include ASSET(%s.%s.h)" % (
-            ultra.script.path_join([name], 1), fmt
-        )]
+        with open(fn, "wb") as f: writer.write(f, data)
+        return ["#include ASSET(%s.%s.h)" % ("/".join(path), fmt)]
     return [" ".join([s % f() for _ in range(w//n)]) for _ in range(h)]
 d_texture = [False, d_texture_prc]
 
@@ -843,8 +944,8 @@ def d_ply_gfx_prc(argv):
         data += "s=r,g,b,a\n"
     if len(data) > 0:
         fn = path + ".ini"
-        with open(fn, "w") as f:
-            f.write(data)
+        main.mkdir(fn)
+        with open(fn, "w") as f: f.write(data)
     data = (
         "ply\n"
         "format ascii 1.0\n"
@@ -899,8 +1000,7 @@ def d_ply_gfx_prc(argv):
     data += "".join(["3 %d %d %d\n" % t for t in tri])
     fn = path + ".ply"
     main.mkdir(fn)
-    with open(fn, "w") as f:
-        f.write(data)
+    with open(fn, "w") as f: f.write(data)
     return ["#include ASSET(%s.h)" % ultra.script.path_join([name], 1)]
 d_ply_gfx = [False, d_ply_gfx_prc]
 
@@ -914,7 +1014,7 @@ def g_movemem(argv):
         if imm != None:
             light = ultra.fmt_addr(d0_1, array=(imm, 0x18))
         else:
-            light = ultra.sym(d0_1)
+            light = ultra.fmt_addr(d0_1)
         return ("SPSetLights1N", light)
     return None
 
@@ -953,6 +1053,7 @@ def g_loadimageblock(cmd, timg, fmt, siz, width, w):
         return None
     width  = max(16 >> siz, (0x800 << siz) // dxt)
     height = (lrs+1) // width
+    ultra.c.timgproc(timg)
     timg   = ultra.sym(timg)
     fmt    = ultra.c.g_im_fmt[fmt]
     siz    = ultra.c.g_im_siz(siz)
@@ -1180,8 +1281,7 @@ def s_msg(self, argv):
     data = "".join(line).rstrip("\n") + "\n"
     fn = self.path_join([name + ".txt"])
     main.mkdir(fn)
-    with open(fn, "w") as f:
-        f.write(data)
+    with open(fn, "w") as f: f.write(data)
     self.file[-1][1].append(
         "#include ASSET(%s.h)\n" % self.path_join([name], 1)
     )
@@ -1350,7 +1450,7 @@ def s_shadow(argv):
 # 19
 def s_background(argv):
     ultra.script.c_addr += 1
-    arg = ultra.sh() # T:enum(background)
+    arg = ultra.sh()
     callback = ultra.c.aw()
     if callback == "NULL":
         r = (arg >> 11 & 0x1F) * 0xFF//0x1F
@@ -1359,7 +1459,7 @@ def s_background(argv):
         a = arg & 1
         arg = "GPACK_RGBA5551(0x%02X, 0x%02X, 0x%02X, %d)" % (r, g, b, a)
     else:
-        arg = "%d" % arg
+        arg = "%d" % arg # T:enum(background)
     return (None, arg, callback)
 
 # 1C
@@ -1373,13 +1473,13 @@ def s_hand(argv):
 
 s_str = (
     "script", # 0x00
-    "exit", # 0x01
+    "end", # 0x01
     "jump", # 0x02
     "return", # 0x03
     "push", # 0x04
     "pull", # 0x05
-    None, # 0x06
-    None, # 0x07
+    "store", # 0x06
+    "flag", # 0x07
     "world", # 0x08
     "ortho", # 0x09
     "persp", # 0x0A
@@ -1399,7 +1499,7 @@ s_str = (
     "callback", # 0x18
     "background", # 0x19
     None, # 0x1A
-    None, # 0x1B
+    "load", # 0x1B
     "hand", # 0x1C
     "scale", # 0x1D
     None, # 0x1E

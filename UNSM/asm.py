@@ -13,23 +13,23 @@ d_prg = [".half", d_prg_prc]
 
 segment_table = {
     0x02: "MAIN",
-    0x03: "ENTITY",
+    0x03: "GLOBAL",
     0x04: "PLAYER",
-    0x05: "SHAPEA",
-    0x06: "SHAPEB",
+    0x05: "SHAPE1",
+    0x06: "SHAPE2",
     0x07: "STAGE",
-    0x08: "SHAPEC",
+    0x08: "SHAPE3",
     0x09: "TEXTURE",
     0x0A: "BACKGROUND",
     0x0B: "WEATHER",
-    0x0C: "SHAPEA",
-    0x0D: "SHAPEB",
+    0x0C: "SHAPE1",
+    0x0D: "SHAPE2",
     0x0E: "STAGE",
-    0x0F: "SHAPEC",
+    0x0F: "SHAPE3",
     0x13: "OBJECT",
     0x14: "MENU",
     0x15: "GAME",
-    0x16: "ENTITY",
+    0x16: "GLOBAL",
     0x17: "PLAYER",
 }
 
@@ -48,7 +48,7 @@ def p_push_jump(argv):
     start  = ultra.sym(start,  dev)
     script = ultra.sym(script, dev)
     if chk_seg(start, "data"):
-        raise RuntimeError("UNSM.asm.ss_mjump(): bad seg")
+        raise RuntimeError("UNSM.asm.p_push_jump(): bad seg")
     name = start[5:-6]
     return (None, seg, name, script)
 
@@ -99,7 +99,7 @@ def p_callback(argv):
     callback = ultra.aw()
     return (None, callback, arg)
 
-# 13 19 31
+# 13 19
 def p_arg(argv):
     x = "%d" % ultra.sh()
     return (None, x)
@@ -166,9 +166,8 @@ def p_object(argv):
     flag = "%d" % ultra.uh()
     script = ultra.aw()
     if mask == 0x1F:
-        return (
-            "object_all", shape, px, py, pz, rx, ry, rz, arg0, arg1, flag,
-            script
+        return ("object_globl",
+            shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script
         )
     mask = "0x%02X" % mask
     return (None, mask, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
@@ -232,6 +231,19 @@ def p_msg(argv):
     msg   = "0x%02X" % ultra.ub() # T:enum(msg)
     return (None, type_, msg)
 
+# 31
+def p_env(argv):
+    env = (
+        "GRASS",
+        "ROCK",
+        "SNOW",
+        "SAND",
+        "GHOST",
+        "WATER",
+        "SLIDER",
+    )[ultra.sh()]
+    return (None, env)
+
 # 33
 def p_wipe(argv):
     type_ = "0x%02X" % ultra.ub() # T:enum(wipe)
@@ -276,7 +288,7 @@ def p_jet(argv):
     px    = "%d" % ultra.sh()
     py    = "%d" % ultra.sh()
     pz    = "%d" % ultra.sh()
-    arg   = "%d" % ultra.uh()
+    arg   = "%d" % ultra.sh()
     return (None, index, mode, px, py, pz, arg)
 
 # 3C
@@ -408,7 +420,7 @@ p_fnc = [
     (p_script, True), # 0x2E
     (p_script, True), # 0x2F
     (p_msg,), # 0x30
-    (p_arg,), # 0x31 T:enum(env)
+    (p_env,), # 0x31
     None, # 0x32
     (p_wipe,), # 0x33
     (p_bool,), # 0x34
@@ -783,12 +795,8 @@ def s_script(self, argv):
     while self.c_addr < end:
         self.c_push()
         c = ultra.ub()
-        if i == 0:
-            self.c_addr += 1
+        if i == 0: self.c_addr += 1
         f = s_fnc[c]
-        if i == 0:
-            if c in {0x2E, 0x2F, 0x39}: ultra.tag = s_str[c]
-            elif c == 0x22: ultra.tag = "s_script"
         scrtbl = {
             0x22: "s_script",
             0x2E: "map",

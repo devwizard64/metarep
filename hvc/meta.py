@@ -36,10 +36,10 @@ def s_file(addr, fn, lst):
         [main.s_write],
     ]]
 
-def s_code(start, end, data=None):
+def s_code(start, end, data=None, p=0):
     if data == None:
         data = c_data
-    return [hvc.asm.s_code, start, end, data, c_type]
+    return [hvc.asm.s_code, start, end, data, c_type, p]
 
 def s_data(start, end, lst=None, data=None):
     if data == None:

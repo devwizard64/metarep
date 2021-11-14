@@ -59,13 +59,13 @@ class sym_var_fnc:
             end, self.arg
         )
 
-def dev_addr(self, src=None):
+def dev_addr(self, src=None, rej=False):
     addr = self.c_dev(src)
+    if src == None: src = self.c_dst
     for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if addr >= start and addr < end and self.c_data.startswith(data):
-            if src in dev:
-                return dev[src]
-    return addr
+            if src in dev: return dev[src]
+    return None if rej else addr
 
 def sym_addr(self, dst, src=None, rej=False):
     addr = self.c_dev(src) if rej else dev_addr(self, src)
@@ -73,12 +73,8 @@ def sym_addr(self, dst, src=None, rej=False):
     for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if self.c_data.startswith(data) and dst in sym:
             res = sym[dst]
-            if addr >= start and addr < end:
-                return res
-    if not rej:
-        if res != None:
-            return res
-    return None
+            if addr >= start and addr < end: return res
+    return None if rej else res
 
 def sym_range(self, dst_start, dst_end, src=None):
     addr = self.c_dev(src)
@@ -94,14 +90,12 @@ def imm_addr(self, dst, src=None):
     addr = self.c_dev(src)
     for start, end, data, sym, dev, imm in self.meta.table.tbl:
         if addr >= start and addr < end and self.c_data.startswith(data):
-            if dst in imm:
-                return imm[dst]
+            if dst in imm: return imm[dst]
     return None
 
 def imm_prc(imm, arg):
     if type(imm) == str:
-        if "%" in imm:
-            return imm % arg
+        if "%" in imm: return imm % arg
         return imm
     if type(imm) in {list, tuple, dict}:
         return imm[arg]
@@ -115,11 +109,9 @@ def macro_prc(self):
             if byte == None:
                 argv.append(x)
             else:
-                if byte != x:
-                    break
+                if byte != x: break
         else:
             x = callback(arg, argv)
-            if x != None:
-                return x
+            if x != None: return x
         self.c_pull()
     return None

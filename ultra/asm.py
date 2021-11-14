@@ -1131,13 +1131,15 @@ def s_code(self, argv):
     gpr  = (gpr_cpu,  gpr_rsp)[mode]
     cop0 = (cop0_cpu, cop0_rsp)[mode]
     line = []
-    reg_table = 64*[False]
-    lui_stack = {}
-    lui_table = 32*[None]
-    lui_next  = None
-    lui_flag  = 1
     while self.c_addr < end:
         self.c_push()
+        sym = table.sym_addr(self, self.c_dst, self.c_dst, True)
+        if sym != None and not sym.flag & table.LOCAL:
+            reg_table = 64*[False]
+            lui_stack = {}
+            lui_table = 32*[None]
+            lui_next  = None
+            lui_flag  = 1
         if self.c_dst in lui_stack:
             lui_table = lui_stack[self.c_dst][:]
         flag = lui_flag

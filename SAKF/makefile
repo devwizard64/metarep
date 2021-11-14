@@ -5,7 +5,7 @@ AS      := ca65
 LD      := ld65
 
 FLAG    := -Iinclude -I$(BUILD) -D__$(VERSION)__
-AS      += --cpu 65816 --feature c_comments -U -s $(FLAG)
+ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 EXE     := exe
 
@@ -24,7 +24,7 @@ $(BUILD)/app.sfc: make/main.ld $(OBJ)
 -include $(OBJ:.o=.d)
 
 $(BUILD)/%.o: %.s | $(BUILD_DIR)
-	$(AS) -o $@ $<
+	$(AS) $(ASFLAG) -o $@ $<
 
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
 	$(filter $(subst *,%,$2),$d))

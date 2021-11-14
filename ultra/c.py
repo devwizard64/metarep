@@ -12,6 +12,7 @@ def init(self, start, data):
 def fmt(self, lst):
     f = self.file[-1][1]
     for addr, sym, extern, line in lst:
+        if len(line) == 0: continue
         if len(extern) > 0:
             f.append("\n\n")
         for a, s in sorted(extern, key=lambda x: x[0]):
@@ -36,6 +37,7 @@ def fmt(self, lst):
             f.append(line[0] + ";\n")
             if "\n" in line[0]:
                 f.append("\n")
+    f.append("\n")
 
 def d_str_prc(argv):
     size, s = argv
@@ -196,7 +198,12 @@ def g_mtx(argv):
 
 def g_vtx(argv):
     w0 = ultra.uw()
-    v  = aw()
+    w1 = ultra.uw()
+    imm = table.imm_addr(ultra.script, ultra.script.c_dst)
+    if imm != None:
+        v = ultra.fmt_addr(w1, addr=True, array=(imm, 0x10))
+    else:
+        v = ultra.fmt_addr(w1)
     n  = "%d" % (w0 >>  4 & 0x0FFF)
     v0 = "%d" % (w0 >> 16 & 0x0F)
     return ("SPVertex", v, n, v0)
@@ -243,6 +250,13 @@ def g_moveword(argv):
         if a_0 == 0x03860010 and d0_0 == 0x03880010 and a_1-d0_1 == 8:
             light = ultra.sym(d0_1)
             return ("SPSetLights1", light)
+    if w0 == 0xBC000008:
+        fm = w1 >> 16
+        fo = (w1 & 0xFFFF) - (w1 << 1 & 0x10000)
+        d = 128000 // fm
+        l = 500 - (fo*d//256)
+        h = l + d
+        return ("SPFogPosition", "%d" % l, "%d" % h)
     return None
 
 def g_texture_prc(s, t, w0):
@@ -298,15 +312,23 @@ g_setothermode_h = {
 
 g_setothermode_l = {
     3: ("DPSetRenderMode", {
-        0x00552078: "G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2",
-        0x00553078: "G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2",
-        0x00552048: "G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2",
-        0x005041C8: "G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2",
-        0x0F0A4000: "G_RM_OPA_SURF, G_RM_OPA_SURF2",
-        0x00504240: "G_RM_XLU_SURF, G_RM_XLU_SURF2",
-        0x00404240: "G_RM_XLU_SURF, G_RM_NOOP2",
+        0x00552078: "G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2", # 0
+        0x00442078: "G_RM_AA_ZB_OPA_SURF, G_RM_NOOP2", # 42
+        0x00553078: "G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2", # 368
+        0x00443078: "G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2", # 402
+        0x00552048: "G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2", # 828
+        0x005041C8: "G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2", # 874
+        0x0F0A4000: "G_RM_OPA_SURF, G_RM_OPA_SURF2", # 1656
+        0x00504240: "G_RM_XLU_SURF, G_RM_XLU_SURF2", # 1702
+        0x00404240: "G_RM_XLU_SURF, G_RM_NOOP2", # 1707
+        0x0F0A7008: "G_RM_TEX_EDGE, G_RM_TEX_EDGE2", # 1794
+        0xC8112078: "G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2", # 2025
+        0xC8113078: "G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2", # 2033
     }),
-    # 2
+    2: ("DPSetDepthSource", {
+        0<<2: "G_ZS_PIXEL",
+        1<<2: "G_ZS_PRIM",
+    }),
     0: ("DPSetAlphaCompare", {
         0<<0: "G_AC_NONE",
         1<<0: "G_AC_THRESHOLD",
@@ -318,8 +340,10 @@ def g_setothermode(argv):
     arg, = argv
     w0 = ultra.uw()
     w1 = ultra.uw()
-    #print("%08X %08X" % (w0, w1))
+    shift = w0 >> 8 & 0xFF
+    if shift not in arg: raise RuntimeError("%02X %d" % (w0 >> 24, shift))
     cmd, table = arg[w0 >> 8 & 0xFF]
+    if w1 not in table: raise RuntimeError("%s %08X" % (cmd, w1))
     flag = table[w1]
     return (cmd, flag)
 
@@ -349,6 +373,12 @@ def gx_tile(w0, w1):
         w0 >> 12 & 0x0FFF, w0 & 0x0FFF,
         w1 >> 12 & 0x0FFF, w1 & 0x0FFF,
     )
+
+def timgproc(addr):
+    if addr >> 24 == 0x09:
+        dev = table.dev_addr(ultra.script)
+        if dev == ultra.script.c_dev():
+            print("    0x%08X: ," % ultra.script.c_dst)
 
 def g_settimg(argv):
     w = [(ultra.uw(), ultra.uw()) for _ in range(7)]
@@ -393,6 +423,7 @@ def g_settimg(argv):
             cmt, maskt, shiftt, cms, masks, shifts,
             0, 0, 0, (width-1) << 2, (height-1) << 2,
         ):
+            timgproc(timg)
             timg    = ultra.sym(timg)
             fmt     = g_im_fmt[fmt]
             width   = "%d" % width
@@ -647,6 +678,7 @@ gfx_table = {
     0xFC: (g_setcombine,),
     0xFB: (g_setrgba, "DPSetEnvColor"),
     0xF9: (g_setrgba, "DPSetBlendColor"),
+    0xF8: (g_setrgba, "DPSetFogColor"),
     0xF5: (g_settile,),
     0xE7: (g_null, "DPPipeSync"),
 }
@@ -673,6 +705,7 @@ def gfx_prc(tab, cmd, argv):
                         lst[-1] += " "
                     lst[-1] += f
     cmd = "gs%s(" % cmd
+    # cmd = "/*0x%08X*/  %s" % (ultra.script.c_dst, cmd)
     if None not in lst:
         a = " ".join(lst)
         if 4*len(tab) + 4+len(cmd)+len(a)+2 <= 80:
@@ -793,6 +826,7 @@ def s_data(self, argv):
     init(self, start, data)
     line = []
     s_data_lst(self, line, lst, "")
+    # if self.addr != end: print("warning: bad size %08X:%08X" % (start, end))
     fmt(self, line)
 
 def s_declare(self, argv, var, addr, s):
