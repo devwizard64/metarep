@@ -944,7 +944,7 @@ def s_audio_ctltbl(self, argv):
     return
 
 def s_audio_seqbnk(self, argv):
-    addr, vol, seq, bnk, data, tbl = argv
+    seq, bnk, data, tbl = argv
     self.addr = 0-seq
     ultra.asm.init(self, 0, data)
     self.c_addr += 2
@@ -956,9 +956,6 @@ def s_audio_seqbnk(self, argv):
         main.mkdir(fn)
         with open(fn, "wb") as f:
             f.write(self.data[self.c_data][seq+start:seq+start+size])
-    self.addr = addr
-    ultra.asm.init(self, vol, data)
-    vol = [ultra.ub() for i in range(cnt)]
     self.addr = 0-bnk
     ultra.asm.init(self, 0, data)
     line = []
@@ -967,7 +964,7 @@ def s_audio_seqbnk(self, argv):
         self.c_push()
         self.c_addr = start
         n = ultra.ub()
-        line.append("SEQ(%s, %d, %s)\n" % (tbl[i], vol[i], ", ".join([
+        line.append("SEQ(%s, %s)\n" % (tbl[i], ", ".join([
             "%d" % ultra.ub() for _ in range(n)
         ])))
         self.c_pull()

@@ -616,7 +616,7 @@ def d_map_data_prc(argv):
         if x == 0x40:
             name = argv.pop(0)
             data = (
-                "# metarep (UNSM) - %s_%s\n"
+                "# metarep.UNSM - %s_%s\n"
             ) % (ultra.script.path[-1], name) + "".join([
                 "v %d %d %d\n" % (ultra.sh(), ultra.sh(), ultra.sh())
                 for _ in range(ultra.sh())
@@ -871,6 +871,7 @@ def s_ply_vtx(self, argv):
 
 def d_ply_gfx_prc(argv):
     end, name, light, scale = argv
+    shade = False
     alpha = False
     vtx = []
     tri = []
@@ -916,8 +917,10 @@ def d_ply_gfx_prc(argv):
                 else:
                     b.append(len(vtx))
                     vtx.append(buf[v])
-                    if vtx[-1][8] != 0:
-                        alpha = True
+                    if vtx[-1][5] != 0: shade = True
+                    if vtx[-1][6] != 0: shade = True
+                    if vtx[-1][7] != 0: shade = True
+                    if vtx[-1][8] != 0: alpha = True
             tri.append(tuple(b))
         else:
             raise RuntimeError("bad shape gfx 0x%08X : %08X %08X" % (
@@ -949,7 +952,7 @@ def d_ply_gfx_prc(argv):
     data = (
         "ply\n"
         "format ascii 1.0\n"
-        "comment metarep (UNSM) - %s_%s\n"
+        "comment metarep.UNSM - %s_%s\n"
         "element vertex %d\n"
         "property short x\n"
         "property short y\n"
@@ -966,7 +969,7 @@ def d_ply_gfx_prc(argv):
             "property float ny\n"
             "property float nz\n"
         )
-    else:
+    elif shade:
         data += (
             "property uchar red\n"
             "property uchar green\n"
@@ -992,7 +995,7 @@ def d_ply_gfx_prc(argv):
             ny = v[6]/128.0
             nz = v[7]/128.0
             data += " %s %s %s" % (str(nx), str(ny), str(nz))
-        else:
+        elif shade:
             data += " %d %d %d" % v[5:8]
         if alpha:
             data += " %d" % v[8]

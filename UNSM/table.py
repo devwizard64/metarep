@@ -563,13 +563,13 @@ shp_globl = {
     142: "WHITEPUFF",
     144: "FLAME",
     145: "BLUEFLAME",
-    158: "SNOWBALL_NOSHADOW",
+    158: "SNOW",
     159: "SAND",
     160: "SNOWBALL",
     161: "STONE",
     162: "LEAF",
-    185: "FISH_NOSHADOW",
-    186: "FISH",
+    185: "FISH",
+    186: "FISH_SHADOW",
     187: "BUTTERFLY",
     200: "DOORKEY",
     203: "FLAME_SHADOW",
@@ -15145,9 +15145,9 @@ sym_E0_shp_gl = {
     0x0302C620: table.sym_var("gfx_shadowstar_s",   "Gfx", "[]"),
     0x0302C658: table.sym_var("align_19", "unused static u64"),
 
-    # snowball
-    0x0302C6A0: table.sym_var("txt_snowball",   "static u16", "[]"),
-    0x0302C8A0: table.sym_var("gfx_snowball",   "Gfx", "[]"), # 158
+    # snow
+    0x0302C6A0: table.sym_var("txt_snow",   "static u16", "[]"),
+    0x0302C8A0: table.sym_var("gfx_snow",   "Gfx", "[]"), # 158
     0x0302C938: table.sym_var("align_20", "unused static u64"),
 
     # signpost
@@ -15223,8 +15223,8 @@ sym_E0_shp_gl = {
     0x16000B8C: table.sym_var("s_blueflame",    "S_SCRIPT", "[]", table.GLOBL), # 145
 
     # fish
-    0x16000BEC: table.sym_var("s_fish",             "S_SCRIPT", "[]", table.GLOBL), # 186
-    0x16000C44: table.sym_var("s_fish_noshadow",    "S_SCRIPT", "[]", table.GLOBL), # 185
+    0x16000BEC: table.sym_var("s_fish_shadow",  "S_SCRIPT", "[]", table.GLOBL), # 186
+    0x16000C44: table.sym_var("s_fish",         "S_SCRIPT", "[]", table.GLOBL), # 185
 
     # leaf
     0x16000C8C: table.sym_var("s_leaf", "S_SCRIPT", "[]", table.GLOBL), # 162
@@ -15251,7 +15251,7 @@ sym_E0_shp_gl = {
     # shadowstar
     0x16000F6C: table.sym_var("s_shadowstar", "S_SCRIPT", "[]", table.GLOBL), # 121
 
-    # snowball
+    # snow
     0x16000F98: table.sym_var("s_snowball", "S_SCRIPT", "[]", table.GLOBL), # 160
 
     # signpost
@@ -15973,16 +15973,16 @@ sym_E0_m_select = {
     0x14000000: table.sym("p_file_select", table.GLOBL),
     0x14000118: table.sym("p_star_select", table.GLOBL),
     0x140001C0: table.sym(".return", table.LOCAL),
-    0x140001D0: table.sym_var("s_menu_3", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000200: table.sym_var("s_menu_8", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000230: table.sym_var("s_menu_9", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000260: table.sym_var("s_menu_10", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000290: table.sym_var("s_menu_4", "S_SCRIPT", "[]", table.GLOBL),
-    0x140002B8: table.sym_var("s_menu_5", "S_SCRIPT", "[]", table.GLOBL),
-    0x140002E0: table.sym_var("s_menu_6", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000308: table.sym_var("s_menu_7", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000330: table.sym_var("s_menu_11", "S_SCRIPT", "[]", table.GLOBL),
-    0x14000358: table.sym_var("s_menu_12", "S_SCRIPT", "[]", table.GLOBL),
+    0x140001D0: table.sym_var("s_select_3", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000200: table.sym_var("s_select_8", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000230: table.sym_var("s_select_9", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000260: table.sym_var("s_select_10", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000290: table.sym_var("s_select_4", "S_SCRIPT", "[]", table.GLOBL),
+    0x140002B8: table.sym_var("s_select_5", "S_SCRIPT", "[]", table.GLOBL),
+    0x140002E0: table.sym_var("s_select_6", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000308: table.sym_var("s_select_7", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000330: table.sym_var("s_select_11", "S_SCRIPT", "[]", table.GLOBL),
+    0x14000358: table.sym_var("s_select_12", "S_SCRIPT", "[]", table.GLOBL),
     0x14000380: table.sym_var("s_file_select", "S_SCRIPT", "[]", table.GLOBL),
     0x14000408: table.sym_var("s_star_select", "S_SCRIPT", "[]", table.GLOBL),
 }

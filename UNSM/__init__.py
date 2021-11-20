@@ -3034,11 +3034,8 @@ _audio_g_bss:
         [0, 1, 3, None],
         [0, -39, 1, ultra.c.d_u16, "0x%04X"], # ? - doesnt seem like d
         [0, 1, 2, None],
-        [0, 1, 1, ultra.c.d_str, 36,
-            "#define SEQ(file, vol, ...)     vol,\n"
-            "#include <meta/seq.h>\n"
-            "#undef SEQ"
-        ],
+        [0, -34, 1, ultra.c.d_u8],
+        [0, 1, 2, None],
         [0, 2, ultra.c.d_align_s8],
         [0, 4, [
             [1, 1, 10, ultra.c.d_u8],
@@ -4557,7 +4554,7 @@ data_player_gfx = [
         [ultra.c.s_data, 0x04032A88, 0x04035378, "E0.szp", [
             d_texture_n("ia16", 32, 32, 5),
             [0, 1, 1, ultra.c.d_Gfx, 0x040352C8],
-            [0, 1, 1, c.d_ply_gfx, 0x040352E0, "gfx", True, (32, 64)],
+            [0, 1, 1, c.d_ply_gfx, 0x040352E0, "gfx", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x04035378],
         ]],
     s_writepop(),
@@ -5165,7 +5162,7 @@ data_global_gfx = [
     [ultra.c.s_data, 0x0302C658, 0x0302C660, "E0.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
-    s_dirfile("snowball", "shape.c"),
+    s_dirfile("snow", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
         [ultra.c.s_data, 0x0302C6A0, 0x0302C938, "E0.szp", [
@@ -5379,7 +5376,7 @@ data_global_shape = [
         ]],
         s_script_endif(),
     s_writepop(),
-    s_dirfile("snowball", "shape.c"),
+    s_dirfile("snow", "shape.c"),
         s_script_else(),
         [ultra.c.s_data, 0x16000F98, 0x16000FB4, "E0", [
             [0, 1, 1, c.d_s_script, 0x16000FB4],
@@ -5952,7 +5949,15 @@ lst = [
         [main.s_addr, 0x10000000-0x00108A10],
         [main.s_file, "main.S"],
             [main.s_str, str_p_script],
-            [asm.s_script, 0x10000000, 0x10000028, "E0", 0],
+            [main.s_str, "#define STAGE   0\n\n"],
+            [asm.s_script, 0x10000000, 0x1000000C, "E0", 0],
+            [main.s_str, "    p_set(STAGE)\n"],
+            [main.s_str, "#if STAGE == 0\n"],
+            [asm.s_script, 0x10000010, 0x10000020, "E0", 0],
+            [main.s_str, "#else\n"],
+            [main.s_str, "    p_push_call(GAME, game, p_game)\n"],
+            [main.s_str, "#endif\n"],
+            [asm.s_script, 0x10000020, 0x10000028, "E0", 0],
         [main.s_write],
         [main.s_dir, "main"],
             s_gfx(0x00108A40, 0x00114750, 0x02, "gfx", data_main_gfx),
@@ -6373,21 +6378,19 @@ lst = [
             s_stagebin(0x004CEC00, 0x004D14F0, 0x004D1910, 0x000050BC, 0x28C, "bitsa"),
             s_stagebin(0x004D1910, 0x004EB1F0, 0x004EBFFC, 0x00030474, 0x710, "ttm"),
         [main.s_pop],
-        [main.s_dir, "file"],
-            [main.s_addr, 0-0x004EC000],
-            [main.s_file, "anime.S"],
-                [main.s_str, header.str_anime],
-                [asm.s_anime, 0x0008DC18, "E0", "anime", (
-                    stbl_anime, ctbl_anime
-                )],
-            [main.s_write],
-            [main.s_addr, 0-0x00579C20],
-            [main.s_file, "demo.S"],
-                [main.s_str, header.str_demo],
-                [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, {})],
-            [main.s_write],
-            [main.s_addr, 0],
-        [main.s_pop],
+        [main.s_addr, 0-0x004EC000],
+        [main.s_file, "anime.S"],
+            [main.s_str, header.str_anime],
+            [asm.s_anime, 0x0008DC18, "E0", "anime", (
+                stbl_anime, ctbl_anime
+            )],
+        [main.s_write],
+        [main.s_addr, 0-0x00579C20],
+        [main.s_file, "demo.S"],
+            [main.s_str, header.str_demo],
+            [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, {})],
+        [main.s_write],
+        [main.s_addr, 0],
         [main.s_dir, "audio"],
             # 0x00017E40, 0x0021D300
             [main.s_bin, 0x0057B720, 0x00593560, "E0", ["ctl.bin"]],
@@ -6398,10 +6401,7 @@ lst = [
             [main.s_file, "tbl.S"],
                 [main.s_str, header.str_audio_tbl],
             [main.s_write],
-            [
-                asm.s_audio_seqbnk, 0x80246000-0x00001000, 0x80333188,
-                0x007B0860, 0x007CC620, "E0", seq_table
-            ],
+            [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", seq_table],
             [main.s_file, "seq.S"],
                 [main.s_str, header.str_audio_seq],
             [main.s_write],

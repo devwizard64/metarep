@@ -695,13 +695,13 @@ str_s_script_globl = """
 #define S_WHITEPUFF             142
 #define S_FLAME                 144
 #define S_BLUEFLAME             145
-#define S_SNOWBALL_NOSHADOW     158
+#define S_SNOW                  158
 #define S_SAND                  159
 #define S_SNOWBALL              160
 #define S_STONE                 161
 #define S_LEAF                  162
-#define S_FISH_NOSHADOW         185
-#define S_FISH                  186
+#define S_FISH                  185
+#define S_FISH_SHADOW           186
 #define S_BUTTERFLY             187
 #define S_DOORKEY               200
 #define S_FLAME_SHADOW          203
@@ -1945,12 +1945,12 @@ str_audio_seq = """
 
 TABLE(3)
 table_start:
-#define SEQ(file, vol, ...)     FILE(file)
+#define SEQ(file, ...)  FILE(file)
 #include <meta/seq.h>
 #undef SEQ
 table_end:
 
-#define SEQ(file, vol, ...)                 \\
+#define SEQ(file, ...)                      \\
     .balign 0x10; file:                     \\
     .incbin ASSET(data/audio/seq/file.seq); \\
     .balign 0x10; file##_end:
@@ -1962,11 +1962,11 @@ str_audio_bnk = """
 .data
 
 table:
-#define SEQ(file, vol, ...)     .short file-table
+#define SEQ(file, ...)  .short file-table
 #include <meta/seq.h>
 #undef SEQ
 
-#define SEQ(file, vol, ...)     \\
+#define SEQ(file, ...)          \\
     file:                       \\
     .byte file##_end-file - 1;  \\
     .byte __VA_ARGS__;          \\
