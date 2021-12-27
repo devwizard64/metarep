@@ -8,23 +8,23 @@ I_RT    = 3
 I_RD    = 4
 I_SA    = 5
 I_CACHE = 6
-I_C0REG = 7
-I_C1CTL = 8
-I_C1FMT = 9
-I_FT    = 10
-I_FS    = 11
-I_FD    = 12
-I_VT    = 13
-I_VS    = 14
-I_VD    = 15
-I_IMM   = 16
-I_IMMS  = 17
-I_IMMHI = 18
-I_OFFS  = 19
-I_CODE  = 20
-I_E     = 21
-I_EV    = 22
-I_DE    = 23
+I_CODE  = 7
+I_C0REG = 8
+I_C1CTL = 9
+I_C1FMT = 10
+I_FT    = 11
+I_FS    = 12
+I_FD    = 13
+I_VT    = 14
+I_VS    = 15
+I_VD    = 16
+I_EV    = 17
+I_DE    = 18
+I_E     = 19
+I_OFFS  = 20
+I_IMMS  = 21
+I_IMMU  = 22
+I_IMMH  = 23
 I_BDST  = 24
 I_JDST  = 25
 
@@ -269,11 +269,11 @@ def str_prc(ptr, argv):
             if arg in {
                 I_SA,
                 I_CACHE,
-                I_IMM,
-                I_IMMS,
-                I_IMMHI,
-                I_OFFS,
                 I_CODE,
+                I_OFFS,
+                I_IMMS,
+                I_IMMU,
+                I_IMMH,
                 I_BDST,
                 I_JDST,
             }:
@@ -285,7 +285,9 @@ def str_prc(ptr, argv):
         for arg in argv
     ])
     if None in lst:
-        raise RuntimeError("ultra.asm.str_prc(): bad arg (%s)" % str(lst))
+        raise RuntimeError("ultra.asm.str_prc(): bad arg (\"%s\" %% %s)" % (
+            ptr, str(lst)
+        ))
     return ptr % lst
 
 def lst_prc(ptr, argv):
@@ -325,9 +327,9 @@ def fnc_or(argv):
             ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
             if inst_arg[I_RS] == 0:
                 if macro:
-                    inst_arg[I_IMM] = 0
-                    inst_fmt[I_IMM] = "%d"
-                    ptr, argv = ["li      %s, %s", [I_RD, I_IMM]]
+                    inst_arg[I_IMMU] = 0
+                    inst_fmt[I_IMMU] = "%d"
+                    ptr, argv = ["li      %s, %s", [I_RD, I_IMMU]]
     lui_write(inst_arg[I_RD], None)
     return str_prc(ptr, argv)
 
@@ -396,8 +398,8 @@ def fnc_addiu(argv):
             ptr, argv = ["li      %s, %s", [I_RT, I_IMMS]]
         # lui rt, hi(addr) ... addiu rt, rt, lo(addr)
         elif lui_table[inst_arg[I_RS]] != None:
-            ln, immhi = lui_table[inst_arg[I_RS]]
-            inst_arg[I_IMMS] = ultra.sym(immhi + inst_arg[I_IMMS])
+            ln, immh = lui_table[inst_arg[I_RS]]
+            inst_arg[I_IMMS] = ultra.sym(immh + inst_arg[I_IMMS])
             inst_fmt[I_IMMS] = "%s"
             if inst_arg[I_RT] == inst_arg[I_RS] and macro:
                 line[ln] = (
@@ -413,59 +415,59 @@ def fnc_addiu(argv):
     else:
         # ARMIPS rejects this
         # if inst_arg[I_RS] == 0x00:
-        #     inst_arg[I_IMM] = ultra.sym(inst_arg[I_IMM])
-        #     inst_fmt[I_IMM] = "%s"
-        #     ptr, argv = ["la      %s, %s", [I_RT, I_IMM]]
+        #     inst_arg[I_IMMU] = ultra.sym(inst_arg[I_IMMU])
+        #     inst_fmt[I_IMMU] = "%s"
+        #     ptr, argv = ["la      %s, %s", [I_RT, I_IMMU]]
         pass
     lui_write(inst_arg[I_RT], None)
     return str_prc(ptr, argv)
 
 def fnc_ori(argv):
-    ptr, argv = ["ori     %s, %s, %s", [I_RT, I_RS, I_IMM]]
+    ptr, argv = ["ori     %s, %s, %s", [I_RT, I_RS, I_IMMU]]
     if inst_arg[I_RS] == 0x00:
         if mode == 0:
             # ori rt, $0, imm -> li rt, imm
-            if inst_arg[I_IMM] >= 0x8000:
-                ptr, argv = ["li      %s, %s", [I_RT, I_IMM]]
+            if inst_arg[I_IMMU] >= 0x8000:
+                ptr, argv = ["li      %s, %s", [I_RT, I_IMMU]]
         else:
             pass
     # lui rt, imm ... ori rt, rt, imm -> li.u rt, imm ... li.l rt, imm
     elif inst_arg[I_RT] == inst_arg[I_RS]:
         if lui_table[inst_arg[I_RT]] != None:
-            ln, immhi = lui_table[inst_arg[I_RT]]
-            inst_arg[I_IMM] = immhi | inst_arg[I_IMM]
-            inst_fmt[I_IMM] = "0x%08X"
+            ln, immh = lui_table[inst_arg[I_RT]]
+            inst_arg[I_IMMU] = immh | inst_arg[I_IMMU]
+            inst_fmt[I_IMMU] = "0x%08X"
             if line[ln][1].startswith("li"):
                 if macro:
                     line[ln] = (
-                        line[ln][0], str_prc("li.u    %s, %s", [I_RT, I_IMM])
+                        line[ln][0], str_prc("li.u    %s, %s", [I_RT, I_IMMU])
                     )
-                    ptr, argv = ["li.l    %s, %s", [I_RT, I_IMM]]
+                    ptr, argv = ["li.l    %s, %s", [I_RT, I_IMMU]]
                 else:
                     line[ln] = (
                         line[ln][0],
-                        str_prc("lui     %s, %s >> 16", [I_RT, I_IMM])
+                        str_prc("lui     %s, %s >> 16", [I_RT, I_IMMU])
                     )
                     ptr, argv = \
-                        ["ori     %s, %s, %s & 0xFFFF", [I_RT, I_RT, I_IMM]]
+                        ["ori     %s, %s, %s & 0xFFFF", [I_RT, I_RT, I_IMMU]]
     lui_write(inst_arg[I_RT], None)
     return str_prc(ptr, argv)
 
 def fnc_lui(argv):
     if inst_arg[I_RT] != 0x00:
-        lui_write(inst_arg[I_RT], (len(line), inst_arg[I_IMMHI]))
+        lui_write(inst_arg[I_RT], (len(line), inst_arg[I_IMMH]))
     if imm != None:
-        ptr, argv = "lui     %s, %s", [I_RT, I_IMM]
+        ptr, argv = "lui     %s, %s", [I_RT, I_IMMU]
     else:
-        ptr, argv = "li      %s, %s", [I_RT, I_IMMHI]
+        ptr, argv = "li      %s, %s", [I_RT, I_IMMH]
     return str_prc(ptr, argv)
 
 def fnc_ls(argv):
     ptr, argv = [argv[0], [argv[1], I_IMMS, I_RS]]
     if mode == 0:
         if lui_table[inst_arg[I_RS]] != None:
-            ln, immhi = lui_table[inst_arg[I_RS]]
-            inst_arg[I_IMMS] = ultra.sym(immhi + inst_arg[I_IMMS])
+            ln, immh = lui_table[inst_arg[I_RS]]
+            inst_arg[I_IMMS] = ultra.sym(immh + inst_arg[I_IMMS])
             inst_fmt[I_IMMS] = "%%hi(%s)"
             line[ln] = (line[ln][0], str_prc("lui     %s, %s", [I_RS, I_IMMS]))
             inst_fmt[I_IMMS] = "%%lo(%s)"
@@ -849,7 +851,7 @@ lst_cop2_func = [
     (fnc_clearv, ["vmudn   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vmudh   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vmacf   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
-    (fnc_clearv, ["vmacq   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
+    (fnc_clearv, ["vmacu   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vrndn   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vmacq   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vmadl   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
@@ -1024,9 +1026,9 @@ lst_op = [
     (fnc_addiu, None), # handle la/li
     (fnc_clear, ["slti    %s, %s, %s", I_RT, I_RS, I_IMMS]),
     (fnc_clear, ["sltiu   %s, %s, %s", I_RT, I_RS, I_IMMS]),
-    (fnc_clear, ["andi    %s, %s, %s", I_RT, I_RS, I_IMM]),
+    (fnc_clear, ["andi    %s, %s, %s", I_RT, I_RS, I_IMMU]),
     (fnc_ori, None), # handle li
-    (fnc_clear, ["xori    %s, %s, %s", I_RT, I_RS, I_IMM]),
+    (fnc_clear, ["xori    %s, %s, %s", I_RT, I_RS, I_IMMU]),
     (fnc_lui, None), # handle la/li
     (lst_cop0_rs, [I_RS]),
     (lst_cop1_rs, [I_RS]),
@@ -1140,28 +1142,26 @@ def s_code(self, argv):
             lui_table = 32*[None]
             lui_next  = None
             lui_flag  = 1
-        if self.c_dst in lui_stack:
-            lui_table = lui_stack[self.c_dst][:]
+        if self.c_dst in lui_stack: lui_table = lui_stack[self.c_dst][:]
         flag = lui_flag
         inst = ultra.uw()
         if inst == 0:
             line.append((self.c_dst, "nop"))
         else:
             f0 = inst >> 26 & 0x3F
+            f1 = inst >>  0 & 0x3F
             r0 = inst >> 21 & 0x1F
             r1 = inst >> 16 & 0x1F
             r2 = inst >> 11 & 0x1F
             r3 = inst >>  6 & 0x1F
-            f1 = inst >>  0 & 0x3F
-            i0 = inst >>  0 & 0xFFFF
-            i1 = i0 - (i0 << 1 & 0x10000)
-            i2 = i0 << 16
-            i3 = inst >>  0 & 0x03FFFFFF
+            e0 = inst >> 21 & 0x0F
+            e1 = inst >> 11 & 0x0F
+            e2 = inst >>  7 & 0x0F
+            i0 = (inst >> 0 & 0x7F) - (inst << 1 & 0x80)
+            i1 = inst >>  0 & 0xFFFF
+            i2 = i1 - (i1 << 1 & 0x10000)
+            i3 = inst <<  0 & 0x03FFFFFF
             i4 = inst >>  6 & 0x000FFFFF
-            i5 = (inst >> 0 & 0x7F) - (inst << 1 & 0x80)
-            i6 = inst >>  7 & 0x0F
-            i7 = inst >> 21 & 0x0F
-            i8 = inst >> 11 & 0x0F
             inst_arg = [
                 f0, # op
                 f1, # func
@@ -1170,24 +1170,24 @@ def s_code(self, argv):
                 r2, # rd
                 r3, # sa
                 r1, # cache
-                r2, # c0 reg
-                r2, # c1 ctl
-                r0, # c1 fmt
+                (r1, i4)[mode], # code
+                r2, # c0reg
+                r2, # c1ctl
+                r0, # c1fmt
                 r1, # ft
                 r2, # fs
                 r3, # fd
                 r1, # vt
                 r2, # vs
                 r3, # vd
-                i0, # imm
-                i1, # imms
-                i2, # immhi
-                i5, # offs
-                (r1, i4)[mode], # code
-                i6, # e
-                i7, # ev
-                i8, # de
-                self.c_addr + (i1 << 2), # bdst
+                e0, # ev
+                e1, # de
+                e2, # e
+                i0, # offs
+                i2, # imms
+                i1, # immu
+                i1 << 16, # immh
+                self.c_addr + (i2 << 2), # bdst
                 (self.c_addr & 0xF0000000) | (i3 << 2), # jdst
             ]
             inst_fmt = [
@@ -1198,23 +1198,23 @@ def s_code(self, argv):
                 gpr, # rd
                 "%d", # sa
                 "0x%02X", # cache
-                cop0, # c0 reg
-                cop1_ctl, # c1 ctl
-                cop1_fmt, # c1 fmt
+                "%d", # code
+                cop0, # c0reg
+                cop1_ctl, # c1ctl
+                cop1_fmt, # c1fmt
                 "$f%d", # ft
                 "$f%d", # fs
                 "$f%d", # fd
                 "$v%d", # vt
                 "$v%d", # vs
                 "$v%d", # vd
-                "0x%04X", # imm
-                ultra.fmt_s16, # imms
-                "0x%08X", # immhi
-                ultra.fmt_s16, # offs
-                "%d", # code
-                "[%d]", # e
                 element_table, # ev
                 element_table, # de
+                "[%d]", # e
+                ultra.fmt_s16, # offs
+                ultra.fmt_s16, # imms
+                "0x%04X", # immu
+                "0x%08X", # immh
                 ".L%08X", # bdst
                 "0x%08X", # jdst
             ]
@@ -1230,13 +1230,11 @@ def s_code(self, argv):
                     ".word 0x%08X",
                     "nop :: .org .-4 :: .word 0x%08X",
                 )[mode] % inst))
-        if flag != 1:
-            lui_flag = 1
+        if flag != 1: lui_flag = 1
     fmt(self, line, True)
 
 def d_fnc(fnc, imm="%d"):
-    x = lambda argv: table.imm_prc(argv[0] if len(argv) > 0 else imm, fnc())
-    return x
+    return lambda argv: table.imm_prc(argv[0] if len(argv) > 0 else imm, fnc())
 
 d_sbyte = [".byte", d_fnc(ultra.sb)]
 d_ubyte = [".byte", d_fnc(ultra.ub)]

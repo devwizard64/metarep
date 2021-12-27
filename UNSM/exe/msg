@@ -7,8 +7,7 @@ import lang
 
 def list_rstrip(l, v):
     x = l[:]
-    while len(x) > 0 and x[-1] == v:
-        x.pop(-1)
+    while len(x) > 0 and x[-1] == v: x.pop(-1)
     return x
 
 def list_split(l, v):
@@ -27,8 +26,7 @@ def main(argv):
     if len(argv) != 3:
         print("usage: %s <output> <input>\n" % argv[0])
         return 1
-    with open(argv[2], "r") as f:
-        data = f.read()
+    with open(argv[2], "r") as f: data = f.read()
     path = argv[1].rpartition(".")[0]
     name = path.rpartition(os.path.sep)[-1]
     ltbl = None
@@ -65,8 +63,7 @@ def main(argv):
                     raise RuntimeError("bad cmd %d:'%s'" % (ln+1, cmd))
                 ctbl.append([label, t, []])
             continue
-        if line.startswith("#") or len(ctbl) == 0:
-            continue
+        if line.startswith("#") or len(ctbl) == 0: continue
         line += "\n"
         i = 0
         while i < len(line):
@@ -103,8 +100,7 @@ def main(argv):
         ]) + ("\nMSG *msg_%s[] =\n{\n" % name) + "".join([
             "    &msg_%s,\n" % label for label, arg in mtbl
         ]) + "    NULL,\n};\n"
-    with open(path + ".h", "w") as f:
-        f.write(data)
+    with open(path + ".h", "w") as f: f.write(data)
     line = []
     s = "0"
     i = 0
@@ -128,8 +124,7 @@ def main(argv):
             "\n"
             "#endif /* __%s__ */\n"
         ) % hn
-        with open(path + ".inc.h", "w") as f:
-            f.write(data)
+        with open(path + ".inc.h", "w") as f: f.write(data)
     return 0
 
 if __name__ == "__main__":

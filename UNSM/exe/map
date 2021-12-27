@@ -8,8 +8,7 @@ def main(argv):
         print("usage: %s <output> <input>" % argv[0])
         return 1
     path = argv[1].rpartition(".")[0]
-    with open(argv[2], "r") as f:
-        data = f.read()
+    with open(argv[2], "r") as f: data = f.read()
     vtx_data = {"v": []}
     obj_data = []
     obj = None
@@ -23,8 +22,7 @@ def main(argv):
         elif arg[0] == "f":
             if obj == None:
                 for i, obj in obj_data:
-                    if i == o:
-                        break
+                    if i == o: break
                 else:
                     obj = []
                     obj_data.append([o, obj])
@@ -59,8 +57,7 @@ def main(argv):
             for face in obj
         ])
     data += "M_FACEEND,\n"
-    with open(path + ".h", "w") as f:
-        f.write(data)
+    with open(path + ".h", "w") as f: f.write(data)
     return 0
 
 if __name__ == "__main__":

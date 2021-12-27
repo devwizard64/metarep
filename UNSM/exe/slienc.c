@@ -47,14 +47,8 @@ static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
         uint n = 0;
         while (o+s < i+ms && s < ms)
         {
-            if (data[i+s] != data[o+s < i ? o+s : o+(s%n)])
-            {
-                break;
-            }
-            if (o+s < i)
-            {
-                n++;
-            }
+            if (data[i+s] != data[o+s < i ? o+s : o+(s%n)]) break;
+            if (o+s < i) n++;
             s++;
         }
         if (*sz < s)
@@ -70,23 +64,23 @@ static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
 
 int main(int argc, const char **argv)
 {
-    char  str[0x1000];
+    char str[0x1000];
     FILE *f;
     FILE *h;
-    u8   *data;
-    u8   *tbl;
-    u8   *pkt;
-    u8   *cpy;
-    u8   *p;
-    u8   *c;
-    uint  size;
-    uint  i;
-    uint  ti;
-    uint  pi;
-    uint  ci;
-    uint  po;
-    uint  co;
-    u8    buf[0x10];
+    u8 *data;
+    u8 *tbl;
+    u8 *pkt;
+    u8 *cpy;
+    u8 *p;
+    u8 *c;
+    uint size;
+    uint i;
+    uint ti;
+    uint pi;
+    uint ci;
+    uint po;
+    uint co;
+    u8 buf[0x10];
     if (argc != 5)
     {
         fprintf(stderr, "usage: %s <output> <header> <input> <sym>\n", argv[0]);
@@ -115,10 +109,7 @@ int main(int argc, const char **argv)
         sscanf(str, "%s %c %x %x", sym, &sec, &adr, &siz);
         if (i    > adr    ) i    = adr;
         if (size < adr+siz) size = adr+siz;
-        if (sec < 'a')
-        {
-            fprintf(h, "#define %s 0x%08X\n", sym, adr);
-        }
+        if (sec < 'a') fprintf(h, "#define %s 0x%08X\n", sym, adr);
     }
     fclose(f);
     fclose(h);

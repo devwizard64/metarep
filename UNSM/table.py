@@ -2342,7 +2342,7 @@ sym_E0_t_spboot = {
 
 imm_E0_t_spboot = {
     0x04001000: ("%d",),
-    # 0x04001008: os_task
+    0x04001008: ("os_task",),
     0x0400100C: (ultra.fmt_struct_OSTask,),
     0x04001010: (lambda x: "0x%04X-1" % (x+1 & 0xFFFF),),
     0x04001044: (ultra.fmt_sp_sr,),

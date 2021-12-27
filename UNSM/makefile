@@ -108,20 +108,22 @@ FLAG    += -D__$(VERSION)__ -DBUILD=$(BUILD)
 CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
 CCFLAG  += -fno-toplevel-reorder -G0
-CCFLAG  += $(FLAG) -Wall -Wextra -Wpedantic -Wno-variadic-macros -O2
+CCFLAG  += $(FLAG) -Os -Wall -Wextra -Wpedantic
+ASFLAG  := $(CCFLAG) -Wno-variadic-macros
 CPPFLAG := $(FLAG) -DULTRA=$(ULTRA)
 
 ARMIPS  := armips
 
-OBJ := $(filter $(BUILD)/%, $(sort \
-	$(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk | tr "\n" " ")))
+OBJ := $(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk | tr "\n" " ")
 SEQ := $(shell $(CPP) $(CPPFLAG) -P -o - make/seq.mk | tr "\n" " ")
+
+OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
 
 $(BUILD)/app.z64: $(BUILD)/app.elf
 	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
-	$(EXE)/mask $@ "$(LABEL)" NSM$(VERSION)
+	$(EXE)/mask $@ NSM$(VERSION) "$(LABEL)"
 
-$(BUILD)/app.elf: $(BUILD)/make/main.ld $(CODE_OBJ) $(OBJ)
+$(BUILD)/app.elf: $(BUILD)/make/main.ld $(OBJ)
 	$(LD) --accept-unknown-input-arch -Map $(@:.elf=.map) -o $@ -T $<
 
 include $(addsuffix .d,$(basename $(SRC_OBJ) $(OBJ)))
@@ -163,14 +165,14 @@ $(BUILD)/%.szp.d: %.bin
 
 $(BUILD)/%.o: %.asm
 	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $(<:.asm=.S)
+	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $(<:.asm=.S)
 $(BUILD)/%.d: %.asm
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.S
-	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $<
+	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $<
 $(BUILD)/%.d: %.S
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.c
 	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $<

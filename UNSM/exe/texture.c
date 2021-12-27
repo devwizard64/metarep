@@ -16,21 +16,19 @@ typedef uint8_t u8;
 #define unused
 #endif
 
-struct texture
+typedef struct texture
 {
     const char *str;
     void (*callback)(FILE *, const u8 *, const u8 *, uint, uint);
-};
+}
+TEXTURE;
 
 static uint texture_pal(const u8 *src, const u8 *pal, uint len)
 {
     uint i;
     for (i = 0; i < len; i++)
     {
-        if (memcmp(src, pal + 4*i, 4) == 0)
-        {
-            return i;
-        }
+        if (memcmp(src, pal + 4*i, 4) == 0) return i;
     }
     return 0;
 }
@@ -76,28 +74,28 @@ static uint texture_pal(const u8 *src, const u8 *pal, uint len)
 #define len_i4      2
 #define len_i8      1
 
-#define TEXTURE(name)                   \
-    static void texture_##name(         \
-        FILE *f,                        \
-        const u8 *src,                  \
-        unused const u8 *pal,           \
-        uint w, uint h                  \
-    )                                   \
-    {                                   \
-        do                              \
-        {                               \
-            uint i = w;                 \
-            do                          \
-            {                           \
-                fprintf(f, fmt_##name); \
-                src += 4*len_##name;    \
-                i   -= 1*len_##name;    \
-            }                           \
-            while (i > 0);              \
-            fputs("\n", f);             \
-        }                               \
-        while (--h > 0);                \
-    }
+#define TEXTURE(name)               \
+static void texture_##name(         \
+    FILE *f,                        \
+    const u8 *src,                  \
+    unused const u8 *pal,           \
+    uint w, uint h                  \
+)                                   \
+{                                   \
+    do                              \
+    {                               \
+        uint i = w;                 \
+        do                          \
+        {                           \
+            fprintf(f, fmt_##name); \
+            src += 4*len_##name;    \
+            i   -= 1*len_##name;    \
+        }                           \
+        while (i > 0);              \
+        fputs("\n", f);             \
+    }                               \
+    while (--h > 0);                \
+}
 TEXTURE(rgba16)
 TEXTURE(rgba32)
 TEXTURE(ci4)
@@ -127,30 +125,31 @@ static const struct texture texture_table[] =
 int main(int argc, const char **argv)
 {
     FILE *f;
-    u8   *src;
-    u8   *pal;
-    uint  w;
-    uint  h;
-    uint  i;
+    u8 *src;
+    u8 *pal;
+    unsigned error;
+    uint w;
+    uint h;
+    uint i;
     if (argc < 3)
     {
         fprintf(stderr, "usage: %s <output> <input> [palette]\n", argv[0]);
         return EXIT_FAILURE;
     }
-    i = lodepng_decode32_file(&src, &w, &h, argv[2]);
-    if (i != 0)
+    error = lodepng_decode32_file(&src, &w, &h, argv[2]);
+    if (error)
     {
-        fprintf(stderr, "error: %s\n", lodepng_error_text(i));
+        fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
         return EXIT_FAILURE;
     }
     if (argc > 3)
     {
         uint pal_w;
         uint pal_h;
-        i = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[3]);
-        if (i != 0)
+        error = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[3]);
+        if (error)
         {
-            fprintf(stderr, "error: %s\n", lodepng_error_text(i));
+            fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
             return EXIT_FAILURE;
         }
     }
@@ -166,7 +165,7 @@ int main(int argc, const char **argv)
     }
     for (i = 0; i < lenof(texture_table); i++)
     {
-        const struct texture *texture = &texture_table[i];
+        const TEXTURE *texture = &texture_table[i];
         if (strstr(argv[2], texture->str))
         {
             texture->callback(f, src, pal, w, h);
@@ -175,9 +174,6 @@ int main(int argc, const char **argv)
     }
     fclose(f);
     free(src);
-    if (pal != NULL)
-    {
-        free(pal);
-    }
+    if (pal != NULL) free(pal);
     return EXIT_SUCCESS;
 }

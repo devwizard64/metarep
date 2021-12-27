@@ -254,7 +254,7 @@ def g_moveword(argv):
         fm = w1 >> 16
         fo = (w1 & 0xFFFF) - (w1 << 1 & 0x10000)
         d = 128000 // fm
-        l = 500 - (fo*d//256)
+        l = 500 - d*fo//256
         h = l + d
         return ("SPFogPosition", "%d" % l, "%d" % h)
     return None

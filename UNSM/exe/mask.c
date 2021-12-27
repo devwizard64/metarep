@@ -11,12 +11,12 @@ typedef uint32_t u32;
 
 static void crc(char *buf, const u8 *data, uint size)
 {
-    u32  c0;
-    u32  c1;
-    u32  c0a;
-    u32  c0b;
-    u32  c1a;
-    u32  c1b;
+    u32 c0;
+    u32 c1;
+    u32 c0a;
+    u32 c0b;
+    u32 c1a;
+    u32 c1b;
     uint i;
     c0 = c1 = c0a = c0b = c1a = c1b = 0xF8CA4DDC;
     for (i = 0; i < size; i += 4)
@@ -36,10 +36,7 @@ static void crc(char *buf, const u8 *data, uint size)
         c1a ^= c1a < x ? c0^x : r;
         c1b += c1^x;
     }
-    for (; i < 0x100000; i += 4)
-    {
-        c1b += c1;
-    }
+    for (; i < 0x100000; i += 4) c1b += c1;
     c0 ^= c0a^c0b;
     c1 ^= c1a^c1b;
     buf[0] = c0 >> 24;
@@ -55,20 +52,26 @@ static void crc(char *buf, const u8 *data, uint size)
 int main(int argc, const char **argv)
 {
     FILE *f;
-    u8   *data;
-    uint  size;
-    char  buf[0x30];
-    if (argc != 4)
+    u8 *data;
+    uint size;
+    char buf[0x30];
+    if (argc < 2)
     {
-        fprintf(stderr, "usage: %s <image> <label> <code>\n", argv[0]);
+        fprintf(stderr, "usage: %s <image> [code] [label]\n", argv[0]);
         return EXIT_FAILURE;
     }
     memset(buf, 0x00, sizeof(buf));
-    memset(&buf[0x10], ' ', 20);
-    size = strlen(argv[2]);
-    memcpy(&buf[0x10], argv[2], MIN(20, size));
-    memcpy(&buf[0x2B], argv[3], 4);
-    buf[0x2F] = strtol(&argv[3][4], NULL, 0);
+    if (argc > 2)
+    {
+        memcpy(&buf[0x2B], argv[2], 4);
+        buf[0x2F] = strtol(&argv[2][4], NULL, 0);
+    }
+    if (argc > 3)
+    {
+        memset(&buf[0x10], ' ', 20);
+        size = strlen(argv[3]);
+        memcpy(&buf[0x10], argv[3], MIN(20, size));
+    }
     f = fopen(argv[1], "r+b");
     if (f == NULL)
     {

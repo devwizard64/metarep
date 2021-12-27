@@ -18,7 +18,7 @@ def ply_read(fn):
     while True:
         argv = line[i].split()
         i += 1
-        if argv[0] == "property":
+        if   argv[0] == "property":
             element[-1][-1].append(argv[1:])
         elif argv[0] == "element":
             element.append((argv[1], int(argv[2]), []))
@@ -65,11 +65,8 @@ def gfx_flush(buf, name):
     buf[2] = []
     buf[3] = []
 
-def sh(x):
-    return max(-0x8000, min(0x7FFF, int(round(x))))
-
-def sb(x):
-    return max(-0x80, min(0x7F, int(round(x))))
+def sh(x): return max(-0x8000, min(+0x7FFF, int(round(x))))
+def sb(x): return max(-0x80,   min(+0x7F,   int(round(x))))
 
 gfx_v_table = {
     "x": (lambda v: "%4d"    % (sb(0x80*v["nx"]) if "nx"     in v else 0)),
@@ -95,8 +92,7 @@ def gfx_write(arg, path, name, ply, ini):
     for t in tri:
         cnt = arg["-v"] - 3
         for v in t:
-            if not arg["-g"] and v in buf[2]:
-                cnt += 1
+            if not arg["-g"] and v in buf[2]: cnt += 1
         if len(buf[2]) > cnt: gfx_flush(buf, name)
         lst = []
         for v in t:
