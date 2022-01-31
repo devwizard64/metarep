@@ -127,6 +127,7 @@ class script:
         else:
             data = self.data[data][start:end]
             if callback != None: data = callback(data)
+            mkdir(fn)
             with open(fn, "wb") as f: f.write(data)
         return data
 
