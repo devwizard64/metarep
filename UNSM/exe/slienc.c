@@ -12,10 +12,7 @@ typedef unsigned int uint;
 typedef uint8_t u8;
 #define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
-#define SIG_0   'M'
-#define SIG_1   'I'
-#define SIG_2   'O'
-#define SIG_3   '0'
+#define SIG     "MIO0"
 #define BLK_OL  1
 #define BLK_SL  3
 #define BLK_OH  (BLK_OL+0x0FFF)
@@ -164,10 +161,10 @@ int main(int argc, const char **argv)
     ci = c-cpy;
     po = 0x10 + ti;
     co = po   + pi;
-    buf[0x00] = SIG_0;
-    buf[0x01] = SIG_1;
-    buf[0x02] = SIG_2;
-    buf[0x03] = SIG_3;
+    buf[0x00] = SIG[0];
+    buf[0x01] = SIG[1];
+    buf[0x02] = SIG[2];
+    buf[0x03] = SIG[3];
     buf[0x04] = size >> 24;
     buf[0x05] = size >> 16;
     buf[0x06] = size >>  8;

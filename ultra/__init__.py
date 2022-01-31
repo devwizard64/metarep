@@ -10,10 +10,10 @@ A_ADDR      = 1 << 1
 A_CAST      = 1 << 2
 A_ARRAY     = 1 << 3
 
-COMM_EXTERN = True
-COMM_VAR    = True
-COMM_LABEL  = True
-COMM_LINE   = True
+COMM_EXTERN = False
+COMM_VAR    = False
+COMM_LABEL  = False
+COMM_LINE   = False
 
 script = None
 

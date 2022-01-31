@@ -23,7 +23,7 @@ d_bool_u16  = [[0, 1, 1, ultra.c.d_u16, UNSM.table.fmt_bool], [0, 1, 2, None]]
 # todo: macro
 def d_staff_prc(argv):
     stage   = ultra.ub() # T:enum(stage)
-    world   = ultra.ub()
+    scene   = ultra.ub()
     flag    = ultra.ub()
     ry      = ultra.ub()
     x       = ultra.sh()
@@ -32,7 +32,7 @@ def d_staff_prc(argv):
     ultra.script.c_addr += 2
     str_    = ultra.c.aw()
     return ["{%2d, %d, 0x%02X, 0x%02X, {%5d, %5d, %5d}, %s}" % (
-        stage, world, flag, ry, x, y, z, str_
+        stage, scene, flag, ry, x, y, z, str_
     )]
 d_staff = [False, d_staff_prc]
 
@@ -63,7 +63,7 @@ d_pl_ground = [
 # pl_callback.h
 # mem.h
 # save.h
-# world.h
+# scene.h
 # shape_draw.h
 # time.h
 # slidec.h
@@ -401,7 +401,7 @@ def d_ripple_shade_prc(argv):
     return lst
 d_ripple_shade = [False, d_ripple_shade_prc]
 
-# print.h
+# dprint.h
 # message.h
 # weather_snow.h
 # weather_lava.h
@@ -680,7 +680,7 @@ def d_bgmctl_prc(argv):
             "LT_X",
             "LT_Y",
             "LT_Z",
-            "WORLD",
+            "SCENE",
             "AREA",
         ):
             if x & bit:
@@ -708,7 +708,7 @@ d_bgmctl_data = [False, d_bgmctl_data_prc]
 
 # audio/data.h
 
-def d_audio_cfg_prc(argv):
+def d_Na_cfg_prc(argv):
     freq    = ultra.uw()
     voice   = ultra.ub()
     e_filt  = ultra.ub()
@@ -726,7 +726,7 @@ def d_audio_cfg_prc(argv):
         "{%5d, %2d, %d, 0x%04X, 0x%04X, 0x%04X, "
         "0x%04X, 0x%04X, 0x%04X, 0x%04X}"
     ) % arg]
-d_audio_cfg = [False, d_audio_cfg_prc]
+d_Na_cfg = [False, d_Na_cfg_prc]
 
 # ?
 
@@ -1304,7 +1304,7 @@ def s_null(argv):
     return (None,)
 
 # 08
-def s_world(argv):
+def s_scene(argv):
     ultra.script.c_addr += 1
     n = "%d" % ultra.sh()
     x = "%d" % ultra.sh()
@@ -1483,7 +1483,7 @@ s_str = (
     "pull", # 0x05
     "store", # 0x06
     "flag", # 0x07
-    "world", # 0x08
+    "scene", # 0x08
     "ortho", # 0x09
     "persp", # 0x0A
     "empty", # 0x0B
@@ -1519,7 +1519,7 @@ s_fnc = (
     (s_null,), # 0x05
     None, # 0x06
     None, # 0x07
-    (s_world,), # 0x08
+    (s_scene,), # 0x08
     (s_arg,), # 0x09
     (s_persp,), # 0x0A
     (s_null,), # 0x0B

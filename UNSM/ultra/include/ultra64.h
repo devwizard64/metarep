@@ -214,9 +214,23 @@
 #ifndef __ASSEMBLER__
 
 /* types.h */
+#ifdef sgi
+#define NULL ((void *)0)
+typedef   signed char          s8;
+typedef unsigned char          u8;
+typedef   signed short     int s16;
+typedef unsigned short     int u16;
+typedef   signed           int s32;
+typedef unsigned           int u32;
+typedef   signed long long int s64;
+typedef unsigned long long int u64;
+typedef   signed long int intptr_t;
+typedef unsigned long int uintptr_t;
+typedef unsigned long int size_t;
+typedef   signed long int ssize_t;
+#else
 #include <stddef.h>
 #include <stdint.h>
-
 typedef  int8_t  s8;
 typedef uint8_t  u8;
 typedef  int16_t s16;
@@ -225,8 +239,19 @@ typedef  int32_t s32;
 typedef uint32_t u32;
 typedef  int64_t s64;
 typedef uint64_t u64;
+#endif
+
 typedef float    f32;
 typedef double   f64;
+
+/* R4300.h */
+#define K0_TO_K1(x)     ((u32)(x)|0xA0000000)
+#define K1_TO_K0(x)     ((u32)(x)&0x9FFFFFFF)
+#define K0_TO_PHYS(x)   ((u32)(x)&0x1FFFFFFF)
+#define K1_TO_PHYS(x)   ((u32)(x)&0x1FFFFFFF)
+#define KDM_TO_PHYS(x)  ((u32)(x)&0x1FFFFFFF)
+#define PHYS_TO_K0(x)   ((u32)(x)|0x80000000)
+#define PHYS_TO_K1(x)   ((u32)(x)|0xA0000000)
 
 /* os_thread.h */
 typedef s32 OSPri;
@@ -572,6 +597,13 @@ __OSEventState;
 #else /* __ASSEMBLER__ */
 
 /* R4300.h */
+#define K0_TO_K1(x)     ((x)|0xA0000000)
+#define K1_TO_K0(x)     ((x)&0x9FFFFFFF)
+#define K0_TO_PHYS(x)   ((x)&0x1FFFFFFF)
+#define K1_TO_PHYS(x)   ((x)&0x1FFFFFFF)
+#define KDM_TO_PHYS(x)  ((x)&0x1FFFFFFF)
+#define PHYS_TO_K0(x)   ((x)|0x80000000)
+#define PHYS_TO_K1(x)   ((x)|0xA0000000)
 #define C0_INX          $0
 #define C0_RAND         $1
 #define C0_ENTRYLO0     $2

@@ -1,6 +1,6 @@
 OUTPUT_ARCH(mips)
 SECTIONS
 {
-   .text : {*(.text*); *(.data*); *(.rodata*);}
-    /DISCARD/ : {*(*);}
+   .text : {*(.text*); *(.data*); *(.rodata*)}
+    /DISCARD/ : {*(*)}
 }

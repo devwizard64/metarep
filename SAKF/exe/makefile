@@ -1,14 +1,14 @@
 OBJ     := mask
 
 CC      := cc
-CCFLAG  := -Wall -Wextra -Wpedantic -O2
+CCFLAG  := -O2 -Wall -Wextra -Wpedantic
 
 .PHONY: default
 default: $(OBJ)
 
-%: %.c
-	$(CC) $(CCFLAG) -o $@ $^
-
 .PHONY: clean
 clean:
-	rm -rf $(OBJ)
+	rm -f $(OBJ)
+
+%: %.c
+	$(CC) $(CCFLAG) -o $@ $<

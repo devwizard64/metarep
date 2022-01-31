@@ -1,3 +1,6 @@
 [submodule "UNSM/exe/lodepng"]
 	path = UNSM/exe/lodepng
 	url = https://github.com/lvandeve/lodepng
+[submodule "UNSM/ido53"]
+	path = UNSM/ido53
+	url = https://github.com/devwizard64/ido53

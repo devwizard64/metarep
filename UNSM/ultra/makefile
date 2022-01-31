@@ -104,7 +104,7 @@ SRC_OBJ := \
 	build/src/atomic.o
 
 OBJ := \
-	lib/PR/header.o         \
+	lib/PR/mask.o           \
 	lib/PR/ipl3.o           \
 	lib/PR/crt0.o           \
 	lib/PR/rspboot.o        \
@@ -112,40 +112,45 @@ OBJ := \
 	lib/PR/aspMain.o        \
 	lib/libultra_rom.a
 
-CC      := mips-linux-gnu-gcc
-AR      := mips-linux-gnu-ar
+CROSS   := mips-linux-gnu-
+ARMIPS  := armips
 
+CC      := $(CROSS)gcc
+AR      := $(CROSS)ar
+FLAG    := -Iinclude
+OPT     := -Os
+WFLAG   := -Wall -Wextra
 CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
 CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CCFLAG  += -fno-toplevel-reorder -G0
-CCFLAG  += -Iinclude -Wall -Wextra -Wpedantic -O2
-
-ARMIPS  := armips
+CCFLAG  += -fno-toplevel-reorder -G 0
+CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
+ASFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -fno-PIC -G 0
+ASFLAG  += $(FLAG) $(OPT) $(WFLAG)
 
 .PHONY: default
 default: $(OBJ)
 
+.PHONY: clean
+clean:
+	rm -f -r build lib
+
 lib/libultra_rom.a: $(SRC_OBJ) | lib
 	$(AR) rc $@ $^
 
-build/src/%.o: src/%.S | build/src
-	$(CC) $(CCFLAG) -c -o $@ $<
-
 build/src/%.o: src/%.c | build/src
 	$(CC) $(CCFLAG) -c -o $@ $<
+
+build/src/%.o: src/%.S | build/src
+	$(CC) $(ASFLAG) -c -o $@ $<
 
 lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
 
 lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
 	$(ARMIPS) -sym build/$(<:.asm=.sym) $<
-	$(CC) $(CCFLAG) -c -o $@ $(<:.asm=.S)
+	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.S)
 
 lib/PR/%.o: PR/%.S | lib/PR
 	$(CC) $(CCFLAG) -c -o $@ $<
 
 build/src build/PR lib lib/PR:
 	mkdir -p $@
-
-.PHONY: clean
-clean:
-	rm -rf build lib

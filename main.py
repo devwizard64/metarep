@@ -35,7 +35,10 @@ def s_copy(self, argv):
     src, dst = argv
     src = path_join([self.name] + src)
     dst = self.path_join(dst)
-    if os.path.isdir(src):
+    if os.path.islink(src):
+        mkdir(dst)
+        os.symlink(os.readlink(src), dst)
+    elif os.path.isdir(src):
         shutil.copytree(src, dst)
     else:
         shutil.copy2(src, dst)

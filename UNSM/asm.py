@@ -33,10 +33,9 @@ segment_table = {
     0x17: "PLAYER",
 }
 
-def chk_seg(sym, s):
-    if s != None and not sym.startswith(s+"_"):
-        return True
-    return not sym.endswith("_start")
+def segment(x, start, end):
+    if x.startswith(start) and x.endswith(end): return x[len(start):-len(end)]
+    return None
 
 # 00 01
 def p_push_jump(argv):
@@ -47,9 +46,8 @@ def p_push_jump(argv):
     dev = ultra.script.addr + start
     start  = ultra.sym(start,  dev)
     script = ultra.sym(script, dev)
-    if chk_seg(start, "data"):
-        raise RuntimeError("UNSM.asm.p_push_jump(): bad seg")
-    name = start[5:-6]
+    name = segment(start, "_", "_dataSegmentRomStart")
+    if name == None: raise RuntimeError("UNSM.asm.p_push_jump(): bad segment")
     return (None, seg, name, script)
 
 # 02 07 0A 1B 1C 1D 1E 20
@@ -108,31 +106,29 @@ def p_arg(argv):
 
 # 16 17 18 1A
 def p_load(argv):
-    s, = argv
+    a, b, = argv
     seg = ultra.uh()
-    if s == None:
+    if b != None:
         dst = ultra.aw()
-        if chk_seg(dst, "code"):
-            raise RuntimeError("UNSM.asm.p_load(): bad dst")
+        name = segment(dst, "_", b)
+        if name == None: raise RuntimeError("UNSM.asm.p_load(): bad dst")
     start = ultra.uw()
     end   = ultra.uw()
     dev   = ultra.script.addr + start
     start = ultra.sym(start, dev)
-    if chk_seg(start, s):
-        raise RuntimeError("UNSM.asm.p_load(): bad seg")
-    name = start[:-6]
-    if s != None:
-        seg  = "MENU" if "menu" in start else segment_table[seg]
-        name = name[len(s)+1:]
-        return (None, seg, name)
-    return (None, name)
+    name = segment(start, "_", a)
+    if name == None: raise RuntimeError("UNSM.asm.p_load(): bad segment")
+    if b != None:
+        return (None, name)
+    seg = "MENU" if "menu" in start else segment_table[seg]
+    return (None, seg, name)
 
 # 1F
-def p_world_start(argv):
-    world = "%d" % ultra.ub()
+def p_scene_start(argv):
+    scene = "%d" % ultra.ub()
     ultra.script.c_addr += 1
     script = ultra.aw()
-    return (None, world, script)
+    return (None, scene, script)
 
 # 21
 def p_shape_gfx(argv):
@@ -191,37 +187,37 @@ def p_link(argv):
     m, = argv
     index = "%d" % ultra.ub()
     stage = "%d" % ultra.ub() # T:enum(stage)
-    world = "%d" % ultra.ub()
+    scene = "%d" % ultra.ub()
     link  = "%d" % ultra.ub()
     flag  = ultra.ub()
     ultra.script.c_addr += 1
-    return (m if flag == 0x80 else None, index, stage, world, link)
+    return (m if flag == 0x80 else None, index, stage, scene, link)
 
 # 28
 def p_connect(argv):
     index = "%d" % ultra.ub()
-    world = "%d" % ultra.ub()
+    scene = "%d" % ultra.ub()
     px = "%d" % ultra.sh()
     py = "%d" % ultra.sh()
     pz = "%d" % ultra.sh()
     ultra.script.c_addr += 2
-    return (None, index, world, px, py, pz)
+    return (None, index, scene, px, py, pz)
 
 # 29 2A
-def p_world(argv):
-    world = "%d" % ultra.ub()
+def p_scene(argv):
+    scene = "%d" % ultra.ub()
     ultra.script.c_addr += 1
-    return (None, world)
+    return (None, scene)
 
 # 2B
 def p_player_open(argv):
-    world = "%d" % ultra.ub()
+    scene = "%d" % ultra.ub()
     ultra.script.c_addr += 1
     ry = "%d" % ultra.sh()
     px = "%d" % ultra.sh()
     py = "%d" % ultra.sh()
     pz = "%d" % ultra.sh()
-    return (None, world, ry, px, py, pz)
+    return (None, scene, ry, px, py, pz)
 
 # (2C) (2D)
 
@@ -302,7 +298,7 @@ def p_var(argv):
         "COURSE",
         "LEVEL",
         "STAGE",
-        "WORLD",
+        "SCENE",
     )[ultra.ub()]
     return (cmd, var)
 
@@ -333,13 +329,13 @@ p_str = [
     "load_data",    # 0x17
     "load_szp",     # 0x18
     "load_face",    # 0x19
-    "load_texture", # 0x1A
+    "load_txt",     # 0x1A
     "stage_init",   # 0x1B
-    "stage_free",   # 0x1C
+    "stage_exit",   # 0x1C
     "stage_start",  # 0x1D
     "stage_end",    # 0x1E
-    "world_start",  # 0x1F
-    "world_end",    # 0x20
+    "scene_start",  # 0x1F
+    "scene_end",    # 0x20
     "shape_gfx",    # 0x21
     "shape_script", # 0x22
     "shape_scale",  # 0x23
@@ -348,11 +344,11 @@ p_str = [
     "link",         # 0x26
     "linkbg",       # 0x27
     "connect",      # 0x28
-    "world_open",   # 0x29
-    "world_close",  # 0x2A
+    "scene_open",   # 0x29
+    "scene_close",  # 0x2A
     "player_open",  # 0x2B
     "player_close", # 0x2C
-    "world_update", # 0x2D
+    "scene_update", # 0x2D
     "map",          # 0x2E
     "area",         # 0x2F
     "msg",          # 0x30
@@ -393,16 +389,16 @@ p_fnc = [
     (p_arg,), # 0x13
     None, # 0x14
     None, # 0x15
-    (p_load, None), # 0x16
-    (p_load, "data"), # 0x17
-    (p_load, "szp"), # 0x18
+    (p_load, "SegmentRomStart", "SegmentStart"), # 0x16
+    (p_load, "_dataSegmentRomStart", None), # 0x17
+    (p_load, "_szpSegmentRomStart", None), # 0x18
     (p_arg,), # 0x19 T:enum(face)
-    (p_load, "szp"), # 0x1A
+    (p_load, "_szpSegmentRomStart", None), # 0x1A
     (p_null,), # 0x1B
     (p_null,), # 0x1C
     (p_null,), # 0x1D
     (p_null,), # 0x1E
-    (p_world_start,), # 0x1F
+    (p_scene_start,), # 0x1F
     (p_null,), # 0x20
     (p_shape_gfx,), # 0x21
     (p_shape_script,), # 0x22
@@ -412,8 +408,8 @@ p_fnc = [
     (p_link, "link_mid"), # 0x26
     (p_link, "linkbg_mid"), # 0x27
     (p_connect,), # 0x28
-    (p_world,), # 0x29
-    (p_world,), # 0x2A
+    (p_scene,), # 0x29
+    (p_scene,), # 0x2A
     (p_player_open,), # 0x2B
     None, # 0x2C
     None, # 0x2D

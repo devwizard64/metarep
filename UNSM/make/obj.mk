@@ -1,8 +1,6 @@
 #define ASSERT(exp, message)
-#define TEXT(fn)    fn
-#define DATA(fn)    fn
-#define BSS(fn)     fn
-#define SECTION(addr, name, section) section
-#define CODE(addr, name, code, bss) code bss
-#define BUFFER(addr, name, bss) bss
+#define TEXT(x) x
+#define DATA(x) x
+#define BSS(x)  x
+#define SECTION(addr, name, s_text, s_data, s_bss) s_text s_data s_bss
 #include <meta/main.h>

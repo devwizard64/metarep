@@ -860,17 +860,17 @@ lst_cop2_func = [
     (fnc_clearv, ["vmadh   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vadd    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vsub    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
-    None,
+    (fnc_clearv, ["vsut    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
     (fnc_clearv, ["vabs    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vaddc   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     (fnc_clearv, ["vsubc   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
+    (fnc_clearv, ["vaddb   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vsubb   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vaccb   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vsucb   %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vsad    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vsac    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
+    (fnc_clearv, ["vsum    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]), # undoc.
     (fnc_clearv, ["vsar    %s, %s, %s%s", I_VD, I_VS, I_VT, I_EV]),
     None,
     None,
@@ -954,7 +954,7 @@ lst_lwc2 = [
     (fnc_lsv, ["luv     ", 3]),
     (fnc_lsv, ["lhv     ", 4]),
     (fnc_lsv, ["lfv     ", 4]),
-    (fnc_lsv, ["lwv     ", 4]), # ?
+    (fnc_lsv, ["lwv     ", 4]), # undoc.
     (fnc_lsv, ["ltv     ", 4]),
     None,
     None,

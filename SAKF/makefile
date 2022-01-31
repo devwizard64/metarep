@@ -1,23 +1,28 @@
 VERSION ?= J0
 BUILD   := build/$(VERSION)
 
-AS      := ca65
-LD      := ld65
-
-FLAG    := -Iinclude -I$(BUILD) -D__$(VERSION)__
-ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
-
-EXE     := exe
-
-OBJ != make -C $(EXE)
-
 OBJ := \
 	$(BUILD)/src/code.o     \
 	$(BUILD)/src/header.o   \
 	$(BUILD)/src/code_01.o  \
 	$(BUILD)/src/bank.o
 
-$(BUILD)/app.sfc: make/main.ld $(OBJ)
+EXE     := exe
+RES != make -C $(EXE)
+
+AS      := ca65
+LD      := ld65
+FLAG    := -Iinclude -I$(BUILD) -D__$(VERSION)__
+ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
+
+.PHONY: default
+default: $(BUILD)/app.sfc
+
+.PHONY: clean
+clean:
+	rm -f -r build
+
+$(BUILD)/%.sfc: make/main.ld $(OBJ)
 	$(LD) -m $(@:.sfc=.map) -o $@ -C $^
 	$(EXE)/mask $@
 
@@ -33,7 +38,3 @@ BUILD_OBJ := $(call obj,*.s)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
 $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@
-
-.PHONY: clean
-clean:
-	rm -rf build

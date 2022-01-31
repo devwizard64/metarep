@@ -1,116 +1,16 @@
 import table
 
 str_ultra_internal_c = """
+#ifdef __GNUC__
 #define dalign                  __attribute__((aligned(4)))
 #define balign                  __attribute__((aligned(8)))
+#else
+#define dalign
+#define balign
+#endif
 """
 
-str_ultra_parameters = """
-.globl osTvType;        osTvType        = 0x80000300
-.globl osRomType;       osRomType       = 0x80000304
-.globl osRomBase;       osRomBase       = 0x80000308
-.globl osResetType;     osResetType     = 0x8000030C
-.globl osCicId;         osCicId         = 0x80000310
-.globl osVersion;       osVersion       = 0x80000314
-.globl osMemSize;       osMemSize       = 0x80000318
-.globl osAppNMIBuffer;  osAppNMIBuffer  = 0x8000031C
-.space 64
-"""
-
-str_sm64_globl = """
-#include <sm64/types.h>
-#include <sm64/gbi_ext.h>
-#include <sm64/segment.h>
-
-#include <sm64/main.h>
-#include <sm64/app.h>
-#include <sm64/audio.h>
-#include <sm64/game.h>
-#include <sm64/pl_collision.h>
-#include <sm64/player.h>
-#include <sm64/pl_physics.h>
-#include <sm64/pl_demo.h>
-#include <sm64/pl_hang.h>
-#include <sm64/pl_stop.h>
-#include <sm64/pl_ground.h>
-#include <sm64/pl_air.h>
-#include <sm64/pl_water.h>
-#include <sm64/pl_grab.h>
-#include <sm64/pl_callback.h>
-#include <sm64/mem.h>
-#include <sm64/save.h>
-#include <sm64/world.h>
-#include <sm64/shape_draw.h>
-#include <sm64/time.h>
-#include <sm64/slidec.h>
-#include <sm64/camera.h>
-#include <sm64/course.h>
-#include <sm64/object.h>
-#include <sm64/obj_lib.h>
-#include <sm64/object_a.h>
-#include <sm64/obj_physics.h>
-#include <sm64/obj_collision.h>
-#include <sm64/obj_list.h>
-#include <sm64/obj_sfx.h>
-#include <sm64/obj_debug.h>
-#include <sm64/wipe.h>
-#include <sm64/shadow.h>
-#include <sm64/background.h>
-#include <sm64/scroll.h>
-#include <sm64/obj_shape.h>
-#include <sm64/ripple.h>
-#include <sm64/print.h>
-#include <sm64/message.h>
-#include <sm64/weather_snow.h>
-#include <sm64/weather_lava.h>
-#include <sm64/obj_data.h>
-#include <sm64/hud.h>
-#include <sm64/object_b.h>
-#include <sm64/object_c.h>
-#include <sm64/math.h>
-#include <sm64/shape.h>
-#include <sm64/s_script.h>
-#include <sm64/p_script.h>
-#include <sm64/map.h>
-#include <sm64/map_data.h>
-#include <sm64/o_script.h>
-#include <sm64/title.h>
-#include <sm64/title_bg.h>
-#include <sm64/file_select.h>
-#include <sm64/star_select.h>
-#include <sm64/buffer.h>
-
-#include <sm64/audio/a.h>
-#include <sm64/audio/b.h>
-#include <sm64/audio/c.h>
-#include <sm64/audio/d.h>
-#include <sm64/audio/e.h>
-#include <sm64/audio/f.h>
-#include <sm64/audio/g.h>
-#include <sm64/audio/data.h>
-#include <sm64/audio/bss.h>
-#include <sm64/audio/heap.h>
-
-#include <sm64/face/main.h>
-#include <sm64/face/mem.h>
-#include <sm64/face/sfx.h>
-#include <sm64/face/draw.h>
-#include <sm64/face/object.h>
-#include <sm64/face/skin.h>
-#include <sm64/face/particle.h>
-#include <sm64/face/dynlist.h>
-#include <sm64/face/gadget.h>
-#include <sm64/face/stdio.h>
-#include <sm64/face/joint.h>
-#include <sm64/face/net.h>
-#include <sm64/face/math.h>
-#include <sm64/face/shape.h>
-#include <sm64/face/gfx.h>
-"""
-
-str_types_globl = """
-#include <ultra64.h>
-
+str_types_g = """
 #define false   0
 #define true    1
 
@@ -126,10 +26,17 @@ typedef s16 vecs[3];
 typedef f32 vecf[3];
 typedef f32 mtxf[4][4];
 
+#ifdef __GNUC__
 #define dalign                  __attribute__((aligned(4)))
 #define balign                  __attribute__((aligned(8)))
 #define unused                  __attribute__((unused))
 #define fallthrough             __attribute__((fallthrough))
+#else
+#define dalign
+#define balign
+#define unused
+#define fallthrough
+#endif
 #define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
 /* todo: move to header */
@@ -137,7 +44,7 @@ typedef u8 AREA_DATA;
 typedef s16 PATH_DATA;
 """
 
-str_types_asm = """
+str_types_s = """
 #define struct(s, i, x)         (sizeof__##s*(i) + s##__##x)
 
 .macro li.u rt, imm
@@ -312,7 +219,7 @@ str_gbi_ext_c = """
                 ((height)-1) << G_TEXTURE_IMAGE_FRAC)
 """
 
-str_segment_globl = """
+str_segment_g = """
 #define SEGMENT_CIMG            0x8038F800
 #define SEGMENT_ZIMG            0x80000400
 #define SEGMENT_MEM_START       0x8005C000
@@ -360,7 +267,7 @@ str_script_c = """
 #define _P(x)       ((uintptr_t)(x))
 """
 
-str_script_asm = """
+str_script_s = """
 #define _B(c, x, y, z)      .byte (c), (x), (y), (z)
 #define _C(c, x, y)         .byte (c), (x); .short (y)
 #define _H(x, y)            .short (x), (y)
@@ -369,7 +276,32 @@ str_script_asm = """
 #define _P(x)               .word (x)
 """
 
-str_obj_data_globl = """
+str_main_g = """
+#define SCREEN_WD   320
+#define SCREEN_HT   240
+#define BORDER_HT   8
+"""
+
+str_app_g = """
+#define FIFO_SIZE 0x1F000
+"""
+
+str_mem_g = """
+#define MEM_ALLOC_L 0
+#define MEM_ALLOC_R 1
+"""
+
+str_mem_c = """
+#define malloc(size)            heap_alloc(mem_heap, size)
+#define free(addr)              heap_free(mem_heap, addr)
+"""
+
+str_mem_s = """
+#define TABLE()     .word (table_end-table_start)/8, 0
+#define FILE(file)  .word file, file##_end-file
+"""
+
+str_obj_data_g = """
 #define P_OBJ_END               (31+(-1))
 #define P_OBJ_COIN              0
 #define P_OBJ_1                 1
@@ -638,7 +570,12 @@ typedef s16 OBJ_DATA;
     (OBJ_DATA)((31+P_OBJ_##obj) | (ry) << 9), px, py, pz, arg
 """
 
-str_s_script_globl = """
+str_math_c = """
+#define sin(x)  math_sin[(u16)(x) >> 4]
+#define cos(x)  math_cos[(u16)(x) >> 4]
+"""
+
+str_s_script_g = """
 #define S_NULL                  0
 
 #define S_MARIO                 1
@@ -1241,7 +1178,7 @@ str_s_script_c = """
     _C(0x07, 1, flag)
 #define s_clrflag(flag)                         \\
     _C(0x07, 2, flag)
-#define s_world(x, y, w, h, n)                  \\
+#define s_scene(x, y, w, h, n)                  \\
     _C(0x08, 0, n),                             \\
     _H(x, y),                                   \\
     _H(w, h)
@@ -1427,7 +1364,7 @@ extern void *s_file_select_main(int, struct shape *, void *);
 extern void *s_star_select_main(int, struct shape *, void *);
 """
 
-str_p_script_globl = """
+str_p_script_g = """
 #define P_CMP_AND               0
 #define P_CMP_NAND              1
 #define P_CMP_EQ                2
@@ -1449,23 +1386,23 @@ str_p_script_globl = """
 #define P_VAR_COURSE            1
 #define P_VAR_LEVEL             2
 #define P_VAR_STAGE             3
-#define P_VAR_WORLD             4
+#define P_VAR_SCENE             4
 """
 
 str_p_script_c = """
 typedef uintptr_t P_SCRIPT;
 """
 
-str_p_script_asm = """
+str_p_script_s = """
 #define p_push_call(seg, name, script)          \\
     _C(0x00, 0x10, SEGMENT_DATA_##seg >> 24);   \\
-    _P(data_##name##_start);                    \\
-    _P(data_##name##_end);                      \\
+    _P(_##name##_dataSegmentRomStart);          \\
+    _P(_##name##_dataSegmentRomEnd);            \\
     _P(script)
 #define p_push_jump(seg, name, script)          \\
     _C(0x01, 0x10, SEGMENT_DATA_##seg >> 24);   \\
-    _P(data_##name##_start);                    \\
-    _P(data_##name##_end);                      \\
+    _P(_##name##_dataSegmentRomStart);          \\
+    _P(_##name##_dataSegmentRomEnd);            \\
     _P(script)
 #define p_pull_return()                         \\
     _C(0x02, 0x04, 0)
@@ -1519,35 +1456,35 @@ str_p_script_asm = """
     _C(0x15, 0x04, 0)
 #define p_load_code(name)                       \\
     _C(0x16, 0x10, 0);                          \\
-    _P(code_##name##_start);                    \\
-    _P(name##_start);                           \\
-    _P(name##_end)
+    _P(_##name##SegmentStart);                  \\
+    _P(_##name##SegmentRomStart);               \\
+    _P(_##name##SegmentRomEnd)
 #define p_load_data(seg, name)                  \\
     _C(0x17, 0x0C, SEGMENT_DATA_##seg >> 24);   \\
-    _P(data_##name##_start);                    \\
-    _P(data_##name##_end)
+    _P(_##name##_dataSegmentRomStart);          \\
+    _P(_##name##_dataSegmentRomEnd)
 #define p_load_szp(seg, name)                   \\
     _C(0x18, 0x0C, SEGMENT_SZP_##seg >> 24);    \\
-    _P(szp_##name##_start);                     \\
-    _P(szp_##name##_end)
+    _P(_##name##_szpSegmentRomStart);           \\
+    _P(_##name##_szpSegmentRomEnd)
 #define p_load_face(arg)                        \\
     _C(0x19, 0x04, arg)
-#define p_load_texture(seg, name)               \\
+#define p_load_txt(seg, name)                   \\
     _C(0x1A, 0x0C, SEGMENT_SZP_##seg >> 24);    \\
-    _P(szp_##name##_start);                     \\
-    _P(szp_##name##_end)
+    _P(_##name##_szpSegmentRomStart);           \\
+    _P(_##name##_szpSegmentRomEnd)
 #define p_stage_init()                          \\
     _C(0x1B, 0x04, 0)
-#define p_stage_free()                          \\
+#define p_stage_exit()                          \\
     _C(0x1C, 0x04, 0)
 #define p_stage_start()                         \\
     _C(0x1D, 0x04, 0)
 #define p_stage_end()                           \\
     _C(0x1E, 0x04, 0)
-#define p_world_start(world, script)            \\
-    _B(0x1F, 0x08, world, 0);                   \\
+#define p_scene_start(scene, script)            \\
+    _B(0x1F, 0x08, scene, 0);                   \\
     _P(script)
-#define p_world_end()                           \\
+#define p_scene_end()                           \\
     _C(0x20, 0x04, 0)
 #define p_shape_gfx(shape, gfx, layer)          \\
     _C(0x21, 0x08, S_LAYER_##layer << 12 | (shape));    \\
@@ -1580,32 +1517,32 @@ str_p_script_asm = """
     _P(script)
 #define p_mario()                               \\
     p_player(S_MARIO, 0, 0, 1, o_mario)
-#define p_link(index, stage, world, link)       \\
+#define p_link(index, stage, scene, link)       \\
     _B(0x26, 0x08, index, stage);               \\
-    _B(world, link, 0x00, 0)
-#define p_link_mid(index, stage, world, link)   \\
+    _B(scene, link, 0x00, 0)
+#define p_link_mid(index, stage, scene, link)   \\
     _B(0x26, 0x08, index, stage);               \\
-    _B(world, link, 0x80, 0)
-#define p_linkbg(index, stage, world, link)     \\
+    _B(scene, link, 0x80, 0)
+#define p_linkbg(index, stage, scene, link)     \\
     _B(0x27, 0x08, index, stage);               \\
-    _B(world, link, 0x00, 0)
-#define p_linkbg_mid(index, stage, world, link) \\
+    _B(scene, link, 0x00, 0)
+#define p_linkbg_mid(index, stage, scene, link) \\
     _B(0x27, 0x08, index, stage);               \\
-    _B(world, link, 0x80, 0)
-#define p_connect(index, world, px, py, pz)     \\
-    _B(0x28, 0x0C, index, world);               \\
+    _B(scene, link, 0x80, 0)
+#define p_connect(index, scene, px, py, pz)     \\
+    _B(0x28, 0x0C, index, scene);               \\
     _H(px, py);                                 \\
     _H(pz, 0)
-#define p_world_open(world)                     \\
-    _B(0x29, 0x04, world, 0)
-#define p_world_close(world)                    \\
-    _B(0x2A, 0x04, world, 0)
-#define p_player_open(world, ry, px, py, pz)    \\
-    _B(0x2B, 0x0C, world, 0);                   \\
+#define p_scene_open(scene)                     \\
+    _B(0x29, 0x04, scene, 0)
+#define p_scene_close(scene)                    \\
+    _B(0x2A, 0x04, scene, 0)
+#define p_player_open(scene, ry, px, py, pz)    \\
+    _B(0x2B, 0x0C, scene, 0);                   \\
     _H(ry, px);                                 \\
     _H(py, pz)
 /* 0x2C player_close */
-#define p_world_update()                        \\
+#define p_scene_update()                        \\
     _C(0x2D, 0x08, 0)
 #define p_map(map)                              \\
     _C(0x2E, 0x08, 0);                          \\
@@ -1646,7 +1583,7 @@ str_p_script_asm = """
     _B(0x3C, 0x04, 1, P_VAR_##var)
 """
 
-str_map_data_globl = """
+str_map_data_g = """
 #define M_VTX                   0x40
 #define M_FACEEND               0x41
 #define M_END                   0x42
@@ -1658,7 +1595,7 @@ str_map_data_c = """
 typedef s16 MAP_DATA;
 """
 
-str_o_script_globl = """
+str_o_script_g = """
 #define O_MEM_0x00              0x00
 #define O_MEM_FLAG              0x01
 #define O_MEM_0x02              0x02
@@ -1760,7 +1697,7 @@ typedef uintptr_t O_SCRIPT;
 typedef void O_CALLBACK(void);
 """
 
-str_o_script_asm = """
+str_o_script_s = """
 #define o_init(type)                            \\
     _C(0x00, O_TYPE_##type, 0)
 #define o_sleep(time)                           \\
@@ -1901,8 +1838,6 @@ str_o_script_asm = """
 """
 
 str_anime = """
-#include <sm64/mem.h>
-
 #define ANIME(anime, flag, waist, start, end, frame, joint)     \\
     .short flag, waist, start, end, frame, joint;               \\
     .word anime##_val - anime;                                  \\
@@ -1914,15 +1849,43 @@ str_anime = """
 """
 
 str_demo = """
-#include <sm64/mem.h>
-
 #define DEMO(stage)             .byte stage, 0, 0, 0
 
 .data
 
 """
 
-str_audio_file_asm = """
+str_audio_g_g = """
+#define BGMCTL_GE_X     0
+#define BGMCTL_GE_Y     1
+#define BGMCTL_GE_Z     2
+#define BGMCTL_LT_X     3
+#define BGMCTL_LT_Y     4
+#define BGMCTL_LT_Z     5
+#define BGMCTL_SCENE    6
+#define BGMCTL_AREA     7
+
+#define BGMCTL(x)       (1 << (15-BGMCTL_##x))
+"""
+
+str_audio_g_c = """
+#define NA_SE3_28               0x39280081
+
+#define NA_SE7_06               0x70060081
+#define NA_SE7_07               0x70070081
+#define NA_SE7_08               0x70080081
+#define NA_SE7_09               0x70090081
+#define NA_SE7_0A               0x700A0081
+#define NA_SE7_0B               0x700B0081
+#define NA_SE7_0C               0x700C0081
+
+#define Na_SE_fixed(se)         Na_SE_play(se, Na_0)
+#define Na_SE_obj(se, obj)      Na_SE_play(se, (obj)->list.s.view)
+
+typedef u32 NA_SE;
+"""
+
+str_audio_file_s = """
 #define TABLE(code)             .short code, (table_end-table_start)/8
 #define FILE(file)              .word file, file##_end-file
 """
@@ -1938,9 +1901,6 @@ str_audio_tbl = """
 """
 
 str_audio_seq = """
-#include <sm64/types.h>
-#include <sm64/audio/file.h>
-
 .data
 
 TABLE(3)
@@ -1991,13 +1951,14 @@ struct_main = [
 struct_app = [
     [0xC84C, "video", [
         (0x0000, table.sym_var("gfx",       "Gfx", "[6400]")),
-        (0xC800, table.sym_var("task",      "struct sc_task")),
+        (0xC800, table.sym_var("task",      "SC_TASK")),
     ]],
     [0x1C, "controller", [
         (0x00, table.sym_var("stick_x",     "s16")),
         (0x02, table.sym_var("stick_y",     "s16")),
-        (0x04, table.sym_var("stick",       "f32", "[2]")),
-        (0x0C, table.sym_var("stick_mag",   "f32")),
+        (0x04, table.sym_var("x",           "f32")),
+        (0x08, table.sym_var("y",           "f32")),
+        (0x0C, table.sym_var("d",           "f32")),
         (0x10, table.sym_var("held",        "u16")),
         (0x12, table.sym_var("down",        "u16")),
         (0x14, table.sym_var("status",      "OSContStatus *")),
@@ -2017,7 +1978,7 @@ struct_audio = [
 struct_game = [
     [0x10, "staff", [
         (0x00, table.sym_var("stage",   "u8")),
-        (0x01, table.sym_var("world",   "u8")),
+        (0x01, table.sym_var("scene",   "u8")),
         (0x02, table.sym_var("flag",    "u8")),
         (0x03, table.sym_var("ry",      "u8")),
         (0x04, table.sym_var("pos",     "vecs")),
@@ -2083,7 +2044,7 @@ struct_player = [
         (0x84, table.sym_var("obj_ride",    "struct object *")),
         (0x88, table.sym_var("obj",         "struct object *")),
         (0x8C, table.sym_var("_8C",         "void *")),
-        (0x90, table.sym_var("world",       "struct world *")),
+        (0x90, table.sym_var("scene",       "struct scene *")),
         (0x94, table.sym_var("camera",      "struct pl_camera *")),
         (0x98, table.sym_var("shape",       "struct pl_shape *")),
         (0x9C, table.sym_var("cont",        "struct controller *")),
@@ -2200,11 +2161,14 @@ struct_mem = [
     ]],
 ]
 
-struct_world = [
+struct_save = [
+]
+
+struct_scene = [
     [0x20, "spawn", [
         (0x00, table.sym_var("pos",     "vecs")),
         (0x06, table.sym_var("rot",     "vecs")),
-        (0x0C, table.sym_var("world",   "s8")),
+        (0x0C, table.sym_var("scene",   "s8")),
         (0x0D, table.sym_var("_0D",     "s8")),
         (0x0E, table.sym_var("_0E",     "u16")),
         (0x10, table.sym_var("_10",     "u32")),
@@ -2212,11 +2176,11 @@ struct_world = [
         (0x18, table.sym_var("obj",     "struct object *")),
         (0x1C, table.sym_var("next",    "struct spawn *")),
     ]],
-    [0x3C, "world", [
+    [0x3C, "scene", [
         (0x00, table.sym_var("index",       "s8")),
         (0x01, table.sym_var("_01",         "s8")),
         (0x02, table.sym_var("env",         "u16")),
-        (0x04, table.sym_var("s",           "struct shape_world *")),
+        (0x04, table.sym_var("s",           "struct shape_scene *")),
         (0x08, table.sym_var("map",         "const MAP_DATA *")),
         (0x0C, table.sym_var("area",        "const AREA_DATA *")),
         (0x10, table.sym_var("obj",         "const OBJ_DATA *")),
@@ -2232,9 +2196,6 @@ struct_world = [
         (0x38, table.sym_var("bgm_index",   "u16")),
         (0x3A, table.sym_var("pad",         "u16")),
     ]],
-]
-
-struct_save = [
 ]
 
 struct_shape_draw = [
@@ -2257,7 +2218,7 @@ struct_slidec = [
 struct_camera = [
     [0x01, "camera", [
         (0x00, table.sym_var("mode",    "u8")),
-        # todo: finish
+        # ...
     ]],
     [0x18, "campos", [
         (0x00, table.sym_var("code",    "s16")),
@@ -2266,9 +2227,9 @@ struct_camera = [
         (0x14, table.sym_var("dist",    "f32")),
     ]],
     [0x16, "camctl", [
-        (0x00, table.sym_var("world",   "s8")),
+        (0x00, table.sym_var("scene",   "s8")),
         (0x04, table.sym_var_fnc("callback", arg=(
-            "struct camera *",
+            "struct camera *cam",
         ))),
         (0x08, table.sym_var("pos",     "vecs")),
         (0x0E, table.sym_var("size",    "vecs")),
@@ -2281,7 +2242,7 @@ struct_camera = [
     ]],
     [0x06, "camdemo", [
         (0x00, table.sym_var_fnc("callback", arg=(
-            "struct camera *",
+            "struct camera *cam",
         ))),
         (0x04, table.sym_var("time",    "s16")),
     ]],
@@ -2292,12 +2253,12 @@ struct_course = [
 
 struct_object = [
     [0x68, "obj_list", [
-        (0x000, table.sym_var("s",      "struct shape_object")),
+        (0x000, table.sym_var("s",      "SHAPE_OBJECT")),
         (0x060, table.sym_var("next",   "struct obj_list *")),
         (0x064, table.sym_var("prev",   "struct obj_list *")),
     ]],
     [0x260, "object", [
-        (0x000, table.sym_var("list",   "struct obj_list")),
+        (0x000, table.sym_var("list",   "OBJ_LIST")),
         (0x068, table.sym_var("parent", "struct object *")),
         (0x06C, table.sym_var("child",  "struct object *")),
         (0x070, table.sym_var("collision",  "u32")),
@@ -2457,7 +2418,7 @@ struct_obj_sfx = [
         (0x00, table.sym_var("flag",    "s16")),
         (0x02, table.sym_var("l",       "s8")),
         (0x03, table.sym_var("r",       "s8")),
-        (0x04, table.sym_var("sfx",     "u32")),
+        (0x04, table.sym_var("se",      "NA_SE")),
     ]],
 ]
 
@@ -2530,9 +2491,25 @@ struct_obj_shape = [
 ]
 
 struct_ripple = [
+    [0x78, "ripple", [
+        (0x00, table.sym_var("_00", "s16")),
+        (0x02, table.sym_var("_02", "s8")),
+        (0x03, table.sym_var("_03", "s8")),
+        (0x04, table.sym_var("_04", "s8")),
+        (0x05, table.sym_var("_05", "s8")),
+        (0x06, table.sym_var("_06", "s8")),
+        (0x07, table.sym_var("_07", "s8")),
+        # ...
+    ]],
 ]
 
-struct_print = [
+struct_dprint = [
+    [0x3C, "dprint", [
+        (0x00, table.sym_var("x",   "s32")),
+        (0x04, table.sym_var("y",   "s32")),
+        (0x08, table.sym_var("len", "s16")),
+        (0x0A, table.sym_var("str", "char", "[50]")),
+    ]],
 ]
 
 struct_message = [
@@ -2596,7 +2573,7 @@ struct_object_c = [
     ]],
     [0x0B, "object_c_1", [
         (0x00, table.sym_var("scale",   "f32")),
-        (0x04, table.sym_var("sfx",     "u32")),
+        (0x04, table.sym_var("se",      "NA_SE")),
         (0x08, table.sym_var("dist",    "s16")),
         (0x0A, table.sym_var("damage",  "s8")),
     ]],
@@ -2658,7 +2635,7 @@ struct_shape = [
         (0x10, table.sym_var("child",   "struct shape *")),
     ]],
     [0x1C, "shape_callback", [
-        (0x00, table.sym_var("s",       "struct shape")),
+        (0x00, table.sym_var("s",       "SHAPE")),
         (0x14, table.sym_var_fnc("callback", val="void *", arg=(
             "int mode",
             "struct shape *shape",
@@ -2667,7 +2644,7 @@ struct_shape = [
         (0x18, table.sym_var("arg", "int")),
     ]],
     [0x3C, "shape_camera", [
-        (0x00, table.sym_var("s",       "struct shape_callback")),
+        (0x00, table.sym_var("s",       "SHAPE_CALLBACK")),
         (0x1C, table.sym_var("eye",     "vecf")),
         (0x28, table.sym_var("look",    "vecf")),
         (0x34, table.sym_var("mf",      "mtxf *")),
@@ -2675,26 +2652,26 @@ struct_shape = [
         (0x3A, table.sym_var("rz_p",    "s16")),
     ]],
     [0x18, "shape_gfx", [
-        (0x00, table.sym_var("s",   "struct shape")),
+        (0x00, table.sym_var("s",   "SHAPE")),
         (0x14, table.sym_var("gfx", "const Gfx *")),
     ]],
     [0x1E, "shape_billboard", [
-        (0x00, table.sym_var("s",   "struct shape_gfx")),
+        (0x00, table.sym_var("s",   "SHAPE_GFX")),
         (0x18, table.sym_var("pos", "vecs")),
     ]],
     [0x1C, "shape_scale", [
-        (0x00, table.sym_var("s",       "struct shape_gfx")),
+        (0x00, table.sym_var("s",       "SHAPE_GFX")),
         (0x18, table.sym_var("scale",   "f32")),
     ]],
     [0x60, "shape_object", [
-        (0x00, table.sym_var("s",           "struct shape")),
+        (0x00, table.sym_var("s",           "SHAPE")),
         (0x14, table.sym_var("list",        "struct shape *")),
-        (0x18, table.sym_var("world",       "s8")),
+        (0x18, table.sym_var("scene",       "s8")),
         (0x19, table.sym_var("shape",       "s8")),
         (0x1A, table.sym_var("rot",         "vecs")),
         (0x20, table.sym_var("pos",         "vecf")),
         (0x2C, table.sym_var("scale",       "vecf")),
-        (0x38, table.sym_var("skeleton",    "struct skeleton")),
+        (0x38, table.sym_var("skeleton",    "SKELETON")),
         (0x4C, table.sym_var("_4C",         "void *")),
         (0x50, table.sym_var("mf",          "mtxf *")),
         (0x54, table.sym_var("view",        "vecf")),
@@ -2778,7 +2755,7 @@ struct_audio_g = [
 ]
 
 struct_audio_data = [
-    [0x1C, "audio_cfg", [
+    [0x1C, "Na_cfg", [
         (0x00, table.sym_var("freq",    "u32")),
         (0x04, table.sym_var("voice",   "u8")),
         (0x05, table.sym_var("e_filt",  "u8")),
