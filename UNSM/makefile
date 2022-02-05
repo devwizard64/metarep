@@ -154,7 +154,7 @@ $(BUILD)/app.z64: $(BUILD)/app.elf
 	$(EXE)/mask $@ NSM$(VERSION) "$(LABEL)"
 
 $(BUILD)/app.elf: $(BUILD)/make/main.ld $(OBJ)
-	$(LD) --accept-unknown-input-arch -Map $(@:.elf=.map) -o $@ -T $<
+	$(LD) -Map $(@:.elf=.map) -o $@ -T $<
 
 include $(addsuffix .d,$(basename $(OBJ) $(SRC_OBJ)))
 
