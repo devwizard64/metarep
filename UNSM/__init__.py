@@ -261,7 +261,8 @@ def str_include(lst):
 def s_include(lst): return [main.s_str, str_include(lst)]
 
 str_code = "\n.set noreorder\n.set noat\n"
-str_code_d = str_code + ".set gp = 64\n"
+str_code_g = str_code + ".set gp=64\n"
+str_code_f = str_code + ".set fp=32\n"
 
 str_data    = "\n.data\n\n"
 str_rdata   = "\n.rdata\n\n"
@@ -1055,7 +1056,7 @@ ultra_src = [
     s_code(0x80323A60, 0x80323CB8, "contreaddata",          ["ultra64"], str_code,   False),
     s_code(0x80323CC0, 0x80324080, "controller",            ["ultra64"], str_code,   False),
     s_code(0x80324080, 0x803240EC, "conteepprobe",          ["ultra64"], str_code,   False),
-    s_code(0x803240F0, 0x803243B0, "ll",                    ["ultra64"], str_code_d, False),
+    s_code(0x803240F0, 0x803243B0, "ll",                    ["ultra64"], str_code_g, False),
     s_code(0x803243B0, 0x8032445C, "invaldcache",           ["ultra64"], str_code,   False),
     s_code(0x80324460, 0x80324564, "pidma",                 ["ultra64"], str_code,   False),
     s_code(0x80324570, 0x8032460C, "bzero",                 ["ultra64"], str_code,   False),
@@ -1066,7 +1067,7 @@ ultra_src = [
     s_code(0x80324C20, 0x80324DDC, "ortho",                 ["ultra64"], str_code,   False),
     s_code(0x80324DE0, 0x80325068, "perspective",           ["ultra64"], str_code,   False),
     s_code(0x80325070, 0x803250F4, "gettime",               ["ultra64"], str_code,   False),
-    s_code(0x80325100, 0x80325308, "llcvt",                 ["ultra64"], str_code_d, False),
+    s_code(0x80325100, 0x80325308, "llcvt",                 ["ultra64"], str_code_g, False),
     s_code(0x80325310, 0x80325478, "cosf",                  ["ultra64"], str_code,   False),
     s_code(0x80325480, 0x80325640, "sinf",                  ["ultra64"], str_code,   False),
     s_code(0x80325640, 0x803256DC, "translate",             ["ultra64"], str_code,   False),
@@ -1083,7 +1084,7 @@ ultra_src = [
     s_code(0x80327490, 0x803274D0, "thread",                ["ultra64"], str_code,   False),
     s_code(0x803274D0, 0x8032750C, "interrupt",             ["ultra64"], str_code,   False),
     s_code(0x80327510, 0x80327634, "vi",                    ["ultra64"], str_code,   False),
-    s_code(0x80327640, 0x80327EB0, "exceptasm",             ["ultra64"], str_code_d, False),
+    s_code(0x80327640, 0x80327EB0, "exceptasm",             ["ultra64"], str_code_g, False),
     s_code(0x80327EB0, 0x80327F2C, "virtualtophysical",     ["ultra64"], str_code,   False),
     s_code(0x80327F30, 0x80327F3C, "spsetstat",             ["ultra64"], str_code,   False),
     s_code(0x80327F40, 0x80327F74, "spsetpc",               ["ultra64"], str_code,   False),
@@ -1427,10 +1428,10 @@ include_main = [
     s_header_code(0x80255080, 0x80256DFC, 0x8032DAF0, 0x8032DB28, 0x8033B290, 0x8033B294, "pl_physics", ["sm64/types", "sm64/player", "sm64/map"], header.struct_pl_physics),
     s_header_code(0x80256E00, 0x8025DD68, 0x8032DB30, 0x8032DC50, 0x8033B2A0, 0x8033B2C0, "pl_demo", ["sm64/types", "sm64/game", "sm64/player", "sm64/object", "sm64/math"], header.struct_pl_demo),
     s_header_code(0x8025DD70, 0x802608AC, 0x8032DC50, 0x8032DC50,          0,          0, "pl_hang", ["sm64/types", "sm64/player"], header.struct_pl_hang),
-    s_header_code(0x802608B0, 0x80263E5C, 0x8032DC50, 0x8032DC50,          0,          0, "pl_stop", ["sm64/types", "sm64/player"], header.struct_pl_stop),
-    s_header_code(0x80263E60, 0x80269F38, 0x8032DC50, 0x8032DD28, 0x8033B2C0, 0x8033B340, "pl_ground", ["sm64/types", "sm64/player"], header.struct_pl_ground),
-    s_header_code(0x80269F40, 0x80270104, 0x8032DD30, 0x8032DD30,          0,          0, "pl_air", ["sm64/types", "sm64/player"], header.struct_pl_air),
-    s_header_code(0x80270110, 0x80274EAC, 0x8032DD30, 0x8032DD40, 0x8033B340, 0x8033B348, "pl_water", ["sm64/types", "sm64/player"], header.struct_pl_water),
+    s_header_code(0x802608B0, 0x80263E5C, 0x8032DC50, 0x8032DC50,          0,          0, "pl_wait", ["sm64/types", "sm64/player"], header.struct_pl_wait),
+    s_header_code(0x80263E60, 0x80269F38, 0x8032DC50, 0x8032DD28, 0x8033B2C0, 0x8033B340, "pl_walk", ["sm64/types", "sm64/player"], header.struct_pl_walk),
+    s_header_code(0x80269F40, 0x80270104, 0x8032DD30, 0x8032DD30,          0,          0, "pl_jump", ["sm64/types", "sm64/player"], header.struct_pl_jump),
+    s_header_code(0x80270110, 0x80274EAC, 0x8032DD30, 0x8032DD40, 0x8033B340, 0x8033B348, "pl_swim", ["sm64/types", "sm64/player"], header.struct_pl_swim),
     s_header_code(0x80274EB0, 0x802761D0, 0x8032DD40, 0x8032DD48,          0,          0, "pl_grab", ["sm64/types", "sm64/player"], header.struct_pl_grab),
     s_header_code(0x802761D0, 0x80277ED4, 0x8032DD50, 0x8032DD6A, 0x8033B350, 0x8033B400, "pl_callback", ["sm64/types", "sm64/player", "sm64/shape"], header.struct_pl_callback),
     s_header_code(0x80277EE0, 0x80279158, 0x8032DD70, 0x8032DD74, 0x8033B400, 0x8033B498, "mem", ["sm64/types"], header.struct_mem, header.str_mem_g, header.str_mem_c, header.str_mem_s),
@@ -1551,10 +1552,10 @@ src_main = [
     s_code(0x80255080, 0x80256DFC, "pl_physics", ["sm64/types"]),
     s_code(0x80256E00, 0x8025DD68, "pl_demo", ["sm64/types", "sm64/hud"]),
     s_code(0x8025DD70, 0x802608AC, "pl_hang", ["sm64/types"]),
-    s_code(0x802608B0, 0x80263E5C, "pl_stop", ["sm64/types"]),
-    s_code(0x80263E60, 0x80269F38, "pl_ground", ["sm64/types"]),
-    s_code(0x80269F40, 0x80270104, "pl_air", ["sm64/types"]),
-    s_code(0x80270110, 0x80274EAC, "pl_water", ["sm64/types"]),
+    s_code(0x802608B0, 0x80263E5C, "pl_wait", ["sm64/types"]),
+    s_code(0x80263E60, 0x80269F38, "pl_walk", ["sm64/types"], str_code_f),
+    s_code(0x80269F40, 0x80270104, "pl_jump", ["sm64/types"]),
+    s_code(0x80270110, 0x80274EAC, "pl_swim", ["sm64/types"]),
     s_code(0x80274EB0, 0x802761D0, "pl_grab", ["sm64/types"]),
     s_code(0x802761D0, 0x80277ED4, "pl_callback", ["sm64/types", "sm64/pl_callback", "sm64/object", "sm64/wipe"]),
     s_code(0x80277EE0, 0x80279158, "mem", ["sm64/types", "sm64/segment", "sm64/mem"]),
@@ -1567,29 +1568,29 @@ src_main = [
     s_code(0x8027F590, 0x8029C764, "camera", ["sm64/types", "sm64/camera"]),
 
     # s_code(0x8029C770, 0x8029C780, "course", ["sm64/types"]),
-    s_code(0x8029C780, 0x8029D884, "object", ["sm64/types", "sm64/player", "sm64/object"]),
-    s_code(0x8029D890, 0x802A5618, "obj_lib", ["sm64/types", "sm64/object"]),
-    s_code(0x802A5620, 0x802C89F0, "object_a", ["sm64/types", "sm64/hud", "sm64/object", "sm64/obj_lib", "sm64/object_a"]),
+    s_code(0x8029C780, 0x8029D884, "object", ["sm64/types", "sm64/player", "sm64/object"], str_code_f),
+    s_code(0x8029D890, 0x802A5618, "obj_lib", ["sm64/types", "sm64/object"], str_code_f),
+    s_code(0x802A5620, 0x802C89F0, "object_a", ["sm64/types", "sm64/hud", "sm64/object", "sm64/obj_lib", "sm64/object_a"], str_code_f),
     s_code(0x802C89F0, 0x802C8F40, "obj_physics", ["sm64/types"]),
     s_code(0x802C8F40, 0x802C97C8, "obj_collision", ["sm64/types"]),
     s_code(0x802C97D0, 0x802CA03C, "obj_list", ["sm64/types", "sm64/object"]),
     # s_code(0x802CA040, 0x802CA370, "obj_sfx", ["sm64/types"]),
     s_code(0x802CA370, 0x802CB5B4, "obj_debug", ["sm64/types", "sm64/object"]),
 
-    s_code(0x802CB5C0, 0x802CD27C, "wipe", ["sm64/types"]),
-    s_code(0x802CD280, 0x802CF5A4, "shadow", ["sm64/types", "sm64/shadow"]),
-    s_code(0x802CF5B0, 0x802D007C, "background", ["sm64/types", "sm64/background"]),
-    s_code(0x802D0080, 0x802D2208, "scroll", ["sm64/types", "sm64/scroll"]),
-    s_code(0x802D2210, 0x802D29BC, "obj_shape", ["sm64/types", "sm64/hud"]),
-    s_code(0x802D29C0, 0x802D5E00, "ripple", ["sm64/types"]),
+    s_code(0x802CB5C0, 0x802CD27C, "wipe", ["sm64/types"], str_code_f),
+    s_code(0x802CD280, 0x802CF5A4, "shadow", ["sm64/types", "sm64/shadow"], str_code_f),
+    s_code(0x802CF5B0, 0x802D007C, "background", ["sm64/types", "sm64/background"], str_code_f),
+    s_code(0x802D0080, 0x802D2208, "scroll", ["sm64/types", "sm64/scroll"], str_code_f),
+    s_code(0x802D2210, 0x802D29BC, "obj_shape", ["sm64/types", "sm64/hud"], str_code_f),
+    s_code(0x802D29C0, 0x802D5E00, "ripple", ["sm64/types"], str_code_f),
 
     # s_code(0x802D5E00, 0x802D6F18, "dprint", ["sm64/types"]),
-    s_code(0x802D6F20, 0x802DDDEC, "message", ["sm64/types", "sm64/hud"]),
+    s_code(0x802D6F20, 0x802DDDEC, "message", ["sm64/types", "sm64/hud"], str_code_f),
     s_code(0x802DDDF0, 0x802DFD50, "weather_snow", ["sm64/types"]),
     s_code(0x802DFD50, 0x802E2094, "weather_lava", ["sm64/types"]),
     s_code(0x802E20A0, 0x802E2CF0, "obj_data", ["sm64/types", "sm64/object", "sm64/obj_data"]),
     s_code(0x802E2CF0, 0x802E3E50, "hud", ["sm64/types", "sm64/hud"]),
-    s_code(0x802E3E50, 0x802F972C, "object_b", ["sm64/types", "sm64/object", "sm64/hud"]),
+    s_code(0x802E3E50, 0x802F972C, "object_b", ["sm64/types", "sm64/object", "sm64/hud"], str_code_f),
 
     s_code(0x802F9730, 0x80314A2C, "object_c", ["sm64/types", "sm64/obj_lib", "sm64/object_c"]),
 
@@ -1773,26 +1774,26 @@ src_main = [
         [0,  4, 1, ultra.c.d_f32],
         [0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
     ]),
-    s_data(0x8032DC50, 0x8032DC50, 0x80336970, 0x80336A74, 0, 0, "pl_stop.data", ["sm64/types", "sm64/pl_stop"], [], [
+    s_data(0x8032DC50, 0x8032DC50, 0x80336970, 0x80336A74, 0, 0, "pl_wait.data", ["sm64/types", "sm64/pl_wait"], [], [
         [0,   2, 1, ultra.c.d_f32],
         [0, -63, 1, ultra.c.d_addr, ultra.A_EXTERN],
     ]),
-    s_data(0x8032DC50, 0x8032DD28, 0x80336A80, 0x80336BF4, 0x8033B2C0, 0x8033B340, "pl_ground.data", ["sm64/types", "sm64/pl_ground"], [
-        [0, 9, c.d_pl_ground],
+    s_data(0x8032DC50, 0x8032DD28, 0x80336A80, 0x80336BF4, 0x8033B2C0, 0x8033B340, "pl_walk.data", ["sm64/types", "sm64/pl_walk"], [
+        [0, 9, c.d_pl_walk],
     ], [
         [0,  29, 1, ultra.c.d_f32], [0, 1, 4, None],
         [0,   1, 1, ultra.c.d_f64],
         [0,   3, 1, ultra.c.d_f32],
         [0, -58, 1, ultra.c.d_addr, ultra.A_EXTERN],
     ]),
-    s_data(0x8032DD30, 0x8032DD30, 0x80336C00, 0x80336E0C, 0, 0, "pl_air.data", ["sm64/types", "sm64/pl_air"], [], [
+    s_data(0x8032DD30, 0x8032DD30, 0x80336C00, 0x80336E0C, 0, 0, "pl_jump.data", ["sm64/types", "sm64/pl_jump"], [], [
         [0,    7, 1, ultra.c.d_f32],
         [0,   -7, 1, ultra.c.d_addr, ultra.A_EXTERN],
         [0,    8, 1, ultra.c.d_f32],
         [0,    1, 1, ultra.c.d_f64],
         [0, -107, 1, ultra.c.d_addr, ultra.A_EXTERN],
     ]),
-    s_data(0x8032DD30, 0x8032DD40, 0x80336E10, 0x80336ECC, 0x8033B340, 0x8033B348, "pl_water.data", ["sm64/types", "sm64/pl_water"], [
+    s_data(0x8032DD30, 0x8032DD40, 0x80336E10, 0x80336ECC, 0x8033B340, 0x8033B348, "pl_swim.data", ["sm64/types", "sm64/pl_swim"], [
         [0, 2, ultra.c.d_align_s16],
         [1, 1, 4, ultra.c.d_s16],
     ], [
@@ -2451,13 +2452,13 @@ src_main = [
 ]
 
 src_main2 = [
-    s_code(0x80378800, 0x8037B21C, "math", ["sm64/types"]),
+    s_code(0x80378800, 0x8037B21C, "math", ["sm64/types"], str_code_f),
     s_code(0x8037B220, 0x8037CD60, "shape", ["sm64/types"]),
     s_code(0x8037CD60, 0x8037E19C, "s_script", ["sm64/types"]),
     s_code(0x8037E1A0, 0x80380684, "p_script", ["sm64/types", "sm64/scene"]),
     s_code(0x80380690, 0x8038248C, "map", ["sm64/types", "sm64/object"]),
-    s_code(0x80382490, 0x80383B6C, "map_data", ["sm64/types"]),
-    s_code(0x80383B70, 0x80385F88, "o_script", ["sm64/types"]),
+    s_code(0x80382490, 0x80383B6C, "map_data", ["sm64/types"], str_code_f),
+    s_code(0x80383B70, 0x80385F88, "o_script", ["sm64/types"], str_code_f),
 
     s_data(0x80385F90, 0x80385FF8, 0x8038BA90, 0x8038BAEC, 0x8038BC90, 0x8038BC9C, "math.data", ["sm64/types", "sm64/gbi_ext", "sm64/math"], [
         [0, 1, 1, c.d_matrix],
@@ -2511,8 +2512,8 @@ src_main2 = [
 src_menu = [
     s_code(0x8016F000, 0x8016F670, "title", ["sm64/types", "sm64/mem"]),
     s_code(0x8016F670, 0x80170280, "title_bg", ["sm64/types"]),
-    s_code(0x80170280, 0x801768E0, "file_select", ["sm64/types"]),
-    s_code(0x801768E0, 0x80177710, "star_select", ["sm64/types"]),
+    s_code(0x80170280, 0x801768E0, "file_select", ["sm64/types"], str_code_f),
+    s_code(0x801768E0, 0x80177710, "star_select", ["sm64/types"], str_code_f),
 
     s_data(0x801A7830, 0x801A7C3C, 0x801A7C40, 0x801A7C68, 0, 0, "title.data", ["sm64/types", "sm64/title"], [
         [0, -38, 16, "str"],
@@ -2635,7 +2636,7 @@ src_audio = [
     s_code(0x80319920, 0x8031AEDC, "d", ["sm64/types"]),
     s_code(0x8031AEE0, 0x8031B82C, "e", ["sm64/types"]),
     s_code(0x8031B830, 0x8031E4E4, "f", ["sm64/types"]),
-    s_code(0x8031E4F0, 0x80322364, "g", ["sm64/types"]),
+    s_code(0x8031E4F0, 0x80322364, "g", ["sm64/types"], str_code_f),
 
     s_data(0x80332E50, 0x80332E50, 0x80338DA0, 0x80338DB4, 0, 0, "a.data", ["sm64/types", "sm64/audio/a"], [], [
         [0, 5, 1, ultra.c.d_f32],
@@ -2760,20 +2761,20 @@ src_audio = [
 
 src_face = [
     s_code(0x80177710, 0x80177820, "main", ["sm64/types"]),
-    s_code(0x80177820, 0x801781DC, "mem", ["sm64/types"]),
+    s_code(0x80177820, 0x801781DC, "mem", ["sm64/types"], str_code_f),
     s_code(0x801781E0, 0x80178278, "sfx", ["sm64/types"]),
-    s_code(0x80178280, 0x8017BDE4, "draw", ["sm64/types"]),
-    s_code(0x8017BDF0, 0x80181718, "object", ["sm64/types"]),
-    s_code(0x80181720, 0x80181D38, "skin", ["sm64/types"]),
-    s_code(0x80181D40, 0x80183A48, "particle", ["sm64/types"]),
-    s_code(0x80183A50, 0x8018B830, "dynlist", ["sm64/types"]),
-    s_code(0x8018B830, 0x8018C2F0, "gadget", ["sm64/types"]),
-    s_code(0x8018C2F0, 0x8018E660, "stdio", ["sm64/types"]),
-    s_code(0x8018E660, 0x80192050, "joint", ["sm64/types"]),
-    s_code(0x80192050, 0x80193C70, "net", ["sm64/types"]),
-    s_code(0x80193C70, 0x801973C0, "math", ["sm64/types"]),
-    s_code(0x801973C0, 0x8019B060, "shape", ["sm64/types"]),
-    s_code(0x8019B060, 0x801A7830, "gfx", ["sm64/types"]),
+    s_code(0x80178280, 0x8017BDE4, "draw", ["sm64/types"], str_code_f),
+    s_code(0x8017BDF0, 0x80181718, "object", ["sm64/types"], str_code_f),
+    s_code(0x80181720, 0x80181D38, "skin", ["sm64/types"], str_code_f),
+    s_code(0x80181D40, 0x80183A48, "particle", ["sm64/types"], str_code_f),
+    s_code(0x80183A50, 0x8018B830, "dynlist", ["sm64/types"], str_code_f),
+    s_code(0x8018B830, 0x8018C2F0, "gadget", ["sm64/types"], str_code_f),
+    s_code(0x8018C2F0, 0x8018E660, "stdio", ["sm64/types"], str_code_f),
+    s_code(0x8018E660, 0x80192050, "joint", ["sm64/types"], str_code_f),
+    s_code(0x80192050, 0x80193C70, "net", ["sm64/types"], str_code_f),
+    s_code(0x80193C70, 0x801973C0, "math", ["sm64/types"], str_code_f),
+    s_code(0x801973C0, 0x8019B060, "shape", ["sm64/types"], str_code_f),
+    s_code(0x8019B060, 0x801A7830, "gfx", ["sm64/types"], str_code_f),
 
     s_data(0x801A81E0, 0x801A81F8, 0x801B54C0, 0x801B54FC, 0, 0, "main.data", ["sm64/types", "sm64/face/main"], [
         [0, 2, 1, ultra.c.d_s32, table.fmt_bool],
@@ -5508,10 +5509,10 @@ lst = [
                 "sm64/pl_physics",
                 "sm64/pl_demo",
                 "sm64/pl_hang",
-                "sm64/pl_stop",
-                "sm64/pl_ground",
-                "sm64/pl_air",
-                "sm64/pl_water",
+                "sm64/pl_wait",
+                "sm64/pl_walk",
+                "sm64/pl_jump",
+                "sm64/pl_swim",
                 "sm64/pl_grab",
                 "sm64/pl_callback",
                 "sm64/mem",

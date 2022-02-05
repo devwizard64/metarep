@@ -48,17 +48,17 @@ d_pl_collision = [False, d_pl_collision_prc]
 # pl_physics.h
 # pl_demo.h
 # pl_hang.h
-# pl_stop.h
+# pl_wait.h
 
-# pl_ground.h
+# pl_walk.h
 
-d_pl_ground = [
+d_pl_walk = [
     [0, -2, 1, ultra.c.d_s16],
     [0, -5, 1, ultra.c.d_u32, "0x%08X"],
 ]
 
-# pl_air.h
-# pl_water.h
+# pl_jump.h
+# pl_swim.h
 # pl_grab.h
 # pl_callback.h
 # mem.h

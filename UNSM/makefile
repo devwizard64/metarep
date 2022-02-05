@@ -13,10 +13,10 @@ MAIN_OBJ := \
 	$(BUILD)/src/pl_physics.o       $(BUILD)/src/pl_physics.data.o      \
 	$(BUILD)/src/pl_demo.o          $(BUILD)/src/pl_demo.data.o         \
 	$(BUILD)/src/pl_hang.o          $(BUILD)/src/pl_hang.data.o         \
-	$(BUILD)/src/pl_stop.o          $(BUILD)/src/pl_stop.data.o         \
-	$(BUILD)/src/pl_ground.o        $(BUILD)/src/pl_ground.data.o       \
-	$(BUILD)/src/pl_air.o           $(BUILD)/src/pl_air.data.o          \
-	$(BUILD)/src/pl_water.o         $(BUILD)/src/pl_water.data.o        \
+	$(BUILD)/src/pl_wait.o          $(BUILD)/src/pl_wait.data.o         \
+	$(BUILD)/src/pl_walk.o          $(BUILD)/src/pl_walk.data.o         \
+	$(BUILD)/src/pl_jump.o          $(BUILD)/src/pl_jump.data.o         \
+	$(BUILD)/src/pl_swim.o          $(BUILD)/src/pl_swim.data.o         \
 	$(BUILD)/src/pl_grab.o          $(BUILD)/src/pl_grab.data.o         \
 	$(BUILD)/src/pl_callback.o      $(BUILD)/src/pl_callback.data.o     \
 	$(BUILD)/src/mem.o              $(BUILD)/src/mem.data.o             \
@@ -116,21 +116,20 @@ LD      := $(CROSS)ld
 CPP     := $(CROSS)cpp
 OBJCOPY := $(CROSS)objcopy
 NM      := $(CROSS)nm
+ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -I$(ULTRA)/include -Iinclude -I. -D__$(VERSION)__ -DBUILD=$(BUILD)
 OPT     := -Os
 WFLAG   := -Wall -Wextra -Werror-implicit-function-declaration
-CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
-CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CCFLAG  += -fno-toplevel-reorder -G 0
+CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding -fno-common
+CCFLAG  += -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
-ASFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -fno-PIC -G 0
-ASFLAG  += $(FLAG) $(WFLAG) -Wno-variadic-macros
+ASFLAG  := $(ARCH) $(FLAG) $(WFLAG) -Wno-variadic-macros
 CPPFLAG := $(FLAG) -DULTRA=$(ULTRA)
 
 IDO_CC      := $(IDO53)/cc
 IDO_OPT     := -g
 IDO_WFLAG   := -fullwarn -prototypes
-IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -signed -non_shared -G 0 -Xcpluscomm
+IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
 IDO_CCFLAG  += $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
 
 OBJ := $(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk | tr "\n" " ")

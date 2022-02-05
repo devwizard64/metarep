@@ -2077,11 +2077,11 @@ struct_pl_demo = [
 struct_pl_hang = [
 ]
 
-struct_pl_stop = [
+struct_pl_wait = [
 ]
 
-struct_pl_ground = [
-    [0x18, "pl_ground", [
+struct_pl_walk = [
+    [0x18, "pl_walk", [
         (0x00, table.sym_var("time",        "s16")),
         (0x02, table.sym_var("timer_floor", "s16")),
         (0x04, table.sym_var("state_slip",  "u32")),
@@ -2092,10 +2092,10 @@ struct_pl_ground = [
     ]],
 ]
 
-struct_pl_air = [
+struct_pl_jump = [
 ]
 
-struct_pl_water = [
+struct_pl_swim = [
 ]
 
 struct_pl_grab = [
