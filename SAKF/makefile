@@ -31,8 +31,7 @@ $(BUILD)/%.sfc: make/main.ld $(OBJ)
 $(BUILD)/%.o: %.s | $(BUILD_DIR)
 	$(AS) $(ASFLAG) -o $@ $<
 
-dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
-	$(filter $(subst *,%,$2),$d))
+dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1)
 BUILD_OBJ := $(call obj,*.s)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))

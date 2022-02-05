@@ -117,15 +117,14 @@ ARMIPS  := armips
 
 CC      := $(CROSS)gcc
 AR      := $(CROSS)ar
+ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -Iinclude
 OPT     := -Os
 WFLAG   := -Wall -Wextra
-CCFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -mno-check-zero-division
-CCFLAG  += -fno-PIC -ffreestanding -fno-common -fno-zero-initialized-in-bss
-CCFLAG  += -fno-toplevel-reorder -G 0
+CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding -fno-common
+CCFLAG  += -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
-ASFLAG  := -march=vr4300 -mfix4300 -mfp32 -mno-abicalls -fno-PIC -G 0
-ASFLAG  += $(FLAG) $(OPT) $(WFLAG)
+ASFLAG  := $(ARCH) $(FLAG) $(OPT) $(WFLAG)
 
 .PHONY: default
 default: $(OBJ)

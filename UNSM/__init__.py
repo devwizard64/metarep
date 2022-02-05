@@ -263,6 +263,7 @@ def s_include(lst): return [main.s_str, str_include(lst)]
 str_code = "\n.set noreorder\n.set noat\n"
 str_code_g = str_code + ".set gp=64\n"
 str_code_f = str_code + ".set fp=32\n"
+str_code_r = str_code + ".set gp=64\n.set fp=32\n"
 
 str_data    = "\n.data\n\n"
 str_rdata   = "\n.rdata\n\n"
@@ -1065,11 +1066,11 @@ ultra_src = [
     s_code(0x803247D0, 0x8032490C, "conteeplongwrite",      ["ultra64"], str_code,   False),
     s_code(0x80324910, 0x80324C14, "bcopy",                 ["ultra64"], str_code,   False),
     s_code(0x80324C20, 0x80324DDC, "ortho",                 ["ultra64"], str_code,   False),
-    s_code(0x80324DE0, 0x80325068, "perspective",           ["ultra64"], str_code,   False),
+    s_code(0x80324DE0, 0x80325068, "perspective",           ["ultra64"], str_code_f, False),
     s_code(0x80325070, 0x803250F4, "gettime",               ["ultra64"], str_code,   False),
-    s_code(0x80325100, 0x80325308, "llcvt",                 ["ultra64"], str_code_g, False),
-    s_code(0x80325310, 0x80325478, "cosf",                  ["ultra64"], str_code,   False),
-    s_code(0x80325480, 0x80325640, "sinf",                  ["ultra64"], str_code,   False),
+    s_code(0x80325100, 0x80325308, "llcvt",                 ["ultra64"], str_code_r, False),
+    s_code(0x80325310, 0x80325478, "cosf",                  ["ultra64"], str_code_f, False),
+    s_code(0x80325480, 0x80325640, "sinf",                  ["ultra64"], str_code_f, False),
     s_code(0x80325640, 0x803256DC, "translate",             ["ultra64"], str_code,   False),
     s_code(0x803256E0, 0x803258C4, "rotate",                ["ultra64"], str_code,   False),
     s_code(0x803258D0, 0x8032596C, "scale",                 ["ultra64"], str_code,   False),
@@ -1117,7 +1118,7 @@ ultra_src = [
     s_code(0x80329750, 0x80329780, "ai",                    ["ultra64"], str_code,   False),
     s_code(0x80329780, 0x8032978C, "setcompare",            ["ultra64"], str_code,   False),
     s_code(0x80329790, 0x80329A90, "xlitob",                ["ultra64"], str_code,   False),
-    s_code(0x80329A90, 0x8032A860, "xldtob",                ["ultra64"], str_code,   False),
+    s_code(0x80329A90, 0x8032A860, "xldtob",                ["ultra64"], str_code_f, False),
     s_code(0x8032A860, 0x8032ACD4, "kdebugserver",          ["ultra64"], str_code,   False),
     s_code(0x8032ACE0, 0x8032AE04, "syncputchars",          ["ultra64"], str_code,   False),
     s_code(0x8032AE10, 0x8032AE70, "setintmask",            ["ultra64"], str_code,   False),

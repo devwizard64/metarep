@@ -63,6 +63,7 @@ int main(int argc, const char **argv)
 {
     char str[0x1000];
     FILE *f;
+    FILE *s;
     FILE *h;
     u8 *data;
     u8 *tbl;
@@ -78,24 +79,29 @@ int main(int argc, const char **argv)
     uint po;
     uint co;
     u8 buf[0x10];
-    if (argc != 5)
+    if (argc != 6)
     {
-        fprintf(stderr, "usage: %s <output> <header> <input> <sym>\n", argv[0]);
+        fprintf(
+            stderr, "usage: %s <a.s> <a.h> <a.szp> <a.bin> <a.sym>\n", argv[0]
+        );
         return EXIT_FAILURE;
     }
-    f = fopen(argv[4], "r");
-    if (f == NULL)
+    if ((f = fopen(argv[5], "r")) == NULL)
     {
-        fprintf(stderr, "error: could not read '%s'\n", argv[4]);
+        fprintf(stderr, "error: could not read '%s'\n", argv[5]);
         return EXIT_FAILURE;
     }
-    h = fopen(argv[2], "w");
-    if (h == NULL)
+    if ((s = fopen(argv[1], "w")) == NULL)
+    {
+        fprintf(stderr, "error: could not write '%s'\n", argv[1]);
+        return EXIT_FAILURE;
+    }
+    if ((h = fopen(argv[2], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[2]);
         return EXIT_FAILURE;
     }
-    i    = ~0;
+    i = ~0;
     size = 0;
     while (fgets(str, lenof(str), f) != NULL)
     {
@@ -106,16 +112,21 @@ int main(int argc, const char **argv)
         sscanf(str, "%s %c %x %x", sym, &sec, &adr, &siz);
         if (i    > adr    ) i    = adr;
         if (size < adr+siz) size = adr+siz;
-        if (sec < 'a') fprintf(h, "#define %s 0x%08X\n", sym, adr);
+        if (sec < 'a')
+        {
+            fprintf(s, ".globl %s; %s = 0x%08X\n", sym, sym, adr);
+            fprintf(h, "#define %s 0x%08X\n", sym, adr);
+        }
     }
+    fprintf(s, ".data\n.incbin \"%s\"\n", argv[3]);
     fclose(f);
+    fclose(s);
     fclose(h);
     size -= i;
     data = malloc(size);
-    f = fopen(argv[3], "rb");
-    if (f == NULL)
+    if ((f = fopen(argv[4], "rb")) == NULL)
     {
-        fprintf(stderr, "error: could not read '%s'\n", argv[3]);
+        fprintf(stderr, "error: could not read '%s'\n", argv[4]);
         return EXIT_FAILURE;
     }
     fread(data, 1, size, f);
@@ -177,10 +188,9 @@ int main(int argc, const char **argv)
     buf[0x0D] = co   >> 16;
     buf[0x0E] = co   >>  8;
     buf[0x0F] = co   >>  0;
-    f = fopen(argv[1], "wb");
-    if (f == NULL)
+    if ((f = fopen(argv[3], "wb")) == NULL)
     {
-        fprintf(stderr, "error: could not write '%s'\n", argv[1]);
+        fprintf(stderr, "error: could not write '%s'\n", argv[3]);
         return EXIT_FAILURE;
     }
     fwrite(buf, 1, sizeof(buf), f);

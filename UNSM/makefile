@@ -176,20 +176,19 @@ $(BUILD)/src/%.ld.d: | $(BUILD)/src
 include $(BUILD)/make/segment.mk
 $(BUILD)/%.szp.h: $(BUILD)/%.szp.o;
 $(BUILD)/%.szp.o: %.c make/szp.ld
-	$(CC) $(CCFLAG) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $@.o $<
-	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $@.elf $@.o
-	$(OBJCOPY) -O binary $@.elf $@.bin
-	$(NM) -f posix $@.elf > $@.sym
-	$(EXE)/slienc $@.szp $(@:.o=.h) $@.bin $@.sym
-	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@.szp.o
-	$(LD) --accept-unknown-input-arch -r -o $@ -R $@.elf $@.szp.o
+	$(CC) $(CCFLAG) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $(@:.szp.o=.o) $<
+	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.o=.elf) $(@:.szp.o=.o)
+	$(OBJCOPY) -O binary $(@:.szp.o=.elf) $(@:.szp.o=.bin)
+	$(NM) -f posix $(@:.szp.o=.elf) > $(@:.szp.o=.sym)
+	$(EXE)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $(@:.szp.o=.bin) $(@:.szp.o=.sym)
+	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
 $(BUILD)/%.szp.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.szp.o: %.bin
-	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $@.sym
-	$(EXE)/slienc $@.szp $(@:.o=.h) $< $@.sym
-	$(OBJCOPY) -O elf32-tradbigmips -I binary $@.szp $@
+	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $(@:.szp.o=.sym)
+	$(EXE)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $< $(@:.szp.o=.sym)
+	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
 $(BUILD)/%.szp.d: %.bin
 	@echo $(@:.d=.o): $< > $@
 
@@ -233,8 +232,7 @@ $(BUILD)/data/audio/seq.o: $(SEQ)
 $(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
 	cp $< $@
 
-dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) \
-	$(filter $(subst *,%,$2),$d))
+dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
 BUILD_OBJ := $(call obj,*.asm *.S *.c *.bin *.png *.ply *.obj *.txt *.seq)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
