@@ -9100,7 +9100,7 @@ sym_E0_d_main = {
     0x80333060: table.sym_var("bgmctl_data",    "BGMCTL", "[]",  flag=table.GLOBL),
     0x803330C0: table.sym_var("Na_g_803330C0",  "u8",   "[][3]",    table.GLOBL), # (stage len)
     0x80333138: table.sym_var("Na_g_80333138",  "u16",  "[]",   table.GLOBL), # (stage len)
-    0x80333188: table.sym_var("Na_seq_vol_table",   "u8",   "[]",   table.GLOBL),
+    0x80333188: table.sym_var("Na_SEQ_vol",     "u8",   "[]",   table.GLOBL),
     0x803331AC: table.sym_var("Na_g_803331AC",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x803331B0: table.sym_var("Na_g_803331B0",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x803331B4: table.sym_var("Na_g_803331B4",  "u8",   "[]",   table.GLOBL),

@@ -394,6 +394,84 @@ str_camera_data = """
 u8 _camera_bss[0x6C0];
 """
 
+str_anime = """
+#define ANIME(anime, flag, waist, start, end, frame, joint)     \\
+    .short flag, waist, start, end, frame, joint;               \\
+    .word anime##_val - anime;                                  \\
+    .word anime##_tbl - anime;                                  \\
+    .word anime##_end - anime
+
+.data
+
+"""
+
+str_demo = """
+#define DEMO(stage)             .byte stage, 0, 0, 0
+
+.data
+
+"""
+
+str_audio_g_data = """
+#define BGMCTL_GE_X     0
+#define BGMCTL_GE_Y     1
+#define BGMCTL_GE_Z     2
+#define BGMCTL_LT_X     3
+#define BGMCTL_LT_Y     4
+#define BGMCTL_LT_Z     5
+#define BGMCTL_SCENE    6
+#define BGMCTL_AREA     7
+
+#define BGMCTL(x)       (1 << (15-BGMCTL_##x))
+"""
+
+str_audio_ctl = """
+.data
+.incbin "data/audio/ctl.bin"
+"""
+
+str_audio_tbl = """
+.data
+.incbin "data/audio/tbl.bin"
+"""
+
+str_audio_seq = """
+.data
+
+TABLE(3)
+table_start:
+#define SEQ(file, ...)  FILE(file)
+#include <meta/seq.h>
+#undef SEQ
+table_end:
+
+#define SEQ(file, ...)                      \\
+    .balign 16; file:                       \\
+    .incbin ASSET(data/audio/seq/file.seq); \\
+    .balign 16; file##_end:
+#include <meta/seq.h>
+#undef SEQ
+"""
+
+str_audio_bnk = """
+.data
+
+table:
+#define SEQ(file, ...)  .short file-table
+#include <meta/seq.h>
+#undef SEQ
+
+#define SEQ(file, ...)          \\
+    file:                       \\
+    .byte file##_end-file - 1;  \\
+    .byte __VA_ARGS__;          \\
+    file##_end:
+#include <meta/seq.h>
+#undef SEQ
+"""
+
+# temporary
+
 str_audio_g = """
 .globl _Na_g_bss
 _Na_g_bss:
@@ -1512,7 +1590,7 @@ include_audio = [
     s_header_code(0x80319920, 0x8031AEDC, 0x80332E50, 0x80332E50,          0,          0, "d", ["sm64/types"], header.struct_audio_d),
     s_header_code(0x8031AEE0, 0x8031B82C, 0x80332E50, 0x80332E50,          0,          0, "e", ["sm64/types"], header.struct_audio_e),
     s_header_code(0x8031B830, 0x8031E4E4, 0x80332E50, 0x80332E50,          0,          0, "f", ["sm64/types"], header.struct_audio_f),
-    s_header_code(0x8031E4F0, 0x80322364, 0x80332E50, 0x803332A0,          0,          0, "g", ["sm64/types", "sm64/main"], header.struct_audio_g, header.str_audio_g_g, header.str_audio_g_c, ""),
+    s_header_code(0x8031E4F0, 0x80322364, 0x80332E50, 0x803332A0,          0,          0, "g", ["sm64/types", "sm64/main"], header.struct_audio_g, "", header.str_audio_g_c, ""),
     s_header_code(0x80246050, 0x80246050, 0x803332A0, 0x80335010,          0,          0, "data", ["sm64/types"], header.struct_audio_data),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80220DA0, 0x80226CBC, "bss", ["sm64/types"], header.struct_audio_bss),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x801CE000, 0x80200200, "heap", ["sm64/types"], []),
@@ -2756,7 +2834,7 @@ src_audio = [
         [0,   2, 1, ultra.c.d_f64],
         [0,   7, 1, ultra.c.d_f32],
         [0, -28, 1, ultra.c.d_addr, ultra.A_EXTERN],
-    ]),
+    ], str_audio_g_data),
     s_data(0x803332A0, 0x8033500C, 0x803397B0, 0x803397B0, 0, 0, "data", ["sm64/types", "sm64/audio/data"], [
         [0, -18, 1, c.d_Na_cfg],
         [0, -0x80//8, 8, ultra.c.d_u16, "0x%04X"],
@@ -6205,7 +6283,7 @@ lst = [
         [main.s_addr, 0-0x004EC000],
         [main.s_file, "anime.S"],
             s_include(["sm64/mem"]),
-            [main.s_str, header.str_anime],
+            [main.s_str, str_anime],
             [asm.s_anime, 0x0008DC18, "E0", "anime", (
                 stbl_anime, ctbl_anime
             )],
@@ -6213,7 +6291,7 @@ lst = [
         [main.s_addr, 0-0x00579C20],
         [main.s_file, "demo.S"],
             s_include(["sm64/mem"]),
-            [main.s_str, header.str_demo],
+            [main.s_str, str_demo],
             [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, {})],
         [main.s_write],
         [main.s_addr, 0],
@@ -6222,18 +6300,18 @@ lst = [
             [main.s_bin, 0x0057B720, 0x00593560, "E0", ["ctl.bin"]],
             [main.s_bin, 0x00593560, 0x007B0860, "E0", ["tbl.bin"]],
             [main.s_file, "ctl.S"],
-                [main.s_str, header.str_audio_ctl],
+                [main.s_str, str_audio_ctl],
             [main.s_write],
             [main.s_file, "tbl.S"],
-                [main.s_str, header.str_audio_tbl],
+                [main.s_str, str_audio_tbl],
             [main.s_write],
             [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", seq_table],
             [main.s_file, "seq.S"],
                 s_include(["sm64/types", "sm64/audio/file"]),
-                [main.s_str, header.str_audio_seq],
+                [main.s_str, str_audio_seq],
             [main.s_write],
             [main.s_file, "bnk.S"],
-                [main.s_str, header.str_audio_bnk],
+                [main.s_str, str_audio_bnk],
             [main.s_write],
         [main.s_pop],
     [main.s_pop],

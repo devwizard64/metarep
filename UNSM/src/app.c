@@ -14,9 +14,11 @@
 #include <sm64/cimg.h>
 #include <sm64/audio/g.h>
 
-CONTROLLER   controller_table[3];
-OSContStatus contstatus_table[4];
-OSContPad    contpad_table[4];
+#define CONTROLLER_LEN  2
+
+CONTROLLER   controller_table[CONTROLLER_LEN+1];
+OSContStatus contstatus_table[MAXCONTROLLERS];
+OSContPad    contpad_table[MAXCONTROLLERS];
 
 OSMesgQueue mq_video_vi;
 OSMesgQueue mq_video_dp;
@@ -238,7 +240,7 @@ static void video_init(void)
     video_gfx = video->gfx;
     video_mem = (u8 *)video->gfx + sizeof(video->gfx);
     video_draw_start();
-    video_clear(0);
+    video_clear(0x00000000);
     video_draw_end();
     sc_queue_gfxtask(&video->task);
     video_dp++;
@@ -319,7 +321,7 @@ static void input_update_stick(CONTROLLER *cont)
     {
         cont->x *= 64/cont->d;
         cont->y *= 64/cont->d;
-        cont->d = 64;
+        cont->d  = 64;
     }
 }
 
@@ -362,10 +364,10 @@ static void input_update(void)
         osContGetReadData(contpad_table);
     }
     demo_update();
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < CONTROLLER_LEN; i++)
     {
         CONTROLLER *cont = &controller_table[i];
-        if (cont->pad != 0)
+        if (cont->pad != NULL)
         {
             cont->stick_x = cont->pad->stick_x;
             cont->stick_y = cont->pad->stick_y;
@@ -401,7 +403,7 @@ static void input_init(void)
     controller_table[0].pad    = &contpad_table[0];
     osContInit(&mq_si, &input_flag, contstatus_table);
     eeprom_status = osEepromProbe(&mq_si);
-    for (c = 0, i = 0; i < 4 && c < 2; i++)
+    for (c = 0, i = 0; i < MAXCONTROLLERS && c < CONTROLLER_LEN; i++)
     {
         if (input_flag & (1 << i))
         {
@@ -431,7 +433,7 @@ static void app_init(void)
     anime_mario_buffer = mem_alloc(0x4000, MEM_ALLOC_L);
     segment_set(SEGMENT_ANIME_MARIO >> 24, anime_mario_buffer);
     file_init(&file_anime_mario, _animeSegmentRomStart, anime_mario_buffer);
-    demo_buffer = mem_alloc(0x800, 0);
+    demo_buffer = mem_alloc(0x800, MEM_ALLOC_L);
     segment_set(SEGMENT_DEMO >> 24, demo_buffer);
     file_init(&file_demo, _demoSegmentRomStart, demo_buffer);
     mem_load_data(

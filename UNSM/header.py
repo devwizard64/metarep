@@ -1837,37 +1837,6 @@ str_o_script_s = """
     _P(splash)
 """
 
-str_anime = """
-#define ANIME(anime, flag, waist, start, end, frame, joint)     \\
-    .short flag, waist, start, end, frame, joint;               \\
-    .word anime##_val - anime;                                  \\
-    .word anime##_tbl - anime;                                  \\
-    .word anime##_end - anime
-
-.data
-
-"""
-
-str_demo = """
-#define DEMO(stage)             .byte stage, 0, 0, 0
-
-.data
-
-"""
-
-str_audio_g_g = """
-#define BGMCTL_GE_X     0
-#define BGMCTL_GE_Y     1
-#define BGMCTL_GE_Z     2
-#define BGMCTL_LT_X     3
-#define BGMCTL_LT_Y     4
-#define BGMCTL_LT_Z     5
-#define BGMCTL_SCENE    6
-#define BGMCTL_AREA     7
-
-#define BGMCTL(x)       (1 << (15-BGMCTL_##x))
-"""
-
 str_audio_g_c = """
 #define NA_SE3_28               0x39280081
 
@@ -1888,51 +1857,6 @@ typedef u32 NA_SE;
 str_audio_file_s = """
 #define TABLE(code)             .short code, (table_end-table_start)/8
 #define FILE(file)              .word file, file##_end-file
-"""
-
-str_audio_ctl = """
-.data
-.incbin "data/audio/ctl.bin"
-"""
-
-str_audio_tbl = """
-.data
-.incbin "data/audio/tbl.bin"
-"""
-
-str_audio_seq = """
-.data
-
-TABLE(3)
-table_start:
-#define SEQ(file, ...)  FILE(file)
-#include <meta/seq.h>
-#undef SEQ
-table_end:
-
-#define SEQ(file, ...)                      \\
-    .balign 16; file:                       \\
-    .incbin ASSET(data/audio/seq/file.seq); \\
-    .balign 16; file##_end:
-#include <meta/seq.h>
-#undef SEQ
-"""
-
-str_audio_bnk = """
-.data
-
-table:
-#define SEQ(file, ...)  .short file-table
-#include <meta/seq.h>
-#undef SEQ
-
-#define SEQ(file, ...)          \\
-    file:                       \\
-    .byte file##_end-file - 1;  \\
-    .byte __VA_ARGS__;          \\
-    file##_end:
-#include <meta/seq.h>
-#undef SEQ
 """
 
 struct_main = [
