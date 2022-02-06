@@ -1,6 +1,6 @@
-#define TEXT(x) x(.text*); . = ALIGN(0x10);
-#define DATA(x) x(.data*); . = ALIGN(0x10); x(.rodata*); . = ALIGN(0x10);
-#define BSS(x)  x(.bss*);  . = ALIGN(0x10);
+#define TEXT(x) x(.text*); . = ALIGN(16);
+#define DATA(x) x(.data*); . = ALIGN(16); x(.rodata*); . = ALIGN(16);
+#define BSS(x)  x(.bss*);  . = ALIGN(16);
 #define SECTION(addr, name, s_text, s_data, s_bss)                      \
     _##name##SegmentRomStart  = __dev;                                  \
     _##name##SegmentStart     = ADDR(.name.text);                       \

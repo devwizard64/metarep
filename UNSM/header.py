@@ -1911,9 +1911,9 @@ table_start:
 table_end:
 
 #define SEQ(file, ...)                      \\
-    .balign 0x10; file:                     \\
+    .balign 16; file:                       \\
     .incbin ASSET(data/audio/seq/file.seq); \\
-    .balign 0x10; file##_end:
+    .balign 16; file##_end:
 #include <meta/seq.h>
 #undef SEQ
 """
