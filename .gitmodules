@@ -1,4 +1,4 @@
-[submodule "UNSM/exe/lodepng"]
+[submodule "UNSM/tools/lodepng"]
 	path = UNSM/tools/lodepng
 	url = https://github.com/lvandeve/lodepng
 [submodule "UNSM/ido53"]
