@@ -6,7 +6,7 @@ import ultra
 
 import UNSM.asm
 import UNSM.c
-import UNSM.exe.lang
+import UNSM.tools.lang
 import UNSM.table
 import UNSM.header
 
@@ -208,46 +208,8 @@ msg_course = [
     "COURSE_VCUTM",
     "COURSE_WMOTR",
     "COURSE_SA",
-    "COURSE_END",
+    "COURSE_ENDING",
     None,
-]
-
-seq_table = [
-    "sfx",
-    "star_catch",
-    "title",
-    "field",
-    "castle",
-    "water",
-    "fire",
-    "arena",
-    "snow",
-    "slider",
-    "ghost",
-    "lullaby",
-    "dungeon",
-    "star_select",
-    "wing",
-    "metal",
-    "msg_bowser",
-    "bowser",
-    "hi_score",
-    "merry_go_round",
-    "fanfare",
-    "star",
-    "battle",
-    "arena_clear",
-    "endless_staircase",
-    "final",
-    "staff",
-    "solution",
-    "msg_toad",
-    "msg_peach",
-    "intro",
-    "final_clear",
-    "ending",
-    "file_select",
-    "msg_lakitu",
 ]
 
 def str_include(lst):
@@ -266,7 +228,8 @@ str_align   = ".align 4\n"
 str_data    = ".data\n"
 str_rdata   = ".rdata\n"
 str_bss     = ".bss\n"
-str_script  = "\n#define __SCRIPT__\n\n"
+str_script  = "#define __SCRIPT__\n"
+str_msg     = "#include ASSET(data/main/en_us.inc.h)\n"
 str_texture = "#include ASSET(data/texture/%s.szp.h)\n\n"
 
 str_ucode = """
@@ -700,7 +663,7 @@ def s_gfx(start, end, a, name, lst):
         [main.s_addr, 0],
     ]]
 
-def s_shapebin(start, end, size, ssize, b, name, shape):
+def s_shapebin(start, end, size, ssize, b, name, shape, s=""):
     return [main.s_call, [
         [main.s_dir, name],
             s_szpbin(start, end, size, "gfx"),
@@ -710,14 +673,18 @@ def s_shapebin(start, end, size, ssize, b, name, shape):
                     "sm64/types",
                     "sm64/s_script",
                 ]),
+                [main.s_str, "\n"],
+                [main.s_str, s],
+                [main.s_str, "\n"],
                 [main.s_str, str_script],
+                [main.s_str, "\n"],
                 [ultra.c.s_data, b << 24, (b << 24) + ssize, "E0", shape],
             [main.s_write],
             [main.s_addr, 0],
         [main.s_pop],
     ]]
 
-def s_shape(start, end, a, b, name, gfx, shape):
+def s_shape(start, end, a, b, name, gfx, shape, s=""):
     return [main.s_call, [
         [main.s_dir, name],
             [s_szp, start, end, "E0"],
@@ -739,14 +706,18 @@ def s_shape(start, end, a, b, name, gfx, shape):
                     "sm64/types",
                     "sm64/s_script",
                 ]),
+                [main.s_str, "\n"],
+                [main.s_str, s],
+                [main.s_str, "\n"],
                 [main.s_str, str_script],
+                [main.s_str, "\n"],
                 [main.s_call, shape],
             [main.s_write],
             [main.s_addr, 0],
         [main.s_pop],
     ]]
 
-def s_script(start, end, addr, size):
+def s_script(start, end, addr, size, p="", s=""):
     p_start = addr
     p_end   = addr + size
     s_start = (p_end+0x0F) & ~0x0F
@@ -759,6 +730,8 @@ def s_script(start, end, addr, size):
                 "sm64/p_script",
             ]),
             [main.s_str, "\n"],
+            [main.s_str, p],
+            [main.s_str, "\n"],
             [main.s_str, str_data],
             [main.s_str, "\n"],
             [asm.s_script, p_start, p_end, "E0", 0],
@@ -768,7 +741,11 @@ def s_script(start, end, addr, size):
                 "sm64/types",
                 "sm64/s_script",
             ]),
+            [main.s_str, "\n"],
+            [main.s_str, s],
+            [main.s_str, "\n"],
             [main.s_str, str_script],
+            [main.s_str, "\n"],
             [ultra.c.s_data, s_start, s_end, "E0", [
                 [0, 1, 1, c.d_s_script, s_end],
             ]],
@@ -783,15 +760,15 @@ def s_shape_p(start, end, name):
         s_writepop(),
     ]]
 
-def s_stagebin(a, b, c, size, s, name):
+def s_stagebin(a, b, c, size, ssize, name, p="", s=""):
     return [main.s_call, [
         [main.s_dir, name],
             s_szpbin(a, b, size, "gfx"),
-            s_script(b, c, 0x0E000000, s),
+            s_script(b, c, 0x0E000000, ssize, p, s),
         [main.s_pop],
     ]]
 
-def s_stage(start, end, size, name, gfx, shape):
+def s_stage(start, end, size, name, gfx, shape, p="", s=""):
     return [main.s_call, [
         [main.s_dir, name],
             [s_szp, start, end, "E0"],
@@ -814,6 +791,8 @@ def s_stage(start, end, size, name, gfx, shape):
                     "sm64/p_script",
                 ]),
                 [main.s_str, "\n"],
+                [main.s_str, p],
+                [main.s_str, "\n"],
                 [main.s_str, str_data],
                 [main.s_str, "\n"],
                 [asm.s_script, 0x0E000000, 0x0E000000+size, "E0", 0],
@@ -823,7 +802,11 @@ def s_stage(start, end, size, name, gfx, shape):
                     "sm64/types",
                     "sm64/s_script",
                 ]),
+                [main.s_str, "\n"],
+                [main.s_str, s],
+                [main.s_str, "\n"],
                 [main.s_str, str_script],
+                [main.s_str, "\n"],
                 [main.s_call, shape],
             [main.s_write],
             [main.s_addr, 0],
@@ -1101,6 +1084,9 @@ stbl_demo = [
     "hmc",
     "pss",
 ]
+
+ctbl_demo = {
+}
 
 ultra_src = [
     [main.s_file, "internal.h"],
@@ -1521,8 +1507,8 @@ include_main = [
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x8038F800, 0x80400000, "cimg", ["sm64/types", "sm64/main"], []),
     s_header_code(0x80246050, 0x80246E68, 0x8032D560, 0x8032D5C4, 0x8033A580, 0x8033AF90, "main", ["sm64/types"], header.struct_main, header.str_main_g, "", ""),
     s_header_code(0x80246E70, 0x80248C3C, 0x8032D5D0, 0x8032D5FC, 0x8033AF90, 0x8033B09C, "app", ["sm64/types", "sm64/main", "sm64/mem"], header.struct_app, header.str_app_g, "", ""),
-    s_header_code(0x80248C40, 0x802495DC, 0x8032D600, 0x8032D6C1, 0x8033B0A0, 0x8033B170, "audio", ["sm64/types", "sm64/main"], header.struct_audio),
-    s_header_code(0x802495E0, 0x8024BFE4, 0x8032D6D0, 0x8032D948, 0x8033B170, 0x8033B26F, "game", ["sm64/types", "sm64/player", "sm64/hud"], header.struct_game),
+    s_header_code(0x80248C40, 0x802495DC, 0x8032D600, 0x8032D6C1, 0x8033B0A0, 0x8033B170, "audio", ["sm64/types", "sm64/main", "sm64/audio/g"], header.struct_audio),
+    s_header_code(0x802495E0, 0x8024BFE4, 0x8032D6D0, 0x8032D948, 0x8033B170, 0x8033B26F, "game", ["sm64/types", "sm64/player", "sm64/hud"], header.struct_game, header.str_game_g, "", ""),
     s_header_code(0x8024BFF0, 0x8025093C, 0x8032D950, 0x8032DA9C, 0x8033B270, 0x8033B274, "pl_collision", ["sm64/types", "sm64/player"], header.struct_pl_collision),
     s_header_code(0x80250940, 0x8025507C, 0x8032DAA0, 0x8032DAE8, 0x8033B280, 0x8033B284, "player", ["sm64/types"], header.struct_player),
     s_header_code(0x80255080, 0x80256DFC, 0x8032DAF0, 0x8032DB28, 0x8033B290, 0x8033B294, "pl_physics", ["sm64/types", "sm64/player", "sm64/map"], header.struct_pl_physics),
@@ -1570,7 +1556,7 @@ include_main2 = [
     s_header_code(0x80378800, 0x8037B21C, 0x80385F90, 0x8038B802, 0x8038BC90, 0x8038BC9C, "math", ["sm64/types"], header.struct_math, "", header.str_math_c, ""),
     s_header_code(0x8037B220, 0x8037CD60, 0x8038B810, 0x8038B810,          0,          0, "shape", ["sm64/types"], header.struct_shape),
     s_header_code(0x8037CD60, 0x8037E19C, 0x8038B810, 0x8038B894, 0x8038BCA0, 0x8038BD9C, "s_script", ["sm64/types", "sm64/script", "sm64/mem", "sm64/shape"], header.struct_s_script, header.str_s_script_g, header.str_s_script_c, ""),
-    s_header_code(0x8037E1A0, 0x80380684, 0x8038B8A0, 0x8038B9AC, 0x8038BDA0, 0x8038BE2C, "p_script", ["sm64/types", "sm64/segment", "sm64/script", "sm64/mem", "sm64/s_script"], header.struct_p_script, header.str_p_script_g, header.str_p_script_c, header.str_p_script_s),
+    s_header_code(0x8037E1A0, 0x80380684, 0x8038B8A0, 0x8038B9AC, 0x8038BDA0, 0x8038BE2C, "p_script", ["sm64/types", "sm64/segment", "sm64/script", "sm64/game", "sm64/mem", "sm64/s_script", "sm64/audio/g"], header.struct_p_script, header.str_p_script_g, header.str_p_script_c, header.str_p_script_s),
     s_header_code(0x80380690, 0x8038248C, 0x8038B9B0, 0x8038B9B0, 0x8038BE30, 0x8038BE90, "map", ["sm64/types"], header.struct_map),
     s_header_code(0x80382490, 0x80383B6C, 0x8038B9B0, 0x8038B9B0, 0x8038BE90, 0x8038EED4, "map_data", ["sm64/types"], header.struct_map_data, header.str_map_data_g, header.str_map_data_c, ""),
     s_header_code(0x80383B70, 0x80385F88, 0x8038B9B0, 0x8038BA90, 0x8038EEE0, 0x8038EEE2, "o_script", ["sm64/types", "sm64/script", "sm64/s_script"], header.struct_o_script, header.str_o_script_g, header.str_o_script_c, header.str_o_script_s),
@@ -1590,7 +1576,7 @@ include_audio = [
     s_header_code(0x80319920, 0x8031AEDC, 0x80332E50, 0x80332E50,          0,          0, "d", ["sm64/types"], header.struct_audio_d),
     s_header_code(0x8031AEE0, 0x8031B82C, 0x80332E50, 0x80332E50,          0,          0, "e", ["sm64/types"], header.struct_audio_e),
     s_header_code(0x8031B830, 0x8031E4E4, 0x80332E50, 0x80332E50,          0,          0, "f", ["sm64/types"], header.struct_audio_f),
-    s_header_code(0x8031E4F0, 0x80322364, 0x80332E50, 0x803332A0,          0,          0, "g", ["sm64/types", "sm64/main"], header.struct_audio_g, "", header.str_audio_g_c, ""),
+    s_header_code(0x8031E4F0, 0x80322364, 0x80332E50, 0x803332A0,          0,          0, "g", ["sm64/types", "sm64/main"], header.struct_audio_g, header.str_audio_g_g, header.str_audio_g_c, ""),
     s_header_code(0x80246050, 0x80246050, 0x803332A0, 0x80335010,          0,          0, "data", ["sm64/types"], header.struct_audio_data),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80220DA0, 0x80226CBC, "bss", ["sm64/types"], header.struct_audio_bss),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x801CE000, 0x80200200, "heap", ["sm64/types"], []),
@@ -2025,7 +2011,7 @@ src_main = [
         [0,  -6, 1, ultra.c.d_addr, 0],
         [0,   1, 1, c.d_obj_col],
         [0,   1, 1, c.d_obj_pcl],
-        [0,  -3, 1, ultra.c.d_u8], [0, 1, 1, None], # T:enum(msg)
+        [0,  -3, 1, ultra.c.d_u8, msg_table], [0, 1, 1, None],
         [0, -13, 1, ultra.c.d_addr, 0],
         [0, -12, 1, c.d_obj_sfx],
         [0,  -7, 1, ultra.c.d_addr, 0],
@@ -2039,7 +2025,7 @@ src_main = [
         [0,  -2, 1, ultra.c.d_addr, 0],
         [1, -13, 2, ultra.c.d_s16],
         [0,  -5, 1, c.d_80330260],
-        [0,  -4, 1, ultra.c.d_u32, "0x%08X"], # T:enum(sfx)
+        [0,  -4, 1, ultra.c.d_u32, UNSM.table.fmt_na_se],
         [0,  -5, 1, ultra.c.d_addr, 0],
         [0,  -4, 1, c.d_object_a_2],
         [0,  -4, 1, ultra.c.d_addr, 0],
@@ -2063,7 +2049,7 @@ src_main = [
         [1,   1, 1, ultra.c.d_s16], [0, 1, 2, None],
         [1,   1, 1, ultra.c.d_s16], [0, 1, 2, None],
         [1,   1, 4, ultra.c.d_s8],
-        [0,  -3, 1, ultra.c.d_s16], [0, 1, 2, None], # T:enum(msg)
+        [0,  -3, 1, ultra.c.d_s16, msg_table], [0, 1, 2, None],
         [1, -12, 3, ultra.c.d_s16],
         [0, -20, 1, ultra.c.d_addr, 0],
         [0, -27, 1, c.d_obj_sfx],
@@ -2193,7 +2179,7 @@ src_main = [
         [0,   6, 1, ultra.c.d_f32], [0, 1, 4, None],
         [0,   1, 1, ultra.c.d_f64],
         [0,   2, 1, ultra.c.d_f32],
-    ]),
+    ], str_msg),
     s_data(0x80330E20, 0x80330E38, 0x80337DF0, 0x80337DF0, 0, 0, "obj_physics.data", ["sm64/types", "sm64/obj_physics"], [
         [0, 1, ultra.c.d_align_s16],
         [1, 1, 1, ultra.c.d_str, 0x10, "0"],
@@ -2466,7 +2452,7 @@ src_main = [
         [0,   3, 1, c.d_obj_col],
         [1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
         [1,   1, 4, ultra.c.d_f32],
-        [1,   1, 3, ultra.c.d_s32], # T:enum(msg)
+        [1,   1, 3, ultra.c.d_s32, msg_table],
         [0,   1, 1, c.d_obj_col],
         [1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
         [0,   1, 1, c.d_obj_col],
@@ -2548,7 +2534,7 @@ src_main = [
         [0,   8, 1, ultra.c.d_f32],
         [0,  -6, 1, ultra.c.d_addr, ultra.A_EXTERN],
         [0,  18, 1, ultra.c.d_f32],
-    ]),
+    ], str_msg),
 ]
 
 src_main2 = [
@@ -2768,17 +2754,17 @@ src_audio = [
         [0, 2, 1, ultra.c.d_s32],
         [0, -17, 10, ultra.c.d_s8, "%2d"],
         [0, 1, 2, None],
-        [0, -11, 1, ultra.c.d_u32, "0x%08X"],
+        [0, -11, 1, ultra.c.d_u32, UNSM.table.fmt_na_se],
         [0, 1, 4*4, None],
         [0, 2, ultra.c.d_align_u8],
         [0, 1, 1, c.d_bgmctl, 6],
         [0, 1, 1, c.d_bgmctl, 12],
         [0, 1, 1, c.d_bgmctl, 12],
         [0, 1, 1, c.d_bgmctl, 1],
-        [0, 1, 1, c.d_bgmctl, 8], # 7
+        [0, 1, 1, c.d_bgmctl, 7],
         [0, 1, 1, c.d_bgmctl, 8],
-        [0, 1, 1, c.d_bgmctl, 8], # 7
-        [0, 1, 1, c.d_bgmctl, 2], # 1
+        [0, 1, 1, c.d_bgmctl, 7],
+        [0, 1, 1, c.d_bgmctl, 1],
         [0, 2, ultra.c.d_align_s8],
         [0, -39, 1, ultra.c.d_addr, 0],
         [0, -8, 1, c.d_bgmctl_data],
@@ -5127,6 +5113,7 @@ data_object = [
             "sm64/types",
             "sm64/o_script",
         ]),
+        [main.s_str, "\n"],
         [main.s_str, str_script],
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -5138,6 +5125,7 @@ data_object = [
             "sm64/types",
             "sm64/o_script",
         ]),
+        [main.s_str, "\n"],
         [main.s_str, str_script],
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -5149,6 +5137,7 @@ data_object = [
             "sm64/types",
             "sm64/o_script",
         ]),
+        [main.s_str, "\n"],
         [main.s_str, str_script],
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -5160,6 +5149,7 @@ data_object = [
             "sm64/types",
             "sm64/o_script",
         ]),
+        [main.s_str, "\n"],
         [main.s_str, str_script],
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -5171,6 +5161,7 @@ data_object = [
             "sm64/types",
             "sm64/o_script",
         ]),
+        [main.s_str, "\n"],
         [main.s_str, str_script],
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -5621,7 +5612,7 @@ lst = [
     [main.s_data, "E0", ["donor", "UNSME0.z64"]],
     [main.s_copy, ["ido53"],    ["ido53"]],
     [main.s_copy, ["ultra"],    ["ultra"]],
-    [main.s_copy, ["exe"],      ["exe"]],
+    [main.s_copy, ["tools"],    ["tools"]],
     [main.s_copy, ["makefile"], ["makefile"]],
     [main.s_copy, ["make"],     ["make"]],
     [main.s_copy, ["meta"],     ["meta"]],
@@ -5922,7 +5913,9 @@ lst = [
                         "sm64/types",
                         "sm64/s_script",
                     ]),
+                    [main.s_str, "\n"],
                     [main.s_str, str_script],
+                    [main.s_str, "\n"],
                     [main.s_call, data_title_shape],
                 [main.s_write],
                 [main.s_addr, 0],
@@ -6248,12 +6241,12 @@ lst = [
             s_gfx(0x0036F530, 0x00371C40, 0x0B, "gfx", data_weather),
         [main.s_pop],
         [main.s_dir, "stage"],
-            s_stagebin(0x00371C40, 0x003828C0, 0x00383950, 0x00026E44, 0x5A8, "bbh"),
-            s_stagebin(0x00383950, 0x00395C90, 0x00396340, 0x000237A6, 0x3DC, "ccm"),
+            s_stagebin(0x00371C40, 0x003828C0, 0x00383950, 0x00026E44, 0x5A8, "bbh", str_msg, ""),
+            s_stagebin(0x00383950, 0x00395C90, 0x00396340, 0x000237A6, 0x3DC, "ccm", str_msg, ""),
             s_stagebin(0x00396340, 0x003CF0D0, 0x003D0DC0, 0x00079118, 0xEFC, "inside"),
             s_stagebin(0x003D0DC0, 0x003E6A00, 0x003E76B0, 0x0002B968, 0x530, "hmc"),
             s_stagebin(0x003E76B0, 0x003FB990, 0x003FC2AC, 0x000288B0, 0x5B4, "ssl"),
-            s_stage(0x003FC2B0, 0x00405A60, 0x43C, "bob", data_bob_gfx, data_bob_shape),
+            s_stage(0x003FC2B0, 0x00405A60, 0x43C, "bob", data_bob_gfx, data_bob_shape, str_msg, ""),
             s_stagebin(0x00405FB0, 0x0040E840, 0x0040ED64, 0x0000FA88, 0x360, "sl"),
             s_stagebin(0x0040ED70, 0x00419F90, 0x0041A75C, 0x00018788, 0x57C, "wdw"),
             s_stagebin(0x0041A760, 0x00423B20, 0x004246C4, 0x000113AC, 0x900, "jrb"),
@@ -6261,19 +6254,19 @@ lst = [
             s_stagebin(0x0042CF20, 0x00437400, 0x00437868, 0x00016A20, 0x240, "ttc"),
             s_stagebin(0x00437870, 0x0044A140, 0x0044ABB4, 0x0002EE76, 0x658, "rr"),
             s_stagebin(0x0044ABC0, 0x004545E0, 0x00454E00, 0x00011878, 0x65C, "grounds"),
-            s_stagebin(0x00454E00, 0x0045BF60, 0x0045C600, 0x0000FE30, 0x3B4, "bitdw"),
-            s_stagebin(0x0045C600, 0x00461220, 0x004614C8, 0x0000ACC8, 0x1F0, "vcutm"),
+            s_stagebin(0x00454E00, 0x0045BF60, 0x0045C600, 0x0000FE30, 0x3B4, "bitdw", str_msg, ""),
+            s_stagebin(0x0045C600, 0x00461220, 0x004614C8, 0x0000ACC8, 0x1F0, "vcutm", str_msg, ""),
             s_stagebin(0x004614D0, 0x0046A840, 0x0046B088, 0x00015C08, 0x4A4, "bitfs"),
             s_stagebin(0x0046B090, 0x0046C1A0, 0x0046C3A0, 0x00003330, 0x168, "sa"),
             s_stagebin(0x0046C3A0, 0x00477D00, 0x004784A0, 0x0001B7F4, 0x42C, "bits"),
-            s_stagebin(0x004784A0, 0x0048C9B0, 0x0048D930, 0x000288D0, 0x9D8, "lll"),
+            s_stagebin(0x004784A0, 0x0048C9B0, 0x0048D930, 0x000288D0, 0x9D8, "lll", str_msg, ""),
             s_stagebin(0x0048D930, 0x00495A60, 0x00496090, 0x0000FD10, 0x450, "ddd"),
-            s_stagebin(0x00496090, 0x0049DA50, 0x0049E70C, 0x00011E18, 0x7E0, "wf"),
-            s_stagebin(0x0049E710, 0x004AC4B0, 0x004AC56C, 0x00027350, 0x050, "end"),
+            s_stagebin(0x00496090, 0x0049DA50, 0x0049E70C, 0x00011E18, 0x7E0, "wf", str_msg, ""),
+            s_stagebin(0x0049E710, 0x004AC4B0, 0x004AC56C, 0x00027350, 0x050, "ending"),
             s_stagebin(0x004AC570, 0x004AF670, 0x004AF930, 0x00006E7C, 0x1FC, "courtyard"),
             s_stagebin(0x004AF930, 0x004B7F10, 0x004B80C8, 0x0001109C, 0x0F8, "pss"),
-            s_stagebin(0x004B80D0, 0x004BE9E0, 0x004BEC28, 0x0000BFA8, 0x194, "cotmc"),
-            s_stagebin(0x004BEC30, 0x004C2700, 0x004C2920, 0x000089C6, 0x158, "totwc"),
+            s_stagebin(0x004B80D0, 0x004BE9E0, 0x004BEC28, 0x0000BFA8, 0x194, "cotmc", str_msg, ""),
+            s_stagebin(0x004BEC30, 0x004C2700, 0x004C2920, 0x000089C6, 0x158, "totwc", str_msg, ""),
             s_stagebin(0x004C2920, 0x004C41C0, 0x004C4318, 0x00002AC8, 0x0D0, "bitdwa"),
             s_stagebin(0x004C4320, 0x004CD930, 0x004CDBCC, 0x000137AE, 0x1E4, "wmotr"),
             s_stagebin(0x004CDBD0, 0x004CE9F0, 0x004CEC00, 0x00001BA0, 0x16C, "bitfsa"),
@@ -6284,28 +6277,25 @@ lst = [
         [main.s_file, "anime.S"],
             s_include(["sm64/mem"]),
             [main.s_str, str_anime],
-            [asm.s_anime, 0x0008DC18, "E0", "anime", (
-                stbl_anime, ctbl_anime
-            )],
+            [asm.s_anime, 0x0008DC18, "E0", "anime", (stbl_anime, ctbl_anime)],
         [main.s_write],
         [main.s_addr, 0-0x00579C20],
         [main.s_file, "demo.S"],
             s_include(["sm64/mem"]),
             [main.s_str, str_demo],
-            [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, {})],
+            [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, ctbl_demo)],
         [main.s_write],
         [main.s_addr, 0],
         [main.s_dir, "audio"],
-            # 0x00017E40, 0x0021D300
-            [main.s_bin, 0x0057B720, 0x00593560, "E0", ["ctl.bin"]],
-            [main.s_bin, 0x00593560, 0x007B0860, "E0", ["tbl.bin"]],
+            [main.s_bin, 0x0057B720, 0x00593560, "E0", ["ctl.bin"]], # 0x00017E40
+            [main.s_bin, 0x00593560, 0x007B0860, "E0", ["tbl.bin"]], # 0x0021D300
             [main.s_file, "ctl.S"],
                 [main.s_str, str_audio_ctl],
             [main.s_write],
             [main.s_file, "tbl.S"],
                 [main.s_str, str_audio_tbl],
             [main.s_write],
-            [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", seq_table],
+            [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", table.seq_table],
             [main.s_file, "seq.S"],
                 s_include(["sm64/types", "sm64/audio/file"]),
                 [main.s_str, str_audio_seq],

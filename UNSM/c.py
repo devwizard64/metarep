@@ -22,7 +22,7 @@ d_bool_u16  = [[0, 1, 1, ultra.c.d_u16, UNSM.table.fmt_bool], [0, 1, 2, None]]
 
 # todo: macro
 def d_staff_prc(argv):
-    stage   = ultra.ub() # T:enum(stage)
+    stage   = UNSM.table.fmt_stage(ultra.ub())
     scene   = ultra.ub()
     flag    = ultra.ub()
     ry      = ultra.ub()
@@ -31,7 +31,7 @@ def d_staff_prc(argv):
     z       = ultra.sh()
     ultra.script.c_addr += 2
     str_    = ultra.c.aw()
-    return ["{%2d, %d, 0x%02X, 0x%02X, {%5d, %5d, %5d}, %s}" % (
+    return ["{%s, %d, 0x%02X, 0x%02X, {%d, %d, %d}, %s}" % (
         stage, scene, flag, ry, x, y, z, str_
     )]
 d_staff = [False, d_staff_prc]
@@ -322,10 +322,10 @@ def d_obj_sfx_prc(argv):
     flag    = ultra.sh()
     l       = ultra.sb()
     r       = ultra.sb()
-    sfx     = ultra.uw() # T:enum(sfx)
-    if (flag, l, r, sfx) == (0, 0, 0, 0):
+    se      = UNSM.table.fmt_na_se(ultra.uw())
+    if (flag, l, r, se) == (0, 0, 0, 0):
         return ["{0}"]
-    return ["{%d, %d, %d, 0x%08X}" % (flag, l, r, sfx)]
+    return ["{%d, %d, %d, %s}" % (flag, l, r, se)]
 d_obj_sfx = [False, d_obj_sfx_prc]
 
 # obj_debug.h
@@ -471,25 +471,25 @@ d_meter = [False, d_meter_prc]
 # object_c.h
 
 def d_object_c_0_prc(argv):
-    msg_start   = ultra.sh() # T:enum(msg)
-    msg_win     = ultra.sh() # T:enum(msg)
+    msg_start   = UNSM.msg_table[ultra.sh()]
+    msg_win     = UNSM.msg_table[ultra.sh()]
     path        = ultra.c.aw(True)
     star_x      = ultra.sh()
     star_y      = ultra.sh()
     star_z      = ultra.sh()
     ultra.script.c_addr += 2
-    return ["{%d, %d, %s, {%d, %d, %d}}" % (
+    return ["{%s, %s, %s, {%d, %d, %d}}" % (
         msg_start, msg_win, path, star_x, star_y, star_z
     )]
 d_object_c_0 = [False, d_object_c_0_prc]
 
 def d_object_c_1_prc(argv):
     scale   = ultra.fmt_float(ultra.f())
-    sfx     = ultra.uw() # T:enum(sfx)
+    se      = UNSM.table.fmt_na_se(ultra.uw())
     dist    = ultra.sh()
     damage  = ultra.sb()
     ultra.script.c_addr += 1
-    return ["{%s, 0x%08X, %d, %d}" % (scale, sfx, dist, damage)]
+    return ["{%s, %s, %d, %d}" % (scale, se, dist, damage)]
 d_object_c_1 = [False, d_object_c_1_prc]
 
 def d_object_c_2_prc(argv):
@@ -665,7 +665,7 @@ d_map_data = [False, d_map_data_prc]
 
 def d_bgmctl_prc(argv):
     n, = argv
-    lst = ["0x%02X," % ultra.sh()] # T:seq
+    lst = ["%s," % UNSM.table.fmt_na_bgm(ultra.sh())]
     n -= 1
     while n > 0:
         x = ultra.sh()
@@ -1203,7 +1203,7 @@ gfx_table = {
 
 def s_msg_lang(self, lang, line, s):
     if s != None:
-        x = UNSM.exe.lang.table[s]
+        x = UNSM.tools.lang.table[s]
         if lang != x:
             lang = x
             line.append("$lang: %s\n\n" % s)

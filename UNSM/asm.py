@@ -186,7 +186,7 @@ def p_player(argv):
 def p_link(argv):
     m, = argv
     index = "%d" % ultra.ub()
-    stage = "%d" % ultra.ub() # T:enum(stage)
+    stage = UNSM.table.fmt_stage(ultra.ub())
     scene = "%d" % ultra.ub()
     link  = "%d" % ultra.ub()
     flag  = ultra.ub()
@@ -224,7 +224,7 @@ def p_player_open(argv):
 # 30
 def p_msg(argv):
     type_ = "%d" % ultra.ub() # T:enum(msgtype)
-    msg   = "0x%02X" % ultra.ub() # T:enum(msg)
+    msg   = UNSM.msg_table[ultra.ub()]
     return (None, type_, msg)
 
 # 31
@@ -260,14 +260,14 @@ def p_bool(argv):
 
 # 36
 def p_bgm(argv):
-    type_= "%d" % ultra.uh() # T:enum(bgmtype)
-    bgm  = "0x%02X" % ultra.uh() # T:enum(seq)
+    mode = UNSM.table.fmt_na_mode(ultra.uh())
+    bgm  = UNSM.table.fmt_na_bgm(ultra.uh())
     ultra.script.c_addr += 2
-    return (None, type_, bgm)
+    return (None, mode, bgm)
 
 # 37
 def p_bgm_play(argv):
-    bgm = "0x%02X" % ultra.uh() # T:enum(seq)
+    bgm = UNSM.table.fmt_na_bgm(ultra.uh())
     return (None, bgm)
 
 # 38

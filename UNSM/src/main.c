@@ -163,7 +163,7 @@ static void sc_event_prenmi(void)
     reset_timer = 1;
     reset_frame = 0;
     Na_SE_clear();
-    Na_IO_lock(2, 0x037A);
+    Na_SE_lock();
     audio_fadeout(90);
 }
 

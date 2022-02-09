@@ -116,13 +116,13 @@ CROSS   := mips-linux-gnu-
 ARMIPS  := armips
 
 CC      := $(CROSS)gcc
-AR      := $(CROSS)ar
+AR      := ar
 ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -Iinclude
 OPT     := -Os
 WFLAG   := -Wall -Wextra
-CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding -fno-common
-CCFLAG  += -fno-zero-initialized-in-bss -fno-toplevel-reorder
+CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
+CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
 ASFLAG  := $(ARCH) $(FLAG) $(OPT) $(WFLAG)
 

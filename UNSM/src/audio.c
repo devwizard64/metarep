@@ -10,7 +10,7 @@
 #include <sm64/audio/c.h>
 #include <sm64/audio/g.h>
 
-#define BGM_NULL                0xFFFF
+#define BGM_NULL                ((u16)-1)
 
 u8 audio_mute = 0;
 u8 audio_lock = false;
@@ -24,17 +24,44 @@ u8 audio_endless = false;
 u32 audio_8032D618[4] = {0};
 s16 audio_output_table[] = {0, 3, 1};
 
-u32 audio_env_se_table[] =
+NA_SE audio_env_se_table[] =
 {
-    0x14000001, 0x14010001, 0x14020001, 0x14030001,
-    0x14040001, 0x14050001, 0x14060001, 0x14100001,
-    0x14128001, 0x14110001, 0x14140001, 0x14200001,
-    0x00000000, 0x400B0001, 0x400C0001, 0x400A0001,
-    0x40000001, 0x40010001, 0x40020001, 0x41030001,
-    0x40040001, 0x40080001, 0x40050001, 0x40090001,
-    0x60000001, 0x1D192001, 0x60028001, 0x60034001,
-    0x60104001, 0x90524001, 0x80504001, 0x50514001,
-    0x40080001, 0x60044001, 0x60048001, 0x400D0001,
+    NA_SE1_00 + (0 << 16),
+    NA_SE1_00 + (1 << 16),
+    NA_SE1_00 + (2 << 16),
+    NA_SE1_00 + (3 << 16),
+    NA_SE1_00 + (4 << 16),
+    NA_SE1_00 + (5 << 16),
+    NA_SE1_00 + (6 << 16),
+    NA_SE1_10,
+    NA_SE1_12,
+    NA_SE1_11,
+    NA_SE1_14,
+    NA_SE1_20,
+    NA_SE_NULL,
+    NA_SE4_0B,
+    NA_SE4_0C,
+    NA_SE4_0A,
+    NA_SE4_00,
+    NA_SE4_01,
+    NA_SE4_02,
+    NA_SE4_03,
+    NA_SE4_04,
+    NA_SE4_08,
+    NA_SE4_05,
+    NA_SE4_09,
+    NA_SE6_00,
+    NA_SE1_19,
+    NA_SE6_02_80,
+    NA_SE6_03,
+    NA_SE6_10,
+    NA_SE9_52,
+    NA_SE8_50,
+    NA_SE5_51,
+    NA_SE4_08,
+    NA_SE6_04_40,
+    NA_SE6_04_80,
+    NA_SE4_0D_0,
 };
 u32 audio_env_se_8033B0A0[lenof(audio_env_se_table)];
 
@@ -68,7 +95,7 @@ void audio_se_lock(void)
     if (audio_lock == false)
     {
         audio_lock = true;
-        Na_IO_lock(2, 0x037A);
+        Na_SE_lock();
     }
 }
 
@@ -77,7 +104,7 @@ void audio_se_unlock(void)
     if (audio_lock == true)
     {
         audio_lock = false;
-        Na_IO_unlock(2, 0x37A);
+        Na_SE_unlock();
     }
 }
 
@@ -116,7 +143,7 @@ void audio_se_ripple(void)
 void bgm_endless(void)
 {
     u8 flag = false;
-    if (stage_index == 6 && scene_index == 2)
+    if (stage_index == STAGE_INSIDE && scene_index == 2)
     {
         if (mario->star < 70)
         {
@@ -129,7 +156,7 @@ void bgm_endless(void)
     if (audio_endless ^ flag)
     {
         audio_endless = flag;
-        if (flag)   Na_BGM_fadeto_start(24, 0x00, 0xFF, 1000);
+        if (flag)   Na_BGM_fadeto_start(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
         else        Na_BGM_fadeto_end(500);
     }
 }
@@ -140,9 +167,9 @@ void bgm_play(u16 mode, u16 bgm, s16 fadein)
     {
         if (bgm != bgm_stage)
         {
-            if (staff != NULL)  Na_mode(7);
+            if (staff != NULL)  Na_mode(NA_MODE_STAFF);
             else                Na_mode(mode);
-            if (game_8033B26E == 0 || bgm != 4)
+            if (game_8033B26E == 0 || bgm != NA_BGM_CASTLE)
             {
                 Na_BGM_play(0, bgm, fadein);
                 bgm_stage = bgm;
@@ -175,8 +202,8 @@ void bgm_stage_play(u16 bgm)
 
 void bgm_shell_play(void)
 {
-    Na_BGM_play(0, 0x400 | 0x80 | 14, 0);
-    bgm_shell = 0x400 | 0x80 | 14;
+    Na_BGM_play(0, NA_BGM_SHELL, 0);
+    bgm_shell = NA_BGM_SHELL;
 }
 
 void bgm_shell_stop(void)

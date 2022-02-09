@@ -573,7 +573,7 @@ lst = [
     [main.s_data, "J0", ["donor", "SAKFJ0.sfc"]],
     [main.s_data, "E0", ["donor", "SAKFE0.sfc"]],
     [main.s_data, "P0", ["donor", "SAKFP0.sfc"]],
-    [main.s_copy, ["exe"],      ["exe"]],
+    [main.s_copy, ["tools"],    ["tools"]],
     [main.s_copy, ["makefile"], ["makefile"]],
     [main.s_copy, ["make"],     ["make"]],
     [main.s_copy, ["include"],  ["include"]],

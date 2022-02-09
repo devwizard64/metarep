@@ -286,6 +286,48 @@ str_app_g = """
 #define FIFO_SIZE 0x1F000
 """
 
+str_game_g = """
+#define STAGE_NULL              0
+#define STAGE_1                 1
+#define STAGE_2                 2
+#define STAGE_3                 3
+#define STAGE_BBH               4
+#define STAGE_CCM               5
+#define STAGE_INSIDE            6
+#define STAGE_HMC               7
+#define STAGE_SSL               8
+#define STAGE_BOB               9
+#define STAGE_SL                10
+#define STAGE_WDW               11
+#define STAGE_JRB               12
+#define STAGE_THI               13
+#define STAGE_TTC               14
+#define STAGE_RR                15
+#define STAGE_GROUNDS           16
+#define STAGE_BITDW             17
+#define STAGE_VCUTM             18
+#define STAGE_BITFS             19
+#define STAGE_SA                20
+#define STAGE_BITS              21
+#define STAGE_LLL               22
+#define STAGE_DDD               23
+#define STAGE_WF                24
+#define STAGE_ENDING            25
+#define STAGE_COURTYARD         26
+#define STAGE_PSS               27
+#define STAGE_COTMC             28
+#define STAGE_TOTWC             29
+#define STAGE_BITDWA            30
+#define STAGE_WMOTR             31
+#define STAGE_32                32
+#define STAGE_BITFSA            33
+#define STAGE_BITSA             34
+#define STAGE_35                35
+#define STAGE_TTM               36
+#define STAGE_37                37
+#define STAGE_38                38
+"""
+
 str_mem_g = """
 #define MEM_ALLOC_L 0
 #define MEM_ALLOC_R 1
@@ -1562,8 +1604,8 @@ str_p_script_s = """
     _B(0x34, 0x04, arg, 0)
 #define p_vi_gamma(arg)                         \\
     _B(0x35, 0x04, arg, 0)
-#define p_bgm(type, bgm)                        \\
-    _C(0x36, 0x08, type);                       \\
+#define p_bgm(mode, bgm)                        \\
+    _C(0x36, 0x08, mode);                       \\
     _H(bgm, 0)
 #define p_bgm_play(bgm)                         \\
     _C(0x37, 0x04, bgm)
@@ -1837,8 +1879,152 @@ str_o_script_s = """
     _P(splash)
 """
 
-str_audio_g_c = """
+str_audio_g_g = """
+#define NA_MODE_DEFAULT         0
+#define NA_MODE_CASTLE          1
+#define NA_MODE_ARENA           2
+#define NA_MODE_WATER           3
+#define NA_MODE_DUNGEON         4
+#define NA_MODE_FIELD           5
+#define NA_MODE_GHOST           6
+#define NA_MODE_STAFF           7
+
+#define NA_SEQ_SE               0
+#define NA_SEQ_STAR_CATCH       1
+#define NA_SEQ_TITLE            2
+#define NA_SEQ_FIELD            3
+#define NA_SEQ_CASTLE           4
+#define NA_SEQ_WATER            5
+#define NA_SEQ_FIRE             6
+#define NA_SEQ_ARENA            7
+#define NA_SEQ_SNOW             8
+#define NA_SEQ_SLIDER           9
+#define NA_SEQ_GHOST            10
+#define NA_SEQ_LULLABY          11
+#define NA_SEQ_DUNGEON          12
+#define NA_SEQ_STAR_SELECT      13
+#define NA_SEQ_WING             14
+#define NA_SEQ_METAL            15
+#define NA_SEQ_MSG_BOWSER       16
+#define NA_SEQ_BOWSER           17
+#define NA_SEQ_HI_SCORE         18
+#define NA_SEQ_MERRY_GO_ROUND   19
+#define NA_SEQ_FANFARE          20
+#define NA_SEQ_STAR             21
+#define NA_SEQ_BATTLE           22
+#define NA_SEQ_ARENA_CLEAR      23
+#define NA_SEQ_ENDLESS          24
+#define NA_SEQ_FINAL            25
+#define NA_SEQ_STAFF            26
+#define NA_SEQ_SOLUTION         27
+#define NA_SEQ_MSG_TOAD         28
+#define NA_SEQ_MSG_PEACH        29
+#define NA_SEQ_INTRO            30
+#define NA_SEQ_FINAL_CLEAR      31
+#define NA_SEQ_ENDING           32
+#define NA_SEQ_FILE_SELECT      33
+#define NA_SEQ_MSG_LAKITU       34
+
+#define NA_BGM_NULL             0
+/* #define NA_BGM_STAR_CATCH       NA_SEQ_STAR_CATCH */
+#define NA_BGM_TITLE            NA_SEQ_TITLE
+#define NA_BGM_GAMEOVER         (0x080 | NA_SEQ_TITLE)
+#define NA_BGM_FIELD            NA_SEQ_FIELD
+#define NA_BGM_CASTLE           NA_SEQ_CASTLE
+#define NA_BGM_WATER            NA_SEQ_WATER
+#define NA_BGM_AQUARIUM         (0x080 | NA_SEQ_WATER)
+#define NA_BGM_FIRE             NA_SEQ_FIRE
+#define NA_BGM_ARENA            NA_SEQ_ARENA
+#define NA_BGM_SNOW             NA_SEQ_SNOW
+#define NA_BGM_SLIDER           NA_SEQ_SLIDER
+#define NA_BGM_GHOST            NA_SEQ_GHOST
+/* #define NA_BGM_LULLABY          NA_SEQ_LULLABY */
+#define NA_BGM_DUNGEON          NA_SEQ_DUNGEON
+#define NA_BGM_STAR_SELECT      NA_SEQ_STAR_SELECT
+/* #define NA_BGM_WING             NA_SEQ_WING */
+#define NA_BGM_SHELL            (0x480 | NA_SEQ_WING)
+/* #define NA_BGM_METAL            NA_SEQ_METAL */
+/* #define NA_BGM_MSG_BOWSER       NA_SEQ_MSG_BOWSER */
+#define NA_BGM_BOWSER           NA_SEQ_BOWSER
+/* #define NA_BGM_HI_SCORE         NA_SEQ_HI_SCORE */
+/* #define NA_BGM_MERRY_GO_ROUND   NA_SEQ_MERRY_GO_ROUND */
+/* #define NA_BGM_FANFARE          NA_SEQ_FANFARE */
+/* #define NA_BGM_STAR             NA_SEQ_STAR */
+/* #define NA_BGM_BATTLE           NA_SEQ_BATTLE */
+/* #define NA_BGM_ARENA_CLEAR      NA_SEQ_ARENA_CLEAR */
+#define NA_BGM_ENDLESS          NA_SEQ_ENDLESS
+#define NA_BGM_FINAL            NA_SEQ_FINAL
+/* #define NA_BGM_STAFF            NA_SEQ_STAFF */
+/* #define NA_BGM_SOLUTION         NA_SEQ_SOLUTION */
+/* #define NA_BGM_MSG_TOAD         NA_SEQ_MSG_TOAD */
+/* #define NA_BGM_MSG_PEACH        NA_SEQ_MSG_PEACH */
+/* #define NA_BGM_INTRO            NA_SEQ_INTRO */
+/* #define NA_BGM_FINAL_CLEAR      NA_SEQ_FINAL_CLEAR */
+/* #define NA_BGM_ENDING           NA_SEQ_ENDING */
+#define NA_BGM_FILE_SELECT      NA_SEQ_FILE_SELECT
+/* #define NA_BGM_MSG_LAKITU       NA_SEQ_MSG_LAKITU */
+
+#define NA_SE_NULL              0x00000000
+
+#define NA_SE1_00               0x14000001
+#define NA_SE1_10               0x14100001
+#define NA_SE1_11               0x14110001
+#define NA_SE1_12               0x14128001
+#define NA_SE1_14               0x14140001
+#define NA_SE1_19               0x1D192001
+#define NA_SE1_20               0x14200001
+
+#define NA_SE3_04               0x3004C081
+#define NA_SE3_05               0x3005C081
+#define NA_SE3_06               0x3006C081
+#define NA_SE3_07               0x3007C081
 #define NA_SE3_28               0x39280081
+#define NA_SE3_70               0x30703081
+
+#define NA_SE4_00               0x40000001
+#define NA_SE4_01               0x40010001
+#define NA_SE4_02               0x40020001
+#define NA_SE4_03               0x41030001
+#define NA_SE4_04               0x40040001
+#define NA_SE4_05               0x40050001
+#define NA_SE4_08               0x40080001
+#define NA_SE4_09               0x40090001
+#define NA_SE4_0A               0x400A0001
+#define NA_SE4_0B               0x400B0001
+#define NA_SE4_0C               0x400C0001
+#define NA_SE4_0D_0             0x400D0001
+#define NA_SE4_0D_1             0x400D1001
+
+#define NA_SE5_03               0x50030081
+#define NA_SE5_05               0x50050081
+#define NA_SE5_06               0x50060081
+#define NA_SE5_15_50            0x50155081
+#define NA_SE5_15_80            0x50158081
+#define NA_SE5_21               0x50210081
+#define NA_SE5_2D               0x502D0081
+#define NA_SE5_38               0x50388081
+#define NA_SE5_39               0x50390081
+#define NA_SE5_3A               0x503A0081
+#define NA_SE5_3B               0x503B0081
+#define NA_SE5_3C               0x503C0081
+#define NA_SE5_3D               0x503DA081
+#define NA_SE5_41               0x50410081
+#define NA_SE5_48               0x50480081
+#define NA_SE5_51               0x50514001
+#define NA_SE5_55               0x50558081
+#define NA_SE5_58               0x50584081
+#define NA_SE5_5F               0x505F8091
+#define NA_SE5_60               0x5060B081
+#define NA_SE5_61               0x5061B081
+#define NA_SE5_6F               0x506F0081
+
+#define NA_SE6_00               0x60000001
+#define NA_SE6_02_80            0x60028001
+#define NA_SE6_02_FF            0x6002FF01
+#define NA_SE6_03               0x60034001
+#define NA_SE6_04_40            0x60044001
+#define NA_SE6_04_80            0x60048001
+#define NA_SE6_10               0x60104001
 
 #define NA_SE7_06               0x70060081
 #define NA_SE7_07               0x70070081
@@ -1848,8 +2034,19 @@ str_audio_g_c = """
 #define NA_SE7_0B               0x700B0081
 #define NA_SE7_0C               0x700C0081
 
+#define NA_SE8_50               0x80504001
+
+#define NA_SE9_04               0x90040081
+#define NA_SE9_52               0x90524001
+#define NA_SE9_69               0x90694081
+"""
+
+str_audio_g_c = """
 #define Na_SE_fixed(se)         Na_SE_play(se, Na_0)
 #define Na_SE_obj(se, obj)      Na_SE_play(se, (obj)->list.s.view)
+
+#define Na_SE_lock()            Na_IO_lock(2, 0x037A)
+#define Na_SE_unlock()          Na_IO_unlock(2, 0x037A)
 
 typedef u32 NA_SE;
 """
@@ -1936,12 +2133,12 @@ struct_player = [
         (0x08, table.sym_var("particle",    "u32")),
         (0x0C, table.sym_var("state",       "u32")),
         (0x10, table.sym_var("state_prev",  "u32")),
-        (0x14, table.sym_var("ground_sfx",  "u32")),
+        (0x14, table.sym_var("ground_se",   "u32")),
         (0x18, table.sym_var("mode",        "s16")),
         (0x1A, table.sym_var("timer",       "u16")),
         (0x1C, table.sym_var("arg",         "u32")),
-        (0x20, table.sym_var("stick_mag",   "f32")),
-        (0x24, table.sym_var("stick_rot",   "s16")),
+        (0x20, table.sym_var("stick_d",     "f32")),
+        (0x24, table.sym_var("stick_ry",    "s16")),
         (0x26, table.sym_var("invincible",  "s16")),
         (0x28, table.sym_var("timer_a",     "u8")),
         (0x29, table.sym_var("timer_b",     "u8")),
@@ -1949,8 +2146,8 @@ struct_player = [
         (0x2B, table.sym_var("timer_floor", "u8")),
         (0x2C, table.sym_var("rot",         "vecs")),
         (0x32, table.sym_var("rot_vel",     "vecs")),
-        (0x38, table.sym_var("ry_slide",    "s16")),
-        (0x3A, table.sym_var("ry_twirl",    "s16")),
+        (0x38, table.sym_var("slide_ry",    "s16")),
+        (0x3A, table.sym_var("twirl_ry",    "s16")),
         (0x3C, table.sym_var("pos",         "vecf")),
         (0x48, table.sym_var("vel",         "vecf")),
         (0x54, table.sym_var("vel_f",       "f32")),
@@ -1958,10 +2155,10 @@ struct_player = [
         (0x60, table.sym_var("wall",        "struct map_face *")),
         (0x64, table.sym_var("roof",        "struct map_face *")),
         (0x68, table.sym_var("ground",      "struct map_face *")),
-        (0x6C, table.sym_var("y_roof",      "f32")),
-        (0x70, table.sym_var("y_ground",    "f32")),
-        (0x74, table.sym_var("ry_ground",   "s16")),
-        (0x76, table.sym_var("y_water",     "s16")),
+        (0x6C, table.sym_var("roof_y",      "f32")),
+        (0x70, table.sym_var("ground_y",    "f32")),
+        (0x74, table.sym_var("ground_ry",   "s16")),
+        (0x76, table.sym_var("water",       "s16")),
         (0x78, table.sym_var("obj_col",     "struct object *")),
         (0x7C, table.sym_var("obj_hold",    "struct object *")),
         (0x80, table.sym_var("obj_use",     "struct object *")),
@@ -1972,7 +2169,7 @@ struct_player = [
         (0x94, table.sym_var("camera",      "struct pl_camera *")),
         (0x98, table.sym_var("shape",       "struct pl_shape *")),
         (0x9C, table.sym_var("cont",        "struct controller *")),
-        (0xA0, table.sym_var("anime",       "struct anime *")),
+        (0xA0, table.sym_var("file_anime",  "struct file *")),
         (0xA4, table.sym_var("collision",   "u32")),
         (0xA8, table.sym_var("coin",        "s16")),
         (0xAA, table.sym_var("star",        "s16")),
@@ -1986,8 +2183,8 @@ struct_player = [
         (0xB5, table.sym_var("alpha",       "u8")),
         (0xB6, table.sym_var("timer_cap",   "u16")),
         (0xB8, table.sym_var("star_prev",   "s16")),
-        (0xBC, table.sym_var("y_peak",      "f32")),
-        (0xC0, table.sym_var("y_sink",      "f32")),
+        (0xBC, table.sym_var("peak",        "f32")),
+        (0xC0, table.sym_var("sink",        "f32")),
         (0xC4, table.sym_var("gravity",     "f32")),
     ]],
 ]

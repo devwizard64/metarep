@@ -13,6 +13,51 @@ def fmt_time(x):
     if y == 0: return "30*%d" % x
     return "30*%d+%d" % (x, y)
 
+fmt_stage_x = [
+    "NULL",
+    "1",
+    "2",
+    "3",
+    "BBH",
+    "CCM",
+    "INSIDE",
+    "HMC",
+    "SSL",
+    "BOB",
+    "SL",
+    "WDW",
+    "JRB",
+    "THI",
+    "TTC",
+    "RR",
+    "GROUNDS",
+    "BITDW",
+    "VCUTM",
+    "BITFS",
+    "SA",
+    "BITS",
+    "LLL",
+    "DDD",
+    "WF",
+    "ENDING",
+    "COURTYARD",
+    "PSS",
+    "COTMC",
+    "TOTWC",
+    "BITDWA",
+    "WMOTR",
+    "32",
+    "BITFSA",
+    "BITSA",
+    "35",
+    "TTM",
+    "37",
+    "38",
+]
+
+def fmt_stage(x):
+    return "STAGE_" + fmt_stage_x[x]
+
 fmt_mem_alloc = [
     "MEM_ALLOC_L",
     "MEM_ALLOC_R",
@@ -1108,7 +1153,7 @@ shp_wf = {
     178: "WF_178",
 }
 
-shp_end = {
+shp_ending = {
 }
 
 shp_courty = {
@@ -1236,7 +1281,7 @@ shp_table = (
     (0x004784A0, 0x0048D930, "E0", shp_1b, shp_2f, shp_lll),
     (0x0048D930, 0x00496090, "E0", shp_1d, shp_2b, shp_ddd),
     (0x00496090, 0x0049E710, "E0", shp_1a, shp_2c, shp_wf),
-    (0x0049E710, 0x004AC570, "E0",                 shp_end),
+    (0x0049E710, 0x004AC570, "E0",                 shp_ending),
     (0x004AC570, 0x004AF930, "E0", shp_1i,         shp_courty),
     (0x004AF930, 0x004B80D0, "E0", shp_1h,         shp_pss),
     (0x004B80D0, 0x004BEC30, "E0", shp_1h, shp_2f, shp_cotmc),
@@ -1413,6 +1458,163 @@ def fmt_shape(x):
     s = fmt_shape_x(x)
     if s != None: return "S_" + s
     return "%d" % x
+
+seq_table = [
+    "se",
+    "star_catch",
+    "title",
+    "field",
+    "castle",
+    "water",
+    "fire",
+    "arena",
+    "snow",
+    "slider",
+    "ghost",
+    "lullaby",
+    "dungeon",
+    "star_select",
+    "wing",
+    "metal",
+    "msg_bowser",
+    "bowser",
+    "hi_score",
+    "merry_go_round",
+    "fanfare",
+    "star",
+    "battle",
+    "arena_clear",
+    "endless",
+    "final",
+    "staff",
+    "solution",
+    "msg_toad",
+    "msg_peach",
+    "intro",
+    "final_clear",
+    "ending",
+    "file_select",
+    "msg_lakitu",
+]
+
+fmt_na_mode_x = [
+    "DEFAULT",
+    "CASTLE",
+    "ARENA",
+    "WATER",
+    "DUNGEON",
+    "FIELD",
+    "GHOST",
+    "STAFF",
+]
+
+def fmt_na_mode(x):
+    return "NA_MODE_" + fmt_na_mode_x[x]
+
+fmt_na_bgm_x = {
+    0: "NULL",
+    0x000 |  2: "TITLE",
+    0x080 |  2: "GAMEOVER",
+    0x000 |  3: "FIELD",
+    0x000 |  4: "CASTLE",
+    0x000 |  5: "WATER",
+    0x080 |  5: "AQUARIUM",
+    0x000 |  6: "FIRE",
+    0x000 |  7: "ARENA",
+    0x000 |  8: "SNOW",
+    0x000 |  9: "SLIDER",
+    0x000 | 10: "GHOST",
+    0x000 | 12: "DUNGEON",
+    0x000 | 13: "STAR_SELECT",
+    0x480 | 14: "SHELL",
+    0x000 | 17: "BOWSER",
+    0x000 | 24: "ENDLESS",
+    0x000 | 25: "FINAL",
+    0x000 | 33: "FILE_SELECT",
+}
+
+def fmt_na_bgm(x):
+    return "NA_BGM_" + fmt_na_bgm_x[x]
+
+fmt_na_se_x = {
+    0x00000000: "NA_SE_NULL",
+
+    0x14000001: "NA_SE1_00 + (0 << 16)",
+    0x14010001: "NA_SE1_00 + (1 << 16)",
+    0x14020001: "NA_SE1_00 + (2 << 16)",
+    0x14030001: "NA_SE1_00 + (3 << 16)",
+    0x14040001: "NA_SE1_00 + (4 << 16)",
+    0x14050001: "NA_SE1_00 + (5 << 16)",
+    0x14060001: "NA_SE1_00 + (6 << 16)",
+    0x14100001: "NA_SE1_10",
+    0x14100001: "NA_SE1_11",
+    0x14128001: "NA_SE1_12",
+    0x14140001: "NA_SE1_14",
+    0x1D192001: "NA_SE1_19",
+    0x14200001: "NA_SE1_20",
+
+    0x3004C081: "NA_SE3_04",
+    0x3005C081: "NA_SE3_05",
+    0x3006C081: "NA_SE3_06",
+    0x3007C081: "NA_SE3_07",
+    0x30703081: "NA_SE3_70",
+
+    0x40000001: "NA_SE4_00",
+    0x40010001: "NA_SE4_01",
+    0x40020001: "NA_SE4_02",
+    0x41030001: "NA_SE4_03",
+    0x40040001: "NA_SE4_04",
+    0x40050001: "NA_SE4_05",
+    0x40080001: "NA_SE4_08",
+    0x40090001: "NA_SE4_09",
+    0x400A0001: "NA_SE4_0A",
+    0x400B0001: "NA_SE4_0B",
+    0x400C0001: "NA_SE4_0C",
+    0x400D0001: "NA_SE4_0D_0",
+
+    0x50030081: "NA_SE5_03",
+    0x50050081: "NA_SE5_05",
+    0x50060081: "NA_SE5_06",
+    0x50158081: "NA_SE5_15_80",
+    0x50210081: "NA_SE5_21",
+    0x502D0081: "NA_SE5_2D",
+    0x50388081: "NA_SE5_38",
+    0x50390081: "NA_SE5_39",
+    0x503A0081: "NA_SE5_3A",
+    0x503B0081: "NA_SE5_3B",
+    0x503C0081: "NA_SE5_3C",
+    0x503DA081: "NA_SE5_3D",
+    0x50410081: "NA_SE5_41",
+    0x50480081: "NA_SE5_48",
+    0x50514001: "NA_SE5_51",
+    0x50558081: "NA_SE5_55",
+    0x50584081: "NA_SE5_58",
+    0x505F8091: "NA_SE5_5F",
+    0x5060B081: "NA_SE5_60",
+    0x5061B081: "NA_SE5_61",
+    0x506F0081: "NA_SE5_6F",
+
+    0x60000001: "NA_SE6_00",
+    0x60028001: "NA_SE6_02_80",
+    0x60034001: "NA_SE6_03",
+    0x60044001: "NA_SE6_04_40",
+    0x60048001: "NA_SE6_04_80",
+    0x60104001: "NA_SE6_10",
+
+    0x80504001: "NA_SE8_50",
+
+    0x90040081: "NA_SE9_04",
+    0x90524001: "NA_SE9_52",
+    0x90694081: "NA_SE9_69",
+}
+
+def fmt_na_se(x):
+    if x not in fmt_na_se_x:
+        print("    0x%08X: \"NA_SE%X_%02X\"," % (
+            x, x >> 28 & 0x0F, x >> 16 & 0xFF
+        ))
+        return "0x%08X" % x
+    return fmt_na_se_x[x]
 
 sym_E0_t_ipl3 = {
     0xA40004C0: table.sym("_A40004C0"), # la
@@ -2760,7 +2962,7 @@ sym_E0_t_main = {
         "s16 arg",
         "int code",
     ), table.GLOBL), # p callback
-    0x8024BFA0: table.sym_fnc("p_end_se", "int", (
+    0x8024BFA0: table.sym_fnc("p_ending_se", "int", (
         "s16 arg",
         "int code",
     ), table.GLOBL), # p callback
@@ -7510,11 +7712,11 @@ sym_E0_t_main = {
     0x8031E7B8: table.sym_fnc("Na_main", "SC_TASK *",
     flag=table.GLOBL), # ext
     0x8031EB00: table.sym_fnc("Na_SE_play", arg=(
-        "u32 se",
+        "NA_SE se",
         "f32 *pos",
     ), flag=table.GLOBL), # ext
     0x8031EB30: table.sym_fnc("Na_g_8031EB30", arg=(
-        "u32",
+        "NA_SE",
         "f32 *",
     )),
     0x8031EDEC: table.sym_fnc("Na_g_8031EDEC"),
@@ -8404,9 +8606,9 @@ sym_E0_d_main = {
     0x8032D60C: table.sym_var("bgm_shell",    "u16",  flag=table.GLOBL|ultra.DALIGN),
     0x8032D610: table.sym_var("bgm_special",  "u16",  flag=table.GLOBL|ultra.DALIGN),
     0x8032D614: table.sym_var("audio_endless",      "u8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D618: table.sym_var("audio_8032D618",     "u32",  "[4]",  table.GLOBL),
-    0x8032D628: table.sym_var("audio_output_table", "s16",  "[]",   table.GLOBL),
-    0x8032D630: table.sym_var("audio_env_se_table", "u32",  "[]",   table.GLOBL),
+    0x8032D618: table.sym_var("audio_8032D618",     "u32",      "[4]",  table.GLOBL),
+    0x8032D628: table.sym_var("audio_output_table", "s16",      "[]",   table.GLOBL),
+    0x8032D630: table.sym_var("audio_env_se_table", "NA_SE",    "[]",   table.GLOBL),
     0x8032D6C0: table.sym_var("audio_ripple",       "s8",   flag=table.GLOBL|ultra.DALIGN),
 
     # src/pl_physics.c
@@ -8720,8 +8922,8 @@ sym_E0_d_main = {
     0x8033022C: table.sym_var("object_a_8033022C",  "s16",  "[][2]",    table.GLOBL),
     0x80330244: table.sym_var("object_a_80330244",  "s16",  "[][2]",    table.GLOBL),
     0x80330260: table.sym_var("object_a_80330260",  "s32",  "[][2]",    table.GLOBL),
-    0x80330288: table.sym_var("object_a_80330288",  "u32",  "[]",   table.GLOBL),
-    0x80330290: table.sym_var("object_a_80330290",  "u32",  "[]",   table.GLOBL),
+    0x80330288: table.sym_var("object_a_80330288",  "NA_SE",    "[]",   table.GLOBL),
+    0x80330290: table.sym_var("object_a_80330290",  "NA_SE",    "[]",   table.GLOBL),
     0x80330298: table.sym_var("object_a_80330298",  "O_CALLBACK *", "[]",   table.GLOBL),
     0x803302AC: table.sym_var("object_a_803302AC",  "struct object_a_2",    "[]",   table.GLOBL),
     0x803302DC: table.sym_var("object_a_803302DC",  "O_CALLBACK *", "[]",   table.GLOBL),
@@ -8903,7 +9105,7 @@ sym_E0_d_main = {
     0x803314E0: table.sym_var("message_803314E0",   "s16", "[]",    table.GLOBL),
     0x803314EC: table.sym_var("message_803314EC",   "s16", "[]",    table.GLOBL),
     0x803314F8: table.sym_var("message_803314F8",   "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x803315E4: table.sym_var("str_803315E4",   "u8 *", "[]",   table.GLOBL), # end subtitle
+    0x803315E4: table.sym_var("str_803315E4",   "u8 *", "[]",   table.GLOBL), # ending subtitle
     0x8033160C: table.sym_var("message_8033160C",   "u16",  flag=table.GLOBL|ultra.DALIGN),
     0x80331610: table.sym_var("message_80331610",   "s16",  flag=table.GLOBL|ultra.DALIGN),
     0x80331614: table.sym_var("message_80331614",   "s16",  flag=table.GLOBL|ultra.DALIGN),
@@ -9122,9 +9324,9 @@ sym_E0_d_main = {
     0x80333234: table.sym_var("Na_g_80333234",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x80333238: table.sym_var("Na_g_80333238",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x8033323C: table.sym_var("Na_g_8033323C",  "u8",   flag=table.GLOBL|ultra.DALIGN),
-    0x80333240: table.sym_var("Na_g_80333240",  "u32",  "[]",   table.GLOBL),
-    0x80333280: table.sym_var("Na_g_80333280",  "u8",   "[]",   table.GLOBL),
-    0x80333290: table.sym_var("Na_g_80333290",  "u8",   "[]",   table.GLOBL),
+    0x80333240: table.sym_var("Na_g_80333240",  "NA_SE",    "[]",   table.GLOBL),
+    0x80333280: table.sym_var("Na_g_80333280",  "u8",       "[]",   table.GLOBL),
+    0x80333290: table.sym_var("Na_g_80333290",  "u8",       "[]",   table.GLOBL),
 
     # src/audio/data.c
     0x803332A0: table.sym_var("Na_cfg_table",    "NA_CFG", "[]",   table.GLOBL), # 18
@@ -17890,12 +18092,12 @@ sym_E0_s_wf = {
     0x0E000BF8: table.sym_var("s_wf1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
-sym_E0_s_end = {
-    0x0049E710: table.sym("_stage_end_szpSegmentRomStart"),
-    0x004AC4B0: table.sym("_stage_end_dataSegmentRomStart"),
-    0x0E000000: table.sym("p_end", table.GLOBL),
+sym_E0_s_ending = {
+    0x0049E710: table.sym("_stage_ending_szpSegmentRomStart"),
+    0x004AC4B0: table.sym("_stage_ending_dataSegmentRomStart"),
+    0x0E000000: table.sym("p_ending", table.GLOBL),
     0x0E000044: table.sym(".loop", table.LOCAL),
-    0x0E000050: table.sym_var("s_end1", "S_SCRIPT", "[]", table.GLOBL),
+    0x0E000050: table.sym_var("s_ending1", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 sym_E0_s_courty = {
@@ -18118,7 +18320,7 @@ tbl = [
     (0x004784A0, 0x0048D930, "E0", sym_E0_s_lll,    {}, {}),
     (0x0048D930, 0x00496090, "E0", sym_E0_s_ddd,    {}, {}),
     (0x00496090, 0x0049E710, "E0", sym_E0_s_wf,     {}, {}),
-    (0x0049E710, 0x004AC570, "E0", sym_E0_s_end,    {}, {}),
+    (0x0049E710, 0x004AC570, "E0", sym_E0_s_ending, {}, {}),
     (0x004AC570, 0x004AF930, "E0", sym_E0_s_courty, {}, {}),
     (0x004AF930, 0x004B80D0, "E0", sym_E0_s_pss,    {}, {}),
     (0x004B80D0, 0x004BEC30, "E0", sym_E0_s_cotmc,  {}, {}),

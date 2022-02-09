@@ -18,7 +18,6 @@
     _##name##SegmentEnd       = ADDR(.name.bss)  + SIZEOF(.name.bss);   \
     _##name##SegmentRomEnd    = __dev;
 
-#undef mips
 OUTPUT_ARCH(mips)
 SECTIONS
 {

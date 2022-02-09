@@ -7,8 +7,8 @@ OBJ := \
 	$(BUILD)/src/code_01.o  \
 	$(BUILD)/src/bank.o
 
-EXE     := exe
-RES != make -C $(EXE)
+TOOLS   := tools
+RES != make -C $(TOOLS)
 
 AS      := ca65
 LD      := ld65
@@ -24,7 +24,7 @@ clean:
 
 $(BUILD)/%.sfc: make/main.ld $(OBJ)
 	$(LD) -m $(@:.sfc=.map) -o $@ -C $^
-	$(EXE)/mask $@
+	$(TOOLS)/mask $@
 
 -include $(OBJ:.o=.d)
 

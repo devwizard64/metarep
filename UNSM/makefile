@@ -96,32 +96,31 @@ IDO_OBJ := \
 	$(BUILD)/src/obj_sfx.o          \
 	$(BUILD)/src/dprint.o
 
-MAIN_OBJ    += $(AUDIO_OBJ)
-SRC_OBJ     := $(MAIN_OBJ) $(MAIN2_OBJ) $(FACE_OBJ)
+SRC_OBJ := $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)
 
 CROSS   := mips-linux-gnu-
-DONOR   := donor
 ARMIPS  := armips
 FLIPS   := flips
+DONOR   := donor
 
 IDO53   := ido53
 ULTRA   := ultra
-EXE     := exe
+TOOLS   := tools
 RES != make -C $(IDO53)
 RES != make -C $(ULTRA)
-RES != make -C $(EXE)
+RES != make -C $(TOOLS)
 
 CC      := $(CROSS)gcc
 LD      := $(CROSS)ld
-CPP     := $(CROSS)cpp
 OBJCOPY := $(CROSS)objcopy
 NM      := $(CROSS)nm
+CPP     := cpp
 ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -I$(ULTRA)/include -Iinclude -I. -D__$(VERSION)__ -DBUILD=$(BUILD)
 OPT     := -Os
 WFLAG   := -Wall -Wextra -Werror-implicit-function-declaration
-CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding -fno-common
-CCFLAG  += -fno-zero-initialized-in-bss -fno-toplevel-reorder
+CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
+CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
 ASFLAG  := $(ARCH) $(FLAG) $(WFLAG) -Wno-variadic-macros
 CPPFLAG := $(FLAG) -DULTRA=$(ULTRA)
@@ -132,8 +131,8 @@ IDO_WFLAG   := -fullwarn -prototypes
 IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
 IDO_CCFLAG  += $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
 
-OBJ := $(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk | tr "\n" " ")
-SEQ := $(shell $(CPP) $(CPPFLAG) -P -o - make/seq.mk | tr "\n" " ")
+OBJ := $(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk)
+SEQ := $(shell $(CPP) $(CPPFLAG) -P -o - make/seq.mk)
 OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
 
 .PHONY: default
@@ -151,7 +150,7 @@ $(BUILD)/app.bps: $(BUILD)/app.z64
 
 $(BUILD)/app.z64: $(BUILD)/app.elf
 	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
-	$(EXE)/mask $@ NSM$(VERSION) "$(LABEL)"
+	$(TOOLS)/mask $@ NSM$(VERSION) "$(LABEL)"
 
 $(BUILD)/app.elf: $(BUILD)/make/main.ld $(OBJ)
 	$(LD) -Map $(@:.elf=.map) -o $@ -T $<
@@ -163,7 +162,7 @@ include $(addsuffix .d,$(basename $(OBJ) $(SRC_OBJ)))
 $(BUILD)/make/%: make/% | $(BUILD)/make
 	$(CPP) $(CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
 
-$(BUILD)/src/main.ld.o: make/rel.ld $(MAIN_OBJ)
+$(BUILD)/src/main.ld.o: make/rel.ld $(MAIN_OBJ) $(AUDIO_OBJ)
 	$(LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
 
 $(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
@@ -180,14 +179,14 @@ $(BUILD)/%.szp.o: %.c make/szp.ld
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.o=.elf) $(@:.szp.o=.o)
 	$(OBJCOPY) -O binary $(@:.szp.o=.elf) $(@:.szp.o=.bin)
 	$(NM) -f posix $(@:.szp.o=.elf) > $(@:.szp.o=.sym)
-	$(EXE)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $(@:.szp.o=.bin) $(@:.szp.o=.sym)
+	$(TOOLS)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $(@:.szp.o=.bin) $(@:.szp.o=.sym)
 	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
 $(BUILD)/%.szp.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.szp.o: %.bin
 	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $(@:.szp.o=.sym)
-	$(EXE)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $< $(@:.szp.o=.sym)
+	$(TOOLS)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $< $(@:.szp.o=.sym)
 	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
 $(BUILD)/%.szp.d: %.bin
 	@echo $(@:.d=.o): $< > $@
@@ -212,19 +211,20 @@ $(BUILD)/%.d: %.asm
 	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.h: %.png
-	$(EXE)/texture $@ $^
+	$(TOOLS)/texture $@ $^
 
 -include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
 $(BUILD)/data/shape/global/butterfly/%.h: GFXFLAG += -g
 $(BUILD)/data/menu/title/debug/%.h: GFXFLAG += -g
 $(BUILD)/%.h: %.ply
-	$(EXE)/gfx $(GFXFLAG) -o $@ $<
+	$(TOOLS)/gfx $(GFXFLAG) -o $@ $<
 
 $(BUILD)/%.h: %.obj
-	$(EXE)/map $@ $<
+	$(TOOLS)/map $@ $<
 
+$(BUILD)/%.inc.h: $(BUILD)/%.h;
 $(BUILD)/%.h: %.txt
-	$(EXE)/msg $@ $<
+	$(TOOLS)/msg $@ $<
 
 data/%.S: data/%.bin
 
