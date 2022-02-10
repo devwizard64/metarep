@@ -166,7 +166,7 @@ $(BUILD)/src/main.ld.o: make/rel.ld $(MAIN_OBJ) $(AUDIO_OBJ)
 	$(LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
 
 $(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
-$(BUILD)/src/face.ld.o:  $(FACE_OBJ)
+$(BUILD)/src/face.ld.o: $(FACE_OBJ)
 $(BUILD)/src/%.ld.o: make/rel.ld | $(BUILD)/src
 	$(LD) -r -o $@ -T $^
 $(BUILD)/src/%.ld.d: | $(BUILD)/src

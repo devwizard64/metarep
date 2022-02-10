@@ -5608,7 +5608,7 @@ data_bob_shape = [
 ]
 
 lst = [
-    [main.s_data, "J0", ["donor", "UNSMJ0.z64"]],
+    # [main.s_data, "J0", ["donor", "UNSMJ0.z64"]],
     [main.s_data, "E0", ["donor", "UNSME0.z64"]],
     [main.s_copy, ["ido53"],    ["ido53"]],
     [main.s_copy, ["ultra"],    ["ultra"]],
@@ -5624,11 +5624,11 @@ lst = [
     #     [ultra.asm.s_code, 0x80378800, 0x80385F90, "J0", 0, True, True],
     # [main.s_write],
     [main.s_dir, "include"],
-        [main.s_file, "sm64.inc"],
-            [main.s_str, ".ifdef __E0__\n"],
-            [ultra.asm.s_definelabel, "E0"],
-            [main.s_str, ".endif /* __E0__ */\n"],
-        [main.s_write],
+        # [main.s_file, "sm64.inc"],
+        #     [main.s_str, ".ifdef __E0__\n"],
+        #     [ultra.asm.s_definelabel, "E0"],
+        #     [main.s_str, ".endif /* __E0__ */\n"],
+        # [main.s_write],
         s_header("sm64", [
             s_include([
                 "sm64/types",
