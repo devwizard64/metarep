@@ -7,12 +7,19 @@ OBJ := \
 	$(BUILD)/src/code_01.o  \
 	$(BUILD)/src/bank.o
 
+$(eval REVISION := $$$(VERSION))
+REGION  := $(subst $(REVISION),,$(VERSION))
+REGION  := $(subst J,0,$(REGION))
+REGION  := $(subst E,1,$(REGION))
+REGION  := $(subst P,2,$(REGION))
+
 TOOLS   := tools
 RES != make -C $(TOOLS)
 
 AS      := ca65
 LD      := ld65
-FLAG    := -Iinclude -I$(BUILD) -D__$(VERSION)__
+FLAG    := -Iinclude -I$(BUILD)
+FLAG    += -DVERSION_$(VERSION) -DREGION=$(REGION) -DREVISION=$(REVISION)
 ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 .PHONY: default

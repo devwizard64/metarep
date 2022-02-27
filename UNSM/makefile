@@ -96,7 +96,8 @@ IDO_OBJ := \
 	$(BUILD)/src/obj_sfx.o          \
 	$(BUILD)/src/dprint.o
 
-SRC_OBJ := $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)
+$(eval REVISION := $$$(VERSION))
+REGION  := $(subst $(REVISION),,$(VERSION))
 
 CROSS   := mips-linux-gnu-
 ARMIPS  := armips
@@ -112,18 +113,20 @@ RES != make -C $(TOOLS)
 
 CC      := $(CROSS)gcc
 LD      := $(CROSS)ld
+CPP     := $(CROSS)cpp
 OBJCOPY := $(CROSS)objcopy
 NM      := $(CROSS)nm
-CPP     := cpp
 ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
-FLAG    := -I$(ULTRA)/include -Iinclude -I. -D__$(VERSION)__ -DBUILD=$(BUILD)
+FLAG    := -I$(ULTRA)/include -Iinclude -I.
+FLAG    += -DVERSION_$(VERSION) -DREGION=\'$(REGION)\' -DREVISION=$(REVISION)
+FLAG    += -DBUILD=$(BUILD)
 OPT     := -Os
 WFLAG   := -Wall -Wextra -Werror-implicit-function-declaration
 CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
 CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
 ASFLAG  := $(ARCH) $(FLAG) $(WFLAG) -Wno-variadic-macros
-CPPFLAG := $(FLAG) -DULTRA=$(ULTRA)
+CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
 
 IDO_CC      := $(IDO53)/cc
 IDO_OPT     := -g
@@ -131,8 +134,8 @@ IDO_WFLAG   := -fullwarn -prototypes
 IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
 IDO_CCFLAG  += $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
 
-OBJ := $(shell $(CPP) $(CPPFLAG) -P -o - make/obj.mk)
-SEQ := $(shell $(CPP) $(CPPFLAG) -P -o - make/seq.mk)
+OBJ := $(shell $(CPP) $(CPPFLAG) -P make/obj.mk)
+SEQ := $(shell $(CPP) $(CPPFLAG) -P make/seq.mk)
 OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
 
 .PHONY: default
@@ -155,7 +158,7 @@ $(BUILD)/app.z64: $(BUILD)/app.elf
 $(BUILD)/app.elf: $(BUILD)/make/main.ld $(OBJ)
 	$(LD) -Map $(@:.elf=.map) -o $@ -T $<
 
-include $(addsuffix .d,$(basename $(OBJ) $(SRC_OBJ)))
+include $(addsuffix .d,$(basename $(OBJ) $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)))
 
 -include $(BUILD)/make/main.d
 -include $(BUILD)/make/segment.d
@@ -199,14 +202,14 @@ $(BUILD)/%.o: %.c
 $(BUILD)/%.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/%.o: %.S
+$(BUILD)/%.o: %.sx
 	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $<
-$(BUILD)/%.d: %.S
+$(BUILD)/%.d: %.sx
 	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.asm
 	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $(<:.asm=.S)
+	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $(<:.asm=.sx)
 $(BUILD)/%.d: %.asm
 	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
@@ -226,7 +229,7 @@ $(BUILD)/%.inc.h: $(BUILD)/%.h;
 $(BUILD)/%.h: %.txt
 	$(TOOLS)/msg $@ $<
 
-data/%.S: data/%.bin
+data/%.sx: data/%.bin
 
 $(BUILD)/data/audio/seq.o: $(SEQ)
 $(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
@@ -234,7 +237,7 @@ $(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
 
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
-BUILD_OBJ := $(call obj,*.asm *.S *.c *.bin *.png *.ply *.obj *.txt *.seq)
+BUILD_OBJ := $(call obj,*.c *.sx *.asm *.bin *.png *.ply *.obj *.txt *.seq)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
 $(BUILD)/make $(BUILD)/src $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@

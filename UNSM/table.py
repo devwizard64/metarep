@@ -1632,7 +1632,7 @@ sym_E0_t_crt0 = {
     # text
     # ==========================================================================
 
-    # ultra/PR/crt0.S
+    # ultra/src/PR/crt0.s
     0x80246000: table.sym("_start", table.GLOBL),
 
     0x80200600: table.sym("_stack"),
@@ -1651,7 +1651,7 @@ sym_E0_t_ultra = {
     # text
     # ==========================================================================
 
-    # ultra/src/parameters.S
+    # ultra/src/parameters.s
     0x80000300: table.sym("osTvType"),
     0x80000304: table.sym("osRomType"),
     0x80000308: table.sym("osRomBase"),
@@ -1661,12 +1661,12 @@ sym_E0_t_ultra = {
     0x80000318: table.sym("osMemSize"),
     0x8000031C: table.sym("osAppNMIBuffer"),
 
-    # ultra/src/settime.S
+    # ultra/src/settime.c
     0x803223B0: table.sym_fnc("osSetTime", arg=(
         "OSTime time",
     ), flag=table.GLOBL),
 
-    # ultra/src/maptlb.S
+    # ultra/src/maptlb.s
     0x803223E0: table.sym_fnc("osMapTLB", arg=(
         "s32 index",
         "OSPageMask pm",
@@ -1676,10 +1676,10 @@ sym_E0_t_ultra = {
         "s32 asid",
     ), flag=table.GLOBL),
 
-    # ultra/src/unmaptlball.S
+    # ultra/src/unmaptlball.s
     0x803224A0: table.sym_fnc("osUnmapTLBAll", flag=table.GLOBL),
 
-    # ultra/src/sprintf.S
+    # ultra/src/sprintf.c
     0x803224F0: table.sym_fnc("sprintf", "int", (
         "char *",
         "const char *",
@@ -1687,28 +1687,28 @@ sym_E0_t_ultra = {
     ), table.GLOBL),
     0x8032255C: table.sym("proutSprintf"),
 
-    # ultra/src/createmesgqueue.S
+    # ultra/src/createmesgqueue.c
     0x803225A0: table.sym_fnc("osCreateMesgQueue", arg=(
         "OSMesgQueue *mq",
         "OSMesg *msg",
         "s32 count",
     ), flag=table.GLOBL),
 
-    # ultra/src/seteventmesg.S
+    # ultra/src/seteventmesg.c
     0x803225D0: table.sym_fnc("osSetEventMesg", arg=(
         "OSEvent e",
         "OSMesgQueue *mq",
         "OSMesg m",
     ), flag=table.GLOBL),
 
-    # ultra/src/visetevent.S
+    # ultra/src/visetevent.c
     0x80322640: table.sym_fnc("osViSetEvent", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "u32 retraceCount",
     ), flag=table.GLOBL),
 
-    # ultra/src/createthread.S
+    # ultra/src/createthread.c
     0x803226B0: table.sym_fnc("osCreateThread", arg=(
         "OSThread *t",
         "OSId id",
@@ -1718,14 +1718,14 @@ sym_E0_t_ultra = {
         "OSPri pri",
     ), flag=table.GLOBL),
 
-    # ultra/src/recvmesg.S
+    # ultra/src/recvmesg.c
     0x80322800: table.sym_fnc("osRecvMesg", "s32", (
         "OSMesgQueue *mq",
         "OSMesg *msg",
         "s32 flag",
     ), table.GLOBL),
 
-    # ultra/src/sptask.S
+    # ultra/src/sptask.c
     0x80322940: table.sym("_VirtualToPhysicalTask"),
     0x80322A5C: table.sym_fnc("osSpTaskLoad", arg=(
         "OSTask *task",
@@ -1734,51 +1734,51 @@ sym_E0_t_ultra = {
         "OSTask *task",
     ), table.GLOBL),
 
-    # ultra/src/sptaskyield.S
+    # ultra/src/sptaskyield.c
     0x80322C00: table.sym_fnc("osSpTaskYield", "s32", flag=table.GLOBL),
 
-    # ultra/src/sendmesg.S
+    # ultra/src/sendmesg.c
     0x80322C20: table.sym_fnc("osSendMesg", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "s32 flag",
     ), flag=table.GLOBL),
 
-    # ultra/src/sptaskyielded.S
+    # ultra/src/sptaskyielded.c
     0x80322D70: table.sym_fnc("osSpTaskYielded", "OSYieldResult", (
         "OSTask *task",
     ), table.GLOBL),
 
-    # ultra/src/startthread.S
+    # ultra/src/startthread.c
     0x80322DF0: table.sym_fnc("osStartThread", arg=(
         "OSThread *t",
     ), flag=table.GLOBL),
 
-    # ultra/src/writebackdcacheall.S
+    # ultra/src/writebackdcacheall.s
     0x80322F40: table.sym_fnc("osWritebackDCacheAll", flag=table.GLOBL),
 
-    # ultra/src/vimgr.S
+    # ultra/src/vimgr.c
     0x80322F70: table.sym_fnc("osCreateViManager", arg=(
         "OSPri pri",
     ), flag=table.GLOBL),
     0x803230F4: table.sym("viMgrMain"),
 
-    # ultra/src/visetmode.S
+    # ultra/src/visetmode.c
     0x803232D0: table.sym_fnc("osViSetMode", arg=(
         "OSViMode *mode",
     ), flag=table.GLOBL),
 
-    # ultra/src/viblack.S
+    # ultra/src/viblack.c
     0x80323340: table.sym_fnc("osViBlack", arg=(
         "u8 active",
     ), flag=table.GLOBL),
 
-    # ultra/src/visetspecial.S
+    # ultra/src/visetspecial.c
     0x803233B0: table.sym_fnc("osViSetSpecialFeatures", arg=(
         "u32 func",
     ), flag=table.GLOBL),
 
-    # ultra/src/pimgr.S
+    # ultra/src/pimgr.c
     0x80323570: table.sym_fnc("osCreatePiManager", arg=(
         "OSPri pri",
         "OSMesgQueue *cmdQ",
@@ -1786,26 +1786,26 @@ sym_E0_t_ultra = {
         "s32 cmdMsgCnt",
     ), flag=table.GLOBL),
 
-    # ultra/src/setthreadpri.S
+    # ultra/src/setthreadpri.c
     0x803236F0: table.sym_fnc("osSetThreadPri", arg=(
         "OSThread *t",
         "OSPri pri",
     ), flag=table.GLOBL),
 
-    # ultra/src/initialize.S
+    # ultra/src/initialize.c
     0x803237D0: table.sym_fnc("osInitialize", flag=table.GLOBL),
 
-    # ultra/src/viswapbuf.S
+    # ultra/src/viswapbuf.c
     0x80323A00: table.sym_fnc("osViSwapBuffer", arg=(
         "void *vaddr",
     ), flag=table.GLOBL),
 
-    # ultra/src/sqrtf.S
+    # ultra/src/sqrtf.c
     0x80323A50: table.sym_fnc("sqrtf", "float", arg=(
         "float value",
     ), flag=table.GLOBL),
 
-    # ultra/src/contreaddata.S
+    # ultra/src/contreaddata.c
     0x80323A60: table.sym_fnc("osContStartReadData", "s32", (
         "OSMesgQueue *mq",
     ), table.GLOBL),
@@ -1814,7 +1814,7 @@ sym_E0_t_ultra = {
     ), flag=table.GLOBL),
     0x80323BCC: table.sym("__osPackReadData"),
 
-    # ultra/src/controller.S
+    # ultra/src/controller.c
     0x80323CC0: table.sym_fnc("osContInit", "s32", (
         "OSMesgQueue *mq",
         "u8 *bitpattern",
@@ -1823,12 +1823,12 @@ sym_E0_t_ultra = {
     0x80323EBC: table.sym("__osContGetInitData"),
     0x80323F8C: table.sym("__osPackRequestData"),
 
-    # ultra/src/conteepprobe.S
+    # ultra/src/conteepprobe.c
     0x80324080: table.sym_fnc("osEepromProbe", "s32", (
         "OSMesgQueue *mq",
     ), table.GLOBL),
 
-    # ultra/src/ll.S
+    # ultra/src/ll.c
     0x803240F0: table.sym("__ull_rshift", table.GLOBL), # unused
     0x8032411C: table.sym("__ull_rem", table.GLOBL),
     0x80324158: table.sym("__ull_div", table.GLOBL),
@@ -1840,13 +1840,13 @@ sym_E0_t_ultra = {
     0x803242E8: table.sym("__ll_mod", table.GLOBL), # unused
     0x80324384: table.sym("__ll_rshift", table.GLOBL), # unused
 
-    # ultra/src/invaldcache.S
+    # ultra/src/invaldcache.s
     0x803243B0: table.sym_fnc("osInvalDCache", arg=(
         "void *vaddr",
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/pidma.S
+    # ultra/src/pidma.c
     0x80324460: table.sym_fnc("osPiStartDma", arg=(
         "OSIoMesg *mb",
         "s32 priority",
@@ -1857,19 +1857,19 @@ sym_E0_t_ultra = {
         "OSMesgQueue *mq",
     ), flag=table.GLOBL),
 
-    # ultra/src/bzero.S
+    # ultra/src/bzero.s
     0x80324570: table.sym_fnc("bzero", arg=(
         "void *",
         "size_t",
     ), flag=table.GLOBL),
 
-    # ultra/src/invalicache.S
+    # ultra/src/invalicache.s
     0x80324610: table.sym_fnc("osInvalICache", arg=(
         "void *vaddr",
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/conteeplongread.S
+    # ultra/src/conteeplongread.c
     0x80324690: table.sym_fnc("osEepromLongRead", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -1877,7 +1877,7 @@ sym_E0_t_ultra = {
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/conteeplongwrite.S
+    # ultra/src/conteeplongwrite.c
     0x803247D0: table.sym_fnc("osEepromLongWrite", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -1885,14 +1885,14 @@ sym_E0_t_ultra = {
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/bcopy.S
+    # ultra/src/bcopy.s
     0x80324910: table.sym_fnc("bcopy", arg=(
         "const void *",
         "void *",
         "size_t",
     ), flag=table.GLOBL),
 
-    # ultra/src/ortho.S
+    # ultra/src/ortho.c
     0x80324C20: table.sym_fnc("guOrthoF", arg=(
         "float mf[4][4]",
         "float l",
@@ -1914,7 +1914,7 @@ sym_E0_t_ultra = {
         "float scale",
     ), flag=table.GLOBL),
 
-    # ultra/src/perspective.S
+    # ultra/src/perspective.c
     0x80324DE0: table.sym_fnc("guPerspectiveF", arg=(
         "float mf[4][4]",
         "u16 *perspNorm",
@@ -1934,10 +1934,10 @@ sym_E0_t_ultra = {
         "float scale",
     ), flag=table.GLOBL),
 
-    # ultra/src/gettime.S
+    # ultra/src/gettime.c
     0x80325070: table.sym_fnc("osGetTime", "OSTime", flag=table.GLOBL),
 
-    # ultra/src/llcvt.S
+    # ultra/src/llcvt.c
     0x80325100: table.sym("__d_to_ll", table.GLOBL), # unused
     0x8032511C: table.sym("__f_to_ll", table.GLOBL), # unused
     0x80325138: table.sym("__d_to_ull", table.GLOBL),
@@ -1947,17 +1947,17 @@ sym_E0_t_ultra = {
     0x803252A4: table.sym("__ull_to_d", table.GLOBL),
     0x803252D8: table.sym("__ull_to_f", table.GLOBL), # unused
 
-    # ultra/src/cosf.S
+    # ultra/src/cosf.c
     0x80325310: table.sym_fnc("cosf", "float", (
         "float angle",
     ), table.GLOBL),
 
-    # ultra/src/sinf.S
+    # ultra/src/sinf.c
     0x80325480: table.sym_fnc("sinf", "float", (
         "float angle",
     ), table.GLOBL),
 
-    # ultra/src/translate.S
+    # ultra/src/translate.c
     0x80325640: table.sym_fnc("guTranslateF", arg=(
         "float mf[4][4]",
         "float x",
@@ -1971,7 +1971,7 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/rotate.S
+    # ultra/src/rotate.c
     0x803256E0: table.sym_fnc("guRotateF", arg=(
         "float mf[4][4]",
         "float a",
@@ -1987,7 +1987,7 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/scale.S
+    # ultra/src/scale.c
     0x803258D0: table.sym_fnc("guScaleF", arg=(
         "float mf[4][4]",
         "float x",
@@ -2001,12 +2001,12 @@ sym_E0_t_ultra = {
         "float z",
     ), flag=table.GLOBL),
 
-    # ultra/src/aisetfreq.S
+    # ultra/src/aisetfreq.c
     0x80325970: table.sym_fnc("osAiSetFrequency", arg=(
         "u32 frequency",
     ), flag=table.GLOBL),
 
-    # ultra/src/bnkf.S
+    # ultra/src/bnkf.c
     0x80325AD0: table.sym("_bnkfPatchBank"), # unused
     0x80325AD8: table.sym("_bnkfPatchInst"), # unused
     0x80325AE0: table.sym("_bnkfPatchSound"),
@@ -2017,28 +2017,28 @@ sym_E0_t_ultra = {
         "u8 *base",
     ), flag=table.GLOBL),
 
-    # ultra/src/writebackdcache.S
+    # ultra/src/writebackdcache.s
     0x80325D20: table.sym_fnc("osWritebackDCache", arg=(
         "void *vaddr",
         "s32 nbytes",
     ), flag=table.GLOBL),
 
-    # ultra/src/aigetlen.S
+    # ultra/src/aigetlen.c
     0x80325DA0: table.sym_fnc("osAiGetLength", "u32", flag=table.GLOBL),
 
-    # ultra/src/aisetnextbuf.S
+    # ultra/src/aisetnextbuf.c
     0x80325DB0: table.sym_fnc("osAiSetNextBuffer", "s32", (
         "void *vaddr",
         "u32 nbytes",
     ), table.GLOBL),
 
-    # ultra/src/timerintr.S
+    # ultra/src/timerintr.c
     0x80325E60: table.sym("__osTimerServicesInit", table.GLOBL),
     0x80325EEC: table.sym("__osTimerInterrupt", table.GLOBL),
     0x80326064: table.sym("__osSetTimerIntr", table.GLOBL),
     0x803260D8: table.sym("__osInsertTimer", table.GLOBL),
 
-    # ultra/src/xprintf.o
+    # ultra/src/xprintf.c
     0x80326260: table.sym("_Printf", table.GLOBL),
     0x80326A8C: table.sym("_Putfld"),
     0x80326B40: table.sym_fnc("L80326B40", flag=table.GLOBL|table.LOCAL),
@@ -2050,7 +2050,7 @@ sym_E0_t_ultra = {
     0x80327308: table.sym_fnc("L80327308", flag=table.GLOBL|table.LOCAL),
     0x803273A0: table.sym_fnc("L803273A0", flag=table.GLOBL|table.LOCAL),
 
-    # ultra/src/string.S
+    # ultra/src/string.c
     0x803273F0: table.sym_fnc("memcpy", "void *", (
         "void *",
         "const void *",
@@ -2064,17 +2064,17 @@ sym_E0_t_ultra = {
         "int",
     ), table.GLOBL),
 
-    # ultra/src/thread.S
+    # ultra/src/thread.c
     0x80327490: table.sym("__osDequeueThread", table.GLOBL),
 
-    # ultra/src/interrupt.S
+    # ultra/src/interrupt.s
     0x803274D0: table.sym("__osDisableInt", table.GLOBL),
     0x803274F0: table.sym("__osRestoreInt", table.GLOBL),
 
-    # ultra/src/vi.S
+    # ultra/src/vi.c
     0x80327510: table.sym("__osViInit", table.GLOBL),
 
-    # ultra/src/exceptasm.S
+    # ultra/src/exceptasm.s
     0x80327640: table.sym("__osExceptionPreamble", table.GLOBL),
     0x80327650: table.sym("__osException"),
     0x803276B4: table.sym("notIP7", table.LOCAL),
@@ -2112,88 +2112,88 @@ sym_E0_t_ultra = {
     0x80327D88: table.sym("__osDispatchThreadSave", table.LOCAL),
     0x80327EA8: table.sym("__osCleanupThread", table.GLOBL),
 
-    # ultra/src/virtualtophysical.S
+    # ultra/src/virtualtophysical.c
     0x80327EB0: table.sym_fnc("osVirtualToPhysical", "u32", (
         "void *vaddr",
     ), table.GLOBL),
 
-    # ultra/src/spsetstat.S
+    # ultra/src/spsetstat.c
     0x80327F30: table.sym("__osSpSetStatus", table.GLOBL),
 
-    # ultra/src/spsetpc.S
+    # ultra/src/spsetpc.c
     0x80327F40: table.sym("__osSpSetPc", table.GLOBL),
 
-    # ultra/src/sprawdma.S
+    # ultra/src/sprawdma.c
     0x80327F80: table.sym("__osSpRawStartDma", table.GLOBL),
 
-    # ultra/src/sp.S
+    # ultra/src/sp.c
     0x80328010: table.sym("__osSpDeviceBusy", table.GLOBL),
 
-    # ultra/src/spgetstat.S
+    # ultra/src/spgetstat.c
     0x80328040: table.sym("__osSpGetStatus", table.GLOBL),
 
-    # ultra/src/getthreadpri.S
+    # ultra/src/getthreadpri.c
     0x80328050: table.sym_fnc("osGetThreadPri", "OSPri", (
         "OSThread *t",
     ), table.GLOBL),
 
-    # ultra/src/vigetcurrcontext.S
+    # ultra/src/vigetcurrcontext.c
     0x80328070: table.sym("__osViGetCurrentContext", table.GLOBL),
 
-    # ultra/src/viswapcontext.S
+    # ultra/src/viswapcontext.c
     0x80328080: table.sym("__osViSwapContext", table.GLOBL),
 
-    # ultra/src/getcount.S
+    # ultra/src/getcount.s
     0x803283E0: table.sym_fnc("osGetCount", "u32", flag=table.GLOBL),
 
-    # ultra/src/piacs.S
+    # ultra/src/piacs.c
     0x803283F0: table.sym("__osPiCreateAccessQueue", table.GLOBL),
     0x80328440: table.sym("__osPiGetAccess"), # unused
     0x80328484: table.sym("__osPiRelAccess"), # unused
 
-    # ultra/src/pirawdma.S
+    # ultra/src/pirawdma.c
     0x803284B0: table.sym("osPiRawStartDma", table.GLOBL),
 
-    # ultra/src/devmgr.S
+    # ultra/src/devmgr.c
     0x80328590: table.sym("__osDevMgrMain", table.GLOBL),
 
-    # ultra/src/setsr.S
+    # ultra/src/setsr.s
     0x80328710: table.sym_fnc("__osSetSR", arg=(
         "u32 value",
     ), flag=table.GLOBL),
 
-    # ultra/src/getsr.S
+    # ultra/src/getsr.s
     0x80328720: table.sym_fnc("__osGetSR", "u32", flag=table.GLOBL),
 
-    # ultra/src/setfpccsr.S
+    # ultra/src/setfpccsr.s
     0x80328730: table.sym_fnc("__osSetFpcCsr", "u32", (
         "u32 value",
     ), table.GLOBL),
 
-    # ultra/src/sirawread.S
+    # ultra/src/sirawread.c
     0x80328740: table.sym("__osSiRawReadIo", table.GLOBL),
 
-    # ultra/src/sirawwrite.S
+    # ultra/src/sirawwrite.c
     0x80328790: table.sym("__osSiRawWriteIo", table.GLOBL),
 
-    # ultra/src/maptlbrdb.S
+    # ultra/src/maptlbrdb.s
     0x803287E0: table.sym_fnc("osMapTLBRdb", flag=table.GLOBL),
 
-    # ultra/src/pirawread.S
+    # ultra/src/pirawread.c
     0x80328840: table.sym_fnc("osPiRawReadIo", "s32", (
         "u32 devAddr",
         "u32 *data",
     ), table.GLOBL),
 
-    # ultra/src/siacs.S
+    # ultra/src/siacs.c
     0x803288A0: table.sym("__osSiCreateAccessQueue", table.GLOBL),
     0x803288F0: table.sym("__osSiGetAccess", table.GLOBL),
     0x80328934: table.sym("__osSiRelAccess", table.GLOBL),
 
-    # ultra/src/sirawdma.S
+    # ultra/src/sirawdma.c
     0x80328960: table.sym("__osSiRawStartDma", table.GLOBL),
 
-    # ultra/src/settimer.S
+    # ultra/src/settimer.c
     0x80328A10: table.sym_fnc("osSetTimer", arg=(
         "OSTimer *timer",
         "OSTime countdown",
@@ -2202,7 +2202,7 @@ sym_E0_t_ultra = {
         "OSMesg msg",
     ), flag=table.GLOBL),
 
-    # ultra/src/conteepwrite.S
+    # ultra/src/conteepwrite.c
     0x80328AF0: table.sym_fnc("osEepromWrite", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -2211,18 +2211,18 @@ sym_E0_t_ultra = {
     0x80328CA0: table.sym("__osPackEepWriteData"),
     0x80328DAC: table.sym("__osEepStatus", table.GLOBL),
 
-    # ultra/src/jammesg.S
+    # ultra/src/jammesg.c
     0x80328FD0: table.sym_fnc("osJamMesg", arg=(
         "OSMesgQueue *mq",
         "OSMesg msg",
         "s32 flag",
     ), flag=table.GLOBL),
 
-    # ultra/src/pigetcmdq.S
+    # ultra/src/pigetcmdq.c
     0x80329120: table.sym_fnc("osPiGetCmdQueue", "OSMesgQueue *",
     flag=table.GLOBL),
 
-    # ultra/src/conteepread.S
+    # ultra/src/conteepread.c
     0x80329150: table.sym_fnc("osEepromRead", arg=(
         "OSMesgQueue *mq",
         "u8 address",
@@ -2230,7 +2230,7 @@ sym_E0_t_ultra = {
     ), flag=table.GLOBL),
     0x80329340: table.sym("__osPackEepReadData"),
 
-    # ultra/src/mtx.S
+    # ultra/src/mtx.c
     0x80329450: table.sym_fnc("guMtxF2L", arg=(
         "float mf[4][4]",
         "Mtx *m",
@@ -2246,30 +2246,30 @@ sym_E0_t_ultra = {
         "Mtx *m",
     ), flag=table.GLOBL), # unused
 
-    # ultra/src/normalize.S
+    # ultra/src/normalize.c
     0x803296C0: table.sym_fnc("guNormalize", arg=(
         "float *x",
         "float *y",
         "float *z",
     ), flag=table.GLOBL),
 
-    # ultra/src/ai.S
+    # ultra/src/ai.c
     0x80329750: table.sym("__osAiDeviceBusy", table.GLOBL),
 
-    # ultra/src/setcompare.S
+    # ultra/src/setcompare.s
     0x80329780: table.sym_fnc("__osSetCompare", arg=(
         "u32 value",
     ), flag=table.GLOBL),
 
-    # ultra/src/xlitob.S
+    # ultra/src/xlitob.c
     0x80329790: table.sym("_Litob", table.GLOBL),
 
-    # ultra/src/xldtob.S
+    # ultra/src/xldtob.c
     0x80329A90: table.sym("_Ldtob", table.GLOBL),
     0x8032A090: table.sym("_Ldunscale"),
     0x8032A170: table.sym("_Genld"),
 
-    # ultra/src/kdebugserver.S
+    # ultra/src/kdebugserver.c
     0x8032A860: table.sym("u32_to_string"), # unused
     0x8032A890: table.sym("string_to_u32"),
     0x8032A8E8: table.sym("send_packet"),
@@ -2278,33 +2278,33 @@ sym_E0_t_ultra = {
     0x8032AACC: table.sym("process_command_register"),
     0x8032AAF8: table.sym("kdebugserver", table.GLOBL),
 
-    # ultra/src/syncputchars.S
+    # ultra/src/syncputchars.c
     0x8032ACE0: table.sym("__osSyncPutChars", table.GLOBL), # unused
 
-    # ultra/src/setintmask.S
+    # ultra/src/setintmask.s
     0x8032AE10: table.sym_fnc("osSetIntMask", "OSIntMask", (
         "OSIntMask im",
     ), table.GLOBL), # unused
 
-    # ultra/src/destroythread.S
+    # ultra/src/destroythread.c
     0x8032AE70: table.sym_fnc("osDestroyThread", arg=(
         "OSThread *t",
     ), flag=table.GLOBL),
 
-    # ultra/src/probetlb.S
+    # ultra/src/probetlb.s
     0x8032AF70: table.sym("__osProbeTLB", table.GLOBL),
 
-    # ultra/src/si.S
+    # ultra/src/si.c
     0x8032B030: table.sym("__osSiDeviceBusy", table.GLOBL),
 
-    # ultra/src/ldiv.S
+    # ultra/src/ldiv.c
     0x8032B060: table.sym("lldiv", table.GLOBL),
     0x8032B160: table.sym("ldiv", table.GLOBL),
 
-    # ultra/src/getcause.S
+    # ultra/src/getcause.s
     0x8032B1F0: table.sym_fnc("__osGetCause", "u32", flag=table.GLOBL),
 
-    # ultra/src/atomic.S
+    # ultra/src/atomic.c
     0x8032B200: table.sym("__osAtomicDec", table.GLOBL),
 
     0x803358D0: table.sym("__osViDevMgr+0x00"),
@@ -2385,7 +2385,7 @@ sym_E0_d_ultra = {
     0x80335A28: table.sym_var("osViNtscEnabled",    "u32",  flag=ultra.DALIGN),
     0x80335A2C: table.sym_var("osViClock",  "u32",  flag=ultra.DALIGN),
 
-    # ultra/src/exceptasm.S
+    # ultra/src/exceptasm.s
     0x80335A30: table.sym("__osHwIntTable"),
     0x80335A44: table.sym("__osIsRdbWrite"),
     0x80335A48: table.sym("__osIsRdbRead"),
@@ -2449,11 +2449,11 @@ sym_E0_d_ultra = {
     0x8033988C: table.sym_var("fbit",   "const u32", "[]"),
     0x803398A4: table.sym_var_fnc("_Putfld__803398A4", "const", "[]"),
 
-    # ultra/src/exceptasm.S
+    # ultra/src/exceptasm.s
     0x80339980: table.sym("__osIntOffTable"),
     0x803399A0: table.sym("__osIntTable"),
 
-    # ultra/src/libm_vals.S
+    # ultra/src/libm_vals.s
     0x803399D0: table.sym("__libm_qnan_f",  table.GLOBL),
 
     # ultra/src/xldtob.c
@@ -2463,7 +2463,7 @@ sym_E0_d_ultra = {
     0x80339A30: table.sym_var("_Genld__80339A30", "const char", "[]"),
     0x80339A38: table.sym_var("_Ldtob__80339A38", "const double"),
 
-    # ultra/src/setintmask.S
+    # ultra/src/setintmask.s
     0x80339A40: table.sym("__osRcpImTable", table.GLOBL),
 
     # ==========================================================================
@@ -4153,7 +4153,7 @@ sym_E0_t_main = {
     0x8027EEAC: table.sym("time_8027EEAC"),
     0x8027F460: table.sym_fnc("time_draw", flag=table.GLOBL),
 
-    # src/slidec.S
+    # src/slidec.s
     0x8027F4E0: table.sym_fnc("slidec", arg=(
         "const u8 *src",
         "u8 *dst",
@@ -7867,13 +7867,13 @@ sym_E0_t_main = {
     0x80321D5C: table.sym_fnc("Na_g_80321D5C", "u16",
     flag=table.GLOBL), # ext
     0x80321D9C: table.sym_fnc("Na_g_80321D9C"),
-    0x80321E48: table.sym_fnc("Na_BGM_fadeto_start", arg=(
+    0x80321E48: table.sym_fnc("Na_BGM_push", arg=(
         "u8",
         "u8",
         "u8",
         "u16",
     ), flag=table.GLOBL), # ext
-    0x80321F48: table.sym_fnc("Na_BGM_fadeto_end", arg=(
+    0x80321F48: table.sym_fnc("Na_BGM_pull", arg=(
         "u16",
     ), flag=table.GLOBL), # ext
     0x80321F9C: table.sym_fnc("Na_fadeout", arg=(
@@ -8384,7 +8384,7 @@ dev_E0_t_main = {
 # todo: fmt_struct_*
 
 imm_E0_t_main = {
-    # src/mem.S
+    # src/mem.s
     0x80278074: (fmt_mask,),
     0x80278078: (fmt_mask,),
     0x80278080: ("sizeof__mem_link",),
@@ -9302,7 +9302,7 @@ sym_E0_d_main = {
     0x80333060: table.sym_var("bgmctl_data",    "BGMCTL", "[]",  flag=table.GLOBL),
     0x803330C0: table.sym_var("Na_g_803330C0",  "u8",   "[][3]",    table.GLOBL), # (stage len)
     0x80333138: table.sym_var("Na_g_80333138",  "u16",  "[]",   table.GLOBL), # (stage len)
-    0x80333188: table.sym_var("Na_SEQ_vol",     "u8",   "[]",   table.GLOBL),
+    0x80333188: table.sym_var("Na_BGM_vol",     "u8",   "[]",   table.GLOBL),
     0x803331AC: table.sym_var("Na_g_803331AC",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x803331B0: table.sym_var("Na_g_803331B0",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x803331B4: table.sym_var("Na_g_803331B4",  "u8",   "[]",   table.GLOBL),
@@ -9312,7 +9312,7 @@ sym_E0_d_main = {
     0x803331E4: table.sym_var("Na_g_803331E4",  "u8",   "[]",   table.GLOBL),
     0x803331F0: table.sym_var("Na_0",           "vecf", flag=table.GLOBL),
     0x803331FC: table.sym_var("Na_1",           "vecf", flag=table.GLOBL), # unused
-    0x80333208: table.sym_var("Na_g_80333208",  "u8",   "[]",   table.GLOBL),
+    0x80333208: table.sym_var("Na_IO_status",   "u8",   "[]",   table.GLOBL),
     0x80333214: table.sym_var("Na_g_80333214",  "u8",   flag=table.GLOBL|ultra.DALIGN), # unused
     0x80333218: table.sym_var("Na_g_80333218",  "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x8033321C: table.sym_var("Na_g_8033321C",  "u8",   flag=table.GLOBL|ultra.DALIGN),
@@ -14745,8 +14745,8 @@ sym_E0_shp_pl = {
     0x0401C6D8: table.sym_var("gfx_mario_wings_start",  "static Gfx", "[]"),
     0x0401C730: table.sym_var("gfx_mario_wings_end",    "static Gfx", "[]"),
     0x0401C758: table.sym_var("gfx_mario_cap_s",        "Gfx", "[]"), # unused
-    0x0401C7E8: table.sym_var("gfx_mario_wings_s",      "Gfx", "[]"), # unused
-    0x0401C890: table.sym_var("gfx_mario_cap_e",        "Gfx", "[]"), # unused
+    0x0401C7E8: table.sym_var("gfx_mario_cap_e",        "Gfx", "[]"), # unused
+    0x0401C890: table.sym_var("gfx_mario_wings_s",      "Gfx", "[]"), # unused
     0x0401C8E8: table.sym_var("gfx_mario_wings_e",      "Gfx", "[]"), # unused
     0x0401C9C0: table.sym_var("gfx_mario_wing_l",       "static Gfx", "[]"),
     0x0401C9E0: table.sym_var("gfx_mario_wing_r",       "static Gfx", "[]"),
@@ -15656,7 +15656,7 @@ imm_E0_shp_gl = {
 sym_E0_object = {
     0x00219E00: table.sym("_object_dataSegmentRomStart"),
 
-    # object_a.S
+    # object_a.s
     0x13000000: table.sym_var("o_13000000", "O_SCRIPT", "[]", table.GLOBL),
     0x13000054: table.sym_var("o_13000054", "O_SCRIPT", "[]", table.GLOBL), # mr. i
     0x1300008C: table.sym_var("o_1300008C", "O_SCRIPT", "[]", table.GLOBL),
@@ -15929,7 +15929,7 @@ sym_E0_object = {
     0x13002E58: table.sym_var("o_13002E58", "O_SCRIPT", "[]", table.GLOBL),
     0x13002EA8: table.sym_var("o_13002EA8", "O_SCRIPT", "[]", table.GLOBL),
 
-    # player.S
+    # player.s
     0x13002EC0: table.sym_var("o_mario", "O_SCRIPT", "[]", table.GLOBL),
     0x13002EF8: table.sym_var("o_13002EF8", "O_SCRIPT", "[]", table.GLOBL),
     0x13002F40: table.sym_var("o_13002F40", "O_SCRIPT", "[]", table.GLOBL),
@@ -15948,7 +15948,7 @@ sym_E0_object = {
     0x13002F90: table.sym_var("o_13002F90", "O_SCRIPT", "[]", table.GLOBL),
     0x13002F94: table.sym_var("o_13002F94", "O_SCRIPT", "[]", table.GLOBL),
 
-    # object_b.S
+    # object_b.s
     # 0x13002FA0
     0x13002FC0: table.sym_var("o_13002FC0", "O_SCRIPT", "[]", table.GLOBL),
     0x13002FE4: table.sym_var("o_13002FE4", "O_SCRIPT", "[]", table.GLOBL),
@@ -16081,7 +16081,7 @@ sym_E0_object = {
     0x130044FC: table.sym_var("o_130044FC", "O_SCRIPT", "[]", table.GLOBL),
     0x13004538: table.sym_var("o_13004538", "O_SCRIPT", "[]", table.GLOBL),
 
-    # object_c.S
+    # object_c.s
     0x13004580: table.sym_var("o_13004580", "O_SCRIPT", "[]", table.GLOBL), # koopa
     0x130045D0: table.sym_var("o_130045D0", "O_SCRIPT", "[]", table.GLOBL), # koopa flag
     0x130045F8: table.sym_var("o_130045F8", "O_SCRIPT", "[]", table.GLOBL),
@@ -16167,7 +16167,7 @@ sym_E0_object = {
     0x13005598: table.sym_var("o_13005598", "O_SCRIPT", "[]", table.GLOBL), # butterfly?
     0x130055DC: table.sym_var("o_130055DC", "O_SCRIPT", "[]", table.GLOBL),
 
-    # camera.S
+    # camera.s
     0x13005610: table.sym_var("o_13005610", "O_SCRIPT", "[]", table.GLOBL),
     0x13005638: table.sym_var("o_13005638", "O_SCRIPT", "[]", table.GLOBL),
     0x1300565C: table.sym_var("o_1300565C", "O_SCRIPT", "[]", table.GLOBL),

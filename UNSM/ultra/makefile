@@ -116,7 +116,7 @@ CROSS   := mips-linux-gnu-
 ARMIPS  := armips
 
 CC      := $(CROSS)gcc
-AR      := ar
+AR      := $(CROSS)ar
 ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -Iinclude
 OPT     := -Os
@@ -139,17 +139,16 @@ lib/libultra_rom.a: $(SRC_OBJ) | lib
 build/src/%.o: src/%.c | build/src
 	$(CC) $(CCFLAG) -c -o $@ $<
 
-build/src/%.o: src/%.S | build/src
+build/src/%.o: src/%.sx | build/src
 	$(CC) $(ASFLAG) -c -o $@ $<
 
-lib/PR/gspFast3D.fifo.o: $(wildcard PR/gspFast3D/*)
+lib/PR/%.o: src/PR/%.sx | lib/PR
+	$(CC) $(ASFLAG) -c -o $@ $<
 
-lib/PR/%.o: PR/%.asm PR/rsp.inc | build/PR lib/PR
+lib/PR/gspFast3D.fifo.o: $(wildcard src/PR/gspFast3D/*)
+lib/PR/%.o: src/PR/%.asm src/PR/rsp.inc | build/src/PR lib/PR
 	$(ARMIPS) -sym build/$(<:.asm=.sym) $<
-	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.S)
+	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.s)
 
-lib/PR/%.o: PR/%.S | lib/PR
-	$(CC) $(CCFLAG) -c -o $@ $<
-
-build/src build/PR lib lib/PR:
+build/src build/src/PR lib lib/PR:
 	mkdir -p $@

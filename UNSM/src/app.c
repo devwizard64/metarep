@@ -221,10 +221,10 @@ static void video_draw_reset(void)
         int vi = video_vi == 0 ? 2 : video_vi-1;
         u64 *cimg = (void *)PHYS_TO_K0(video_cimg[vi]);
         cimg += SCREEN_WD/4 * reset_frame++;
-        for (y = 0; y < 16; y++)
+        for (y = 0; y < SCREEN_HT/15; y++)
         {
             for (x = 0; x < SCREEN_WD/4; x++) *cimg++ = 0;
-            cimg += SCREEN_WD/4 * (SCREEN_HT/16-1);
+            cimg += SCREEN_WD/4 * (15-1);
         }
     }
     osWritebackDCacheAll();
@@ -459,7 +459,7 @@ void app_main(unused void *arg)
     save_802799DC();
     sc_client_init(2, &sc_client_video, &mq_video_vi, (OSMesg)1);
     pc = segment_to_virtual(p_main);
-    Na_BGM_play(2, 0, 0);
+    Na_BGM_play(2, NA_SEQ_SE, 0);
     audio_output(save_8027A5B4());
     video_init();
     while (true)

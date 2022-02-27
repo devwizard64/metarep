@@ -11,4 +11,4 @@ clean:
 	rm -f -r $(OBJ) __pycache__ *.pyc
 
 %: %.c
-	$(CC) $(CCFLAG) -o $@ $<
+	$(CC) $(CCFLAG) -s -o $@ $<

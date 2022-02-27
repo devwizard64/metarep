@@ -406,11 +406,11 @@ void sc_audio_disable(void)
 
 static void idle_main(unused void *arg)
 {
-#ifndef __J0__
+#ifndef VERSION_J0
     int tv_type = osTvType;
 #endif
     osCreateViManager(OS_PRIORITY_VIMGR);
-#ifndef __J0__
+#ifndef VERSION_J0
     if (tv_type == OS_TV_NTSC)  osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
     else                        osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
 #else

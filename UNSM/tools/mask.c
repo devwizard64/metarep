@@ -49,11 +49,11 @@ static void crc(char *buf, const u8 *data, uint size)
     buf[7] = c1 >>  0;
 }
 
-int main(int argc, const char **argv)
+int main(int argc, char *argv[])
 {
     FILE *f;
     u8 *data;
-    uint size;
+    size_t size;
     char buf[0x30];
     if (argc < 2)
     {
@@ -72,8 +72,7 @@ int main(int argc, const char **argv)
         size = strlen(argv[3]);
         memcpy(&buf[0x10], argv[3], MIN(20, size));
     }
-    f = fopen(argv[1], "r+b");
-    if (f == NULL)
+    if ((f = fopen(argv[1], "r+b")) == NULL)
     {
         fprintf(stderr, "error: could not open '%s'\n", argv[1]);
         return EXIT_FAILURE;

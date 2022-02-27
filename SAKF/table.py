@@ -4,7 +4,7 @@ from hvc.meta import *
 
 sym_J0_00 = {
     0x008004: table.sym("start", table.GLOBL),
-    0x0081B1: table.sym("nmi_main", table.GLOBL | hvc.asm.A16 | hvc.asm.I16),
+    0x0081B1: table.sym("nmi", table.GLOBL | hvc.asm.A16 | hvc.asm.I16),
     0x008292: table.sym("_008292"),
     0x0083C1: table.sym("_0083C1"),
     0x0083E6: table.sym("data_0083E6"),
@@ -14,7 +14,7 @@ sym_J0_00 = {
     0x0083EE: table.sym("data_0083EC+2"),
     0x008404: table.sym("data_008404"),
     0x008406: table.sym("data_008404+2"),
-    0x0084A2: table.sym("irq_main", table.GLOBL | hvc.asm.A16 | hvc.asm.I16),
+    0x0084A2: table.sym("irq", table.GLOBL | hvc.asm.A16 | hvc.asm.I16),
     0x0084BB: table.sym("code_0084BB", table.GLOBL),
     0x0084BE: table.sym("code_0084BE", table.GLOBL),
     0x0084D8: table.sym("code_0084D8"),

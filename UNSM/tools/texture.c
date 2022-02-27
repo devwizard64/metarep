@@ -19,7 +19,7 @@ typedef uint8_t u8;
 typedef struct texture
 {
     const char *str;
-    void (*callback)(FILE *, const u8 *, const u8 *, uint, uint);
+    void (*callback)(FILE *f, const u8 *src, const u8 *pal, uint w, uint h);
 }
 TEXTURE;
 
@@ -107,9 +107,9 @@ TEXTURE(i4)
 TEXTURE(i8)
 #undef TEXTURE
 
-#define TEXTURE(name)   {"." #name ".", texture_##name},
-static const struct texture texture_table[] =
+static const TEXTURE texture_table[] =
 {
+#define TEXTURE(name)   {"." #name ".", texture_##name},
     TEXTURE(rgba16)
     TEXTURE(rgba32)
     TEXTURE(ci4)
@@ -119,10 +119,10 @@ static const struct texture texture_table[] =
     TEXTURE(ia16)
     TEXTURE(i4)
     TEXTURE(i8)
-};
 #undef TEXTURE
+};
 
-int main(int argc, const char **argv)
+int main(int argc, char *argv[])
 {
     FILE *f;
     u8 *src;
@@ -136,8 +136,7 @@ int main(int argc, const char **argv)
         fprintf(stderr, "usage: %s <output> <input> [palette]\n", argv[0]);
         return EXIT_FAILURE;
     }
-    error = lodepng_decode32_file(&src, &w, &h, argv[2]);
-    if (error)
+    if ((error = lodepng_decode32_file(&src, &w, &h, argv[2])))
     {
         fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
         return EXIT_FAILURE;
@@ -146,8 +145,7 @@ int main(int argc, const char **argv)
     {
         uint pal_w;
         uint pal_h;
-        error = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[3]);
-        if (error)
+        if ((error = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[3])))
         {
             fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
             return EXIT_FAILURE;
@@ -157,8 +155,7 @@ int main(int argc, const char **argv)
     {
         pal = NULL;
     }
-    f = fopen(argv[1], "w");
-    if (f == NULL)
+    if ((f = fopen(argv[1], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[1]);
         return EXIT_FAILURE;

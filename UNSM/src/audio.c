@@ -156,8 +156,8 @@ void bgm_endless(void)
     if (audio_endless ^ flag)
     {
         audio_endless = flag;
-        if (flag)   Na_BGM_fadeto_start(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
-        else        Na_BGM_fadeto_end(500);
+        if (flag)   Na_BGM_push(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
+        else        Na_BGM_pull(500);
     }
 }
 

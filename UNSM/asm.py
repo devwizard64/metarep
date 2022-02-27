@@ -868,7 +868,7 @@ def s_anime(self, argv):
     i = 0
     while self.c_addr < end:
         if init:
-            fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".S"
+            fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".sx"
             line.append("#include \"%s/%s\"\n" % (name, fn))
             c = [".balign 4\n"]
         label = file_s(self, c, stbl)

@@ -700,7 +700,7 @@ def d_bgmctl_data_prc(argv):
     b_voice = ultra.uh()
     b_vol   = ultra.uh()
     b_time  = ultra.sh()
-    return ["{(s16)0x%04X, 0x%02X, %3d, 0x%04X, 0x%02X, %3d}" % (
+    return ["{(s16)0x%04X, 0x%02X, %3d, (s16)0x%04X, 0x%02X, %3d}" % (
         a_voice, a_vol, a_time,
         b_voice, b_vol, b_time,
     )]

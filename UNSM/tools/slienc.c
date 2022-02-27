@@ -59,7 +59,7 @@ static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
     return found;
 }
 
-int main(int argc, const char **argv)
+int main(int argc, char *argv[])
 {
     char str[0x1000];
     FILE *f;

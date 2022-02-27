@@ -2269,7 +2269,7 @@ struct_mem = [
     ]],
     [0x08, "file_table", [
         (0x00, table.sym_var("len", "uint")),
-        (0x04, table.sym_var("src", "void *")),
+        (0x04, table.sym_var("src", "u8 *")),
         [0x08, "struct", "table", [
             (0x00, table.sym_var("start",   "uint")),
             (0x04, table.sym_var("size",    "uint")),
@@ -2277,8 +2277,8 @@ struct_mem = [
     ]],
     [0x0C, "file", [
         (0x00, table.sym_var("table",   "struct file_table *")),
-        (0x04, table.sym_var("src",     "void *")),
-        (0x08, table.sym_var("buf",     "void *")),
+        (0x04, table.sym_var("src",     "u8 *")),
+        (0x08, table.sym_var("buf",     "u8 *")),
     ]],
 ]
 
@@ -2734,8 +2734,8 @@ struct_shape = [
         (0x06, table.sym_var("end",     "s16")),
         (0x08, table.sym_var("frame",   "s16")),
         (0x0A, table.sym_var("joint",   "s16")),
-        (0x0C, table.sym_var("val",     "const s16 *")),
-        (0x10, table.sym_var("tbl",     "const u16 *")),
+        (0x0C, table.sym_var("val",     "s16 *")),
+        (0x10, table.sym_var("tbl",     "u16 *")),
         (0x14, table.sym_var("size",    "size_t")),
     ]],
     [0x14, "skeleton", [
@@ -2758,7 +2758,7 @@ struct_shape = [
     [0x1C, "shape_callback", [
         (0x00, table.sym_var("s",       "SHAPE")),
         (0x14, table.sym_var_fnc("callback", val="void *", arg=(
-            "int mode",
+            "int code",
             "struct shape *shape",
             "void *data",
         ))),

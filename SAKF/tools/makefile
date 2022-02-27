@@ -11,4 +11,4 @@ clean:
 	rm -f $(OBJ)
 
 %: %.c
-	$(CC) $(CCFLAG) -o $@ $<
+	$(CC) $(CCFLAG) -s -o $@ $<

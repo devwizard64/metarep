@@ -34,7 +34,7 @@
     .word arg1
 .endmacro
 
-.ifdef __J0__
+.ifdef VERSION_J0
 code_0397F4 = $0397F4
 code_03A02A = $03A02A
 code_03A103 = $03A103
@@ -104,7 +104,7 @@ bss_7ABF = $7ABF
 bss_7B2B = $7B2B
 .endif
 
-.ifdef __E0__
+.ifdef VERSION_E0
 code_01DFC6_E0 = $01DFC6
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A04A
@@ -175,7 +175,7 @@ bss_7ABF = $7AC1
 bss_7B2B = $7B2D
 .endif
 
-.ifdef __P0__
+.ifdef VERSION_P0
 code_01DFC6_E0 = $01DFC6 ;
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A04A ;

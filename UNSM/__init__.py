@@ -228,22 +228,22 @@ str_align   = ".align 4\n"
 str_data    = ".data\n"
 str_rdata   = ".rdata\n"
 str_bss     = ".bss\n"
-str_script  = "#define __SCRIPT__\n"
+str_script  = "#define SCRIPT\n"
 str_msg     = "#include ASSET(data/main/en_us.inc.h)\n"
 str_texture = "#include ASSET(data/texture/%s.szp.h)\n\n"
 
 str_ucode = """
-.include "PR/rsp.inc"
+.include "src/PR/rsp.inc"
 
 """
 
 str_ucode_create = """
-.create "build/PR/%s.bin", %s
+.create "build/src/PR/%s.bin", %s
 
 """
 
 str_ucode_base = """
-.create "build/PR/%s.bin", 0
+.create "build/src/PR/%s.bin", 0
 .base %s
 
 """
@@ -256,7 +256,7 @@ str_ucode_close = """
 str_ucode_s_text = """
 .globl %sTextStart
 %sTextStart:
-.incbin "build/PR/%s.text.bin"
+.incbin "build/src/PR/%s.text.bin"
 .globl %sTextEnd
 %sTextEnd:
 """
@@ -266,7 +266,7 @@ str_ucode_s_data = """
 
 .globl %sDataStart
 %sDataStart:
-.incbin "build/PR/%s.data.bin"
+.incbin "build/src/PR/%s.data.bin"
 .globl %sDataEnd
 %sDataEnd:
 """
@@ -288,24 +288,24 @@ str_gspFast3D_fifo = """
 gspFast3D_fifoTextStart:
 
 init_start:
-.incbin "build/PR/gspFast3D.fifo.init.bin"
-.incbin "build/PR/gspFast3D.fifo.main.bin", 0x88
+.incbin "build/src/PR/gspFast3D.fifo.init.bin"
+.incbin "build/src/PR/gspFast3D.fifo.main.bin", 0x88
 init_end:
 
 main_start:
-.incbin "build/PR/gspFast3D.fifo.main.bin", 0, 0x88
+.incbin "build/src/PR/gspFast3D.fifo.main.bin", 0, 0x88
 main_end:
 
 clip_start:
-.incbin "build/PR/gspFast3D.fifo.clip.bin"
+.incbin "build/src/PR/gspFast3D.fifo.clip.bin"
 clip_end:
 
 light_start:
-.incbin "build/PR/gspFast3D.fifo.light.bin"
+.incbin "build/src/PR/gspFast3D.fifo.light.bin"
 light_end:
 
 exit_start:
-.incbin "build/PR/gspFast3D.fifo.exit.bin"
+.incbin "build/src/PR/gspFast3D.fifo.exit.bin"
 exit_end:
 
 .globl gspFast3D_fifoTextEnd
@@ -321,7 +321,7 @@ gspFast3D_fifoDataStart:
 .macro prg name
     .word \\name\\()_start - gspFast3D_fifoTextStart
     .half \\name\\()_end - \\name\\()_start - 1
-    .incbin "build/PR/gspFast3D.fifo.data.bin", DATA+6, 2
+    .incbin "build/src/PR/gspFast3D.fifo.data.bin", DATA+6, 2
     .set DATA, DATA+8
 .endm
 
@@ -331,7 +331,7 @@ prg clip
 prg light
 prg exit
 
-.incbin "build/PR/gspFast3D.fifo.data.bin", DATA
+.incbin "build/src/PR/gspFast3D.fifo.data.bin", DATA
 
 .globl gspFast3D_fifoDataEnd
 gspFast3D_fifoDataEnd:
@@ -385,7 +385,7 @@ str_audio_g_data = """
 #define BGMCTL_SCENE    6
 #define BGMCTL_AREA     7
 
-#define BGMCTL(x)       (1 << (15-BGMCTL_##x))
+#define BGMCTL(x)       (0x8000 >> BGMCTL_##x)
 """
 
 str_audio_ctl = """
@@ -564,10 +564,10 @@ def s_define(s, l=0, r=0):  return s_def("#define %s"       % s, l, r)
 def s_else(s, l=0, r=0):    return s_def("#else /* %s */"   % s, l, r)
 def s_endif(s, l=0, r=0):   return s_def("#endif /* %s */"  % s, l, r)
 
-def s_script_ifdef():   return s_ifdef("__SCRIPT__", 1, 1)
-def s_script_ifndef():  return s_ifndef("__SCRIPT__", 1, 1)
-def s_script_else():    return s_else("__SCRIPT__", 1, 1)
-def s_script_endif():   return s_endif("__SCRIPT__", 1, 1)
+def s_script_ifdef():   return s_ifdef("SCRIPT", 1, 1)
+def s_script_ifndef():  return s_ifndef("SCRIPT", 1, 1)
+def s_script_else():    return s_else("SCRIPT", 1, 1)
+def s_script_endif():   return s_endif("SCRIPT", 1, 1)
 
 def s_header_macro(self, argv):
     fmt, = argv
@@ -627,7 +627,7 @@ def s_header_code(ts, te, ds, de, bs, be, name, include, lst, g="", c="", s=""):
 
 def s_code(start, end, fn, include=[], s="", macro=True, sep=False):
     return [main.s_call, [
-        [main.s_file, "%s.S" % fn],
+        [main.s_file, "%s.sx" % fn],
             s_include(include),
             [main.s_str, "\n.set noreorder\n.set noat\n"],
             [main.s_str, s],
@@ -724,7 +724,7 @@ def s_script(start, end, addr, size, p="", s=""):
     s_end   = addr + end-start
     return [main.s_call, [
         [main.s_addr, addr-start],
-        [main.s_file, "program.S"],
+        [main.s_file, "program.sx"],
             s_include([
                 "sm64/types",
                 "sm64/p_script",
@@ -755,7 +755,7 @@ def s_script(start, end, addr, size, p="", s=""):
 
 def s_shape_p(start, end, name):
     return [main.s_call, [
-        s_dirfile(os.path.join("shape", name), "program.S"),
+        s_dirfile(os.path.join("shape", name), "program.sx"),
             [asm.s_script, start, end, "E0", 0],
         s_writepop(),
     ]]
@@ -785,7 +785,7 @@ def s_stage(start, end, size, name, gfx, shape, p="", s=""):
             [main.s_write],
             [main.s_dev, None],
             [main.s_addr, 0x0E000000-end],
-            [main.s_file, "program.S"],
+            [main.s_file, "program.sx"],
                 s_include([
                     "sm64/types",
                     "sm64/p_script",
@@ -1097,7 +1097,7 @@ ultra_src = [
         s_endif("__ASSEMBLER__", 1, 1),
         s_endif("__ULTRA_INTERNAL_H__", 1, 0),
     [main.s_write],
-    [main.s_file, "parameters.S"],
+    [main.s_file, "parameters.sx"],
         [main.s_str, str_ultra_parameters],
     [main.s_write],
     s_code(0x803223B0, 0x803223D4, "settime",               ["ultra64"], "", False),
@@ -1260,7 +1260,7 @@ ultra_src = [
         [0, 2, 1, ultra.c.d_addr, ultra.A_ADDR|ultra.A_ARRAY, 0x803359C0, 0x30],
         [0, 2, 1, ultra.c.d_u32],
     ], []),
-    [main.s_file, "exceptasm.S"],
+    [main.s_file, "exceptasm.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -1278,7 +1278,7 @@ ultra_src = [
             [9, 1, ultra.asm.d_waddr],
         ]],
     [main.s_write],
-    [main.s_file, "libm_vals.S"],
+    [main.s_file, "libm_vals.sx"],
         s_include(["ultra64"]),
         [main.s_str, "\n"],
         [main.s_str, str_rdata],
@@ -1317,7 +1317,7 @@ ultra_src = [
     s_data(0x80335B50, 0x80335B58, 0x80339A40, 0x80339A40, 0, 0, "syncputchars.data", ["ultra64", "$internal"], [
         [0, 2, 1, ultra.c.d_u32],
     ], []),
-    [main.s_file, "setintmask.S"],
+    [main.s_file, "setintmask.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_rdata],
         [main.s_str, str_align],
@@ -1328,23 +1328,23 @@ ultra_src = [
     [main.s_write],
 ]
 
-ultra_PR = [
+ultra_src_PR = [
     s_code(0x80246000, 0x80246050, "crt0", ["ultra64"], "", False),
     [main.s_addr, 0],
-    [main.s_file, "mask.S"],
+    [main.s_file, "mask.sx"],
         [ultra.asm.s_header, "E0"],
     [main.s_write],
     [main.s_addr, 0xA4000000-0x00000000],
     s_code(0xA4000040, 0xA4000B6C, "ipl3", ["ultra64"], "", False),
     [main.s_bin, 0xA4000B70, 0xA4001000, "E0", ["ipl3.data.bin"]],
-    [main.s_file, "ipl3.S"],
+    [main.s_file, "ipl3.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [main.s_str, ".incbin \"PR/ipl3.data.bin\"\n"],
+        [main.s_str, ".incbin \"src/PR/ipl3.data.bin\"\n"],
     [main.s_write],
-    [main.s_file, "rspboot.S"],
+    [main.s_file, "rspboot.s"],
         [main.s_str, str_ucode_s_text % (
             "rspboot", "rspboot",
             "rspboot",
@@ -1360,13 +1360,13 @@ ultra_PR = [
         [main.s_str, str_ucode_close],
     [main.s_write],
 
-    [main.s_file, "gspFast3D.fifo.S"],
+    [main.s_file, "gspFast3D.fifo.s"],
         [main.s_str, str_gspFast3D_fifo],
     [main.s_write],
     [main.s_file, "gspFast3D.fifo.asm"],
     [main.s_dir, "gspFast3D"],
         [main.s_str, str_ucode],
-        [main.s_str, ".include \"PR/gspFast3D/init.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/init.asm\"\n"],
         [main.s_file, "init.asm"],
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.init", "0x04001080")],
             [main.s_str, "prg_init_start:\n\n"],
@@ -1374,7 +1374,7 @@ ultra_PR = [
             [ultra.asm.s_code, 0x04001080, 0x04001088, "E0", 1, False, False],
             [main.s_str, str_ucode_close],
         [main.s_write],
-        [main.s_str, ".include \"PR/gspFast3D/main.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/main.asm\"\n"],
         [main.s_file, "main.asm"],
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.main", "0x04001000")],
             [main.s_str, "prg_main_start:\n\n"],
@@ -1389,7 +1389,7 @@ ultra_PR = [
             [main.s_str, "\n.align 8\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
-        [main.s_str, ".include \"PR/gspFast3D/clip.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/clip.asm\"\n"],
         [main.s_file, "clip.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.clip", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E7318],
@@ -1397,7 +1397,7 @@ ultra_PR = [
             [main.s_str, "\n.align 8\nprg_clip_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
-        [main.s_str, ".include \"PR/gspFast3D/light.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/light.asm\"\n"],
         [main.s_file, "light.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.light", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E7538],
@@ -1405,7 +1405,7 @@ ultra_PR = [
             [main.s_str, "\n.align 8\nprg_light_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
-        [main.s_str, ".include \"PR/gspFast3D/exit.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/exit.asm\"\n"],
         [main.s_file, "exit.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.exit", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E76D0],
@@ -1413,7 +1413,7 @@ ultra_PR = [
             [main.s_str, "\n.align 8\nprg_exit_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
-        [main.s_str, ".include \"PR/gspFast3D/data.asm\"\n"],
+        [main.s_str, ".include \"src/PR/gspFast3D/data.asm\"\n"],
         [main.s_file, "data.asm"],
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.data", "0")],
             [main.s_addr, 0x00000000 - 0x000F4AC0],
@@ -1468,7 +1468,7 @@ ultra_PR = [
         [main.s_write],
     [main.s_pop],
     [main.s_write],
-    [main.s_file, "aspMain.S"],
+    [main.s_file, "aspMain.s"],
         [main.s_str, str_ucode_s_text % (
             "aspMain", "aspMain",
             "aspMain",
@@ -2557,7 +2557,7 @@ src_main2 = [
         [0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
         [0, 16, 1, ultra.c.d_f32],
     ]),
-    [main.s_file, "math_table.S"],
+    [main.s_file, "math_table.sx"],
         s_include(["sm64/types"]),
         [main.s_str, "\n"],
         [main.s_str, str_data],
@@ -2743,7 +2743,7 @@ src_audio = [
     s_data(0x80332E50, 0x80332E50, 0x80338E60, 0x803394E4, 0, 0, "f.data", ["sm64/types", "sm64/audio/f"], [], [
         [0, -417, 1, ultra.c.d_addr, ultra.A_EXTERN],
     ]),
-    [main.s_file, "g.S"],
+    [main.s_file, "g.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_bss],
         [main.s_str, str_align],
@@ -2760,7 +2760,7 @@ src_audio = [
         [0, 1, 1, c.d_bgmctl, 6],
         [0, 1, 1, c.d_bgmctl, 12],
         [0, 1, 1, c.d_bgmctl, 12],
-        [0, 1, 1, c.d_bgmctl, 1],
+        [0, 1, 1, c.d_bgmctl, 2],
         [0, 1, 1, c.d_bgmctl, 7],
         [0, 1, 1, c.d_bgmctl, 8],
         [0, 1, 1, c.d_bgmctl, 7],
@@ -2770,7 +2770,7 @@ src_audio = [
         [0, -8, 1, c.d_bgmctl_data],
         [1, -39, 3, ultra.c.d_u8, "0x%02X"],
         [0, 1, 3, None],
-        [0, -39, 1, ultra.c.d_u16, "0x%04X"], # ? - doesnt seem like d
+        [0, -39, 1, ultra.c.d_u16], # ? - doesnt seem like d
         [0, 1, 2, None],
         [0, -34, 1, ultra.c.d_u8],
         [0, 1, 2, None],
@@ -2841,7 +2841,7 @@ src_audio = [
         [0,  1, 1, ultra.c.d_s32],
         [0,  1, ultra.c.d_align_s8],
     ], []),
-    [main.s_file, "bss.S"],
+    [main.s_file, "bss.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_bss],
         [main.s_str, str_align],
@@ -2901,7 +2901,7 @@ src_face = [
         [0, 1, 16, "str"],
     ]),
     s_databin(0x801A8200, 0x801A8334, "draw.data"),
-    [main.s_file, "draw.S"],
+    [main.s_file, "draw.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -2956,7 +2956,7 @@ src_face = [
         [0,   1, 1, ultra.c.d_f32],
     ]),
     s_databin(0x801A8340, 0x801A8358, "object.data"),
-    [main.s_file, "object.S"],
+    [main.s_file, "object.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3065,7 +3065,7 @@ src_face = [
         [0, 1, 44, "str"],
     ]),
     s_databin(0x801A8360, 0x801A83D8, "particle.data"),
-    [main.s_file, "particle.S"],
+    [main.s_file, "particle.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3086,7 +3086,7 @@ src_face = [
         [0, 4, 1, ultra.c.d_f64],
     ]),
     s_databin(0x801A83E0, 0x801A8404, "dynlist.data"),
-    [main.s_file, "dynlist.S"],
+    [main.s_file, "dynlist.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3358,7 +3358,7 @@ src_face = [
         [0, 2, 1, ultra.c.d_f64],
     ]),
     s_databin(0x801A8410, 0x801A8454, "stdio.data"),
-    [main.s_file, "stdio.S"],
+    [main.s_file, "stdio.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3406,7 +3406,7 @@ src_face = [
         [0,   1, 1, ultra.c.d_f64],
     ]),
     s_databin(0x801A8460, 0x801A8468, "joint.data"),
-    [main.s_file, "joint.S"],
+    [main.s_file, "joint.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3494,7 +3494,7 @@ src_face = [
         [0, 4, 1, ultra.c.d_f64],
     ]),
     s_databin(0x801A8470, 0x801A8800, "shape.data"),
-    [main.s_file, "shape.S"],
+    [main.s_file, "shape.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3568,7 +3568,7 @@ src_face = [
         [0,  5, 1, ultra.c.d_f32],
     ]),
     s_databin(0x801A8800, 0x801B54B8, "gfx.data"),
-    [main.s_file, "gfx.S"],
+    [main.s_file, "gfx.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -3753,7 +3753,7 @@ src_face = [
         [0,   1, 1, ultra.c.d_f64],
     ]),
 
-    [main.s_file, "data.S"],
+    [main.s_file, "data.sx"],
         [main.s_str, "\n"],
         [main.s_str, str_bss],
         [main.s_str, str_align],
@@ -5108,7 +5108,7 @@ data_global_shape = [
 ]
 
 data_object = [
-    [main.s_file, "object_a.S"],
+    [main.s_file, "object_a.sx"],
         s_include([
             "sm64/types",
             "sm64/o_script",
@@ -5120,7 +5120,7 @@ data_object = [
         [main.s_str, "\n"],
         [asm.s_script, 0x13000000, 0x13002EB8, "E0", 1],
     [main.s_write],
-    [main.s_file, "player.S"],
+    [main.s_file, "player.sx"],
         s_include([
             "sm64/types",
             "sm64/o_script",
@@ -5132,7 +5132,7 @@ data_object = [
         [main.s_str, "\n"],
         [asm.s_script, 0x13002EC0, 0x13002F98, "E0", 1],
     [main.s_write],
-    [main.s_file, "object_b.S"],
+    [main.s_file, "object_b.sx"],
         s_include([
             "sm64/types",
             "sm64/o_script",
@@ -5144,7 +5144,7 @@ data_object = [
         [main.s_str, "\n"],
         [asm.s_script, 0x13002FA0, 0x13004580, "E0", 1],
     [main.s_write],
-    [main.s_file, "object_c.S"],
+    [main.s_file, "object_c.sx"],
         s_include([
             "sm64/types",
             "sm64/o_script",
@@ -5156,7 +5156,7 @@ data_object = [
         [main.s_str, "\n"],
         [asm.s_script, 0x13004580, 0x13005610, "E0", 1],
     [main.s_write],
-    [main.s_file, "camera.S"],
+    [main.s_file, "camera.sx"],
         s_include([
             "sm64/types",
             "sm64/o_script",
@@ -5617,7 +5617,7 @@ lst = [
     [main.s_copy, ["make"],     ["make"]],
     [main.s_copy, ["meta"],     ["meta"]],
     [main.s_copy, ["src"],      ["src"]],
-    # [main.s_file, "J0.S"],
+    # [main.s_file, "J0.s"],
     #     [main.s_addr, 0x80246000-0x00001000],
     #     [ultra.asm.s_code, 0x80246000, 0x8032A320, "J0", 0, True, True],
     #     [main.s_addr, 0x80378800-0x000F4210],
@@ -5625,9 +5625,9 @@ lst = [
     # [main.s_write],
     [main.s_dir, "include"],
         # [main.s_file, "sm64.inc"],
-        #     [main.s_str, ".ifdef __E0__\n"],
+        #     [main.s_str, ".ifdef VERSION_E0\n"],
         #     [ultra.asm.s_definelabel, "E0"],
-        #     [main.s_str, ".endif /* __E0__ */\n"],
+        #     [main.s_str, ".endif /* VERSION_E0 */\n"],
         # [main.s_write],
         s_header("sm64", [
             s_include([
@@ -5772,9 +5772,9 @@ lst = [
         [main.s_addr, 0x80246000-0x00001000],
         [main.s_dir, "src"],
             [main.s_call, ultra_src],
-        [main.s_pop],
-        [main.s_dir, "PR"],
-            [main.s_call, ultra_PR],
+            [main.s_dir, "PR"],
+                [main.s_call, ultra_src_PR],
+            [main.s_pop],
         [main.s_pop],
         [main.s_addr, 0],
     [main.s_pop],
@@ -5796,7 +5796,7 @@ lst = [
     [main.s_pop],
     [main.s_dir, "data"],
         [main.s_addr, 0x10000000-0x00108A10],
-        [main.s_file, "main.S"],
+        [main.s_file, "main.sx"],
             s_include([
                 "sm64/types",
                 "sm64/p_script",
@@ -5898,7 +5898,7 @@ lst = [
                 s_gfx(0x0026A3A0, 0x0026F420, 0x07, "gfx",   data_title_gfx),
                 s_gfx(0x0026F420, 0x002708C0, 0x07, "debug", data_title_debug),
                 [main.s_addr, 0x14000000-0x00269EA0],
-                [main.s_file, "program.S"],
+                [main.s_file, "program.sx"],
                     s_include([
                         "sm64/types",
                         "sm64/p_script",
@@ -5927,12 +5927,12 @@ lst = [
         [main.s_pop],
         [main.s_dir, "face"],
             [main.s_bin, 0x002739A0, 0x002A6120, "E0", ["data.bin"]],
-            [main.s_file, "data.S"],
+            [main.s_file, "data.sx"],
                 [main.s_str, ".data\n.incbin \"data/face/data.bin\"\n"],
             [main.s_write],
         [main.s_pop],
         [main.s_addr, 0x15000000-0x002ABCA0],
-        [main.s_file, "game.S"],
+        [main.s_file, "game.sx"],
             s_include([
                 "sm64/types",
                 "sm64/p_script",
@@ -6274,13 +6274,13 @@ lst = [
             s_stagebin(0x004D1910, 0x004EB1F0, 0x004EBFFC, 0x00030474, 0x710, "ttm"),
         [main.s_pop],
         [main.s_addr, 0-0x004EC000],
-        [main.s_file, "anime.S"],
+        [main.s_file, "anime.sx"],
             s_include(["sm64/mem"]),
             [main.s_str, str_anime],
             [asm.s_anime, 0x0008DC18, "E0", "anime", (stbl_anime, ctbl_anime)],
         [main.s_write],
         [main.s_addr, 0-0x00579C20],
-        [main.s_file, "demo.S"],
+        [main.s_file, "demo.sx"],
             s_include(["sm64/mem"]),
             [main.s_str, str_demo],
             [asm.s_demo, 0x00001B00, "E0", "demo", (stbl_demo, ctbl_demo)],
@@ -6289,18 +6289,18 @@ lst = [
         [main.s_dir, "audio"],
             [main.s_bin, 0x0057B720, 0x00593560, "E0", ["ctl.bin"]], # 0x00017E40
             [main.s_bin, 0x00593560, 0x007B0860, "E0", ["tbl.bin"]], # 0x0021D300
-            [main.s_file, "ctl.S"],
+            [main.s_file, "ctl.sx"],
                 [main.s_str, str_audio_ctl],
             [main.s_write],
-            [main.s_file, "tbl.S"],
+            [main.s_file, "tbl.sx"],
                 [main.s_str, str_audio_tbl],
             [main.s_write],
             [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", table.seq_table],
-            [main.s_file, "seq.S"],
+            [main.s_file, "seq.sx"],
                 s_include(["sm64/types", "sm64/audio/file"]),
                 [main.s_str, str_audio_seq],
             [main.s_write],
-            [main.s_file, "bnk.S"],
+            [main.s_file, "bnk.sx"],
                 [main.s_str, str_audio_bnk],
             [main.s_write],
         [main.s_pop],

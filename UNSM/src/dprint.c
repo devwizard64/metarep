@@ -230,7 +230,7 @@ static void dprint_draw_char(int x, int y, int n)
         video_gfx++,
         (ux     ) << 2, (uy     ) << 2,
         (ux+16-1) << 2, (uy+16-1) << 2,
-        G_TX_RENDERTILE, 0, 0, 0x400*4, 0x400
+        G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
     );
 }
 
