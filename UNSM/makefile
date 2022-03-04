@@ -188,7 +188,7 @@ $(BUILD)/%.szp.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.szp.o: %.bin
-	printf "a t 0 %x\n" $(shell stat --printf="%s" $<) > $(@:.szp.o=.sym)
+	python3 -c "import os; print(\"a t 0 %x\" % os.path.getsize(\"$<\"))" > $(@:.szp.o=.sym)
 	$(TOOLS)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $< $(@:.szp.o=.sym)
 	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
 $(BUILD)/%.szp.d: %.bin
