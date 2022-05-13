@@ -14,25 +14,23 @@
 #include <sm64/cimg.h>
 #include <sm64/audio/g.h>
 
-#define CONTROLLER_LEN  2
+CONTROLLER   controller_data[CONTROLLER_LEN+1];
+OSContStatus contstatus_data[MAXCONTROLLERS];
+OSContPad    contpad_data[MAXCONTROLLERS];
 
-CONTROLLER   controller_table[CONTROLLER_LEN+1];
-OSContStatus contstatus_table[MAXCONTROLLERS];
-OSContPad    contpad_table[MAXCONTROLLERS];
-
-OSMesgQueue mq_video_vi;
-OSMesgQueue mq_video_dp;
-OSMesg msg_video_vi;
-OSMesg msg_video_dp;
+OSMesgQueue video_vi_mq;
+OSMesgQueue video_dp_mq;
+OSMesg video_vi_msg;
+OSMesg video_dp_msg;
 SC_CLIENT sc_client_video;
 
 uintptr_t video_cimg[3];
 uintptr_t video_zimg;
-u8      *anime_mario_buffer;
-u8      *demo_buffer;
+void    *anime_mario_buffer;
+void    *demo_buffer;
 SC_TASK *video_task;
 Gfx     *video_gfx;
-u8      *video_mem;
+char    *video_mem;
 VIDEO   *video;
 
 u8 input_flag;
@@ -47,9 +45,9 @@ u16 video_vi = 0;
 u16 video_dp = 0;
 void (*video_callback)(void) = NULL;
 
-CONTROLLER *controller_1    = &controller_table[0];
-CONTROLLER *controller_2    = &controller_table[1];
-CONTROLLER *controller_menu = &controller_table[2];
+CONTROLLER *cont_1    = &controller_data[0];
+CONTROLLER *cont_2    = &controller_data[1];
+CONTROLLER *cont_menu = &controller_data[2];
 
 DEMO *demo = NULL;
 u16   demo_index = 0;
@@ -133,10 +131,10 @@ void video_clear(u32 fill)
 
 void video_vp_clear(const Vp *vp, u32 fill)
 {
-    s16 ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
-    s16 uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
-    s16 lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1 - 1;
-    s16 lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1 - 1;
+    SHORT ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
+    SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
+    SHORT lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1 - 1;
+    SHORT lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1 - 1;
     gDPPipeSync(video_gfx++);
     gDPSetRenderMode(video_gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType(video_gfx++, G_CYC_FILL);
@@ -163,22 +161,22 @@ static void video_draw_border(void)
 
 void video_vp_scissor(const Vp *vp)
 {
-    s16 ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
-    s16 uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
-    s16 lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1;
-    s16 lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1;
+    SHORT ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
+    SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
+    SHORT lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1;
+    SHORT lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1;
     gDPSetScissor(video_gfx++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
 }
 
 static void video_init_task(void)
 {
     size_t len = video_gfx - video->gfx;
-    video_task->mq = &mq_video_dp;
+    video_task->mq = &video_dp_mq;
     video_task->msg = (OSMesg)2;
     video_task->task.t.type = M_GFXTASK;
     video_task->task.t.ucode_boot = rspbootTextStart;
     video_task->task.t.ucode_boot_size =
-        (u8 *)rspbootTextEnd - (u8 *)rspbootTextStart;
+        (char *)rspbootTextEnd - (char *)rspbootTextStart;
     video_task->task.t.flags = 0;
     video_task->task.t.ucode = gspFast3D_fifoTextStart;
     video_task->task.t.ucode_data = gspFast3D_fifoDataStart;
@@ -228,17 +226,17 @@ static void video_draw_reset(void)
         }
     }
     osWritebackDCacheAll();
-    osRecvMesg(&mq_video_vi, &msg_null, OS_MESG_BLOCK);
-    osRecvMesg(&mq_video_vi, &msg_null, OS_MESG_BLOCK);
+    osRecvMesg(&video_vi_mq, &null_msg, OS_MESG_BLOCK);
+    osRecvMesg(&video_vi_mq, &null_msg, OS_MESG_BLOCK);
 }
 
 static void video_init(void)
 {
-    video = &video_table[0];
-    segment_set(SEGMENT_VIDEO >> 24, video);
+    video = &video_data[0];
+    segment_set(SEG_VIDEO, video);
     video_task = &video->task;
     video_gfx = video->gfx;
-    video_mem = (u8 *)video->gfx + sizeof(video->gfx);
+    video_mem = (char *)video->gfx + sizeof(video->gfx);
     video_draw_start();
     video_clear(0x00000000);
     video_draw_end();
@@ -249,28 +247,28 @@ static void video_init(void)
 
 static void video_start(void)
 {
-    video = &video_table[video_frame & 1];
-    segment_set(SEGMENT_VIDEO >> 24, video);
+    video = &video_data[video_frame & 1];
+    segment_set(SEG_VIDEO, video);
     video_task = &video->task;
     video_gfx = video->gfx;
-    video_mem = (u8 *)video->gfx + sizeof(video->gfx);
+    video_mem = (char *)video->gfx + sizeof(video->gfx);
 }
 
 static void video_end(void)
 {
-    time_8027E3E0(2);
-    osRecvMesg(&mq_video_dp, &msg_null, OS_MESG_BLOCK);
+    time_gfxcpu(TIME_GFXCPU_ENDGFX);
+    osRecvMesg(&video_dp_mq, &null_msg, OS_MESG_BLOCK);
     if (video_callback != NULL)
     {
         video_callback();
         video_callback = NULL;
     }
     sc_queue_gfxtask(&video->task);
-    time_8027E3E0(3);
-    osRecvMesg(&mq_video_vi, &msg_null, OS_MESG_BLOCK);
+    time_gfxcpu(TIME_GFXCPU_ENDRDP);
+    osRecvMesg(&video_vi_mq, &null_msg, OS_MESG_BLOCK);
     osViSwapBuffer((void *)PHYS_TO_K0(video_cimg[video_vi]));
-    time_8027E3E0(4);
-    osRecvMesg(&mq_video_vi, &msg_null, OS_MESG_BLOCK);
+    time_gfxcpu(TIME_GFXCPU_END);
+    osRecvMesg(&video_vi_mq, &null_msg, OS_MESG_BLOCK);
     if (++video_vi == 3) video_vi = 0;
     if (++video_dp == 3) video_dp = 0;
     video_frame++;
@@ -279,10 +277,9 @@ static void video_end(void)
 unused static void demo_record(void)
 {
     static DEMO record = {0};
-    u8 button =
-        (controller_1->held & 0xF000) >> 8 | (controller_1->held & 0x000F);
-    s8 stick_x = controller_1->stick_x;
-    s8 stick_y = controller_1->stick_y;
+    UCHAR button = (cont_1->held & 0xF000) >> 8 | (cont_1->held & 0x000F);
+    CHAR stick_x = cont_1->stick_x;
+    CHAR stick_y = cont_1->stick_y;
     if (stick_x > -8 && stick_x < 8) stick_x = 0;
     if (stick_y > -8 && stick_y < 8) stick_y = 0;
     if
@@ -327,29 +324,29 @@ static void input_update_stick(CONTROLLER *cont)
 
 static void demo_update(void)
 {
-    controller_table[0].pad->button &= 0xFF3F;
+    controller_data[0].pad->button &= 0xFF3F;
     if (demo != NULL)
     {
-        if (controller_table[1].pad != NULL)
+        if (controller_data[1].pad != NULL)
         {
-            controller_table[1].pad->stick_x = 0;
-            controller_table[1].pad->stick_y = 0;
-            controller_table[1].pad->button  = 0;
+            controller_data[1].pad->stick_x = 0;
+            controller_data[1].pad->stick_y = 0;
+            controller_data[1].pad->button  = 0;
         }
         if (demo->count == 0)
         {
-            controller_table[0].pad->stick_x = 0;
-            controller_table[0].pad->stick_y = 0;
-            controller_table[0].pad->button  = 0x0080;
+            controller_data[0].pad->stick_x = 0;
+            controller_data[0].pad->stick_y = 0;
+            controller_data[0].pad->button  = 0x0080;
         }
         else
         {
-            u16 start = controller_table[0].pad->button & START_BUTTON;
-            controller_table[0].pad->stick_x = demo->stick_x;
-            controller_table[0].pad->stick_y = demo->stick_y;
-            controller_table[0].pad->button =
+            USHORT start = controller_data[0].pad->button & START_BUTTON;
+            controller_data[0].pad->stick_x = demo->stick_x;
+            controller_data[0].pad->stick_y = demo->stick_y;
+            controller_data[0].pad->button =
                 ((demo->button & 0xF0) << 8) + (demo->button & 0x0F);
-            controller_table[0].pad->button |= start;
+            controller_data[0].pad->button |= start;
             if (--demo->count == 0) demo++;
         }
     }
@@ -360,13 +357,13 @@ static void input_update(void)
     int i;
     if (input_flag != 0)
     {
-        osRecvMesg(&mq_si, &msg_null, OS_MESG_BLOCK);
-        osContGetReadData(contpad_table);
+        osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
+        osContGetReadData(contpad_data);
     }
     demo_update();
     for (i = 0; i < CONTROLLER_LEN; i++)
     {
-        CONTROLLER *cont = &controller_table[i];
+        CONTROLLER *cont = &controller_data[i];
         if (cont->pad != NULL)
         {
             cont->stick_x = cont->pad->stick_x;
@@ -386,64 +383,64 @@ static void input_update(void)
             cont->d       = 0;
         }
     }
-    controller_menu->stick_x = controller_1->stick_x;
-    controller_menu->stick_y = controller_1->stick_y;
-    controller_menu->x       = controller_1->x;
-    controller_menu->y       = controller_1->y;
-    controller_menu->d       = controller_1->d;
-    controller_menu->down    = controller_1->down;
-    controller_menu->held    = controller_1->held;
+    cont_menu->stick_x = cont_1->stick_x;
+    cont_menu->stick_y = cont_1->stick_y;
+    cont_menu->x       = cont_1->x;
+    cont_menu->y       = cont_1->y;
+    cont_menu->d       = cont_1->d;
+    cont_menu->down    = cont_1->down;
+    cont_menu->held    = cont_1->held;
 }
 
 static void input_init(void)
 {
-    s16 i;
-    s16 c;
-    controller_table[0].status = &contstatus_table[0];
-    controller_table[0].pad    = &contpad_table[0];
-    osContInit(&mq_si, &input_flag, contstatus_table);
-    eeprom_status = osEepromProbe(&mq_si);
+    SHORT i;
+    SHORT c;
+    controller_data[0].status = &contstatus_data[0];
+    controller_data[0].pad    = &contpad_data[0];
+    osContInit(&si_mq, &input_flag, contstatus_data);
+    eeprom_status = osEepromProbe(&si_mq);
     for (c = 0, i = 0; i < MAXCONTROLLERS && c < CONTROLLER_LEN; i++)
     {
         if (input_flag & (1 << i))
         {
-            controller_table[c  ].status = &contstatus_table[i];
-            controller_table[c++].pad    = &contpad_table[i];
+            controller_data[c  ].status = &contstatus_data[i];
+            controller_data[c++].pad    = &contpad_data[i];
         }
     }
 }
 
-extern u8 _main_dataSegmentRomStart[];
-extern u8 _main_dataSegmentRomEnd[];
-extern u8 _main_szpSegmentRomStart[];
-extern u8 _main_szpSegmentRomEnd[];
-extern u8 _animeSegmentRomStart[];
-extern u8 _demoSegmentRomStart[];
+extern const char _main_dataSegmentRomStart[];
+extern const char _main_dataSegmentRomEnd[];
+extern const char _main_szpSegmentRomStart[];
+extern const char _main_szpSegmentRomEnd[];
+extern const char _animeSegmentRomStart[];
+extern const char _demoSegmentRomStart[];
 
 static void app_init(void)
 {
     unused int i;
     segment_set(0x00, (void *)0x80000000);
-    osCreateMesgQueue(&mq_video_dp, &msg_video_dp, 1);
-    osCreateMesgQueue(&mq_video_vi, &msg_video_vi, 1);
+    osCreateMesgQueue(&video_dp_mq, &video_dp_msg, 1);
+    osCreateMesgQueue(&video_vi_mq, &video_vi_msg, 1);
     video_zimg    = K0_TO_PHYS(depth_buffer);
     video_cimg[0] = K0_TO_PHYS(colour_buffer_a);
     video_cimg[1] = K0_TO_PHYS(colour_buffer_b);
     video_cimg[2] = K0_TO_PHYS(colour_buffer_c);
     anime_mario_buffer = mem_alloc(0x4000, MEM_ALLOC_L);
-    segment_set(SEGMENT_ANIME_MARIO >> 24, anime_mario_buffer);
+    segment_set(SEG_ANIME_MARIO, anime_mario_buffer);
     file_init(&file_anime_mario, _animeSegmentRomStart, anime_mario_buffer);
     demo_buffer = mem_alloc(0x800, MEM_ALLOC_L);
-    segment_set(SEGMENT_DEMO >> 24, demo_buffer);
+    segment_set(SEG_DEMO, demo_buffer);
     file_init(&file_demo, _demoSegmentRomStart, demo_buffer);
     mem_load_data(
-        SEGMENT_DATA_MAIN >> 24,
+        SEG_DATA_MAIN,
         _main_dataSegmentRomStart,
         _main_dataSegmentRomEnd,
         MEM_ALLOC_L
     );
     mem_load_szp(
-        SEGMENT_SZP_MAIN >> 24,
+        SEG_SZP_MAIN,
         _main_szpSegmentRomStart,
         _main_szpSegmentRomEnd
     );
@@ -453,29 +450,29 @@ extern P_SCRIPT p_main[];
 
 void app_main(unused void *arg)
 {
-    P_SCRIPT *pc;
+    const P_SCRIPT *pc;
     app_init();
     input_init();
     save_802799DC();
-    sc_client_init(2, &sc_client_video, &mq_video_vi, (OSMesg)1);
+    sc_client_init(2, &sc_client_video, &video_vi_mq, (OSMesg)1);
     pc = segment_to_virtual(p_main);
     Na_BGM_play(2, NA_SEQ_SE, 0);
     audio_output(save_8027A5B4());
     video_init();
-    while (true)
+    for (;;)
     {
         if (reset_timer != 0)
         {
             video_draw_reset();
             continue;
         }
-        time_8027E3E0(0);
-        if (input_flag != 0) osContStartReadData(&mq_si);
+        time_gfxcpu(TIME_GFXCPU_START);
+        if (input_flag != 0) osContStartReadData(&si_mq);
         audio_update();
         video_start();
         input_update();
         pc = p_script_main(pc);
         video_end();
-        if (debug_mem) dprintf(180, 20, "BUF %d", video_mem-(u8 *)video_gfx);
+        if (debug_mem) dprintf(180, 20, "BUF %d", video_mem-(char *)video_gfx);
     }
 }

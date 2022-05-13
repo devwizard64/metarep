@@ -1,30 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
-#define MIN(a, b)               ((a) < (b) ? (a) : (b))
-typedef unsigned int uint;
-typedef uint8_t u8;
-typedef uint32_t u32;
-
-static void crc(char *buf, const u8 *data, uint size)
+static void crc(char *buf, const unsigned char *data, size_t size)
 {
-    u32 c0;
-    u32 c1;
-    u32 c0a;
-    u32 c0b;
-    u32 c1a;
-    u32 c1b;
-    uint i;
+    uint32_t c0;
+    uint32_t c1;
+    uint32_t c0a;
+    uint32_t c0b;
+    uint32_t c1a;
+    uint32_t c1b;
+    size_t i;
     c0 = c1 = c0a = c0b = c1a = c1b = 0xF8CA4DDC;
     for (i = 0; i < size; i += 4)
     {
-        u32 x;
-        u32 o;
-        u32 s;
-        u32 r;
+        uint32_t x;
+        uint32_t o;
+        uint32_t s;
+        uint32_t r;
         x = data[i+0] << 24 | data[i+1] << 16 | data[i+2] << 8 | data[i+3];
         o = c0 + x;
         if (o < c0) c0a++;
@@ -52,15 +46,15 @@ static void crc(char *buf, const u8 *data, uint size)
 int main(int argc, char *argv[])
 {
     FILE *f;
-    u8 *data;
+    unsigned char *data;
     size_t size;
     char buf[0x30];
-    if (argc < 2)
+    if (argc < 2 || argc > 4)
     {
         fprintf(stderr, "usage: %s <image> [code] [label]\n", argv[0]);
-        return EXIT_FAILURE;
+        return 1;
     }
-    memset(buf, 0x00, sizeof(buf));
+    memset(buf, 0, sizeof(buf));
     if (argc > 2)
     {
         memcpy(&buf[0x2B], argv[2], 4);
@@ -70,14 +64,15 @@ int main(int argc, char *argv[])
     {
         memset(&buf[0x10], ' ', 20);
         size = strlen(argv[3]);
-        memcpy(&buf[0x10], argv[3], MIN(20, size));
+        if (size > 20) size = 20;
+        memcpy(&buf[0x10], argv[3], size);
     }
     if ((f = fopen(argv[1], "r+b")) == NULL)
     {
         fprintf(stderr, "error: could not open '%s'\n", argv[1]);
-        return EXIT_FAILURE;
+        return 1;
     }
-    fseek(f, 0x1000, SEEK_END);
+    fseek(f, -0x1000, SEEK_END);
     size = ftell(f);
     if (size > 0x100000) size = 0x100000;
     data = malloc(size);
@@ -88,5 +83,5 @@ int main(int argc, char *argv[])
     fseek(f, 0x10, SEEK_SET);
     fwrite(buf, 1, sizeof(buf), f);
     fclose(f);
-    return EXIT_SUCCESS;
+    return 0;
 }

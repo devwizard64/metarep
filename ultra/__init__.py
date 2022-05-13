@@ -141,10 +141,7 @@ fmt_sp_sw           = lambda x: fmt_flag(flag_sp_sw, x)
 fmt_dpc_sr          = lambda x: fmt_flag(flag_dpc_sr, x)
 
 def fmt_flag(flag, x):
-    lst = []
-    for m, i, s in flag:
-        if (x & m) == i:
-            lst.append(s)
+    lst = [s for m, i, s in flag if (x & m) == i]
     return " | ".join(lst) if len(lst) > 0 else "0"
 
 def fmt_s16(x):

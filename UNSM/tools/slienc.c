@@ -1,23 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <string.h>
-
-#define false   0
-#define true    1
-#define MIN(a, b)               ((a) < (b) ? (a) : (b))
-#define MAX(a, b)               ((a) > (b) ? (a) : (b))
-typedef unsigned int uint;
-typedef uint8_t u8;
-#define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
 #define SIG     "MIO0"
 #define BLK_OL  1
 #define BLK_SL  3
-#define BLK_OH  (BLK_OL+0x0FFF)
-#define BLK_SH  (BLK_SL+0x000F)
-
+#define BLK_OH  (BLK_OL+0xFFF)
+#define BLK_SH  (BLK_SL+0xF)
 #define slitbl()                        \
 {                                       \
     ti++;                               \
@@ -25,7 +14,7 @@ typedef uint8_t u8;
 #define slicpy()                        \
 {                                       \
     *c++ = data[i++];                   \
-    tbl[ti/8] |= 1 << (7-(ti & 7));     \
+    tbl[ti/8] |= 0x80 >> (ti%8);        \
 }
 #define slipkt()                        \
 {                                       \
@@ -33,16 +22,16 @@ typedef uint8_t u8;
     *p++ = x >> 0;                      \
 }
 
-static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
+static int sliblk(const char *data, size_t size, size_t i, int *of, int *sz)
 {
-    uint o  = MAX(0, (int)i-BLK_OH);
-    uint ms = MIN(BLK_SH, size-i);
-    uint found = false;
-    while (o < i && *sz < ms)
+    int flag = 0;
+    size_t o = i < BLK_OH ? 0 : i-BLK_OH;
+    int c = size-i < BLK_SH ? size-i : BLK_SH;
+    while (o < i && *sz < c)
     {
-        uint s = 0;
-        uint n = 0;
-        while (o+s < i+ms && s < ms)
+        int s = 0;
+        int n = 0;
+        while (o+s < i+c && s < c)
         {
             if (data[i+s] != data[o+s < i ? o+s : o+(s%n)]) break;
             if (o+s < i) n++;
@@ -52,63 +41,60 @@ static uint sliblk(const u8 *data, uint size, uint i, uint *of, uint *sz)
         {
             *of = o;
             *sz = s;
-            found = true;
+            flag = 1;
         }
         o++;
     }
-    return found;
+    return flag;
 }
 
 int main(int argc, char *argv[])
 {
-    char str[0x1000];
+    char str[4096];
     FILE *f;
     FILE *s;
     FILE *h;
-    u8 *data;
-    u8 *tbl;
-    u8 *pkt;
-    u8 *cpy;
-    u8 *p;
-    u8 *c;
-    uint size;
-    uint i;
-    uint ti;
-    uint pi;
-    uint ci;
-    uint po;
-    uint co;
-    u8 buf[0x10];
+    char *data;
+    char *tbl;
+    char *pkt;
+    char *cpy;
+    char *p;
+    char *c;
+    size_t size;
+    size_t i;
+    size_t ti;
+    size_t pi;
+    size_t ci;
+    int po;
+    int co;
     if (argc != 6)
     {
-        fprintf(
-            stderr, "usage: %s <a.s> <a.h> <a.szp> <a.bin> <a.sym>\n", argv[0]
-        );
-        return EXIT_FAILURE;
+        fprintf(stderr, "usage: %s <s> <h> <szp> <bin> <sym>\n", argv[0]);
+        return 1;
     }
     if ((f = fopen(argv[5], "r")) == NULL)
     {
         fprintf(stderr, "error: could not read '%s'\n", argv[5]);
-        return EXIT_FAILURE;
+        return 1;
     }
     if ((s = fopen(argv[1], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[1]);
-        return EXIT_FAILURE;
+        return 1;
     }
     if ((h = fopen(argv[2], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[2]);
-        return EXIT_FAILURE;
+        return 1;
     }
     i = ~0;
     size = 0;
-    while (fgets(str, lenof(str), f) != NULL)
+    while (fgets(str, sizeof(str), f) != NULL)
     {
-        char sym[lenof(str)];
+        char sym[sizeof(str)];
         char sec;
-        uint adr;
-        uint siz;
+        unsigned int adr;
+        unsigned int siz;
         sscanf(str, "%s %c %x %x", sym, &sec, &adr, &siz);
         if (i    > adr    ) i    = adr;
         if (size < adr+siz) size = adr+siz;
@@ -119,15 +105,15 @@ int main(int argc, char *argv[])
         }
     }
     fprintf(s, ".data\n.incbin \"%s\"\n", argv[3]);
-    fclose(f);
     fclose(s);
     fclose(h);
+    fclose(f);
     size -= i;
     data = malloc(size);
     if ((f = fopen(argv[4], "rb")) == NULL)
     {
         fprintf(stderr, "error: could not read '%s'\n", argv[4]);
-        return EXIT_FAILURE;
+        return 1;
     }
     fread(data, 1, size, f);
     fclose(f);
@@ -135,19 +121,18 @@ int main(int argc, char *argv[])
     tbl =     malloc(ti);
     pkt = p = malloc(size);
     cpy = c = malloc(size);
-    memset(tbl, 0x00, ti);
+    memset(tbl, 0, ti);
     ti = 0;
-    i = 0;
-    while (i < size)
+    for (i = 0; i < size;)
     {
-        uint of;
-        uint sz;
+        int of;
+        int sz;
         sz = 2;
         if (sliblk(data, size, i, &of, &sz))
         {
-            uint ofn;
-            uint szn;
-            uint x;
+            int ofn;
+            int szn;
+            int x;
             if (szn = sz+1, sliblk(data, size, i+1, &ofn, &szn))
             {
                 slicpy();
@@ -170,37 +155,30 @@ int main(int argc, char *argv[])
     ti = (ti+3) & ~3;
     pi = p-pkt;
     ci = c-cpy;
-    po = 0x10 + ti;
-    co = po   + pi;
-    buf[0x00] = SIG[0];
-    buf[0x01] = SIG[1];
-    buf[0x02] = SIG[2];
-    buf[0x03] = SIG[3];
-    buf[0x04] = size >> 24;
-    buf[0x05] = size >> 16;
-    buf[0x06] = size >>  8;
-    buf[0x07] = size >>  0;
-    buf[0x08] = po   >> 24;
-    buf[0x09] = po   >> 16;
-    buf[0x0A] = po   >>  8;
-    buf[0x0B] = po   >>  0;
-    buf[0x0C] = co   >> 24;
-    buf[0x0D] = co   >> 16;
-    buf[0x0E] = co   >>  8;
-    buf[0x0F] = co   >>  0;
+    po = 16 + ti;
+    co = po + pi;
+    free(data);
     if ((f = fopen(argv[3], "wb")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[3]);
-        return EXIT_FAILURE;
+        return 1;
     }
-    fwrite(buf, 1, sizeof(buf), f);
-    fwrite(tbl, 1, ti, f);
-    fwrite(pkt, 1, pi, f);
-    fwrite(cpy, 1, ci, f);
+    fwrite(SIG, 1, 4, f);
+    fputc(size >> 24, f);
+    fputc(size >> 16, f);
+    fputc(size >>  8, f);
+    fputc(size >>  0, f);
+    fputc(po   >> 24, f);
+    fputc(po   >> 16, f);
+    fputc(po   >>  8, f);
+    fputc(po   >>  0, f);
+    fputc(co   >> 24, f);
+    fputc(co   >> 16, f);
+    fputc(co   >>  8, f);
+    fputc(co   >>  0, f);
+    fwrite(tbl, 1, ti, f); free(tbl);
+    fwrite(pkt, 1, pi, f); free(pkt);
+    fwrite(cpy, 1, ci, f); free(cpy);
     fclose(f);
-    free(data);
-    free(tbl);
-    free(cpy);
-    free(pkt);
-    return EXIT_SUCCESS;
+    return 0;
 }

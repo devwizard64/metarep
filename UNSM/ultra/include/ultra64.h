@@ -1,20 +1,28 @@
 #ifndef _ULTRA64_H_
 #define _ULTRA64_H_
 
+/* ultratypes.h */
+#ifndef TRUE
+#define TRUE    1
+#endif
+#ifndef FALSE
+#define FALSE   0
+#endif
+
 /* math.h */
 #define M_PI                    3.14159265358979323846
 
 /* os.h */
-#define OS_PIM_STACKSIZE        0x1000
-#define OS_VIM_STACKSIZE        0x1000
-#define OS_SIM_STACKSIZE        0x1000
-#define OS_MIN_STACKSIZE        0x0048
+#define OS_PIM_STACKSIZE        4096
+#define OS_VIM_STACKSIZE        4096
+#define OS_SIM_STACKSIZE        4096
+#define OS_MIN_STACKSIZE        72
 
 /* os_thread.h */
-#define OS_STATE_STOPPED        0x0001
-#define OS_STATE_RUNNABLE       0x0002
-#define OS_STATE_RUNNING        0x0004
-#define OS_STATE_WAITING        0x0008
+#define OS_STATE_STOPPED        1
+#define OS_STATE_RUNNABLE       2
+#define OS_STATE_RUNNING        4
+#define OS_STATE_WAITING        8
 #define OS_PRIORITY_MAX         255
 #define OS_PRIORITY_VIMGR       254
 #define OS_PRIORITY_RMON        250
@@ -25,60 +33,60 @@
 #define OS_PRIORITY_IDLE        0
 
 /* os_message.h */
-#define OS_EVENT_SW1            0x00
-#define OS_EVENT_SW2            0x01
-#define OS_EVENT_CART           0x02
-#define OS_EVENT_COUNTER        0x03
-#define OS_EVENT_SP             0x04
-#define OS_EVENT_SI             0x05
-#define OS_EVENT_AI             0x06
-#define OS_EVENT_VI             0x07
-#define OS_EVENT_PI             0x08
-#define OS_EVENT_DP             0x09
-#define OS_EVENT_CPU_BREAK      0x0A
-#define OS_EVENT_SP_BREAK       0x0B
-#define OS_EVENT_FAULT          0x0C
-#define OS_EVENT_THREADSTATUS   0x0D
-#define OS_EVENT_PRENMI         0x0E
-#define OS_NUM_EVENTS           0x0F
-#define OS_MESG_NOBLOCK         0x00
-#define OS_MESG_BLOCK           0x01
+#define OS_NUM_EVENTS           15
+#define OS_EVENT_SW1            0
+#define OS_EVENT_SW2            1
+#define OS_EVENT_CART           2
+#define OS_EVENT_COUNTER        3
+#define OS_EVENT_SP             4
+#define OS_EVENT_SI             5
+#define OS_EVENT_AI             6
+#define OS_EVENT_VI             7
+#define OS_EVENT_PI             8
+#define OS_EVENT_DP             9
+#define OS_EVENT_CPU_BREAK      10
+#define OS_EVENT_SP_BREAK       11
+#define OS_EVENT_FAULT          12
+#define OS_EVENT_THREADSTATUS   13
+#define OS_EVENT_PRENMI         14
+#define OS_MESG_NOBLOCK         0
+#define OS_MESG_BLOCK           1
 
 /* os_exception.h */
-#define OS_FLAG_CPU_BREAK       0x0001
-#define OS_FLAG_FAULT           0x0002
+#define OS_FLAG_CPU_BREAK       1
+#define OS_FLAG_FAULT           2
 #define OS_IM_NONE              0x00000001
 #define OS_IM_SW1               0x00000501
 #define OS_IM_SW2               0x00000601
-#define OS_IM_CART              0x00000C01
+#define OS_IM_CART              0x00000c01
 #define OS_IM_PRENMI            0x00001401
 #define OS_IM_RDBWRITE          0x00002401
 #define OS_IM_RDBREAD           0x00004401
 #define OS_IM_COUNTER           0x00008401
-#define OS_IM_CPU               0x0000FF01
+#define OS_IM_CPU               0x0000ff01
 #define OS_IM_SP                0x00010401
 #define OS_IM_SI                0x00020401
 #define OS_IM_AI                0x00040401
 #define OS_IM_VI                0x00080401
 #define OS_IM_PI                0x00100401
 #define OS_IM_DP                0x00200401
-#define OS_IM_ALL               0x003FFF01
-#define RCP_IMASK               0x003F0000
+#define OS_IM_ALL               0x003fff01
+#define RCP_IMASK               0x003f0000
 #define RCP_IMASKSHIFT          16
 
 /* os_tlb.h */
 #define OS_PM_4K        0x0000000
 #define OS_PM_16K       0x0006000
-#define OS_PM_64K       0x001E000
-#define OS_PM_256K      0x007E000
-#define OS_PM_1M        0x01FE000
-#define OS_PM_4M        0x07FE000
-#define OS_PM_16M       0x1FFE000
+#define OS_PM_64K       0x001e000
+#define OS_PM_256K      0x007e000
+#define OS_PM_1M        0x01fe000
+#define OS_PM_4M        0x07fe000
+#define OS_PM_16M       0x1ffe000
 
 /* os_pi.h */
-#define OS_READ                 0x00
-#define OS_WRITE                0x01
-#define OS_MESG_TYPE_BASE       0x0A
+#define OS_READ                 0
+#define OS_WRITE                1
+#define OS_MESG_TYPE_BASE       (10)
 #define OS_MESG_TYPE_LOOPBACK   (OS_MESG_TYPE_BASE+0)
 #define OS_MESG_TYPE_DMAREAD    (OS_MESG_TYPE_BASE+1)
 #define OS_MESG_TYPE_DMAWRITE   (OS_MESG_TYPE_BASE+2)
@@ -86,40 +94,38 @@
 #define OS_MESG_TYPE_COUNTER    (OS_MESG_TYPE_BASE+4)
 #define OS_MESG_TYPE_EDMAREAD   (OS_MESG_TYPE_BASE+5)
 #define OS_MESG_TYPE_EDMAWRITE  (OS_MESG_TYPE_BASE+6)
-#define OS_MESG_PRI_NORMAL      0x00
-#define OS_MESG_PRI_HIGH        0x01
-#define PI_DOMAIN1              0x00
-#define PI_DOMAIN2              0x01
+#define OS_MESG_PRI_NORMAL      0
+#define OS_MESG_PRI_HIGH        1
 
 /* os_vi.h */
-#define OS_VI_NTSC_LPN1         0x00
-#define OS_VI_NTSC_LPF1         0x01
-#define OS_VI_NTSC_LAN1         0x02
-#define OS_VI_NTSC_LAF1         0x03
-#define OS_VI_NTSC_LPN2         0x04
-#define OS_VI_NTSC_LPF2         0x05
-#define OS_VI_NTSC_LAN2         0x06
-#define OS_VI_NTSC_LAF2         0x07
-#define OS_VI_NTSC_HPN1         0x08
-#define OS_VI_NTSC_HPF1         0x09
-#define OS_VI_NTSC_HAN1         0x0A
-#define OS_VI_NTSC_HAF1         0x0B
-#define OS_VI_NTSC_HPN2         0x0C
-#define OS_VI_NTSC_HPF2         0x0D
-#define OS_VI_PAL_LPN1          0x0E
-#define OS_VI_PAL_LPF1          0x0F
-#define OS_VI_PAL_LAN1          0x10
-#define OS_VI_PAL_LAF1          0x11
-#define OS_VI_PAL_LPN2          0x12
-#define OS_VI_PAL_LPF2          0x13
-#define OS_VI_PAL_LAN2          0x14
-#define OS_VI_PAL_LAF2          0x15
-#define OS_VI_PAL_HPN1          0x16
-#define OS_VI_PAL_HPF1          0x17
-#define OS_VI_PAL_HAN1          0x18
-#define OS_VI_PAL_HAF1          0x19
-#define OS_VI_PAL_HPN2          0x1A
-#define OS_VI_PAL_HPF2          0x1B
+#define OS_VI_NTSC_LPN1         0
+#define OS_VI_NTSC_LPF1         1
+#define OS_VI_NTSC_LAN1         2
+#define OS_VI_NTSC_LAF1         3
+#define OS_VI_NTSC_LPN2         4
+#define OS_VI_NTSC_LPF2         5
+#define OS_VI_NTSC_LAN2         6
+#define OS_VI_NTSC_LAF2         7
+#define OS_VI_NTSC_HPN1         8
+#define OS_VI_NTSC_HPF1         9
+#define OS_VI_NTSC_HAN1         10
+#define OS_VI_NTSC_HAF1         11
+#define OS_VI_NTSC_HPN2         12
+#define OS_VI_NTSC_HPF2         13
+#define OS_VI_PAL_LPN1          14
+#define OS_VI_PAL_LPF1          15
+#define OS_VI_PAL_LAN1          16
+#define OS_VI_PAL_LAF1          17
+#define OS_VI_PAL_LPN2          18
+#define OS_VI_PAL_LPF2          19
+#define OS_VI_PAL_LAN2          20
+#define OS_VI_PAL_LAF2          21
+#define OS_VI_PAL_HPN1          22
+#define OS_VI_PAL_HPF1          23
+#define OS_VI_PAL_HAN1          24
+#define OS_VI_PAL_HAF1          25
+#define OS_VI_PAL_HPN2          26
+#define OS_VI_PAL_HPF2          27
 #define OS_VI_GAMMA_ON                  0x0001
 #define OS_VI_GAMMA_OFF                 0x0002
 #define OS_VI_GAMMA_DITHER_ON           0x0004
@@ -143,14 +149,14 @@
 
 /* os_cont.h */
 #define MAXCONTROLLERS          4
-#define CONT_NO_RESPONSE_ERROR  0x08
-#define CONT_OVERRUN_ERROR      0x04
+#define CONT_NO_RESPONSE_ERROR  0x8
+#define CONT_OVERRUN_ERROR      0x4
 #define CONT_ABSOLUTE           0x0001
 #define CONT_RELATIVE           0x0002
 #define CONT_JOYPORT            0x0004
 #define CONT_EEPROM             0x8000
 #define CONT_EEP16K             0x4000
-#define CONT_TYPE_MASK          0x1F07
+#define CONT_TYPE_MASK          0x1f07
 #define CONT_TYPE_NORMAL        0x0005
 #define CONT_TYPE_MOUSE         0x0002
 #define CONT_CARD_ON            0x01
@@ -185,11 +191,11 @@
 #define L_CBUTTONS              CONT_C
 #define R_CBUTTONS              CONT_F
 #define D_CBUTTONS              CONT_D
-#define CONT_ERR_NO_CONTROLLER  0x01
-#define CONT_ERR_CONTRFAIL      0x04
-#define CONT_ERR_INVALID        0x05
-#define CONT_ERR_DEVICE         0x0B
-#define CONT_ERR_NOT_READY      0x0C
+#define CONT_ERR_NO_CONTROLLER  1
+#define CONT_ERR_CONTRFAIL      4
+#define CONT_ERR_INVALID        5
+#define CONT_ERR_DEVICE         11
+#define CONT_ERR_NOT_READY      12
 
 /* os_system.h */
 #define OS_TV_PAL               0
@@ -198,36 +204,45 @@
 #define OS_APP_NMI_BUFSIZE      64
 
 /* sptask.h */
+#if (defined(F3DEX_GBI)||defined(F3DLP_GBI)||defined(F3DEX_GBI_2))
+#define OS_YIELD_DATA_SIZE      0xc00
+#else
 #define OS_YIELD_DATA_SIZE      0x900
+#endif
 #define OS_YIELD_AUDIO_SIZE     0x400
 
 /* mbi.h */
+#define G_ON                    (1)
+#define G_OFF                   (0)
 #define M_GFXTASK               1
 #define M_AUDTASK               2
+#define NUM_SEGMENTS            (16)
+#define SEGMENT_ADDR(num, off)  (((num) << 24) + (off))
 
 /* ucode.h */
-#define SP_DRAM_STACK_SIZE8     0x0400
-#define SP_DRAM_STACK_SIZE64    0x0080
-#define SP_UCODE_SIZE           0x1000
-#define SP_UCODE_DATA_SIZE      0x0800
+#define SP_DRAM_STACK_SIZE8     (1024)
+#define SP_DRAM_STACK_SIZE64    (SP_DRAM_STACK_SIZE8 >> 3)
+#define SP_UCODE_SIZE           4096
+#define SP_UCODE_DATA_SIZE      2048
 
 #ifndef __ASSEMBLER__
 
-/* types.h */
+/* ultratypes.h */
 #ifdef sgi
-#define NULL ((void *)0)
-typedef   signed char          s8;
-typedef unsigned char          u8;
-typedef   signed short     int s16;
-typedef unsigned short     int u16;
-typedef   signed           int s32;
-typedef unsigned           int u32;
-typedef   signed long long int s64;
-typedef unsigned long long int u64;
-typedef   signed long int intptr_t;
-typedef unsigned long int uintptr_t;
-typedef unsigned long int size_t;
-typedef   signed long int ssize_t;
+#ifndef NULL
+#define NULL    ((void *)0)
+#endif
+typedef unsigned char       u8;
+typedef unsigned short      u16;
+typedef unsigned long       u32;
+typedef unsigned long long  u64;
+typedef signed char s8;
+typedef short       s16;
+typedef long        s32;
+typedef long long   s64;
+typedef long intptr_t;
+typedef unsigned long uintptr_t;
+typedef unsigned long size_t;
 #else
 #include <stddef.h>
 #include <stdint.h>
@@ -436,11 +451,13 @@ OSTask;
 typedef u32 OSYieldResult;
 
 /* mbi.h */
-#define _SHIFTL(v, s, w)        ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
-#define _SHIFTR(v, s, w)        ((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
-#define G_OFF                   0x00
-#define G_ON                    0x01
+#define _SHIFTL(v, s, w)        \
+    ((unsigned int) (((unsigned int)(v) & ((0x01 << (w)) - 1)) << (s)))
+#define _SHIFTR(v, s, w)        \
+    ((unsigned int)(((unsigned int)(v) >> (s)) & ((0x01 << (w)) - 1)))
 #include <gbi.h>
+#define SEGMENT_OFFSET(a)       ((unsigned int)(a) & 0x00ffffff)
+#define SEGMENT_NUMBER(a)       (((unsigned int)(a) << 4) >> 28)
 
 typedef struct
 {
@@ -524,7 +541,7 @@ __OSEventState;
 /* 0x80324610 */ extern void osInvalICache(void *, s32);
 /* 0x80324690 */ extern s32 osEepromLongRead(OSMesgQueue *, u8, u8 *, s32);
 /* 0x803247D0 */ extern s32 osEepromLongWrite(OSMesgQueue *, u8, u8 *, s32);
-/* 0x80324910 */ extern void bcopy(const void *, void *, s32);
+/* 0x80324910 */ extern void bcopy(const void *, void *, size_t);
 /* 0x80324C20 */ extern void guOrthoF(
     f32[4][4], f32, f32, f32, f32, f32, f32, f32
 );
@@ -551,7 +568,7 @@ __OSEventState;
 /* 0x80325DB0 */ extern s32 osAiSetNextBuffer(void *, u32);
 /* 0x803273F0 */ extern void *memcpy(void *, const void *, size_t);
 /* 0x8032741C */ extern size_t strlen(const char *);
-/* 0x80327444 */ extern const char *strchr(const char *, s32);
+/* 0x80327444 */ extern char *strchr(const char *, int);
 /* 0x80327EB0 */ extern u32 osVirtualToPhysical(void *);
 /* 0x80328050 */ extern OSPri osGetThreadPri(OSThread *);
 /* 0x803283E0 */ extern u32 osGetCount(void);

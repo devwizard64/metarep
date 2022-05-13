@@ -16,36 +16,36 @@ static uint dprint_powi(int base, int exponent)
 }
 
 static void dprintf_write(
-    int value, int base, char *buf, int *index, u8 digit, s8 zero
+    int value, int base, char *buf, int *index, UCHAR digit, CHAR zero
 )
 {
     uint power;
     int e = 0;
     int n;
     int i = 0;
-    s8 c;
-    s8 minus = false;
-    char pad = zero == true ? '0' : -1;
+    CHAR c;
+    CHAR minus = FALSE;
+    CHAR pad = zero == TRUE ? '0' : -1;
     if (value != 0)
     {
         if (value < 0)
         {
             value = -value;
-            minus = true;
+            minus = TRUE;
         }
         /* can hang */
-        while (true)
+        for (;;)
         {
             power = dprint_powi(base, e);
             if (power > (uint)value) break;
             e++;
         }
-        if (digit > e)
+        if ((int)digit > e)
         {
-            for (i = 0; i < digit-e; i++) *(buf+i) = pad;
-            if (minus == true) i--;
+            for (i = 0; i < (int)digit-e; i++) *(buf+i) = pad;
+            if (minus == TRUE) i--;
         }
-        if (minus == true)
+        if (minus == TRUE)
         {
             *(buf+i) = 'M';
             i++;
@@ -62,21 +62,21 @@ static void dprintf_write(
     else
     {
         e = 1;
-        if (digit > e)
+        if ((int)digit > e)
         {
-            for (i = 0; i < digit-e; i++) *(buf+i) = pad;
+            for (i = 0; i < (int)digit-e; i++) *(buf+i) = pad;
         }
         *(buf+i) = '0';
     }
     *index += e + i;
 }
 
-static void dprintf_read(const char *fmt, int *index, u8 *digit, s8 *zero)
+static void dprintf_read(const char *fmt, int *index, UCHAR *digit, CHAR *zero)
 {
     char buf[10];
-    s8 n = 0;
-    s16 i;
-    if (fmt[*index] == '0') *zero = true;
+    CHAR n = 0;
+    SHORT i;
+    if (fmt[*index] == '0') *zero = TRUE;
     while (fmt[*index] != 'd' && fmt[*index] != 'x')
     {
         buf[n] = fmt[*index] - '0';
@@ -95,9 +95,9 @@ static void dprintf_read(const char *fmt, int *index, u8 *digit, s8 *zero)
 
 void dprintf(int x, int y, const char *fmt, int value)
 {
-    char c = 0;
-    s8 zero = false;
-    u8 digit = 0;
+    CHAR c = 0;
+    CHAR zero = FALSE;
+    UCHAR digit = 0;
     int base = 0;
     int n = 0;
     int i = 0;
@@ -134,7 +134,7 @@ void dprintf(int x, int y, const char *fmt, int value)
 
 void dprint(int x, int y, const char *str)
 {
-    char c = 0;
+    CHAR c = 0;
     int n = 0;
     int i = 0;
     if ((dprint_table[dprint_index] = malloc(sizeof(DPRINT))) == NULL) return;
@@ -154,8 +154,8 @@ void dprint(int x, int y, const char *str)
 
 void dprintc(int x, int y, const char *str)
 {
-    char c = 0;
-    unused u8 digit = 0;
+    CHAR c = 0;
+    unused UCHAR digit = 0;
     unused int base = 0;
     int n = 0;
     int i = 0;
@@ -179,7 +179,7 @@ extern Gfx gfx_dprint_copy_start[];
 extern Gfx gfx_dprint_copy_char[];
 extern Gfx gfx_dprint_copy_end[];
 
-static char dprint_cvt(char c)
+static CHAR dprint_cvt(CHAR c)
 {
     if (c >= 'A' && c <= 'Z') return 10 + c-'A';
     if (c >= 'a' && c <= 'z') return 10 + c-'a';
@@ -199,12 +199,12 @@ static char dprint_cvt(char c)
     return -1;
 }
 
-static void dprint_draw_txt(char c)
+static void dprint_draw_txt(CHAR c)
 {
     u16 **txt = segment_to_virtual(txt_dprint);
     gDPPipeSync(video_gfx++);
     gDPSetTextureImage(
-        video_gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[(int)c]
+        video_gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[c]
     );
     gSPDisplayList(video_gfx++, gfx_dprint_copy_char);
 }
@@ -238,7 +238,7 @@ void dprint_draw(void)
 {
     int i;
     int n;
-    char c;
+    CHAR c;
     Mtx *mtx;
     if (dprint_index == 0) return;
     if ((mtx = gfx_alloc(sizeof(Mtx))) == NULL)

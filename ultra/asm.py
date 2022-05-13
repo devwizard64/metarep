@@ -255,8 +255,7 @@ imm         = None
 def sym(addr, src=None):
     btbl.add(addr)
     sym = table.sym_addr(ultra.script, addr, src, True)
-    if sym != None:
-        return sym.label
+    if sym != None: return sym.label
     return ".L%08X" % addr
 
 def aw(src=None):
@@ -277,8 +276,7 @@ def str_prc(ptr, argv):
                 I_BDST,
                 I_JDST,
             }:
-                if imm[i] != None:
-                    inst_fmt[arg] = imm[i]
+                if imm[i] != None: inst_fmt[arg] = imm[i]
                 i += 1
     lst = tuple([
         table.imm_prc(inst_fmt[arg], inst_arg[arg])
@@ -325,11 +323,6 @@ def fnc_or(argv):
     if mode == 0:
         if inst_arg[I_RT] == 0:
             ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
-            if inst_arg[I_RS] == 0:
-                if macro:
-                    inst_arg[I_IMMU] = 0
-                    inst_fmt[I_IMMU] = "%d"
-                    ptr, argv = ["li      %s, %s", [I_RD, I_IMMU]]
     lui_write(inst_arg[I_RD], None)
     return str_prc(ptr, argv)
 
@@ -353,7 +346,7 @@ def fnc_b(argv):
     # regimm
     if inst_arg[I_OP] == 0x01:
         # b?z $0
-        if inst_arg[I_RS] == 0x00:
+        if inst_arg[I_RS] == 0:
             # bgezal $0 -> bal
             if inst_arg[I_RT] == 0x11:
                 cnt, ptr = [0, "bal     "]
@@ -372,7 +365,7 @@ def fnc_b(argv):
         # beq
         if inst_arg[I_OP] == 0x04:
             # beq $0, $0 -> b
-            if inst_arg[I_RS] == 0x00:
+            if inst_arg[I_RS] == 0:
                 cnt, ptr = [0, "b       "]
             # beq rs, $0 -> beqz rs
             else:
@@ -394,27 +387,33 @@ def fnc_addiu(argv):
     ptr, argv = ["addiu   %s, %s, %s", [I_RT, I_RS, I_IMMS]]
     if mode == 0:
         # addiu rt, $0, imm -> li rt, imm
-        if inst_arg[I_RS] == 0x00 and inst_arg[I_IMMS] != 0:
+        if inst_arg[I_RS] == 0:
             ptr, argv = ["li      %s, %s", [I_RT, I_IMMS]]
         # lui rt, hi(addr) ... addiu rt, rt, lo(addr)
         elif lui_table[inst_arg[I_RS]] != None:
             ln, immh = lui_table[inst_arg[I_RS]]
             inst_arg[I_IMMS] = ultra.sym(immh + inst_arg[I_IMMS])
             inst_fmt[I_IMMS] = "%s"
-            if inst_arg[I_RT] == inst_arg[I_RS] and macro:
-                line[ln] = (
-                    line[ln][0], str_prc("la.u    %s, %s", [I_RS, I_IMMS])
-                )
-                ptr, argv = ["la.l    %s, %s", [I_RT, I_IMMS]]
+            if inst_arg[I_RT] == inst_arg[I_RS]:
+                if macro:
+                    line[ln] = (
+                        line[ln][0], str_prc("la.u    %s, %s", [I_RS, I_IMMS])
+                    )
+                    ptr, argv = ["la.l    %s, %s", [I_RT, I_IMMS]]
+                else:
+                    line[ln] = (
+                        line[ln][0],
+                        str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
+                    )
+                    ptr, argv = ["addiu   %s, %%lo(%s)", [I_RT, I_IMMS]]
             else:
                 line[ln] = (
-                    line[ln][0],
-                    str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
+                    line[ln][0], str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
                 )
                 ptr, argv = ["addiu   %s, %s, %%lo(%s)", [I_RT, I_RS, I_IMMS]]
     else:
         # ARMIPS rejects this
-        # if inst_arg[I_RS] == 0x00:
+        # if inst_arg[I_RS] == 0:
         #     inst_arg[I_IMMU] = ultra.sym(inst_arg[I_IMMU])
         #     inst_fmt[I_IMMU] = "%s"
         #     ptr, argv = ["la      %s, %s", [I_RT, I_IMMU]]
@@ -424,7 +423,7 @@ def fnc_addiu(argv):
 
 def fnc_ori(argv):
     ptr, argv = ["ori     %s, %s, %s", [I_RT, I_RS, I_IMMU]]
-    if inst_arg[I_RS] == 0x00:
+    if inst_arg[I_RS] == 0:
         if mode == 0:
             # ori rt, $0, imm -> li rt, imm
             if inst_arg[I_IMMU] >= 0x8000:
@@ -448,13 +447,12 @@ def fnc_ori(argv):
                         line[ln][0],
                         str_prc("lui     %s, %s >> 16", [I_RT, I_IMMU])
                     )
-                    ptr, argv = \
-                        ["ori     %s, %s, %s & 0xFFFF", [I_RT, I_RT, I_IMMU]]
+                    ptr, argv = ["ori     %s, %s & 0xFFFF", [I_RT, I_IMMU]]
     lui_write(inst_arg[I_RT], None)
     return str_prc(ptr, argv)
 
 def fnc_lui(argv):
-    if inst_arg[I_RT] != 0x00:
+    if inst_arg[I_RT] != 0:
         lui_write(inst_arg[I_RT], (len(line), inst_arg[I_IMMH]))
     if imm != None:
         ptr, argv = "lui     %s, %s", [I_RT, I_IMMU]
@@ -1311,7 +1309,7 @@ def s_struct_lst(line, prefix, lst):
 def s_struct(self, argv):
     tbl, = argv
     f = self.file[-1][1]
-    for size, name, lst in tbl:
+    for size, c, name, lst in tbl:
         fmt = ultra.fmt_sizefmt(size)
         line = []
         s_struct_lst(line, (name,), lst)
@@ -1326,21 +1324,11 @@ def s_struct(self, argv):
 def s_header(self, argv):
     data, = argv
     ultra.init(self, 0, data)
-    p0 = ultra.ub()
-    p1 = ultra.ub()
-    p2 = ultra.ub()
-    p3 = ultra.ub()
-    c  = ultra.uw()
-    s  = ultra.aw()
-    u0 = ultra.ub()
-    u1 = ultra.ub()
-    u2 = ultra.ub()
-    u3 = ultra.ub()
+    p = ultra.uw()
+    c = ultra.uw()
+    s = ultra.aw()
+    u = ultra.uw()
     self.c_addr += 0x30
-    self.file[-1][1].append((
-        ".byte 0x%02X, 0x%02X, 0x%02X, 0x%02X\n"
-        ".word 0x%08X\n"
-        ".word %s\n"
-        ".byte %d, %d, %d, '%c'\n"
-        ".fill 0x30\n"
-    ) % (p0, p1, p2, p3, c, s, u0, u1, u2, u3))
+    self.file[-1][1].append(".word 0x%08X, 0x%08X, %s, %d << 8 | '%c'\n" % (
+        p, c, s, u >> 8, u & 0xFF
+    ))

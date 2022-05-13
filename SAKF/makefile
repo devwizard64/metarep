@@ -14,7 +14,7 @@ REGION  := $(subst E,1,$(REGION))
 REGION  := $(subst P,2,$(REGION))
 
 TOOLS   := tools
-RES != make -C $(TOOLS)
+RES != $(MAKE) -C $(TOOLS)
 
 AS      := ca65
 LD      := ld65

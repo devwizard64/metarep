@@ -1,4 +1,4 @@
-/* void slidec(const u8 *src, u8 *dst) */
+/* void slidec(const char *src, char *dst) */
 .globl slidec
 slidec:
     lw      $t8, 0x04($a0)

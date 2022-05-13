@@ -104,9 +104,9 @@ SRC_OBJ := \
 	build/src/atomic.o
 
 OBJ := \
-	lib/PR/mask.o           \
-	lib/PR/ipl3.o           \
-	lib/PR/crt0.o           \
+	lib/PR/romheader.o      \
+	lib/PR/Boot.o           \
+	lib/PR/font.o           \
 	lib/PR/rspboot.o        \
 	lib/PR/gspFast3D.fifo.o \
 	lib/PR/aspMain.o        \

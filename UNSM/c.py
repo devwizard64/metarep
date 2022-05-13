@@ -64,7 +64,7 @@ d_pl_walk = [
 # mem.h
 # save.h
 # scene.h
-# shape_draw.h
+# draw.h
 # time.h
 # slidec.h
 
@@ -417,17 +417,24 @@ def d_prg_obj_prc(argv):
     return ["/* %3d */   {%s, %s, %d}" % (i, script, shape, arg)]
 d_prg_obj = [False, d_prg_obj_prc]
 
-map_obj_type = {}
+map_obj_ext = {}
 
 def d_map_obj_prc(argv):
-    index   = ultra.ub()
-    type_   = ultra.ub()
-    arg     = ultra.ub()
-    shape   = UNSM.table.fmt_shape(ultra.ub())
-    script  = ultra.aw(extern=True)
-    map_obj_type[index] = type_
-    index   = UNSM.table.fmt_m_obj(index)
-    return ["{%s, %d, %d, %s, %s}" % (index, type_, arg, shape, script)]
+    index  = ultra.ub()
+    ext    = ultra.ub()
+    code   = ultra.ub()
+    shape  = UNSM.table.fmt_shape(ultra.ub())
+    script = ultra.aw(extern=True)
+    map_obj_ext[index] = ext
+    index = UNSM.table.fmt_m_obj(index)
+    ext   = "M_EXT_" + (
+        "NULL",
+        "RY",
+        "RY_ARG",
+        "XYZ",
+        "RY_CODE",
+    )[ext]
+    return ["{%s, %s, %d, %s, %s}" % (index, ext, code, shape, script)]
 d_map_obj = [False, d_map_obj_prc]
 
 def d_obj_data_prc(argv):
@@ -544,7 +551,7 @@ def d_anime_prc(self, line, tab, argv):
     anime, = argv
     shared = self.c_addr == anime
     self.c_addr = anime
-    flag    = ultra.sh()
+    flag    = UNSM.table.fmt_anime_flag(ultra.sh())
     waist   = ultra.sh()
     start   = ultra.sh()
     end     = ultra.sh()
@@ -581,7 +588,7 @@ def d_anime_prc(self, line, tab, argv):
         ]))
         self.c_pull()
     line.append((anime, sym_anime, set(), [
-        "/* flag     */  0x%04X," % flag,
+        "/* flag     */  %s," % flag,
         "/* waist    */  %d," % waist,
         "/* start    */  %d," % start,
         "/* end      */  %d," % end,
@@ -636,7 +643,7 @@ def d_map_data_prc(argv):
             lst.append("M_OBJ, %d," % n)
             for _ in range(n):
                 o = ultra.sh()
-                n = (3, 4, 5, 6, 4)[map_obj_type[o]]
+                n = (3, 4, 5, 6, 4)[map_obj_ext[o]]
                 o = UNSM.table.fmt_m_obj(o)
                 lst.append(" ".join(
                     [o + ","] + ["%d," % ultra.sh() for _ in range(n)]
@@ -775,21 +782,6 @@ def d_rendermode_prc(argv):
         0x03024000: "G_RM_OPA_SURF2",
     }[ultra.uw()]]
 d_rendermode = [False, d_rendermode_prc]
-
-d_vp_table = {
-}
-
-def d_vp_prc(argv):
-    w = ultra.sh() // 2
-    h = ultra.sh() // 2
-    ultra.script.c_addr += 4
-    x = ultra.sh() // 4
-    y = ultra.sh() // 4
-    ultra.script.c_addr += 4
-    return ["gdSPDefViewport(%s, %s, %s, %s)" % tuple([
-        d_vp_table[x] if x in d_vp_table else "%d" % x for x in (w, h, x, y)
-    ])]
-d_vp = [False, d_vp_prc]
 
 def d_light_prc(argv):
     a, = argv
@@ -1213,8 +1205,7 @@ def s_msg_str(self, lang, line):
     lst = []
     while True:
         x = ultra.ub()
-        if x == 0xFF:
-            break
+        if x == 0xFF: break
         lst.append(x)
     i = 0
     while i < len(lst):
@@ -1226,8 +1217,7 @@ def s_msg_str(self, lang, line):
                 break
         else:
             raise RuntimeError("illegal character 0x%02X" % lst[i])
-    if not line[-1].endswith("\n"):
-        line.append("\n")
+    if not line[-1].endswith("\n"): line.append("\n")
     self.c_addr = (self.c_addr+3) & ~3
 
 def s_msg(self, argv):
@@ -1248,8 +1238,7 @@ def s_msg(self, argv):
                 n = x[3:]
         else:
             x = ultra.uw()
-            if x == 0:
-                break
+            if x == 0: break
             addr = self.c_addr
             self.c_addr = x
             if m == 1:
@@ -1263,12 +1252,10 @@ def s_msg(self, argv):
                 self.c_addr += 2
                 self.c_addr = ultra.uw()
                 cmd, arg = "msg", ["%d, %d, %d, %d" % (arg, ln, x, y)]
-            if table != None and table[i] != None:
-                arg.append(table[i])
+            if table != None and table[i] != None: arg.append(table[i])
         i += 1
         line.append("$%s:" % cmd)
-        if len(arg) > 0:
-            line.append(" " + "; ".join(arg))
+        if len(arg) > 0: line.append(" " + "; ".join(arg))
         line.append("\n")
         if n != None:
             for _ in range(n[1]):
@@ -1279,8 +1266,7 @@ def s_msg(self, argv):
         else:
             s_msg_str(self, lang, line)
         line.append("\n")
-        if m != 0:
-            self.c_addr = addr
+        if m != 0: self.c_addr = addr
     data = "".join(line).rstrip("\n") + "\n"
     fn = self.path_join([name + ".txt"])
     main.mkdir(fn)
@@ -1447,8 +1433,8 @@ def s_shadow(argv):
     ultra.script.c_addr += 1
     type_ = "%d" % ultra.uh() # T:enum(shadow)
     alpha = "%d" % ultra.uh()
-    scale = "%d" % ultra.uh()
-    return (None, scale, alpha, type_)
+    size  = "%d" % ultra.uh()
+    return (None, size, alpha, type_)
 
 # 19
 def s_background(argv):

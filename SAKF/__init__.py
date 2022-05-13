@@ -53,8 +53,7 @@ def hal_decode(src):
     while True:
         x, = struct.unpack(">B", src[i:i+1])
         i += 1
-        if x == 0xFF:
-            break
+        if x == 0xFF: break
         cmd = x >> 5
         siz = x & 0x1F
         if cmd == 7:
@@ -76,8 +75,7 @@ def hal_decode(src):
         elif cmd == 3:
             x, = struct.unpack(">B", src[i:i+1])
             i += 1
-            for x in range(x, x+siz):
-                dst += struct.pack(">B", x & 0xFF)
+            for x in range(x, x+siz): dst += struct.pack(">B", x & 0xFF)
         elif cmd == 5:
             x, = struct.unpack(">H", src[i:i+2])
             i += 2
@@ -100,8 +98,7 @@ def hal_decode(src):
         else:
             x, = struct.unpack(">H", src[i:i+2])
             i += 2
-            for x in range(x, x+siz):
-                dst += dst[x:x+1]
+            for x in range(x, x+siz): dst += dst[x:x+1]
     return dst
 
 def s_hal(self, argv):

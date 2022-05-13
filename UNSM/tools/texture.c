@@ -7,25 +7,21 @@
 #include "lodepng/lodepng.h"
 #include "lodepng/lodepng.cpp"
 
-typedef unsigned int uint;
-typedef uint8_t u8;
-#define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
-#ifdef __GNUC__
-#define unused                  __attribute__((unused))
-#else
-#define unused
-#endif
-
 typedef struct texture
 {
     const char *str;
-    void (*callback)(FILE *f, const u8 *src, const u8 *pal, uint w, uint h);
+    void (*callback)(
+        FILE *f, const unsigned char *src, const unsigned char *pal,
+        unsigned w, unsigned h
+    );
 }
 TEXTURE;
 
-static uint texture_pal(const u8 *src, const u8 *pal, uint len)
+static unsigned int texture_pal(
+    const unsigned char *src, const unsigned char *pal, unsigned int len
+)
 {
-    uint i;
+    unsigned int i;
     for (i = 0; i < len; i++)
     {
         if (memcmp(src, pal + 4*i, 4) == 0) return i;
@@ -77,14 +73,15 @@ static uint texture_pal(const u8 *src, const u8 *pal, uint len)
 #define TEXTURE(name)               \
 static void texture_##name(         \
     FILE *f,                        \
-    const u8 *src,                  \
-    unused const u8 *pal,           \
-    uint w, uint h                  \
+    const unsigned char *src,       \
+    const unsigned char *pal,       \
+    unsigned w, unsigned h          \
 )                                   \
 {                                   \
+    (void)pal;                      \
     do                              \
     {                               \
-        uint i = w;                 \
+        unsigned i = w;             \
         do                          \
         {                           \
             fprintf(f, fmt_##name); \
@@ -125,30 +122,30 @@ static const TEXTURE texture_table[] =
 int main(int argc, char *argv[])
 {
     FILE *f;
-    u8 *src;
-    u8 *pal;
+    unsigned char *src;
+    unsigned char *pal;
     unsigned error;
-    uint w;
-    uint h;
-    uint i;
-    if (argc < 3)
+    unsigned w;
+    unsigned h;
+    int i;
+    if (argc < 3 || argc > 4)
     {
         fprintf(stderr, "usage: %s <output> <input> [palette]\n", argv[0]);
-        return EXIT_FAILURE;
+        return 1;
     }
     if ((error = lodepng_decode32_file(&src, &w, &h, argv[2])))
     {
         fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
-        return EXIT_FAILURE;
+        return 1;
     }
     if (argc > 3)
     {
-        uint pal_w;
-        uint pal_h;
+        unsigned pal_w;
+        unsigned pal_h;
         if ((error = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[3])))
         {
             fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
-            return EXIT_FAILURE;
+            return 1;
         }
     }
     else
@@ -158,9 +155,9 @@ int main(int argc, char *argv[])
     if ((f = fopen(argv[1], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[1]);
-        return EXIT_FAILURE;
+        return 1;
     }
-    for (i = 0; i < lenof(texture_table); i++)
+    for (i = 0; i < (int)(sizeof(texture_table)/sizeof(TEXTURE)); i++)
     {
         const TEXTURE *texture = &texture_table[i];
         if (strstr(argv[2], texture->str))
@@ -172,5 +169,5 @@ int main(int argc, char *argv[])
     fclose(f);
     free(src);
     if (pal != NULL) free(pal);
-    return EXIT_SUCCESS;
+    return 0;
 }

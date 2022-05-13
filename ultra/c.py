@@ -94,6 +94,28 @@ def d_addr_prc(argv):
     return [ultra.fmt_addr(x, extern, addr, cast, array)]
 d_addr = [False, d_addr_prc]
 
+fmt_Vp = {
+    640: "4*(SCREEN_WD/2)",
+    480: "4*(SCREEN_HT/2)",
+    0x1FF: "G_MAXZ/2",
+}
+def d_Vp_prc(argv):
+    w = fmt_Vp[ultra.sh()]
+    h = fmt_Vp[ultra.sh()]
+    d = fmt_Vp[ultra.sh()]
+    ultra.script.c_addr += 2
+    x = fmt_Vp[ultra.sh()]
+    y = fmt_Vp[ultra.sh()]
+    z = fmt_Vp[ultra.sh()]
+    ultra.script.c_addr += 2
+    return [
+        "{{",
+        "\t{%s, %s, %s, 0}," % (w, h, d),
+        "\t{%s, %s, %s, 0}," % (x, y, z),
+        "}}",
+    ]
+d_Vp = [False, d_Vp_prc]
+
 def d_Lights1_prc(argv):
     r0 = ultra.ub()
     g0 = ultra.ub()
@@ -281,7 +303,7 @@ def g_geometrymode(argv):
     if w1 == 0xFFFFFFFF:
         flag = ["~0"]
     else:
-        flag = [s for m, c, s in g_geometrymode_table if (w1 & m) == c]
+        flag = [s for m, i, s in g_geometrymode_table if (w1 & m) == i]
     return (cmd, flag)
 
 g_setothermode_h = {
@@ -874,8 +896,8 @@ def s_struct_lst(f, tab, fmt, lst):
 def s_struct(self, argv):
     tbl, = argv
     f = self.file[-1][1]
-    for size, name, lst in tbl:
+    for size, c, name, lst in tbl:
         fmt = s_struct_fmt(size)
-        f.append("typedef struct %s\n{\n" % name)
+        f.append("typedef %s %s\n{\n" % (c, name))
         s_struct_lst(f, "", fmt, lst)
         f.append(("}   "+fmt.rstrip()+"\n%s;\n\n") % (size, name.upper()))

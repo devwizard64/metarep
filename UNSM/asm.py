@@ -434,86 +434,86 @@ p_inc = {0x08, 0x0A, 0x0E, 0x0F, 0x1D, 0x1F}
 p_dec = {0x09, 0x0B, 0x0F, 0x10, 0x1E, 0x20}
 
 mem_table = (
-    "0x00", # 0x00
-    "FLAG", # 0x01
-    "0x02", # 0x02
-    "0x03", # 0x03
-    "0x04", # 0x04
-    "0x05", # 0x05
-    "0x06", # 0x06
-    "0x07", # 0x07
-    "0x08", # 0x08
-    "0x09", # 0x09
-    "0x0A", # 0x0A
-    "0x0B", # 0x0B
-    "0x0C", # 0x0C
-    "0x0D", # 0x0D
-    "0x0E", # 0x0E
-    "0x0F", # 0x0F
-    "0x10", # 0x10
-    "0x11", # 0x11
-    "0x12", # 0x12
-    "0x13", # 0x13
-    "0x14", # 0x14
-    "0x15", # 0x15
-    "0x16", # 0x16
-    "0x17", # 0x17
-    "0x18", # 0x18
-    "0x19", # 0x19
-    "0x1A", # 0x1A
-    "0x1B", # 0x1B
-    "0x1C", # 0x1C
-    "0x1D", # 0x1D
-    "0x1E", # 0x1E
-    "0x1F", # 0x1F
-    "0x20", # 0x20
-    "0x21", # 0x21
-    "0x22", # 0x22
-    "0x23", # 0x23
-    "0x24", # 0x24
-    "0x25", # 0x25
-    "ANIME", # 0x26
-    "0x27", # 0x27
-    "0x28", # 0x28
-    "0x29", # 0x29
-    "COLTYPE", # 0x2A
-    "COLFLAG", # 0x2B
-    "0x2C", # 0x2C
-    "0x2D", # 0x2D
-    "0x2E", # 0x2E
-    "0x2F", # 0x2F
-    "0x30", # 0x30
-    "0x31", # 0x31
-    "0x32", # 0x32
-    "0x33", # 0x33
-    "0x34", # 0x34
-    "0x35", # 0x35
-    "0x36", # 0x36
-    "0x37", # 0x37
-    "0x38", # 0x38
-    "0x39", # 0x39
-    "0x3A", # 0x3A
-    "0x3B", # 0x3B
-    "0x3C", # 0x3C
-    "0x3D", # 0x3D
-    "0x3E", # 0x3E
-    "0x3F", # 0x3F
-    "0x40", # 0x40
-    "0x41", # 0x41
-    "COLARG", # 0x42
-    "0x43", # 0x43
-    "0x44", # 0x44
-    "0x45", # 0x45
-    "0x46", # 0x46
-    "0x47", # 0x47
-    "0x48", # 0x48
-    "0x49", # 0x49
-    "0x4A", # 0x4A
-    "0x4B", # 0x4B
-    "0x4C", # 0x4C
-    "0x4D", # 0x4D
-    "0x4E", # 0x4E
-    "0x4F", # 0x4F
+    "VAR", # 0
+    "FLAG", # 1
+    "MSG", # 2
+    "3", # 3
+    "4", # 4
+    "COL_TIMER", # 5
+    "POS_X", # 6
+    "POS_Y", # 7
+    "POS_Z", # 8
+    "VEL_X", # 9
+    "VEL_Y", # 10
+    "VEL_Z", # 11
+    "VEL_F", # 12
+    "VEL_L", # 13
+    "VEL_U", # 14
+    "ROT_X", # 15
+    "ROT_Y", # 16
+    "ROT_Z", # 17
+    "SHAPE_ROT_X", # 18
+    "SHAPE_ROT_Y", # 19
+    "SHAPE_ROT_Z", # 20
+    "SHAPE_OFF_Y", # 21
+    "PARTICLE", # 22
+    "GRAVITY", # 23
+    "GROUND_Y", # 24
+    "MOVE_FLAG", # 25
+    "ANIME_CODE", # 26
+    "V0", # 27
+    "V1", # 28
+    "V2", # 29
+    "V3", # 30
+    "V4", # 31
+    "V5", # 32
+    "V6", # 33
+    "V7", # 34
+    "ROT_VEL_X", # 35
+    "ROT_VEL_Y", # 36
+    "ROT_VEL_Z", # 37
+    "ANIME", # 38
+    "HOLD", # 39
+    "WALL_R", # 40
+    "DRAG", # 41
+    "COL_TYPE", # 42
+    "COL_FLAG", # 43
+    "OFF_X", # 44
+    "OFF_Y", # 45
+    "OFF_Z", # 46
+    "CODE", # 47
+    "48", # 48
+    "STATE", # 49
+    "MODE", # 50
+    "TIMER", # 51
+    "BOUNCE", # 52
+    "PL_DIST", # 53
+    "PL_ROT", # 54
+    "ORG_X", # 55
+    "ORG_Y", # 56
+    "ORG_Z", # 57
+    "FRICTION", # 58
+    "DENSITY", # 59
+    "ANIME_INDEX", # 60
+    "ALPHA", # 61
+    "AP", # 62
+    "HP", # 63
+    "ARG", # 64
+    "STATE_PREV", # 65
+    "COL_ARG", # 66
+    "COL_DIST", # 67
+    "COIN", # 68
+    "SHAPE_DIST", # 69
+    "AREA", # 70
+    "71", # 71
+    "PRG_ARG", # 72
+    "V8", # 73
+    "V9", # 74
+    "WALL_RY", # 75
+    "GROUND_ARG", # 76
+    "ORG_RY", # 77
+    "GROUND", # 78
+    "SE_DIE", # 79
 )
 
 def mb():
@@ -692,7 +692,7 @@ o_str = [
     "memaddi",  # 0x20
     "billboard",    # 0x21
     "shapehide",    # 0x22
-    "colhit",   # 0x23
+    "col_hit",  # 0x23
     None,       # 0x24
     "memsleep", # 0x25
     "for2",     # 0x26
@@ -700,13 +700,13 @@ o_str = [
     "anime",    # 0x28
     "objectarg",    # 0x29
     "map",      # 0x2A
-    "coloff",   # 0x2B
+    "col_off",  # 0x2B
     "child",    # 0x2C
     "origin",   # 0x2D
-    "coldmg",   # 0x2E
-    "coltype",  # 0x2F
+    "col_dmg",  # 0x2E
+    "col_type", # 0x2F
     "physics",  # 0x30
-    "colarg",   # 0x31
+    "col_arg",  # 0x31
     "scale",    # 0x32
     "memclrflag",   # 0x33
     "inc",      # 0x34
@@ -879,7 +879,7 @@ def s_anime(self, argv):
         init = False
         # anime
         if t == 0:
-            a_flag  = ultra.sh()
+            a_flag  = UNSM.table.fmt_anime_flag(ultra.sh())
             a_waist = ultra.sh()
             a_start = ultra.sh()
             a_end   = ultra.sh()
@@ -891,7 +891,7 @@ def s_anime(self, argv):
             stbl_add(stbl, a_val, 1, s + "_val")
             stbl_add(stbl, a_tbl, 2, s + "_tbl")
             c.append((
-                "\tANIME(%s, 0x%04X, %d, %d, %d, %d, %d)\n"
+                "\tANIME(%s, %s, %d, %d, %d, %d, %d)\n"
             ) % (s, a_flag, a_waist, a_start, a_end, a_frame, a_joint))
             i += 1
         # val

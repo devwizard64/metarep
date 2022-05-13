@@ -21,18 +21,17 @@
 OUTPUT_ARCH(mips)
 SECTIONS
 {
-    __dev = 0;
-    SECTION(0xA4000000, mask,
-        TEXT(ULTRA/lib/PR/mask.o)
-        TEXT(ULTRA/lib/PR/ipl3.o)
-    ,
-        DATA(ULTRA/lib/PR/ipl3.o)
-    ,
-    )
+    .makerom 0xA4000000 : AT(0)
+    {
+        ULTRA/lib/PR/romheader.o(.text);
+        . = ALIGN(64);
+        ULTRA/lib/PR/Boot.o(.text);
+        ULTRA/lib/PR/font.o(.data);
+        . = ALIGN(0x1000);
+    }
+    __dev = 0x1000;
 #include <meta/main.h>
-    _stack       = stack_main + 0x400;
-    _bss_start   = ADDR(.main.bss);
-    _bss_size_hi = SIZEOF(.main.bss) >> 16;
-    _bss_size_lo = SIZEOF(.main.bss) & 0xFFFF;
+    _bss_size_hi = SIZEOF(.code.bss) >> 16;
+    _bss_size_lo = SIZEOF(.code.bss) & 0xFFFF;
     /DISCARD/ : {*(*)}
 }

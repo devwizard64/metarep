@@ -7,7 +7,7 @@
 
 void obj_sfx_802CA040(OBJ_SFX *sfx)
 {
-    int i = object->mem[60].s32;
+    int i = object->o_anime_index;
     switch (sfx[i].flag)
     {
         case 0:
@@ -29,10 +29,11 @@ void obj_sfx_802CA040(OBJ_SFX *sfx)
 }
 
 extern O_SCRIPT o_1300229C[];
+
 void obj_sfx_802CA144(NA_SE se)
 {
     OBJECT *obj = obj_lib_8029EDCC(object, 0, o_1300229C);
-    obj->mem[27].u32 = se;
+    obj->mem[O_MEM_V0].s32 = se;
 }
 
 void obj_sfx_802CA190(NA_SE se)

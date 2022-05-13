@@ -6,24 +6,23 @@ str_hira_1  = "がぎぐげござじずぜぞだぢづでど" # dakuten
 str_hira_2  = "ばびぶべぼ" # dakuten
 str_hira_3  = "ぱぴぷぺぽ" # handakuten
 str_hira_4  = "ぇっゃゅょぁぃぅぉ" # small
-str_kata_0  = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン ー"
+str_kata_0  = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン　ー"
 str_kata_1  = "ガギグゲゴザジズゼゾダヂヅデド" # dakuten
 str_kata_2  = "バビブベボ" # dakuten
 str_kata_3  = "パピプペポ" # handakuten
 str_kata_4  = "ェッャュョァィゥォ" # small
 
-def str_range(i, s, c=[]):
-    return [(s, c + [i+n]) for n, s in enumerate(s)]
+def str_range(n, s, p=[]):
+    return [(c, p + [n+i]) for i, c in enumerate(s)]
 
 global3 = [
     ("[+]", [0xF9]),
-    ("[*]", [0xFA]),
+    ("[-]", [0xFA]),
     ("[x]", [0xFB]),
 ]
 
 common3 = global3 + [
     ("<->", [0xE4]),
-    ("[-]", [0xFC]),
     ("[.]", [0xFD]),
 ]
 
@@ -36,8 +35,6 @@ common2 = global2 + [
 
 global1 = str_range(0x00, str_digit + str_upper) + [
     ("&",   [0xE5]),
-    ("!",   [0xF2]),
-    ("?",   [0xF4]),
     ("\n",  [0xFE]),
 ]
 
@@ -61,9 +58,12 @@ jp = common3 + common2 + common1 + (
     str_range(0xA0, str_hira_4) +
     str_range(0xD0, str_kata_4)
 ) + [
+    ("！",   [0xF2]),
+    ("？",   [0xF4]),
     ("『",   [0xF5]),
     ("』",   [0xF6]),
     ("〜",   [0xF7]),
+    ("・",   [0xFC]),
 ]
 
 jp_p = str_range(0x00, "ファイルセレクトをコピーするけマリオスアみどの?サウンド")
@@ -75,6 +75,8 @@ en1 = [
     (" ",   [0x9E]),
     ("-",   [0x9F]),
     ("\t",  [0xD0]),
+    ("!",   [0xF2]),
+    ("?",   [0xF4]),
 ]
 
 en = [
@@ -87,6 +89,7 @@ en = [
     ("[C]", [0x56]),
     ("[Z]", [0x57]),
     ("[R]", [0x58]),
+    ("[*]", [0xFC]),
 ] + common3 + common2 + common1 + en1 + str_range(0x24, str_lower) + [
     ("{",   [0xF5]),
     ("}",   [0xF6]),

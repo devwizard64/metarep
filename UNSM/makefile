@@ -3,7 +3,8 @@ LABEL   := SUPER MARIO 64
 
 BUILD   := build/$(VERSION)
 
-MAIN_OBJ := \
+CODE_OBJ := \
+	$(BUILD)/src/crt0.o             \
 	$(BUILD)/src/main.o             \
 	$(BUILD)/src/app.o              \
 	$(BUILD)/src/audio.o            \
@@ -19,18 +20,18 @@ MAIN_OBJ := \
 	$(BUILD)/src/pl_swim.o          $(BUILD)/src/pl_swim.data.o         \
 	$(BUILD)/src/pl_grab.o          $(BUILD)/src/pl_grab.data.o         \
 	$(BUILD)/src/pl_callback.o      $(BUILD)/src/pl_callback.data.o     \
-	$(BUILD)/src/mem.o              $(BUILD)/src/mem.data.o             \
+	$(BUILD)/src/mem.o              \
 	$(BUILD)/src/save.o             $(BUILD)/src/save.data.o            \
-	$(BUILD)/src/scene.o            $(BUILD)/src/scene.data.o           \
-	$(BUILD)/src/shape_draw.o       $(BUILD)/src/shape_draw.data.o      \
-	$(BUILD)/src/time.o             $(BUILD)/src/time.data.o            \
+	$(BUILD)/src/scene.o            \
+	$(BUILD)/src/draw.o             \
+	$(BUILD)/src/time.o             \
 	$(BUILD)/src/slidec.o           \
 	$(BUILD)/src/camera.o           $(BUILD)/src/camera.data.o          \
 	$(BUILD)/src/course.o           \
 	$(BUILD)/src/object.o           $(BUILD)/src/object.data.o          \
 	$(BUILD)/src/obj_lib.o          $(BUILD)/src/obj_lib.data.o         \
 	$(BUILD)/src/object_a.o         $(BUILD)/src/object_a.data.o        \
-	$(BUILD)/src/obj_physics.o      $(BUILD)/src/obj_physics.data.o     \
+	$(BUILD)/src/obj_physics.o      \
 	$(BUILD)/src/obj_collision.o    $(BUILD)/src/obj_collision.data.o   \
 	$(BUILD)/src/obj_list.o         $(BUILD)/src/obj_list.data.o        \
 	$(BUILD)/src/obj_sfx.o          \
@@ -45,12 +46,12 @@ MAIN_OBJ := \
 	$(BUILD)/src/message.o          $(BUILD)/src/message.data.o         \
 	$(BUILD)/src/weather_snow.o     $(BUILD)/src/weather_snow.data.o    \
 	$(BUILD)/src/weather_lava.o     $(BUILD)/src/weather_lava.data.o    \
-	$(BUILD)/src/obj_data.o         $(BUILD)/src/obj_data.data.o        \
+	$(BUILD)/src/obj_data.o         \
 	$(BUILD)/src/hud.o              $(BUILD)/src/hud.data.o             \
 	$(BUILD)/src/object_b.o         $(BUILD)/src/object_b.data.o        \
 	$(BUILD)/src/object_c.o         $(BUILD)/src/object_c.data.o
 
-MAIN2_OBJ := \
+LIB_OBJ := \
 	$(BUILD)/src/math.o             $(BUILD)/src/math.data.o            \
 	$(BUILD)/src/math_table.o       \
 	$(BUILD)/src/shape.o            \
@@ -92,9 +93,16 @@ IDO_OBJ := \
 	$(BUILD)/src/main.o             \
 	$(BUILD)/src/app.o              \
 	$(BUILD)/src/audio.o            \
+	$(BUILD)/src/mem.o              \
+	$(BUILD)/src/scene.o            \
+	$(BUILD)/src/draw.o             \
+	$(BUILD)/src/time.o             \
 	$(BUILD)/src/course.o           \
+	$(BUILD)/src/obj_physics.o      \
 	$(BUILD)/src/obj_sfx.o          \
-	$(BUILD)/src/dprint.o
+	$(BUILD)/src/dprint.o           \
+	$(BUILD)/src/obj_data.o         \
+	$(BUILD)/src/title.o
 
 $(eval REVISION := $$$(VERSION))
 REGION  := $(subst $(REVISION),,$(VERSION))
@@ -107,9 +115,9 @@ DONOR   := donor
 IDO53   := ido53
 ULTRA   := ultra
 TOOLS   := tools
-RES != make -C $(IDO53)
-RES != make -C $(ULTRA)
-RES != make -C $(TOOLS)
+RES != $(MAKE) -C $(IDO53)
+RES != $(MAKE) -C $(ULTRA)
+RES != $(MAKE) -C $(TOOLS)
 
 CC      := $(CROSS)gcc
 LD      := $(CROSS)ld
@@ -121,14 +129,14 @@ FLAG    := -I$(ULTRA)/include -Iinclude -I.
 FLAG    += -DVERSION_$(VERSION) -DREGION=\'$(REGION)\' -DREVISION=$(REVISION)
 FLAG    += -DBUILD=$(BUILD)
 OPT     := -Os
-WFLAG   := -Wall -Wextra -Werror-implicit-function-declaration
+WFLAG   := -Wall -Wextra -Werror=implicit-function-declaration
 CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
 CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
 CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
 ASFLAG  := $(ARCH) $(FLAG) $(WFLAG) -Wno-variadic-macros
 CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
 
-IDO_CC      := $(IDO53)/cc
+IDO_CC      := $(IDO53)/bin/cc
 IDO_OPT     := -g
 IDO_WFLAG   := -fullwarn -prototypes
 IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
@@ -155,24 +163,28 @@ $(BUILD)/app.z64: $(BUILD)/app.elf
 	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
 	$(TOOLS)/mask $@ NSM$(VERSION) "$(LABEL)"
 
-$(BUILD)/app.elf: $(BUILD)/make/main.ld $(OBJ)
+$(BUILD)/app.elf: $(OBJ)
+$(BUILD)/%.elf: $(BUILD)/make/%.ld
 	$(LD) -Map $(@:.elf=.map) -o $@ -T $<
 
-include $(addsuffix .d,$(basename $(OBJ) $(MAIN_OBJ) $(MAIN2_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)))
-
--include $(BUILD)/make/main.d
+-include $(BUILD)/make/app.d
 -include $(BUILD)/make/segment.d
+$(BUILD)/make/app.ld:
 $(BUILD)/make/%: make/% | $(BUILD)/make
 	$(CPP) $(CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
 
-$(BUILD)/src/main.ld.o: make/rel.ld $(MAIN_OBJ) $(AUDIO_OBJ)
+include $(addsuffix .d,$(basename $(OBJ) $(CODE_OBJ) $(LIB_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)))
+
+$(BUILD)/code.o: make/rel.ld $(CODE_OBJ) $(AUDIO_OBJ)
 	$(LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
 
-$(BUILD)/src/main2.ld.o: $(MAIN2_OBJ)
-$(BUILD)/src/face.ld.o: $(FACE_OBJ)
-$(BUILD)/src/%.ld.o: make/rel.ld | $(BUILD)/src
+$(BUILD)/lib.o: make/rel.ld $(LIB_OBJ)
 	$(LD) -r -o $@ -T $^
-$(BUILD)/src/%.ld.d: | $(BUILD)/src
+
+$(BUILD)/face.o: make/rel.ld $(FACE_OBJ)
+	$(LD) -r -o $@ -T $^
+
+$(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
 	@echo $(@:.d=.o): $< > $@
 
 include $(BUILD)/make/segment.mk

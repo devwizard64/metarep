@@ -57,34 +57,33 @@ SECTION(SEGMENT_FIFO, fifo,
     ,
     BSS(BUILD/src/fifo.o)
 )
-ASSERT(. <= SEGMENT_MAIN, "error: FIFO exceeds memory size.")
-SECTION(SEGMENT_MAIN, main,
-    TEXT(ULTRA/lib/PR/crt0.o)
-    TEXT(BUILD/src/main.ld.o)
+ASSERT(. <= SEGMENT_CODE, "error: FIFO exceeds memory size.")
+SECTION(SEGMENT_CODE, code,
+    TEXT(BUILD/code.o)
     TEXT(ULTRA/lib/PR/rspboot.o)
     TEXT(ULTRA/lib/PR/gspFast3D.fifo.o)
     TEXT(ULTRA/lib/PR/aspMain.o)
     ,
-    DATA(BUILD/src/main.ld.o)
+    DATA(BUILD/code.o)
     DATA(ULTRA/lib/PR/rspboot.o)
     DATA(ULTRA/lib/PR/gspFast3D.fifo.o)
     DATA(ULTRA/lib/PR/aspMain.o)
     ,
-    BSS(BUILD/src/main.ld.o)
+    BSS(BUILD/code.o)
     BSS(ULTRA/lib/PR/rspboot.o)
     BSS(ULTRA/lib/PR/gspFast3D.fifo.o)
     BSS(ULTRA/lib/PR/aspMain.o)
 )
-ASSERT(__dev <= 0x00101000, "error: MAIN exceeds device size.")
-ASSERT(. <= SEGMENT_MAIN2, "error: MAIN exceeds memory size.")
-SECTION(SEGMENT_MAIN2, main2,
-    TEXT(BUILD/src/main2.ld.o)
+ASSERT(__dev <= 0x00101000, "error: CODE exceeds device size.")
+ASSERT(. <= SEGMENT_LIB, "error: CODE exceeds memory size.")
+SECTION(SEGMENT_LIB, lib,
+    TEXT(BUILD/lib.o)
     ,
-    DATA(BUILD/src/main2.ld.o)
+    DATA(BUILD/lib.o)
     ,
-    BSS(BUILD/src/main2.ld.o)
+    BSS(BUILD/lib.o)
 )
-ASSERT(. <= SEGMENT_CIMG, "error: MAIN2 exceeds memory size.")
+ASSERT(. <= SEGMENT_CIMG, "error: LIB exceeds memory size.")
 SECTION(SEGMENT_CIMG, cimg,
     ,
     ,
@@ -127,19 +126,19 @@ SECTION(SEGMENT_MENU, menu,
     TEXT(BUILD/src/title_bg.o)
     TEXT(BUILD/src/file_select.o)
     TEXT(BUILD/src/star_select.o)
-    TEXT(BUILD/src/face.ld.o)
+    TEXT(BUILD/face.o)
     ,
-    DATA(BUILD/src/title.data.o)
+    DATA(BUILD/src/title.o)
     DATA(BUILD/src/title_bg.data.o)
     DATA(BUILD/src/file_select.data.o)
     DATA(BUILD/src/star_select.data.o)
-    DATA(BUILD/src/face.ld.o)
+    DATA(BUILD/face.o)
     ,
-    BSS(BUILD/src/title.data.o)
+    BSS(BUILD/src/title.o)
     BSS(BUILD/src/title_bg.data.o)
     BSS(BUILD/src/file_select.data.o)
     BSS(BUILD/src/star_select.data.o)
-    BSS(BUILD/src/face.ld.o)
+    BSS(BUILD/face.o)
 )
 ASSERT(. <= SEGMENT_MEM_END-0x10, "error: MENU exceeds memory size.")
 DATA2(MENU, menu_title, menu/title)

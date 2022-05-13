@@ -14,25 +14,25 @@
 #define SC_EVENT_GFXTASK        103
 #define SC_EVENT_PRENMI         104
 
-OSThread thread_fault;
+OSThread thread_rmon;
 OSThread thread_idle;
 OSThread thread_sc;
 OSThread thread_app;
 OSThread thread_audio;
 
-OSMesgQueue mq_pi;
-OSMesgQueue mq_sc;
-OSMesgQueue mq_sc_task;
-OSMesg msg_app;
-OSMesg msg_pi[32];
-OSMesg msg_si;
-OSMesg msg_sc[16];
-OSMesg msg_sc_task[16];
+OSMesgQueue pi_mq;
+OSMesgQueue sc_mq;
+OSMesgQueue sc_task_mq;
+OSMesg app_msg;
+OSMesg pi_msg[32];
+OSMesg si_msg;
+OSMesg sc_msg[16];
+OSMesg sc_task_msg[16];
 
-OSIoMesg iomesg_app;
-OSMesg msg_null;
-OSMesgQueue mq_app;
-OSMesgQueue mq_si;
+OSIoMesg app_iomesg;
+OSMesg null_msg;
+OSMesgQueue app_mq;
+OSMesgQueue si_mq;
 
 SC_CLIENT *sc_client_1 = NULL;
 SC_CLIENT *sc_client_2 = NULL;
@@ -41,16 +41,16 @@ SC_TASK *sc_audtask = NULL;
 SC_TASK *sc_gfxtask = NULL;
 SC_TASK *sc_audtask_next = NULL;
 SC_TASK *sc_gfxtask_next = NULL;
-s8 sc_audio = true;
+s8 sc_audio = TRUE;
 u32 sc_vi = 0;
 
 s8 reset_timer = 0;
 s8 reset_frame = 0;
 
-s8 debug_stage  = false;
-s8 debug_thread = false;
-s8 debug_time   = false;
-s8 debug_mem    = false;
+s8 debug_stage  = FALSE;
+s8 debug_thread = FALSE;
+s8 debug_time   = FALSE;
+s8 debug_mem    = FALSE;
 
 void debug_update(void)
 {
@@ -78,19 +78,19 @@ void debug_update(void)
     };
     static s16 t = 0;
     static s16 m = 0;
-    if (controller_menu->down != 0)
+    if (cont_menu->down != 0)
     {
-        if (button_t[t++] == controller_menu->down)
+        if (button_t[t++] == cont_menu->down)
         {
-            if (t == lenof(button_t)) t = 0, debug_time ^= false^true;
+            if (t == lenof(button_t)) t = 0, debug_time ^= FALSE^TRUE;
         }
         else
         {
             t = 0;
         }
-        if (button_m[m++] == controller_menu->down)
+        if (button_m[m++] == cont_menu->down)
         {
-            if (m == lenof(button_m)) m = 0, debug_mem ^= false^true;
+            if (m == lenof(button_m)) m = 0, debug_mem ^= FALSE^TRUE;
         }
         else
         {
@@ -116,7 +116,7 @@ unused static void dummy(void)
 #endif
 }
 
-static void debug_main(void)
+static void debug_entry(void)
 {
 }
 
@@ -130,15 +130,15 @@ static void debug_sc_vi(void)
 
 static void sc_init(void)
 {
-    osCreateMesgQueue(&mq_app, &msg_app, 1);
-    osCreateMesgQueue(&mq_si, &msg_si, 1);
-    osSetEventMesg(OS_EVENT_SI, &mq_si, (OSMesg)0);
-    osCreateMesgQueue(&mq_sc_task, msg_sc_task, lenof(msg_sc_task));
-    osCreateMesgQueue(&mq_sc, msg_sc, lenof(msg_sc));
-    osViSetEvent(&mq_sc, (OSMesg)SC_EVENT_VI, 1);
-    osSetEventMesg(OS_EVENT_SP, &mq_sc, (OSMesg)SC_EVENT_SP);
-    osSetEventMesg(OS_EVENT_DP, &mq_sc, (OSMesg)SC_EVENT_DP);
-    osSetEventMesg(OS_EVENT_PRENMI, &mq_sc, (OSMesg)SC_EVENT_PRENMI);
+    osCreateMesgQueue(&app_mq, &app_msg, 1);
+    osCreateMesgQueue(&si_mq, &si_msg, 1);
+    osSetEventMesg(OS_EVENT_SI, &si_mq, (OSMesg)0);
+    osCreateMesgQueue(&sc_task_mq, sc_task_msg, lenof(sc_task_msg));
+    osCreateMesgQueue(&sc_mq, sc_msg, lenof(sc_msg));
+    osViSetEvent(&sc_mq, (OSMesg)SC_EVENT_VI, 1);
+    osSetEventMesg(OS_EVENT_SP, &sc_mq, (OSMesg)SC_EVENT_SP);
+    osSetEventMesg(OS_EVENT_DP, &sc_mq, (OSMesg)SC_EVENT_DP);
+    osSetEventMesg(OS_EVENT_PRENMI, &sc_mq, (OSMesg)SC_EVENT_PRENMI);
 }
 
 static void sc_init_mem(void)
@@ -170,7 +170,7 @@ static void sc_event_prenmi(void)
 static void sc_task_flush(void)
 {
     SC_TASK *task;
-    while (osRecvMesg(&mq_sc_task, (OSMesg *)&task, OS_MESG_NOBLOCK) != -1)
+    while (osRecvMesg(&sc_task_mq, (OSMesg *)&task, OS_MESG_NOBLOCK) != -1)
     {
         task->state = 0;
         switch (task->task.t.type)
@@ -215,7 +215,7 @@ static void sc_event_gfxtask(void)
     {
         if (sc_gfxtask != NULL && sc_gfxtask->state == 0)
         {
-            time_8027E520(0);
+            time_gfxrcp(TIME_GFXRCP_START);
             sc_task_start(M_GFXTASK);
         }
     }
@@ -225,7 +225,7 @@ static void sc_audtask_skip(void)
 {
     sc_task = sc_audtask;
     sc_task->state = 1;
-    osSendMesg(&mq_sc, (OSMesg)SC_EVENT_SP, OS_MESG_NOBLOCK);
+    osSendMesg(&sc_mq, (OSMesg)SC_EVENT_SP, OS_MESG_NOBLOCK);
 }
 
 static void sc_event_vi(void)
@@ -243,7 +243,7 @@ static void sc_event_vi(void)
         }
         else
         {
-            time_8027E5CC();
+            time_audrcp();
             if (sc_audio)   sc_task_start(M_AUDTASK);
             else            sc_audtask_skip();
         }
@@ -252,7 +252,7 @@ static void sc_event_vi(void)
     {
         if (sc_gfxtask != NULL && sc_gfxtask->state != 3)
         {
-            time_8027E520(0);
+            time_gfxrcp(TIME_GFXRCP_START);
             sc_task_start(M_GFXTASK);
         }
     }
@@ -275,9 +275,9 @@ static void sc_event_sp(void)
         if (!osSpTaskYielded(&task->task))
         {
             task->state = 3;
-            time_8027E520(1);
+            time_gfxrcp(TIME_GFXRCP_ENDRSP);
         }
-        time_8027E5CC();
+        time_audrcp();
         if (sc_audio)   sc_task_start(M_AUDTASK);
         else            sc_audtask_skip();
     }
@@ -286,10 +286,10 @@ static void sc_event_sp(void)
         task->state = 3;
         if (task->task.t.type == M_AUDTASK)
         {
-            time_8027E5CC();
+            time_audrcp();
             if (sc_gfxtask != NULL && sc_gfxtask->state != 3)
             {
-                if (sc_gfxtask->state != 2) time_8027E520(0);
+                if (sc_gfxtask->state != 2) time_gfxrcp(TIME_GFXRCP_START);
                 sc_task_start(M_GFXTASK);
             }
             sc_audtask = NULL;
@@ -300,7 +300,7 @@ static void sc_event_sp(void)
         }
         else
         {
-            time_8027E520(1);
+            time_gfxrcp(TIME_GFXRCP_ENDRSP);
         }
     }
 }
@@ -311,7 +311,7 @@ static void sc_event_dp(void)
     {
         osSendMesg(sc_gfxtask->mq, sc_gfxtask->msg, OS_MESG_NOBLOCK);
     }
-    time_8027E520(2);
+    time_gfxrcp(TIME_GFXRCP_ENDRDP);
     sc_gfxtask->state = 4;
     sc_gfxtask = NULL;
 }
@@ -320,7 +320,7 @@ static void sc_main(unused void *arg)
 {
     sc_init();
     sc_init_mem();
-    mem_load_main2();
+    mem_load_lib();
     thread_create(
         &thread_audio, 4, audio_main, NULL, stack_audio+lenof(stack_audio), 20
     );
@@ -329,10 +329,10 @@ static void sc_main(unused void *arg)
         &thread_app, 5, app_main, NULL, stack_app+lenof(stack_app), 10
     );
     osStartThread(&thread_app);
-    while (true)
+    for (;;)
     {
         OSMesg msg;
-        osRecvMesg(&mq_sc, &msg, OS_MESG_BLOCK);
+        osRecvMesg(&sc_mq, &msg, OS_MESG_BLOCK);
         switch ((int)msg)
         {
             case SC_EVENT_VI:       sc_event_vi();      break;
@@ -359,7 +359,7 @@ void sc_client_init(int i, SC_CLIENT *client, OSMesgQueue *mq, OSMesg msg)
 void sc_queue_task(SC_TASK *task)
 {
     osWritebackDCacheAll();
-    osSendMesg(&mq_sc_task, task, OS_MESG_NOBLOCK);
+    osSendMesg(&sc_task_mq, task, OS_MESG_NOBLOCK);
 }
 
 void sc_queue_audtask(SC_TASK *task)
@@ -369,7 +369,7 @@ void sc_queue_audtask(SC_TASK *task)
         if (task != NULL)
         {
             osWritebackDCacheAll();
-            osSendMesg(&mq_sc_task, task, OS_MESG_NOBLOCK);
+            osSendMesg(&sc_task_mq, task, OS_MESG_NOBLOCK);
         }
     }
 }
@@ -384,7 +384,7 @@ void sc_queue_gfxtask(SC_TASK *task)
         {
             sc_gfxtask = task;
             sc_gfxtask_next = NULL;
-            osSendMesg(&mq_sc, (OSMesg)SC_EVENT_GFXTASK, OS_MESG_NOBLOCK);
+            osSendMesg(&sc_mq, (OSMesg)SC_EVENT_GFXTASK, OS_MESG_NOBLOCK);
         }
         else
         {
@@ -395,12 +395,12 @@ void sc_queue_gfxtask(SC_TASK *task)
 
 void sc_audio_enable(void)
 {
-    sc_audio = true;
+    sc_audio = TRUE;
 }
 
 void sc_audio_disable(void)
 {
-    sc_audio = false;
+    sc_audio = FALSE;
     while (sc_audtask != NULL);
 }
 
@@ -416,21 +416,21 @@ static void idle_main(unused void *arg)
 #else
     osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
 #endif
-    osViBlack(true);
+    osViBlack(TRUE);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
-    osCreatePiManager(OS_PRIORITY_PIMGR, &mq_pi, msg_pi, lenof(msg_pi));
+    osCreatePiManager(OS_PRIORITY_PIMGR, &pi_mq, pi_msg, lenof(pi_msg));
     thread_create(&thread_sc, 3, sc_main, NULL, stack_sc+lenof(stack_sc), 100);
     if (!debug_thread) osStartThread(&thread_sc);
     osSetThreadPri(NULL, OS_PRIORITY_IDLE);
-    while (true);
+    for (;;);
 }
 
-void main(void)
+void entry(void)
 {
     unused char buf[64];
     osInitialize();
-    debug_main();
+    debug_entry();
     thread_create(
         &thread_idle, 1, idle_main, NULL, stack_idle+lenof(stack_idle), 100
     );
