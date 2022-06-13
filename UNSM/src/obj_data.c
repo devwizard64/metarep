@@ -82,7 +82,7 @@ void prg_obj_main(SHORT scene, OBJ_DATA *data)
 {
     object_dummy.list.s.scene = scene;
     object_dummy.list.s.group = scene;
-    while (true)
+    for (;;)
     {
         unused int i;
         int n;
@@ -123,7 +123,7 @@ void obj_data_main(SHORT scene, OBJ_DATA *data)
 {
     object_dummy.list.s.scene = scene;
     object_dummy.list.s.group = scene;
-    while (true)
+    for (;;)
     {
         unused int i;
         unused OBJECT *obj;

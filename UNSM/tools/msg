@@ -127,5 +127,4 @@ def main(argv):
         with open(path + ".inc.h", "w") as f: f.write(data)
     return 0
 
-if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+if __name__ == "__main__": sys.exit(main(sys.argv))

@@ -104,6 +104,9 @@ IDO_OBJ := \
 	$(BUILD)/src/obj_data.o         \
 	$(BUILD)/src/title.o
 
+INS_SRC := data/audio/se.ins data/audio/music.ins
+SBK_SRC := data/audio/se.sbk data/audio/music.sbk
+
 $(eval REVISION := $$$(VERSION))
 REGION  := $(subst $(REVISION),,$(VERSION))
 
@@ -143,7 +146,6 @@ IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
 IDO_CCFLAG  += $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
 
 OBJ := $(shell $(CPP) $(CPPFLAG) -P make/obj.mk)
-SEQ := $(shell $(CPP) $(CPPFLAG) -P make/seq.mk)
 OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
 
 .PHONY: default
@@ -188,42 +190,62 @@ $(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
 	@echo $(@:.d=.o): $< > $@
 
 include $(BUILD)/make/segment.mk
-$(BUILD)/%.szp.h: $(BUILD)/%.szp.o;
-$(BUILD)/%.szp.o: %.c make/szp.ld
-	$(CC) $(CCFLAG) -MMD -MP -MF $(@:.o=.d) -MT $@ -c -o $(@:.szp.o=.o) $<
-	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.o=.elf) $(@:.szp.o=.o)
-	$(OBJCOPY) -O binary $(@:.szp.o=.elf) $(@:.szp.o=.bin)
-	$(NM) -f posix $(@:.szp.o=.elf) > $(@:.szp.o=.sym)
-	$(TOOLS)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $(@:.szp.o=.bin) $(@:.szp.o=.sym)
-	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
+$(BUILD)/%.szp.h: $(BUILD)/%.szp.s;
+$(BUILD)/%.szp.s: %.c make/szp.ld
+	$(CC) $(CCFLAG) -c -o $(@:.szp.s=.o) $<
+	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.s=.elf) $(@:.szp.s=.o)
+	$(OBJCOPY) -O binary $(@:.szp.s=.elf) $(@:.szp.s=.bin)
+	$(NM) -f posix $(@:.szp.s=.elf) > $(@:.szp.s=.sym)
+	$(TOOLS)/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $(@:.szp.s=.bin) $(@:.szp.s=.sym)
 $(BUILD)/%.szp.d: %.c
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $<
 
-$(BUILD)/%.szp.o: %.bin
-	python3 -c "import os; print(\"a t 0 %x\" % os.path.getsize(\"$<\"))" > $(@:.szp.o=.sym)
-	$(TOOLS)/slienc $(@:.o=.s) $(@:.o=.h) $(@:.szp.o=.szp) $< $(@:.szp.o=.sym)
-	$(CC) $(ASFLAG) -c -o $@ $(@:.o=.s)
+$(BUILD)/%.szp.s: %.bin
+	@python3 -c "import os; print(\"a t 0 %x\" % os.path.getsize(\"$<\"))" > $(@:.szp.s=.sym)
+	$(TOOLS)/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $< $(@:.szp.s=.sym)
 $(BUILD)/%.szp.d: %.bin
-	@echo $(@:.d=.o): $< > $@
+	@echo $(@:.d=.s): $< > $@
+
+$(BUILD)/data/audio/tbl.s: $(BUILD)/data/audio/ctl.s;
+$(BUILD)/data/audio/ctl.s: $(INS_SRC)
+	$(TOOLS)/ic $(FLAG) -ctl $@ -tbl $(@:ctl.s=tbl.s) $(INS_SRC)
+$(BUILD)/data/audio/tbl.d: $(BUILD)/data/audio/ctl.d;
+$(BUILD)/data/audio/ctl.d: $(INS_SRC)
+	$(TOOLS)/ic $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(INS_SRC)
+
+$(BUILD)/data/audio/bnk.s: $(BUILD)/data/audio/seq.s;
+$(BUILD)/data/audio/seq.s: $(SBK_SRC)
+	$(TOOLS)/sbc $(FLAG) -seq $@ -bnk $(@:seq.s=bnk.s) $(SBK_SRC)
+$(BUILD)/data/audio/bnk.d: $(BUILD)/data/audio/seq.d;
+$(BUILD)/data/audio/seq.d: $(SBK_SRC)
+	$(TOOLS)/sbc $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(SBK_SRC)
+
+$(BUILD)/%.o: $(BUILD)/%.s
+	$(CC) $(ASFLAG) -c -o $@ $<
 
 $(IDO_OBJ): $(BUILD)/%.o: %.c
 	$(IDO_CC) $(IDO_CCFLAG) -c -o $@ $<
 
-$(BUILD)/%.o: %.c
-	$(CC) $(CCFLAG) -MMD -MP -c -o $@ $<
-$(BUILD)/%.d: %.c
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+$(BUILD)/%.o: %.asm
+	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
+	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.s)
+$(BUILD)/%.d: %.asm
+	@echo $(@:.d=.o): $< > $@
+
+$(BUILD)/%.o: %.s
+	$(CC) $(ASFLAG) -c -o $@ $<
+$(BUILD)/%.d: %.s
+	@echo $(@:.d=.o): $< > $@
 
 $(BUILD)/%.o: %.sx
-	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $<
+	$(CC) $(ASFLAG) -c -o $@ $<
 $(BUILD)/%.d: %.sx
 	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/%.o: %.asm
-	$(ARMIPS) -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(CC) $(ASFLAG) -MMD -MP -c -o $@ $(<:.asm=.sx)
-$(BUILD)/%.d: %.asm
-	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+$(BUILD)/%.o: %.c
+	$(CC) $(CCFLAG) -c -o $@ $<
+$(BUILD)/%.d: %.c
+	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.h: %.png
 	$(TOOLS)/texture $@ $^
@@ -241,17 +263,13 @@ $(BUILD)/%.inc.h: $(BUILD)/%.h;
 $(BUILD)/%.h: %.txt
 	$(TOOLS)/msg $@ $<
 
-data/%.sx: data/%.bin
-
-$(BUILD)/data/audio/seq.o: $(SEQ)
-$(BUILD)/data/audio/seq/%.seq: data/audio/seq/%.seq
-	cp $< $@
+$(BUILD)/data/%.o: data/%.bin
 
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)
-BUILD_OBJ := $(call obj,*.c *.sx *.asm *.bin *.png *.ply *.obj *.txt *.seq)
+BUILD_OBJ := $(call obj,*.c *.s *.sx *.asm *.bin *.png *.ply *.obj *.txt *.ins *.sbk)
 $(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
-$(BUILD)/make $(BUILD)/src $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
+$(BUILD)/make $(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
 	mkdir -p $@
 
 print-%:

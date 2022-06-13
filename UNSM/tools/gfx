@@ -169,5 +169,4 @@ def main(argv):
     gfx_write(arg, path, name, ply, ini)
     return 0
 
-if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+if __name__ == "__main__": sys.exit(main(sys.argv))

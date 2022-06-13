@@ -136,19 +136,25 @@ clean:
 lib/libultra_rom.a: $(SRC_OBJ) | lib
 	$(AR) rc $@ $^
 
-build/src/%.o: src/%.c | build/src
-	$(CC) $(CCFLAG) -c -o $@ $<
+build/src/%.o: src/%.s | build/src
+	$(CC) $(ASFLAG) -c -o $@ $<
 
 build/src/%.o: src/%.sx | build/src
 	$(CC) $(ASFLAG) -c -o $@ $<
 
-lib/PR/%.o: src/PR/%.sx | lib/PR
-	$(CC) $(ASFLAG) -c -o $@ $<
+build/src/%.o: src/%.c | build/src
+	$(CC) $(CCFLAG) -c -o $@ $<
 
 lib/PR/gspFast3D.fifo.o: $(wildcard src/PR/gspFast3D/*)
 lib/PR/%.o: src/PR/%.asm src/PR/rsp.inc | build/src/PR lib/PR
 	$(ARMIPS) -sym build/$(<:.asm=.sym) $<
 	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.s)
+
+lib/PR/%.o: src/PR/%.s | lib/PR
+	$(CC) $(ASFLAG) -c -o $@ $<
+
+lib/PR/%.o: src/PR/%.sx | lib/PR
+	$(CC) $(ASFLAG) -c -o $@ $<
 
 build/src build/src/PR lib lib/PR:
 	mkdir -p $@

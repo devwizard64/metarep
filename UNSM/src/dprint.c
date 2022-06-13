@@ -220,7 +220,7 @@ static void dprint_clamp(int *x, int *y)
 static void dprint_draw_char(int x, int y, int n)
 {
     int sx = 12*n + x;
-    int sy = (SCREEN_HT-2*BORDER_HT) - y;
+    int sy = SCREEN_HT - (y+16);
     uint ux;
     uint uy;
     dprint_clamp(&sx, &sy);

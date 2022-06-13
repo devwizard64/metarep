@@ -1,4 +1,5 @@
 import struct
+import math
 
 import main
 import table
@@ -118,8 +119,7 @@ def p_load(argv):
     start = ultra.sym(start, dev)
     name = segment(start, "_", a)
     if name == None: raise RuntimeError("UNSM.asm.p_load(): bad segment")
-    if b != None:
-        return (None, name)
+    if b != None: return (None, name)
     seg = "MENU" if "menu" in start else segment_table[seg]
     return (None, seg, name)
 
@@ -161,10 +161,9 @@ def p_object(argv):
     arg1 = "%d" % ultra.ub()
     flag = "%d" % ultra.uh()
     script = ultra.aw()
-    if mask == 0x1F:
-        return ("object_globl",
-            shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script
-        )
+    if mask == 0x1F: return ("object_globl",
+        shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script
+    )
     mask = "0x%02X" % mask
     return (None, mask, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
 
@@ -252,7 +251,7 @@ def p_wipe(argv):
 
 # 34
 def p_bool(argv):
-    x = UNSM.table.fmt_bool[ultra.ub()]
+    x = ultra.fmt_bool[ultra.ub()]
     ultra.script.c_addr += 1
     return (None, x)
 
@@ -582,8 +581,7 @@ def o_object(argv):
     arg = "%d" % ultra.sh()
     shape = UNSM.table.fmt_shape(ultra.uw())
     script = ultra.aw()
-    if m:
-        return (None, shape, script, arg)
+    if m: return (None, shape, script, arg)
     return (None, shape, script)
 
 # 1F (20)
@@ -808,22 +806,18 @@ def s_script(self, argv):
         if i == 1 and c in objtbl: ultra.tag = objtbl[c]
         argv = f[0](f[1:])
         s = argv[0] if argv[0] != None else s_str[c]
-        if c in s_dec:
-            tab -= 1
+        if c in s_dec: tab -= 1
         ln = "%s%s_%s(%s)" % ("\t"*tab, s_t, s, ", ".join(argv[1:]))
-        if c in s_inc:
-            tab += 1
+        if c in s_inc: tab += 1
         line.append((self.c_dst, ln))
     ultra.asm.fmt(self, line)
 
 def stbl_add(stbl, i, t, s):
-    if i not in stbl:
-        stbl[i] = [t]
+    if i not in stbl: stbl[i] = [t]
     stbl[i].append(s)
 
 def etbl_add(etbl, i, s):
-    if i not in etbl:
-        etbl[i] = []
+    if i not in etbl: etbl[i] = []
     etbl[i].append(s)
 
 def file_init(self, argv):
@@ -834,7 +828,7 @@ def file_init(self, argv):
     line = self.file[-1][1]
     stbl = {}
     etbl = {}
-    line.append("TABLE()\ntable_start:\n")
+    line.append("TABLE()\ntable:\n")
     for i in range(cnt):
         s = "%s_%s" % (name, tbl[0][i])
         line.append("\tFILE(%s)\n" % s)
@@ -850,15 +844,13 @@ def file_s(self, line, stbl):
     if self.c_addr in stbl:
         label = stbl[self.c_addr]
         line.append("\n")
-        for s in label[1:]:
-            line.append("%s:\n" % s)
+        for s in label[1:]: line.append("%s:\n" % s)
         return label
     return None
 
 def file_e(self, line, etbl):
     if self.c_addr in etbl:
-        for s in etbl[self.c_addr]:
-            line.append("%s_end:\n" % s)
+        for s in etbl[self.c_addr]: line.append("%s_end:\n" % s)
         return True
     return False
 
@@ -874,8 +866,7 @@ def s_anime(self, argv):
         label = file_s(self, c, stbl)
         if label != None:
             t = label[0]
-            if t == 0:
-                s = label[-1]
+            if t == 0: s = label[-1]
         init = False
         # anime
         if t == 0:
@@ -900,8 +891,7 @@ def s_anime(self, argv):
                 "0x%04X" % ultra.uh()
                 for _ in range(min(8, (a_siz-self.c_dst)//2))
             ]))
-            if self.c_addr == a_siz:
-                c.append("\n")
+            if self.c_addr == a_siz: c.append("\n")
         # tbl
         elif t == 2:
             c.append("\t.short %s\n" % ", ".join([
@@ -914,8 +904,7 @@ def s_anime(self, argv):
             data = main.line_prc(c)
             fn = self.path_join([name, fn])
             main.mkdir(fn)
-            with open(fn, "w") as fd:
-                fd.write(data)
+            with open(fn, "w") as f: f.write(data)
             self.c_addr = (self.c_addr+3) & ~3
             init = True
 
@@ -923,9 +912,9 @@ def s_demo(self, argv):
     end, name, tbl, cnt, line, stbl, etbl = file_init(self, argv)
     while self.c_addr < end:
         if file_s(self, line, stbl) != None:
-            stage = ultra.ub()
+            stage = UNSM.table.fmt_stage(ultra.ub())
             self.c_addr += 3
-            line.append("\tDEMO(%d)\n" % stage)
+            line.append("\tDEMO(%s)\n" % stage)
         else:
             count   = ultra.ub()
             stick_x = ultra.sb()
@@ -936,36 +925,247 @@ def s_demo(self, argv):
             ))
         file_e(self, line, etbl)
 
+def pstr(s):
+    return struct.pack(">B", len(s)) + s
+
+def iff_chunk(code, data):
+    return struct.pack(">4sI", code, len(data)) + data
+
+def aifc_pack(rate, wave, book=None, loop=None):
+    x, = struct.unpack(">Q", struct.pack(">d", rate))
+    e = 0x3FFF + (x >> 52)-0x3FF
+    f = 1 << 63 | (x & 0xFFFFFFFFFFFFF) << 11
+    data = B"AIFC"
+    data += iff_chunk(
+        B"COMM", struct.pack(">HIHHQ", 1, 16*len(wave)//9, 16, e, f) +
+        B"VAPC" + pstr(B"VADPCM ~4-1")
+    )
+    if book: data += iff_chunk(
+        B"APPL", B"stoc" + pstr(B"VADPCMCODES") +
+        struct.pack(">HHH", 1, book[0], book[1]) + book[2]
+    )
+    if loop: data += iff_chunk(
+        B"APPL", B"stoc" + pstr(B"VADPCMLOOPS") +
+        struct.pack(">HHIII", 1, 1, loop[0], loop[1], loop[2]) +
+        (loop[3] if loop[2] > 0 else struct.pack(">32x"))
+    )
+    data += iff_chunk(B"SSND", struct.pack(">II", 0, 0) + wave)
+    if len(data) & 1: data += B"\0"
+    return iff_chunk(B"FORM", data)
+
+def al_book(self, book):
+    if book == 0: return None
+    self.c_addr = book
+    order       = ultra.uw()
+    npredictors = ultra.uw()
+    book = self.c_next(16 << npredictors)
+    return (order, npredictors, book)
+
+def al_loop(self, loop):
+    if loop == 0: return None
+    self.c_addr = loop
+    start = ultra.uw()
+    end   = ultra.uw()
+    count = ultra.uw()
+    if count > 0:
+        self.c_addr += 4
+        state = self.c_next(32)
+        return (start, end, count, state)
+    return (start, end, count)
+
+def al_sound(self, bankdata, wavedata, tbl, snd, key):
+    if snd == 0: return None
+    self.c_addr = snd
+    self.c_addr += 4
+    wave = ultra.uw()
+    loop = ultra.uw()
+    book = ultra.uw()
+    size = ultra.uw()
+    x = key
+    key *= 32000
+    wave = tbl+wave
+    imm = table.imm_addr(self, wave)
+    rate = imm[0] if imm[0] != None else int(round(key))
+    name = imm[1]
+    if wave not in wavedata:
+        path = imm[2]
+        book = al_book(self, book)
+        loop = al_loop(self, loop)
+        wavedata[wave] = [size, book, loop, rate, path, name]
+    return (name, int(round(12*math.log2(round(key/rate, 6)))))
+
+def al_envelope(self, bankdata, env):
+    self.c_addr = env
+    if env not in bankdata[1]:
+        envelope = []
+        while True:
+            envelope.append((ultra.sh(), ultra.sh()))
+            if envelope[-1][0] in {-1, -2, -3}: break
+        name = "env%d" % bankdata[0]
+        bankdata[0] += 1
+        bankdata[1][env] = (name, ", ".join("%d, %d" % x for x in envelope))
+
+def al_note(x):
+    return (
+        "C", "Cs", "D", "Eb", "E",
+        "F", "Fs", "G", "Ab", "A", "Bb", "B",
+    )[(x+9) % 12] + "%d" % ((x+9) // 12)
+
+def al_instrument(self, bankdata, wavedata, tbl, inst, i):
+    if inst == 0: return
+    self.c_push()
+    self.c_addr = inst
+    self.c_addr += 1
+    min_ = ultra.ub()
+    max_ = ultra.ub()
+    rel = ultra.ub()
+    env = ultra.uw()
+    sound = [(ultra.uw(), ultra.f()) for i in range(3)]
+    al_envelope(self, bankdata, env)
+    if self.c_addr-self.addr in {0x57D350, 0x57D3C0}:
+        al_envelope(self, bankdata, (self.c_addr+15) & ~15)
+    sound = [
+        al_sound(self, bankdata, wavedata, tbl, snd, key)
+        for snd, key in sound
+    ]
+    bankdata[2].append((
+        "    instrument[%d] =\n"
+        "    {\n"
+        "        release = %d;\n"
+        "        envelope = %s;\n"
+    ) % (i, rel, bankdata[1][env][0]))
+    if sound[0] != None: bankdata[2].append((
+        "        soundL = {%s, %s, %s};\n"
+    ) % (al_note(min_), sound[0][0], al_note(39-sound[0][1])))
+    bankdata[2].append((
+        "        sound = {%s, %s};\n"
+    ) % (               sound[1][0], al_note(39-sound[1][1])))
+    if sound[2] != None: bankdata[2].append((
+        "        soundH = {%s, %s, %s};\n"
+    ) % (al_note(max_), sound[2][0], al_note(39-sound[2][1])))
+    bankdata[2].append("    };\n")
+    self.c_pull()
+
+def al_percussion(self, bankdata, wavedata, tbl, perc, i):
+    if perc == 0: return
+    self.c_push()
+    self.c_addr = perc
+    rel = ultra.ub()
+    pan = ultra.ub()
+    self.c_addr += 2
+    snd, key = ultra.uw(), ultra.f()
+    env = ultra.uw()
+    al_envelope(self, bankdata, env)
+    snd, note = al_sound(self, bankdata, wavedata, tbl, snd, key)
+    bankdata[2].append((
+        "    percussion[%d] =\n"
+        "    {\n"
+        "        release = %d;\n"
+        "        pan = %d;\n"
+        "        envelope = %s;\n"
+        "        sound = {%s, %s};\n"
+        "    };\n"
+    ) % (i, rel, pan, bankdata[1][env][0], snd, al_note(39+note)))
+    self.c_pull()
+
 def s_audio_ctltbl(self, argv):
-    return
+    ctl, tbl, data, ctlname, tblname = argv
+    line = self.file[-1][1]
+    wavetbl = {i: {} for i in tblname}
+    banktbl = {}
+    self.addr = 0-tbl
+    ultra.asm.init(self, 0, data)
+    self.c_addr += 2
+    cnt = ultra.uh()
+    for i in range(cnt):
+        start = ultra.uw()
+        self.c_addr += 4
+        if i not in ctlname: continue
+        banktbl[i] = [[0, {}, []], wavetbl[tbl+start], ctl, tbl+start]
+    self.addr = 0-ctl
+    ultra.asm.init(self, 0, self.c_data)
+    self.c_addr += 2
+    cnt = ultra.uh()
+    for i in range(cnt):
+        start = ultra.uw()
+        self.c_addr += 4
+        if i not in ctlname: continue
+        self.c_push()
+        self.c_addr = start
+        icnt = ultra.uw()
+        pcnt = ultra.uw()
+        flag = ultra.uw()
+        date = ultra.uw()
+        banktbl[i][2] += self.c_addr
+        banktbl[i] += [icnt, pcnt, flag, date]
+        self.c_pull()
+    for i in banktbl:
+        bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
+        self.addr = 0-ctl
+        ultra.asm.init(self, 0, self.c_data)
+        imm = table.imm_addr(self, ctl)
+        perc = ultra.uw()
+        itbl = [ultra.uw() for i in range(icnt)]
+        self.c_addr = perc
+        ptbl = [ultra.uw() for i in range(pcnt)]
+        for inst in sorted(itbl):
+            i = itbl.index(inst)
+            if i == imm:
+                for perc in sorted(ptbl):
+                    p = ptbl.index(perc)
+                    al_percussion(self, bankdata, wavedata, tbl, perc, p)
+            al_instrument(self, bankdata, wavedata, tbl, inst, i)
+    for tbl in sorted(wavetbl.keys()):
+        wavedata = wavetbl[tbl]
+        line.append("wave %s\n{\n" % tblname[tbl])
+        for wave in sorted(wavedata.keys()):
+            size, book, loop, rate, path, name = wavedata[wave]
+            wave = self.data[self.c_data][wave:wave+size]
+            data = aifc_pack(rate, wave, book, loop)
+            fn = self.path_join(path)
+            main.mkdir(fn)
+            with open(fn, "wb") as f: f.write(data)
+            line.append("    sound %s \"%s\";\n" % (name, "/".join(path)))
+        line.append("};\n\n")
+    for i in sorted(banktbl.keys()):
+        bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
+        line.append("bank %s\n{\n" % ctlname[i])
+        line.append("    date = {%X, %X, %X};\n" % (
+            date >> 16, date >> 8 & 0xFF, date >> 0 & 0xFF
+        ))
+        line.append("    wave %s;\n" % tblname[tbl])
+        for env in sorted(bankdata[1].keys()):
+            line.append("    envelope %s {%s};\n" % bankdata[1][env])
+        line += bankdata[2]
+        line.append("};\n\n")
 
 def s_audio_seqbnk(self, argv):
-    seq, bnk, data, tbl = argv
+    seq, bnk, data, seqname, path = argv
+    line = self.file[-1][1]
     self.addr = 0-seq
     ultra.asm.init(self, 0, data)
     self.c_addr += 2
     cnt = ultra.uh()
     for i in range(cnt):
-        start   = ultra.uw()
-        size    = ultra.uw()
-        fn = self.path_join(["seq", "%s.seq" % tbl[i]])
+        start = ultra.uw()
+        size  = ultra.uw()
+        if i not in seqname: continue
+        start = seq+start
+        imm = table.imm_addr(self, start)
+        if imm != None: size = imm
+        data = self.data[self.c_data][start:start+size]
+        fn = self.path_join(path + ["%s.seq" % seqname[i]])
         main.mkdir(fn)
-        with open(fn, "wb") as f:
-            f.write(self.data[self.c_data][seq+start:seq+start+size])
+        with open(fn, "wb") as f: f.write(data)
     self.addr = 0-bnk
-    ultra.asm.init(self, 0, data)
-    line = []
+    ultra.asm.init(self, 0, self.c_data)
     for i in range(cnt):
-        start   = ultra.uh()
+        start = ultra.uh()
+        if i not in seqname: continue
         self.c_push()
         self.c_addr = start
-        n = ultra.ub()
-        line.append("SEQ(%s, %s)\n" % (tbl[i], ", ".join([
-            "%d" % ultra.ub() for _ in range(n)
-        ])))
+        line.append("\"%s\" %s\n" % (
+            "/".join(path + ["%s.seq" % seqname[i]]),
+            " ".join(["%d" % ultra.ub() for _ in range(ultra.ub())])
+        ))
         self.c_pull()
-    data = "".join(line)
-    fn = main.path_join([self.root, "meta", "seq.h"])
-    main.mkdir(fn)
-    with open(fn, "w") as f:
-        f.write(data)

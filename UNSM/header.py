@@ -11,9 +11,6 @@ str_ultra_internal_c = """
 """
 
 str_types_g = """
-#define false   0
-#define true    1
-
 #define _STR(x)                 #x
 #define STR(x)                  _STR(x)
 #define _ASSET(x)               BUILD/x
@@ -300,10 +297,10 @@ str_main_g = """
 #define SCREEN_HT               240
 #define BORDER_HT               8
 
-#define GFX_LEN                 6400
 """
 
 str_app_g = """
+#define GFX_LEN                 6400
 #define FIFO_SIZE               0x1F000
 
 #define CONTROLLER_LEN          2
@@ -362,8 +359,8 @@ str_mem_c = """
 """
 
 str_mem_s = """
-#define TABLE()     .word (table_end-table_start)/8, 0
-#define FILE(file)  .word file, file##_end-file
+#define TABLE()     .word (table_end-table)/8, 0
+#define FILE(name)  .word name, name##_end-name
 """
 
 str_scene_g = """
@@ -2243,11 +2240,6 @@ str_audio_g_c = """
 #define Na_SE_unlock()          Na_IO_unlock(2, 0x037A)
 
 typedef u32 NA_SE;
-"""
-
-str_audio_file_s = """
-#define TABLE(code)             .short code, (table_end-table_start)/8
-#define FILE(file)              .word file, file##_end-file
 """
 
 struct_main = [

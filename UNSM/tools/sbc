@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import struct
+import subprocess
+
+def token(x):
+    i = 0
+    while i < len(x):
+        while x[i] == " ":
+            i += 1
+            if i >= len(x): return
+        n = i
+        if x[i] == "\"":
+            while True:
+                i += 1
+                if i >= len(x): yield None
+                if x[i] == "\"": break
+            i += 1
+            yield x[n:i]
+        elif x[i] in ",;=[]{}":
+            i += 1
+            yield x[n:i]
+        else:
+            while True:
+                if x[i] in "!#$%&'()*/:<>?@\\^`|~": yield None
+                i += 1
+                if i >= len(x): break
+                if x[i] in " ,;=[]{}": break
+            yield x[n:i]
+
+def main(argv):
+    arg = []
+    flag = ["-D__ASSEMBLER__"]
+    m  = False
+    mm = False
+    md = True
+    mg = True
+    mp = False
+    mf = None
+    mt = None
+    seq = None
+    bnk = None
+    i = 1
+    while i < len(argv):
+        x = argv[i]
+        i += 1
+        if x.startswith("-"):
+            if x.startswith("-I") or x.startswith("-D"):
+                if len(x) == 2:
+                    x += argv[i]
+                    i += 1
+                flag.append(x)
+            elif x == "-M":   m, mm, md = True, False, False
+            elif x == "-MM":  m, mm, md = True, True,  False
+            elif x == "-MD":  m, mm, md = True, False, True
+            elif x == "-MMD": m, mm, md = True, True,  True
+            elif x == "-MG": mg = False
+            elif x == "-MP": mp = True
+            elif x == "-MF":
+                mf = argv[i]
+                i += 1
+            elif x == "-MT":
+                mt = argv[i]
+                i += 1
+            elif x == "-seq":
+                seq = argv[i]
+                i += 1
+            elif x == "-bnk":
+                bnk = argv[i]
+                i += 1
+            else:
+                print("error: unknown arg '%s'" % x)
+                return 1
+        else:
+            arg.append(x)
+    if md: mg = True
+    dep = []
+    sbk = []
+    for fn in arg:
+        ln = 1
+        path = os.path.dirname(fn)
+        data = subprocess.check_output(["cpp"] + flag + [fn], text=True)
+        for line in data.split("\n"):
+            if line.startswith("#"):
+                arg = line.split()
+                ln = int(arg[1])
+                fn = eval(arg[2])
+                if fn.startswith("<"): continue
+                if mm and fn.startswith("/usr"): continue
+                if fn not in dep: dep.append(fn)
+            else:
+                pathname = None
+                bank = []
+                for tok in token(line):
+                    if tok == None:
+                        print("%s:%d: syntax error" % (fn, ln))
+                        return 1
+                    if pathname == None:
+                        if not tok.startswith("\""):
+                            print("%s:%d: syntax error" % (fn, ln))
+                            return 1
+                        pathname = tok[1:-1]
+                        if os.path.isfile(os.path.join(path, pathname)):
+                            pathname = os.path.join(path, pathname)
+                        elif os.path.isfile(pathname):
+                            pass
+                        elif mg:
+                            print("error: %s: file not found" % pathname)
+                            return 1
+                        if pathname not in dep: dep.append(pathname)
+                    else:
+                        if not tok.isdigit():
+                            print("%s:%d: syntax error" % (fn, ln))
+                            return 1
+                        bank.append(int(tok))
+                if pathname != None: sbk.append((pathname, bank))
+                ln += 1
+    if md:
+        if seq == None:
+            print("error: -seq not specified")
+            return 1
+        if bnk == None:
+            print("error: -bnk not specified")
+            return 1
+        seqdata = [None]*len(sbk)
+        bnkdata = [None]*len(sbk)
+        buf = B"\0"*0x10000
+        seqp = 4 + 8*len(sbk)
+        bnkp = 2*len(sbk)
+        for index, x in enumerate(sbk):
+            pathname, bank = x
+            seqp = (seqp+15) & ~15
+            seqdata.append(".balign 16\n")
+            seqdata.append(".incbin \"%s\"\n" % pathname)
+            ptr = 0
+            with open(pathname, "rb") as f:
+                f.seek(0, 2)
+                size = f.tell()
+                f.seek(0)
+                while size > 0:
+                    x = f.read(min(len(buf)-ptr%len(buf), size))
+                    buf = buf[:ptr%len(buf)]+x+buf[ptr%len(buf)+len(x):]
+                    ptr += len(x)
+                    size -= len(x)
+            if ptr & 15:
+                seqdata.append(".byte %s\n" % ", ".join([
+                    "%d" % struct.unpack(">B", buf[i:i+1])[0]
+                    for i in range(ptr%len(buf), (ptr%len(buf)+15) & ~15)
+                ]))
+                ptr = (ptr+15) & ~15
+            bnkdata.append(".byte %s\n" % ", ".join([
+                "%d" % x for x in [len(bank)]+bank
+            ]))
+            seqdata[index] = ".word %d, %d\n" % (seqp, ptr)
+            bnkdata[index] = ".short %d\n" % bnkp
+            seqp += ptr
+            bnkp += 1+len(bank)
+        with open(seq, "w") as f:
+            f.write(".data\n")
+            f.write(".short 3, %d\n" % len(sbk))
+            for x in seqdata: f.write(x)
+        with open(bnk, "w") as f:
+            f.write(".data\n")
+            for x in bnkdata: f.write(x)
+    if m:
+        if mf == None:
+            print("error: -MF not specified")
+            return 1
+        if mt == None:
+            print("error: -MT not specified")
+            return 1
+        with open(mf, "w") as f:
+            s = "%s:" % mt
+            for x in dep:
+                x = " " + x
+                if len(s+x) > 78:
+                    f.write(s+" \\\n")
+                    s = ""
+                s += x
+            f.write(s+"\n")
+            if mp:
+                for x in dep: f.write("%s:\n" % x)
+    return 0
+
+if __name__ == "__main__": sys.exit(main(sys.argv))

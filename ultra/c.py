@@ -68,10 +68,14 @@ d_f64 = d_fnc(ultra.d, ultra.fmt_f64)
 d_flag8  = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.ub())]]
 d_flag16 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uh())]]
 d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
-d_align_s8  = [[0, 1, 1, d_s8],     [0, 1, 3, None]]
-d_align_u8  = [[0, 1, 1, d_u8],     [0, 1, 3, None]]
-d_align_s16 = [[0, 1, 1, d_s16],    [0, 1, 2, None]]
-d_align_u16 = [[0, 1, 1, d_u16],    [0, 1, 2, None]]
+d_align_s8  = [[0, 1, 1, d_s8],  [0, 1, 3, None]]
+d_align_u8  = [[0, 1, 1, d_u8],  [0, 1, 3, None]]
+d_align_s16 = [[0, 1, 1, d_s16], [0, 1, 2, None]]
+d_align_u16 = [[0, 1, 1, d_u16], [0, 1, 2, None]]
+d_bool_s8   = [[0, 1, 1, d_s8,  ultra.fmt_bool], [0, 1, 3, None]]
+d_bool_u8   = [[0, 1, 1, d_u8,  ultra.fmt_bool], [0, 1, 3, None]]
+d_bool_s16  = [[0, 1, 1, d_s16, ultra.fmt_bool], [0, 1, 2, None]]
+d_bool_u16  = [[0, 1, 1, d_u16, ultra.fmt_bool], [0, 1, 2, None]]
 
 def d_addr_prc(argv):
     x = ultra.uw()

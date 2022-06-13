@@ -1,8 +1,6 @@
 import table
 import ultra
 
-fmt_bool = ["false", "true"]
-
 def fmt_mask(x):
     fd, fx, x = ("~%d", "~0x%02X", ~x) if x < 0 else ("%d", "0x%02X", x)
     return fd % x if x < 10 else fx % x
@@ -1472,44 +1470,6 @@ def fmt_shape(x):
     if s != None: return "S_" + s
     return "%d" % x
 
-seq_table = [
-    "se",
-    "star_catch",
-    "title",
-    "field",
-    "castle",
-    "water",
-    "fire",
-    "arena",
-    "snow",
-    "slider",
-    "ghost",
-    "lullaby",
-    "dungeon",
-    "star_select",
-    "wing",
-    "metal",
-    "msg_bowser",
-    "bowser",
-    "hi_score",
-    "merry_go_round",
-    "fanfare",
-    "star",
-    "battle",
-    "arena_clear",
-    "endless",
-    "final",
-    "staff",
-    "solution",
-    "msg_toad",
-    "msg_peach",
-    "intro",
-    "final_clear",
-    "ending",
-    "file_select",
-    "msg_lakitu",
-]
-
 fmt_na_mode_x = [
     "DEFAULT",
     "CASTLE",
@@ -1628,6 +1588,371 @@ def fmt_na_se(x):
         ))
         return "0x%08X" % x
     return fmt_na_se_x[x]
+
+stbl_anime = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "77",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99",
+    "100",
+    "101",
+    "102",
+    "103",
+    "104",
+    "105",
+    "106",
+    "107",
+    "108",
+    "109",
+    "110",
+    "111",
+    "112",
+    "113",
+    "114",
+    "115",
+    "116",
+    "117",
+    "118",
+    "119",
+    "120",
+    "121",
+    "122",
+    "123",
+    "124",
+    "125",
+    "126",
+    "127",
+    "128",
+    "129",
+    "130",
+    "131",
+    "132",
+    "133",
+    "134",
+    "135",
+    "136",
+    "137",
+    "138",
+    "139",
+    "140",
+    "141",
+    "142",
+    "143",
+    "144",
+    "145",
+    "146",
+    "147",
+    "148",
+    "149",
+    "150",
+    "151",
+    "152",
+    "153",
+    "154",
+    "155",
+    "156",
+    "157",
+    "158",
+    "159",
+    "160",
+    "161",
+    "162",
+    "163",
+    "164",
+    "165",
+    "166",
+    "167",
+    "168",
+    "169",
+    "170",
+    "171",
+    "172",
+    "173",
+    "174",
+    "175",
+    "176",
+    "177",
+    "178",
+    "179",
+    "180",
+    "181",
+    "182",
+    "183",
+    "184",
+    "185",
+    "186",
+    "187",
+    "188",
+    "189",
+    "190",
+    "191",
+    "192",
+    "193",
+    "194",
+    "195",
+    "196",
+    "197",
+    "198",
+    "199",
+    "200",
+    "201",
+    "202",
+    "203",
+    "204",
+    "205",
+    "206",
+    "207",
+    "208",
+]
+
+ctbl_anime = {
+    1: "1_2",
+    2: "1_2",
+    7: "7_8",
+    8: "7_8",
+    11: "11_12",
+    12: "11_12",
+    15: "15_16",
+    16: "15_16",
+    44: "44_45",
+    45: "44_45",
+    60: "60_61",
+    61: "60_61",
+    69: "69_70",
+    70: "69_70",
+    77: "77_78",
+    78: "77_78",
+    86: "86_87",
+    87: "86_87",
+    111: "111_112",
+    112: "111_112",
+    114: "114_115",
+    115: "114_115",
+    136: "136_137",
+    137: "136_137",
+    142: "142_143",
+    143: "142_143",
+    181: "181_182",
+    182: "181_182",
+    188: "188_189",
+    189: "188_189",
+    203: "203_204",
+    204: "203_204",
+}
+
+stbl_demo = [
+    "bitdwa",
+    "wf",
+    "ccm",
+    "bbh",
+    "jrb",
+    "hmc",
+    "pss",
+]
+
+ctbl_demo = {
+}
+
+ctlname_se = {
+    0: "se0",
+    1: "se1",
+    2: "se2",
+    3: "se3",
+    4: "se4",
+    5: "se5",
+    6: "se6",
+    7: "se7",
+    8: "se8",
+    9: "se9",
+    10: "se10",
+}
+
+ctlname_music = {
+    11: "music11",
+    12: "music12",
+    13: "music13",
+    14: "music14",
+    15: "music15",
+    16: "music16",
+    17: "music17",
+    18: "music18",
+    19: "music19",
+    20: "music20",
+    21: "music21",
+    22: "music22",
+    23: "music23",
+    24: "music24",
+    25: "music25",
+    26: "music26",
+    27: "music27",
+    28: "music28",
+    29: "music29",
+    30: "music30",
+    31: "music31",
+    32: "music32",
+    33: "music33",
+    34: "music34",
+    35: "music35",
+    36: "music36",
+    37: "music37",
+}
+
+tblname_se = {
+    0x005936A0: "se0",
+    0x0059A840: "se1",
+    0x0059E210: "se2",
+    0x005A4A20: "se3",
+    0x005AFCD0: "se4_5",
+    0x005E5400: "se6",
+    0x005F6FA0: "se7",
+    0x00607E90: "se8",
+    0x0064D350: "se9",
+    0x00657EA0: "se10",
+}
+
+tblname_music = {
+    0x006B5B00: "music",
+    0x00799DD0: "music20",
+    0x0079D850: "music22",
+    0x0079F1A0: "music29",
+}
+
+seqname_se = {
+    0: "se",
+}
+
+seqname_music = {
+    1: "star_catch",
+    2: "title",
+    3: "field",
+    4: "castle",
+    5: "water",
+    6: "fire",
+    7: "arena",
+    8: "snow",
+    9: "slider",
+    10: "ghost",
+    11: "lullaby",
+    12: "dungeon",
+    13: "star_select",
+    14: "wing",
+    15: "metal",
+    16: "msg_bowser",
+    17: "bowser",
+    18: "hi_score",
+    19: "merry_go_round",
+    20: "fanfare",
+    21: "star",
+    22: "battle",
+    23: "arena_clear",
+    24: "endless",
+    25: "final",
+    26: "staff",
+    27: "solution",
+    28: "msg_toad",
+    29: "msg_peach",
+    30: "intro",
+    31: "final_clear",
+    32: "ending",
+    33: "file_select",
+    34: "msg_lakitu",
+}
 
 sym_E0_t_ipl3 = {
     # ultra/src/PR/Boot.s
@@ -8408,11 +8733,11 @@ sym_E0_t_code = {
     0x80332E28: table.sym("object_c_80332E24+object_c_5__script"),
     0x80332E2C: table.sym("object_c_80332E24+object_c_5__scale"),
 
-    0x80333794: table.sym("Na_data_80333598+4*0x7F"),
+    0x80333794: table.sym("Na_data_80333598+4*127"),
     0x80333DF2: table.sym("Na_data_80333DE0+2*9"),
-    0x80333FF0: table.sym("Na_pan_0+4*0x7F"),
-    0x803341F0: table.sym("Na_pan_1+4*0x7F"),
-    0x803343F0: table.sym("Na_pan_2+4*0x7F"),
+    0x80333FF0: table.sym("Na_pan_phone+4*127"),
+    0x803341F0: table.sym("Na_pan_wide+4*127"),
+    0x803343F0: table.sym("Na_pan_stereo+4*127"),
 
     # ==========================================================================
     # bss
@@ -9488,27 +9813,27 @@ sym_E0_d_code = {
     0x80333B94: table.sym_var("Na_data_80333B94",   "u8",   "[]",   table.GLOBL),
     0x80333BA4: table.sym_var("Na_data_80333BA4",   "u8",   "[]",   table.GLOBL),
     0x80333BB4: table.sym_var("Na_data_80333BB4",   "s8",   "[]",   table.GLOBL),
-    0x80333BC4: table.sym_var("adsr_default",   "s16",  "[]",   table.GLOBL),
+    0x80333BC4: table.sym_var("env_default",    "s16",  "[]",   table.GLOBL),
     0x80333BD0: table.sym_var("wave_sine",      "static s16", "[]"),
     0x80333C50: table.sym_var("wave_pulse",     "static s16", "[]"),
     0x80333CD0: table.sym_var("wave_triangle",  "static s16", "[]"),
     0x80333D50: table.sym_var("wave_saw",       "static s16", "[]"),
     0x80333DD0: table.sym_var("wave_table",     "s16 *",    "[]",   table.GLOBL),
     0x80333DE0: table.sym_var("Na_data_80333DE0",    "u16", "[]",   table.GLOBL),
-    0x80333DF4: table.sym_var("Na_pan_0",    "f32",  "[]",   table.GLOBL),
-    0x80333FF4: table.sym_var("Na_pan_1",    "f32",  "[]",   table.GLOBL),
-    0x803341F4: table.sym_var("Na_pan_2",    "f32",  "[]",   table.GLOBL),
-    0x803343F4: table.sym_var("Na_pan_3",    "f32",  "[]",   table.GLOBL),
-    0x803345F4: table.sym_var("Na_pan_4",    "f32",  "[]",   table.GLOBL),
-    0x803347F4: table.sym_var("Na_pan_5",    "f32",  "[]",   table.GLOBL),
-    0x803349F4: table.sym_var("Na_pan_6",    "f32",  "[]",   table.GLOBL),
-    0x80334BF4: table.sym_var("Na_pan_7",    "f32",  "[]",   table.GLOBL),
-    0x80334DF4: table.sym_var("Na_pan_8",    "f32",  "[]",   table.GLOBL),
+    0x80333DF4: table.sym_var("Na_pan_phone",   "f32",  "[]",   table.GLOBL),
+    0x80333FF4: table.sym_var("Na_pan_wide",    "f32",  "[]",   table.GLOBL),
+    0x803341F4: table.sym_var("Na_pan_stereo",  "f32",  "[]",   table.GLOBL),
+    0x803343F4: table.sym_var("Na_rate_136A",   "f32",  "[]",   table.GLOBL),
+    0x803345F4: table.sym_var("Na_rate_136B",   "f32",  "[]",   table.GLOBL),
+    0x803347F4: table.sym_var("Na_rate_144A",   "f32",  "[]",   table.GLOBL),
+    0x803349F4: table.sym_var("Na_rate_144B",   "f32",  "[]",   table.GLOBL),
+    0x80334BF4: table.sym_var("Na_rate_128A",   "f32",  "[]",   table.GLOBL),
+    0x80334DF4: table.sym_var("Na_rate_128B",   "f32",  "[]",   table.GLOBL),
     0x80334FF4: table.sym_var("Na_tick_rate",        "s16",          flag=table.GLOBL|ultra.DALIGN),
     0x80334FF8: table.sym_var("Na_data_80334FF8",    "s8",           flag=table.GLOBL|ultra.DALIGN),
     0x80334FFC: table.sym_var("Na_heap_size",        "size_t",       flag=table.GLOBL|ultra.DALIGN),
-    0x80335000: table.sym_var("Na_data_80335000",    "size_t",       flag=table.GLOBL|ultra.DALIGN),
-    0x80335004: table.sym_var("Na_data_80335004",    "volatile s32", flag=table.GLOBL|ultra.DALIGN),
+    0x80335000: table.sym_var("Na_data_80335000",    "size_t",       flag=table.GLOBL|ultra.DALIGN), # fix size
+    0x80335004: table.sym_var("Na_data_80335004",    "volatile u32", flag=table.GLOBL|ultra.DALIGN),
     0x80335008: table.sym_var("Na_data_80335008",    "s8",           flag=table.GLOBL|ultra.DALIGN), # unused
 
     # ==========================================================================
@@ -18407,6 +18732,314 @@ sym_E0_s_ttm = {
     0x0E000DF4: table.sym_var("s_ttm_123", "S_SCRIPT", "[]", table.GLOBL),
 }
 
+imm_E0_audio = {
+    0x0057B870: 5,
+    0x0057BC90: 8,
+    0x0057C1F0: 2,
+    0x0057C420: 9,
+    0x0057CBF0: 10,
+    0x0057D5F0: 10,
+    0x0057E150: 10,
+    0x0057EB70: 10,
+    0x0057F520: 10,
+    0x00580690: 6,
+    0x00580BC0: 10,
+    0x00581AB0: 10,
+    0x005820D0: 11,
+    0x005833D0: 10,
+    0x005845D0: 6,
+    0x00584B70: 3,
+    0x00584FC0: 6,
+    0x00585BD0: 10,
+    0x00587090: 10,
+    0x005879D0: 10,
+    0x005889B0: 4,
+    0x00588B50: 8,
+    0x00589AD0: 1,
+    0x00589BD0: 10,
+    0x0058AF10: 10,
+    0x0058C050: 11,
+    0x0058D400: 10,
+    0x0058DCE0: 11,
+    0x0058ECC0: 6,
+    0x0058EFD0: 5,
+    0x0058F300: 3,
+    0x0058F670: 11,
+    0x0058F9A0: 8,
+    0x0058FCF0: 3,
+    0x0058FEF0: 10,
+    0x00590DD0: 7,
+    0x00591250: 1,
+    0x00591EE0: 15,
+
+    0x005936A0: (None, "se0_0", ["se", "0_0.aifc"]), # flip
+    0x00593D90: (None, "se0_1", ["se", "0_1.aifc"]), # (continuous)
+    0x00596660: (None, "se0_2", ["se", "0_2.aifc"]), # beat
+    0x00596990: (None, "yoshi", ["se", "yoshi.aifc"]),
+    0x00597B60: (None, "se0_4", ["se", "0_4.aifc"]), # pop out
+    0x00598CF0: (None, "se0_5", ["se", "0_5.aifc"]), # pound
+
+    0x0059A840: (None, "se1_0", ["se", "1_0.aifc"]), # step?
+    0x0059A8A0: (None, "se1_1", ["se", "1_1.aifc"]), # grass step
+    0x0059AB50: (None, "se1_3", ["se", "1_3.aifc"]), # floor step
+    0x0059AD90: (None, "se1_4", ["se", "1_4.aifc"]), # wood step
+    0x0059B420: (None, "se1_5", ["se", "1_5.aifc"]), # sand step
+    0x0059BAA0: (None, "se1_6", ["se", "1_6.aifc"]), # snow step
+    0x0059BC00: (None, "se1_7", ["se", "1_7.aifc"]), # metal step
+    0x0059D5E0: (None, "se1_8", ["se", "1_8.aifc"]), # sand
+
+    0x0059E210: (None, "se2_0", ["se", "2_0.aifc"]), # dive
+    0x005A19A0: (None, "se2_1", ["se", "2_1.aifc"]), # splash
+    0x005A2E90: (None, "se2_2", ["se", "2_2.aifc"]), # swim
+
+    # various sliding / continuous
+    0x005A4A20: (None, "se3_0", ["se", "3_0.aifc"]),
+    0x005A66B0: (None, "se3_1", ["se", "3_1.aifc"]),
+    0x005A7880: (None, "se3_2", ["se", "3_2.aifc"]),
+    0x005A8940: (None, "se3_3", ["se", "3_3.aifc"]),
+    0x005A9E10: (None, "se3_4", ["se", "3_4.aifc"]),
+    0x005AA8C0: (None, "se3_5", ["se", "3_5.aifc"]),
+    0x005AB3D0: (None, "se3_6", ["se", "3_6.aifc"]),
+    0x005ABE20: (None, "se3_7", ["se", "3_7.aifc"]),
+    0x005ACC80: (None, "se3_8", ["se", "3_8.aifc"]),
+    0x005AF500: (None, "se3_9", ["se", "3_9.aifc"]),
+
+    0x005AFCD0: (None, "se4_0", ["se", "4_0.aifc"]), # warp
+    0x005B12B0: (None, "se4_1", ["se", "4_1.aifc"]), # doorknob
+    0x005B22E0: (None, "se4_2__5_4", ["se", "4_2__5_4.aifc"]), # hinge creak
+    0x005B4F60: (None, "se4_3", ["se", "4_3.aifc"]), # metal creak
+    0x005B6720: (None, "se4_4", ["se", "4_4.aifc"]), # (metal) door close
+    0x005B7920: (None, "se4_5", ["se", "4_5.aifc"]), # surfacing
+    0x005BB0C0: (None, "se4_6", ["se", "4_6.aifc"]), # short swim
+    0x005BB870: (None, "se4_8", ["se", "4_8.aifc"]),
+    0x005BDBE0: (None, "se4_9", ["se", "4_9.aifc"]),
+    0x005BE660: (None, "se4_10", ["se", "4_10.aifc"]),
+    0x005BED70: (None, "se4_11", ["se", "4_11.aifc"]),
+    0x005BF340: (None, "se4_13", ["se", "4_13.aifc"]), # eject from painting
+    0x005C1F50: (None, "se4_14", ["se", "4_14.aifc"]), # star noise
+    0x005C7860: (None, "se4_15", ["se", "4_15.aifc"]), # blast
+    0x005CF6B0: (None, "se5_0", ["se", "5_0.aifc"]),
+    0x005D0720: (None, "se5_1", ["se", "5_1.aifc"]),
+    0x005D2BD0: (None, "se5_2", ["se", "5_2.aifc"]), # elevator
+    0x005D3010: (None, "se5_3", ["se", "5_3.aifc"]),
+    0x005D6700: (None, "se5_5", ["se", "5_5.aifc"]),
+    0x005D7390: (None, "se5_6", ["se", "5_6.aifc"]), # wind
+    0x005DAC60: (None, "se5_7", ["se", "5_7.aifc"]), # box break
+    0x005DD570: (None, "se5_8", ["se", "5_8.aifc"]), # bird
+    0x005DDD40: (None, "se5_9", ["se", "5_9.aifc"]), # bird
+    0x005DE6F0: (None, "se5_10", ["se", "5_10.aifc"]), # bird
+    0x005DF650: (None, "se5_11", ["se", "5_11.aifc"]),
+    0x005DFE70: (None, "se5_12", ["se", "5_12.aifc"]), # bird
+    0x005E01A0: (None, "se5_13", ["se", "5_13.aifc"]),
+    0x005E29D0: (None, "se5_14", ["se", "5_14.aifc"]), # spring
+    0x005E4380: (None, "se5_15", ["se", "5_15.aifc"]), # shine
+
+    0x005E5400: (None, "se6_0", ["se", "6_0.aifc"]), # MIPS
+    0x005E5C90: (None, "se6_1", ["se", "6_1.aifc"]),
+    0x005E6950: (None, "se6_2", ["se", "6_2.aifc"]), # bowser growl
+    0x005E8C60: (None, "se6_4", ["se", "6_4.aifc"]), # bowser shriek
+    0x005ECA10: (None, "se6_5", ["se", "6_5.aifc"]), # bowser swing
+    0x005ED500: (None, "se6_6", ["se", "6_6.aifc"]), # bowser inhale
+    0x005EEEC0: (None, "se6_7", ["se", "6_7.aifc"]), # penguin step
+    0x005EF580: (None, "se6_8", ["se", "6_8.aifc"]),
+    0x005EFAB0: (None, "se6_9", ["se", "6_9.aifc"]), # laugh
+    0x005F1740: (None, "se6_10", ["se", "6_10.aifc"]), # cannon 1
+    0x005F2060: (None, "se6_11", ["se", "6_11.aifc"]), # cannon 2
+    0x005F29E0: (None, "se6_12", ["se", "6_12.aifc"]), # cannon 3
+    0x005F3270: (None, "se6_14", ["se", "6_14.aifc"]), # piranha flower death
+    0x005F4720: (None, "se6_15", ["se", "6_15.aifc"]), # moving stone
+
+    0x005F6FA0: (None, "se7_0", ["se", "7_0.aifc"]), # ghost death
+    0x005F7460: (None, "se7_1", ["se", "7_1.aifc"]),
+    0x005F82B0: (None, "se7_2", ["se", "7_2.aifc"]),
+    0x005F8770: (None, "se7_3", ["se", "7_3.aifc"]), # blast
+    0x005FB0D0: (None, "se7_5", ["se", "7_5.aifc"]), # bowser breath
+    0x005FDB10: (None, "se7_6", ["se", "7_6.aifc"]), # cannon turn
+    0x005FEB20: (None, "se7_7", ["se", "7_7.aifc"]), # monkey
+    0x005FFDF0: (None, "se7_8", ["se", "7_8.aifc"]),
+    0x006011D0: (None, "se7_9", ["se", "7_9.aifc"]), # klepto?
+    0x00601740: (None, "se7_10", ["se", "7_10.aifc"]), # penguin cry
+    0x00602690: (None, "se7_11", ["se", "7_11.aifc"]),
+    0x00603EE0: (None, "se7_12", ["se", "7_12.aifc"]), # thwomp
+    0x00605480: (None, "se7_13", ["se", "7_13.aifc"]), # piano
+    0x00607770: (None, "se7_14", ["se", "7_14.aifc"]), # chain chomp
+
+    0x00607E90: (None, "se8_0", ["se", "8_0.aifc"]), # Ho
+    0x006085F0: (None, "se8_1", ["se", "8_1.aifc"]), # Wa
+    0x00608E00: (None, "se8_2", ["se", "8_2.aifc"]), # Ya
+    0x00609890: (None, "se8_3", ["se", "8_3.aifc"]), # Haha
+    0x0060B390: (None, "se8_4", ["se", "8_4.aifc"]), # Yahoo
+    0x0060D4E0: (None, "se8_5", ["se", "8_5.aifc"]), # falling grunt
+    0x0060DFE0: (None, "se8_6", ["se", "8_6.aifc"]), # grab object
+    0x0060F160: (None, "se8_7", ["se", "8_7.aifc"]), # Wa
+    0x0060FBF0: (None, "se8_8", ["se", "8_8.aifc"]), # Woa
+    0x00611C80: (None, "se8_9", ["se", "8_9.aifc"]), # lifting grunt
+    0x006135B0: (None, "se8_10", ["se", "8_10.aifc"]), # damage
+    0x00614BC0: (None, "se8_11", ["se", "8_11.aifc"]), # Oof
+    0x00616170: (None, "se8_12", ["se", "8_12.aifc"]), # Here we go
+    0x00619380: (None, "se8_13", ["se", "8_13.aifc"]), # yawn
+    0x0061CC80: (None, "se8_14", ["se", "8_14.aifc"]), # snore 1
+    0x0061ED60: (None, "se8_15", ["se", "8_15.aifc"]), # snore 2
+    0x0061F920: (None, "se8_16", ["se", "8_16.aifc"]), # Doh
+    0x00620D40: (None, "se8_17", ["se", "8_17.aifc"]), # Game over
+    0x00622670: (None, "se8_18", ["se", "8_18.aifc"]), # Hello
+    0x00624190: (None, "se8_19", ["se", "8_19.aifc"]), # Press START to play
+    0x00627760: (None, "se8_20", ["se", "8_20.aifc"]), # Boing
+    0x006288A0: (None, "se8_21", ["se", "8_21.aifc"]), # dream
+    0x00640860: (None, "se8_22", ["se", "8_22.aifc"]), # So long Bowser
+    0x00643D10: (None, "se8_23", ["se", "8_23.aifc"]), # I'm tired
+    0x006469A0: (None, "se8_24", ["se", "8_24.aifc"]), # Waha
+    0x00648F80: (None, "se8_25", ["se", "8_25.aifc"]), # Yippee
+    0x0064B2C0: (None, "se8_26", ["se", "8_26.aifc"]), # Let's go
+
+    0x0064D350: (32000, "se9_0_2", ["se", "9_0_2.aifc"]), # piano
+    0x0064EAD0: (16000, "se9_0h", ["se", "9_0h.aifc"]), # piano
+    0x0064F690: (32000, "se9_1", ["se", "9_1.aifc"]), # piano + string (pause)
+    0x006521C0: (32000, "se9_3", ["se", "9_3.aifc"]), # bell (coin)
+    0x006542D0: (None, "se9_4", ["se", "9_4.aifc"]), # camera buzz
+    0x00655150: (None, "se9_5", ["se", "9_5.aifc"]), # camera click
+    0x006557E0: (None, "se9_6", ["se", "9_6.aifc"]), # face stretch
+
+    0x00657EA0: (None, "se10_0", ["se", "10_0.aifc"]), # falling
+    0x0065DF60: (None, "se10_1", ["se", "10_1.aifc"]), # Hoohoo
+    0x0065F540: (None, "se10_2", ["se", "10_2.aifc"]), # low power
+    0x006609C0: (None, "se10_4", ["se", "10_4.aifc"]), # standing death
+    0x00664770: (None, "se10_5", ["se", "10_5.aifc"]), # burning
+    0x00668E50: (None, "se10_6", ["se", "10_6.aifc"]), # push off grunt
+    0x00669740: (None, "se10_7", ["se", "10_7.aifc"]), # cough
+    0x0066A140: (None, "se10_8", ["se", "10_8.aifc"]), # It's me, Mario
+    0x0066E3C0: (None, "se10_9", ["se", "10_9.aifc"]), # Ya
+    0x0066EC60: (None, "se10_10", ["se", "10_10.aifc"]), # Hoo
+    0x006702C0: (None, "se10_11", ["se", "10_11.aifc"]), # Mama-mia
+    0x00672300: (None, "se10_12", ["se", "10_12.aifc"]), # Okey-dokey
+    0x00674330: (None, "se10_13", ["se", "10_13.aifc"]), # drowning
+    0x00677260: (None, "se10_14", ["se", "10_14.aifc"]), # Thank you so much for playing my game
+    0x0067C6D0: (None, "se10_15", ["se", "10_15.aifc"]), # Dear Mario: ...
+    0x00691C00: (None, "se10_16", ["se", "10_16.aifc"]), # Mario!
+    0x006938B0: (None, "se10_17", ["se", "10_17.aifc"]), # The power of the Stars is restored to the castle...
+    0x0069AE20: (None, "se10_18", ["se", "10_18.aifc"]), # ...and it's all thanks to you!
+    0x0069EAB0: (None, "se10_19", ["se", "10_19.aifc"]), # Thank you, Mario!
+    0x006A2230: (None, "se10_20", ["se", "10_20.aifc"]), # We have to do something special for you...
+    0x006A8080: (None, "se10_21", ["se", "10_21.aifc"]), # Listen, everybody, let's bake a delicious cake...
+    0x006B1B10: (None, "se10_22", ["se", "10_22.aifc"]), # ...for Mario...
+    0x006B3F40: (None, "se10_23", ["se", "10_23.aifc"]), # Mario!
+
+    0x006B5B00: (32000, "banjo_l", ["music", "banjo_l.aifc"]),
+    0x006B8940: (32000, "banjo", ["music", "banjo.aifc"]),
+    0x006BB1E0: (32000, "violin", ["music", "violin.aifc"]),
+    0x006BF5B0: (32000, "whistle", ["music", "whistle.aifc"]),
+    0x006C38A0: (32000, "honky_tonk", ["music", "honky_tonk.aifc"]),
+    0x006C56B0: (24000, "acoustic_bass", ["music", "acoustic_bass.aifc"]),
+    0x006C8E40: (16000, "kick", ["music", "kick.aifc"]),
+    0x006C9600: (32000, "rim", ["music", "rim.aifc"]),
+    0x006CA190: (24000, "snare", ["music", "snare.aifc"]),
+    0x006CB610: (32000, "tom", ["music", "tom.aifc"]),
+    0x006CD0D0: (32000, "tambourine", ["music", "tambourine.aifc"]),
+    0x006CF6B0: (22050, "bongo_1", ["music", "bongo_1.aifc"]),
+    0x006D12D0: (32000, "bongo_2", ["music", "bongo_2.aifc"]),
+    0x006D2470: (32000, "claves", ["music", "claves.aifc"]),
+    0x006D3670: (32000, "closed_hi_hat", ["music", "closed_hi_hat.aifc"]),
+    0x006D3EC0: (32000, "open_hi_hat", ["music", "open_hi_hat.aifc"]),
+    0x006D6E60: (32000, "ride_cymbal", ["music", "ride_cymbal.aifc"]),
+    0x006D9FE0: (32000, "crash_cymbal", ["music", "crash_cymbal.aifc"]),
+    0x006DE6F0: (32000, "snare_2_l", ["music", "snare_2_l.aifc"]),
+    0x006E02C0: (32000, "snare_2", ["music", "snare_2.aifc"]),
+    0x006E2930: (32000, "strings_1_l", ["music", "strings_1_l.aifc"]),
+    0x006E7880: (32000, "strings_1", ["music", "strings_1.aifc"]),
+    0x006EC3D0: (32000, "french_horn", ["music", "french_horn.aifc"]),
+    0x006EFD20: (32000, "trumpet", ["music", "trumpet.aifc"]),
+    0x006F3500: (32000, "timpani", ["music", "timpani.aifc"]),
+    0x006F82A0: (32000, "brass_section", ["music", "brass_section.aifc"]),
+    0x006FC970: (32000, "slap_bass", ["music", "slap_bass.aifc"]),
+    0x006FECD0: (32000, "synth_voice", ["music", "synth_voice.aifc"]),
+    0x00702A60: (32000, "muted_guitar_fourth", ["music", "muted_guitar_fourth.aifc"]),
+    0x00704430: (32000, "melodic_tom", ["music", "melodic_tom.aifc"]),
+    0x0070A060: (22050, "triangle_l", ["music", "triangle_l.aifc"]),
+    0x0070A460: (22050, "triangle", ["music", "triangle.aifc"]),
+    0x0070BCE0: (32000, "cabasa", ["music", "cabasa.aifc"]),
+    0x0070CD70: (12000, "bass_lead", ["music", "bass_lead.aifc"]),
+    0x0070EA60: (24000, "choir_ooh", ["music", "choir_ooh.aifc"]),
+    0x00712170: (32000, "strings_2_l", ["music", "strings_2_l.aifc"]),
+    0x00715F80: (32000, "strings_2", ["music", "strings_2.aifc"]),
+    0x0071A670: (32000, "strings_2_h", ["music", "strings_2_h.aifc"]),
+    0x0071EAD0: (32000, "electric_piano", ["music", "electric_piano.aifc"]),
+    0x00725BC0: (32000, "harpsichord", ["music", "harpsichord.aifc"]),
+    0x0072C210: (24000, "sitar_1", ["music", "sitar_1.aifc"]),
+    0x00730010: (32000, "orchestra_hit", ["music", "orchestra_hit.aifc"]),
+    0x00733190: (24000, "percussion_loop_l", ["music", "percussion_loop_l.aifc"]),
+    0x00736870: (24000, "percussion_loop", ["music", "percussion_loop.aifc"]),
+    0x00738660: (24000, "percussion_loop_h", ["music", "percussion_loop_h.aifc"]),
+    0x0073CCA0: (32000, "trombone", ["music", "trombone.aifc"]),
+    0x007408B0: (16000, "accordion", ["music", "accordion.aifc"]),
+    0x00744FF0: (32000, "snow_bells", ["music", "snow_bells.aifc"]),
+    0x0074A160: (32000, "charang", ["music", "charang.aifc"]),
+    0x0074E790: (32000, "overdriven_guitar", ["music", "overdriven_guitar.aifc"]),
+    0x007523D0: (32000, "power_snare", ["music", "power_snare.aifc"]),
+    0x00756560: (24000, "power_kick", ["music", "power_kick.aifc"]),
+    0x00757730: (32000, "flute", ["music", "flute.aifc"]),
+    0x00759BD0: (24000, "percussive_organ", ["music", "percussive_organ.aifc"]),
+    0x0075C5E0: (32000, "synth_bass", ["music", "synth_bass.aifc"]),
+    0x0075E670: (16000, "square_lead", ["music", "square_lead.aifc"]),
+    0x00760390: (22050, "synth_kick", ["music", "synth_kick.aifc"]),
+    0x00760D50: (24000, "sitar_2", ["music", "sitar_2.aifc"]),
+    0x00765FC0: (16000, "music_box", ["music", "music_box.aifc"]),
+    0x00769A40: (32000, "acoustic_guitar_l", ["music", "acoustic_guitar_l.aifc"]),
+    0x0076F4B0: (32000, "acoustic_guitar", ["music", "acoustic_guitar.aifc"]),
+    0x00773FE0: (11025, "acoustic_guitar_h", ["music", "acoustic_guitar_h.aifc"]),
+    0x00777070: (32000, "ghost", ["music", "ghost.aifc"]),
+    0x00779D50: (27777, "ghost_bell_1", ["music", "ghost_bell_1.aifc"]),
+    0x0077EAF0: (16000, "ghost_bell_2", ["music", "ghost_bell_2.aifc"]),
+    0x00782750: (32000, "pan_flute", ["music", "pan_flute.aifc"]),
+    0x00786D90: (22050, "celesta", ["music", "celesta.aifc"]),
+    0x00787940: (16000, "harmonica", ["music", "harmonica.aifc"]),
+    0x0078AAF0: (32000, "piano", ["music", "piano.aifc"]),
+    0x0078E680: (16000, "french_horn_h", ["music", "french_horn_h.aifc"]),
+    0x00790350: (32000, "pizzicato_strings", ["music", "pizzicato_strings.aifc"]),
+    0x00792FD0: (16000, "pizzicato_strings_h", ["music", "pizzicato_strings_h.aifc"]),
+    0x00796400: (32000, "steel_drum", ["music", "steel_drum.aifc"]),
+    0x00799DD0: (16000, "music_box", ["music", "music_box.aifc"]),
+    0x0079D850: (32000, "voice_pah", ["music", "voice_pah.aifc"]),
+    0x0079F1A0: (32000, "church_organ", ["music", "church_organ.aifc"]),
+    0x007A8FA0: (16000, "church_organ_h", ["music", "church_organ_h.aifc"]),
+    0x007AD140: (24000, "choir_ooh", ["music", "choir_ooh.aifc"]),
+
+    0x007B0980: 0x348C, # se
+    0x007B3E10: 0x026B, # star_catch
+    0x007B4080: 0x203E, # title
+    0x007B60C0: 0x1402, # field
+    0x007B74D0: 0x09BE, # castle
+    0x007B7E90: 0x12AC, # water
+    0x007B9140: 0x0993, # fire
+    0x007B9AE0: 0x0D5A, # arena
+    0x007BA840: 0x1FCF, # snow
+    0x007BC810: 0x1D08, # slider
+    0x007BE520: 0x162A, # ghost
+    0x007BFB50: 0x0573, # lullaby
+    0x007C00D0: 0x1317, # dungeon
+    0x007C13F0: 0x0086, # star_select
+    0x007C1480: 0x0C39, # wing
+    0x007C20C0: 0x0AD2, # metal
+    0x007C2BA0: 0x0228, # msg_bowser
+    0x007C2DD0: 0x1285, # bowser
+    0x007C4060: 0x010F, # hi_score
+    0x007C4170: 0x0679, # merry_go_round
+    0x007C47F0: 0x00C5, # fanfare
+    0x007C48C0: 0x0284, # star
+    0x007C4B50: 0x0D6B, # battle
+    0x007C58C0: 0x029F, # arena_clear
+    0x007C5B60: 0x06F1, # endless
+    0x007C6260: 0x0DBB, # final
+    0x007C7020: 0x37E9, # staff
+    0x007CA810: 0x00D8, # solution
+    0x007CA8F0: 0x00D0, # msg_toad
+    0x007CA9C0: 0x01B0, # msg_peach
+    0x007CAB70: 0x06E4, # intro
+    0x007CB260: 0x080A, # final_clear
+    0x007CBA70: 0x075A, # ending
+    0x007CC1D0: 0x030D, # file_select
+    0x007CC4E0: 0x0139, # msg_lakitu
+}
+
 tbl = [
     (0x001076D0, 0x00112B50, "J0", sym_J0_main,     {}, {}),
     (0x00000040, 0x00001000, "E0", sym_E0_t_ipl3,   {}, {}),
@@ -18511,4 +19144,5 @@ tbl = [
     (0x004CDBD0, 0x004CEC00, "E0", sym_E0_s_bitfsa, {}, {}),
     (0x004CEC00, 0x004D1910, "E0", sym_E0_s_bitsa,  {}, {}),
     (0x004D1910, 0x004EC000, "E0", sym_E0_s_ttm,    {}, {}),
+    (0x0057B720, 0x007CC6C0, "E0", {}, {}, imm_E0_audio),
 ]

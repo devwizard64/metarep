@@ -9,11 +9,6 @@ import ultra
 import UNSM
 import UNSM.table
 
-d_bool_s8   = [[0, 1, 1, ultra.c.d_s8,  UNSM.table.fmt_bool], [0, 1, 3, None]]
-d_bool_u8   = [[0, 1, 1, ultra.c.d_u8,  UNSM.table.fmt_bool], [0, 1, 3, None]]
-d_bool_s16  = [[0, 1, 1, ultra.c.d_s16, UNSM.table.fmt_bool], [0, 1, 2, None]]
-d_bool_u16  = [[0, 1, 1, ultra.c.d_u16, UNSM.table.fmt_bool], [0, 1, 2, None]]
-
 # main.h
 # app.h
 # audio.h
@@ -134,8 +129,7 @@ d_camera_windemo = [False, d_camera_windemo_prc]
 def d_camera_pause_prc(argv):
     x = ultra.ub()
     return ["CAM_PAUSE(%s)" % ", ".join([
-        UNSM.table.fmt_bool[x >> i & 1].rjust(5)
-        for i in range(8)
+        "%d" % (x >> i & 1) for i in range(8)
     ])]
 d_camera_pause = [False, d_camera_pause_prc]
 
@@ -336,7 +330,7 @@ d_obj_sfx = [False, d_obj_sfx_prc]
 def d_shadow_rect_prc(argv):
     sx = ultra.fmt_float(ultra.f())
     sz = ultra.fmt_float(ultra.f())
-    y_scale = UNSM.table.fmt_bool[ultra.sb()]
+    y_scale = ultra.fmt_bool[ultra.sb()]
     ultra.script.c_addr += 3
     return ["{%s, %s, %s}" % (sx, sz, y_scale)]
 d_shadow_rect = [False, d_shadow_rect_prc]
@@ -1318,7 +1312,7 @@ def s_persp(argv):
 
 # 0C
 def s_layer(argv):
-    depth = UNSM.table.fmt_bool[ultra.ub()]
+    depth = ultra.fmt_bool[ultra.ub()]
     ultra.script.c_addr += 2
     return (None, depth)
 

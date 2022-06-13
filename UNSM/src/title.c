@@ -77,13 +77,13 @@ static int title_demo(int code)
 
 static int title_debug(void)
 {
-    int flag = false;
-    if (cont_1->down & A_BUTTON) stage_index +=  1, flag = true;
-    if (cont_1->down & B_BUTTON) stage_index -=  1, flag = true;
-    if (cont_1->down & U_JPAD)   stage_index -=  1, flag = true;
-    if (cont_1->down & D_JPAD)   stage_index +=  1, flag = true;
-    if (cont_1->down & L_JPAD)   stage_index -= 10, flag = true;
-    if (cont_1->down & R_JPAD)   stage_index += 10, flag = true;
+    int flag = FALSE;
+    if (cont_1->down & A_BUTTON) stage_index +=  1, flag = TRUE;
+    if (cont_1->down & B_BUTTON) stage_index -=  1, flag = TRUE;
+    if (cont_1->down & U_JPAD)   stage_index -=  1, flag = TRUE;
+    if (cont_1->down & D_JPAD)   stage_index +=  1, flag = TRUE;
+    if (cont_1->down & L_JPAD)   stage_index -= 10, flag = TRUE;
+    if (cont_1->down & R_JPAD)   stage_index += 10, flag = TRUE;
     if (flag) Na_SE_fixed(NA_SE3_2B);
     if (stage_index > 38) stage_index =  1;
     if (stage_index <  1) stage_index = 38;
@@ -97,7 +97,7 @@ static int title_debug(void)
     {
         if (cont_1->held == (Z_TRIG | START_BUTTON | L_CBUTTONS | R_CBUTTONS))
         {
-            debug_stage = false;
+            debug_stage = FALSE;
             return -1;
         }
         Na_SE_fixed(NA_SE7_1E);
@@ -108,39 +108,39 @@ static int title_debug(void)
 
 static int title_face(void)
 {
-    static s16 flag = true;
+    static s16 flag = TRUE;
     int code = 0;
-    if (flag == true)
+    if (flag == TRUE)
     {
         if (video_frame <= 128) Na_SE_fixed(NA_SE2_32);
         else                    Na_SE_fixed(NA_SE2_33);
-        flag = false;
+        flag = FALSE;
     }
     scene_demo();
     if (cont_1->down & START_BUTTON)
     {
         Na_SE_fixed(NA_SE7_1E);
         code = 100 + debug_stage;
-        flag = true;
+        flag = TRUE;
     }
     return title_demo(code);
 }
 
 static int title_gameover(void)
 {
-    static s16 flag = true;
+    static s16 flag = TRUE;
     int code = 0;
-    if (flag == true)
+    if (flag == TRUE)
     {
         Na_SE_fixed(NA_SE2_31);
-        flag = false;
+        flag = FALSE;
     }
     scene_demo();
     if (cont_1->down & START_BUTTON)
     {
         Na_SE_fixed(NA_SE7_1E);
         code = 100 + debug_stage;
-        flag = true;
+        flag = TRUE;
     }
     return title_demo(code);
 }

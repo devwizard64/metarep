@@ -19,6 +19,8 @@ script = None
 
 tag = ""
 
+fmt_bool = ["FALSE", "TRUE"]
+
 fmt_os_readwrite = [
     "OS_READ",
     "OS_WRITE",
@@ -163,8 +165,7 @@ def fmt_str(x):
         ("\"", "\\\""),
         ("\n", "\\n"),
         ("\t", "\\t"),
-    ):
-        x = x.replace(old, new)
+    ): x = x.replace(old, new)
     return "\"" + x + "\""
 
 def fmt_addr(x, extern=False, addr=False, cast=None, array=None):
@@ -180,10 +181,9 @@ def fmt_sizefmt(size):
 
 def round_cvt(dec, enc, data):
     x = dec(data)
-    for i in range(0x100):
+    for i in range(64):
         r = round(x, i)
-        if enc(r) == data:
-            return r
+        if enc(r) == data: return r
     return x
 
 def addr_chk(seg, addr, dev):

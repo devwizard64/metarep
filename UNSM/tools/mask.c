@@ -5,34 +5,28 @@
 
 static void crc(char *buf, const unsigned char *data, size_t size)
 {
+    size_t i;
     uint32_t c0;
     uint32_t c1;
-    uint32_t c0a;
-    uint32_t c0b;
-    uint32_t c1a;
-    uint32_t c1b;
-    size_t i;
-    c0 = c1 = c0a = c0b = c1a = c1b = 0xF8CA4DDC;
+    uint64_t v0 = 0xF8CA4DDCF8CA4DDC;
+    uint32_t v1 = 0xF8CA4DDC;
+    uint32_t v2 = 0xF8CA4DDC;
+    uint32_t v3 = 0xF8CA4DDC;
+    uint32_t v4 = 0xF8CA4DDC;
     for (i = 0; i < size; i += 4)
     {
-        uint32_t x;
-        uint32_t o;
-        uint32_t s;
-        uint32_t r;
-        x = data[i+0] << 24 | data[i+1] << 16 | data[i+2] << 8 | data[i+3];
-        o = c0 + x;
-        if (o < c0) c0a++;
-        s    = x & 0x1F;
-        r    = x << s | x >> (32-s);
-        c0   = o;
-        c0b ^= x;
-        c1  += r;
-        c1a ^= c1a < x ? c0^x : r;
-        c1b += c1^x;
+        uint32_t x =
+            data[i+0] << 24 | data[i+1] << 16 | data[i+2] << 8 | data[i+3];
+        uint32_t y = x << (x & 31) | x >> (-x & 31);
+        v0 += x;
+        v1 ^= x;
+        v2 += y;
+        v3 ^= v3 < x ? (uint32_t)v0^x : y;
+        v4 += v2^x;
     }
-    for (; i < 0x100000; i += 4) c1b += c1;
-    c0 ^= c0a^c0b;
-    c1 ^= c1a^c1b;
+    for (; i < 0x100000; i += 4) v4 += v2;
+    c0 = (uint32_t)(v0 >> 32) ^ (uint32_t)v0 ^ v1;
+    c1 = v2 ^ v3 ^ v4;
     buf[0] = c0 >> 24;
     buf[1] = c0 >> 16;
     buf[2] = c0 >>  8;
