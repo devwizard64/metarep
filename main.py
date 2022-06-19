@@ -4,7 +4,7 @@ import shutil
 import importlib
 
 def mkdir(fn):
-    os.makedirs(fn.rpartition(os.path.sep)[0], exist_ok=True)
+    os.makedirs(os.path.dirname(fn), exist_ok=True)
 
 def path_join(path):
     fn = path[0]
@@ -146,7 +146,7 @@ class script:
         i = self.c_addr - self.addr
         self.c_addr += n
         data = self.data[self.c_data][i:i+n]
-        if len(data) < n: data += B"\x00" * (n-len(data))
+        if len(data) < n: data += B"\0" * (n-len(data))
         return data
 
 def main(argv):

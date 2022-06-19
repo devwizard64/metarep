@@ -28,7 +28,7 @@ def main(argv):
         return 1
     with open(argv[2], "r") as f: data = f.read()
     path = argv[1].rpartition(".")[0]
-    name = path.rpartition(os.path.sep)[-1]
+    name = os.path.split(path)[-1]
     ltbl = None
     ctbl = []
     stbl = []

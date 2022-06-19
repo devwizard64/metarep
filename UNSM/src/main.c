@@ -23,15 +23,15 @@ OSThread thread_audio;
 OSMesgQueue pi_mq;
 OSMesgQueue sc_mq;
 OSMesgQueue sc_task_mq;
-OSMesg app_msg;
+OSMesg dma_msg;
 OSMesg pi_msg[32];
 OSMesg si_msg;
 OSMesg sc_msg[16];
 OSMesg sc_task_msg[16];
 
-OSIoMesg app_iomesg;
+OSIoMesg dma_mb;
 OSMesg null_msg;
-OSMesgQueue app_mq;
+OSMesgQueue dma_mq;
 OSMesgQueue si_mq;
 
 SC_CLIENT *sc_client_1 = NULL;
@@ -130,7 +130,7 @@ static void debug_sc_vi(void)
 
 static void sc_init(void)
 {
-    osCreateMesgQueue(&app_mq, &app_msg, 1);
+    osCreateMesgQueue(&dma_mq, &dma_msg, 1);
     osCreateMesgQueue(&si_mq, &si_msg, 1);
     osSetEventMesg(OS_EVENT_SI, &si_mq, (OSMesg)0);
     osCreateMesgQueue(&sc_task_mq, sc_task_msg, lenof(sc_task_msg));

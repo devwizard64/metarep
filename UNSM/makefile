@@ -107,20 +107,19 @@ IDO_OBJ := \
 INS_SRC := data/audio/se.ins data/audio/music.ins
 SBK_SRC := data/audio/se.sbk data/audio/music.sbk
 
+TOOLS_OBJ := tools/mask tools/slienc tools/texture
+
 $(eval REVISION := $$$(VERSION))
 REGION  := $(subst $(REVISION),,$(VERSION))
 
 CROSS   := mips-linux-gnu-
 ARMIPS  := armips
 FLIPS   := flips
+IDO     := ido53
 DONOR   := donor
 
-IDO53   := ido53
 ULTRA   := ultra
-TOOLS   := tools
-RES != $(MAKE) -C $(IDO53)
 RES != $(MAKE) -C $(ULTRA)
-RES != $(MAKE) -C $(TOOLS)
 
 CC      := $(CROSS)gcc
 LD      := $(CROSS)ld
@@ -139,11 +138,11 @@ CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
 ASFLAG  := $(ARCH) $(FLAG) $(WFLAG) -Wno-variadic-macros
 CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
 
-IDO_CC      := $(IDO53)/bin/cc
+IDO_CC      := $(IDO)/bin/cc
 IDO_OPT     := -g
 IDO_WFLAG   := -fullwarn -prototypes
 IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
-IDO_CCFLAG  += $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
+IDO_CCFLAG  += -I$(IDO)/include $(FLAG) $(IDO_OPT) $(IDO_WFLAG)
 
 OBJ := $(shell $(CPP) $(CPPFLAG) -P make/obj.mk)
 OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
@@ -156,14 +155,14 @@ dist: $(BUILD)/app.bps
 
 .PHONY: clean
 clean:
-	rm -f -r build
+	rm -f -r build $(TOOLS_OBJ) tools/__pycache__ tools/*.pyc
 
 $(BUILD)/app.bps: $(BUILD)/app.z64
 	$(FLIPS) $(DONOR)/UNSM$(VERSION).z64 $< $@
 
-$(BUILD)/app.z64: $(BUILD)/app.elf
+$(BUILD)/app.z64: $(BUILD)/app.elf tools/mask
 	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
-	$(TOOLS)/mask $@ NSM$(VERSION) "$(LABEL)"
+	tools/mask $@ NSM$(VERSION) "$(LABEL)"
 
 $(BUILD)/app.elf: $(OBJ)
 $(BUILD)/%.elf: $(BUILD)/make/%.ld
@@ -191,34 +190,34 @@ $(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
 
 include $(BUILD)/make/segment.mk
 $(BUILD)/%.szp.h: $(BUILD)/%.szp.s;
-$(BUILD)/%.szp.s: %.c make/szp.ld
+$(BUILD)/%.szp.s: %.c make/szp.ld tools/slienc
 	$(CC) $(CCFLAG) -c -o $(@:.szp.s=.o) $<
 	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.s=.elf) $(@:.szp.s=.o)
 	$(OBJCOPY) -O binary $(@:.szp.s=.elf) $(@:.szp.s=.bin)
 	$(NM) -f posix $(@:.szp.s=.elf) > $(@:.szp.s=.sym)
-	$(TOOLS)/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $(@:.szp.s=.bin) $(@:.szp.s=.sym)
+	tools/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $(@:.szp.s=.bin) $(@:.szp.s=.sym)
 $(BUILD)/%.szp.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $<
 
-$(BUILD)/%.szp.s: %.bin
+$(BUILD)/%.szp.s: %.bin tools/slienc
 	@python3 -c "import os; print(\"a t 0 %x\" % os.path.getsize(\"$<\"))" > $(@:.szp.s=.sym)
-	$(TOOLS)/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $< $(@:.szp.s=.sym)
+	tools/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $< $(@:.szp.s=.sym)
 $(BUILD)/%.szp.d: %.bin
 	@echo $(@:.d=.s): $< > $@
 
 $(BUILD)/data/audio/tbl.s: $(BUILD)/data/audio/ctl.s;
-$(BUILD)/data/audio/ctl.s: $(INS_SRC)
-	$(TOOLS)/ic $(FLAG) -ctl $@ -tbl $(@:ctl.s=tbl.s) $(INS_SRC)
+$(BUILD)/data/audio/ctl.s: $(INS_SRC) tools/ic
+	tools/ic $(FLAG) -ctl $@ -tbl $(@:ctl.s=tbl.s) $(INS_SRC)
 $(BUILD)/data/audio/tbl.d: $(BUILD)/data/audio/ctl.d;
-$(BUILD)/data/audio/ctl.d: $(INS_SRC)
-	$(TOOLS)/ic $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(INS_SRC)
+$(BUILD)/data/audio/ctl.d: $(INS_SRC) tools/ic
+	tools/ic $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(INS_SRC)
 
 $(BUILD)/data/audio/bnk.s: $(BUILD)/data/audio/seq.s;
-$(BUILD)/data/audio/seq.s: $(SBK_SRC)
-	$(TOOLS)/sbc $(FLAG) -seq $@ -bnk $(@:seq.s=bnk.s) $(SBK_SRC)
+$(BUILD)/data/audio/seq.s: $(SBK_SRC)  tools/sbc
+	tools/sbc $(FLAG) -seq $@ -bnk $(@:seq.s=bnk.s) $(SBK_SRC)
 $(BUILD)/data/audio/bnk.d: $(BUILD)/data/audio/seq.d;
-$(BUILD)/data/audio/seq.d: $(SBK_SRC)
-	$(TOOLS)/sbc $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(SBK_SRC)
+$(BUILD)/data/audio/seq.d: $(SBK_SRC) tools/sbc
+	tools/sbc $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(SBK_SRC)
 
 $(BUILD)/%.o: $(BUILD)/%.s
 	$(CC) $(ASFLAG) -c -o $@ $<
@@ -247,23 +246,27 @@ $(BUILD)/%.o: %.c
 $(BUILD)/%.d: %.c
 	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
-$(BUILD)/%.h: %.png
-	$(TOOLS)/texture $@ $^
+$(BUILD)/%.h: %.png tools/texture
+	tools/texture $@ $(filter %.png,$^)
 
 -include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
 $(BUILD)/data/shape/global/butterfly/%.h: GFXFLAG += -g
 $(BUILD)/data/menu/title/debug/%.h: GFXFLAG += -g
-$(BUILD)/%.h: %.ply
-	$(TOOLS)/gfx $(GFXFLAG) -o $@ $<
+$(BUILD)/%.h: %.ply tools/gfx
+	tools/gfx $(GFXFLAG) -o $@ $<
 
-$(BUILD)/%.h: %.obj
-	$(TOOLS)/map $@ $<
+$(BUILD)/%.h: %.obj tools/map
+	tools/map $@ $<
 
 $(BUILD)/%.inc.h: $(BUILD)/%.h;
-$(BUILD)/%.h: %.txt
-	$(TOOLS)/msg $@ $<
+$(BUILD)/%.h: %.txt tools/msg
+	tools/msg $@ $<
 
 $(BUILD)/data/%.o: data/%.bin
+
+$(TOOLS_OBJ):
+tools/%: tools/%.c
+	cc -O2 -Wall -Wextra -Wpedantic -s -o $@ $<
 
 dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
 obj = $(call dirs,src/,$1) $(call dirs,data/,$1)

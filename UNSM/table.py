@@ -11079,14 +11079,14 @@ sym_E0_d_code = {
     0x8033ADF0: table.sym_var("pi_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AE08: table.sym_var("sc_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AE20: table.sym_var("sc_task_mq",     "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033AE38: table.sym_var("app_msg",        "OSMesg",           flag=table.GLOBL),
+    0x8033AE38: table.sym_var("dma_msg",        "OSMesg",           flag=table.GLOBL),
     0x8033AE40: table.sym_var("pi_msg",         "OSMesg", "[32]",   table.GLOBL|ultra.BALIGN),
     0x8033AEC0: table.sym_var("si_msg",         "OSMesg",           flag=table.GLOBL),
     0x8033AEC8: table.sym_var("sc_msg",         "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
     0x8033AF08: table.sym_var("sc_task_msg",    "OSMesg", "[16]",   table.GLOBL|ultra.BALIGN),
-    0x8033AF48: table.sym_var("app_iomesg",     "OSIoMesg",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AF48: table.sym_var("dma_mb",         "OSIoMesg",         flag=table.GLOBL|ultra.BALIGN),
     0x8033AF5C: table.sym_var("null_msg",       "OSMesg",           flag=table.GLOBL),
-    0x8033AF60: table.sym_var("app_mq",         "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033AF60: table.sym_var("dma_mq",         "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AF78: table.sym_var("si_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
 
     # src/app.c

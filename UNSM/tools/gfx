@@ -150,8 +150,8 @@ def main(argv):
         else:
             arg[None] = x
     path = arg["-o"].rpartition(".")[0]
-    obj, _, name = path.rpartition(os.path.sep)
-    name = obj.rpartition(os.path.sep)[-1] + "_" + name
+    obj, name = os.path.split(path)
+    name = os.path.split(obj)[-1] + "_" + name
     ply = ply_read(arg[None])
     ini = {
         "v": ["0", "16"],

@@ -161,10 +161,10 @@ void mem_dma(char *dst, const char *start, const char *end)
     {
         size_t n = size >= 0x1000 ? 0x1000 : size;
         osPiStartDma(
-            &app_iomesg, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t)start, dst,
-            n, &app_mq
+            &dma_mb, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t)start, dst, n,
+            &dma_mq
         );
-        osRecvMesg(&app_mq, &null_msg, OS_MESG_BLOCK);
+        osRecvMesg(&dma_mq, &null_msg, OS_MESG_BLOCK);
         dst   += n;
         start += n;
         size  -= n;

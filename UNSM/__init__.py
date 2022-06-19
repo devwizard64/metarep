@@ -5305,10 +5305,9 @@ data_bob_shape = [
 lst = [
     # [main.s_data, "J0", ["donor", "UNSMJ0.z64"]],
     [main.s_data, "E0", ["donor", "UNSME0.z64"]],
-    [main.s_copy, ["ido53"],    ["ido53"]],
     [main.s_copy, ["ultra"],    ["ultra"]],
-    [main.s_copy, ["tools"],    ["tools"]],
     [main.s_copy, ["makefile"], ["makefile"]],
+    [main.s_copy, ["tools"],    ["tools"]],
     [main.s_copy, ["make"],     ["make"]],
     [main.s_copy, ["meta"],     ["meta"]],
     [main.s_copy, ["src"],      ["src"]],
