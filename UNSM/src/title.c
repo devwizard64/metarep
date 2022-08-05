@@ -1,7 +1,7 @@
 #include <sm64/types.h>
 #include <sm64/app.h>
 #include <sm64/audio.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/save.h>
 #include <sm64/scene.h>
 #include <sm64/dprint.h>
@@ -152,17 +152,17 @@ static int title_logo(void)
     return 1;
 }
 
-int p_title_main(SHORT arg, int code)
+int p_title_main(SHORT arg, UNUSED int code)
 {
     int result;
     switch (arg)
     {
-        case 0:     result = title_logo();      break;
-        case 1:     result = title_face();      break;
-        case 2:     result = title_gameover();  break;
-        case 3:     result = title_debug();     break;
-#ifndef sgi
-        default:    result = code;              break;
+        case 0: result = title_logo();      break;
+        case 1: result = title_face();      break;
+        case 2: result = title_gameover();  break;
+        case 3: result = title_debug();     break;
+#ifdef __GNUC__
+        default: __builtin_unreachable();   break;
 #endif
     }
     return result;

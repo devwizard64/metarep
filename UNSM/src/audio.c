@@ -70,7 +70,7 @@ void audio_mute_reset(void)
     audio_mute = 0;
 }
 
-void audio_mute_start(uint flag)
+void audio_mute_start(int flag)
 {
     switch (flag)
     {
@@ -80,7 +80,7 @@ void audio_mute_start(uint flag)
     audio_mute |= flag;
 }
 
-void audio_mute_end(uint flag)
+void audio_mute_end(int flag)
 {
     switch (flag)
     {
@@ -242,7 +242,7 @@ void bgm_special_stop(void)
     }
 }
 
-void audio_env_se_play(int se, vecf pos)
+void audio_env_se_play(int se, VECF pos)
 {
     Na_SE_play(audio_env_se_data[se], pos);
 }
@@ -252,12 +252,12 @@ void audio_update(void)
     Na_update();
 }
 
-vecf audio_0;
+VECF audio_0;
 OSMesgQueue audio_vi_mq;
 OSMesg audio_vi_msg;
 SC_CLIENT sc_client_audio;
 
-void audio_main(unused void *arg)
+void audio_main(UNUSED void *arg)
 {
     Na_load();
     Na_init();

@@ -59,16 +59,19 @@ SECTION(SEGMENT_FIFO, fifo,
 )
 ASSERT(. <= SEGMENT_CODE, "error: FIFO exceeds memory size.")
 SECTION(SEGMENT_CODE, code,
+    TEXT(BUILD/src/crt0.o)
     TEXT(BUILD/code.o)
     TEXT(ULTRA/lib/PR/rspboot.o)
     TEXT(ULTRA/lib/PR/gspFast3D.fifo.o)
     TEXT(ULTRA/lib/PR/aspMain.o)
     ,
+    DATA(BUILD/src/crt0.o)
     DATA(BUILD/code.o)
     DATA(ULTRA/lib/PR/rspboot.o)
     DATA(ULTRA/lib/PR/gspFast3D.fifo.o)
     DATA(ULTRA/lib/PR/aspMain.o)
     ,
+    BSS(BUILD/src/crt0.o)
     BSS(BUILD/code.o)
     BSS(ULTRA/lib/PR/rspboot.o)
     BSS(ULTRA/lib/PR/gspFast3D.fifo.o)
@@ -142,7 +145,7 @@ SECTION(SEGMENT_MENU, menu,
 )
 ASSERT(. <= SEGMENT_MEM_END-0x10, "error: MENU exceeds memory size.")
 DATA2(MENU, menu_title, menu/title)
-SZP(menu_title, menu/title/gfx)
+SZP(menu_logo, menu/title/logo)
 SZP(menu_debug, menu/title/debug)
 BACKGROUND(title)
 SECTION(SEGMENT_DATA_FACE, face_data,

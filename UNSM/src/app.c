@@ -3,7 +3,7 @@
 #include <sm64/main.h>
 #include <sm64/app.h>
 #include <sm64/audio.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/save.h>
 #include <sm64/time.h>
 #include <sm64/dprint.h>
@@ -274,7 +274,7 @@ static void video_end(void)
     video_frame++;
 }
 
-unused static void demo_record(void)
+UNUSED static void demo_record(void)
 {
     static DEMO record = {0};
     UCHAR button = (cont_1->held & 0xF000) >> 8 | (cont_1->held & 0x000F);
@@ -306,7 +306,7 @@ unused static void demo_record(void)
 
 static void input_update_stick(CONTROLLER *cont)
 {
-    unused int i;
+    UNUSED int i;
     cont->x = 0;
     cont->y = 0;
     if (cont->stick_x <= -8) cont->x = cont->stick_x + 6;
@@ -419,7 +419,7 @@ extern const char _demoSegmentRomStart[];
 
 static void app_init(void)
 {
-    unused int i;
+    UNUSED int i;
     segment_set(0x00, (void *)0x80000000);
     osCreateMesgQueue(&video_dp_mq, &video_dp_msg, 1);
     osCreateMesgQueue(&video_vi_mq, &video_vi_msg, 1);
@@ -448,16 +448,16 @@ static void app_init(void)
 
 extern P_SCRIPT p_main[];
 
-void app_main(unused void *arg)
+void app_main(UNUSED void *arg)
 {
     const P_SCRIPT *pc;
     app_init();
     input_init();
-    save_802799DC();
+    save_init();
     sc_client_init(2, &sc_client_video, &video_vi_mq, (OSMesg)1);
     pc = segment_to_virtual(p_main);
     Na_BGM_play(2, NA_SEQ_SE, 0);
-    audio_output(save_8027A5B4());
+    audio_output(save_output_get());
     video_init();
     for (;;)
     {

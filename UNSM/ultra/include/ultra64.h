@@ -9,6 +9,32 @@
 #define FALSE   0
 #endif
 
+/* rcp.h */
+#define K0BASE                  0x80000000
+#define K1BASE                  0xA0000000
+#define PI_BASE_REG             0x04600000
+#define PI_DRAM_ADDR_REG        (PI_BASE_REG+0x00)
+#define PI_CART_ADDR_REG        (PI_BASE_REG+0x04)
+#define PI_RD_LEN_REG           (PI_BASE_REG+0x08)
+#define PI_WR_LEN_REG           (PI_BASE_REG+0x0C)
+#define PI_STATUS_REG           (PI_BASE_REG+0x10)
+#define PI_BSD_DOM1_LAT_REG     (PI_BASE_REG+0x14)
+#define PI_BSD_DOM1_PWD_REG     (PI_BASE_REG+0x18)
+#define PI_BSD_DOM1_PGS_REG     (PI_BASE_REG+0x1C)
+#define PI_BSD_DOM1_RLS_REG     (PI_BASE_REG+0x20)
+#define PI_BSD_DOM2_LAT_REG     (PI_BASE_REG+0x24)
+#define PI_BSD_DOM2_PWD_REG     (PI_BASE_REG+0x28)
+#define PI_BSD_DOM2_PGS_REG     (PI_BASE_REG+0x2C)
+#define PI_BSD_DOM2_RLS_REG     (PI_BASE_REG+0x30)
+#define PI_STATUS_ERROR         0x04
+#define PI_STATUS_IO_BUSY       0x02
+#define PI_STATUS_DMA_BUSY      0x01
+#define PI_DOM1_ADDR1           0x06000000
+#define PI_DOM1_ADDR2           0x10000000
+#define PI_DOM1_ADDR3           0x1FD00000
+#define PI_DOM2_ADDR1           0x05000000
+#define PI_DOM2_ADDR2           0x08000000
+
 /* math.h */
 #define M_PI                    3.14159265358979323846
 
@@ -259,6 +285,10 @@ typedef uint64_t u64;
 typedef float    f32;
 typedef double   f64;
 
+/* rcp.h */
+#define IO_READ(addr)       (*(volatile u32 *)PHYS_TO_K1(addr))
+#define IO_WRITE(addr,data) (*(volatile u32 *)PHYS_TO_K1(addr) = (u32)(data))
+
 /* R4300.h */
 #define K0_TO_K1(x)     ((u32)(x)|0xA0000000)
 #define K1_TO_K0(x)     ((u32)(x)&0x9FFFFFFF)
@@ -458,38 +488,6 @@ typedef u32 OSYieldResult;
 #include <gbi.h>
 #define SEGMENT_OFFSET(a)       ((unsigned int)(a) & 0x00ffffff)
 #define SEGMENT_NUMBER(a)       (((unsigned int)(a) << 4) >> 28)
-
-typedef struct
-{
-    u16 _00;
-    u16 _02;
-    void *_04;
-    OSViMode *_08;
-    u32 _0C;
-    OSMesgQueue *_10;
-    OSMesg *_14;
-    f32 _18;
-    u16 _1C;
-    u32 _20;
-    f32 _24;
-    u16 _28;
-    u32 _2C;
-}
-__OSViContext;
-
-typedef struct
-{
-    struct OSThread_s  *next;
-    OSPri               priority;
-}
-__OSThreadTail;
-
-typedef struct
-{
-    OSMesgQueue        *messageQueue;
-    OSMesg              message;
-}
-__OSEventState;
 
 /* 0x80000300 */ extern s32 osTvType;
 /* 0x80000304 */ extern s32 osRomType;

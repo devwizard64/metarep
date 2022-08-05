@@ -2,12 +2,44 @@ import table
 
 str_ultra_internal_c = """
 #ifdef __GNUC__
-#define dalign                  __attribute__((aligned(4)))
-#define balign                  __attribute__((aligned(8)))
+#define DALIGN                  __attribute__((aligned(4)))
+#define BALIGN                  __attribute__((aligned(8)))
 #else
-#define dalign
-#define balign
+#define DALIGN
+#define BALIGN
 #endif
+
+typedef struct
+{
+    OSThread           *next;
+    OSPri               priority;
+}
+__OSThreadTail;
+
+typedef struct
+{
+    OSMesgQueue        *messageQueue;
+    OSMesg              message;
+}
+__OSEventState;
+
+typedef struct
+{
+    u16 _00;
+    u16 _02;
+    void *_04;
+    OSViMode *_08;
+    u32 _0C;
+    OSMesgQueue *_10;
+    OSMesg *_14;
+    f32 _18;
+    u16 _1C;
+    u32 _20;
+    f32 _24;
+    u16 _28;
+    u32 _2C;
+}
+__OSViContext;
 """
 
 str_types_g = """
@@ -19,9 +51,9 @@ str_types_g = """
 
 str_types_c = """
 typedef unsigned int uint;
-typedef s16 vecs[3];
-typedef f32 vecf[3];
-typedef f32 mtxf[4][4];
+typedef s16 VECS[3];
+typedef f32 VECF[3];
+typedef f32 MTXF[4][4];
 
 #ifdef sgi
 typedef signed char CHAR;
@@ -36,20 +68,25 @@ typedef uint USHORT;
 #endif
 
 #ifdef __GNUC__
-#define dalign                  __attribute__((aligned(4)))
-#define balign                  __attribute__((aligned(8)))
-#define unused                  __attribute__((unused))
-#define fallthrough             __attribute__((fallthrough))
+#define DALIGN                  __attribute__((aligned(4)))
+#define BALIGN                  __attribute__((aligned(8)))
+#define UNUSED                  __attribute__((unused))
+#define FALLTHROUGH             __attribute__((fallthrough))
 #else
-#define dalign
-#define balign
-#define unused
-#define fallthrough
+#define DALIGN
+#define BALIGN
+#define UNUSED
+#define FALLTHROUGH
 #endif
 #define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
 /* todo: move to header */
 typedef s16 PATH_DATA;
+
+typedef struct dummy0 DUMMY0;
+typedef struct dummy1 DUMMY1;
+typedef struct dummy2 DUMMY2;
+typedef struct dummy3 DUMMY3;
 """
 
 str_types_s = """
@@ -348,19 +385,60 @@ str_game_g = """
 #define STAGE_38                38
 """
 
-str_mem_g = """
+str_memory_g = """
 #define MEM_ALLOC_L 0
 #define MEM_ALLOC_R 1
 """
 
-str_mem_c = """
+str_memory_c = """
 #define malloc(size)            heap_alloc(mem_heap, size)
 #define free(ptr)               heap_free(mem_heap, ptr)
 """
 
-str_mem_s = """
+str_memory_s = """
 #define TABLE()     .word (table_end-table)/8, 0
 #define FILE(name)  .word name, name##_end-name
+"""
+
+str_save_g = """
+#define SAVE_ACTIVE             0x000001
+#define SAVE_000002             0x000002
+#define SAVE_000004             0x000004
+#define SAVE_000008             0x000008
+#define SAVE_000010             0x000010
+#define SAVE_000020             0x000020
+#define SAVE_000040             0x000040
+#define SAVE_000080             0x000080
+#define SAVE_000100             0x000100
+#define SAVE_000200             0x000200
+#define SAVE_000400             0x000400
+#define SAVE_000800             0x000800
+#define SAVE_001000             0x001000
+#define SAVE_002000             0x002000
+#define SAVE_004000             0x004000
+#define SAVE_008000             0x008000
+#define SAVE_010000             0x010000
+#define SAVE_020000             0x020000
+#define SAVE_040000             0x040000
+#define SAVE_080000             0x080000
+#define SAVE_100000             0x100000
+"""
+
+str_save_c = """
+#define stage_to_course(stage)  course_table[(stage)-1]
+
+#define save_file_star_total(file)  save_file_star_range(file, 1, 15)
+
+#define save_write()                save_file_write(save_index-1)
+#define save_erase()                save_file_erase(save_index-1)
+#define save_isactive()             save_file_isactive(save_index-1)
+#define save_star_count(course)     save_file_star_count(save_index-1, course)
+#define save_star_range(min, max)   save_file_star_range(save_index-1, min, max)
+#define save_star_total()           save_file_star_total(save_index-1)
+#define save_star_get(course)       save_file_star_get(save_index-1, course)
+#define save_star_set(course, flag) \
+    save_file_star_set(save_index-1, course, flag)
+#define save_coin_get(course)       save_file_coin_get(save_index-1, course)
 """
 
 str_scene_g = """
@@ -1809,7 +1887,7 @@ str_p_script_s = """
 
 str_map_data_g = """
 #define M_VTX                   0x40
-#define M_FACEEND               0x41
+#define M_PLANEEND              0x41
 #define M_END                   0x42
 #define M_OBJ                   0x43
 #define M_WATER                 0x44
@@ -2288,7 +2366,7 @@ struct_game = [
         (0x01, table.sym_var("scene",   "u8")),
         (0x02, table.sym_var("flag",    "u8")),
         (0x03, table.sym_var("ry",      "u8")),
-        (0x04, table.sym_var("pos",     "vecs")),
+        (0x04, table.sym_var("pos",     "VECS")),
         (0x0C, table.sym_var("str",     "const char **")),
     ]],
     [0x08, "struct", "struct_8033B248", [
@@ -2330,17 +2408,17 @@ struct_player = [
         (0x29, table.sym_var("timer_b",         "u8")),
         (0x2A, table.sym_var("timer_wall",      "u8")),
         (0x2B, table.sym_var("timer_ground",    "u8")),
-        (0x2C, table.sym_var("rot",         "vecs")),
-        (0x32, table.sym_var("rot_vel",     "vecs")),
+        (0x2C, table.sym_var("rot",         "VECS")),
+        (0x32, table.sym_var("rot_vel",     "VECS")),
         (0x38, table.sym_var("slide_ry",    "s16")),
         (0x3A, table.sym_var("twirl_ry",    "s16")),
-        (0x3C, table.sym_var("pos",         "vecf")),
-        (0x48, table.sym_var("vel",         "vecf")),
+        (0x3C, table.sym_var("pos",         "VECF")),
+        (0x48, table.sym_var("vel",         "VECF")),
         (0x54, table.sym_var("vel_f",       "f32")),
         (0x58, table.sym_var("vel_h",       "f32", "[2]")),
-        (0x60, table.sym_var("wall",        "struct map_face *")),
-        (0x64, table.sym_var("roof",        "struct map_face *")),
-        (0x68, table.sym_var("ground",      "struct map_face *")),
+        (0x60, table.sym_var("wall",        "struct map_plane *")),
+        (0x64, table.sym_var("roof",        "struct map_plane *")),
+        (0x68, table.sym_var("ground",      "struct map_plane *")),
         (0x6C, table.sym_var("roof_y",      "f32")),
         (0x70, table.sym_var("ground_y",    "f32")),
         (0x74, table.sym_var("ground_ry",   "s16")),
@@ -2418,14 +2496,14 @@ struct_pl_callback = [
         (0x08, table.sym_var("cap",     "s16")),
         (0x0A, table.sym_var("hold",    "s8")),
         (0x0B, table.sym_var("punch",   "u8")),
-        (0x0C, table.sym_var("torso",   "vecs")),
-        (0x12, table.sym_var("neck",    "vecs")),
-        (0x18, table.sym_var("hand",    "vecf")),
+        (0x0C, table.sym_var("torso",   "VECS")),
+        (0x12, table.sym_var("neck",    "VECS")),
+        (0x18, table.sym_var("hand",    "VECF")),
         (0x24, table.sym_var("obj",     "struct object *")),
     ]],
 ]
 
-struct_mem = [
+struct_memory = [
     [0x10, "struct", "mem_block", [
         (0x00, table.sym_var("prev",    "struct mem_block *")),
         (0x04, table.sym_var("next",    "struct mem_block *")),
@@ -2469,12 +2547,35 @@ struct_mem = [
 ]
 
 struct_save = [
+    [0x04, "struct", "save_check", [
+        (0x00, table.sym_var("key", "u16")),
+        (0x02, table.sym_var("sum", "u16")),
+    ]],
+    [0x20, "struct", "save_data", [
+        (0x00, table.sym_var("time",    "u32",  "[4]")),
+        (0x10, table.sym_var("output",  "u16")),
+        (0x12, table.sym_var("pad",     "char", "[10]")),
+        (0x1C, table.sym_var("check",   "SAVE_CHECK")),
+    ]],
+    [0x38, "struct", "save_file", [
+        (0x00, table.sym_var("stage",   "u8")),
+        (0x01, table.sym_var("scene",   "u8")),
+        (0x02, table.sym_var("pos",     "VECS")),
+        (0x08, table.sym_var("flag",    "u32")),
+        (0x0C, table.sym_var("star",    "u8",   "[25]")),
+        (0x25, table.sym_var("coin",    "u8",   "[15]")),
+        (0x34, table.sym_var("check",   "SAVE_CHECK")),
+    ]],
+    [0x200, "struct", "save", [
+        (0x000, table.sym_var("file",   "SAVE_FILE",    "[4][2]")),
+        (0x1C0, table.sym_var("data",   "SAVE_DATA",    "[2]")),
+    ]],
 ]
 
 struct_scene = [
     [0x20, "struct", "spawn", [
-        (0x00, table.sym_var("pos",     "vecs")),
-        (0x06, table.sym_var("rot",     "vecs")),
+        (0x00, table.sym_var("pos",     "VECS")),
+        (0x06, table.sym_var("rot",     "VECS")),
         (0x0C, table.sym_var("scene",   "s8")),
         (0x0D, table.sym_var("group",   "s8")),
         (0x10, table.sym_var("arg",     "u32")),
@@ -2535,7 +2636,7 @@ struct_camera = [
     ]],
     [0x18, "struct", "campos", [
         (0x00, table.sym_var("code",    "s16")),
-        (0x04, table.sym_var("pos",     "vecf")),
+        (0x04, table.sym_var("pos",     "VECF")),
         (0x10, table.sym_var("_10",     "f32")),
         (0x14, table.sym_var("dist",    "f32")),
     ]],
@@ -2544,14 +2645,14 @@ struct_camera = [
         (0x04, table.sym_var_fnc("callback", arg=(
             "struct camera *cam",
         ))),
-        (0x08, table.sym_var("pos",     "vecs")),
-        (0x0E, table.sym_var("size",    "vecs")),
+        (0x08, table.sym_var("pos",     "VECS")),
+        (0x0E, table.sym_var("size",    "VECS")),
         (0x14, table.sym_var("ry",      "s16")),
     ]],
     [0x08, "struct", "campath", [
         (0x00, table.sym_var("code",    "s8")),
         (0x01, table.sym_var("time",    "u8")),
-        (0x02, table.sym_var("pos",     "vecs")),
+        (0x02, table.sym_var("pos",     "VECS")),
     ]],
     [0x06, "struct", "camdemo", [
         (0x00, table.sym_var_fnc("callback", arg=(
@@ -2603,7 +2704,7 @@ struct_object = [
         (0x210, table.sym_var("_210",       "struct object *")),
         (0x214, table.sym_var("obj_ground", "struct object *")),
         (0x218, table.sym_var("_218",       "s16 *")),
-        (0x21C, table.sym_var("mf",         "mtxf")),
+        (0x21C, table.sym_var("mf",         "MTXF")),
         (0x25C, table.sym_var("_25C",       "void *")),
     ]],
     [0x10, "struct", "pl_pcl", [
@@ -2687,7 +2788,7 @@ struct_object_a = [
     ]],
     [0x14, "struct", "object_a_4", [
         (0x00, table.sym_var("offset",  "s32")),
-        (0x04, table.sym_var("scale",   "vecf")),
+        (0x04, table.sym_var("scale",   "VECF")),
         (0x10, table.sym_var("vel",     "f32")),
     ]],
     [0x08, "struct", "object_a_5", [
@@ -2894,7 +2995,7 @@ struct_object_c = [
         (0x00, table.sym_var("msg_start",   "s16")),
         (0x02, table.sym_var("msg_win",     "s16")),
         (0x04, table.sym_var("path",        "const PATH_DATA *")),
-        (0x08, table.sym_var("star",        "vecs")),
+        (0x08, table.sym_var("star",        "VECS")),
     ]],
     [0x0B, "struct", "object_c_1", [
         (0x00, table.sym_var("scale",   "f32")),
@@ -2926,7 +3027,7 @@ struct_object_c = [
 struct_math = [
     [0x08, "struct", "bspline", [
         (0x00, table.sym_var("time",    "s16")),
-        (0x02, table.sym_var("pos",     "vecs")),
+        (0x02, table.sym_var("pos",     "VECS")),
     ]],
 ]
 
@@ -3005,9 +3106,9 @@ struct_shape = [
     ]],
     [0x3C, "struct", "shape_camera", [
         (0x00, table.sym_var("s",       "SHAPE_CALLBACK")),
-        (0x1C, table.sym_var("eye",     "vecf")),
-        (0x28, table.sym_var("look",    "vecf")),
-        (0x34, table.sym_var("mf",      "mtxf *")),
+        (0x1C, table.sym_var("eye",     "VECF")),
+        (0x28, table.sym_var("look",    "VECF")),
+        (0x34, table.sym_var("mf",      "MTXF *")),
         (0x38, table.sym_var("rz_m",    "s16")),
         (0x3A, table.sym_var("rz_p",    "s16")),
     ]],
@@ -3023,16 +3124,16 @@ struct_shape = [
     ]],
     [0x24, "struct", "shape_posrot", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("pos", "vecs")),
-        (0x1E, table.sym_var("rot", "vecs")),
+        (0x18, table.sym_var("pos", "VECS")),
+        (0x1E, table.sym_var("rot", "VECS")),
     ]],
     [0x1E, "struct", "shape_pos", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("pos", "vecs")),
+        (0x18, table.sym_var("pos", "VECS")),
     ]],
     [0x1E, "struct", "shape_rot", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("rot", "vecs")),
+        (0x18, table.sym_var("rot", "VECS")),
     ]],
     [0x1C, "struct", "shape_scale", [
         (0x00, table.sym_var("s",       "SHAPE_GFX")),
@@ -3040,11 +3141,11 @@ struct_shape = [
     ]],
     [0x1E, "struct", "shape_billboard", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("pos", "vecs")),
+        (0x18, table.sym_var("pos", "VECS")),
     ]],
     [0x1E, "struct", "shape_joint", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("pos", "vecs")),
+        (0x18, table.sym_var("pos", "VECS")),
     ]],
     [0x18, "struct", "shape_shadow", [
         (0x00, table.sym_var("s",       "SHAPE")),
@@ -3061,13 +3162,13 @@ struct_shape = [
         (0x14, table.sym_var("shape",       "SHAPE *")),
         (0x18, table.sym_var("scene",       "s8")),
         (0x19, table.sym_var("group",       "s8")),
-        (0x1A, table.sym_var("rot",         "vecs")),
-        (0x20, table.sym_var("pos",         "vecf")),
-        (0x2C, table.sym_var("scale",       "vecf")),
+        (0x1A, table.sym_var("rot",         "VECS")),
+        (0x20, table.sym_var("pos",         "VECF")),
+        (0x2C, table.sym_var("scale",       "VECF")),
         (0x38, table.sym_var("skeleton",    "SKELETON")),
         (0x4C, table.sym_var("spawn",       "struct spawn *")),
-        (0x50, table.sym_var("mf",          "mtxf *")),
-        (0x54, table.sym_var("view",        "vecf")),
+        (0x50, table.sym_var("mf",          "MTXF *")),
+        (0x54, table.sym_var("view",        "VECF")),
     ]],
     [0x18, "struct", "shape_list", [
         (0x00, table.sym_var("s",       "SHAPE")),
@@ -3076,7 +3177,7 @@ struct_shape = [
     [0x26, "struct", "shape_hand", [
         (0x00, table.sym_var("s",       "SHAPE_CALLBACK")),
         (0x1C, table.sym_var("object",  "SHAPE_OBJECT *")),
-        (0x20, table.sym_var("pos",     "vecs")),
+        (0x20, table.sym_var("pos",     "VECS")),
     ]],
     [0x16, "struct", "shape_cull", [
         (0x00, table.sym_var("s",       "SHAPE")),
@@ -3091,16 +3192,16 @@ struct_p_script = [
 ]
 
 struct_map = [
-    [0x30, "struct", "map_face", [
+    [0x30, "struct", "map_plane", [
         (0x00, table.sym_var("type",    "s16")),
         (0x02, table.sym_var("arg",     "s16")),
         (0x04, table.sym_var("flag",    "s8")),
         (0x05, table.sym_var("area",    "s8")),
         (0x06, table.sym_var("y_min",   "s16")),
         (0x08, table.sym_var("y_max",   "s16")),
-        (0x0A, table.sym_var("v0",      "vecs")),
-        (0x10, table.sym_var("v1",      "vecs")),
-        (0x16, table.sym_var("v2",      "vecs")),
+        (0x0A, table.sym_var("v0",      "VECS")),
+        (0x10, table.sym_var("v1",      "VECS")),
+        (0x16, table.sym_var("v2",      "VECS")),
         (0x1C, table.sym_var("nx",      "f32")),
         (0x20, table.sym_var("ny",      "f32")),
         (0x24, table.sym_var("nz",      "f32")),
@@ -3109,7 +3210,7 @@ struct_map = [
     ]],
     [0x08, "struct", "map_list", [
         (0x00, table.sym_var("next",    "struct map_list *")),
-        (0x04, table.sym_var("face",    "MAP_FACE *")),
+        (0x04, table.sym_var("plane",   "MAP_PLANE *")),
     ]],
 ]
 

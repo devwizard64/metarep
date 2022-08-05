@@ -13,30 +13,24 @@ def fmt(self, lst):
     f = self.file[-1][1]
     for addr, sym, extern, line in lst:
         if len(line) == 0: continue
-        if len(extern) > 0:
-            f.append("\n\n")
-        for a, s in sorted(extern, key=lambda x: x[0]):
-            if ultra.COMM_EXTERN:
-                start = "/* 0x%08X */ extern " % a
-            else:
-                start = "extern "
+        if len(extern) > 0: f.append("\n\n")
+        for a, s in sorted(extern, key=lambda x: (x[0], x[1].label)):
+            start = "/* 0x%08X */ " % a if ultra.COMM_EXTERN else ""
+            start += "extern "
             f.append(s.fmt(start, ";") + "\n")
         start = "/* 0x%08X */ " % addr if ultra.COMM_VAR else ""
-        if sym.flag & ultra.DALIGN:
-            start += "dalign "
+        if sym.flag & ultra.DALIGN: start += "DALIGN "
         if len(line) > 1 or line[-1].endswith(",") or line[-1].startswith("#"):
             f.append("\n\n%s\n{\n" % sym.fmt(start, " ="))
             for ln in line:
                 f.append(("%s\n" if ln.startswith("#") else "\t%s\n") % ln)
             f.append("};\n\n")
         else:
-            if "\n" in line[0]:
-                f.append("\n")
+            if "\n" in line[0]: f.append("\n")
             f.append(sym.fmt(start, " ="))
             f.append("\n\t" if len(f[-1]) + 2 + len(line[0]) > 80 else " ")
             f.append(line[0] + ";\n")
-            if "\n" in line[0]:
-                f.append("\n")
+            if "\n" in line[0]: f.append("\n")
     f.append("\n")
 
 def d_str_prc(argv):
@@ -214,8 +208,7 @@ def g_null(argv):
 def g_mtx(argv):
     w0 = ultra.uw()
     m = aw()
-    if not m.startswith("0x"):
-        m = "&" + m
+    if not m.startswith("0x"): m = "&" + m
     p = w0 >> 16 & 0xFF
     a = "G_MTX_PROJECTION" if p & 0x01 else "G_MTX_MODELVIEW"
     b = "G_MTX_LOAD"       if p & 0x02 else "G_MTX_MUL"
@@ -304,10 +297,8 @@ def g_geometrymode(argv):
     cmd, = argv
     ultra.script.c_addr += 4
     w1 = ultra.uw()
-    if w1 == 0xFFFFFFFF:
-        flag = ["~0"]
-    else:
-        flag = [s for m, i, s in g_geometrymode_table if (w1 & m) == i]
+    if w1 == 0xFFFFFFFF: flag = ["~0"]
+    else: flag = [s for m, i, s in g_geometrymode_table if (w1 & m) == i]
     return (cmd, flag)
 
 g_setothermode_h = {
@@ -725,26 +716,21 @@ def gfx_prc(tab, cmd, argv):
                 lst.append("")
                 for i, f in enumerate(x):
                     f += end if i == len(x)-1 else " |"
-                    if 8+len(lst[-1])+1+len(f) > 80:
-                        lst.append("")
-                    if len(lst[-1]) > 0:
-                        lst[-1] += " "
+                    if 8+len(lst[-1])+1+len(f) > 80: lst.append("")
+                    if len(lst[-1]) > 0: lst[-1] += " "
                     lst[-1] += f
     cmd = "gs%s(" % cmd
     # cmd = "/*0x%08X*/  %s" % (ultra.script.c_dst, cmd)
     if None not in lst:
         a = " ".join(lst)
-        if 4*len(tab) + 4+len(cmd)+len(a)+2 <= 80:
-            return cmd + a + "),"
+        if 4*len(tab) + 4+len(cmd)+len(a)+2 <= 80: return cmd + a + "),"
     line = [cmd, "\t"]
     for x in lst:
         if x == None:
             line.append("\t")
         else:
-            if 4*len(tab) + 4+len(line[-1])+1+len(x) > 80:
-                line.append("\t")
-            if len(line[-1]) > 1:
-                line[-1] += " "
+            if 4*len(tab) + 4+len(line[-1])+1+len(x) > 80: line.append("\t")
+            if len(line[-1]) > 1: line[-1] += " "
             line[-1] += x
     line.append("),")
     return ("\n\t"+tab).join(line)
@@ -838,8 +824,7 @@ def s_data_lst(self, line, lst, tab):
                     else:
                         r, f = t
                         if r:
-                            for _ in range(n):
-                                f(self, line, tab, argv[4:])
+                            for _ in range(n): f(self, line, tab, argv[4:])
                         else:
                             line[-1][-1].append(tab + start + ", ".join([
                                 ("\n\t"+tab).join(f(argv[4:])) for _ in range(n)
@@ -865,8 +850,7 @@ def s_declare(self, argv, var, addr, s):
         if hasattr(sym, "fmt"):
             if var or (sym.flag & table.GLOBL and not sym.flag & table.LOCAL):
                 start = "/* 0x%08X */ " % dst + s if addr else s
-                if var and sym.flag & ultra.BALIGN:
-                    start += "balign "
+                if var and sym.flag & ultra.BALIGN: start += "BALIGN "
                 f.append(sym.fmt(start, ";") + "\n")
 
 def s_bss(self, argv):

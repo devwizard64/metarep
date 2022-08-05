@@ -2,7 +2,7 @@ import table
 import hvc
 from hvc.meta import *
 
-sym_J0_00 = {
+sym_J00_00 = {
     0x008004: table.sym("start", table.GLOBL),
     0x0081B1: table.sym("nmi", table.GLOBL | hvc.asm.A16 | hvc.asm.I16),
     0x008292: table.sym("_008292"),
@@ -604,13 +604,13 @@ sym_J0_00 = {
     0x00F0F6: table.sym("code_00F0F6"),
 }
 
-sym_E0_00 = {
+sym_E00_00 = {
     0x008C92: table.sym("code_008C6D"),
     0x008D37: table.sym("code_008D37_E0"),
     0x008D4F: table.sym("data_008D4F_E0"),
 }
 
-sym_J0_01 = {
+sym_J00_01 = {
     0x018000: table.sym("code_018000", table.GLOBL),
     0x01806B: table.sym("code_01806B"),
     0x018078: table.sym("code_018078", table.GLOBL),
@@ -1203,14 +1203,14 @@ sym_J0_01 = {
     0x01FFCF: table.sym("data_01FFCF"),
 }
 
-sym_E0_01 = {
+sym_E00_01 = {
     0x01DFC6: table.sym("code_01DFC6_E0", table.GLOBL),
 }
 
-sym_J0_02 = {
+sym_J00_02 = {
 }
 
-sym_J0_03 = {
+sym_J00_03 = {
     0x0397F4: table.sym("code_0397F4", table.GLOBL),
     0x03A02A: table.sym("code_03A02A", table.GLOBL),
     0x03A103: table.sym("code_03A103", table.GLOBL),
@@ -1222,11 +1222,11 @@ sym_J0_03 = {
     0x03EC3A: table.sym("code_03EC3A", table.GLOBL),
 }
 
-sym_J0_04 = {
+sym_J00_04 = {
     0x048184: table.sym("code_048184", table.GLOBL),
 }
 
-sym_J0_05 = {
+sym_J00_05 = {
     0x05813A: table.sym("code_05813A", table.GLOBL),
     0x05971A: table.sym("code_05971A", table.GLOBL),
     0x059A15: table.sym("code_059A15", table.GLOBL),
@@ -1243,15 +1243,15 @@ sym_J0_05 = {
     0x05EE86: table.sym("data_05EE86", table.GLOBL),
 }
 
-sym_J0_C7 = {
+sym_J00_C7 = {
     0xC792FC: table.sym("_C792FC"),
 }
 
-sym_J0_C9 = {
+sym_J00_C9 = {
     0xC905FC: table.sym("code_C905FC", table.GLOBL),
 }
 
-sym_J0_CF = {
+sym_J00_CF = {
     0xCF2E10: table.sym("code_CF2E10", table.GLOBL),
     0xCF63B6: table.sym("code_CF63B6", table.GLOBL),
     0xCF63F8: table.sym("code_CF63F8", table.GLOBL),
@@ -1260,7 +1260,7 @@ sym_J0_CF = {
     0xCFB35D: table.sym("code_CFB35D", table.GLOBL),
 }
 
-sym_J0_D0 = {
+sym_J00_D0 = {
     0xD00623: table.sym("code_D00623", table.GLOBL),
     0xD00771: table.sym("code_D00771", table.GLOBL),
     0xD01566: table.sym("code_D01566", table.GLOBL),
@@ -1268,19 +1268,19 @@ sym_J0_D0 = {
     0xD0234E: table.sym("code_D0234E", table.GLOBL),
 }
 
-sym_J0_D3 = {
+sym_J00_D3 = {
     0xD3E1DA: table.sym("code_D3E1DA", table.GLOBL),
 }
 
-sym_E0_D4 = {
+sym_E00_D4 = {
     0xD4FB90: table.sym("code_CFB35D", table.GLOBL),
 }
 
-sym_J0_D5 = {
+sym_J00_D5 = {
     0xD59992: table.sym("code_D59992", table.GLOBL),
 }
 
-sym_J0_bss = {
+sym_J00_bss = {
     0x00760D: table.sym("bss_760D"),
     0x007637: table.sym("bss_7637"),
     0x007639: table.sym("bss_7639"),
@@ -1310,7 +1310,7 @@ sym_J0_bss = {
     0x007B2B: table.sym("bss_7B2B"),
 }
 
-imm_J0_00 = {
+imm_J00_00 = {
     0x0080ED: (i_aa,),
     0x008D28: (i_aa,),
     0x008D2E: (i_aa,),
@@ -1320,33 +1320,33 @@ imm_J0_00 = {
     0x008E47: (i_aa,),
     0x009202: (i_aa,),
     0x0093FA: (i_aa,),
-    0x00AF6A: i_loword(sym_J0_C7, 0xC792FC),
-    0x00AF6F: i_hiword(sym_J0_C7, 0xC792FC),
-    0x00B085: i_loword(sym_J0_C7, 0xC792FC),
-    0x00B08A: i_hiword(sym_J0_C7, 0xC792FC),
-    0x00B125: i_loword(sym_J0_C7, 0xC792FC),
-    0x00B12A: i_hiword(sym_J0_C7, 0xC792FC),
-    0x00B374: i_loword(sym_J0_C7, 0xC792FC),
-    0x00B379: i_hiword(sym_J0_C7, 0xC792FC),
-    0x00B455: i_loword(sym_J0_C7, 0xC792FC),
-    0x00B45A: i_hiword(sym_J0_C7, 0xC792FC),
+    0x00AF6A: i_loword(sym_J00_C7, 0xC792FC),
+    0x00AF6F: i_hiword(sym_J00_C7, 0xC792FC),
+    0x00B085: i_loword(sym_J00_C7, 0xC792FC),
+    0x00B08A: i_hiword(sym_J00_C7, 0xC792FC),
+    0x00B125: i_loword(sym_J00_C7, 0xC792FC),
+    0x00B12A: i_hiword(sym_J00_C7, 0xC792FC),
+    0x00B374: i_loword(sym_J00_C7, 0xC792FC),
+    0x00B379: i_hiword(sym_J00_C7, 0xC792FC),
+    0x00B455: i_loword(sym_J00_C7, 0xC792FC),
+    0x00B45A: i_hiword(sym_J00_C7, 0xC792FC),
 }
 
 tbl = [
-    (0x000000, 0x008000, "J0", sym_J0_00, {}, imm_J0_00),
-    (0x000000, 0x008000, "E0", sym_E0_00, {}, {}),
-    (0x008000, 0x010000, "J0", sym_J0_01, {}, {}),
-    (0x008000, 0x010000, "E0", sym_E0_01, {}, {}),
-    (0x010000, 0x018000, "J0", sym_J0_02, {}, {}),
-    (0x018000, 0x020000, "J0", sym_J0_03, {}, {}),
-    (0x020000, 0x028000, "J0", sym_J0_04, {}, {}),
-    (0x028000, 0x030000, "J0", sym_J0_05, {}, {}),
-    (0x070000, 0x080000, "J0", sym_J0_C7, {}, {}),
-    (0x090000, 0x0A0000, "J0", sym_J0_C9, {}, {}),
-    (0x0F0000, 0x100000, "J0", sym_J0_CF, {}, {}),
-    (0x100000, 0x110000, "J0", sym_J0_D0, {}, {}),
-    (0x130000, 0x140000, "J0", sym_J0_D3, {}, {}),
-    (0x140000, 0x150000, "E0", sym_E0_D4, {}, {}),
-    (0x150000, 0x160000, "J0", sym_J0_D5, {}, {}),
-    (0x000000, 0x040000, "J0", sym_J0_bss, {}, {}),
+    (0x000000, 0x008000, "J00", sym_J00_00, {}, imm_J00_00),
+    (0x000000, 0x008000, "E00", sym_E00_00, {}, {}),
+    (0x008000, 0x010000, "J00", sym_J00_01, {}, {}),
+    (0x008000, 0x010000, "E00", sym_E00_01, {}, {}),
+    (0x010000, 0x018000, "J00", sym_J00_02, {}, {}),
+    (0x018000, 0x020000, "J00", sym_J00_03, {}, {}),
+    (0x020000, 0x028000, "J00", sym_J00_04, {}, {}),
+    (0x028000, 0x030000, "J00", sym_J00_05, {}, {}),
+    (0x070000, 0x080000, "J00", sym_J00_C7, {}, {}),
+    (0x090000, 0x0A0000, "J00", sym_J00_C9, {}, {}),
+    (0x0F0000, 0x100000, "J00", sym_J00_CF, {}, {}),
+    (0x100000, 0x110000, "J00", sym_J00_D0, {}, {}),
+    (0x130000, 0x140000, "J00", sym_J00_D3, {}, {}),
+    (0x140000, 0x150000, "E00", sym_E00_D4, {}, {}),
+    (0x150000, 0x160000, "J00", sym_J00_D5, {}, {}),
+    (0x000000, 0x040000, "J00", sym_J00_bss, {}, {}),
 ]

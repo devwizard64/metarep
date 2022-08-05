@@ -1,7 +1,7 @@
 #include <sm64/types.h>
 #include <sm64/segment.h>
 #include <sm64/app.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/slidec.h>
 #include <sm64/timg.h>
 
@@ -32,14 +32,14 @@ void *segment_get(int segment)
 
 void *segment_to_virtual(const void *addr)
 {
-    uint segment = (unsigned int)addr >> 24;
-    uint offset  = SEGMENT_OFFSET(addr);
+    int segment = (uintptr_t)addr >> 24;
+    intptr_t offset = SEGMENT_OFFSET(addr);
     return (void *)PHYS_TO_K0(segment_table[segment] + offset);
 }
 
 void *virtual_to_segment(int segment, const void *addr)
 {
-    uint offset = K0_TO_PHYS(addr) - segment_table[segment];
+    intptr_t offset = K0_TO_PHYS(addr) - segment_table[segment];
     return (void *)SEGMENT_ADDR(segment, offset);
 }
 
@@ -235,10 +235,10 @@ void *mem_load_szp(int segment, const char *start, const char *end)
 
 void *mem_load_txt(int segment, const char *start, const char *end)
 {
-    unused char *ptr = NULL;
+    UNUSED char *ptr = NULL;
     size_t devsize = ALIGN16(end-start);
     char *src = mem_alloc(devsize, MEM_ALLOC_R);
-    unused u32 *alcsize = (u32 *)(src + 4);
+    UNUSED u32 *alcsize = (u32 *)(src + 4);
     if (src != NULL)
     {
         mem_dma(src, start, end);
@@ -259,7 +259,7 @@ void mem_load_lib(void)
 {
     char *addr = (char *)SEGMENT_LIB;
     size_t alcsize = SEGMENT_CIMG-SEGMENT_LIB;
-    unused size_t devsize = ALIGN16(_libSegmentRomEnd-_libSegmentRomStart);
+    UNUSED size_t devsize = ALIGN16(_libSegmentRomEnd-_libSegmentRomStart);
     bzero(addr, alcsize);
     osWritebackDCacheAll();
     mem_dma(addr, _libSegmentRomStart, _libSegmentRomEnd);

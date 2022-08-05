@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/app.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/shadow.h>
 #include <sm64/dprint.h>
 #include <sm64/math.h>
@@ -8,7 +8,7 @@
 #include <sm64/s_script.h>
 
 s16  draw_m;
-mtxf draw_mtxf[32];
+MTXF draw_mtxf[32];
 Mtx *draw_mtx[32];
 
 u8   joint_prev_type;
@@ -215,7 +215,7 @@ static void draw_select(SHAPE_SELECT *select)
 
 static void draw_camera(SHAPE_CAMERA *camera)
 {
-    mtxf mf;
+    MTXF mf;
     Mtx *mrz = gfx_alloc(sizeof(Mtx));
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     if (camera->s.callback != NULL) camera->s.callback(
@@ -229,7 +229,7 @@ static void draw_camera(SHAPE_CAMERA *camera)
     mtxf_lookat(mf, camera->eye, camera->look, camera->rz_m);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (camera->s.s.child != NULL)
     {
@@ -243,14 +243,14 @@ static void draw_camera(SHAPE_CAMERA *camera)
 
 static void draw_posrot(SHAPE_POSROT *posrot)
 {
-    mtxf mf;
-    vecf vf;
+    MTXF mf;
+    VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
-    vecf_vecs(vf, posrot->pos);
+    vecs_to_vecf(vf, posrot->pos);
     mtxf_posrot(mf, vf, posrot->rot);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (posrot->s.gfx != NULL) draw_layer_gfx(
         posrot->s.gfx, shape_layer_get(posrot)
@@ -261,14 +261,14 @@ static void draw_posrot(SHAPE_POSROT *posrot)
 
 static void draw_pos(SHAPE_POS *pos)
 {
-    mtxf mf;
-    vecf vf;
+    MTXF mf;
+    VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
-    vecf_vecs(vf, pos->pos);
+    vecs_to_vecf(vf, pos->pos);
     mtxf_posrot(mf, vf, vecs_0);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (pos->s.gfx != NULL) draw_layer_gfx(
         pos->s.gfx, shape_layer_get(pos)
@@ -279,12 +279,12 @@ static void draw_pos(SHAPE_POS *pos)
 
 static void draw_rot(SHAPE_ROT *rot)
 {
-    mtxf mf;
+    MTXF mf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     mtxf_posrot(mf, vecf_0, rot->rot);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (rot->s.gfx != NULL) draw_layer_gfx(
         rot->s.gfx, shape_layer_get(rot)
@@ -295,13 +295,13 @@ static void draw_rot(SHAPE_ROT *rot)
 
 static void draw_scale(SHAPE_SCALE *scale)
 {
-    unused mtxf mf;
-    vecf vf;
+    UNUSED MTXF mf;
+    VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     vecf_set(vf, scale->scale, scale->scale, scale->scale);
     mtxf_scale(draw_mtxf[draw_m+1], draw_mtxf[draw_m], vf);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (scale->s.gfx != NULL) draw_layer_gfx(
         scale->s.gfx, shape_layer_get(scale)
@@ -312,10 +312,10 @@ static void draw_scale(SHAPE_SCALE *scale)
 
 static void draw_billboard(SHAPE_BILLBOARD *billboard)
 {
-    vecf vf;
+    VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     draw_m++;
-    vecf_vecs(vf, billboard->pos);
+    vecs_to_vecf(vf, billboard->pos);
     mtxf_billboard(
         draw_mtxf[draw_m], draw_mtxf[draw_m-1], vf, shape_camera->rz_m
     );
@@ -325,7 +325,7 @@ static void draw_billboard(SHAPE_BILLBOARD *billboard)
     else if (shape_object != NULL) mtxf_scale(
         draw_mtxf[draw_m], draw_mtxf[draw_m], shape_object->scale
     );
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (billboard->s.gfx != NULL) draw_layer_gfx(
         billboard->s.gfx, shape_layer_get(billboard)
@@ -390,9 +390,9 @@ static void draw_background(SHAPE_BACKGROUND *background)
 
 static void draw_joint(SHAPE_JOINT *joint)
 {
-    mtxf mf;
-    vecs rot;
-    vecf pos;
+    MTXF mf;
+    VECS rot;
+    VECF pos;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     vecs_cpy(rot, vecs_0);
     vecf_set(pos, joint->pos[0], joint->pos[1], joint->pos[2]);
@@ -431,7 +431,7 @@ static void draw_joint(SHAPE_JOINT *joint)
     mtxf_joint(mf, pos, rot);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
-    mtx_mtxf(mtx, draw_mtxf[draw_m]);
+    mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
     if (joint->s.gfx != NULL) draw_layer_gfx(
         joint->s.gfx, shape_layer_get(joint)
@@ -462,9 +462,9 @@ static void draw_shadow(SHAPE_SHADOW *shadow)
     if (shape_camera != NULL && shape_object != NULL)
     {
         Gfx *gfx;
-        mtxf mf;
-        vecf pos;
-        vecf joint;
+        MTXF mf;
+        VECF pos;
+        VECF joint;
         float scale;
         float size;
         if (shape_hand != NULL)
@@ -504,7 +504,7 @@ static void draw_shadow(SHAPE_SHADOW *shadow)
             draw_m++;
             mtxf_pos(mf, pos);
             mtxf_cat(draw_mtxf[draw_m], mf, *shape_camera->mf);
-            mtx_mtxf(mtx, draw_mtxf[draw_m]);
+            mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
             draw_mtx[draw_m] = mtx;
             if      (shadow_803612B4 == 1) draw_layer_gfx(
                 (void *)K0_TO_PHYS(gfx), S_LAYER_TEX_EDGE
@@ -521,7 +521,7 @@ static void draw_shadow(SHAPE_SHADOW *shadow)
     if (shadow->s.child != NULL) draw_shape(shadow->s.child);
 }
 
-static int draw_object_isvisible(SHAPE_OBJECT *object, mtxf mf)
+static int draw_object_isvisible(SHAPE_OBJECT *object, MTXF mf)
 {
     SHORT d;
     SHORT y;
@@ -542,7 +542,7 @@ static int draw_object_isvisible(SHAPE_OBJECT *object, mtxf mf)
 
 static void draw_object(SHAPE_OBJECT *object)
 {
-    mtxf mf;
+    MTXF mf;
     int flag = (object->s.flag & S_FLAG_ANIME) != 0;
     if (object->scene == shape_scene->index)
     {
@@ -573,7 +573,7 @@ static void draw_object(SHAPE_OBJECT *object)
         if (draw_object_isvisible(object, draw_mtxf[draw_m]))
         {
             Mtx *mtx = gfx_alloc(sizeof(Mtx));
-            mtx_mtxf(mtx, draw_mtxf[draw_m]);
+            mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
             draw_mtx[draw_m] = mtx;
             if (object->shape != NULL)
             {
@@ -604,8 +604,8 @@ static void draw_list(SHAPE_LIST *list)
 
 static void draw_hand(SHAPE_HAND *hand)
 {
-    mtxf mf;
-    vecf pos;
+    MTXF mf;
+    VECF pos;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     if (hand->s.callback != NULL) hand->s.callback(
         S_CODE_DRAW, &hand->s.s, draw_mtxf[draw_m]
@@ -629,7 +629,7 @@ static void draw_hand(SHAPE_HAND *hand)
             S_CODE_MTX, &hand->s.s, draw_mtxf[draw_m+1]
         );
         draw_m++;
-        mtx_mtxf(mtx, draw_mtxf[draw_m]);
+        mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
         draw_mtx[draw_m] = mtx;
         joint_prev_type   = joint_type;
         joint_prev_shadow = joint_shadow;
@@ -710,7 +710,7 @@ void draw_scene(SHAPE_SCENE *scene, Vp *viewport, Vp *scissor, u32 fill)
 {
     if (scene->s.flag & S_FLAG_ACTIVE)
     {
-        unused int i;
+        UNUSED int i;
         Mtx *mtx;
         Vp *vp;
         vp = gfx_alloc(sizeof(Vp));
@@ -732,7 +732,7 @@ void draw_scene(SHAPE_SCENE *scene, Vp *viewport, Vp *scissor, u32 fill)
             video_vp_scissor(scissor);
         }
         mtxf_identity(draw_mtxf[draw_m]);
-        mtx_mtxf(mtx, draw_mtxf[draw_m]);
+        mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
         draw_mtx[draw_m] = mtx;
         gSPViewport(video_gfx++, K0_TO_PHYS(vp));
         gSPMatrix(

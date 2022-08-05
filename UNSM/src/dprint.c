@@ -1,7 +1,7 @@
 #include <sm64/types.h>
 #include <sm64/main.h>
 #include <sm64/app.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/dprint.h>
 
 DPRINT *dprint_table[50];
@@ -155,8 +155,8 @@ void dprint(int x, int y, const char *str)
 void dprintc(int x, int y, const char *str)
 {
     CHAR c = 0;
-    unused UCHAR digit = 0;
-    unused int base = 0;
+    UNUSED UCHAR digit = 0;
+    UNUSED int base = 0;
     int n = 0;
     int i = 0;
     if ((dprint_table[dprint_index] = malloc(sizeof(DPRINT))) == NULL) return;

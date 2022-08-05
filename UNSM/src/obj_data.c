@@ -66,7 +66,7 @@ static void spawn_xyz(
     obj->mem[O_MEM_V7].f32 = z;
 }
 
-unused static void spawn_old(const O_SCRIPT *script, OBJ_DATA *data)
+UNUSED static void spawn_old(const O_SCRIPT *script, OBJ_DATA *data)
 {
     OBJECT *obj;
     SHORT shape = script == o_1300091C ? S_COIN : S_NULL;
@@ -84,7 +84,7 @@ void prg_obj_main(SHORT scene, OBJ_DATA *data)
     object_dummy.list.s.group = scene;
     for (;;)
     {
-        unused int i;
+        UNUSED int i;
         int n;
         OBJ_DATA buf[5];
         OBJECT *obj;
@@ -125,14 +125,14 @@ void obj_data_main(SHORT scene, OBJ_DATA *data)
     object_dummy.list.s.group = scene;
     for (;;)
     {
-        unused int i;
-        unused OBJECT *obj;
+        UNUSED int i;
+        UNUSED OBJECT *obj;
         SHORT px;
         SHORT py;
         SHORT pz;
         SHORT n;
         SHORT ry;
-        unused OBJ_DATA buf[5];
+        UNUSED OBJ_DATA buf[5];
         n = *data++;
         if (n < 0) break;
         px = *data++;

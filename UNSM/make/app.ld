@@ -30,7 +30,7 @@ SECTIONS
         . = ALIGN(0x1000);
     }
     __dev = 0x1000;
-#include <meta/main.h>
+#include "main.h"
     _bss_size_hi = SIZEOF(.code.bss) >> 16;
     _bss_size_lo = SIZEOF(.code.bss) & 0xFFFF;
     /DISCARD/ : {*(*)}

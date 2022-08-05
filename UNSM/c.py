@@ -56,7 +56,7 @@ d_pl_walk = [
 # pl_swim.h
 # pl_grab.h
 # pl_callback.h
-# mem.h
+# memory.h
 # save.h
 # scene.h
 # draw.h
@@ -599,7 +599,7 @@ d_anime = [True, d_anime_prc]
 
 # map.h
 
-d_map_face = [
+d_map_plane = [
     [0, -1, 2, ultra.c.d_s16],
     [0, -2, 1, ultra.c.d_s8],
     [0, -1, 2, ultra.c.d_s16],

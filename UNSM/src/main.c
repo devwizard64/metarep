@@ -3,7 +3,7 @@
 #include <sm64/main.h>
 #include <sm64/app.h>
 #include <sm64/audio.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/time.h>
 #include <sm64/buffer.h>
 #include <sm64/audio/g.h>
@@ -99,7 +99,7 @@ void debug_update(void)
     }
 }
 
-unused static void dummy(void)
+void dummy(void)
 {
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -193,7 +193,7 @@ static void sc_task_flush(void)
 
 static void sc_task_start(int type)
 {
-    unused int i;
+    UNUSED int i;
     if (type == M_AUDTASK)  sc_task = sc_audtask;
     else                    sc_task = sc_gfxtask;
     osSpTaskStart(&sc_task->task);
@@ -230,7 +230,7 @@ static void sc_audtask_skip(void)
 
 static void sc_event_vi(void)
 {
-    unused int i;
+    UNUSED int i;
     debug_sc_vi();
     sc_vi++;
     if (reset_timer > 0) reset_timer++;
@@ -316,7 +316,7 @@ static void sc_event_dp(void)
     sc_gfxtask = NULL;
 }
 
-static void sc_main(unused void *arg)
+static void sc_main(UNUSED void *arg)
 {
     sc_init();
     sc_init_mem();
@@ -404,13 +404,13 @@ void sc_audio_disable(void)
     while (sc_audtask != NULL);
 }
 
-static void idle_main(unused void *arg)
+static void idle_main(UNUSED void *arg)
 {
-#ifndef VERSION_J0
+#ifndef VERSION_J00
     int tv_type = osTvType;
 #endif
     osCreateViManager(OS_PRIORITY_VIMGR);
-#ifndef VERSION_J0
+#ifndef VERSION_J00
     if (tv_type == OS_TV_NTSC)  osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
     else                        osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
 #else
@@ -428,7 +428,7 @@ static void idle_main(unused void *arg)
 
 void entry(void)
 {
-    unused char buf[64];
+    UNUSED char buf[64];
     osInitialize();
     debug_entry();
     thread_create(

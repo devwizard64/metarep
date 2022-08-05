@@ -46,7 +46,7 @@ void obj_sfx_802CA1E0(NA_SE se)
     if (object->list.s.s.flag & 1) Na_SE_obj(se, object);
 }
 
-unused static int obj_sfx_802CA230(float x)
+UNUSED static int obj_sfx_802CA230(float x)
 {
     int y;
     if      (x <  500) y = 127;
@@ -55,7 +55,7 @@ unused static int obj_sfx_802CA230(float x)
     return y;
 }
 
-unused static int obj_sfx_802CA2D4(float x)
+UNUSED static int obj_sfx_802CA2D4(float x)
 {
     int y;
     if      (x < 1300) y = 127;

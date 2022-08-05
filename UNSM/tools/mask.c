@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     if (argc > 2)
     {
         memcpy(&buf[0x2B], argv[2], 4);
-        buf[0x2F] = strtol(&argv[2][4], NULL, 0);
+        buf[0x2F] = strtol(&argv[2][4], NULL, 16);
     }
     if (argc > 3)
     {

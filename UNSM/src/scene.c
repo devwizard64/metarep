@@ -2,7 +2,7 @@
 #include <sm64/segment.h>
 #include <sm64/app.h>
 #include <sm64/pl_demo.h>
-#include <sm64/mem.h>
+#include <sm64/memory.h>
 #include <sm64/scene.h>
 #include <sm64/draw.h>
 #include <sm64/object.h>
@@ -22,8 +22,8 @@ s16 course_index;
 s16 level_index;
 s16 scene_index;
 s16 course_prev;
-s16 msg_result;
 s16 msg_code;
+s16 msg_latch;
 
 SPAWN *spawn_mario = &spawn_player[0];
 SHAPE **shape_table = shape_data;
@@ -383,7 +383,7 @@ void scene_draw(void)
             0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
         );
 #endif
-        if ((msg_result = message_802DDCA4()) != 0) msg_code = msg_result;
+        if ((msg_code = message_802DDCA4()) != 0) msg_latch = msg_code;
         if (scene_scissor != NULL) video_vp_scissor(scene_scissor);
         else gDPSetScissor(
             video_gfx++, G_SC_NON_INTERLACE,

@@ -209,7 +209,7 @@ msg_course = [
     "COURSE_WMOTR",
     "COURSE_SA",
     "COURSE_ENDING",
-    None,
+    "COURSE_NULL; 0",
 ]
 
 def str_include(lst):
@@ -484,8 +484,8 @@ def s_szp(self, argv):
 
 def s_szpbin(start, end, size, name):
     return [main.s_call, [
-        [s_szp, start, end, "E0"],
-        [main.s_bin, 0, size, "E0.szp", ["%s.bin" % name]],
+        [s_szp, start, end, "E00"],
+        [main.s_bin, 0, size, "E00.szp", ["%s.bin" % name]],
         [main.s_dev, None],
     ]]
 
@@ -567,26 +567,25 @@ def s_header_code(ts, te, ds, de, bs, be, name, include, lst, g="", c="", s=""):
         [main.s_str, "\n"],
         [ultra.c.s_struct, lst],
         [main.s_str, "\n"],
-        [ultra.c.s_extern, bs, be, "E0", ds],
-        [ultra.c.s_extern, ds, de, "E0", None],
+        [ultra.c.s_extern, bs, be, "E00", ds],
+        [ultra.c.s_extern, ds, de, "E00", None],
         [main.s_str, "\n"],
-        [ultra.c.s_extern, ts, te, "E0", None],
+        [ultra.c.s_extern, ts, te, "E00", None],
     ], [
         [main.s_str, s],
-        [main.s_str, "\n"],
-        [ultra.asm.s_struct, lst],
-    ] if asm != "" or len(lst) > 0 else [])
+    ] if s != "" else [])
 
 def s_code(start, end, fn, include=[], s="", macro=True, sep=False):
     return [main.s_call, [
         [main.s_file, "%s.sx" % fn],
             s_include(include),
-            [main.s_str, "\n.set noreorder\n.set noat\n"],
+            [main.s_str, "\n"],
             [main.s_str, s],
+            [main.s_str, ".set noreorder\n.set noat\n"],
             [main.s_str, "\n"],
             [main.s_str, str_align],
             [main.s_str, "\n"],
-            [ultra.asm.s_code, start, end, "E0", 0, macro, sep],
+            [ultra.asm.s_code, start, end, "E00", 0, macro, sep],
         [main.s_write],
     ]]
 
@@ -595,18 +594,18 @@ def s_data(ds, de, rs, re, bs, be, fn, include, dl, rl, s=""):
         [main.s_file, "%s.c" % fn],
             s_include(include),
             [main.s_str, "\n"], [main.s_str, s],
-            [main.s_str, "\n"], [ultra.c.s_data, rs, re, "E0", rl],
-            [main.s_str, "\n"], [ultra.c.s_bss,  bs, be, "E0", ds],
-            [main.s_str, "\n"], [ultra.c.s_data, ds, de, "E0", dl],
+            [main.s_str, "\n"], [ultra.c.s_data, rs, re, "E00", rl],
+            [main.s_str, "\n"], [ultra.c.s_bss,  bs, be, "E00", ds],
+            [main.s_str, "\n"], [ultra.c.s_data, ds, de, "E00", dl],
         [main.s_write],
     ]]
 
 def s_databin(start, end, name):
-    return [main.s_bin, start, end, "E0", ["%s.bin" % name]]
+    return [main.s_bin, start, end, "E00", ["%s.bin" % name]]
 
 def s_gfx(start, end, a, name, lst):
     return [main.s_call, [
-        [s_szp, start, end, "E0"],
+        [s_szp, start, end, "E00"],
         [main.s_addr, a << 24],
         [main.s_file, "%s.c" % name],
             [main.s_call, lst],
@@ -630,7 +629,7 @@ def s_shapebin(start, end, size, ssize, b, name, shape, s=""):
                 [main.s_str, "\n"],
                 [main.s_str, str_script],
                 [main.s_str, "\n"],
-                [ultra.c.s_data, b << 24, (b << 24) + ssize, "E0", shape],
+                [ultra.c.s_data, b << 24, (b << 24) + ssize, "E00", shape],
             [main.s_write],
             [main.s_addr, 0],
         [main.s_pop],
@@ -639,7 +638,7 @@ def s_shapebin(start, end, size, ssize, b, name, shape, s=""):
 def s_shape(start, end, a, b, name, gfx, shape, s=""):
     return [main.s_call, [
         [main.s_dir, name],
-            [s_szp, start, end, "E0"],
+            [s_szp, start, end, "E00"],
             [main.s_addr, (a << 24)],
             [main.s_file, "gfx.c"],
                 s_include([
@@ -686,7 +685,7 @@ def s_script(start, end, addr, size, p="", s=""):
             [main.s_str, "\n"],
             [main.s_str, str_data],
             [main.s_str, "\n"],
-            [asm.s_script, p_start, p_end, "E0", 0],
+            [asm.s_script, p_start, p_end, "E00", 0],
         [main.s_write],
         [main.s_file, "shape.c"],
             s_include([
@@ -698,7 +697,7 @@ def s_script(start, end, addr, size, p="", s=""):
             [main.s_str, "\n"],
             [main.s_str, str_script],
             [main.s_str, "\n"],
-            [ultra.c.s_data, s_start, s_end, "E0", [
+            [ultra.c.s_data, s_start, s_end, "E00", [
                 [0, 1, 1, c.d_s_script, s_end],
             ]],
         [main.s_write],
@@ -708,7 +707,7 @@ def s_script(start, end, addr, size, p="", s=""):
 def s_shape_p(start, end, name):
     return [main.s_call, [
         s_dirfile(os.path.join("shape", name), "program.sx"),
-            [asm.s_script, start, end, "E0", 0],
+            [asm.s_script, start, end, "E00", 0],
         s_writepop(),
     ]]
 
@@ -723,7 +722,7 @@ def s_stagebin(a, b, c, size, ssize, name, p="", s=""):
 def s_stage(start, end, size, name, gfx, shape, p="", s=""):
     return [main.s_call, [
         [main.s_dir, name],
-            [s_szp, start, end, "E0"],
+            [s_szp, start, end, "E00"],
             [main.s_addr, 0x07000000],
             [main.s_file, "gfx.c"],
                 s_include([
@@ -747,7 +746,7 @@ def s_stage(start, end, size, name, gfx, shape, p="", s=""):
                 [main.s_str, "\n"],
                 [main.s_str, str_data],
                 [main.s_str, "\n"],
-                [asm.s_script, 0x0E000000, 0x0E000000+size, "E0", 0],
+                [asm.s_script, 0x0E000000, 0x0E000000+size, "E00", 0],
             [main.s_write],
             [main.s_file, "shape.c"],
                 s_include([
@@ -768,7 +767,7 @@ def s_stage(start, end, size, name, gfx, shape, p="", s=""):
 def s_ply(start, gfx, end, name, light=False, scale=None):
     return [main.s_call, [
         [c.s_ply_vtx, name],
-        [ultra.c.s_data, start, end, "E0.szp", [
+        [ultra.c.s_data, start, end, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, gfx, name, light, scale],
             [0, 1, 1, ultra.c.d_Gfx, end],
         ]],
@@ -957,7 +956,7 @@ ultra_src = [
         [main.s_str, str_data],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [ultra.asm.s_data, 0x80335A30, 0x80335A4C, "E0", [
+        [ultra.asm.s_data, 0x80335A30, 0x80335A4C, "E00", [
             [5, 1, ultra.asm.d_uword],
             [2, 1, ultra.asm.d_uword],
         ]],
@@ -965,7 +964,7 @@ ultra_src = [
         [main.s_str, str_rdata],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [ultra.asm.s_data, 0x80339980, 0x803399C4, "E0", [
+        [ultra.asm.s_data, 0x80339980, 0x803399C4, "E00", [
             [4, 8, ultra.asm.d_ubyte, lambda x: "4*%d" % (x//4)],
             [9, 1, ultra.asm.d_waddr],
         ]],
@@ -976,7 +975,7 @@ ultra_src = [
         [main.s_str, str_rdata],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [ultra.asm.s_data, 0x803399D0, 0x803399D4, "E0", [
+        [ultra.asm.s_data, 0x803399D0, 0x803399D4, "E00", [
             [1, 1, ultra.asm.d_uword, "0x%08X"],
         ]],
     [main.s_write],
@@ -1014,7 +1013,7 @@ ultra_src = [
         [main.s_str, str_rdata],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [ultra.asm.s_data, 0x80339A40, 0x80339AC0, "E0", [
+        [ultra.asm.s_data, 0x80339A40, 0x80339AC0, "E00", [
             [8, 8, ultra.asm.d_uhalf, "0x%03X"],
         ]],
     [main.s_write],
@@ -1025,9 +1024,9 @@ ultra_src_PR = [
     s_code(0xA4000040, 0xA4000B6C, "Boot", ["ultra64"], "", False),
     [main.s_addr, 0],
     [main.s_file, "romheader.s"],
-        [ultra.asm.s_header, "E0"],
+        [ultra.asm.s_header, "E00"],
     [main.s_write],
-    [main.s_bin, 0x00000B70, 0x00000FEE, "E0", ["font"]],
+    [main.s_bin, 0x00000B70, 0x00000FEE, "E00", ["font"]],
     [main.s_file, "font.s"],
         [main.s_str, str_data],
         [main.s_str, str_align],
@@ -1045,7 +1044,7 @@ ultra_src_PR = [
         [main.s_str, str_ucode],
         [main.s_str, str_ucode_create % ("rspboot.text", "0x04001000")],
         [main.s_addr, 0x04001000 - 0x000E6260],
-        [ultra.asm.s_code, 0x04001000, 0x040010D0, "E0", 1, False, False],
+        [ultra.asm.s_code, 0x04001000, 0x040010D0, "E00", 1, False, False],
         [main.s_str, "\n.align 8\n"],
         [main.s_str, str_ucode_close],
     [main.s_write],
@@ -1061,7 +1060,7 @@ ultra_src_PR = [
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.init", "0x04001080")],
             [main.s_str, "prg_init_start:\n\n"],
             [main.s_addr, 0x04001080 - 0x000E6330],
-            [ultra.asm.s_code, 0x04001080, 0x04001088, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001080, 0x04001088, "E00", 1, False, False],
             [main.s_str, str_ucode_close],
         [main.s_write],
         [main.s_str, ".include \"src/PR/gspFast3D/main.asm\"\n"],
@@ -1069,13 +1068,13 @@ ultra_src_PR = [
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.main", "0x04001000")],
             [main.s_str, "prg_main_start:\n\n"],
             [main.s_addr, 0x04001000 - 0x000E7290],
-            [ultra.asm.s_code, 0x04001000, 0x04001088, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001000, 0x04001088, "E00", 1, False, False],
             [main.s_addr, 0x04001080 - 0x000E6330],
-            [ultra.asm.s_code, 0x04001088, 0x04001768, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001088, 0x04001768, "E00", 1, False, False],
             [main.s_str, "\n.align 8\nprg_ext_start:\n\n"],
-            [ultra.asm.s_code, 0x04001768, 0x0400188C, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001768, 0x0400188C, "E00", 1, False, False],
             [main.s_str, "\n.fill max(prg_clip_end, prg_light_end, prg_exit_end)-. + 0x10\n"],
-            [ultra.asm.s_code, 0x04001998, 0x04001FDC, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001998, 0x04001FDC, "E00", 1, False, False],
             [main.s_str, "\n.align 8\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
@@ -1083,7 +1082,7 @@ ultra_src_PR = [
         [main.s_file, "clip.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.clip", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E7318],
-            [ultra.asm.s_code, 0x04001768, 0x04001988, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001768, 0x04001988, "E00", 1, False, False],
             [main.s_str, "\n.align 8\nprg_clip_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
@@ -1091,7 +1090,7 @@ ultra_src_PR = [
         [main.s_file, "light.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.light", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E7538],
-            [ultra.asm.s_code, 0x04001768, 0x040018FC, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001768, 0x040018FC, "E00", 1, False, False],
             [main.s_str, "\n.align 8\nprg_light_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
@@ -1099,7 +1098,7 @@ ultra_src_PR = [
         [main.s_file, "exit.asm"],
             [main.s_str, str_ucode_base % ("gspFast3D.fifo.exit", "prg_ext_start")],
             [main.s_addr, 0x04001768 - 0x000E76D0],
-            [ultra.asm.s_code, 0x04001768, 0x040017CC, "E0", 1, False, False],
+            [ultra.asm.s_code, 0x04001768, 0x040017CC, "E00", 1, False, False],
             [main.s_str, "\n.align 8\nprg_exit_end:\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
@@ -1107,7 +1106,7 @@ ultra_src_PR = [
         [main.s_file, "data.asm"],
             [main.s_str, str_ucode_create % ("gspFast3D.fifo.data", "0")],
             [main.s_addr, 0x00000000 - 0x000F4AC0],
-            [ultra.asm.s_data, 0x00000000, 0x00000800, "E0", [
+            [ultra.asm.s_data, 0x00000000, 0x00000800, "E00", [
                 [ 5, 1, asm.d_prg],
                 [ 1, 2, ultra.asm.d_shalf], # VCONST_SCREENCLAMP
                 [ 1, 2, ultra.asm.d_uhalf, "0x%04X"],
@@ -1174,12 +1173,12 @@ ultra_src_PR = [
         [main.s_str, str_ucode],
         [main.s_str, str_ucode_create % ("aspMain.text", "0x04001080")],
         [main.s_addr, 0x04001080 - 0x000E7740],
-        [ultra.asm.s_code, 0x04001080, 0x04001E9C, "E0", 1, False, False],
+        [ultra.asm.s_code, 0x04001080, 0x04001E9C, "E00", 1, False, False],
         [main.s_str, "\n.align 8\n"],
         [main.s_str, str_ucode_close],
         [main.s_str, str_ucode_create % ("aspMain.data", "0")],
         [main.s_addr, 0x00000000 - 0x000F52C0],
-        [ultra.asm.s_data, 0x00000000, 0x000002C0, "E0", [
+        [ultra.asm.s_data, 0x00000000, 0x000002C0, "E00", [
             [(0x10)//0x10, 4, ultra.asm.d_uword, "0x%08X"],
             [16, 1, ultra.asm.d_addr],
             [(0x2C0-0x30)//0x10, 4, ultra.asm.d_uword, "0x%08X"],
@@ -1192,11 +1191,11 @@ ultra_src_PR = [
 include_code = [
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80000400, 0x80025C00, "zimg", ["sm64/types", "sm64/main"], []),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x801C1000, 0x801CE000, "timg", ["sm64/types"], []),
-    s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80200200, 0x80220DA0, "buffer", ["sm64/types", "sm64/app"], []),
+    s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80200200, 0x80220DA0, "buffer", ["sm64/types", "sm64/app", "sm64/save"], []),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x80227000, 0x80246000, "fifo", ["sm64/types", "sm64/app"], []),
     s_header_code(0x80246050, 0x80246050, 0x8032D560, 0x8032D560, 0x8038F800, 0x80400000, "cimg", ["sm64/types", "sm64/main"], []),
     s_header_code(0x80246050, 0x80246E68, 0x8032D560, 0x8032D5C4, 0x8033A580, 0x8033AF90, "main", ["sm64/types"], header.struct_main, header.str_main_g, "", ""),
-    s_header_code(0x80246E70, 0x80248C3C, 0x8032D5D0, 0x8032D5FC, 0x8033AF90, 0x8033B09C, "app", ["sm64/types", "sm64/main", "sm64/mem"], header.struct_app, header.str_app_g, "", ""),
+    s_header_code(0x80246E70, 0x80248C3C, 0x8032D5D0, 0x8032D5FC, 0x8033AF90, 0x8033B09C, "app", ["sm64/types", "sm64/main", "sm64/memory"], header.struct_app, header.str_app_g, "", ""),
     s_header_code(0x80248C40, 0x802495DC, 0x8032D600, 0x8032D6C1, 0x8033B0A0, 0x8033B170, "audio", ["sm64/types", "sm64/main", "sm64/audio/g"], header.struct_audio),
     s_header_code(0x802495E0, 0x8024BFE4, 0x8032D6D0, 0x8032D948, 0x8033B170, 0x8033B26F, "game", ["sm64/types", "sm64/player", "sm64/hud"], header.struct_game, header.str_game_g, "", ""),
     s_header_code(0x8024BFF0, 0x8025093C, 0x8032D950, 0x8032DA9C, 0x8033B270, 0x8033B274, "pl_collision", ["sm64/types", "sm64/player"], header.struct_pl_collision),
@@ -1210,10 +1209,10 @@ include_code = [
     s_header_code(0x80270110, 0x80274EAC, 0x8032DD30, 0x8032DD40, 0x8033B340, 0x8033B348, "pl_swim", ["sm64/types", "sm64/player"], header.struct_pl_swim),
     s_header_code(0x80274EB0, 0x802761D0, 0x8032DD40, 0x8032DD48,          0,          0, "pl_grab", ["sm64/types", "sm64/player"], header.struct_pl_grab),
     s_header_code(0x802761D0, 0x80277ED4, 0x8032DD50, 0x8032DD6A, 0x8033B350, 0x8033B400, "pl_callback", ["sm64/types", "sm64/player", "sm64/shape"], header.struct_pl_callback),
-    s_header_code(0x80277EE0, 0x80279158, 0x8032DD70, 0x8032DD74, 0x8033B400, 0x8033B498, "mem", ["sm64/types"], header.struct_mem, header.str_mem_g, header.str_mem_c, header.str_mem_s),
-    s_header_code(0x80279160, 0x8027A7C4, 0x8032DD80, 0x8032DDBE, 0x8033B4A0, 0x8033B4A7, "save", ["sm64/types"], header.struct_save),
+    s_header_code(0x80277EE0, 0x80279158, 0x8032DD70, 0x8032DD74, 0x8033B400, 0x8033B498, "memory", ["sm64/types"], header.struct_memory, header.str_memory_g, header.str_memory_c, header.str_memory_s),
+    s_header_code(0x80279160, 0x8027A7C4, 0x8032DD80, 0x8032DDBE, 0x8033B4A0, 0x8033B4A7, "save", ["sm64/types", "sm64/scene"], header.struct_save, header.str_save_g, header.str_save_c, ""),
     s_header_code(0x8027A7D0, 0x8027B6C0, 0x8032DDC0, 0x8032DE70, 0x8033B4B0, 0x8033BAE0, "scene", ["sm64/types", "sm64/game", "sm64/object", "sm64/wipe", "sm64/shape", "sm64/map_data", "sm64/o_script"], header.struct_scene, header.str_scene_g, "", ""),
-    s_header_code(0x8027B6C0, 0x8027E3DC, 0x8032DE70, 0x8032DF0C, 0x8033BAE0, 0x8033C38C, "draw", ["sm64/types", "sm64/mem", "sm64/shape"], header.struct_draw),
+    s_header_code(0x8027B6C0, 0x8027E3DC, 0x8032DE70, 0x8032DF0C, 0x8033BAE0, 0x8033C38C, "draw", ["sm64/types", "sm64/memory", "sm64/shape"], header.struct_draw),
     s_header_code(0x8027E3E0, 0x8027F4D4, 0x8032DF10, 0x8032DF1C, 0x8033C390, 0x8033C520, "time", ["sm64/types"], header.struct_time, header.str_time_g, "", ""),
     s_header_code(0x8027F4E0, 0x8027F584, 0x8032DF20, 0x8032DF20,          0,          0, "slidec", ["sm64/types"], header.struct_slidec),
     s_header_code(0x8027F590, 0x8029C764, 0x8032DF20, 0x8032FEB4,          0,          0, "camera", ["sm64/types", "sm64/object"], header.struct_camera),
@@ -1245,8 +1244,8 @@ include_code = [
 include_lib = [
     s_header_code(0x80378800, 0x8037B21C, 0x80385F90, 0x8038B802, 0x8038BC90, 0x8038BC9C, "math", ["sm64/types"], header.struct_math, "", header.str_math_c, ""),
     s_header_code(0x8037B220, 0x8037CD60, 0x8038B810, 0x8038B810,          0,          0, "shape", ["sm64/types", "sm64/game"], header.struct_shape, header.str_shape_g, header.str_shape_c, ""),
-    s_header_code(0x8037CD60, 0x8037E19C, 0x8038B810, 0x8038B894, 0x8038BCA0, 0x8038BD9C, "s_script", ["sm64/types", "sm64/script", "sm64/mem", "sm64/shape"], header.struct_s_script, header.str_s_script_g, header.str_s_script_c, ""),
-    s_header_code(0x8037E1A0, 0x80380684, 0x8038B8A0, 0x8038B9AC, 0x8038BDA0, 0x8038BE2C, "p_script", ["sm64/types", "sm64/segment", "sm64/script", "sm64/game", "sm64/mem", "sm64/scene", "sm64/s_script", "sm64/audio/g"], header.struct_p_script, header.str_p_script_g, header.str_p_script_c, header.str_p_script_s),
+    s_header_code(0x8037CD60, 0x8037E19C, 0x8038B810, 0x8038B894, 0x8038BCA0, 0x8038BD9C, "s_script", ["sm64/types", "sm64/script", "sm64/memory", "sm64/shape"], header.struct_s_script, header.str_s_script_g, header.str_s_script_c, ""),
+    s_header_code(0x8037E1A0, 0x80380684, 0x8038B8A0, 0x8038B9AC, 0x8038BDA0, 0x8038BE2C, "p_script", ["sm64/types", "sm64/segment", "sm64/script", "sm64/game", "sm64/memory", "sm64/scene", "sm64/s_script", "sm64/audio/g"], header.struct_p_script, header.str_p_script_g, header.str_p_script_c, header.str_p_script_s),
     s_header_code(0x80380690, 0x8038248C, 0x8038B9B0, 0x8038B9B0, 0x8038BE30, 0x8038BE90, "map", ["sm64/types"], header.struct_map),
     s_header_code(0x80382490, 0x80383B6C, 0x8038B9B0, 0x8038B9B0, 0x8038BE90, 0x8038EED4, "map_data", ["sm64/types"], header.struct_map_data, header.str_map_data_g, header.str_map_data_c, ""),
     s_header_code(0x80383B70, 0x80385F88, 0x8038B9B0, 0x8038BA90, 0x8038EEE0, 0x8038EEE2, "o_script", ["sm64/types", "sm64/script", "sm64/s_script"], header.struct_o_script, header.str_o_script_g, header.str_o_script_c, header.str_o_script_s),
@@ -1294,27 +1293,27 @@ src_buffer = [
     [main.s_file, "zimg.c"],
         s_include(["sm64/types", "sm64/main"]),
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x80000400, 0x80025C00, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x80000400, 0x80025C00, "E00", 0x8032D560],
     [main.s_write],
     [main.s_file, "timg.c"],
         s_include(["sm64/types"]),
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x801C1000, 0x801CE000, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x801C1000, 0x801CE000, "E00", 0x8032D560],
     [main.s_write],
     [main.s_file, "buffer.c"],
-        s_include(["sm64/types", "sm64/app"]),
+        s_include(["sm64/types", "sm64/app", "sm64/buffer"]),
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x80200200, 0x80220DA0, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x80200200, 0x80220DA0, "E00", 0x8032D560],
     [main.s_write],
     [main.s_file, "fifo.c"],
         s_include(["sm64/types", "sm64/app"]),
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x80227000, 0x80246000, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x80227000, 0x80246000, "E00", 0x8032D560],
     [main.s_write],
     [main.s_file, "cimg.c"],
         s_include(["sm64/types", "sm64/main"]),
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x8038F800, 0x80400000, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x8038F800, 0x80400000, "E00", 0x8032D560],
     [main.s_write],
 ]
 
@@ -1334,8 +1333,8 @@ src_code = [
     s_code(0x80270110, 0x80274EAC, "pl_swim", ["sm64/types"]),
     s_code(0x80274EB0, 0x802761D0, "pl_grab", ["sm64/types"]),
     s_code(0x802761D0, 0x80277ED4, "pl_callback", ["sm64/types", "sm64/pl_callback", "sm64/object", "sm64/wipe"]),
-    # s_code(0x80277EE0, 0x80279158, "mem", ["sm64/types", "sm64/segment", "sm64/mem"]),
-    s_code(0x80279160, 0x8027A7C4, "save", ["sm64/types"]),
+    # s_code(0x80277EE0, 0x80279158, "memory", ["sm64/types", "sm64/segment", "sm64/memory"]),
+    # s_code(0x80279160, 0x8027A7C4, "save", ["sm64/types"]),
     # s_code(0x8027A7D0, 0x8027B6C0, "scene", ["sm64/types", "sm64/scene", "sm64/wipe", "sm64/shape"]),
     # s_code(0x8027B6C0, 0x8027E3DC, "draw", ["sm64/types"]),
     # s_code(0x8027E3E0, 0x8027F4D4, "time", ["sm64/types", "sm64/time"]),
@@ -1521,7 +1520,7 @@ src_code = [
     ]),
     s_data(0x8032DAF0, 0x8032DB28, 0x80336670, 0x803366C4, 0x8033B290, 0x8033B294, "pl_physics.data", ["sm64/types", "sm64/pl_physics"], [
         [1, 1, 3, ultra.c.d_s16], [0, 1, 2, None],
-        [0, 1, c.d_map_face],
+        [0, 1, c.d_map_plane],
     ], [
         [0,   2, 1, ultra.c.d_f32],
         [0, -13, 1, ultra.c.d_addr, ultra.A_EXTERN],
@@ -1592,13 +1591,13 @@ src_code = [
         [0,  2, 1, ultra.c.d_f32], [0, 1, 4, None],
         [0,  2, 1, ultra.c.d_f64],
     ]),
-    # s_data(0x8032DD70, 0x8032DD74, 0x80336F70, 0x80336F70, 0x8033B400, 0x8033B498, "mem.data", ["sm64/types", "sm64/mem"], [
+    # s_data(0x8032DD70, 0x8032DD74, 0x80336F70, 0x80336F70, 0x8033B400, 0x8033B498, "memory.data", ["sm64/types", "sm64/memory"], [
     #     [0, 1, 1, ultra.c.d_addr, 0],
     # ], []),
-    s_data(0x8032DD80, 0x8032DDBE, 0x80336F70, 0x80336F70, 0x8033B4A0, 0x8033B4A7, "save.data", ["sm64/types", "sm64/save"], [
-        [0, 6, ultra.c.d_align_u8],
-        [0, -38, 1, ultra.c.d_u8],
-    ], []),
+    # s_data(0x8032DD80, 0x8032DDBE, 0x80336F70, 0x80336F70, 0x8033B4A0, 0x8033B4A7, "save.data", ["sm64/types", "sm64/save"], [
+    #     [0, 6, ultra.c.d_align_u8],
+    #     [0, -38, 1, ultra.c.d_u8],
+    # ], []),
     # s_data(0x8032DDC0, 0x8032DE70, 0x80336F70, 0x80336F90, 0x8033B4B0, 0x8033BAE0, "scene.data", ["sm64/types", "sm64/scene"], [
     #     [0, 7, 1, ultra.c.d_addr, 0],
     #     [0, 1, ultra.c.d_align_s16],
@@ -1956,14 +1955,14 @@ src_code = [
     [main.s_file, "message.data.c"],
         s_include(["sm64/types"]),
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x803381A0, 0x80338278, "E0", [
+        [ultra.c.s_data, 0x803381A0, 0x80338278, "E00", [
             [0,   3, 1, ultra.c.d_f64],
             [0, -48, 1, ultra.c.d_addr, ultra.A_EXTERN],
         ]],
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x803613F0, 0x803613FF, "E0", 0x803381A0],
+        [ultra.c.s_bss, 0x803613F0, 0x803613FF, "E00", 0x803381A0],
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x80331370, 0x803314A4, "E0", [
+        [ultra.c.s_data, 0x80331370, 0x803314A4, "E00", [
             [0, -16, 16, ultra.c.d_u8],
             [0, 1, ultra.c.d_align_s8],
             [0, 2, 1, ultra.c.d_f32],
@@ -1976,13 +1975,13 @@ src_code = [
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 1, None],
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 3, None],
         ]],
-        [c.s_msg, 0x803314B0, 0x803314C0, "E0", 0, "message_a", None, [
+        [c.s_msg, 0x803314B0, 0x803314C0, "E00", 0, "message_a", None, [
             (0, "en.p", "803314B0"),
             (0, "en.p", "803314B4"),
             (0, "en.p", "803314B8"),
             (0, "en.p", "803314BC"),
         ]],
-        [ultra.c.s_data, 0x803314C0, 0x803314FC, "E0", [
+        [ultra.c.s_data, 0x803314C0, 0x803314FC, "E00", [
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 1, None],
             [1, -1, 4, ultra.c.d_u8, "0x%02X"], [0, 1, 3, None],
             [1, 1, 5, ultra.c.d_s16], [0, 1, 2, None],
@@ -1991,13 +1990,13 @@ src_code = [
             [1, 1, 5, ultra.c.d_s16], [0, 1, 2, None],
             [0, 1, ultra.c.d_align_s16],
         ]],
-        [c.s_msg, 0x803315E4, 0x8033160C, "E0", 1, "803315E4", "en", None],
-        [ultra.c.s_data, 0x8033160C, 0x80331624, "E0", [
+        [c.s_msg, 0x803315E4, 0x8033160C, "E00", 1, "803315E4", "en", None],
+        [ultra.c.s_data, 0x8033160C, 0x80331624, "E00", [
             [0, 1, ultra.c.d_align_u16],
             [0, 3, ultra.c.d_align_s16],
             [0, 2, ultra.c.d_align_s8],
         ]],
-        [c.s_msg, 0x80331624, 0x803316C8, "E0", 0, "message_c", None, [
+        [c.s_msg, 0x80331624, 0x803316C8, "E00", 0, "message_c", None, [
             (0, "en", "80331624"),
             (0, "en", "8033162C"),
             (0, "en", "80331638"),
@@ -2014,12 +2013,12 @@ src_code = [
             (0, "en", "803316C0"),
             (0, "en", "803316C4"),
         ]],
-        [ultra.c.s_data, 0x803316C8, 0x803316D8, "E0", [
+        [ultra.c.s_data, 0x803316C8, 0x803316D8, "E00", [
             [0, 1, ultra.c.d_align_s8],
             [0, 2, 1, ultra.c.d_s32],
             [0, 1, ultra.c.d_align_s8],
         ]],
-        [c.s_msg, 0x803316D8, 0x8033174C, "E0", 0, "message_d", None, [
+        [c.s_msg, 0x803316D8, 0x8033174C, "E00", 0, "message_d", None, [
             (0, "en",   "803316D8"),
             (0, "en",   "803316E4"),
             (0, "en.p", "803316F4"),
@@ -2259,7 +2258,7 @@ src_lib = [
         [main.s_str, str_data],
         [main.s_str, str_align],
         [main.s_str, "\n"],
-        [ultra.asm.s_data, 0x80386000, 0x8038B802, "E0", [
+        [ultra.asm.s_data, 0x80386000, 0x8038B802, "E00", [
             [0x1400, 1, ultra.asm.d_float],
             [  0x80, 8, ultra.asm.d_uhalf, "0x%04X"],
             [     1, 1, ultra.asm.d_uhalf, "0x%04X"],
@@ -2295,7 +2294,7 @@ src_lib = [
 ]
 
 src_menu = [
-    # s_code(0x8016F000, 0x8016F670, "title", ["sm64/types", "sm64/mem"]),
+    # s_code(0x8016F000, 0x8016F670, "title", ["sm64/types", "sm64/memory"]),
     s_code(0x8016F670, 0x80170280, "title_bg", ["sm64/types"]),
     s_code(0x80170280, 0x801768E0, "file_select", ["sm64/types"], str_fp),
     s_code(0x801768E0, 0x80177710, "star_select", ["sm64/types"], str_fp),
@@ -2325,7 +2324,7 @@ src_menu = [
     [main.s_file, "file_select.data.c"],
         s_include(["sm64/types", "sm64/file_select"]),
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x801A7F40, 0x801A8194, "E0", [
+        [ultra.c.s_data, 0x801A7F40, 0x801A8194, "E00", [
             [0,    1, 1, ultra.c.d_f32], [0, 1, 4, None],
             [0,    7, 1, ultra.c.d_f64],
             [0,   -7, 1, ultra.c.d_addr, ultra.A_EXTERN],
@@ -2333,9 +2332,9 @@ src_menu = [
             [0, -102, 1, ultra.c.d_addr, ultra.A_EXTERN],
         ]],
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x801B99F0, 0x801B9A7A, "E0", 0x801A7D10],
+        [ultra.c.s_bss, 0x801B99F0, 0x801B9A7A, "E00", 0x801A7D10],
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x801A7D10, 0x801A7D54, "E0", [
+        [ultra.c.s_data, 0x801A7D10, 0x801A7D54, "E00", [
             [0, 2, ultra.c.d_align_s8],
             [0, 1, ultra.c.d_align_u8],
             [1, 1, 2, ultra.c.d_f32],
@@ -2346,7 +2345,7 @@ src_menu = [
             [0, 1, ultra.c.d_align_s16],
             [0, 5, ultra.c.d_align_s8],
         ]],
-        [c.s_msg, 0x801A7D54, 0x801A7F3C, "E0", 0, "file_select", None, [
+        [c.s_msg, 0x801A7D54, 0x801A7F3C, "E00", 0, "file_select", None, [
             (0, "en",   "801A7D54"),
             (0, "en",   "801A7D5C"),
             (0, "en",   "801A7D68"),
@@ -2387,28 +2386,28 @@ src_menu = [
             (0, "en",   "801A7F24"),
             (0, "en",   "801A7F30"),
         ]],
-        [ultra.c.s_data, 0x801A7F3C, 0x801A7F3E, "E0", [
+        [ultra.c.s_data, 0x801A7F3C, 0x801A7F3E, "E00", [
             [0, 1, 1, ultra.c.d_s16, "0x%02X"],
         ]],
     [main.s_write],
     [main.s_file, "star_select.data.c"],
         s_include(["sm64/types", "sm64/star_select"]),
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x801A81C0, 0x801A81E0, "E0", [
+        [ultra.c.s_data, 0x801A81C0, 0x801A81E0, "E00", [
             [0, 3, 1, ultra.c.d_f64],
             [0, 2, 1, ultra.c.d_f32],
         ]],
         [main.s_str, "\n"],
-        [ultra.c.s_bss, 0x801B9A80, 0x801B9AA4, "E0", 0x801A81A0],
+        [ultra.c.s_bss, 0x801B9A80, 0x801B9AA4, "E00", 0x801A81A0],
         [main.s_str, "\n"],
-        [ultra.c.s_data, 0x801A81A0, 0x801A81AC, "E0", [
+        [ultra.c.s_data, 0x801A81A0, 0x801A81AC, "E00", [
             [0, 2, ultra.c.d_align_s8],
             [0, 1, 1, ultra.c.d_s32],
         ]],
-        [c.s_msg, 0x801A81AC, 0x801A81B4, "E0", 0, "star_select", None, [
+        [c.s_msg, 0x801A81AC, 0x801A81B4, "E00", 0, "star_select", None, [
             (0, "en", "801A81AC"),
         ]],
-        [ultra.c.s_data, 0x801A81B4, 0x801A81B6, "E0", [
+        [ultra.c.s_data, 0x801A81B4, 0x801A81B6, "E00", [
             [0, 1, 1, ultra.c.d_u16, "0x%02X"],
         ]],
     [main.s_write],
@@ -2545,7 +2544,7 @@ src_audio = [
     [main.s_write],
     [main.s_file, "heap.c"],
         s_include(["sm64/types", "sm64/audio/heap"]),
-        [ultra.c.s_bss, 0x801CE000, 0x80200200, "E0", 0x8032D560],
+        [ultra.c.s_bss, 0x801CE000, 0x80200200, "E00", 0x8032D560],
     [main.s_write],
 ]
 
@@ -3461,7 +3460,7 @@ data_main_gfx = [
     s_include(["sm64/types", "sm64/gbi_ext", "sm64/message"]),
     [main.s_str, "\n"],
     s_dirfile("dprint", "texture.c"),
-        [ultra.c.s_data, 0x02000000, 0x02004A00, "E0.szp", [
+        [ultra.c.s_data, 0x02000000, 0x02004A00, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, name]
             for name in list("0123456789abcdefghiklmnoprstuwy") + [
                 "squote",
@@ -3474,13 +3473,13 @@ data_main_gfx = [
         ]],
     s_writepop(),
     s_dirfile("staff", "texture.c"),
-        [ultra.c.s_data, 0x02004A00, 0x02005900, "E0.szp", [
+        [ultra.c.s_data, 0x02004A00, 0x02005900, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 8, 8, name]
             for name in list("346abcdefghijklmnopqrstuvwxyz") + ["period"]
         ]],
     s_writepop(),
     s_dirfile("message", "texture.c"),
-        [ultra.c.s_data, 0x02005900, 0x02007000, "E0.szp", [
+        [ultra.c.s_data, 0x02005900, 0x02007000, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia4", 16, 8, name]
             for name in list("0123456789") + [
                 "u_"+x for x in "abcdefghijklmnopqrstuvwxyz"
@@ -3521,7 +3520,7 @@ data_main_gfx = [
         ]],
     s_writepop(),
     s_dirfile("camera", "texture.c"),
-        [ultra.c.s_data, 0x02007000, 0x02007700, "E0.szp", [
+        [ultra.c.s_data, 0x02007000, 0x02007700, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "camera"],
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "lakitu"],
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "cross"],
@@ -3530,42 +3529,42 @@ data_main_gfx = [
         ]],
     s_writepop(),
     s_dirfile("dprint", "table.c"),
-        [ultra.c.s_data, 0x02007700, 0x020077E8, "E0.szp", [
+        [ultra.c.s_data, 0x02007700, 0x020077E8, "E00.szp", [
             [0, -58, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("message", "table.c"),
-        [ultra.c.s_data, 0x020077E8, 0x02007BE8, "E0.szp", [
+        [ultra.c.s_data, 0x020077E8, 0x02007BE8, "E00.szp", [
             [0, -0x100, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("staff", "table.c"),
-        [ultra.c.s_data, 0x02007BE8, 0x02007C7C, "E0.szp", [
+        [ultra.c.s_data, 0x02007BE8, 0x02007C7C, "E00.szp", [
             [0, -37, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("camera", "table.c"),
-        [ultra.c.s_data, 0x02007C7C, 0x02007C94, "E0.szp", [
+        [ultra.c.s_data, 0x02007C7C, 0x02007C94, "E00.szp", [
             [0, -6, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     [main.s_str, "\n"],
-    [c.s_msg, 0x02007D28, 0x02007D34, "E0.szp", 2, "select", "jp",   None],
-    [c.s_msg, 0x02010A68, 0x02010D14, "E0.szp", 2, "en_us",  "en.m", msg_table],
-    [c.s_msg, 0x02010F68, 0x02010FD4, "E0.szp", 1, "course", "en.m", msg_course],
-    [c.s_msg, 0x0201192C, 0x02011AB4, "E0.szp", 1, "level",  "en.m", None],
+    [c.s_msg, 0x02007D28, 0x02007D34, "E00.szp", 2, "select", "jp",   None],
+    [c.s_msg, 0x02010A68, 0x02010D14, "E00.szp", 2, "en_us",  "en.m", msg_table],
+    [c.s_msg, 0x02010F68, 0x02010FD4, "E00.szp", 1, "course", "en.m", msg_course],
+    [c.s_msg, 0x0201192C, 0x02011AB4, "E00.szp", 1, "level",  "en.m", None],
     [main.s_str, "\n"],
-    [ultra.c.s_data, 0x02011AB8, 0x02011AC0, "E0.szp", [
+    [ultra.c.s_data, 0x02011AB8, 0x02011AC0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     [main.s_str, "\n"],
     s_dirfile("dprint", "gfx.c"),
-        [ultra.c.s_data, 0x02011AC0, 0x02011C08, "E0.szp", [
+        [ultra.c.s_data, 0x02011AC0, 0x02011C08, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x02011C08],
         ]],
     s_writepop(),
     s_dirfile("message", "gfx.c"),
-        [ultra.c.s_data, 0x02011C08, 0x02011E10, "E0.szp", [
+        [ultra.c.s_data, 0x02011C08, 0x02011E10, "E00.szp", [
             [0, -4, 1, ultra.c.d_Vtx, False],
             [0,  1, 1, ultra.c.d_Gfx, 0x02011C88],
             [0, -4, 1, ultra.c.d_Vtx, False],
@@ -3577,7 +3576,7 @@ data_main_gfx = [
     s_dirfile("number", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x02011E50, 0x020120B8, "E0.szp", [
+        [ultra.c.s_data, 0x02011E50, 0x020120B8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x02011E98],
             [0, 1, 1, c.d_ply_gfx, 0x02011EB0, "gfx", False, (16, 16, 0.5)],
             [0, 1, 1, ultra.c.d_Gfx, 0x020120B8],
@@ -3585,13 +3584,13 @@ data_main_gfx = [
         s_script_endif(),
     s_writepop(),
     s_dirfile("shadow", "texture.c"),
-        [ultra.c.s_data, 0x020120B8, 0x020122B8, "E0.szp", [
+        [ultra.c.s_data, 0x020120B8, 0x020122B8, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia8", 16, 16, "circle"],
             [0, 1, 1, c.d_texture, "ia8", 16, 16, "square"],
         ]],
     s_writepop(),
     s_dirfile("wipe", "texture.c"),
-        [ultra.c.s_data, 0x020122B8, 0x02014AB8, "E0.szp", [
+        [ultra.c.s_data, 0x020122B8, 0x02014AB8, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia8", 32, 64, "star"],
             [0, 1, 1, c.d_texture, "ia8", 32, 64, "circle"],
             [0, 1, 1, c.d_texture, "ia8", 64, 64, "mario"],
@@ -3599,7 +3598,7 @@ data_main_gfx = [
         ]],
     s_writepop(),
     s_dirfile("scroll", "texture.c"),
-        [ultra.c.s_data, 0x02014AB8, 0x020172B8, "E0.szp", [
+        [ultra.c.s_data, 0x02014AB8, 0x020172B8, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "water_0"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "water_1"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "water_2"],
@@ -3607,39 +3606,39 @@ data_main_gfx = [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "lava"],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x020172B8, 0x02017380, "E0.szp", [
+    [ultra.c.s_data, 0x020172B8, 0x02017380, "E00.szp", [
         [0, 1, 1, ultra.c.d_Lights1],
         [0, 2, 1, c.d_matrix],
         [0, 1, 1, ultra.c.d_Gfx, 0x02017380],
     ]],
     s_dirfile("shadow", "gfx.c"),
-        [ultra.c.s_data, 0x02017380, 0x020174C0, "E0.szp", [
+        [ultra.c.s_data, 0x02017380, 0x020174C0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x020174C0],
         ]],
     s_writepop(),
     s_dirfile("wipe", "gfx.c"),
-        [ultra.c.s_data, 0x020174C0, 0x02017568, "E0.szp", [
+        [ultra.c.s_data, 0x020174C0, 0x02017568, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x02017568],
         ]],
     s_writepop(),
     s_dirfile("background", "gfx.c"),
-        [ultra.c.s_data, 0x02017568, 0x020175F0, "E0.szp", [
+        [ultra.c.s_data, 0x02017568, 0x020175F0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x020175F0],
         ]],
     s_writepop(),
     s_dirfile("scroll", "gfx.c"),
-        [ultra.c.s_data, 0x020175F0, 0x02017698, "E0.szp", [
+        [ultra.c.s_data, 0x020175F0, 0x02017698, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x02017698],
         ]],
     s_writepop(),
     s_dirfile("minimap", "gfx.c"),
-        [ultra.c.s_data, 0x02017698, 0x020177B8, "E0.szp", [
+        [ultra.c.s_data, 0x02017698, 0x020177B8, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia8", 8, 8, "arrow"],
             [0, 1, 1, ultra.c.d_Gfx, 0x020177B8],
         ]],
     s_writepop(),
     s_dirfile("ripple", "gfx.c"),
-        [ultra.c.s_data, 0x020177B8, 0x02018A0E, "E0.szp", [
+        [ultra.c.s_data, 0x020177B8, 0x02018A0E, "E00.szp", [
             [0, 1, 1, ultra.c.d_Lights1],
             [0, 1, 1, ultra.c.d_Gfx, 0x020178C0],
             [0, 2, 1, c.d_ripple_shape],
@@ -3652,7 +3651,7 @@ data_main_gfx = [
 data_player_gfx = [
     s_dirfile("mario", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x04000000, 0x0400C090, "E0.szp", [
+        [ultra.c.s_data, 0x04000000, 0x0400C090, "E00.szp", [
             [0, 6, 1, c.d_light, 0.5],
             [0, 1, 1, c.d_texture, "rgba16", 64, 32, "metal"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "button"],
@@ -3688,7 +3687,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "h_torso0"],
         [c.s_ply_vtx, "h_torso2"],
         [c.s_ply_vtx, "h_torso1"],
-        [ultra.c.s_data, 0x0400FF28, 0x04010410, "E0.szp", [
+        [ultra.c.s_data, 0x0400FF28, 0x04010410, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0400FF80, "h_torso0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0400FF88],
             [0, 1, 1, c.d_ply_gfx, 0x04010258, "h_torso1", True, None],
@@ -3703,7 +3702,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "h_cap5"],
         [c.s_ply_vtx, "h_cap4"],
         [c.s_ply_vtx, "h_cap6"],
-        [ultra.c.s_data, 0x040112B0, 0x04012190, "E0.szp", [
+        [ultra.c.s_data, 0x040112B0, 0x04012190, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x040112E0, "h_cap0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x040112E8],
             [0, 1, 1, c.d_ply_gfx, 0x04011348, "h_cap1", True, (32, 32)],
@@ -3726,7 +3725,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "h_hair3a"],
         [c.s_ply_vtx, "h_hair4"],
         [c.s_ply_vtx, "h_hair3b"],
-        [ultra.c.s_data, 0x040132B0, 0x04014098, "E0.szp", [
+        [ultra.c.s_data, 0x040132B0, 0x04014098, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x04013310, "h_hair0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x04013318],
             [0, 1, 1, c.d_ply_gfx, 0x040133A0, "h_hair1", True, (32, 32)],
@@ -3755,7 +3754,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "m_torso0"],
         [c.s_ply_vtx, "m_torso2"],
         [c.s_ply_vtx, "m_torso1"],
-        [ultra.c.s_data, 0x04016668, 0x04016968, "E0.szp", [
+        [ultra.c.s_data, 0x04016668, 0x04016968, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x040166B0, "m_torso0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x040166B8],
             [0, 1, 1, c.d_ply_gfx, 0x040167F8, "m_torso1", True, None],
@@ -3779,7 +3778,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "l_torso0"],
         [c.s_ply_vtx, "l_torso1"],
         [c.s_ply_vtx, "l_torso2"],
-        [ultra.c.s_data, 0x04017D68, 0x04017F40, "E0.szp", [
+        [ultra.c.s_data, 0x04017D68, 0x04017F40, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x04017D90, "l_torso0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x04017D98],
             [0, 1, 1, c.d_ply_gfx, 0x04017E18, "l_torso1", True, None],
@@ -3793,7 +3792,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "l_cap4"],
         [c.s_ply_vtx, "l_cap3"],
         [c.s_ply_vtx, "l_cap5"],
-        [ultra.c.s_data, 0x04018270, 0x04018B18, "E0.szp", [
+        [ultra.c.s_data, 0x04018270, 0x04018B18, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x04018290, "l_cap0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x04018298],
             [0, 1, 1, c.d_ply_gfx, 0x040182B8, "l_cap1", True, (32, 32)],
@@ -3811,7 +3810,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "l_hair1"],
         [c.s_ply_vtx, "l_hair2"],
         [c.s_ply_vtx, "l_hair3"],
-        [ultra.c.s_data, 0x04018DC8, 0x04019538, "E0.szp", [
+        [ultra.c.s_data, 0x04018DC8, 0x04019538, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x04018DE8, "l_hair0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x04018DF0],
             [0, 1, 1, c.d_ply_gfx, 0x04018E28, "l_hair1", True, (32, 32)],
@@ -3827,7 +3826,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "capR2"],
         [c.s_ply_vtx, "capR1"],
         [c.s_ply_vtx, "capR3"],
-        [ultra.c.s_data, 0x0401ABA8, 0x0401AF60, "E0.szp", [
+        [ultra.c.s_data, 0x0401ABA8, 0x0401AF60, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0401ABC8, "capR0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401ABD0],
             [0, 1, 1, c.d_ply_gfx, 0x0401AD38, "capR1", True, None],
@@ -3839,7 +3838,7 @@ data_player_gfx = [
         ]],
         [c.s_ply_vtx, "wingsR_l"],
         [c.s_ply_vtx, "wingsR_r"],
-        [ultra.c.s_data, 0x0401B080, 0x0401B2D0, "E0.szp", [
+        [ultra.c.s_data, 0x0401B080, 0x0401B2D0, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0401B0A8, "wingsR_l", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401B0B0],
             [0, 1, 1, c.d_ply_gfx, 0x0401B0D8, "wingsR_r", True, (32, 64)],
@@ -3849,7 +3848,7 @@ data_player_gfx = [
         [c.s_ply_vtx, "cap0"],
         [c.s_ply_vtx, "cap1"],
         [c.s_ply_vtx, "cap2"],
-        [ultra.c.s_data, 0x0401C330, 0x0401C538, "E0.szp", [
+        [ultra.c.s_data, 0x0401C330, 0x0401C538, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0401C360, "cap0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401C368],
             [0, 1, 1, c.d_ply_gfx, 0x0401C4C0, "cap1", True, None],
@@ -3859,7 +3858,7 @@ data_player_gfx = [
         ]],
         [c.s_ply_vtx, "wings_l"],
         [c.s_ply_vtx, "wings_r"],
-        [ultra.c.s_data, 0x0401C678, 0x0401C940, "E0.szp", [
+        [ultra.c.s_data, 0x0401C678, 0x0401C940, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0401C6A0, "wings_l", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401C6A8],
             [0, 1, 1, c.d_ply_gfx, 0x0401C6D0, "wings_r", True, (32, 64)],
@@ -3867,7 +3866,7 @@ data_player_gfx = [
         ]],
         [c.s_ply_vtx, "wing_l"],
         [c.s_ply_vtx, "wing_r"],
-        [ultra.c.s_data, 0x0401C9C0, 0x04019538, "E0.szp", [
+        [ultra.c.s_data, 0x0401C9C0, 0x04019538, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x0401C9D8, "wing_l", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401C9E0],
             [0, 1, 1, c.d_ply_gfx, 0x0401C9F8, "wing_r", True, (32, 64)],
@@ -3877,7 +3876,7 @@ data_player_gfx = [
     s_dirfile("bubble", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0401CD60, 0x0401DE60, "E0.szp", [
+        [ultra.c.s_data, 0x0401CD60, 0x0401DE60, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "a"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "b"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0401DDB0],
@@ -3890,7 +3889,7 @@ data_player_gfx = [
     s_dirfile("dust", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0401DEA0, 0x040217C0, "E0.szp", [
+        [ultra.c.s_data, 0x0401DEA0, 0x040217C0, "E00.szp", [
             d_texture_n("ia16", 32, 32, 7),
             [0, 1, 1, ultra.c.d_Gfx, 0x040216E0],
             [0, 1, 1, c.d_ply_gfx, 0x040216F8, "gfx", False, (32, 32)],
@@ -3900,7 +3899,7 @@ data_player_gfx = [
     s_dirfile("smoke", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x04021800, 0x040220C8, "E0.szp", [
+        [ultra.c.s_data, 0x04021800, 0x040220C8, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia16", 32, 32, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x04022028],
             [0, 1, 1, c.d_ply_gfx, 0x04022040, "gfx", False, (32, 32)],
@@ -3909,7 +3908,7 @@ data_player_gfx = [
     s_writepop(),
     s_dirfile("wave", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x040220C8, 0x04025318, "E0.szp", [
+        [ultra.c.s_data, 0x040220C8, 0x04025318, "E00.szp", [
             [0, -8, 1, ultra.c.d_Vtx, False],
             d_texture_n("ia16", 32, 32, 6),
             [0, 1, 1, ultra.c.d_Gfx, 0x04025318],
@@ -3917,7 +3916,7 @@ data_player_gfx = [
     s_writepop(),
     s_dirfile("ripple", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x04025318, 0x04027450, "E0.szp", [
+        [ultra.c.s_data, 0x04025318, 0x04027450, "E00.szp", [
             [0, -4, 1, ultra.c.d_Vtx, False],
             d_texture_n("ia16", 32, 32, 4),
             [0, 1, 1, ultra.c.d_Gfx, 0x04027450],
@@ -3926,7 +3925,7 @@ data_player_gfx = [
     s_dirfile("sparkle", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x04027490, 0x0402A588, "E0.szp", [
+        [ultra.c.s_data, 0x04027490, 0x0402A588, "E00.szp", [
             d_texture_n("rgba16", 32, 32, -1, start=5, step=-1),
             [0, 1, 1, ultra.c.d_Gfx, 0x0402A4C8],
             [0, 1, 1, c.d_ply_gfx, 0x0402A4E0, "gfx", True, (32, 32, 0.5)],
@@ -3936,7 +3935,7 @@ data_player_gfx = [
     s_dirfile("splash", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0402A5C8, 0x04032700, "E0.szp", [
+        [ultra.c.s_data, 0x0402A5C8, 0x04032700, "E00.szp", [
             d_texture_n("rgba16", 32, 64, 8),
             [0, 1, 1, ultra.c.d_Gfx, 0x04032608],
             [0, 1, 1, c.d_ply_gfx, 0x04032620, "gfx", True, (32, 64)],
@@ -3945,7 +3944,7 @@ data_player_gfx = [
     s_writepop(),
     s_dirfile("droplet", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x04032700, 0x04032A48, "E0.szp", [
+        [ultra.c.s_data, 0x04032700, 0x04032A48, "E00.szp", [
             [0, -8, 1, ultra.c.d_Vtx, False],
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x04032A48],
@@ -3954,7 +3953,7 @@ data_player_gfx = [
     s_dirfile("glow", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x04032A88, 0x04035378, "E0.szp", [
+        [ultra.c.s_data, 0x04032A88, 0x04035378, "E00.szp", [
             d_texture_n("ia16", 32, 32, 5),
             [0, 1, 1, ultra.c.d_Gfx, 0x040352C8],
             [0, 1, 1, c.d_ply_gfx, 0x040352E0, "gfx", True, (32, 32)],
@@ -3966,49 +3965,49 @@ data_player_gfx = [
 data_player_shape = [
     s_dirfile("bubble", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000000, 0x17000038, "E0", [
+        [ultra.c.s_data, 0x17000000, 0x17000038, "E00", [
             [0, 1, 1, c.d_s_script, 0x17000038],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("dust", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000038, 0x17000084, "E0", [
+        [ultra.c.s_data, 0x17000038, 0x17000084, "E00", [
             [0, 1, 1, c.d_s_script, 0x17000084],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("smoke", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000084, 0x1700009C, "E0", [
+        [ultra.c.s_data, 0x17000084, 0x1700009C, "E00", [
             [0, 1, 1, c.d_s_script, 0x1700009C],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("wave", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x1700009C, 0x17000124, "E0", [
+        [ultra.c.s_data, 0x1700009C, 0x17000124, "E00", [
             [0, 1, 1, c.d_s_script, 0x17000124],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("ripple", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000124, 0x170001BC, "E0", [
+        [ultra.c.s_data, 0x17000124, 0x170001BC, "E00", [
             [0, 1, 1, c.d_s_script, 0x170001BC],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("sparkle", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x170001BC, 0x17000230, "E0", [
+        [ultra.c.s_data, 0x170001BC, 0x17000230, "E00", [
             [0, 1, 1, c.d_s_script, 0x17000230],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("splash", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000230, 0x17000284, "E0", [
+        [ultra.c.s_data, 0x17000230, 0x17000284, "E00", [
             [0, 1, 1, c.d_s_script, 0x17000284],
         ]],
         s_script_endif(),
@@ -4018,14 +4017,14 @@ data_player_shape = [
     s_writepop(),
     s_dirfile("glow", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x17000284, 0x170002E0, "E0", [
+        [ultra.c.s_data, 0x17000284, 0x170002E0, "E00", [
             [0, 1, 1, c.d_s_script, 0x170002E0],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("mario", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x170002E0, 0x17002E30, "E0", [
+        [ultra.c.s_data, 0x170002E0, 0x17002E30, "E00", [
             [0, 1, 1, c.d_s_script, 0x17002E30],
         ]],
         s_script_endif(),
@@ -4036,7 +4035,7 @@ data_1b_gfx = [
     s_dirfile("bully", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "horn"],
-        [ultra.c.s_data, 0x050000E0, 0x05002C68, "E0.szp", [
+        [ultra.c.s_data, 0x050000E0, 0x05002C68, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "horn"],
             [0, 1, 1, ultra.c.d_Gfx, 0x050002F8],
             [0, 1, 1, c.d_ply_gfx, 0x05000390, "horn", False, (16, 16)],
@@ -4050,7 +4049,7 @@ data_1b_gfx = [
         [c.s_ply_vtx, "shoeR"],
         [c.s_ply_vtx, "eye_old"],
         [c.s_ply_vtx, "body_old"],
-        [ultra.c.s_data, 0x05003708, 0x05003C50, "E0.szp", [
+        [ultra.c.s_data, 0x05003708, 0x05003C50, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x05003718],
             [0, 1, 1, c.d_ply_gfx, 0x05003798, "shoeL", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x050037B0],
@@ -4063,7 +4062,7 @@ data_1b_gfx = [
         ]],
         [c.s_ply_vtx, "body_l"],
         [c.s_ply_vtx, "body_r"],
-        [ultra.c.s_data, 0x05003CD0, 0x05003DB8, "E0.szp", [
+        [ultra.c.s_data, 0x05003CD0, 0x05003DB8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x05003CE8],
             [0, 1, 1, c.d_ply_gfx, 0x05003D00, "body_l", False, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x05003D20],
@@ -4072,7 +4071,7 @@ data_1b_gfx = [
         ]],
         [c.s_ply_vtx, "body_big_l"],
         [c.s_ply_vtx, "body_big_r"],
-        [ultra.c.s_data, 0x05003E38, 0x05003F20, "E0.szp", [
+        [ultra.c.s_data, 0x05003E38, 0x05003F20, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x05003E50],
             [0, 1, 1, c.d_ply_gfx, 0x05003E68, "body_big_l", False, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x05003E88],
@@ -4080,7 +4079,7 @@ data_1b_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x05003F20],
         ]],
         [c.s_ply_vtx, "eye"],
-        [ultra.c.s_data, 0x05003F80, 0x05004720, "E0.szp", [
+        [ultra.c.s_data, 0x05003F80, 0x05004720, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x05003F98],
             [0, 1, 1, c.d_ply_gfx, 0x05003FC0, "eye", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x05004038],
@@ -4091,12 +4090,12 @@ data_1b_gfx = [
             [0, -5, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x05004720, 0x05004728, "E0.szp", [
+    [ultra.c.s_data, 0x05004720, 0x05004728, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("blargg", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x05004728, 0x050047A0, "E0.szp", [
+        [ultra.c.s_data, 0x05004728, 0x050047A0, "E00.szp", [
             [0, -5, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "upper_teeth"],
@@ -4104,7 +4103,7 @@ data_1b_gfx = [
         [c.s_ply_vtx, "lower_teeth"],
         [c.s_ply_vtx, "lower_jaw"],
         [c.s_ply_vtx, "body"],
-        [ultra.c.s_data, 0x050058D0, 0x05006178, "E0.szp", [
+        [ultra.c.s_data, 0x050058D0, 0x05006178, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x050058E0],
             [0, 1, 1, c.d_ply_gfx, 0x05005998, "upper_teeth", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x050059A8],
@@ -4121,7 +4120,7 @@ data_1b_gfx = [
             [0, -3, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x05006178, 0x05006180, "E0.szp", [
+    [ultra.c.s_data, 0x05006178, 0x05006180, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
 ]
@@ -4129,14 +4128,14 @@ data_1b_gfx = [
 data_1b_shape = [
     s_dirfile("bully", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x0C000000, 0x0C000240, "E0", [
+        [ultra.c.s_data, 0x0C000000, 0x0C000240, "E00", [
             [0, 1, 1, c.d_s_script, 0x0C000240],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("blargg", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x0C000240, 0x0C0002B0, "E0", [
+        [ultra.c.s_data, 0x0C000240, 0x0C0002B0, "E00", [
             [0, 1, 1, c.d_s_script, 0x0C0002B0],
         ]],
         s_script_endif(),
@@ -4148,7 +4147,7 @@ data_global_gfx = [
         s_script_ifndef(),
         [c.s_ply_vtx, "white"],
         [c.s_ply_vtx, "black"],
-        [ultra.c.s_data, 0x03000080, 0x030009C8, "E0.szp", [
+        [ultra.c.s_data, 0x03000080, 0x030009C8, "E00.szp", [
             [0, 1, 1, c.d_texture, "ia16", 32, 32, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x030008D8],
             [0, 1, 1, c.d_ply_gfx, 0x030008F0, "white", False, (32, 32)],
@@ -4157,30 +4156,30 @@ data_global_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x030009C0],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030009C0, 0x030009C8, "E0.szp", [
+    [ultra.c.s_data, 0x030009C0, 0x030009C8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("explosion", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x03000A08, 0x03004340, "E0.szp", [
+        [ultra.c.s_data, 0x03000A08, 0x03004340, "E00.szp", [
             d_texture_n("rgba16", 32, 32, 7),
             [0, 1, 1, ultra.c.d_Gfx, 0x03004250],
             [0, 1, 1, c.d_ply_gfx, 0x03004268, "gfx", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03004340],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x03004340, 0x03004348, "E0.szp", [
+    [ultra.c.s_data, 0x03004340, 0x03004348, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("butterfly", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "l"],
-        [ultra.c.s_data, 0x030043A8, 0x030053A8, "E0.szp", [
+        [ultra.c.s_data, 0x030043A8, 0x030053A8, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "wing"],
         ]],
         [c.s_ply_vtx, "r"],
-        [ultra.c.s_data, 0x03005408, 0x030056B8, "E0.szp", [
+        [ultra.c.s_data, 0x03005408, 0x030056B8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x03005460],
             [0, 1, 1, c.d_ply_gfx, 0x03005478, "l", False, (32, 64, 0.5)],
             [0, 1, 1, ultra.c.d_Gfx, 0x030054F8],
@@ -4191,27 +4190,27 @@ data_global_gfx = [
             [0, -2, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030056B8, 0x030056C0, "E0.szp", [
+    [ultra.c.s_data, 0x030056B8, 0x030056C0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("coin", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x030056C0, 0x030079E0, "E0.szp", [
+        [ultra.c.s_data, 0x030056C0, 0x030079E0, "E00.szp", [
             [0, -12, 1, ultra.c.d_Vtx, False],
             d_texture_n("ia16", 32, 32, 4),
             [0, 1, 1, ultra.c.d_Gfx, 0x030079E0],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030079E0, 0x030079E8, "E0.szp", [
+    [ultra.c.s_data, 0x030079E0, 0x030079E8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("pipe", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x030079E8, 0x03007A00, "E0.szp", [
+        [ultra.c.s_data, 0x030079E8, 0x03007A00, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "side"],
-        [ultra.c.s_data, 0x03007E40, 0x03009028, "E0.szp", [
+        [ultra.c.s_data, 0x03007E40, 0x03009028, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "side"],
             [0, 1, 1, ultra.c.d_Gfx, 0x03008E68],
             [0, 1, 1, c.d_ply_gfx, 0x03008F90, "side", True, (32, 64)],
@@ -4220,7 +4219,7 @@ data_global_gfx = [
         ]],
         [c.s_ply_vtx, "top"],
         [c.s_ply_vtx, "bottom"],
-        [ultra.c.s_data, 0x03009168, 0x03009CD8, "E0.szp", [
+        [ultra.c.s_data, 0x03009168, 0x03009CD8, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "top"],
             [0, 1, 1, ultra.c.d_Gfx, 0x03009990],
             [0, 1, 1, c.d_ply_gfx, 0x03009A18, "top", True, (32, 32)],
@@ -4230,12 +4229,12 @@ data_global_gfx = [
             [0, 1, 1, c.d_map_data, "map"],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x03009CD8, 0x03009CE0, "E0.szp", [
+    [ultra.c.s_data, 0x03009CD8, 0x03009CE0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("door", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x03009CE0, 0x03013910, "E0.szp", [
+        [ultra.c.s_data, 0x03009CE0, 0x03013910, "E00.szp", [
             [0, 2, 1, c.d_light, 0.25],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "a_face"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "a_side"],
@@ -4256,7 +4255,7 @@ data_global_gfx = [
         [c.s_ply_vtx, "a_h_face"],
         [c.s_ply_vtx, "a_h_knob_f"],
         [c.s_ply_vtx, "a_h_knob_b"],
-        [ultra.c.s_data, 0x03013C10, 0x03013F20, "E0.szp", [
+        [ultra.c.s_data, 0x03013C10, 0x03013F20, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x03013C38],
             [0, 1, 1, c.d_ply_gfx, 0x03013C80, "a_h_side", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03013C98],
@@ -4268,7 +4267,7 @@ data_global_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x03013F20],
         ]],
         [c.s_ply_vtx, "a_l_face"],
-        [ultra.c.s_data, 0x03013FA0, 0x03014558, "E0.szp", [
+        [ultra.c.s_data, 0x03013FA0, 0x03014558, "E00.szp", [
             [0, -8, 1, ultra.c.d_Vtx, True],
             [0, 1, 1, ultra.c.d_Gfx, 0x03014088],
             [0, 1, 1, c.d_ply_gfx, 0x030140B0, "a_l_face", True, (32, 64)],
@@ -4281,7 +4280,7 @@ data_global_gfx = [
         [c.s_ply_vtx, "h_side"],
         [c.s_ply_vtx, "h_face"],
         [c.s_ply_vtx, "h_knob"],
-        [ultra.c.s_data, 0x03014888, 0x03014DF0, "E0.szp", [
+        [ultra.c.s_data, 0x03014888, 0x03014DF0, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x030149B8, "h_knob", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x030149D0],
             [0, 1, 1, c.d_ply_gfx, 0x03014A18, "h_side", True, (32, 32)],
@@ -4291,7 +4290,7 @@ data_global_gfx = [
         ]],
         [c.s_ply_vtx, "l_panel"],
         [c.s_ply_vtx, "l_knob"],
-        [ultra.c.s_data, 0x03014EF0, 0x030156D4, "E0.szp", [
+        [ultra.c.s_data, 0x03014EF0, 0x030156D4, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x03014F00],
             [0, 1, 1, c.d_ply_gfx, 0x03014F28, "l_panel", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03014F30],
@@ -4305,16 +4304,16 @@ data_global_gfx = [
             [0, -5, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030156D8, 0x030156E0, "E0.szp", [
+    [ultra.c.s_data, 0x030156D8, 0x030156E0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("doorkey", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x030156E0, 0x030156F8, "E0.szp", [
+        [ultra.c.s_data, 0x030156E0, 0x030156F8, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "key"],
-        [ultra.c.s_data, 0x030161F8, 0x030172D8, "E0.szp", [
+        [ultra.c.s_data, 0x030161F8, 0x030172D8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x03016208],
             [0, 1, 1, c.d_ply_gfx, 0x03016528, "key", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x03016530],
@@ -4323,13 +4322,13 @@ data_global_gfx = [
             [0, -2, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030172D8, 0x030172E0, "E0.szp", [
+    [ultra.c.s_data, 0x030172D8, 0x030172E0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("flame", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x03017320, 0x0301B5C0, "E0.szp", [
+        [ultra.c.s_data, 0x03017320, 0x0301B5C0, "E00.szp", [
             d_texture_n("ia16", 32, 32, 8),
             [0, 1, 1, ultra.c.d_Gfx, 0x0301B368],
             [0, 1, 1, c.d_ply_gfx, 0x0301B380, "gfx", False, (32, 32)],
@@ -4338,23 +4337,23 @@ data_global_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x0301B5C0],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0301B5C0, 0x0301B5C8, "E0.szp", [
+    [ultra.c.s_data, 0x0301B5C0, 0x0301B5C8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("fish", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0301B5C8, 0x0301BDE0, "E0.szp", [
+        [ultra.c.s_data, 0x0301B5C8, 0x0301BDE0, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "texture"],
         ]],
         [c.s_ply_vtx, "body"],
-        [ultra.c.s_data, 0x0301BEC0, 0x0301C018, "E0.szp", [
+        [ultra.c.s_data, 0x0301BEC0, 0x0301C018, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0301BEE8],
             [0, 1, 1, c.d_ply_gfx, 0x0301BFB0, "body", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301C018],
         ]],
         [c.s_ply_vtx, "tail"],
-        [ultra.c.s_data, 0x0301C0A8, 0x0301C2B4, "E0.szp", [
+        [ultra.c.s_data, 0x0301C0A8, 0x0301C2B4, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0301C0D0],
             [0, 1, 1, c.d_ply_gfx, 0x0301C148, "tail", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301C1B0],
@@ -4362,48 +4361,48 @@ data_global_gfx = [
             [0, -1, 1, ultra.c.d_addr, ultra.A_ADDR],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0301C2B8, 0x0301C2C0, "E0.szp", [
+    [ultra.c.s_data, 0x0301C2B8, 0x0301C2C0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("stone", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0301C300, 0x0301CB98, "E0.szp", [
+        [ultra.c.s_data, 0x0301C300, 0x0301CB98, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301CB58],
             [0, 1, 1, c.d_ply_gfx, 0x0301CB70, "gfx", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301CB98],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0301CB98, 0x0301CBA0, "E0.szp", [
+    [ultra.c.s_data, 0x0301CB98, 0x0301CBA0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("leaf", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0301CBE0, 0x0301CE70, "E0.szp", [
+        [ultra.c.s_data, 0x0301CBE0, 0x0301CE70, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301CE38],
             [0, 1, 1, c.d_ply_gfx, 0x0301CE50, "gfx", False, (16, 16)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0301CE70],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0301CE70, 0x0301CE78, "E0.szp", [
+    [ultra.c.s_data, 0x0301CE70, 0x0301CE78, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("map", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0301CE78, 0x0301CF00, "E0.szp", [
+        [ultra.c.s_data, 0x0301CE78, 0x0301CF00, "E00.szp", [
             [0, 1, 1, c.d_map_data, "door"],
             [0, 1, 1, c.d_map_data, "13002018"],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0301CF00, 0x0301CF08, "E0.szp", [
+    [ultra.c.s_data, 0x0301CF00, 0x0301CF08, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("cap", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0301CF08, 0x03022750, "E0.szp", [
+        [ultra.c.s_data, 0x0301CF08, 0x03022750, "E00.szp", [
             [0, 3, 1, c.d_light, 0.5],
             [0, 1, 1, c.d_texture, "rgba16", 64, 32, ["data", "shape", "player", "mario", "metal"]],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, ["data", "shape", "player", "mario", "logo"]],
@@ -4415,7 +4414,7 @@ data_global_gfx = [
         [c.s_ply_vtx, "cap0"],
         [c.s_ply_vtx, "cap1"],
         [c.s_ply_vtx, "cap2"],
-        [ultra.c.s_data, 0x03022B30, 0x03022D38, "E0.szp", [
+        [ultra.c.s_data, 0x03022B30, 0x03022D38, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x03022B60, "cap0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03022B68],
             [0, 1, 1, c.d_ply_gfx, 0x03022CC0, "cap1", True, None],
@@ -4425,19 +4424,19 @@ data_global_gfx = [
         ]],
         [c.s_ply_vtx, "wings_l"],
         [c.s_ply_vtx, "wings_r"],
-        [ultra.c.s_data, 0x03022E78, 0x030233D0, "E0.szp", [
+        [ultra.c.s_data, 0x03022E78, 0x030233D0, "E00.szp", [
             [0, 1, 1, c.d_ply_gfx, 0x03022EA0, "wings_l", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03022EA8],
             [0, 1, 1, c.d_ply_gfx, 0x03022ED0, "wings_r", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x030233D0],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030233D0, 0x030233D8, "E0.szp", [
+    [ultra.c.s_data, 0x030233D0, 0x030233D8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("meter", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x030233D8, 0x030295D8, "E0.szp", [
+        [ultra.c.s_data, 0x030233D8, 0x030295D8, "E00.szp", [
             [0, 1, 1, ultra.c.d_u64],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "0_l"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "0_r"],
@@ -4456,70 +4455,70 @@ data_global_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x030295D8],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x030295D8, 0x030295E0, "E0.szp", [
+    [ultra.c.s_data, 0x030295D8, 0x030295E0, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("number", "shape.c"),
         s_script_ifdef(),
     s_writepop(),
-    [ultra.c.s_data, 0x030295E0, 0x030295E8, "E0.szp", [
+    [ultra.c.s_data, 0x030295E0, 0x030295E8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("1up", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x030295E8, 0x0302A6D0, "E0.szp", [
+        [ultra.c.s_data, 0x030295E8, 0x0302A6D0, "E00.szp", [
             [0, -4, 1, ultra.c.d_Vtx, False],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302A6D0],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302A6D0, 0x0302A6D8, "E0.szp", [
+    [ultra.c.s_data, 0x0302A6D0, 0x0302A6D8, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("powerstar", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0302A6D8, 0x0302B6F0, "E0.szp", [
+        [ultra.c.s_data, 0x0302A6D8, 0x0302B6F0, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "star"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "eye"],
         ]],
         [c.s_ply_vtx, "star"],
-        [ultra.c.s_data, 0x0302B7B0, 0x0302B920, "E0.szp", [
+        [ultra.c.s_data, 0x0302B7B0, 0x0302B920, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302B7C0],
             [0, 1, 1, c.d_ply_gfx, 0x0302B868, "star", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302B908],
             [0, 1, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "eyes"],
-        [ultra.c.s_data, 0x0302B9C0, 0x0302BA88, "E0.szp", [
+        [ultra.c.s_data, 0x0302B9C0, 0x0302BA88, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302B9E8],
             [0, 1, 1, c.d_ply_gfx, 0x0302BA10, "eyes", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302BA88],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302BA88, 0x0302BA90, "E0.szp", [
+    [ultra.c.s_data, 0x0302BA88, 0x0302BA90, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("sand", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0302BAD0, 0x0302BD60, "E0.szp", [
+        [ultra.c.s_data, 0x0302BAD0, 0x0302BD60, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302BD28],
             [0, 1, 1, c.d_ply_gfx, 0x0302BD40, "gfx", False, (16, 16)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302BD60],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302BD60, 0x0302BD68, "E0.szp", [
+    [ultra.c.s_data, 0x0302BD60, 0x0302BD68, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("shard", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0302BD68, 0x0302BDC8, "E0.szp", [
+        [ultra.c.s_data, 0x0302BD68, 0x0302BDC8, "E00.szp", [
             [0, 4, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "cork"],
-        [ultra.c.s_data, 0x0302BDF8, 0x0302C098, "E0.szp", [
+        [ultra.c.s_data, 0x0302BDF8, 0x0302C098, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "cork"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C010],
             [0, 1, 1, c.d_ply_gfx, 0x0302C020, "cork", True, (16, 16)],
@@ -4529,7 +4528,7 @@ data_global_gfx = [
         [c.s_ply_vtx, "shard_y"],
         [c.s_ply_vtx, "star_s"],
         [c.s_ply_vtx, "star_y"],
-        [ultra.c.s_data, 0x0302C238, 0x0302C480, "E0.szp", [
+        [ultra.c.s_data, 0x0302C238, 0x0302C480, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C240],
             [0, 1, 1, c.d_ply_gfx, 0x0302C288, "star_s", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C320],
@@ -4547,44 +4546,44 @@ data_global_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C480],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302C480, 0x0302C488, "E0.szp", [
+    [ultra.c.s_data, 0x0302C480, 0x0302C488, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("shadowstar", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0302C488, 0x0302C4A0, "E0.szp", [
+        [ultra.c.s_data, 0x0302C488, 0x0302C4A0, "E00.szp", [
             [0, 1, 1, c.d_light, 0.1],
         ]],
         [c.s_ply_vtx, "star"],
-        [ultra.c.s_data, 0x0302C560, 0x0302C658, "E0.szp", [
+        [ultra.c.s_data, 0x0302C560, 0x0302C658, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C570],
             [0, 1, 1, c.d_ply_gfx, 0x0302C618, "star", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C658],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302C658, 0x0302C660, "E0.szp", [
+    [ultra.c.s_data, 0x0302C658, 0x0302C660, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("snow", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "gfx"],
-        [ultra.c.s_data, 0x0302C6A0, 0x0302C938, "E0.szp", [
+        [ultra.c.s_data, 0x0302C6A0, 0x0302C938, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "texture"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C8F8],
             [0, 1, 1, c.d_ply_gfx, 0x0302C910, "gfx", False, (16, 16)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302C938],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302C938, 0x0302C940, "E0.szp", [
+    [ultra.c.s_data, 0x0302C938, 0x0302C940, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("signpost", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0302C940, 0x0302C958, "E0.szp", [
+        [ultra.c.s_data, 0x0302C940, 0x0302C958, "E00.szp", [
             [0, 1, 1, c.d_light, 0.5],
         ]],
         [c.s_ply_vtx, "post"],
-        [ultra.c.s_data, 0x0302C9C8, 0x0302DAC0, "E0.szp", [
+        [ultra.c.s_data, 0x0302C9C8, 0x0302DAC0, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "wood"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "face"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302D9F0],
@@ -4594,7 +4593,7 @@ data_global_gfx = [
         ]],
         [c.s_ply_vtx, "sign"],
         [c.s_ply_vtx, "face"],
-        [ultra.c.s_data, 0x0302DC40, 0x0302DE04, "E0.szp", [
+        [ultra.c.s_data, 0x0302DC40, 0x0302DE04, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302DC68],
             [0, 1, 1, c.d_ply_gfx, 0x0302DCC8, "sign", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302DCE8],
@@ -4603,19 +4602,19 @@ data_global_gfx = [
             [0, 1, 1, c.d_map_data, "map"],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0302DE08, 0x0302DE10, "E0.szp", [
+    [ultra.c.s_data, 0x0302DE08, 0x0302DE10, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     s_dirfile("tree", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0302DE10, 0x0302FE28, "E0.szp", [
+        [ultra.c.s_data, 0x0302DE10, 0x0302FE28, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "a_l"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "a_r"],
         ]],
         [c.s_ply_vtx, "a_l"],
         [c.s_ply_vtx, "a_r"],
-        [ultra.c.s_data, 0x0302FE88, 0x03030F60, "E0.szp", [
+        [ultra.c.s_data, 0x0302FE88, 0x03030F60, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0302FEA0],
             [0, 1, 1, c.d_ply_gfx, 0x0302FEB0, "a_l", False, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0302FED0],
@@ -4624,33 +4623,33 @@ data_global_gfx = [
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "b"],
         ]],
         [c.s_ply_vtx, "b"],
-        [ultra.c.s_data, 0x03030FA0, 0x03032048, "E0.szp", [
+        [ultra.c.s_data, 0x03030FA0, 0x03032048, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x03031008],
             [0, 1, 1, c.d_ply_gfx, 0x03031020, "b", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03031048],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "c"],
         ]],
         [c.s_ply_vtx, "c"],
-        [ultra.c.s_data, 0x03032088, 0x03032130, "E0.szp", [
+        [ultra.c.s_data, 0x03032088, 0x03032130, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x030320F0],
             [0, 1, 1, c.d_ply_gfx, 0x03032108, "c", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03032130],
         ]],
         [c.s_ply_vtx, "d"],
-        [ultra.c.s_data, 0x03032170, 0x03033218, "E0.szp", [
+        [ultra.c.s_data, 0x03032170, 0x03033218, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x030321D8],
             [0, 1, 1, c.d_ply_gfx, 0x030321F0, "d", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03032218],
             [0, 1, 1, c.d_texture, "rgba16", 32, 64, "e"],
         ]],
         [c.s_ply_vtx, "e"],
-        [ultra.c.s_data, 0x03033258, 0x03033300, "E0.szp", [
+        [ultra.c.s_data, 0x03033258, 0x03033300, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x030332C0],
             [0, 1, 1, c.d_ply_gfx, 0x030332D8, "e", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x03033300],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x03033300, 0x03033308, "E0.szp", [
+    [ultra.c.s_data, 0x03033300, 0x03033308, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
 ]
@@ -4658,63 +4657,63 @@ data_global_gfx = [
 data_global_shape = [
     s_dirfile("puff", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000000, 0x16000040, "E0", [
+        [ultra.c.s_data, 0x16000000, 0x16000040, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000040],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("explosion", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000040, 0x160000A8, "E0", [
+        [ultra.c.s_data, 0x16000040, 0x160000A8, "E00", [
             [0, 1, 1, c.d_s_script, 0x160000A8],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("butterfly", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x160000A8, 0x1600013C, "E0", [
+        [ultra.c.s_data, 0x160000A8, 0x1600013C, "E00", [
             [0, 1, 1, c.d_s_script, 0x1600013C],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("coin", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x1600013C, 0x16000388, "E0", [
+        [ultra.c.s_data, 0x1600013C, 0x16000388, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000388],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("pipe", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000388, 0x160003A8, "E0", [
+        [ultra.c.s_data, 0x16000388, 0x160003A8, "E00", [
             [0, 1, 1, c.d_s_script, 0x160003A8],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("door", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x160003A8, 0x16000A84, "E0", [
+        [ultra.c.s_data, 0x160003A8, 0x16000A84, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000A84],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("doorkey", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000A84, 0x16000B10, "E0", [
+        [ultra.c.s_data, 0x16000A84, 0x16000B10, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000B10],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("flame", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000B10, 0x16000BEC, "E0", [
+        [ultra.c.s_data, 0x16000B10, 0x16000BEC, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000BEC],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("fish", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000BEC, 0x16000C8C, "E0", [
+        [ultra.c.s_data, 0x16000BEC, 0x16000C8C, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000C8C],
         ]],
         s_script_endif(),
@@ -4724,7 +4723,7 @@ data_global_shape = [
     s_writepop(),
     s_dirfile("leaf", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000C8C, 0x16000CA4, "E0", [
+        [ultra.c.s_data, 0x16000C8C, 0x16000CA4, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000CA4],
         ]],
         s_script_endif(),
@@ -4734,7 +4733,7 @@ data_global_shape = [
     s_writepop(),
     s_dirfile("cap", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000CA4, 0x16000E14, "E0", [
+        [ultra.c.s_data, 0x16000CA4, 0x16000E14, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000E14],
         ]],
         s_script_endif(),
@@ -4743,21 +4742,21 @@ data_global_shape = [
         s_script_endif(),
     s_writepop(),
     s_dirfile("number", "shape.c"),
-        [ultra.c.s_data, 0x16000E14, 0x16000E84, "E0", [
+        [ultra.c.s_data, 0x16000E14, 0x16000E84, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000E84],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("1up", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000E84, 0x16000EA0, "E0", [
+        [ultra.c.s_data, 0x16000E84, 0x16000EA0, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000EA0],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("powerstar", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000EA0, 0x16000ED4, "E0", [
+        [ultra.c.s_data, 0x16000EA0, 0x16000ED4, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000ED4],
         ]],
         s_script_endif(),
@@ -4767,35 +4766,35 @@ data_global_shape = [
     s_writepop(),
     s_dirfile("shard", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000ED4, 0x16000F6C, "E0", [
+        [ultra.c.s_data, 0x16000ED4, 0x16000F6C, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000F6C],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("shadowstar", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000F6C, 0x16000F98, "E0", [
+        [ultra.c.s_data, 0x16000F6C, 0x16000F98, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000F98],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("snow", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000F98, 0x16000FB4, "E0", [
+        [ultra.c.s_data, 0x16000F98, 0x16000FB4, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000FB4],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("signpost", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000FB4, 0x16000FE8, "E0", [
+        [ultra.c.s_data, 0x16000FB4, 0x16000FE8, "E00", [
             [0, 1, 1, c.d_s_script, 0x16000FE8],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("tree", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x16000FE8, 0x16001060, "E0", [
+        [ultra.c.s_data, 0x16000FE8, 0x16001060, "E00", [
             [0, 1, 1, c.d_s_script, 0x16001060],
         ]],
         s_script_endif(),
@@ -4813,7 +4812,7 @@ data_object = [
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, "\n"],
-        [asm.s_script, 0x13000000, 0x13002EB8, "E0", 1],
+        [asm.s_script, 0x13000000, 0x13002EB8, "E00", 1],
     [main.s_write],
     [main.s_file, "player.sx"],
         s_include([
@@ -4825,7 +4824,7 @@ data_object = [
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, "\n"],
-        [asm.s_script, 0x13002EC0, 0x13002F98, "E0", 1],
+        [asm.s_script, 0x13002EC0, 0x13002F98, "E00", 1],
     [main.s_write],
     [main.s_file, "object_b.sx"],
         s_include([
@@ -4837,7 +4836,7 @@ data_object = [
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, "\n"],
-        [asm.s_script, 0x13002FA0, 0x13004580, "E0", 1],
+        [asm.s_script, 0x13002FA0, 0x13004580, "E00", 1],
     [main.s_write],
     [main.s_file, "object_c.sx"],
         s_include([
@@ -4849,7 +4848,7 @@ data_object = [
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, "\n"],
-        [asm.s_script, 0x13004580, 0x13005610, "E0", 1],
+        [asm.s_script, 0x13004580, 0x13005610, "E00", 1],
     [main.s_write],
     [main.s_file, "camera.sx"],
         s_include([
@@ -4861,11 +4860,11 @@ data_object = [
         [main.s_str, "\n"],
         [main.s_str, str_data],
         [main.s_str, "\n"],
-        [asm.s_script, 0x13005610, 0x130056BC, "E0", 1],
+        [asm.s_script, 0x13005610, 0x130056BC, "E00", 1],
     [main.s_write],
 ]
 
-data_title_gfx = [
+data_title_logo = [
     s_include(["sm64/types", "sm64/gbi_ext"]),
     [main.s_str, "\n"],
     s_dirfile("logo", "shape.c"),
@@ -4873,7 +4872,7 @@ data_title_gfx = [
         [c.s_ply_vtx, "marble"],
         [c.s_ply_vtx, "wood"],
         [c.s_ply_vtx, "shade"],
-        [ultra.c.s_data, 0x07007EA0, 0x0700B420, "E0.szp", [
+        [ultra.c.s_data, 0x07007EA0, 0x0700B420, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "wood"],
             [0, 1, 1, c.d_texture, "rgba16", 32, 32, "marble"],
             [0, 1, 1, ultra.c.d_Gfx, 0x07008EB8],
@@ -4889,7 +4888,7 @@ data_title_gfx = [
         s_script_ifndef(),
         [c.s_ply_vtx, "copyright"],
         [c.s_ply_vtx, "trademark"],
-        [ultra.c.s_data, 0x0700B4A0, 0x0700C790, "E0.szp", [
+        [ultra.c.s_data, 0x0700B4A0, 0x0700C790, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 128, 16, "copyright"],
             [0, 1, 1, c.d_texture, "rgba16",  16, 16, "trademark"],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700C6F0],
@@ -4899,7 +4898,7 @@ data_title_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700C790],
         ]],
     s_writepop(),
-    [ultra.c.s_data, 0x0700C790, 0x0700C940, "E0.szp", [
+    [ultra.c.s_data, 0x0700C790, 0x0700C940, "E00.szp", [
         [1, -36, 3, ultra.c.d_f32],
     ]],
 ]
@@ -4909,74 +4908,74 @@ data_title_debug = [
     [main.s_str, "\n"],
     s_dirfile("debug", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x07000000, 0x07000018, "E0.szp", [
+        [ultra.c.s_data, 0x07000000, 0x07000018, "E00.szp", [
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "super_s"],
-        [ultra.c.s_data, 0x07000858, 0x07000A40, "E0.szp", [
+        [ultra.c.s_data, 0x07000858, 0x07000A40, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07000870],
             [0, 1, 1, c.d_ply_gfx, 0x07000A20, "super_s", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07000A28],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "super_u"],
-        [ultra.c.s_data, 0x07001100, 0x070012A0, "E0.szp", [
+        [ultra.c.s_data, 0x07001100, 0x070012A0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07001118],
             [0, 1, 1, c.d_ply_gfx, 0x07001280, "super_u", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07001288],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "super_p"],
-        [ultra.c.s_data, 0x07001BA0, 0x07001DB0, "E0.szp", [
+        [ultra.c.s_data, 0x07001BA0, 0x07001DB0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07001BB8],
             [0, 1, 1, c.d_ply_gfx, 0x07001D90, "super_p", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07001D98],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "super_e"],
-        [ultra.c.s_data, 0x070025F0, 0x070027D8, "E0.szp", [
+        [ultra.c.s_data, 0x070025F0, 0x070027D8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07002608],
             [0, 1, 1, c.d_ply_gfx, 0x070027B8, "super_e", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x070027C0],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "super_r"],
-        [ultra.c.s_data, 0x07003258, 0x070034B8, "E0.szp", [
+        [ultra.c.s_data, 0x07003258, 0x070034B8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07003270],
             [0, 1, 1, c.d_ply_gfx, 0x07003498, "super_r", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x070034A0],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "mario_m"],
-        [ultra.c.s_data, 0x07003DB8, 0x07003FC8, "E0.szp", [
+        [ultra.c.s_data, 0x07003DB8, 0x07003FC8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07003DD0],
             [0, 1, 1, c.d_ply_gfx, 0x07003FA8, "mario_m", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07003FB0],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "mario_a"],
-        [ultra.c.s_data, 0x070048C8, 0x07004AD8, "E0.szp", [
+        [ultra.c.s_data, 0x070048C8, 0x07004AD8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x070048E0],
             [0, 1, 1, c.d_ply_gfx, 0x07004AB8, "mario_a", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07004AC0],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "mario_r"],
-        [ultra.c.s_data, 0x07005558, 0x070057B8, "E0.szp", [
+        [ultra.c.s_data, 0x07005558, 0x070057B8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07005570],
             [0, 1, 1, c.d_ply_gfx, 0x07005798, "mario_r", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x070057A0],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "mario_i"],
-        [ultra.c.s_data, 0x070059F8, 0x07005AB0, "E0.szp", [
+        [ultra.c.s_data, 0x070059F8, 0x07005AB0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07005A10],
             [0, 1, 1, c.d_ply_gfx, 0x07005A90, "mario_i", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x07005A98],
             [0, 1, 1, ultra.c.d_Lights1],
         ]],
         [c.s_ply_vtx, "mario_o"],
-        [ultra.c.s_data, 0x070063B0, 0x070065A8, "E0.szp", [
+        [ultra.c.s_data, 0x070063B0, 0x070065A8, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x070063C8],
             [0, 1, 1, c.d_ply_gfx, 0x070065A0, "mario_o", True, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x070065A8],
@@ -4985,7 +4984,7 @@ data_title_debug = [
 ]
 
 data_title_shape = [
-    [ultra.c.s_data, 0x140002D0, 0x14000414, "E0", [
+    [ultra.c.s_data, 0x140002D0, 0x14000414, "E00", [
         [0, 1, 1, c.d_s_script, 0x14000414],
     ]],
     s_dirfile("logo", "shape.c"),
@@ -4996,7 +4995,7 @@ data_title_shape = [
     s_writepop(),
     s_dirfile("debug", "shape.c"),
         s_script_else(),
-        [ultra.c.s_data, 0x14000414, 0x140004FC, "E0", [
+        [ultra.c.s_data, 0x14000414, 0x140004FC, "E00", [
             [0, 1, 1, c.d_s_script, 0x140004FC],
         ]],
         s_script_endif(),
@@ -5004,7 +5003,7 @@ data_title_shape = [
 ]
 
 data_game = [
-    [asm.s_script, 0x15000000, 0x15000660, "E0", 0],
+    [asm.s_script, 0x15000000, 0x15000660, "E00", 0],
     [main.s_str, "\n"],
     s_shape_p(0x15000660, 0x1500071C, "3common"),
     s_shape_p(0x1500071C, 0x15000750, "1a"),
@@ -5029,7 +5028,7 @@ data_game = [
 data_background_title = [
     s_include(["sm64/types", "sm64/gbi_ext"]),
     [main.s_str, "\n"],
-    [ultra.c.s_data, 0x0A000000, 0x0A0065E8, "E0.szp", [
+    [ultra.c.s_data, 0x0A000000, 0x0A0065E8, "E00.szp", [
         [0, -16, 1, ultra.c.d_Vtx, False],
         [0, 1, 1, ultra.c.d_Gfx, 0x0A0001C0],
         d_texture_n("rgba16", 80, 20, 4, "mario.%d"),
@@ -5042,30 +5041,30 @@ data_background_title = [
 data_weather = [
     s_include(["sm64/types", "sm64/gbi_ext"]),
     [main.s_str, "\n"],
-    [ultra.c.s_data, 0x0B000000, 0x0B000008, "E0.szp", [
+    [ultra.c.s_data, 0x0B000000, 0x0B000008, "E00.szp", [
         [0, 1, 1, ultra.c.d_u64],
     ]],
     [main.s_str, "\n"],
     s_dirfile("flower", "texture.c"),
-        [ultra.c.s_data, 0x0B000008, 0x0B002020, "E0.szp", [
+        [ultra.c.s_data, 0x0B000008, 0x0B002020, "E00.szp", [
             d_texture_n("rgba16", 32, 32, 4),
             [0, -6, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("lava", "texture.c"),
-        [ultra.c.s_data, 0x0B002020, 0x0B006048, "E0.szp", [
+        [ultra.c.s_data, 0x0B002020, 0x0B006048, "E00.szp", [
             d_texture_n("rgba16", 32, 32, 8),
             [0, -10, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("bubble", "texture.c"),
-        [ultra.c.s_data, 0x0B006048, 0x0B00684C, "E0.szp", [
+        [ultra.c.s_data, 0x0B006048, 0x0B00684C, "E00.szp", [
             d_texture_n("rgba16", 32, 32, 1),
             [0, -1, 1, ultra.c.d_addr, 0],
         ]],
     s_writepop(),
     s_dirfile("snow", "gfx.c"),
-        [ultra.c.s_data, 0x0B00684C, 0x0B006D98, "E0.szp", [
+        [ultra.c.s_data, 0x0B00684C, 0x0B006D98, "E00.szp", [
             [0, 1, 1, c.d_texture, "rgba16", 16, 16, "a"],
             [0, 1, 4, None],
             [0, 1, 1, ultra.c.d_Gfx, 0x0B006AD8],
@@ -5113,18 +5112,18 @@ data_weather = [
 
 data_bob_gfx = [
     [main.s_str, str_texture % "c"],
-    [ultra.c.s_data, 0x07000000, 0x07002800, "E0.szp", [
+    [ultra.c.s_data, 0x07000000, 0x07002800, "E00.szp", [
         d_texture_n("rgba16", 32, 32, 5),
     ]],
     s_dirfile("battlefield", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x07002800, 0x07002818, "E0.szp", [
+        [ultra.c.s_data, 0x07002800, 0x07002818, "E00.szp", [
             [0, 1, 1, c.d_light, 0.4],
         ]],
         [c.s_ply_vtx, "0"],
         [c.s_ply_vtx, "1"],
         [c.s_ply_vtx, "2"],
-        [ultra.c.s_data, 0x07003CA8, 0x07004490, "E0.szp", [
+        [ultra.c.s_data, 0x07003CA8, 0x07004490, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07003CD0],
             [0, 1, 1, c.d_ply_gfx, 0x070041D8, "0", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x070041F8],
@@ -5144,7 +5143,7 @@ data_bob_gfx = [
         [c.s_ply_vtx, "10"],
         [c.s_ply_vtx, "11"],
         [c.s_ply_vtx, "12"],
-        [ultra.c.s_data, 0x07008AF0, 0x07009E98, "E0.szp", [
+        [ultra.c.s_data, 0x07008AF0, 0x07009E98, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x07008B18],
             [0, 1, 1, c.d_ply_gfx, 0x07008C20, "3", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x07008C40],
@@ -5168,14 +5167,14 @@ data_bob_gfx = [
             [0, 1, 1, ultra.c.d_Gfx, 0x07009E98],
         ]],
         [c.s_ply_vtx, "13"],
-        [ultra.c.s_data, 0x0700A318, 0x0700A4E0, "E0.szp", [
+        [ultra.c.s_data, 0x0700A318, 0x0700A4E0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700A330],
             [0, 1, 1, c.d_ply_gfx, 0x0700A468, "13", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700A4E0],
         ]],
         [c.s_ply_vtx, "14"],
         [c.s_ply_vtx, "15"],
-        [ultra.c.s_data, 0x0700A800, 0x0700AA10, "E0.szp", [
+        [ultra.c.s_data, 0x0700A800, 0x0700AA10, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700A818],
             [0, 1, 1, c.d_ply_gfx, 0x0700A840, "14", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700A860],
@@ -5190,7 +5189,7 @@ data_bob_gfx = [
         [c.s_ply_vtx, "20"],
         [c.s_ply_vtx, "21"],
         [c.s_ply_vtx, "22"],
-        [ultra.c.s_data, 0x0700CFC0, 0x0700DE48, "E0.szp", [
+        [ultra.c.s_data, 0x0700CFC0, 0x0700DE48, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700CFE8],
             [0, 1, 1, c.d_ply_gfx, 0x0700D740, "16", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700D750],
@@ -5209,7 +5208,7 @@ data_bob_gfx = [
             [0, 1, 1, c.d_light, 0.2],
         ]],
         [c.s_ply_vtx, "23"],
-        [ultra.c.s_data, 0x0700E1E8, 0x0700E3E0, "E0.szp", [
+        [ultra.c.s_data, 0x0700E1E8, 0x0700E3E0, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E210],
             [0, 1, 1, c.d_ply_gfx, 0x0700E330, "23", True, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E3E0],
@@ -5219,7 +5218,7 @@ data_bob_gfx = [
     s_dirfile("54", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "54"],
-        [ultra.c.s_data, 0x0700E420, 0x0700E510, "E0.szp", [
+        [ultra.c.s_data, 0x0700E420, 0x0700E510, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E438],
             [0, 1, 1, c.d_ply_gfx, 0x0700E450, "54", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E510],
@@ -5228,11 +5227,11 @@ data_bob_gfx = [
     s_writepop(),
     s_dirfile("55", "shape.c"),
         s_script_ifndef(),
-        [ultra.c.s_data, 0x0700E510, 0x0700E528, "E0.szp", [
+        [ultra.c.s_data, 0x0700E510, 0x0700E528, "E00.szp", [
             [0, 1, 1, c.d_light, 0.25],
         ]],
         [c.s_ply_vtx, "55"],
-        [ultra.c.s_data, 0x0700E6C8, 0x0700E810, "E0.szp", [
+        [ultra.c.s_data, 0x0700E6C8, 0x0700E810, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E6F0],
             [0, 1, 1, c.d_ply_gfx, 0x0700E760, "55", True, (32, 64)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E810],
@@ -5242,7 +5241,7 @@ data_bob_gfx = [
     s_dirfile("56", "shape.c"),
         s_script_ifndef(),
         [c.s_ply_vtx, "56"],
-        [ultra.c.s_data, 0x0700E860, 0x0700E958, "E0.szp", [
+        [ultra.c.s_data, 0x0700E860, 0x0700E958, "E00.szp", [
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E878],
             [0, 1, 1, c.d_ply_gfx, 0x0700E898, "56", False, (32, 32)],
             [0, 1, 1, ultra.c.d_Gfx, 0x0700E958],
@@ -5250,52 +5249,52 @@ data_bob_gfx = [
         s_script_else(),
     s_writepop(),
     [main.s_dir, "battlefield"],
-        [ultra.c.s_data, 0x0700E958, 0x070113C0, "E0.szp", [
+        [ultra.c.s_data, 0x0700E958, 0x070113C0, "E00.szp", [
             [0, 1, 1, c.d_map_data, "map"],
             [0, 1, 1, c.d_obj_data],
         ]],
     [main.s_pop],
     [main.s_dir, "54"],
-        [ultra.c.s_data, 0x070113C0, 0x070113F0, "E0.szp", [
+        [ultra.c.s_data, 0x070113C0, 0x070113F0, "E00.szp", [
             [0, 1, 1, c.d_map_data, "map"],
         ]],
     [main.s_pop],
     [main.s_dir, "55"],
-        [ultra.c.s_data, 0x070113F0, 0x07011474, "E0.szp", [
+        [ultra.c.s_data, 0x070113F0, 0x07011474, "E00.szp", [
             [0, 1, 1, c.d_map_data, "map"],
         ]],
     [main.s_pop],
     [main.s_dir, "56"],
-        [ultra.c.s_data, 0x07011474, 0x07011530, "E0.szp", [
+        [ultra.c.s_data, 0x07011474, 0x07011530, "E00.szp", [
             [0, 1, 1, c.d_map_data, "map"],
         ]],
     [main.s_pop],
-    [ultra.c.s_data, 0x07011530, 0x070117C2, "E0.szp", [
+    [ultra.c.s_data, 0x07011530, 0x070117C2, "E00.szp", [
         [0, 3, 1, c.d_path_data],
     ]],
 ]
 
 data_bob_shape = [
     s_dirfile("54", "shape.c"),
-        [ultra.c.s_data, 0x0E000440, 0x0E000458, "E0", [
+        [ultra.c.s_data, 0x0E000440, 0x0E000458, "E00", [
             [0, 1, 1, c.d_s_script, 0x0E000458],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("55", "shape.c"),
-        [ultra.c.s_data, 0x0E000458, 0x0E000470, "E0", [
+        [ultra.c.s_data, 0x0E000458, 0x0E000470, "E00", [
             [0, 1, 1, c.d_s_script, 0x0E000470],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("56", "shape.c"),
-        [ultra.c.s_data, 0x0E000470, 0x0E000488, "E0", [
+        [ultra.c.s_data, 0x0E000470, 0x0E000488, "E00", [
             [0, 1, 1, c.d_s_script, 0x0E000488],
         ]],
         s_script_endif(),
     s_writepop(),
     s_dirfile("battlefield", "shape.c"),
-        [ultra.c.s_data, 0x0E000488, 0x0E00054C, "E0", [
+        [ultra.c.s_data, 0x0E000488, 0x0E00054C, "E00", [
             [0, 1, 1, c.d_s_script, 0x0E00054C],
         ]],
         s_script_endif(),
@@ -5303,25 +5302,42 @@ data_bob_shape = [
 ]
 
 lst = [
-    # [main.s_data, "J0", ["donor", "UNSMJ0.z64"]],
-    [main.s_data, "E0", ["donor", "UNSME0.z64"]],
+    # [main.s_data, "J00", ["donor", "UNSMJ00.z64"]],
+    [main.s_data, "E00", ["donor", "UNSME00.z64"]],
     [main.s_copy, ["ultra"],    ["ultra"]],
     [main.s_copy, ["makefile"], ["makefile"]],
     [main.s_copy, ["tools"],    ["tools"]],
     [main.s_copy, ["make"],     ["make"]],
-    [main.s_copy, ["meta"],     ["meta"]],
     [main.s_copy, ["src"],      ["src"]],
-    # [main.s_file, "J0.s"],
+    # [main.s_file, "J00.code.s"],
     #     [main.s_addr, 0x80246000-0x00001000],
-    #     [ultra.asm.s_code, 0x80246000, 0x8032A320, "J0", 0, True, True],
+    #     [ultra.asm.s_code, 0x80246000, 0x8032A320, "J00", 0, True, True],
+    # [main.s_write],
+    # [main.s_file, "J00.lib.s"],
     #     [main.s_addr, 0x80378800-0x000F4210],
-    #     [ultra.asm.s_code, 0x80378800, 0x80385F90, "J0", 0, True, True],
+    #     [ultra.asm.s_code, 0x80378800, 0x80385F90, "J00", 0, True, True],
+    # [main.s_write],
+    # [main.s_file, "J00.menu.s"],
+    #     [main.s_addr, 0x8016F000-0x0021D7D0],
+    #     [ultra.asm.s_code, 0x8016F000, 0x801A76F0, "J00", 0, True, True],
+    # [main.s_write],
+    # [main.s_file, "E00.code.s"],
+    #     [main.s_addr, 0x80246000-0x00001000],
+    #     [ultra.asm.s_code, 0x80246000, 0x8032B260, "E00", 0, True, True],
+    # [main.s_write],
+    # [main.s_file, "E00.lib.s"],
+    #     [main.s_addr, 0x80378800-0x000F5580],
+    #     [ultra.asm.s_code, 0x80378800, 0x80385F90, "E00", 0, True, True],
+    # [main.s_write],
+    # [main.s_file, "E00.menu.s"],
+    #     [main.s_addr, 0x8016F000-0x0021F4C0],
+    #     [ultra.asm.s_code, 0x8016F000, 0x801A7830, "E00", 0, True, True],
     # [main.s_write],
     [main.s_dir, "include"],
         # [main.s_file, "sm64.inc"],
-        #     [main.s_str, ".ifdef VERSION_E0\n"],
-        #     [ultra.asm.s_definelabel, "E0"],
-        #     [main.s_str, ".endif /* VERSION_E0 */\n"],
+        #     [main.s_str, ".ifdef VERSION_E00\n"],
+        #     [ultra.asm.s_definelabel, "E00"],
+        #     [main.s_str, ".endif /* VERSION_E00 */\n"],
         # [main.s_write],
         s_header("sm64", [
             s_include([
@@ -5346,7 +5362,7 @@ lst = [
                 "sm64/pl_swim",
                 "sm64/pl_grab",
                 "sm64/pl_callback",
-                "sm64/mem",
+                "sm64/memory",
                 "sm64/save",
                 "sm64/scene",
                 "sm64/draw",
@@ -5495,18 +5511,18 @@ lst = [
             [main.s_str, str_data],
             [main.s_str, "\n"],
             [main.s_str, "#define STAGE   0\n\n"],
-            [asm.s_script, 0x10000000, 0x1000000C, "E0", 0],
+            [asm.s_script, 0x10000000, 0x1000000C, "E00", 0],
             [main.s_str, "    p_set(STAGE)\n"],
             [main.s_str, "#if STAGE == 0\n"],
-            [asm.s_script, 0x10000010, 0x10000020, "E0", 0],
+            [asm.s_script, 0x10000010, 0x10000020, "E00", 0],
             [main.s_str, "#else\n"],
             [main.s_str, "    p_push_call(GAME, game, p_game)\n"],
             [main.s_str, "#endif\n"],
-            [asm.s_script, 0x10000020, 0x10000028, "E0", 0],
+            [asm.s_script, 0x10000020, 0x10000028, "E00", 0],
         [main.s_write],
         [main.s_dir, "main"],
             s_gfx(0x00108A40, 0x00114750, 0x02, "gfx", data_main_gfx),
-            # [s_szp, 0x001076D0, 0x00112B50, "J0"],
+            # [s_szp, 0x001076D0, 0x00112B50, "J00"],
             # [main.s_addr, 0x02000000],
             # [main.s_file, ""],
             # [c.s_msg, 0x0200DFE8, 0x0200E294, "J0.szp", 2, "ja_jp", "jp", msg_table],
@@ -5591,7 +5607,7 @@ lst = [
         [main.s_pop],
         [main.s_dir, "menu"],
             [main.s_dir, "title"],
-                s_gfx(0x0026A3A0, 0x0026F420, 0x07, "gfx",   data_title_gfx),
+                s_gfx(0x0026A3A0, 0x0026F420, 0x07, "logo",  data_title_logo),
                 s_gfx(0x0026F420, 0x002708C0, 0x07, "debug", data_title_debug),
                 [main.s_addr, 0x14000000-0x00269EA0],
                 [main.s_file, "program.sx"],
@@ -5602,7 +5618,7 @@ lst = [
                     [main.s_str, "\n"],
                     [main.s_str, str_data],
                     [main.s_str, "\n"],
-                    [asm.s_script, 0x14000000, 0x140002D0, "E0", 0],
+                    [asm.s_script, 0x14000000, 0x140002D0, "E00", 0],
                 [main.s_write],
                 [main.s_file, "shape.c"],
                     s_include([
@@ -5622,7 +5638,7 @@ lst = [
             [main.s_pop],
         [main.s_pop],
         [main.s_dir, "face"],
-            [main.s_bin, 0x002739A0, 0x002A6120, "E0", ["data.bin"]],
+            [main.s_bin, 0x002739A0, 0x002A6120, "E00", ["data.bin"]],
             [main.s_file, "data.s"],
                 [main.s_str, ".data\n.incbin \"data/face/data.bin\"\n"],
             [main.s_write],
@@ -5649,7 +5665,7 @@ lst = [
                 [main.s_dir, "a"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5659,7 +5675,7 @@ lst = [
                 [main.s_dir, "b"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5669,7 +5685,7 @@ lst = [
                 [main.s_dir, "c"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A014940, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A014940, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 41),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5679,7 +5695,7 @@ lst = [
                 [main.s_dir, "d"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A018940, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A018940, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 49),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5689,7 +5705,7 @@ lst = [
                 [main.s_dir, "e"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5699,7 +5715,7 @@ lst = [
                 [main.s_dir, "f"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5709,7 +5725,7 @@ lst = [
                 [main.s_dir, "g"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5719,7 +5735,7 @@ lst = [
                 [main.s_dir, "h"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A014940, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A014940, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 41),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5729,7 +5745,7 @@ lst = [
                 [main.s_dir, "i"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5739,7 +5755,7 @@ lst = [
                 [main.s_dir, "j"],
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E0.szp", [
+                [ultra.c.s_data, 0x0A000000, 0x0A020140, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 64),
                     [0, -80, 1, ultra.c.d_addr, 0],
                 ]],
@@ -5750,14 +5766,14 @@ lst = [
             s_gfx(0x0031E1D0, 0x00326E40, 0x09, "a", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C000, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C000, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 24, "a%d"),
                 ]],
             ]),
             s_gfx(0x00326E40, 0x0032D070, 0x09, "b", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C800, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "b0"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "b1"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "b2"],
@@ -5781,7 +5797,7 @@ lst = [
             s_gfx(0x0032D070, 0x00334B30, 0x09, "c", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900B800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900B800, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 12, "c%d", 0),
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "c12"],
                     d_texture_n("rgba16", 32, 32, 21, "c%d", 13),
@@ -5791,7 +5807,7 @@ lst = [
             s_gfx(0x00334B30, 0x0033D710, 0x09, "d", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C800, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "d0"],
                     d_texture_n("rgba16", 64, 32, 6, "d%d", 1),
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "d6"],
@@ -5808,7 +5824,7 @@ lst = [
             s_gfx(0x0033D710, 0x00341140, 0x09, "e", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x09008800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x09008800, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 4, "e%d"),
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "e4"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "e5"],
@@ -5823,7 +5839,7 @@ lst = [
             s_gfx(0x00341140, 0x00347A50, 0x09, "f", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900A000, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900A000, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "f0"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "f1"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "f2"],
@@ -5838,7 +5854,7 @@ lst = [
             s_gfx(0x00347A50, 0x0034E760, 0x09, "g", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C800, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "g0"],
                     d_texture_n("rgba16", 32, 32, 6, "g%d", 1),
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "g6"],
@@ -5858,7 +5874,7 @@ lst = [
             s_gfx(0x0034E760, 0x00351960, 0x09, "h", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x09008C00, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x09008C00, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "h0"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "h1_l6"],
                     d_texture_n("rgba16", 32, 32, 8, "h%d", 2),
@@ -5872,7 +5888,7 @@ lst = [
             s_gfx(0x00351960, 0x00357350, 0x09, "i", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C800, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "i0"],
                     [0, 1, 1, c.d_texture, "rgba16", 64, 32, "i1"],
                     d_texture_n("rgba16", 32, 32, 16, "i%d", 2),
@@ -5885,7 +5901,7 @@ lst = [
             s_gfx(0x00357350, 0x0035ED10, 0x09, "j", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C000, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C000, "E00.szp", [
                     d_texture_n("rgba16", 32, 32, 12, "j%d"),
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "e8_j12"],
                     d_texture_n("rgba16", 32, 32, 22, "j%d", 13),
@@ -5896,7 +5912,7 @@ lst = [
             s_gfx(0x0035ED10, 0x00365980, 0x09, "k", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C400, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C400, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "k0"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 32, "k1"],
                     [0, 1, 1, c.d_texture, "rgba16", 64, 32, "k2"],
@@ -5911,7 +5927,7 @@ lst = [
             s_gfx(0x00365980, 0x0036F530, 0x09, "l", [
                 s_include(["sm64/types"]),
                 [main.s_str, "\n"],
-                [ultra.c.s_data, 0x09000000, 0x0900C800, "E0.szp", [
+                [ultra.c.s_data, 0x09000000, 0x0900C800, "E00.szp", [
                     [0, 1, 1, c.d_texture, "rgba16", 64, 32, "l0"],
                     [0, 1, 1, c.d_texture, "rgba16", 64, 32, "l1"],
                     [0, 1, 1, c.d_texture, "rgba16", 32, 64, "l2"],
@@ -5972,34 +5988,34 @@ lst = [
         [main.s_addr, 0-0x004EC000],
         [main.s_file, "anime.sx"],
             s_include([
-                "sm64/mem",
+                "sm64/memory",
                 "sm64/shape",
             ]),
             [main.s_str, str_anime],
-            [asm.s_anime, 0x0008DC18, "E0", "anime", (table.stbl_anime, table.ctbl_anime)],
+            [asm.s_anime, 0x0008DC18, "E00", "anime", (table.stbl_anime, table.ctbl_anime)],
         [main.s_write],
         [main.s_addr, 0-0x00579C20],
         [main.s_file, "demo.sx"],
             s_include([
                 "sm64/game",
-                "sm64/mem",
+                "sm64/memory",
             ]),
             [main.s_str, str_demo],
-            [asm.s_demo, 0x00001B00, "E0", "demo", (table.stbl_demo, table.ctbl_demo)],
+            [asm.s_demo, 0x00001B00, "E00", "demo", (table.stbl_demo, table.ctbl_demo)],
         [main.s_write],
         [main.s_addr, 0],
         [main.s_dir, "audio"],
             [main.s_file, "se.ins"],
-                [asm.s_audio_ctltbl, 0x0057B720, 0x00593560, "E0", table.ctlname_se, table.tblname_se],
+                [asm.s_audio_ctltbl, 0x0057B720, 0x00593560, "E00", table.ctlname_se, table.tblname_se],
             [main.s_write],
             [main.s_file, "music.ins"],
-                [asm.s_audio_ctltbl, 0x0057B720, 0x00593560, "E0", table.ctlname_music, table.tblname_music],
+                [asm.s_audio_ctltbl, 0x0057B720, 0x00593560, "E00", table.ctlname_music, table.tblname_music],
             [main.s_write],
             [main.s_file, "se.sbk"],
-                [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", table.seqname_se, ["se"]],
+                [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E00", table.seqname_se, ["se"]],
             [main.s_write],
             [main.s_file, "music.sbk"],
-                [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E0", table.seqname_music, ["music"]],
+                [asm.s_audio_seqbnk, 0x007B0860, 0x007CC620, "E00", table.seqname_music, ["music"]],
             [main.s_write],
         [main.s_pop],
     [main.s_pop],

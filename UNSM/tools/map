@@ -56,7 +56,7 @@ def main(argv):
             ])
             for face in obj
         ])
-    data += "M_FACEEND,\n"
+    data += "M_PLANEEND,\n"
     with open(path + ".h", "w") as f: f.write(data)
     return 0
 

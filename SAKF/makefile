@@ -1,4 +1,4 @@
-VERSION ?= J0
+VERSION ?= J00
 BUILD   := build/$(VERSION)
 
 OBJ := \
@@ -29,21 +29,16 @@ clean:
 	rm -f -r build $(TOOLS_OBJ)
 
 $(BUILD)/%.sfc: make/main.ld $(OBJ) tools/mask
+	@mkdir -p $(dir $@)
 	$(LD) -m $(@:.sfc=.map) -o $@ -C make/main.ld $(OBJ)
 	tools/mask $@
 
 -include $(OBJ:.o=.d)
 
 $(BUILD)/%.o: %.s | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(AS) $(ASFLAG) -o $@ $<
 
 $(TOOLS_OBJ):
 tools/%: tools/%.c
 	cc -O2 -Wall -Wextra -Wpedantic -s -o $@ $<
-
-dirs = $(foreach d,$(wildcard $1*),$(call dirs,$d/,$2) $(filter $(subst *,%,$2),$d))
-obj = $(call dirs,src/,$1)
-BUILD_OBJ := $(call obj,*.s)
-$(foreach f,$(BUILD_OBJ),$(eval $f: | $(addprefix $(BUILD)/,$(dir $f))))
-$(sort $(addprefix $(BUILD)/,$(dir $(BUILD_OBJ)))):
-	mkdir -p $@

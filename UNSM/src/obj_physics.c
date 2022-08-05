@@ -12,8 +12,8 @@ OBJECT *obj_ground = NULL;
 
 void obj_physics_802C89F0(void)
 {
-    MAP_FACE *ground;
-    unused OBJECT *obj;
+    MAP_PLANE *ground;
+    UNUSED OBJECT *obj;
     float x;
     float y;
     float z;
@@ -69,10 +69,10 @@ void obj_physics_802C8BC8(int ismario, OBJECT *obj)
     float gx;
     float gy;
     float gz;
-    vecf pos;
-    vecf off;
-    vecf new;
-    vecs rot;
+    VECF pos;
+    VECF off;
+    VECF new;
+    VECS rot;
     rot[0] = obj->o_rot_vel_x;
     rot[1] = obj->o_rot_vel_y;
     rot[2] = obj->o_rot_vel_z;
@@ -91,10 +91,10 @@ void obj_physics_802C8BC8(int ismario, OBJECT *obj)
     pz += obj->o_vel_z;
     if (rot[0] != 0 || rot[1] != 0 || rot[2] != 0)
     {
-        unused SHORT rx = rot[0];
-        unused SHORT rz = rot[2];
-        unused SHORT ry = obj->o_shape_rot_y;
-        mtxf mf;
+        UNUSED SHORT rx = rot[0];
+        UNUSED SHORT rz = rot[2];
+        UNUSED SHORT ry = obj->o_shape_rot_y;
+        MTXF mf;
         if (ismario) player_data[0].rot[1] += rot[1];
         gx = obj->o_pos_x;
         gy = obj->o_pos_y;
