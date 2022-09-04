@@ -1,4 +1,5 @@
 VERSION ?= J00
+
 BUILD   := build/$(VERSION)
 
 OBJ := \
@@ -15,11 +16,15 @@ REGION  := $(subst J,0,$(REGION))
 REGION  := $(subst E,1,$(REGION))
 REGION  := $(subst P,2,$(REGION))
 
-AS      := ca65
-LD      := ld65
 FLAG    := -Iinclude -I$(BUILD)
 FLAG    += -DVERSION_$(VERSION) -DREGION=$(REGION) -DREVISION=$(REVISION)
-ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
+
+CC      := gcc
+CCFLAG  := -O2 -Wall -Wextra -Wpedantic
+
+SFC_AS      := ca65
+SFC_LD      := ld65
+SFC_ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
 
 .PHONY: default
 default: $(BUILD)/app.sfc
@@ -30,15 +35,15 @@ clean:
 
 $(BUILD)/%.sfc: make/main.ld $(OBJ) tools/mask
 	@mkdir -p $(dir $@)
-	$(LD) -m $(@:.sfc=.map) -o $@ -C make/main.ld $(OBJ)
+	$(SFC_LD) -m $(@:.sfc=.map) -o $@ -C make/main.ld $(OBJ)
 	tools/mask $@
 
 -include $(OBJ:.o=.d)
 
-$(BUILD)/%.o: %.s | $(BUILD_DIR)
+$(BUILD)/%.o: %.s
 	@mkdir -p $(dir $@)
-	$(AS) $(ASFLAG) -o $@ $<
+	$(SFC_AS) $(SFC_ASFLAG) -o $@ $<
 
 $(TOOLS_OBJ):
 tools/%: tools/%.c
-	cc -O2 -Wall -Wextra -Wpedantic -s -o $@ $<
+	$(CC) $(CCFLAG) -s -o $@ $<

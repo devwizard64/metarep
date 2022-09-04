@@ -4788,11 +4788,11 @@ sym_E00_t_code = {
 
     # src/save.c
     0x80279160: table.sym_fnc("save_init_debug"),
-    0x80279174: table.sym_fnc("save_read", "int", (
+    0x80279174: table.sym_fnc("save_rd", "int", (
         "void *data",
         "int size",
     )),
-    0x80279218: table.sym_fnc("save_write", "int", (
+    0x80279218: table.sym_fnc("save_wr", "int", (
         "const void *data",
         "int size",
     )),
@@ -11921,7 +11921,7 @@ sym_E00_d_code = {
 
     # src/buffer.c
     0x80200200: table.sym_var("stack_entry",    "u64", "[0x400/8]",     table.GLOBL|ultra.BALIGN),
-    0x80200600: table.sym_var("stack_idle",     "u64", "[0x800/8",      table.GLOBL|ultra.BALIGN),
+    0x80200600: table.sym_var("stack_idle",     "u64", "[0x800/8]",      table.GLOBL|ultra.BALIGN),
     0x80200E00: table.sym_var("stack_sc",       "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
     0x80202E00: table.sym_var("stack_audio",    "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
     0x80204E00: table.sym_var("stack_app",      "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),

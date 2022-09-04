@@ -23,7 +23,8 @@ def fmt(self, lst):
         if len(line) > 1 or line[-1].endswith(",") or line[-1].startswith("#"):
             f.append("\n\n%s\n{\n" % sym.fmt(start, " ="))
             for ln in line:
-                f.append(("%s\n" if ln.startswith("#") else "\t%s\n") % ln)
+                x = ln.lstrip("\t")
+                f.append("%s\n" % x if x.startswith("#") else "\t%s\n" % ln)
             f.append("};\n\n")
         else:
             if "\n" in line[0]: f.append("\n")

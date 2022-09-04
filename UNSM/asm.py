@@ -926,6 +926,7 @@ def s_demo(self, argv):
         file_e(self, line, etbl)
 
 def pstr(s):
+    if not len(s) & 1: s += B"\0"
     return struct.pack(">B", len(s)) + s
 
 def iff_chunk(code, data):

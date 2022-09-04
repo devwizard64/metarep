@@ -112,28 +112,32 @@ TOOLS_OBJ := tools/mask tools/slienc tools/texture
 $(eval REVISION := $$$(VERSION))
 REGION  := $(subst $(REVISION),,$(VERSION))
 
-HOST    := mips-linux-gnu
 DONOR   := donor
 
 ULTRA   := ultra
 RES != $(MAKE) -C $(ULTRA)
 
-CC      := $(HOST)-gcc
-LD      := $(HOST)-ld
-CPP     := $(HOST)-cpp
-OBJCOPY := $(HOST)-objcopy
-NM      := $(HOST)-nm
-ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -I$(ULTRA)/include -Iinclude -I. -D_ULTRA64
-FLAG    += -DVERSION_$(VERSION) -DREGION=\'$(REGION)\' -DREVISION=$(REVISION)
+FLAG    += -DVERSION_$(VERSION) -DREGION=\'$(REGION)\' -DREVISION=0x$(REVISION)
 FLAG    += -DBUILD=$(BUILD)
-OPT     := -Os
-WARN    := -Wall -Wextra -Werror=implicit-function-declaration
-CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
-CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
-CCFLAG  += $(FLAG) $(OPT) $(WARN)
-ASFLAG  := $(ARCH) $(FLAG) -Wno-variadic-macros
-CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
+
+CC          := gcc
+CCFLAG      := -O2 -Wall -Wextra -Wpedantic
+
+U64_HOST    := mips-linux-gnu
+U64_CC      := $(U64_HOST)-gcc
+U64_LD      := $(U64_HOST)-ld
+U64_CPP     := $(U64_HOST)-cpp
+U64_OBJCOPY := $(U64_HOST)-objcopy
+U64_NM      := $(U64_HOST)-nm
+U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
+U64_OPT     := -Os
+U64_WARN    := -Wall -Wextra -Werror=implicit-function-declaration
+U64_CCFLAG  := $(U64_ARCH) -mno-check-zero-division -ffreestanding
+U64_CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
+U64_CCFLAG  += $(FLAG) $(U64_OPT) $(U64_WARN)
+U64_ASFLAG  := $(U64_ARCH) $(FLAG) -Wno-variadic-macros
+U64_CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
 
 IDO_CC      := $(IDO)/bin/cc
 IDO_OPT     := -g
@@ -141,7 +145,7 @@ IDO_WARN    := -fullwarn -prototypes
 IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
 IDO_CCFLAG  += -I$(IDO)/include $(FLAG) $(IDO_OPT) $(IDO_WARN)
 
-OBJ := $(shell $(CPP) $(CPPFLAG) -P make/obj.mk)
+OBJ := $(shell $(U64_CPP) $(U64_CPPFLAG) -P make/obj.mk)
 OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
 
 .PHONY: default
@@ -158,34 +162,34 @@ $(BUILD)/app.bps: $(BUILD)/app.z64
 	flips $(DONOR)/UNSM$(VERSION).z64 $< $@
 
 $(BUILD)/app.z64: $(BUILD)/app.elf tools/mask
-	$(OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
+	$(U64_OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
 	tools/mask $@ NSM$(VERSION) "$(LABEL)"
 
 $(BUILD)/app.elf: $(OBJ)
 $(BUILD)/%.elf: $(BUILD)/make/%.ld
 	@mkdir -p $(dir $@)
-	$(LD) -Map $(@:.elf=.map) -o $@ -T $<
+	$(U64_LD) -Map $(@:.elf=.map) -o $@ -T $<
 
 -include $(BUILD)/make/app.d
 -include $(BUILD)/make/segment.d
 $(BUILD)/make/app.ld:
 $(BUILD)/make/%: make/%
 	@mkdir -p $(dir $@)
-	$(CPP) $(CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
+	$(U64_CPP) $(U64_CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
 
 include $(addsuffix .d,$(basename $(OBJ) $(CODE_OBJ) $(LIB_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)))
 
 $(BUILD)/code.o: make/rel.ld $(CODE_OBJ) $(AUDIO_OBJ)
 	@mkdir -p $(dir $@)
-	$(LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
+	$(U64_LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
 
 $(BUILD)/lib.o: make/rel.ld $(LIB_OBJ)
 	@mkdir -p $(dir $@)
-	$(LD) -r -o $@ -T $^
+	$(U64_LD) -r -o $@ -T $^
 
 $(BUILD)/face.o: make/rel.ld $(FACE_OBJ)
 	@mkdir -p $(dir $@)
-	$(LD) -r -o $@ -T $^
+	$(U64_LD) -r -o $@ -T $^
 
 $(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
 	@mkdir -p $(dir $@)
@@ -194,52 +198,51 @@ $(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
 $(BUILD)/%.o: %.asm
 	@mkdir -p $(dir $@)
 	armips -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(CC) $(ASFLAG) -c -o $@ $(<:.asm=.s)
+	$(U64_CC) $(U64_ASFLAG) -c -o $@ $(<:.asm=.s)
 $(BUILD)/%.d: %.asm
 	@mkdir -p $(dir $@)
 	@echo $(@:.d=.o): $< > $@
 
 $(BUILD)/%.o: %.s
 	@mkdir -p $(dir $@)
-	$(CC) $(ASFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
 $(BUILD)/%.d: %.s
 	@mkdir -p $(dir $@)
 	@echo $(@:.d=.o): $< > $@
 
 $(BUILD)/%.o: %.sx
 	@mkdir -p $(dir $@)
-	$(CC) $(ASFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
 $(BUILD)/%.d: %.sx
 	@mkdir -p $(dir $@)
-	$(CC) $(ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(U64_CC) $(U64_ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(BUILD)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CCFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_CCFLAG) -c -o $@ $<
 $(BUILD)/%.d: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(U64_CC) $(U64_CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
 
 $(IDO_OBJ): $(BUILD)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(IDO_CC) $(IDO_CCFLAG) -c -o $@ $<
 
 $(BUILD)/%.o: $(BUILD)/%.s
-	@mkdir -p $(dir $@)
-	$(CC) $(ASFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
 
 include $(BUILD)/make/segment.mk
 $(BUILD)/%.szp.h: $(BUILD)/%.szp.s;
 $(BUILD)/%.szp.s: %.c make/szp.ld tools/slienc
 	@mkdir -p $(dir $@)
-	$(CC) $(CCFLAG) -c -o $(@:.szp.s=.o) $<
-	$(LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.s=.elf) $(@:.szp.s=.o)
-	$(OBJCOPY) -O binary $(@:.szp.s=.elf) $(@:.szp.s=.bin)
-	$(NM) -f posix $(@:.szp.s=.elf) > $(@:.szp.s=.sym)
+	$(U64_CC) $(U64_CCFLAG) -c -o $(@:.szp.s=.o) $<
+	$(U64_LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.s=.elf) $(@:.szp.s=.o)
+	$(U64_OBJCOPY) -O binary $(@:.szp.s=.elf) $(@:.szp.s=.bin)
+	$(U64_NM) -f posix $(@:.szp.s=.elf) > $(@:.szp.s=.sym)
 	tools/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $(@:.szp.s=.bin) $(@:.szp.s=.sym)
 $(BUILD)/%.szp.d: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $<
+	$(U64_CC) $(U64_CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $<
 
 $(BUILD)/%.szp.s: %.bin tools/slienc
 	@mkdir -p $(dir $@)
@@ -296,7 +299,7 @@ $(BUILD)/data/%.o: data/%.bin
 
 $(TOOLS_OBJ):
 tools/%: tools/%.c
-	cc -O2 -Wall -Wextra -Wpedantic -s -o $@ $<
+	$(CC) $(CCFLAG) -s -o $@ $<
 
 print-%:
 	$(info $* = $(flavor $*): [$($*)]) @true

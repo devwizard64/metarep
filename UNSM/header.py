@@ -427,7 +427,7 @@ str_save_g = """
 str_save_c = """
 #define stage_to_course(stage)  course_table[(stage)-1]
 
-#define save_file_star_total(file)  save_file_star_range(file, 1, 15)
+#define save_file_star_total(file)  save_file_star_range(file, 0, 24)
 
 #define save_write()                save_file_write(save_index-1)
 #define save_erase()                save_file_erase(save_index-1)
