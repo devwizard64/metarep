@@ -1,6 +1,7 @@
 .rsp
 
 .half equ .halfword
+.asciz equ .asciiz
 
 .macro .base, addr
     .headersize (addr) - orga()

@@ -880,7 +880,7 @@ def s_struct_lst(f, tab, fmt, lst):
             f.append(t+"}\n" + t+name+end+";\n")
         else:
             sym = x[1]
-            f.append(sym.fmt(start, ";", 8) + "\n")
+            f.append(sym.fmt(start, ";") + "\n")
 
 def s_struct(self, argv):
     tbl, = argv

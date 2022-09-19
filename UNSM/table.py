@@ -9416,50 +9416,50 @@ dev_E00_t_code = {
 
 imm_E00_t_code = {
     # src/memory.s
-    0x80278074: (fmt_mask,),
-    0x80278078: (fmt_mask,),
-    0x8027808C: (fmt_mask,),
-    0x80278128: (fmt_mask,),
-    0x8027812C: (fmt_mask,),
-    0x802783A0: (fmt_mem_alloc,),
-    0x80278428: (fmt_mem_alloc,),
-    0x80278520: (fmt_mask,),
-    0x80278528: (fmt_mask,),
-    0x8027858C: (ultra.fmt_os_mesg_pri,),
-    0x80278590: (ultra.fmt_os_readwrite,),
-    0x802785B8: (ultra.fmt_os_mesg_flag,),
-    0x8027862C: (fmt_mask,),
-    0x80278634: (fmt_mask,),
-    0x80278710: (fmt_mask,),
-    0x80278718: (fmt_mask,),
-    0x80278730: (fmt_mask,),
-    0x80278738: (fmt_mask,),
-    0x80278760: (fmt_mem_alloc,),
-    0x802787F8: (fmt_mask,),
-    0x80278800: (fmt_mask,),
-    0x80278814: (fmt_mem_alloc,),
-    0x80278848: (fmt_mem_alloc,),
-    0x802788D4: (fmt_mask,),
-    0x802788DC: (fmt_mask,),
-    0x802788F0: (fmt_mem_alloc,),
-    0x80278980: ("SEGMENT_LIB",),
-    0x8027898C: ("SEGMENT_CIMG - SEGMENT_LIB",),
-    0x802789A8: (fmt_mask,),
-    0x802789AC: (fmt_mask,),
-    0x80278A2C: (fmt_mask,),
-    0x80278A30: (fmt_mask,),
-    0x80278AC0: (fmt_mask,),
-    0x80278AC4: (fmt_mask,),
-    0x80278B3C: (fmt_mask,),
-    0x80278B40: (fmt_mask,),
-    0x80278BB0: (fmt_mask,),
-    0x80278BB4: (fmt_mask,),
-    0x80278C68: (fmt_mask,),
-    0x80278C6C: (fmt_mask,),
-    0x80278F34: (fmt_mask,),
-    0x80278F38: (fmt_mask,),
-    0x80278FB0: (fmt_mem_alloc,),
-    0x80278FE8: (fmt_mem_alloc,),
+    # 0x80278074: (fmt_mask,),
+    # 0x80278078: (fmt_mask,),
+    # 0x8027808C: (fmt_mask,),
+    # 0x80278128: (fmt_mask,),
+    # 0x8027812C: (fmt_mask,),
+    # 0x802783A0: (fmt_mem_alloc,),
+    # 0x80278428: (fmt_mem_alloc,),
+    # 0x80278520: (fmt_mask,),
+    # 0x80278528: (fmt_mask,),
+    # 0x8027858C: (ultra.fmt_os_mesg_pri,),
+    # 0x80278590: (ultra.fmt_os_readwrite,),
+    # 0x802785B8: (ultra.fmt_os_mesg_flag,),
+    # 0x8027862C: (fmt_mask,),
+    # 0x80278634: (fmt_mask,),
+    # 0x80278710: (fmt_mask,),
+    # 0x80278718: (fmt_mask,),
+    # 0x80278730: (fmt_mask,),
+    # 0x80278738: (fmt_mask,),
+    # 0x80278760: (fmt_mem_alloc,),
+    # 0x802787F8: (fmt_mask,),
+    # 0x80278800: (fmt_mask,),
+    # 0x80278814: (fmt_mem_alloc,),
+    # 0x80278848: (fmt_mem_alloc,),
+    # 0x802788D4: (fmt_mask,),
+    # 0x802788DC: (fmt_mask,),
+    # 0x802788F0: (fmt_mem_alloc,),
+    # 0x80278980: ("SEGMENT_LIB",),
+    # 0x8027898C: ("SEGMENT_CIMG - SEGMENT_LIB",),
+    # 0x802789A8: (fmt_mask,),
+    # 0x802789AC: (fmt_mask,),
+    # 0x80278A2C: (fmt_mask,),
+    # 0x80278A30: (fmt_mask,),
+    # 0x80278AC0: (fmt_mask,),
+    # 0x80278AC4: (fmt_mask,),
+    # 0x80278B3C: (fmt_mask,),
+    # 0x80278B40: (fmt_mask,),
+    # 0x80278BB0: (fmt_mask,),
+    # 0x80278BB4: (fmt_mask,),
+    # 0x80278C68: (fmt_mask,),
+    # 0x80278C6C: (fmt_mask,),
+    # 0x80278F34: (fmt_mask,),
+    # 0x80278F38: (fmt_mask,),
+    # 0x80278FB0: (fmt_mem_alloc,),
+    # 0x80278FE8: (fmt_mem_alloc,),
 }
 
 sym_E00_d_code = {
@@ -11593,7 +11593,7 @@ sym_E00_d_code = {
     0x8033B3B0: table.sym_var("pl_shape_data",  "PL_SHAPE", "[2]", table.GLOBL|ultra.BALIGN),
 
     # src/memory.c
-    0x8033B400: table.sym_var("segment_table",  "uintptr_t", "[NUM_SEGMENTS+16]", table.GLOBL|ultra.BALIGN),
+    0x8033B400: table.sym_var("segment_table",  "uintptr_t", "[32]", table.GLOBL|ultra.BALIGN),
     0x8033B480: table.sym_var("mem_size",       "size_t",   flag=table.GLOBL),
     0x8033B484: table.sym_var("mem_start",      "char *",   flag=table.GLOBL),
     0x8033B488: table.sym_var("mem_end",        "char *",   flag=table.GLOBL),
@@ -12631,11 +12631,30 @@ sym_E00_t_menu = {
     ), table.GLOBL), # p callback
 
     # src/title_bg.c
-    0x8016F670: table.sym("s_logo_shape", table.GLOBL), # s callback
-    0x8016F984: table.sym("s_logo_text", table.GLOBL), # s callback
-    0x8016FBB0: table.sym("title_bg_8016FBB0"),
-    0x8016FE70: table.sym("s_title_bg", table.GLOBL), # s callback
-    0x8016FFFC: table.sym("s_gameover_bg", table.GLOBL), # s callback
+    0x8016F670: table.sym_fnc("s_logo_shape", "void *", (
+        "int code",
+        "SHAPE *shape",
+        "void *data",
+    ), table.GLOBL), # s callback
+    0x8016F984: table.sym_fnc("s_logo_symbol", "void *", (
+        "int code",
+        "SHAPE *shape",
+        "void *data",
+    ), table.GLOBL), # s callback
+    0x8016FBB0: table.sym_fnc("title_bg_tile", "Gfx *", (
+        "int index",
+        "s8 *bg",
+    )),
+    0x8016FE70: table.sym_fnc("s_title_bg", "void *", (
+        "int code",
+        "SHAPE *shape",
+        "void *data",
+    ), table.GLOBL), # s callback
+    0x8016FFFC: table.sym_fnc("s_gameover_bg", "void *", (
+        "int code",
+        "SHAPE *shape",
+        "void *data",
+    ), table.GLOBL), # s callback
 
     # src/file_select.c
     0x80170280: table.sym("file_select_80170280", table.GLOBL), # o callback
@@ -14166,14 +14185,14 @@ sym_E00_d_menu = {
 
     # data
     # src/title_bg.c
-    0x801A7C70: table.sym_var("gfx_title_bg",       "Gfx *", "[]",  table.GLOBL),
-    0x801A7C80: table.sym_var("title_bg_x",         "f32", "[]",    table.GLOBL),
-    0x801A7CB0: table.sym_var("title_bg_y",         "f32", "[]",    table.GLOBL),
-    0x801A7CE0: table.sym_var("txt_title_bg",       "u16 **", "[]", table.GLOBL),
+    0x801A7C70: table.sym_var("gfx_title_bg",       "Gfx *", "[]"),
+    0x801A7C80: table.sym_var("title_bg_x",         "f32", "[]"),
+    0x801A7CB0: table.sym_var("title_bg_y",         "f32", "[]"),
+    0x801A7CE0: table.sym_var("txt_title_bg",       "u16 **", "[]"),
     0x801A7CE8: table.sym_var("title_bg_mario",     "static s8", "[]"),
-    0x801A7CF4: table.sym_var("title_bg_table",     "s8 *", "[]",   table.GLOBL),
-    0x801A7CF8: table.sym_var("title_bg_gameover",  "s8", "[]", table.GLOBL),
-    0x801A7D04: table.sym_var("title_bg_flip",      "s8", "[]", table.GLOBL),
+    0x801A7CF4: table.sym_var("title_bg_table",     "s8 *", "[]"),
+    0x801A7CF8: table.sym_var("title_bg_gameover",  "s8", "[]"),
+    0x801A7D04: table.sym_var("title_bg_flip",      "s8", "[]"),
 
     # data
     # src/file_select.c
@@ -14296,10 +14315,10 @@ sym_E00_d_menu = {
     # ==========================================================================
 
     # src/title_bg.c
-    0x801B99E0: table.sym_var("title_bg_801B99E0",  "u32",   flag=table.GLOBL),
-    0x801B99E4: table.sym_var("title_bg_801B99E4",  "s32",   flag=table.GLOBL),
-    0x801B99E8: table.sym_var("title_bg_801B99E8",  "s16",   flag=table.GLOBL),
-    0x801B99EC: table.sym_var("title_bg_801B99EC",  "s32",   flag=table.GLOBL),
+    0x801B99E0: table.sym_var("title_bg_timer", "s32", flag=table.GLOBL),
+    0x801B99E4: table.sym_var("title_bg_count", "s32", flag=table.GLOBL),
+    0x801B99E8: table.sym_var("title_bg_frame", "s16", flag=table.GLOBL),
+    0x801B99EC: table.sym_var("title_bg_alpha", "s32", flag=table.GLOBL),
 
     # src/file_select.c
     0x801B99F0: table.sym_var("file_select_801B99F0",   "s16",  flag=table.GLOBL),
@@ -17131,8 +17150,8 @@ sym_E00_m_logo = {
     0x0700B4A0: table.sym_var("txt_logo_copyright", "static u16", "[]"),
     0x0700C4A0: table.sym_var("txt_logo_trademark", "static u16", "[]"),
     0x0700C6A0: table.sym_var("gfx_logo_symbol",    "Gfx", "[]"),
-    0x0700C790: table.sym_var("vecf_logo_a",        "VECF", "[]"),
-    0x0700C880: table.sym_var("vecf_logo_b",        "VECF", "[]"),
+    0x0700C790: table.sym_var("logo_scale_a",       "f32", "[]"),
+    0x0700C880: table.sym_var("logo_scale_b",       "f32", "[]"),
 }
 
 sym_E00_m_debug = {

@@ -102,7 +102,8 @@ IDO_OBJ := \
 	$(BUILD)/src/obj_sfx.o          \
 	$(BUILD)/src/dprint.o           \
 	$(BUILD)/src/obj_data.o         \
-	$(BUILD)/src/title.o
+	$(BUILD)/src/title.o            \
+	$(BUILD)/src/title_bg.o
 
 INS_SRC := data/audio/se.ins data/audio/music.ins
 SBK_SRC := data/audio/se.sbk data/audio/music.sbk

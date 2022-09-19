@@ -1108,21 +1108,19 @@ ultra_src_PR = [
             [main.s_addr, 0x00000000 - 0x000F4AC0],
             [ultra.asm.s_data, 0x00000000, 0x00000800, "E00", [
                 [ 5, 1, asm.d_prg],
-                [ 1, 2, ultra.asm.d_shalf], # VCONST_SCREENCLAMP
-                [ 1, 2, ultra.asm.d_uhalf, "0x%04X"],
+                [ 1, 4, ultra.asm.d_shalf],
                 [ 1, 1, ultra.asm.d_align, 16],
-                [ 1, 4, ultra.asm.d_shalf], # VCONST_OFFSET
-                [ 1, 4, ultra.asm.d_uhalf, "0x%04X"],
-                [ 1, 8, ultra.asm.d_uhalf, "0x%04X"], # VCONST1_OFFSET
-                [ 1, 8, ultra.asm.d_shalf], # VOPENGL_OFFSET
-                [ 1, 8, ultra.asm.d_shalf], # VNEWT_OFFSET
-                [12, 1, ultra.asm.d_uword, "0x%08X"], # CLIP_SELECT
+                [ 1, 8, ultra.asm.d_shalf],
+                [ 1, 8, ultra.asm.d_uhalf, "0x%04X"],
+                [ 1, 8, ultra.asm.d_shalf],
+                [ 1, 8, ultra.asm.d_shalf],
+                [ 3, 8, ultra.asm.d_shalf], # clipping
                 [ 1, 1, ultra.asm.d_addr], # vtx_light
-                [ 3, 1, ultra.asm.d_uhalf, "0x%04X"], # arccos
-                [ 1, 6, ultra.asm.d_uhalf, "0x%04X"], # CLIPMASKS
-                [ 1, 1, ultra.asm.d_shalf], # ANCHOR
+                [ 1, 3, ultra.asm.d_uhalf, "0x%04X"], # arccos
+                [ 1, 6, ultra.asm.d_uhalf, "0x%04X"],
+                [ 1, 1, ultra.asm.d_shalf],
                 [ 1, 1, ultra.asm.d_addr], # exit
-                [ 1, 1, ultra.asm.d_uword, "0x%08X"], # SEGADDR_MASK_OFFSET
+                [ 1, 1, ultra.asm.d_uword, "0x%X"], # segment mask
                 [ 4, 1, ultra.asm.d_addr], # cmd type
                 [10, 1, ultra.asm.d_addr], # cmd DMA
                 [15, 1, ultra.asm.d_addr], # cmd IMM
@@ -1131,7 +1129,7 @@ ultra_src_PR = [
                 [ 1, 1, ultra.asm.d_uhalf], # return
                 [ 1, 1, ultra.asm.d_uword], # yield
                 [ 1, 1, ultra.asm.d_uword], # rdphalf
-                [ 1, 1, ultra.asm.d_align, 8], # STATE
+                [ 1, 1, ultra.asm.d_align, 8], # state
                 [ 1, 1, ultra.asm.d_ubyte], # dl no
                 [ 1, 1, ultra.asm.d_align, 2],
                 [ 1, 1, ultra.asm.d_uhalf, "0x%04X"], # perspnorm
@@ -1144,14 +1142,59 @@ ultra_src_PR = [
                 [ 1, 1, ultra.asm.d_uword], # output
                 [ 1, 1, ultra.asm.d_uword, "0x%08X"], # light no
                 [ 2, 1, ultra.asm.d_uword], # stack
-                # 138
-                [(0x360-0x138)//8, 2, ultra.asm.d_uword, "0x%08X"],
+                [ 2, 1, ultra.asm.d_uhalf, "0x%04X"],
+                [ 2, 1, ultra.asm.d_shalf],
+                [ 1, 1, ultra.asm.d_uword], # output
+                [ 4, 1, ultra.asm.d_shalf],
+                [ 1, 1, ultra.asm.d_align, 8],
+                [ 1, 1, ultra.asm.d_uword], # output len
+                [ 1, 1, ultra.asm.d_uword],
+                [ 1, 1, ultra.asm.d_uhalf], # return
+                [ 1, 1, ultra.asm.d_align, 4],
+                [ 1, 1, ultra.asm.d_uword], # stack
+                [16, 1, ultra.asm.d_uword], # segment table
+                [ 1, 1, ultra.asm.d_align, 16],
+                [ 1, 4, ultra.asm.d_uhalf, "0x%04X"], # select S
+                [ 1, 2, ultra.asm.d_uword],
+                # lights
+                # LOOKATX
+                [ 1, 4, ultra.asm.d_uhalf, "0x%04X"], # select T
+                [ 1, 4, ultra.asm.d_sbyte], # direction
+                [ 1, 1, ultra.asm.d_uword],
+                [ 1, 8, ultra.asm.d_sbyte], # direction
+                [ 1, 2, ultra.asm.d_uword],
+                # LOOKATY
+                [ 1, 2, ultra.asm.d_uword],
+                [ 1, 4, ultra.asm.d_sbyte], # direction
+                [ 1, 1, ultra.asm.d_uword],
+                [ 1, 8, ultra.asm.d_sbyte], # direction
+                [ 1, 2, ultra.asm.d_uword],
+                # L0
+                [ 1, 6, ultra.asm.d_uword],
+                [ 1, 4, ultra.asm.d_shalf], # VCONST3
+                # L1
+                [ 1, 2, ultra.asm.d_uword, "0x%08X"], # colour
+                [ 1, 6, ultra.asm.d_uword],
+                [ 1, 8, ultra.asm.d_uword], # L2
+                [ 1, 8, ultra.asm.d_uword], # L3
+                # L4-L7
+                [ 1, 30, "asciz"],
+                [ 1, 60, "ascii"],
+                [ 1, 31, "ascii"],
+                [ 1, 2, ultra.asm.d_ubyte],
+                [ 1, 1, ultra.asm.d_uword],
+                [15, 1, ultra.asm.d_uhalf, "0x%03X"], # movemem table
+                [ 7, 1, ultra.asm.d_uhalf, "0x%03X"], # movemem table
+                [ 1, 1, ultra.asm.d_align, 16],
+                [ 1, 8, ultra.asm.d_shalf], # viewport
+                [ 1, 3, ultra.asm.d_shalf], # fog
+                [ 1, 10, ultra.asm.d_uword], # DL stack
+                [ 1, 1, ultra.asm.d_align, 16],
             ]],
-            [main.s_str, "\n.align 8\ndata_end:\n"],
-            # bss
-            [main.s_str, "\n.org data_end\n"],
-            [main.s_str, ".if orga() < 0x800\n"],
-            [main.s_str, "    .fill 0x800-orga()\n"],
+            [main.s_str, "data_end:\n"],
+            [main.s_str, "\n"],
+            [main.s_str, ".if 0x800-orga() > 0\n"],
+            [main.s_str, ".fill 0x800-orga()\n"],
             [main.s_str, ".endif\n"],
             [main.s_str, str_ucode_close],
         [main.s_write],
@@ -1253,7 +1296,7 @@ include_lib = [
 
 include_menu = [
     s_header_code(0x8016F000, 0x8016F670, 0x801A7830, 0x801A7C3C,          0,          0, "title", ["sm64/types"], header.struct_title),
-    s_header_code(0x8016F670, 0x80170280, 0x801A7C70, 0x801A7D10, 0x801B99E0, 0x801B99F0, "title_bg", ["sm64/types"], header.struct_title_bg),
+    s_header_code(0x8016F670, 0x80170280, 0x801A7C70, 0x801A7D10, 0x801B99E0, 0x801B99F0, "title_bg", ["sm64/types", "sm64/shape"], header.struct_title_bg),
     s_header_code(0x80170280, 0x801768E0, 0x801A7D10, 0x801A7F3E, 0x801B99F0, 0x801B9A7A, "file_select", ["sm64/types", "sm64/object"], header.struct_file_select),
     s_header_code(0x801768E0, 0x80177710, 0x801A81A0, 0x801A81B6, 0x801B9A80, 0x801B9AA4, "star_select", ["sm64/types", "sm64/object"], header.struct_star_select),
 ]
@@ -1318,56 +1361,56 @@ src_buffer = [
 ]
 
 src_code = [
-    # s_code(0x80246050, 0x80246E68, "main", ["sm64/types", "sm64/segment"]),
-    # s_code(0x80246E70, 0x80248C3C, "app", ["sm64/types", "sm64/app"]),
+    # s_code(0x80246050, 0x80246E68, "main", ["sm64/types"]),
+    # s_code(0x80246E70, 0x80248C3C, "app", ["sm64/types"]),
     # s_code(0x80248C40, 0x802495DC, "audio", ["sm64/types"]),
-    s_code(0x802495E0, 0x8024BFE4, "game", ["sm64/types", "sm64/game", "sm64/wipe", "sm64/hud"]),
-    s_code(0x8024BFF0, 0x8025093C, "pl_collision", ["sm64/types", "sm64/pl_collision", "sm64/hud"]),
-    s_code(0x80250940, 0x8025507C, "player", ["sm64/types", "sm64/hud"]),
+    s_code(0x802495E0, 0x8024BFE4, "game", ["sm64/types"]),
+    s_code(0x8024BFF0, 0x8025093C, "pl_collision", ["sm64/types"]),
+    s_code(0x80250940, 0x8025507C, "player", ["sm64/types"]),
     s_code(0x80255080, 0x80256DFC, "pl_physics", ["sm64/types"]),
-    s_code(0x80256E00, 0x8025DD68, "pl_demo", ["sm64/types", "sm64/hud"]),
+    s_code(0x80256E00, 0x8025DD68, "pl_demo", ["sm64/types"]),
     s_code(0x8025DD70, 0x802608AC, "pl_hang", ["sm64/types"]),
     s_code(0x802608B0, 0x80263E5C, "pl_wait", ["sm64/types"]),
     s_code(0x80263E60, 0x80269F38, "pl_walk", ["sm64/types"], str_fp),
     s_code(0x80269F40, 0x80270104, "pl_jump", ["sm64/types"]),
     s_code(0x80270110, 0x80274EAC, "pl_swim", ["sm64/types"]),
     s_code(0x80274EB0, 0x802761D0, "pl_grab", ["sm64/types"]),
-    s_code(0x802761D0, 0x80277ED4, "pl_callback", ["sm64/types", "sm64/pl_callback", "sm64/object", "sm64/wipe"]),
-    # s_code(0x80277EE0, 0x80279158, "memory", ["sm64/types", "sm64/segment", "sm64/memory"]),
+    s_code(0x802761D0, 0x80277ED4, "pl_callback", ["sm64/types"]),
+    # s_code(0x80277EE0, 0x80279158, "memory", ["sm64/types"]),
     # s_code(0x80279160, 0x8027A7C4, "save", ["sm64/types"]),
-    # s_code(0x8027A7D0, 0x8027B6C0, "scene", ["sm64/types", "sm64/scene", "sm64/wipe", "sm64/shape"]),
+    # s_code(0x8027A7D0, 0x8027B6C0, "scene", ["sm64/types"]),
     # s_code(0x8027B6C0, 0x8027E3DC, "draw", ["sm64/types"]),
-    # s_code(0x8027E3E0, 0x8027F4D4, "time", ["sm64/types", "sm64/time"]),
+    # s_code(0x8027E3E0, 0x8027F4D4, "time", ["sm64/types"]),
     # s_code(0x8027F4E0, 0x8027F584, "slidec", ["sm64/types"]),
 
-    s_code(0x8027F590, 0x8029C764, "camera", ["sm64/types", "sm64/camera"]),
+    s_code(0x8027F590, 0x8029C764, "camera", ["sm64/types"]),
 
     # s_code(0x8029C770, 0x8029C780, "course", ["sm64/types"]),
-    s_code(0x8029C780, 0x8029D884, "object", ["sm64/types", "sm64/player", "sm64/object"], str_fp),
-    s_code(0x8029D890, 0x802A5618, "obj_lib", ["sm64/types", "sm64/object"], str_fp),
-    s_code(0x802A5620, 0x802C89F0, "object_a", ["sm64/types", "sm64/hud", "sm64/object", "sm64/obj_lib", "sm64/object_a"], str_fp),
+    s_code(0x8029C780, 0x8029D884, "object", ["sm64/types"], str_fp),
+    s_code(0x8029D890, 0x802A5618, "obj_lib", ["sm64/types"], str_fp),
+    s_code(0x802A5620, 0x802C89F0, "object_a", ["sm64/types"], str_fp),
     # s_code(0x802C89F0, 0x802C8F40, "obj_physics", ["sm64/types"]),
     s_code(0x802C8F40, 0x802C97C8, "obj_collision", ["sm64/types"]),
-    s_code(0x802C97D0, 0x802CA03C, "obj_list", ["sm64/types", "sm64/object"]),
+    s_code(0x802C97D0, 0x802CA03C, "obj_list", ["sm64/types"]),
     # s_code(0x802CA040, 0x802CA370, "obj_sfx", ["sm64/types"]),
-    s_code(0x802CA370, 0x802CB5B4, "obj_debug", ["sm64/types", "sm64/object"]),
+    s_code(0x802CA370, 0x802CB5B4, "obj_debug", ["sm64/types"]),
 
     s_code(0x802CB5C0, 0x802CD27C, "wipe", ["sm64/types"], str_fp),
-    s_code(0x802CD280, 0x802CF5A4, "shadow", ["sm64/types", "sm64/shadow"], str_fp),
-    s_code(0x802CF5B0, 0x802D007C, "background", ["sm64/types", "sm64/background"], str_fp),
-    s_code(0x802D0080, 0x802D2208, "scroll", ["sm64/types", "sm64/scroll"], str_fp),
-    s_code(0x802D2210, 0x802D29BC, "obj_shape", ["sm64/types", "sm64/hud"], str_fp),
+    s_code(0x802CD280, 0x802CF5A4, "shadow", ["sm64/types"], str_fp),
+    s_code(0x802CF5B0, 0x802D007C, "background", ["sm64/types"], str_fp),
+    s_code(0x802D0080, 0x802D2208, "scroll", ["sm64/types"], str_fp),
+    s_code(0x802D2210, 0x802D29BC, "obj_shape", ["sm64/types"], str_fp),
     s_code(0x802D29C0, 0x802D5E00, "ripple", ["sm64/types"], str_fp),
 
     # s_code(0x802D5E00, 0x802D6F18, "dprint", ["sm64/types"]),
-    s_code(0x802D6F20, 0x802DDDEC, "message", ["sm64/types", "sm64/hud"], str_fp),
+    s_code(0x802D6F20, 0x802DDDEC, "message", ["sm64/types"], str_fp),
     s_code(0x802DDDF0, 0x802DFD50, "weather_snow", ["sm64/types"]),
     s_code(0x802DFD50, 0x802E2094, "weather_lava", ["sm64/types"]),
-    # s_code(0x802E20A0, 0x802E2CF0, "obj_data", ["sm64/types", "sm64/object", "sm64/obj_data"]),
-    s_code(0x802E2CF0, 0x802E3E50, "hud", ["sm64/types", "sm64/hud"]),
-    s_code(0x802E3E50, 0x802F972C, "object_b", ["sm64/types", "sm64/object", "sm64/hud"], str_fp),
+    # s_code(0x802E20A0, 0x802E2CF0, "obj_data", ["sm64/types"]),
+    s_code(0x802E2CF0, 0x802E3E50, "hud", ["sm64/types"]),
+    s_code(0x802E3E50, 0x802F972C, "object_b", ["sm64/types"], str_fp),
 
-    s_code(0x802F9730, 0x80314A2C, "object_c", ["sm64/types", "sm64/obj_lib", "sm64/object_c"]),
+    s_code(0x802F9730, 0x80314A2C, "object_c", ["sm64/types"]),
 
     # s_data(0x8032D560, 0x8032D5C4, 0x80335B60, 0x80335B74, 0x8033A580, 0x8033AF90, "main.data", ["sm64/types", "sm64/main"], [
     #     [0,   7, 1, ultra.c.d_addr, 0],
@@ -1724,7 +1767,7 @@ src_code = [
         [1,   1, 4, ultra.c.d_s16],
         [0,   1, 1, c.d_obj_pcl],
         [0,  -4, 1, ultra.c.d_addr, 0],
-        [1,   1, 4, ultra.c.d_f32],
+        [1,   1, 4, ultra.c.d_f32, "%.1f"],
         [0,   3, 1, c.d_obj_col],
         [1, -10, 2, ultra.c.d_s16],
         [0,  -4, 1, ultra.c.d_addr, 0],
@@ -2187,7 +2230,7 @@ src_code = [
         [0,   5, 1, c.d_obj_col],
         [1,  -3, 2, ultra.c.d_s16],
         [0,   2, 1, c.d_obj_col],
-        [1,   1, 2, ultra.c.d_f32],
+        [1,   1, 2, ultra.c.d_f32, "%g"],
         [0,   4, 1, c.d_obj_col],
         [1,   1, 6, ultra.c.d_s8], [0, 1, 2, None],
         [0,   1, 1, c.d_obj_col],
@@ -2236,8 +2279,8 @@ src_lib = [
     s_code(0x80378800, 0x8037B21C, "math", ["sm64/types"], str_fp),
     s_code(0x8037B220, 0x8037CD60, "shape", ["sm64/types"]),
     s_code(0x8037CD60, 0x8037E19C, "s_script", ["sm64/types"]),
-    s_code(0x8037E1A0, 0x80380684, "p_script", ["sm64/types", "sm64/scene"]),
-    s_code(0x80380690, 0x8038248C, "map", ["sm64/types", "sm64/object"]),
+    s_code(0x8037E1A0, 0x80380684, "p_script", ["sm64/types"]),
+    s_code(0x80380690, 0x8038248C, "map", ["sm64/types"]),
     s_code(0x80382490, 0x80383B6C, "map_data", ["sm64/types"], str_fp),
     s_code(0x80383B70, 0x80385F88, "o_script", ["sm64/types"], str_fp),
 
@@ -2252,9 +2295,7 @@ src_lib = [
         [0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
         [0, 16, 1, ultra.c.d_f32],
     ]),
-    [main.s_file, "math_table.sx"],
-        s_include(["sm64/types"]),
-        [main.s_str, "\n"],
+    [main.s_file, "math_table.s"],
         [main.s_str, str_data],
         [main.s_str, str_align],
         [main.s_str, "\n"],
@@ -2294,8 +2335,8 @@ src_lib = [
 ]
 
 src_menu = [
-    # s_code(0x8016F000, 0x8016F670, "title", ["sm64/types", "sm64/memory"]),
-    s_code(0x8016F670, 0x80170280, "title_bg", ["sm64/types"]),
+    # s_code(0x8016F000, 0x8016F670, "title", ["sm64/types"]),
+    # s_code(0x8016F670, 0x80170280, "title_bg", ["sm64/types"]),
     s_code(0x80170280, 0x801768E0, "file_select", ["sm64/types"], str_fp),
     s_code(0x801768E0, 0x80177710, "star_select", ["sm64/types"], str_fp),
 
@@ -2309,18 +2350,18 @@ src_menu = [
     #     [0, 1, 20, "str"],
     #     [0, 1,  4, "str"],
     # ]),
-    s_data(0x801A7C70, 0x801A7D10, 0x801A7D10, 0x801A7D10, 0x801B99E0, 0x801B99F0, "title_bg.data", ["sm64/types", "sm64/title_bg"], [
-        [0, -4, 1, ultra.c.d_addr, ultra.A_EXTERN],
-        [0, -6, 4, ultra.c.d_f32],
-        [0, -2, 1, ultra.c.d_addr, ultra.A_EXTERN],
-        [0, -3, 4, ultra.c.d_s8],
-        [0, -1, 1, ultra.c.d_addr, 0],
-        [0, -3, 4, ultra.c.d_s8],
-        [0, -1, 4, ultra.c.d_s8],
-        [0, -1, 1, ultra.c.d_s8],
-        [0, -1, 4, ultra.c.d_s8],
-        [0, -1, 3, ultra.c.d_s8],
-    ], []),
+    # s_data(0x801A7C70, 0x801A7D10, 0x801A7D10, 0x801A7D10, 0x801B99E0, 0x801B99F0, "title_bg.data", ["sm64/types", "sm64/title_bg"], [
+    #     [0, -4, 1, ultra.c.d_addr, ultra.A_EXTERN],
+    #     [0, -6, 4, ultra.c.d_f32],
+    #     [0, -2, 1, ultra.c.d_addr, ultra.A_EXTERN],
+    #     [0, -3, 4, ultra.c.d_s8],
+    #     [0, -1, 1, ultra.c.d_addr, 0],
+    #     [0, -3, 4, ultra.c.d_s8],
+    #     [0, -1, 4, ultra.c.d_s8],
+    #     [0, -1, 1, ultra.c.d_s8],
+    #     [0, -1, 4, ultra.c.d_s8],
+    #     [0, -1, 3, ultra.c.d_s8],
+    # ], []),
     [main.s_file, "file_select.data.c"],
         s_include(["sm64/types", "sm64/file_select"]),
         [main.s_str, "\n"],
@@ -2518,17 +2559,22 @@ src_audio = [
     ], str_audio_g_data),
     s_data(0x803332A0, 0x8033500C, 0x803397B0, 0x803397B0, 0, 0, "data", ["sm64/types", "sm64/audio/data"], [
         [0, -18, 1, c.d_Na_cfg],
-        [0, -0x80//8, 8, ultra.c.d_u16, "0x%04X"],
-        [0, -0xFF, 1, ultra.c.d_f32],
-        [0, -0x80, 1, ultra.c.d_f32],
+        [0, -128//8, 8, ultra.c.d_u16, "0x%04X"],
+        [0, -252//4, 4, ultra.c.d_f32, "%f"],
+        [0,      -1, 3, ultra.c.d_f32, "%f"],
+        [0, -128//4, 4, ultra.c.d_f32, "%f"],
         [1,  1, 16, ultra.c.d_u8],
         [1,  1, 16, ultra.c.d_u8],
         [1,  1, 16, ultra.c.d_s8],
         [1,  1, 6, ultra.c.d_s16],
-        [0, -4*0x40//8, 8, ultra.c.d_s16, "%6d"],
+        [0, -4*64//8, 8, ultra.c.d_s16, "%6d"],
         [0, -4, 1, ultra.c.d_addr, 0],
         [1,  1, 10, ultra.c.d_u16],
-        [0, -9*0x80, 1, ultra.c.d_f32],
+        [0, -3*128//4, 4, ultra.c.d_f32, "%f"],
+        [0, 3, [
+            [0, -128//4, 4, ultra.c.d_f32, "%.3f"],
+            [0, -128//4, 4, ultra.c.d_f32, "%f"],
+        ]],
         [0,  1, ultra.c.d_align_s16],
         [0,  1, ultra.c.d_align_s8],
         [0,  2, 1, ultra.c.d_u32, "0x%X"],
@@ -4899,7 +4945,7 @@ data_title_logo = [
         ]],
     s_writepop(),
     [ultra.c.s_data, 0x0700C790, 0x0700C940, "E00.szp", [
-        [1, -36, 3, ultra.c.d_f32],
+        [0, -(20+16), 3, ultra.c.d_f32, "%.4f"],
     ]],
 ]
 

@@ -132,13 +132,13 @@ SECTION(SEGMENT_MENU, menu,
     TEXT(BUILD/face.o)
     ,
     DATA(BUILD/src/title.o)
-    DATA(BUILD/src/title_bg.data.o)
+    DATA(BUILD/src/title_bg.o)
     DATA(BUILD/src/file_select.data.o)
     DATA(BUILD/src/star_select.data.o)
     DATA(BUILD/face.o)
     ,
     BSS(BUILD/src/title.o)
-    BSS(BUILD/src/title_bg.data.o)
+    BSS(BUILD/src/title_bg.o)
     BSS(BUILD/src/file_select.data.o)
     BSS(BUILD/src/star_select.data.o)
     BSS(BUILD/face.o)

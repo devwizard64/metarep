@@ -1263,10 +1263,11 @@ def lst_main(self, line, lst):
                 self.c_push()
                 n = argv[1]
                 t = argv[2]
-                if type(t) == str and t in {"ascii", "asciiz"}:
+                if type(t) == str and t in {"ascii", "asciz"}:
                     line.append((self.c_dst, ".%s \"%s\"" % (
                         t, "".join([chr(ultra.ub()) for _ in range(n)])
                     )))
+                    if t == "asciz": ultra.script.c_addr += 1
                 else:
                     line.append((self.c_dst, "%s %s" % (
                         t[0], ", ".join([t[1](argv[3:]) for _ in range(n)])

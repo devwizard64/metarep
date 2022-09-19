@@ -249,8 +249,7 @@ void dprint_draw(void)
     guOrtho(mtx, 0, SCREEN_WD, 0, SCREEN_HT, -10, 10, 1);
     gSPPerspNormalize(video_gfx++, 0xFFFF);
     gSPMatrix(
-        video_gfx++, K0_TO_PHYS(mtx),
-        G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH
+        video_gfx++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
     );
     gSPDisplayList(video_gfx++, gfx_dprint_copy_start);
     for (i = 0; i < dprint_index; i++)

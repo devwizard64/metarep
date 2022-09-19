@@ -1665,7 +1665,7 @@ extern void *s_object_c_8030D93C(int, struct shape *, void *); /* callback */
 extern void *s_object_c_8030D9AC(int, struct shape *, void *); /* callback */
 
 extern void *s_logo_shape(int, struct shape *, void *);
-extern void *s_logo_text(int, struct shape *, void *);
+extern void *s_logo_symbol(int, struct shape *, void *);
 extern void *s_title_bg(int, struct shape *, void *);
 extern void *s_gameover_bg(int, struct shape *, void *);
 
@@ -3020,7 +3020,7 @@ struct_object_c = [
     [0x0C, "struct", "object_c_5", [
         (0x00, table.sym_var("shape",   "int")),
         (0x04, table.sym_var("script",  "const O_SCRIPT *")),
-        (0x08, table.sym_var("scale",   "f32")),
+        (0x08, table.sym_var("scale",   "float")),
     ]],
 ]
 

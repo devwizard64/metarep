@@ -105,7 +105,7 @@ static void draw_layer_list(SHAPE_LAYER *layer)
             {
                 gSPMatrix(
                     video_gfx++, K0_TO_PHYS(list->mtx),
-                    G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH
+                    G_MTX_MODELVIEW|G_MTX_LOAD|G_MTX_NOPUSH
                 );
                 gSPDisplayList(video_gfx++, list->gfx);
                 list = list->next;
@@ -162,7 +162,7 @@ static void draw_ortho(SHAPE_ORTHO *ortho)
         gSPPerspNormalize(video_gfx++, 0xFFFF);
         gSPMatrix(
             video_gfx++, K0_TO_PHYS(mtx),
-            G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH
+            G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
         );
         draw_shape(ortho->s.child);
     }
@@ -184,7 +184,7 @@ static void draw_persp(SHAPE_PERSP *persp)
         gSPPerspNormalize(video_gfx++, perspNorm);
         gSPMatrix(
             video_gfx++, K0_TO_PHYS(mtx),
-            G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH
+            G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
         );
         shape_persp = persp;
         draw_shape(persp->s.s.child);
@@ -223,8 +223,7 @@ static void draw_camera(SHAPE_CAMERA *camera)
     );
     mtx_rz(mrz, camera->rz_p);
     gSPMatrix(
-        video_gfx++, K0_TO_PHYS(mrz),
-        G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH
+        video_gfx++, K0_TO_PHYS(mrz), G_MTX_PROJECTION|G_MTX_MUL|G_MTX_NOPUSH
     );
     mtxf_lookat(mf, camera->eye, camera->look, camera->rz_m);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
@@ -737,7 +736,7 @@ void draw_scene(SHAPE_SCENE *scene, Vp *viewport, Vp *scissor, u32 fill)
         gSPViewport(video_gfx++, K0_TO_PHYS(vp));
         gSPMatrix(
             video_gfx++, K0_TO_PHYS(draw_mtx[draw_m]),
-            G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH
+            G_MTX_MODELVIEW|G_MTX_LOAD|G_MTX_NOPUSH
         );
         shape_scene = scene;
         if (scene->s.child != NULL) draw_shape(scene->s.child);
