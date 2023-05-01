@@ -1,5 +1,5 @@
 #include <sm64/types.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/audio.h>
 #include <sm64/memory.h>
 #include <sm64/save.h>
@@ -59,10 +59,10 @@ static int title_demo(int code)
         {
             if (++timer == 800)
             {
-                file_update(&file_demo, demo_index);
-                if (++demo_index == file_demo.table->len) demo_index = 0;
-                demo = (DEMO *)(file_demo.buf+4);
-                code = file_demo.buf[0];
+                bank_load(&demo_bank, demo_index);
+                if (++demo_index == demo_bank.table->len) demo_index = 0;
+                demo = (DEMO *)(demo_bank.buf+4);
+                code = demo_bank.buf[0];
                 save_index = 1;
                 level_index = 1;
             }
@@ -112,7 +112,7 @@ static int title_face(void)
     int code = 0;
     if (flag == TRUE)
     {
-        if (video_frame <= 128) Na_SE_fixed(NA_SE2_32);
+        if (gfx_frame <= 128)   Na_SE_fixed(NA_SE2_32);
         else                    Na_SE_fixed(NA_SE2_33);
         flag = FALSE;
     }

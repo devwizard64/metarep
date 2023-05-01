@@ -12,19 +12,19 @@
 
 #define BGM_NULL                ((u16)-1)
 
-u8 audio_mute = 0;
-u8 audio_lock = FALSE;
+u8 aud_mute = 0;
+u8 aud_lock = FALSE;
 
 u16 bgm_stage   = BGM_NULL;
 u16 bgm_shell   = BGM_NULL;
 u16 bgm_special = BGM_NULL;
 
-u8 audio_endless = FALSE;
+u8 aud_endless = FALSE;
 
-u32 audio_8032D618[4] = {0};
-s16 audio_output_table[] = {0, 3, 1};
+u32 aud_8032D618[4] = {0};
+s16 aud_output_table[] = {0, 3, 1};
 
-NA_SE audio_env_se_data[] =
+NA_SE aud_env_se_data[] =
 {
     NA_SE1_00 + (0 << 16),
     NA_SE1_00 + (1 << 16),
@@ -63,57 +63,57 @@ NA_SE audio_env_se_data[] =
     NA_SE6_04_80,
     NA_SE4_0D_0,
 };
-u32 audio_env_se_8033B0A0[lenof(audio_env_se_data)];
+u32 aud_env_se_8033B0A0[lenof(aud_env_se_data)];
 
-void audio_mute_reset(void)
+void aud_mute_reset(void)
 {
-    audio_mute = 0;
+    aud_mute = 0;
 }
 
-void audio_mute_start(int flag)
+void aud_mute_start(int flag)
 {
     switch (flag)
     {
         case 1: Na_pause(TRUE);         break;
         case 2: Na_SEQ_mute(0, 60, 40); break;
     }
-    audio_mute |= flag;
+    aud_mute |= flag;
 }
 
-void audio_mute_end(int flag)
+void aud_mute_end(int flag)
 {
     switch (flag)
     {
         case 1: Na_pause(FALSE);        break;
         case 2: Na_SEQ_unmute(0, 60);   break;
     }
-    audio_mute &= ~flag;
+    aud_mute &= ~flag;
 }
 
-void audio_se_lock(void)
+void aud_se_lock(void)
 {
-    if (audio_lock == FALSE)
+    if (aud_lock == FALSE)
     {
-        audio_lock = TRUE;
+        aud_lock = TRUE;
         Na_SE_lock();
     }
 }
 
-void audio_se_unlock(void)
+void aud_se_unlock(void)
 {
-    if (audio_lock == TRUE)
+    if (aud_lock == TRUE)
     {
-        audio_lock = FALSE;
+        aud_lock = FALSE;
         Na_SE_unlock();
     }
 }
 
-void audio_output(USHORT type)
+void aud_output(USHORT type)
 {
-    if (type < 3) Na_output(audio_output_table[type]);
+    if (type < 3) Na_output(aud_output_table[type]);
 }
 
-void audio_face_sfx(SHORT flag)
+void aud_face_sfx(SHORT flag)
 {
     if      (flag & (1 << 0)) Na_SE_fixed(NA_SE7_0A);
     else if (flag & (1 << 1)) Na_SE_fixed(NA_SE7_0B);
@@ -123,10 +123,10 @@ void audio_face_sfx(SHORT flag)
     else if (flag & (1 << 5)) Na_SE_fixed(NA_SE7_09);
     else if (flag & (1 << 6)) Na_SE_fixed(NA_SE7_06);
     else if (flag & (1 << 7)) Na_SE_fixed(NA_SE7_07);
-    if      (flag & (1 << 8)) audio_env_se_play(20, NULL);
+    if      (flag & (1 << 8)) aud_env_se_play(20, NULL);
 }
 
-void audio_se_ripple(void)
+void aud_se_ripple(void)
 {
     static s8 flag = FALSE;
     if (ripple_80361318 != NULL && ripple_80361318->_07 == 2)
@@ -153,9 +153,9 @@ void bgm_endless(void)
             }
         }
     }
-    if (audio_endless ^ flag)
+    if (aud_endless ^ flag)
     {
-        audio_endless = flag;
+        aud_endless = flag;
         if (flag)   Na_BGM_push(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
         else        Na_BGM_pull(500);
     }
@@ -178,7 +178,7 @@ void bgm_play(USHORT mode, USHORT bgm, SHORT fadein)
     }
 }
 
-void audio_fadeout(SHORT fadeout)
+void aud_fadeout(SHORT fadeout)
 {
     Na_fadeout(fadeout);
     bgm_stage   = BGM_NULL;
@@ -242,32 +242,32 @@ void bgm_special_stop(void)
     }
 }
 
-void audio_env_se_play(int se, VECF pos)
+void aud_env_se_play(int se, VECF pos)
 {
-    Na_SE_play(audio_env_se_data[se], pos);
+    Na_SE_play(aud_env_se_data[se], pos);
 }
 
-void audio_update(void)
+void aud_update(void)
 {
     Na_update();
 }
 
-VECF audio_0;
-OSMesgQueue audio_vi_mq;
-OSMesg audio_vi_msg;
-SC_CLIENT sc_client_audio;
+VECF aud_0;
+OSMesgQueue aud_vi_mq;
+OSMesg aud_vi_msg;
+SC_CLIENT sc_client_aud;
 
-void audio_main(UNUSED void *arg)
+void aud_main(UNUSED void *arg)
 {
     Na_load();
     Na_init();
-    vecf_cpy(audio_0, vecf_0);
-    osCreateMesgQueue(&audio_vi_mq, &audio_vi_msg, 1);
-    sc_client_init(1, &sc_client_audio, &audio_vi_mq, (OSMesg)0x200);
+    vecf_cpy(aud_0, vecf_0);
+    osCreateMesgQueue(&aud_vi_mq, &aud_vi_msg, 1);
+    sc_client_init(1, &sc_client_aud, &aud_vi_mq, (OSMesg)0x200);
     for (;;)
     {
         OSMesg msg;
-        osRecvMesg(&audio_vi_mq, &msg, OS_MESG_BLOCK);
+        osRecvMesg(&aud_vi_mq, &msg, OS_MESG_BLOCK);
         if (reset_timer < 25)
         {
             SC_TASK *task;

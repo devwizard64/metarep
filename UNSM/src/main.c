@@ -1,7 +1,7 @@
 #include <sm64/types.h>
 #include <sm64/segment.h>
 #include <sm64/main.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/audio.h>
 #include <sm64/memory.h>
 #include <sm64/time.h>
@@ -17,8 +17,8 @@
 OSThread thread_rmon;
 OSThread thread_idle;
 OSThread thread_sc;
-OSThread thread_app;
-OSThread thread_audio;
+OSThread thread_gfx;
+OSThread thread_aud;
 
 OSMesgQueue pi_mq;
 OSMesgQueue sc_mq;
@@ -41,7 +41,7 @@ SC_TASK *sc_audtask = NULL;
 SC_TASK *sc_gfxtask = NULL;
 SC_TASK *sc_audtask_next = NULL;
 SC_TASK *sc_gfxtask_next = NULL;
-s8 sc_audio = TRUE;
+s8 sc_aud = TRUE;
 u32 sc_vi = 0;
 
 s8 reset_timer = 0;
@@ -78,9 +78,9 @@ void debug_update(void)
     };
     static s16 t = 0;
     static s16 m = 0;
-    if (cont_menu->down != 0)
+    if (controller->down != 0)
     {
-        if (button_t[t++] == cont_menu->down)
+        if (button_t[t++] == controller->down)
         {
             if (t == lenof(button_t)) t = 0, debug_time ^= FALSE^TRUE;
         }
@@ -88,7 +88,7 @@ void debug_update(void)
         {
             t = 0;
         }
-        if (button_m[m++] == cont_menu->down)
+        if (button_m[m++] == controller->down)
         {
             if (m == lenof(button_m)) m = 0, debug_mem ^= FALSE^TRUE;
         }
@@ -164,7 +164,7 @@ static void sc_event_prenmi(void)
     reset_frame = 0;
     Na_SE_clear();
     Na_SE_lock();
-    audio_fadeout(90);
+    aud_fadeout(90);
 }
 
 static void sc_task_flush(void)
@@ -244,8 +244,8 @@ static void sc_event_vi(void)
         else
         {
             time_audrcp();
-            if (sc_audio)   sc_task_start(M_AUDTASK);
-            else            sc_audtask_skip();
+            if (sc_aud) sc_task_start(M_AUDTASK);
+            else        sc_audtask_skip();
         }
     }
     else if (sc_task == NULL)
@@ -278,8 +278,8 @@ static void sc_event_sp(void)
             time_gfxrcp(TIME_GFXRCP_ENDRSP);
         }
         time_audrcp();
-        if (sc_audio)   sc_task_start(M_AUDTASK);
-        else            sc_audtask_skip();
+        if (sc_aud) sc_task_start(M_AUDTASK);
+        else        sc_audtask_skip();
     }
     else
     {
@@ -322,13 +322,13 @@ static void sc_main(UNUSED void *arg)
     sc_init_mem();
     mem_load_lib();
     thread_create(
-        &thread_audio, 4, audio_main, NULL, stack_audio+lenof(stack_audio), 20
+        &thread_aud, 4, aud_main, NULL, stack_aud+lenof(stack_aud), 20
     );
-    osStartThread(&thread_audio);
+    osStartThread(&thread_aud);
     thread_create(
-        &thread_app, 5, app_main, NULL, stack_app+lenof(stack_app), 10
+        &thread_gfx, 5, gfx_main, NULL, stack_gfx+lenof(stack_gfx), 10
     );
-    osStartThread(&thread_app);
+    osStartThread(&thread_gfx);
     for (;;)
     {
         OSMesg msg;
@@ -364,7 +364,7 @@ void sc_queue_task(SC_TASK *task)
 
 void sc_queue_audtask(SC_TASK *task)
 {
-    if (sc_audio)
+    if (sc_aud)
     {
         if (task != NULL)
         {
@@ -393,14 +393,14 @@ void sc_queue_gfxtask(SC_TASK *task)
     }
 }
 
-void sc_audio_enable(void)
+void sc_aud_enable(void)
 {
-    sc_audio = TRUE;
+    sc_aud = TRUE;
 }
 
-void sc_audio_disable(void)
+void sc_aud_disable(void)
 {
-    sc_audio = FALSE;
+    sc_aud = FALSE;
     while (sc_audtask != NULL);
 }
 

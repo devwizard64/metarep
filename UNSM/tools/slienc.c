@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #define SIG     "MIO0"
@@ -51,7 +51,7 @@ static int sliblk(const char *data, size_t size, size_t i, int *of, int *sz)
 int main(int argc, char *argv[])
 {
     char str[4096];
-    FILE *f;
+    FILE *fp;
     FILE *s;
     FILE *h;
     char *data;
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "usage: %s <s> <h> <szp> <bin> <sym>\n", argv[0]);
         return 1;
     }
-    if ((f = fopen(argv[5], "r")) == NULL)
+    if ((fp = fopen(argv[5], "r")) == NULL)
     {
         fprintf(stderr, "error: could not read '%s'\n", argv[5]);
         return 1;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     }
     i = ~0;
     size = 0;
-    while (fgets(str, sizeof(str), f) != NULL)
+    while (fgets(str, sizeof(str), fp) != NULL)
     {
         char sym[sizeof(str)];
         char sec;
@@ -107,16 +107,16 @@ int main(int argc, char *argv[])
     fprintf(s, ".data\n.incbin \"%s\"\n", argv[3]);
     fclose(s);
     fclose(h);
-    fclose(f);
+    fclose(fp);
     size -= i;
     data = malloc(size);
-    if ((f = fopen(argv[4], "rb")) == NULL)
+    if ((fp = fopen(argv[4], "rb")) == NULL)
     {
         fprintf(stderr, "error: could not read '%s'\n", argv[4]);
         return 1;
     }
-    fread(data, 1, size, f);
-    fclose(f);
+    fread(data, 1, size, fp);
+    fclose(fp);
     ti = (size+7) / 8;
     tbl =     malloc(ti);
     pkt = p = malloc(size);
@@ -158,27 +158,27 @@ int main(int argc, char *argv[])
     po = 16 + ti;
     co = po + pi;
     free(data);
-    if ((f = fopen(argv[3], "wb")) == NULL)
+    if ((fp = fopen(argv[3], "wb")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[3]);
         return 1;
     }
-    fwrite(SIG, 1, 4, f);
-    fputc(size >> 24, f);
-    fputc(size >> 16, f);
-    fputc(size >>  8, f);
-    fputc(size >>  0, f);
-    fputc(po   >> 24, f);
-    fputc(po   >> 16, f);
-    fputc(po   >>  8, f);
-    fputc(po   >>  0, f);
-    fputc(co   >> 24, f);
-    fputc(co   >> 16, f);
-    fputc(co   >>  8, f);
-    fputc(co   >>  0, f);
-    fwrite(tbl, 1, ti, f); free(tbl);
-    fwrite(pkt, 1, pi, f); free(pkt);
-    fwrite(cpy, 1, ci, f); free(cpy);
-    fclose(f);
+    fwrite(SIG, 1, 4, fp);
+    fputc(size >> 24, fp);
+    fputc(size >> 16, fp);
+    fputc(size >>  8, fp);
+    fputc(size >>  0, fp);
+    fputc(po   >> 24, fp);
+    fputc(po   >> 16, fp);
+    fputc(po   >>  8, fp);
+    fputc(po   >>  0, fp);
+    fputc(co   >> 24, fp);
+    fputc(co   >> 16, fp);
+    fputc(co   >>  8, fp);
+    fputc(co   >>  0, fp);
+    fwrite(tbl, 1, ti, fp); free(tbl);
+    fwrite(pkt, 1, pi, fp); free(pkt);
+    fwrite(cpy, 1, ci, fp); free(cpy);
+    fclose(fp);
     return 0;
 }

@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/main.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/time.h>
 
 TIME time_data[2];
@@ -56,11 +56,11 @@ void time_audrcp(void)
 #define F_RED       GPACK_RGBA5551(0xFF, 0x28, 0x28, 1)
 #define F_CYAN      GPACK_RGBA5551(0x28, 0xC0, 0xE0, 1)
 
-#define time_draw_rect(xl, xh, y, fill)                             \
-{                                                                   \
-    gDPPipeSync(video_gfx++);                                       \
-    gDPSetFillColor(video_gfx++, (fill) << 16 | (fill));            \
-    gDPFillRectangle(video_gfx++, (xl), (y), (xh), (y)+TIME_H-1);   \
+#define time_draw_rect(xl, xh, y, fill)                         \
+{                                                               \
+    gDPPipeSync(gfx_ptr++);                                     \
+    gDPSetFillColor(gfx_ptr++, (fill) << 16 | (fill));          \
+    gDPFillRectangle(gfx_ptr++, (xl), (y), (xh), (y)+TIME_H-1); \
 }
 
 static void time_draw_d(
@@ -91,8 +91,8 @@ static void time_draw_scale(void)
 
 /*
 red   : aud CPU
-yellow: app update
-orange: app gfx
+yellow: gfx update
+orange: gfx draw
 cyan  : gfx RCP
 
 red   : aud RSP
@@ -102,7 +102,7 @@ orange: gfx RDP
 
 #define GFXCPU_START    time->gfxcpu[TIME_GFXCPU_START]
 #define GFXCPU_ENDUPD   time->gfxcpu[TIME_GFXCPU_ENDUPD]
-#define GFXCPU_ENDGFX   time->gfxcpu[TIME_GFXCPU_ENDGFX]
+#define GFXCPU_ENDFRM   time->gfxcpu[TIME_GFXCPU_ENDFRM]
 #define GFXCPU_ENDRDP   time->gfxcpu[TIME_GFXCPU_ENDRDP]
 #define GFXRCP_START    time->gfxrcp[TIME_GFXRCP_START]
 #define GFXRCP_ENDRSP   time->gfxrcp[TIME_GFXRCP_ENDRSP]
@@ -115,8 +115,8 @@ static void time_draw_abs(void)
     TIME *time = &time_data[time_cpu^1];
     OSTime start = AUDCPU_START - 16433*osClockRate/1000000;
     time_draw_d(start, GFXCPU_START,  GFXCPU_ENDUPD, TIME_Y(2), F_YELLOW);
-    time_draw_d(start, GFXCPU_ENDUPD, GFXCPU_ENDGFX, TIME_Y(2), F_ORANGE);
-    time_draw_d(start, GFXCPU_ENDGFX, GFXCPU_ENDRDP, TIME_Y(2), F_CYAN);
+    time_draw_d(start, GFXCPU_ENDUPD, GFXCPU_ENDFRM, TIME_Y(2), F_ORANGE);
+    time_draw_d(start, GFXCPU_ENDFRM, GFXCPU_ENDRDP, TIME_Y(2), F_CYAN);
     time->audcpu_i &= (USHORT)~1;
     for (i = 0; i < time->audcpu_i; i += 2) time_draw_d(
         start, time->audcpu[i+0], time->audcpu[i+1], TIME_Y(2), F_RED
@@ -135,8 +135,8 @@ static void time_draw_rel(void)
     int i;
     TIME *time = &time_data[time_cpu^1];
     OSTime start = GFXCPU_START <= AUDCPU_START ? GFXCPU_START : AUDCPU_START;
-    OSTime appupd = GFXCPU_ENDUPD - start;
-    OSTime appgfx = GFXCPU_ENDGFX - GFXCPU_ENDUPD;
+    OSTime gfxupd = GFXCPU_ENDUPD - start;
+    OSTime gfxfrm = GFXCPU_ENDFRM - GFXCPU_ENDUPD;
     OSTime audcpu = 0;
     OSTime gfxrsp = GFXRCP_ENDRSP - GFXRCP_START;
     OSTime gfxrdp = GFXRCP_ENDRDP - GFXRCP_START;
@@ -146,8 +146,8 @@ static void time_draw_rel(void)
     {
         OSTime d = time->audcpu[i+1]-time->audcpu[i+0];
         audcpu += d;
-        if      (time->audcpu[i] < GFXCPU_ENDUPD) appupd -= d;
-        else if (time->audcpu[i] < GFXCPU_ENDGFX) appgfx -= d;
+        if      (time->audcpu[i] < GFXCPU_ENDUPD) gfxupd -= d;
+        else if (time->audcpu[i] < GFXCPU_ENDFRM) gfxfrm -= d;
     }
     /* meant audrcp_i */
     time->audcpu_i &= (USHORT)~1;
@@ -157,8 +157,8 @@ static void time_draw_rel(void)
     }
     start = 0;
     time_draw_d(0, start, start+audcpu, TIME_Y(2), F_RED   ); start += audcpu;
-    time_draw_d(0, start, start+appupd, TIME_Y(2), F_YELLOW); start += appupd;
-    time_draw_d(0, start, start+appgfx, TIME_Y(2), F_ORANGE);
+    time_draw_d(0, start, start+gfxupd, TIME_Y(2), F_YELLOW); start += gfxupd;
+    time_draw_d(0, start, start+gfxfrm, TIME_Y(2), F_ORANGE);
     time_draw_d(0, 0, gfxrdp, TIME_Y(1), F_ORANGE);
     time_draw_d(0, 0, gfxrsp, TIME_Y(1), F_YELLOW);
     time_draw_d(0, 0, audrsp, TIME_Y(1), F_RED   );

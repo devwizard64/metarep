@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/main.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/audio.h>
 #include <sm64/save.h>
 #include <sm64/scene.h>
@@ -91,7 +91,7 @@ static int save_rd(void *data, int size)
     return code;
 }
 
-static int save_wr(const void *data, int size)
+static int save_wr(void *data, int size)
 {
     int code = 1;
     if (eeprom_status != 0)
@@ -101,21 +101,21 @@ static int save_wr(const void *data, int size)
         do
         {
             n--;
-            code = osEepromLongWrite(&si_mq, address, (void *)data, size);
+            code = osEepromLongWrite(&si_mq, address, data, size);
         }
         while (n > 0 && code != 0);
     }
     return code;
 }
 
-static USHORT save_check_sum(const u8 *data, int size)
+static USHORT save_check_sum(u8 *data, int size)
 {
     USHORT sum = 0;
     while (size-- > 2) sum += *data++;
     return (u16)sum;
 }
 
-static int save_check(const void *data, int size, USHORT key)
+static int save_check(void *data, int size, USHORT key)
 {
     SAVE_CHECK *check = (SAVE_CHECK *)((size-sizeof(SAVE_CHECK))+(char *)data);
     if (check->key != key) return FALSE;
@@ -445,7 +445,7 @@ int save_cap_get(VECS pos)
 
 void save_output_set(USHORT output)
 {
-    audio_output(output);
+    aud_output(output);
     save.data[0].output = output;
     save_data_dirty = TRUE;
     save_data_write();
@@ -475,7 +475,7 @@ void save_mid_clear(void)
     save_mid_course = 0;
 }
 
-void save_mid_set(const LINK *link)
+void save_mid_set(LINK *link)
 {
     if (link->stage & 0x80)
     {

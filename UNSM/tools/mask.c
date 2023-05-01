@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
-static void crc(char *buf, const unsigned char *data, size_t size)
+static void checksum(char *buf, const unsigned char *data, size_t size)
 {
     size_t i;
     uint32_t c0;
@@ -39,7 +39,7 @@ static void crc(char *buf, const unsigned char *data, size_t size)
 
 int main(int argc, char *argv[])
 {
-    FILE *f;
+    FILE *fp;
     unsigned char *data;
     size_t size;
     char buf[0x30];
@@ -61,21 +61,21 @@ int main(int argc, char *argv[])
         if (size > 20) size = 20;
         memcpy(&buf[0x10], argv[3], size);
     }
-    if ((f = fopen(argv[1], "r+b")) == NULL)
+    if ((fp = fopen(argv[1], "r+b")) == NULL)
     {
         fprintf(stderr, "error: could not open '%s'\n", argv[1]);
         return 1;
     }
-    fseek(f, -0x1000, SEEK_END);
-    size = ftell(f);
+    fseek(fp, -0x1000, SEEK_END);
+    size = ftell(fp);
     if (size > 0x100000) size = 0x100000;
     data = malloc(size);
-    fseek(f, 0x1000, SEEK_SET);
-    fread(data, 1, size, f);
-    crc(&buf[0x00], data, size);
+    fseek(fp, 0x1000, SEEK_SET);
+    fread(data, 1, size, fp);
+    checksum(&buf[0x00], data, size);
     free(data);
-    fseek(f, 0x10, SEEK_SET);
-    fwrite(buf, 1, sizeof(buf), f);
-    fclose(f);
+    fseek(fp, 0x10, SEEK_SET);
+    fwrite(buf, 1, sizeof(buf), fp);
+    fclose(fp);
     return 0;
 }

@@ -143,7 +143,7 @@ SECTION(SEGMENT_MENU, menu,
     BSS(BUILD/src/star_select.data.o)
     BSS(BUILD/face.o)
 )
-ASSERT(. <= SEGMENT_MEM_END-0x10, "error: MENU exceeds memory size.")
+ASSERT(. <= SEGMENT_MEM_END-16, "error: MENU exceeds memory size.")
 DATA2(MENU, menu_title, menu/title)
 SZP(menu_logo, menu/title/logo)
 SZP(menu_debug, menu/title/debug)

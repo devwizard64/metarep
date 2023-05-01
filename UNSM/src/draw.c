@@ -1,5 +1,5 @@
 #include <sm64/types.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/memory.h>
 #include <sm64/shadow.h>
 #include <sm64/dprint.h>
@@ -93,33 +93,33 @@ static void draw_layer_list(SHAPE_LAYER *layer)
     u32 *rm_2 = draw_rendermode_2[zb];
     if (zb)
     {
-        gDPPipeSync(video_gfx++);
-        gSPSetGeometryMode(video_gfx++, G_ZBUFFER);
+        gDPPipeSync(gfx_ptr++);
+        gSPSetGeometryMode(gfx_ptr++, G_ZBUFFER);
     }
     for (i = 0; i < S_LAYER_MAX; i++)
     {
         if ((list = layer->list[i]) != NULL)
         {
-            gDPSetRenderMode(video_gfx++, rm_1[i], rm_2[i]);
+            gDPSetRenderMode(gfx_ptr++, rm_1[i], rm_2[i]);
             while (list != NULL)
             {
                 gSPMatrix(
-                    video_gfx++, K0_TO_PHYS(list->mtx),
+                    gfx_ptr++, K0_TO_PHYS(list->mtx),
                     G_MTX_MODELVIEW|G_MTX_LOAD|G_MTX_NOPUSH
                 );
-                gSPDisplayList(video_gfx++, list->gfx);
+                gSPDisplayList(gfx_ptr++, list->gfx);
                 list = list->next;
             }
         }
     }
     if (zb)
     {
-        gDPPipeSync(video_gfx++);
-        gSPClearGeometryMode(video_gfx++, G_ZBUFFER);
+        gDPPipeSync(gfx_ptr++);
+        gSPClearGeometryMode(gfx_ptr++, G_ZBUFFER);
     }
 }
 
-static void draw_layer_gfx(const Gfx *gfx, SHORT layer)
+static void draw_layer_gfx(Gfx *gfx, SHORT layer)
 {
     if (shape_layer != NULL)
     {
@@ -159,9 +159,9 @@ static void draw_ortho(SHAPE_ORTHO *ortho)
         float t = (float)(shape_scene->y-shape_scene->h)/2 * ortho->scale;
         float b = (float)(shape_scene->y+shape_scene->h)/2 * ortho->scale;
         guOrtho(mtx, l, r, b, t, -2, +2, 1);
-        gSPPerspNormalize(video_gfx++, 0xFFFF);
+        gSPPerspNormalize(gfx_ptr++, 0xFFFF);
         gSPMatrix(
-            video_gfx++, K0_TO_PHYS(mtx),
+            gfx_ptr++, K0_TO_PHYS(mtx),
             G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
         );
         draw_shape(ortho->s.child);
@@ -181,9 +181,9 @@ static void draw_persp(SHAPE_PERSP *persp)
         guPerspective(
             mtx, &perspNorm, persp->fovy, aspect, persp->near, persp->far, 1
         );
-        gSPPerspNormalize(video_gfx++, perspNorm);
+        gSPPerspNormalize(gfx_ptr++, perspNorm);
         gSPMatrix(
-            video_gfx++, K0_TO_PHYS(mtx),
+            gfx_ptr++, K0_TO_PHYS(mtx),
             G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
         );
         shape_persp = persp;
@@ -223,7 +223,7 @@ static void draw_camera(SHAPE_CAMERA *camera)
     );
     mtx_rz(mrz, camera->rz_p);
     gSPMatrix(
-        video_gfx++, K0_TO_PHYS(mrz), G_MTX_PROJECTION|G_MTX_MUL|G_MTX_NOPUSH
+        gfx_ptr++, K0_TO_PHYS(mrz), G_MTX_PROJECTION|G_MTX_MUL|G_MTX_NOPUSH
     );
     mtxf_lookat(mf, camera->eye, camera->look, camera->rz_m);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
@@ -240,21 +240,21 @@ static void draw_camera(SHAPE_CAMERA *camera)
     draw_m--;
 }
 
-static void draw_posrot(SHAPE_POSROT *posrot)
+static void draw_posang(SHAPE_POSANG *posang)
 {
     MTXF mf;
     VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
-    vecs_to_vecf(vf, posrot->pos);
-    mtxf_posrot(mf, vf, posrot->rot);
+    vecs_to_vecf(vf, posang->pos);
+    mtxf_posang(mf, vf, posang->ang);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
     mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
-    if (posrot->s.gfx != NULL) draw_layer_gfx(
-        posrot->s.gfx, shape_layer_get(posrot)
+    if (posang->s.gfx != NULL) draw_layer_gfx(
+        posang->s.gfx, shape_layer_get(posang)
     );
-    if (posrot->s.s.child != NULL) draw_shape(posrot->s.s.child);
+    if (posang->s.s.child != NULL) draw_shape(posang->s.s.child);
     draw_m--;
 }
 
@@ -264,7 +264,7 @@ static void draw_pos(SHAPE_POS *pos)
     VECF vf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
     vecs_to_vecf(vf, pos->pos);
-    mtxf_posrot(mf, vf, vecs_0);
+    mtxf_posang(mf, vf, vecs_0);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
     mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
@@ -276,19 +276,19 @@ static void draw_pos(SHAPE_POS *pos)
     draw_m--;
 }
 
-static void draw_rot(SHAPE_ROT *rot)
+static void draw_ang(SHAPE_ANG *ang)
 {
     MTXF mf;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
-    mtxf_posrot(mf, vecf_0, rot->rot);
+    mtxf_posang(mf, vecf_0, ang->ang);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
     mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
     draw_mtx[draw_m] = mtx;
-    if (rot->s.gfx != NULL) draw_layer_gfx(
-        rot->s.gfx, shape_layer_get(rot)
+    if (ang->s.gfx != NULL) draw_layer_gfx(
+        ang->s.gfx, shape_layer_get(ang)
     );
-    if (rot->s.s.child != NULL) draw_shape(rot->s.s.child);
+    if (ang->s.s.child != NULL) draw_shape(ang->s.s.child);
     draw_m--;
 }
 
@@ -390,10 +390,10 @@ static void draw_background(SHAPE_BACKGROUND *background)
 static void draw_joint(SHAPE_JOINT *joint)
 {
     MTXF mf;
-    VECS rot;
+    VECS ang;
     VECF pos;
     Mtx *mtx = gfx_alloc(sizeof(Mtx));
-    vecs_cpy(rot, vecs_0);
+    vecs_cpy(ang, vecs_0);
     vecf_set(pos, joint->pos[0], joint->pos[1], joint->pos[2]);
     if (joint_type == 1)
     {
@@ -423,11 +423,11 @@ static void draw_joint(SHAPE_JOINT *joint)
     }
     if (joint_type == 5)
     {
-        rot[0] = JOINT();
-        rot[1] = JOINT();
-        rot[2] = JOINT();
+        ang[0] = JOINT();
+        ang[1] = JOINT();
+        ang[2] = JOINT();
     }
-    mtxf_joint(mf, pos, rot);
+    mtxf_joint(mf, pos, ang);
     mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
     draw_m++;
     mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
@@ -490,8 +490,8 @@ static void draw_shadow(SHAPE_SHADOW *shadow)
             joint[1] = 0; joint_tbl += 2;
             joint[2] = JOINT_POS() * scale;
             joint_tbl -= 2*3;
-            s = sin(shape_object->rot[1]);
-            c = cos(shape_object->rot[1]);
+            s = sin(shape_object->ang[1]);
+            c = cos(shape_object->ang[1]);
             pos[0] +=  joint[0]*c + joint[2]*s;
             pos[2] += -joint[0]*s + joint[2]*c;
         }
@@ -558,7 +558,7 @@ static void draw_object(SHAPE_OBJECT *object)
         }
         else
         {
-            mtxf_posrot(mf, object->pos, object->rot);
+            mtxf_posang(mf, object->pos, object->ang);
             mtxf_cat(draw_mtxf[draw_m+1], mf, draw_mtxf[draw_m]);
         }
         mtxf_scale(draw_mtxf[draw_m+1], draw_mtxf[draw_m+1], object->scale);
@@ -681,9 +681,9 @@ static void draw_shape(SHAPE *shape)
                 case S_TYPE_LOD:        draw_lod((void *)s);        break;
                 case S_TYPE_SELECT:     draw_select((void *)s);     break;
                 case S_TYPE_CAMERA:     draw_camera((void *)s);     break;
-                case S_TYPE_POSROT:     draw_posrot((void *)s);     break;
+                case S_TYPE_POSANG:     draw_posang((void *)s);     break;
                 case S_TYPE_POS:        draw_pos((void *)s);        break;
-                case S_TYPE_ROT:        draw_rot((void *)s);        break;
+                case S_TYPE_ANG:        draw_ang((void *)s);        break;
                 case S_TYPE_OBJECT:     draw_object((void *)s);     break;
                 case S_TYPE_JOINT:      draw_joint((void *)s);      break;
                 case S_TYPE_BILLBOARD:  draw_billboard((void *)s);  break;
@@ -721,21 +721,21 @@ void draw_scene(SHAPE_SCENE *scene, Vp *viewport, Vp *scissor, u32 fill)
         vecs_set(vp->vp.vscale, 4*scene->w, 4*scene->h, G_MAXZ/2);
         if (viewport != NULL)
         {
-            video_clear(fill);
-            video_vp_scissor(viewport);
+            gfx_clear(fill);
+            gfx_vp_scissor(viewport);
             *vp = *viewport;
         }
         else if (scissor != NULL)
         {
-            video_clear(fill);
-            video_vp_scissor(scissor);
+            gfx_clear(fill);
+            gfx_vp_scissor(scissor);
         }
         mtxf_identity(draw_mtxf[draw_m]);
         mtxf_to_mtx(mtx, draw_mtxf[draw_m]);
         draw_mtx[draw_m] = mtx;
-        gSPViewport(video_gfx++, K0_TO_PHYS(vp));
+        gSPViewport(gfx_ptr++, K0_TO_PHYS(vp));
         gSPMatrix(
-            video_gfx++, K0_TO_PHYS(draw_mtx[draw_m]),
+            gfx_ptr++, K0_TO_PHYS(draw_mtx[draw_m]),
             G_MTX_MODELVIEW|G_MTX_LOAD|G_MTX_NOPUSH
         );
         shape_scene = scene;

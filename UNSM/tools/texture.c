@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "lodepng/lodepng.h"
@@ -11,7 +10,7 @@ typedef struct texture
 {
     const char *str;
     void (*callback)(
-        FILE *f, const unsigned char *src, const unsigned char *pal,
+        FILE *fp, const unsigned char *src, const unsigned char *pal,
         unsigned w, unsigned h
     );
 }
@@ -70,28 +69,28 @@ static unsigned int texture_pal(
 #define len_i4      2
 #define len_i8      1
 
-#define TEXTURE(name)               \
-static void texture_##name(         \
-    FILE *f,                        \
-    const unsigned char *src,       \
-    const unsigned char *pal,       \
-    unsigned w, unsigned h          \
-)                                   \
-{                                   \
-    (void)pal;                      \
-    do                              \
-    {                               \
-        unsigned i = w;             \
-        do                          \
-        {                           \
-            fprintf(f, fmt_##name); \
-            src += 4*len_##name;    \
-            i   -= 1*len_##name;    \
-        }                           \
-        while (i > 0);              \
-        fputs("\n", f);             \
-    }                               \
-    while (--h > 0);                \
+#define TEXTURE(name)                   \
+static void texture_##name(             \
+    FILE *fp,                           \
+    const unsigned char *src,           \
+    const unsigned char *pal,           \
+    unsigned w, unsigned h              \
+)                                       \
+{                                       \
+    (void)pal;                          \
+    do                                  \
+    {                                   \
+        unsigned i = w;                 \
+        do                              \
+        {                               \
+            fprintf(fp, fmt_##name);    \
+            src += 4*len_##name;        \
+            i   -= 1*len_##name;        \
+        }                               \
+        while (i > 0);                  \
+        fputs("\n", fp);                \
+    }                                   \
+    while (--h > 0);                    \
 }
 TEXTURE(rgba16)
 TEXTURE(rgba32)
@@ -121,13 +120,13 @@ static const TEXTURE texture_table[] =
 
 int main(int argc, char *argv[])
 {
-    FILE *f;
+    int i;
+    FILE *fp;
     unsigned char *src;
     unsigned char *pal;
     unsigned error;
     unsigned w;
     unsigned h;
-    int i;
     if (argc < 3 || argc > 4)
     {
         fprintf(stderr, "usage: %s <output> <input> [palette]\n", argv[0]);
@@ -152,7 +151,7 @@ int main(int argc, char *argv[])
     {
         pal = NULL;
     }
-    if ((f = fopen(argv[1], "w")) == NULL)
+    if ((fp = fopen(argv[1], "w")) == NULL)
     {
         fprintf(stderr, "error: could not write '%s'\n", argv[1]);
         return 1;
@@ -162,11 +161,11 @@ int main(int argc, char *argv[])
         const TEXTURE *texture = &texture_table[i];
         if (strstr(argv[2], texture->str))
         {
-            texture->callback(f, src, pal, w, h);
+            texture->callback(fp, src, pal, w, h);
             break;
         }
     }
-    fclose(f);
+    fclose(fp);
     free(src);
     if (pal != NULL) free(pal);
     return 0;

@@ -10,7 +10,7 @@ import UNSM
 import UNSM.table
 
 # main.h
-# app.h
+# graphics.h
 # audio.h
 
 # game.h
@@ -20,14 +20,14 @@ def d_staff_prc(argv):
     stage   = UNSM.table.fmt_stage(ultra.ub())
     scene   = ultra.ub()
     flag    = ultra.ub()
-    ry      = ultra.ub()
+    ang     = ultra.ub()
     x       = ultra.sh()
     y       = ultra.sh()
     z       = ultra.sh()
     ultra.script.c_addr += 2
     str_    = ultra.c.aw()
     return ["{%s, %d, 0x%02X, 0x%02X, {%d, %d, %d}, %s}" % (
-        stage, scene, flag, ry, x, y, z, str_
+        stage, scene, flag, ang, x, y, z, str_
     )]
 d_staff = [False, d_staff_prc]
 
@@ -86,9 +86,9 @@ def d_camctl_prc(argv):
     w   = ultra.sh()
     h   = ultra.sh()
     d   = ultra.sh()
-    ry  = ultra.fmt_s16(ultra.sh())
+    ang = ultra.fmt_s16(ultra.sh())
     ultra.script.c_addr += 2
-    arg = (_00, callback, x, y, z, w, h, d, ry)
+    arg = (_00, callback, x, y, z, w, h, d, ang)
     if arg == (0, "NULL", 0, 0, 0, 0, 0, 0, "0x0000"):
         return ["{0}"]
     return ["{%d, %s, {%d, %d, %d}, {%d, %d, %d}, %s}" % arg]
@@ -154,7 +154,7 @@ def d_obj_splash_prc(argv):
     flag    = ultra.fmt_s16(ultra.sh())
     shape   = UNSM.table.fmt_shape(ultra.sh())
     script  = ultra.c.aw(True)
-    ry_mul  = ultra.sh()
+    ay_mul  = ultra.sh()
     p_mul   = ultra.sh()
     vf_add  = ultra.fmt_float(ultra.f())
     vf_mul  = ultra.fmt_float(ultra.f())
@@ -164,7 +164,7 @@ def d_obj_splash_prc(argv):
     s_mul   = ultra.fmt_float(ultra.f())
     return [
         "%s, %s, %s," % (flag, shape, script),
-        "/* rot y    */  %d," % ry_mul,
+        "/* ang y    */  %d," % ay_mul,
         "/* pos      */  %d," % p_mul,
         "/* vel f    */  %s, %s," % (vf_add, vf_mul),
         "/* vel y    */  %s, %s," % (vy_add, vy_mul),
@@ -259,9 +259,9 @@ def d_object_a_3_prc(argv):
     map_    = ultra.c.aw(True)
     px      = ultra.sh()
     pz      = ultra.sh()
-    ry      = ultra.fmt_s16(ultra.sh())
+    ay      = ultra.fmt_s16(ultra.sh())
     ultra.script.c_addr += 2
-    return ["{%s, %d, %d, %s}" % (map_, px, pz, ry)]
+    return ["{%s, %d, %d, %s}" % (map_, px, pz, ay)]
 d_object_a_3 = [False, d_object_a_3_prc]
 
 def d_object_a_4_prc(argv):
@@ -423,10 +423,10 @@ def d_map_obj_prc(argv):
     index = UNSM.table.fmt_m_obj(index)
     ext   = "M_EXT_" + (
         "NULL",
-        "RY",
-        "RY_ARG",
+        "AY",
+        "AY_ARG",
         "XYZ",
-        "RY_CODE",
+        "AY_CODE",
     )[ext]
     return ["{%s, %s, %d, %s, %s}" % (index, ext, code, shape, script)]
 d_map_obj = [False, d_map_obj_prc]
@@ -436,7 +436,7 @@ def d_obj_data_prc(argv):
     while True:
         x = ultra.uh()
         o = (x & 0x1FF) - 31
-        ry = x >> 9
+        ay = x >> 9
         if o == -1:
             lst.append("P_OBJ_END,")
             break
@@ -449,7 +449,7 @@ def d_obj_data_prc(argv):
             pz  = ultra.sh()
             arg = ultra.sh()
             lst.append("P_OBJ(%s, %d, %d, %d, %d, %d)," % (
-                UNSM.table.fmt_p_obj_x[o], ry, px, py, pz, arg,
+                UNSM.table.fmt_p_obj_x[o], ay, px, py, pz, arg,
             ))
     ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
     return lst
@@ -1344,7 +1344,7 @@ def s_camera(argv):
     return (None, arg, px, py, pz, lx, ly, lz, callback)
 
 # 10
-def s_gfx_posrot(argv):
+def s_gfx_posang(argv):
     arg = ultra.ub()
     x = arg >> 4 & 7
     if x == 0:
@@ -1352,27 +1352,27 @@ def s_gfx_posrot(argv):
         px = "%d" % ultra.sh()
         py = "%d" % ultra.sh()
         pz = "%d" % ultra.sh()
-        rx = "%d" % ultra.sh()
-        ry = "%d" % ultra.sh()
-        rz = "%d" % ultra.sh()
-        s = "posrot"
-        a = (px, py, pz, rx, ry, rz)
+        ax = "%d" % ultra.sh()
+        ay = "%d" % ultra.sh()
+        az = "%d" % ultra.sh()
+        s = "posang"
+        a = (px, py, pz, ax, ay, az)
     if x == 1:
-        px = "%d" % ultra.sh()
-        py = "%d" % ultra.sh()
-        pz = "%d" % ultra.sh()
-        s = "prp"
+        ax = "%d" % ultra.sh()
+        ay = "%d" % ultra.sh()
+        az = "%d" % ultra.sh()
+        s = "pap"
         a = (px, py, pz)
     if x == 2:
-        rx = "%d" % ultra.sh()
-        ry = "%d" % ultra.sh()
-        rz = "%d" % ultra.sh()
-        s = "prr"
-        a = (rx, ry, rz)
+        ax = "%d" % ultra.sh()
+        ay = "%d" % ultra.sh()
+        az = "%d" % ultra.sh()
+        s = "paa"
+        a = (ax, ay, az)
     if x == 3:
-        ry = "%d" % ultra.sh()
-        s = "pry"
-        a = (ry,)
+        ay = "%d" % ultra.sh()
+        s = "pay"
+        a = (ay,)
     if arg & 0x80:
         layer = UNSM.table.fmt_s_layer_x[arg & 0x0F]
         ultra.tag = "gfx"
@@ -1471,9 +1471,9 @@ s_str = (
     "lod", # 0x0D
     "select", # 0x0E
     "camera", # 0x0F
-    "posrot", # 0x10
+    "posang", # 0x10
     "pos", # 0x11
-    "rot", # 0x12
+    "ang", # 0x12
     "joint", # 0x13
     "billboard", # 0x14
     "gfx", # 0x15
@@ -1507,9 +1507,9 @@ s_fnc = (
     (s_lod,), # 0x0D
     (s_callback,), # 0x0E
     (s_camera,), # 0x0F
-    (s_gfx_posrot,), # 0x10
+    (s_gfx_posang,), # 0x10
     (s_gfx_arg, "gfx_pos", 0), # 0x11
-    (s_gfx_arg, "gfx_rot", 0), # 0x12
+    (s_gfx_arg, "gfx_ang", 0), # 0x12
     (s_gfx_pos,), # 0x13
     (s_gfx_arg, "gfx_billboard", 0), # 0x14
     (s_gfx,), # 0x15

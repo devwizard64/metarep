@@ -154,18 +154,18 @@ def p_object(argv):
     px = "%d" % ultra.sh()
     py = "%d" % ultra.sh()
     pz = "%d" % ultra.sh()
-    rx = "%d" % ultra.sh()
-    ry = "%d" % ultra.sh()
-    rz = "%d" % ultra.sh()
+    ax = "%d" % ultra.sh()
+    ay = "%d" % ultra.sh()
+    az = "%d" % ultra.sh()
     arg0 = "%d" % ultra.ub()
     arg1 = "%d" % ultra.ub()
     flag = "%d" % ultra.uh()
     script = ultra.aw()
     if mask == 0x1F: return ("object_globl",
-        shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script
+        shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script
     )
     mask = "0x%02X" % mask
-    return (None, mask, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
+    return (None, mask, shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script)
 
 # 25
 def p_player(argv):
@@ -212,11 +212,11 @@ def p_scene(argv):
 def p_player_open(argv):
     scene = "%d" % ultra.ub()
     ultra.script.c_addr += 1
-    ry = "%d" % ultra.sh()
+    ay = "%d" % ultra.sh()
     px = "%d" % ultra.sh()
     py = "%d" % ultra.sh()
     pz = "%d" % ultra.sh()
-    return (None, scene, ry, px, py, pz)
+    return (None, scene, ay, px, py, pz)
 
 # (2C) (2D)
 
@@ -448,12 +448,12 @@ mem_table = (
     "VEL_F", # 12
     "VEL_L", # 13
     "VEL_U", # 14
-    "ROT_X", # 15
-    "ROT_Y", # 16
-    "ROT_Z", # 17
-    "SHAPE_ROT_X", # 18
-    "SHAPE_ROT_Y", # 19
-    "SHAPE_ROT_Z", # 20
+    "ANG_X", # 15
+    "ANG_Y", # 16
+    "ANG_Z", # 17
+    "SHAPE_ANG_X", # 18
+    "SHAPE_ANG_Y", # 19
+    "SHAPE_ANG_Z", # 20
     "SHAPE_OFF_Y", # 21
     "PARTICLE", # 22
     "GRAVITY", # 23
@@ -468,9 +468,9 @@ mem_table = (
     "V5", # 32
     "V6", # 33
     "V7", # 34
-    "ROT_VEL_X", # 35
-    "ROT_VEL_Y", # 36
-    "ROT_VEL_Z", # 37
+    "ANG_VEL_X", # 35
+    "ANG_VEL_Y", # 36
+    "ANG_VEL_Z", # 37
     "ANIME", # 38
     "HOLD", # 39
     "WALL_R", # 40
@@ -487,7 +487,7 @@ mem_table = (
     "TIMER", # 51
     "BOUNCE", # 52
     "PL_DIST", # 53
-    "PL_ROT", # 54
+    "PL_ANG", # 54
     "ORG_X", # 55
     "ORG_Y", # 56
     "ORG_Z", # 57
@@ -508,9 +508,9 @@ mem_table = (
     "PRG_ARG", # 72
     "V8", # 73
     "V9", # 74
-    "WALL_RY", # 75
+    "WALL_ANG", # 75
     "GROUND_ARG", # 76
-    "ORG_RY", # 77
+    "ORG_ANG", # 77
     "GROUND", # 78
     "SE_DIE", # 79
 )
@@ -820,7 +820,7 @@ def etbl_add(etbl, i, s):
     if i not in etbl: etbl[i] = []
     etbl[i].append(s)
 
-def file_init(self, argv):
+def bank_init(self, argv):
     end, data, name, tbl = argv
     ultra.asm.init(self, 0, data)
     cnt = ultra.uw()
@@ -831,7 +831,7 @@ def file_init(self, argv):
     line.append("TABLE()\ntable:\n")
     for i in range(cnt):
         s = "%s_%s" % (name, tbl[0][i])
-        line.append("\tFILE(%s)\n" % s)
+        line.append("\tBANK(%s)\n" % s)
         start = ultra.uw()
         size  = ultra.uw()
         stbl_add(stbl, start, 0, s)
@@ -839,7 +839,7 @@ def file_init(self, argv):
     line.append("table_end:\n\n")
     return end, name, tbl, cnt, line, stbl, etbl
 
-def file_s(self, line, stbl):
+def bank_s(self, line, stbl):
     self.c_push()
     if self.c_addr in stbl:
         label = stbl[self.c_addr]
@@ -848,14 +848,14 @@ def file_s(self, line, stbl):
         return label
     return None
 
-def file_e(self, line, etbl):
+def bank_e(self, line, etbl):
     if self.c_addr in etbl:
         for s in etbl[self.c_addr]: line.append("%s_end:\n" % s)
         return True
     return False
 
 def s_anime(self, argv):
-    end, name, tbl, cnt, line, stbl, etbl = file_init(self, argv)
+    end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
     init = True
     i = 0
     while self.c_addr < end:
@@ -863,7 +863,7 @@ def s_anime(self, argv):
             fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".sx"
             line.append("#include \"%s/%s\"\n" % (name, fn))
             c = [".balign 4\n"]
-        label = file_s(self, c, stbl)
+        label = bank_s(self, c, stbl)
         if label != None:
             t = label[0]
             if t == 0: s = label[-1]
@@ -900,7 +900,7 @@ def s_anime(self, argv):
             ]))
         else:
             raise RuntimeError("bad mode")
-        if file_e(self, c, etbl):
+        if bank_e(self, c, etbl):
             data = main.line_prc(c)
             fn = self.path_join([name, fn])
             main.mkdir(fn)
@@ -909,9 +909,9 @@ def s_anime(self, argv):
             init = True
 
 def s_demo(self, argv):
-    end, name, tbl, cnt, line, stbl, etbl = file_init(self, argv)
+    end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
     while self.c_addr < end:
-        if file_s(self, line, stbl) != None:
+        if bank_s(self, line, stbl) != None:
             stage = UNSM.table.fmt_stage(ultra.ub())
             self.c_addr += 3
             line.append("\tDEMO(%s)\n" % stage)
@@ -923,7 +923,7 @@ def s_demo(self, argv):
             line.append("\t.byte %3d, %3d, %3d, 0x%02X\n" % (
                 count, stick_x, stick_y, button
             ))
-        file_e(self, line, etbl)
+        bank_e(self, line, etbl)
 
 def pstr(s):
     if not len(s) & 1: s += B"\0"

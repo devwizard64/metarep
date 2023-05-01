@@ -110,14 +110,13 @@ OBJ := \
 	lib/PR/rspboot.o        \
 	lib/PR/gspFast3D.fifo.o \
 	lib/PR/aspMain.o        \
-	lib/libultra_rom.a
-
+	lib/libultra.a
 
 FLAG    := -Iinclude -D_ULTRA64
 
-U64_HOST    := mips-linux-gnu
-U64_CC      := $(U64_HOST)-gcc
-U64_AR      := $(U64_HOST)-ar
+U64_PREFIX  := mips-linux-gnu-
+U64_CC      := $(U64_PREFIX)gcc
+U64_AR      := $(U64_PREFIX)ar
 U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 U64_OPT     := -Os
 U64_WARN    := -Wall -Wextra
@@ -133,7 +132,7 @@ default: $(OBJ)
 clean:
 	rm -f -r build lib
 
-lib/libultra_rom.a: $(SRC_OBJ)
+lib/libultra.a: $(SRC_OBJ)
 	@mkdir -p $(dir $@)
 	$(U64_AR) rc $@ $^
 

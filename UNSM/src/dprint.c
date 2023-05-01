@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/main.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/memory.h>
 #include <sm64/dprint.h>
 
@@ -202,11 +202,9 @@ static CHAR dprint_cvt(CHAR c)
 static void dprint_draw_txt(CHAR c)
 {
     u16 **txt = segment_to_virtual(txt_dprint);
-    gDPPipeSync(video_gfx++);
-    gDPSetTextureImage(
-        video_gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[c]
-    );
-    gSPDisplayList(video_gfx++, gfx_dprint_copy_char);
+    gDPPipeSync(gfx_ptr++);
+    gDPSetTextureImage(gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[c]);
+    gSPDisplayList(gfx_ptr++, gfx_dprint_copy_char);
 }
 
 static void dprint_clamp(int *x, int *y)
@@ -227,7 +225,7 @@ static void dprint_draw_char(int x, int y, int n)
     ux = sx;
     uy = sy;
     gSPTextureRectangle(
-        video_gfx++,
+        gfx_ptr++,
         (ux     ) << 2, (uy     ) << 2,
         (ux+16-1) << 2, (uy+16-1) << 2,
         G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
@@ -247,11 +245,11 @@ void dprint_draw(void)
         return;
     }
     guOrtho(mtx, 0, SCREEN_WD, 0, SCREEN_HT, -10, 10, 1);
-    gSPPerspNormalize(video_gfx++, 0xFFFF);
+    gSPPerspNormalize(gfx_ptr++, 0xFFFF);
     gSPMatrix(
-        video_gfx++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
+        gfx_ptr++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
     );
-    gSPDisplayList(video_gfx++, gfx_dprint_copy_start);
+    gSPDisplayList(gfx_ptr++, gfx_dprint_copy_start);
     for (i = 0; i < dprint_index; i++)
     {
         for (n = 0; n < dprint_table[i]->len; n++)
@@ -264,6 +262,6 @@ void dprint_draw(void)
         }
         free(dprint_table[i]);
     }
-    gSPDisplayList(video_gfx++, gfx_dprint_copy_end);
+    gSPDisplayList(gfx_ptr++, gfx_dprint_copy_end);
     dprint_index = 0;
 }

@@ -259,7 +259,7 @@ str_segment_g = """
 
 #define SEGMENT_DATA_FACE       0x04000000
 
-#define SEGMENT_VIDEO           0x01000000
+#define SEGMENT_FRAME           0x01000000
 #define SEGMENT_SZP_MAIN        0x02000000
 #define SEGMENT_SZP_GLOBAL      0x03000000
 #define SEGMENT_SZP_PLAYER      0x04000000
@@ -285,7 +285,7 @@ str_segment_g = """
 #define SEGMENT_DATA_PLAYER     0x17000000
 #define SEGMENT_DEMO            0x18000000
 
-#define SEG_VIDEO               (SEGMENT_VIDEO          >> 24)
+#define SEG_FRAME               (SEGMENT_FRAME          >> 24)
 #define SEG_SZP_MAIN            (SEGMENT_SZP_MAIN       >> 24)
 #define SEG_SZP_GLOBAL          (SEGMENT_SZP_GLOBAL     >> 24)
 #define SEG_SZP_PLAYER          (SEGMENT_SZP_PLAYER     >> 24)
@@ -336,9 +336,9 @@ str_main_g = """
 
 """
 
-str_app_g = """
+str_graphics_g = """
 #define GFX_LEN                 6400
-#define FIFO_SIZE               0x1F000
+#define FIFO_LEN                (0x1F000/8)
 
 #define CONTROLLER_LEN          2
 """
@@ -397,7 +397,7 @@ str_memory_c = """
 
 str_memory_s = """
 #define TABLE()     .word (table_end-table)/8, 0
-#define FILE(name)  .word name, name##_end-name
+#define BANK(name)  .word name, name##_end-name
 """
 
 str_save_g = """
@@ -459,7 +459,7 @@ str_scene_g = """
 str_time_g = """
 #define TIME_GFXCPU_START       0
 #define TIME_GFXCPU_ENDUPD      1
-#define TIME_GFXCPU_ENDGFX      2
+#define TIME_GFXCPU_ENDFRM      2
 #define TIME_GFXCPU_ENDRDP      3
 #define TIME_GFXCPU_END         4
 #define TIME_GFXCPU_MAX         5
@@ -488,21 +488,21 @@ str_object_c = """
 #define /* 0x0B8 */ o_vel_f             mem[O_MEM_VEL_F].f32
 #define /* 0x0BC */ o_vel_l             mem[O_MEM_VEL_L].f32
 #define /* 0x0C0 */ o_vel_u             mem[O_MEM_VEL_U].f32
-#define /* 0x0C4 */ o_rot_x             mem[O_MEM_ROT_X].s32
-#define /* 0x0C8 */ o_rot_y             mem[O_MEM_ROT_Y].s32
-#define /* 0x0CC */ o_rot_z             mem[O_MEM_ROT_Z].s32
-#define /* 0x0D0 */ o_shape_rot_x       mem[O_MEM_SHAPE_ROT_X].s32
-#define /* 0x0D4 */ o_shape_rot_y       mem[O_MEM_SHAPE_ROT_Y].s32
-#define /* 0x0D8 */ o_shape_rot_z       mem[O_MEM_SHAPE_ROT_Z].s32
+#define /* 0x0C4 */ o_ang_x             mem[O_MEM_ANG_X].s32
+#define /* 0x0C8 */ o_ang_y             mem[O_MEM_ANG_Y].s32
+#define /* 0x0CC */ o_ang_z             mem[O_MEM_ANG_Z].s32
+#define /* 0x0D0 */ o_shape_ang_x       mem[O_MEM_SHAPE_ANG_X].s32
+#define /* 0x0D4 */ o_shape_ang_y       mem[O_MEM_SHAPE_ANG_Y].s32
+#define /* 0x0D8 */ o_shape_ang_z       mem[O_MEM_SHAPE_ANG_Z].s32
 #define /* 0x0DC */ o_shape_off_y       mem[O_MEM_SHAPE_OFF_Y].f32
 #define /* 0x0E0 */ o_particle          mem[O_MEM_PARTICLE].s32
 #define /* 0x0E4 */ o_gravity           mem[O_MEM_GRAVITY].f32
 #define /* 0x0E8 */ o_ground_y          mem[O_MEM_GROUND_Y].f32
 #define /* 0x0EC */ o_move_flag         mem[O_MEM_MOVE_FLAG].s32
 #define /* 0x0F0 */ o_anime_code        mem[O_MEM_ANIME_CODE].s32
-#define /* 0x114 */ o_rot_vel_x         mem[O_MEM_ROT_VEL_X].s32
-#define /* 0x118 */ o_rot_vel_y         mem[O_MEM_ROT_VEL_Y].s32
-#define /* 0x11C */ o_rot_vel_z         mem[O_MEM_ROT_VEL_Z].s32
+#define /* 0x114 */ o_ang_vel_x         mem[O_MEM_ANG_VEL_X].s32
+#define /* 0x118 */ o_ang_vel_y         mem[O_MEM_ANG_VEL_Y].s32
+#define /* 0x11C */ o_ang_vel_z         mem[O_MEM_ANG_VEL_Z].s32
 #define /* 0x120 */ o_anime             mem[O_MEM_ANIME].ptr
 #define /* 0x124 */ o_hold              mem[O_MEM_HOLD].s32
 #define /* 0x128 */ o_wall_r            mem[O_MEM_WALL_R].f32
@@ -518,7 +518,7 @@ str_object_c = """
 #define /* 0x154 */ o_timer             mem[O_MEM_TIMER].s32
 #define /* 0x158 */ o_bounce            mem[O_MEM_BOUNCE].f32
 #define /* 0x15C */ o_pl_dist           mem[O_MEM_PL_DIST].f32
-#define /* 0x160 */ o_pl_rot            mem[O_MEM_PL_ROT].s32
+#define /* 0x160 */ o_pl_ang            mem[O_MEM_PL_ANG].s32
 #define /* 0x164 */ o_org_x             mem[O_MEM_ORG_X].f32
 #define /* 0x168 */ o_org_y             mem[O_MEM_ORG_Y].f32
 #define /* 0x16C */ o_org_z             mem[O_MEM_ORG_Z].f32
@@ -536,10 +536,10 @@ str_object_c = """
 #define /* 0x19C */ o_shape_dist        mem[O_MEM_SHAPE_DIST].f32
 #define /* 0x1A0 */ o_area              mem[O_MEM_AREA].s32
 #define /* 0x1A8 */ o_prg_arg           mem[O_MEM_PRG_ARG].s32
-#define /* 0x1B4 */ o_wall_ry           mem[O_MEM_WALL_RY].s32
+#define /* 0x1B4 */ o_wall_ang          mem[O_MEM_WALL_ANG].s32
 #define /* 0x1B8 */ o_ground_type       mem[O_MEM_GROUND_ARG].s16[0]
 #define /* 0x1BA */ o_ground_area       mem[O_MEM_GROUND_ARG].s16[1]
-#define /* 0x1BC */ o_org_ry            mem[O_MEM_ORG_RY].s32
+#define /* 0x1BC */ o_org_ang           mem[O_MEM_ORG_ANG].s32
 #define /* 0x1C0 */ o_ground            mem[O_MEM_GROUND].ptr
 #define /* 0x1C4 */ o_se_die            mem[O_MEM_SE_DIE].s32
 
@@ -735,10 +735,10 @@ str_obj_data_g = """
 #define P_OBJ_360               360
 
 #define M_EXT_NULL      0
-#define M_EXT_RY        1
-#define M_EXT_RY_ARG    2
+#define M_EXT_AY        1
+#define M_EXT_AY_ARG    2
 #define M_EXT_XYZ       3
-#define M_EXT_RY_CODE   4
+#define M_EXT_AY_CODE   4
 
 #define M_OBJ_PLAYER            0
 #define M_OBJ_COIN              1
@@ -817,8 +817,8 @@ str_obj_data_g = """
 """
 
 str_obj_data_c = """
-#define P_OBJ(obj, ry, px, py, pz, arg) \\
-    (OBJ_DATA)((P_OBJ_START+P_OBJ_##obj) | (ry) << 9), px, py, pz, arg
+#define P_OBJ(obj, ay, px, py, pz, arg) \\
+    (OBJ_DATA)((P_OBJ_START+P_OBJ_##obj) | (ay) << 9), px, py, pz, arg
 """
 
 str_math_c = """
@@ -837,9 +837,9 @@ str_shape_g = """
 #define S_TYPE_SELECT           (12 | 0x100)
 
 #define S_TYPE_CAMERA           (20 | 0x100)
-#define S_TYPE_POSROT           (21)
+#define S_TYPE_POSANG           (21)
 #define S_TYPE_POS              (22)
-#define S_TYPE_ROT              (23)
+#define S_TYPE_ANG              (23)
 #define S_TYPE_OBJECT           (24)
 #define S_TYPE_JOINT            (25)
 #define S_TYPE_BILLBOARD        (26)
@@ -1517,34 +1517,34 @@ str_s_script_c = """
     _H(pz, lx),                                 \\
     _H(ly, lz),                                 \\
     _P(callback)
-#define s_posrot(px, py, pz, rx, ry, rz)        \\
+#define s_posang(px, py, pz, ax, ay, az)        \\
     _C(0x10, 0x00, 0),                          \\
     _H(px, py),                                 \\
-    _H(pz, rx),                                 \\
-    _H(ry, rz)
-#define s_prp(px, py, pz)                       \\
+    _H(pz, ax),                                 \\
+    _H(ay, az)
+#define s_pap(px, py, pz)                       \\
     _C(0x10, 0x10, px),                         \\
     _H(py, pz)
-#define s_prr(rx, ry, rz)                       \\
-    _C(0x10, 0x20, rx),                         \\
-    _H(ry, rz)
-#define s_pry(ry)                               \\
-    _C(0x10, 0x30, ry)
-#define s_gfx_posrot(layer, gfx, px, py, pz, rx, ry, rz)    \\
+#define s_paa(ax, ay, az)                       \\
+    _C(0x10, 0x20, ax),                         \\
+    _H(ay, az)
+#define s_pay(ay)                               \\
+    _C(0x10, 0x30, ay)
+#define s_gfx_posang(layer, gfx, px, py, pz, ax, ay, az)    \\
     _C(0x10, 0x80 | S_LAYER_##layer, 0),        \\
     _H(px, py),                                 \\
-    _H(pz, rx),                                 \\
-    _H(ry, rz),                                 \\
+    _H(pz, ax),                                 \\
+    _H(ay, az),                                 \\
     _P(gfx)
-#define s_gfx_prp(layer, gfx, px, py, pz)       \\
+#define s_gfx_pap(layer, gfx, px, py, pz)       \\
     _C(0x10, 0x90 | S_LAYER_##layer, px),       \\
     _H(py, pz)
-#define s_gfx_prr(layer, gfx, rx, ry, rz)       \\
-    _C(0x10, 0xA0 | S_LAYER_##layer, rx),       \\
-    _H(ry, rz),                                 \\
+#define s_gfx_paa(layer, gfx, ax, ay, az)       \\
+    _C(0x10, 0xA0 | S_LAYER_##layer, ax),       \\
+    _H(ay, az),                                 \\
     _P(gfx)
-#define s_gfx_pry(layer, gfx, ry)               \\
-    _C(0x10, 0xB0 | S_LAYER_##layer, ry),       \\
+#define s_gfx_pay(layer, gfx, ay)               \\
+    _C(0x10, 0xB0 | S_LAYER_##layer, ay),       \\
     _P(gfx)
 #define s_pos(px, py, pz)                       \\
     _C(0x11, 0x00, px),                         \\
@@ -1553,12 +1553,12 @@ str_s_script_c = """
     _C(0x11, 0x80 | S_LAYER_##layer, px),       \\
     _H(py, pz),                                 \\
     _P(gfx)
-#define s_rot(rx, ry, rz)                       \\
-    _C(0x12, 0x00, rx),                         \\
-    _H(ry, rz)
-#define s_gfx_rot(layer, gfx, rx, ry, rz)       \\
-    _C(0x11, 0x80 | S_LAYER_##layer, rx),       \\
-    _H(ry, rz),                                 \\
+#define s_ang(ax, ay, az)                       \\
+    _C(0x12, 0x00, ax),                         \\
+    _H(ay, az)
+#define s_gfx_ang(layer, gfx, ax, ay, az)       \\
+    _C(0x11, 0x80 | S_LAYER_##layer, ax),       \\
+    _H(ay, az),                                 \\
     _P(gfx)
 #define s_joint(layer, gfx, px, py, pz)         \\
     _C(0x13, S_LAYER_##layer, px),              \\
@@ -1614,13 +1614,13 @@ extern void *s_face_main(int, struct shape *, void *);
 extern void *s_player_alpha(int, struct shape *, void *);
 extern void *s_player_select_lod(int, struct shape *, void *);
 extern void *s_player_select_eye(int, struct shape *, void *);
-extern void *s_player_rot_torso(int, struct shape *, void *);
-extern void *s_player_rot_head(int, struct shape *, void *);
+extern void *s_player_ang_torso(int, struct shape *, void *);
+extern void *s_player_ang_head(int, struct shape *, void *);
 extern void *s_player_select_glove(int, struct shape *, void *);
 extern void *s_player_scale(int, struct shape *, void *);
 extern void *s_player_select_cap(int, struct shape *, void *);
 extern void *s_player_select_head(int, struct shape *, void *);
-extern void *s_player_rot_wing(int, struct shape *, void *);
+extern void *s_player_ang_wing(int, struct shape *, void *);
 extern void *s_player_hand(int, struct shape *, void *);
 extern void *s_inside_mirror(int, struct shape *, void *);
 extern void *s_player_mirror(int, struct shape *, void *);
@@ -1799,20 +1799,20 @@ str_p_script_s = """
     _P(gfx);                                    \\
     _F(scale)
 #define p_object(                               \\
-    mask, shape, px, py, pz, rx, ry, rz,        \\
+    mask, shape, px, py, pz, ax, ay, az,        \\
     arg0, arg1, flag, script                    \\
 )                                               \\
     _B(0x24, 0x18, mask, shape);                \\
     _H(px, py);                                 \\
-    _H(pz, rx);                                 \\
-    _H(ry, rz);                                 \\
+    _H(pz, ax);                                 \\
+    _H(ay, az);                                 \\
     _C(arg0, arg1, flag);                       \\
     _P(script)
 #define p_object_globl(                         \\
-    shape, px, py, pz, rx, ry, rz,              \\
+    shape, px, py, pz, ax, ay, az,              \\
     arg0, arg1, flag, script                    \\
 )                                               \\
-    p_object(0x1F, shape, px, py, pz, rx, ry, rz, arg0, arg1, flag, script)
+    p_object(0x1F, shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script)
 #define p_player(shape, arg0, arg1, flag, script)   \\
     _B(0x25, 0x0C, 0, shape);                   \\
     _C(arg0, arg1, flag);                       \\
@@ -1839,9 +1839,9 @@ str_p_script_s = """
     _B(0x29, 0x04, scene, 0)
 #define p_scene_close(scene)                    \\
     _B(0x2A, 0x04, scene, 0)
-#define p_player_open(scene, ry, px, py, pz)    \\
+#define p_player_open(scene, ay, px, py, pz)    \\
     _B(0x2B, 0x0C, scene, 0);                   \\
-    _H(ry, px);                                 \\
+    _H(ay, px);                                 \\
     _H(py, pz)
 /* 0x2C player_close */
 #define p_scene_update()                        \\
@@ -1915,12 +1915,12 @@ str_o_script_g = """
 #define O_MEM_VEL_F             12
 #define O_MEM_VEL_L             13
 #define O_MEM_VEL_U             14
-#define O_MEM_ROT_X             15
-#define O_MEM_ROT_Y             16
-#define O_MEM_ROT_Z             17
-#define O_MEM_SHAPE_ROT_X       18
-#define O_MEM_SHAPE_ROT_Y       19
-#define O_MEM_SHAPE_ROT_Z       20
+#define O_MEM_ANG_X             15
+#define O_MEM_ANG_Y             16
+#define O_MEM_ANG_Z             17
+#define O_MEM_SHAPE_ANG_X       18
+#define O_MEM_SHAPE_ANG_Y       19
+#define O_MEM_SHAPE_ANG_Z       20
 #define O_MEM_SHAPE_OFF_Y       21
 #define O_MEM_PARTICLE          22
 #define O_MEM_GRAVITY           23
@@ -1935,9 +1935,9 @@ str_o_script_g = """
 #define O_MEM_V5                32
 #define O_MEM_V6                33
 #define O_MEM_V7                34
-#define O_MEM_ROT_VEL_X         35
-#define O_MEM_ROT_VEL_Y         36
-#define O_MEM_ROT_VEL_Z         37
+#define O_MEM_ANG_VEL_X         35
+#define O_MEM_ANG_VEL_Y         36
+#define O_MEM_ANG_VEL_Z         37
 #define O_MEM_ANIME             38
 #define O_MEM_HOLD              39
 #define O_MEM_WALL_R            40
@@ -1954,7 +1954,7 @@ str_o_script_g = """
 #define O_MEM_TIMER             51
 #define O_MEM_BOUNCE            52
 #define O_MEM_PL_DIST           53
-#define O_MEM_PL_ROT            54
+#define O_MEM_PL_ANG            54
 #define O_MEM_ORG_X             55
 #define O_MEM_ORG_Y             56
 #define O_MEM_ORG_Z             57
@@ -1975,9 +1975,9 @@ str_o_script_g = """
 #define O_MEM_PRG_ARG           72
 #define O_MEM_V8                73
 #define O_MEM_V9                74
-#define O_MEM_WALL_RY           75
+#define O_MEM_WALL_ANG          75
 #define O_MEM_GROUND_ARG        76
-#define O_MEM_ORG_RY            77
+#define O_MEM_ORG_ANG           77
 #define O_MEM_GROUND            78
 #define O_MEM_SE_DIE            79
 
@@ -2333,8 +2333,8 @@ struct_main = [
     ]],
 ]
 
-struct_app = [
-    [0xC84C, "struct", "video", [
+struct_graphics = [
+    [0xC84C, "struct", "frame", [
         (0x0000, table.sym_var("gfx",       "Gfx", "[GFX_LEN]")),
         (0xC800, table.sym_var("task",      "SC_TASK")),
     ]],
@@ -2365,7 +2365,7 @@ struct_game = [
         (0x00, table.sym_var("stage",   "u8")),
         (0x01, table.sym_var("scene",   "u8")),
         (0x02, table.sym_var("flag",    "u8")),
-        (0x03, table.sym_var("ry",      "u8")),
+        (0x03, table.sym_var("ang",     "u8")),
         (0x04, table.sym_var("pos",     "VECS")),
         (0x0C, table.sym_var("str",     "const char **")),
     ]],
@@ -2401,17 +2401,17 @@ struct_player = [
         (0x18, table.sym_var("mode",        "s16")),
         (0x1A, table.sym_var("timer",       "u16")),
         (0x1C, table.sym_var("arg",         "u32")),
-        (0x20, table.sym_var("stick_d",     "f32")),
-        (0x24, table.sym_var("stick_ry",    "s16")),
+        (0x20, table.sym_var("stick_dist",  "f32")),
+        (0x24, table.sym_var("stick_ang",   "s16")),
         (0x26, table.sym_var("invincible",  "s16")),
         (0x28, table.sym_var("timer_a",         "u8")),
         (0x29, table.sym_var("timer_b",         "u8")),
         (0x2A, table.sym_var("timer_wall",      "u8")),
         (0x2B, table.sym_var("timer_ground",    "u8")),
-        (0x2C, table.sym_var("rot",         "VECS")),
-        (0x32, table.sym_var("rot_vel",     "VECS")),
-        (0x38, table.sym_var("slide_ry",    "s16")),
-        (0x3A, table.sym_var("twirl_ry",    "s16")),
+        (0x2C, table.sym_var("ang",         "VECS")),
+        (0x32, table.sym_var("ang_vel",     "VECS")),
+        (0x38, table.sym_var("slide_ang",   "s16")),
+        (0x3A, table.sym_var("twirl_ang",   "s16")),
         (0x3C, table.sym_var("pos",         "VECF")),
         (0x48, table.sym_var("vel",         "VECF")),
         (0x54, table.sym_var("vel_f",       "f32")),
@@ -2421,7 +2421,7 @@ struct_player = [
         (0x68, table.sym_var("ground",      "struct map_plane *")),
         (0x6C, table.sym_var("roof_y",      "f32")),
         (0x70, table.sym_var("ground_y",    "f32")),
-        (0x74, table.sym_var("ground_ry",   "s16")),
+        (0x74, table.sym_var("ground_ang",  "s16")),
         (0x76, table.sym_var("water",       "s16")),
         (0x78, table.sym_var("obj_col",     "struct object *")),
         (0x7C, table.sym_var("obj_hold",    "struct object *")),
@@ -2433,7 +2433,7 @@ struct_player = [
         (0x94, table.sym_var("camera",      "struct pl_camera *")),
         (0x98, table.sym_var("shape",       "struct pl_shape *")),
         (0x9C, table.sym_var("cont",        "struct controller *")),
-        (0xA0, table.sym_var("file_anime",  "struct file *")),
+        (0xA0, table.sym_var("anime",       "struct bank *")),
         (0xA4, table.sym_var("collision",   "u32")),
         (0xA8, table.sym_var("coin",        "s16")),
         (0xAA, table.sym_var("star",        "s16")),
@@ -2531,7 +2531,7 @@ struct_memory = [
         (0x08, table.sym_var("free",    "HEAP_BLOCK *")),
         (0x0C, table.sym_var("pad",     "u32")),
     ]],
-    [0x08, "struct", "file_table", [
+    [0x08, "struct", "bank_table", [
         (0x00, table.sym_var("len", "uint")),
         (0x04, table.sym_var("src", "const char *")),
         [0x08, "struct", "table", [
@@ -2539,8 +2539,8 @@ struct_memory = [
             (0x04, table.sym_var("size",    "uint")),
         ], "[1]"],
     ]],
-    [0x0C, "struct", "file", [
-        (0x00, table.sym_var("table",   "FILE_TABLE *")),
+    [0x0C, "struct", "bank", [
+        (0x00, table.sym_var("table",   "BANK_TABLE *")),
         (0x04, table.sym_var("src",     "const char *")),
         (0x08, table.sym_var("buf",     "char *")),
     ]],
@@ -2575,11 +2575,11 @@ struct_save = [
 struct_scene = [
     [0x20, "struct", "spawn", [
         (0x00, table.sym_var("pos",     "VECS")),
-        (0x06, table.sym_var("rot",     "VECS")),
+        (0x06, table.sym_var("ang",     "VECS")),
         (0x0C, table.sym_var("scene",   "s8")),
         (0x0D, table.sym_var("group",   "s8")),
         (0x10, table.sym_var("arg",     "u32")),
-        (0x14, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x14, table.sym_var("script",  "O_SCRIPT *")),
         (0x18, table.sym_var("shape",   "struct shape *")),
         (0x1C, table.sym_var("next",    "struct spawn *")),
     ]],
@@ -2596,8 +2596,8 @@ struct_scene = [
         (0x01, table.sym_var("flag",        "s8")),
         (0x02, table.sym_var("env",         "u16")),
         (0x04, table.sym_var("s",           "SHAPE_SCENE *")),
-        (0x08, table.sym_var("map",         "const MAP_DATA *")),
-        (0x0C, table.sym_var("area",        "const AREA_DATA *")),
+        (0x08, table.sym_var("map",         "MAP_DATA *")),
+        (0x0C, table.sym_var("area",        "AREA_DATA *")),
         (0x10, table.sym_var("obj",         "OBJ_DATA *")),
         (0x14, table.sym_var("link",        "struct link *")),
         (0x18, table.sym_var("linkbg",      "void *")),
@@ -2647,7 +2647,7 @@ struct_camera = [
         ))),
         (0x08, table.sym_var("pos",     "VECS")),
         (0x0E, table.sym_var("size",    "VECS")),
-        (0x14, table.sym_var("ry",      "s16")),
+        (0x14, table.sym_var("ang",     "s16")),
     ]],
     [0x08, "struct", "campath", [
         (0x00, table.sym_var("code",    "s8")),
@@ -2690,7 +2690,7 @@ struct_object = [
             (None, table.sym_var("ptr", "void *")),
         ], "[80]"],
         (0x1C8, table.sym_var("_1C8",           "void *")),
-        (0x1CC, table.sym_var("pc",             "const O_SCRIPT *")),
+        (0x1CC, table.sym_var("pc",             "O_SCRIPT *")),
         (0x1D0, table.sym_var("stack_index",    "uint")),
         (0x1D4, table.sym_var("stack",          "void *", "[8]")),
         (0x1F4, table.sym_var("_1F4",       "s16")),
@@ -2700,10 +2700,10 @@ struct_object = [
         (0x200, table.sym_var("col_dmg_r",  "f32")),
         (0x204, table.sym_var("col_dmg_h",  "f32")),
         (0x208, table.sym_var("col_offset", "f32")),
-        (0x20C, table.sym_var("script",     "const O_SCRIPT *")),
+        (0x20C, table.sym_var("script",     "O_SCRIPT *")),
         (0x210, table.sym_var("_210",       "struct object *")),
         (0x214, table.sym_var("obj_ground", "struct object *")),
-        (0x218, table.sym_var("_218",       "s16 *")),
+        (0x218, table.sym_var("map",        "MAP_DATA *")),
         (0x21C, table.sym_var("mf",         "MTXF")),
         (0x25C, table.sym_var("_25C",       "void *")),
     ]],
@@ -2711,7 +2711,7 @@ struct_object = [
         (0x00, table.sym_var("code",    "u32")),
         (0x04, table.sym_var("flag",    "u32")),
         (0x08, table.sym_var("shape",   "u8")),
-        (0x0C, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x0C, table.sym_var("script",  "O_SCRIPT *")),
     ]],
     [0x06, "struct", "struct_8033D274", [
         (0x00, table.sym_var("ground",  "s16")),
@@ -2724,8 +2724,8 @@ struct_obj_lib = [
     [0x24, "struct", "obj_splash", [
         (0x00, table.sym_var("flag",    "s16")),
         (0x02, table.sym_var("shape",   "s16")),
-        (0x04, table.sym_var("script",  "const O_SCRIPT *")),
-        (0x08, table.sym_var("ry_mul",  "s16")),
+        (0x04, table.sym_var("script",  "O_SCRIPT *")),
+        (0x08, table.sym_var("ay_mul", "s16")),
         (0x0A, table.sym_var("p_mul",   "s16")),
         (0x0C, table.sym_var("vf_add",  "f32")),
         (0x10, table.sym_var("vf_mul",  "f32")),
@@ -2770,7 +2770,7 @@ struct_object_a = [
     [0x0A, "struct", "object_a_1", [
         (0x00, table.sym_var("flag",    "s16")),
         (0x02, table.sym_var("scale",   "s16")),
-        (0x04, table.sym_var("map",     "const MAP_DATA *")),
+        (0x04, table.sym_var("map",     "MAP_DATA *")),
         (0x08, table.sym_var("dist",    "s16")),
     ]],
     [0x0C, "struct", "object_a_2", [
@@ -2778,13 +2778,13 @@ struct_object_a = [
         (0x02, table.sym_var("add",     "s16")),
         (0x04, table.sym_var("mul",     "s16")),
         (0x06, table.sym_var("shape",   "s16")),
-        (0x08, table.sym_var("map",     "const MAP_DATA *")),
+        (0x08, table.sym_var("map",     "MAP_DATA *")),
     ]],
     [0x0A, "struct", "object_a_3", [
-        (0x00, table.sym_var("map", "const MAP_DATA *")),
+        (0x00, table.sym_var("map", "MAP_DATA *")),
         (0x04, table.sym_var("px",  "s16")),
         (0x06, table.sym_var("pz",  "s16")),
-        (0x08, table.sym_var("ry",  "s16")),
+        (0x08, table.sym_var("ay",  "s16")),
     ]],
     [0x14, "struct", "object_a_4", [
         (0x00, table.sym_var("offset",  "s32")),
@@ -2796,19 +2796,19 @@ struct_object_a = [
         (0x01, table.sym_var("px",      "s8")),
         (0x02, table.sym_var("pz",      "s8")),
         (0x03, table.sym_var("state",   "s8")),
-        (0x04, table.sym_var("data",    "const s8 *")),
+        (0x04, table.sym_var("data",    "s8 *")),
     ]],
     [0x08, "struct", "object_a_6", [
         (0x00, table.sym_var("index",   "u8")),
         (0x01, table.sym_var("flag",    "u8")),
         (0x02, table.sym_var("arg",     "u8")),
         (0x03, table.sym_var("shape",   "u8")),
-        (0x04, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x04, table.sym_var("script",  "O_SCRIPT *")),
     ]],
     [0x08, "struct", "object_a_7", [
         (0x00, table.sym_var("offset",  "s16")),
         (0x02, table.sym_var("shape",   "s16")),
-        (0x04, table.sym_var("map",     "const MAP_DATA *")),
+        (0x04, table.sym_var("map",     "MAP_DATA *")),
     ]],
     [0x10, "struct", "object_a_8", [
         (0x00, table.sym_var("time",        "s32")),
@@ -2863,7 +2863,7 @@ struct_wipe = [
         (0x0A, table.sym_var("s_y",     "s16")),
         (0x0C, table.sym_var("e_x",     "s16")),
         (0x0E, table.sym_var("e_y",     "s16")),
-        (0x10, table.sym_var("rot_vel", "s16")),
+        (0x10, table.sym_var("ang_vel", "s16")),
     ]],
     [0x04, "union", "wipe_arg", [
         (0x00, table.sym_var("fade",    "WIPE_ARG_FADE")),
@@ -2901,10 +2901,10 @@ struct_scroll = [
         (0x00, table.sym_var("index",   "int")),
         (0x04, table.sym_var("texture", "int")),
         (0x08, table.sym_var("len",     "int")),
-        (0x0C, table.sym_var("data",    "const s16 *")),
-        (0x10, table.sym_var("start",   "const Gfx *")),
-        (0x14, table.sym_var("end",     "const Gfx *")),
-        (0x18, table.sym_var("draw",    "const Gfx *")),
+        (0x0C, table.sym_var("data",    "s16 *")),
+        (0x10, table.sym_var("start",   "Gfx *")),
+        (0x14, table.sym_var("end",     "Gfx *")),
+        (0x18, table.sym_var("draw",    "Gfx *")),
         (0x1C, table.sym_var("r",       "u8")),
         (0x1D, table.sym_var("g",       "u8")),
         (0x1E, table.sym_var("b",       "u8")),
@@ -2944,7 +2944,7 @@ struct_message = [
         (0x04, table.sym_var("line",    "s8")),
         (0x06, table.sym_var("x",       "s16")),
         (0x08, table.sym_var("y",       "s16")),
-        (0x0C, table.sym_var("str",     "const u8 *")),
+        (0x0C, table.sym_var("str",     "u8 *")),
     ]],
 ]
 
@@ -2956,7 +2956,7 @@ struct_weather_lava = [
 
 struct_obj_data = [
     [0x08, "struct", "prg_obj", [
-        (0x00, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x00, table.sym_var("script",  "O_SCRIPT *")),
         (0x04, table.sym_var("shape",   "s16")),
         (0x06, table.sym_var("arg",     "s16")),
     ]],
@@ -2965,7 +2965,7 @@ struct_obj_data = [
         (0x01, table.sym_var("ext",     "u8")),
         (0x02, table.sym_var("code",    "u8")),
         (0x03, table.sym_var("shape",   "u8")),
-        (0x04, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x04, table.sym_var("script",  "O_SCRIPT *")),
     ]],
 ]
 
@@ -2994,7 +2994,7 @@ struct_object_c = [
     [0x0E, "struct", "object_c_0", [
         (0x00, table.sym_var("msg_start",   "s16")),
         (0x02, table.sym_var("msg_win",     "s16")),
-        (0x04, table.sym_var("path",        "const PATH_DATA *")),
+        (0x04, table.sym_var("path",        "PATH_DATA *")),
         (0x08, table.sym_var("star",        "VECS")),
     ]],
     [0x0B, "struct", "object_c_1", [
@@ -3004,12 +3004,12 @@ struct_object_c = [
         (0x0A, table.sym_var("damage",  "s8")),
     ]],
     [0x0A, "struct", "object_c_2", [
-        (0x00, table.sym_var("map",     "const MAP_DATA *")),
-        (0x04, table.sym_var("p_map",   "const MAP_DATA *")),
+        (0x00, table.sym_var("map",     "MAP_DATA *")),
+        (0x04, table.sym_var("p_map",   "MAP_DATA *")),
         (0x08, table.sym_var("p_shape", "s16")),
     ]],
     [0x06, "struct", "object_c_3", [
-        (0x00, table.sym_var("map",     "const MAP_DATA *")),
+        (0x00, table.sym_var("map",     "MAP_DATA *")),
         (0x04, table.sym_var("shape",   "s16")),
     ]],
     [0x0C, "struct", "object_c_4", [
@@ -3019,7 +3019,7 @@ struct_object_c = [
     ]],
     [0x0C, "struct", "object_c_5", [
         (0x00, table.sym_var("shape",   "int")),
-        (0x04, table.sym_var("script",  "const O_SCRIPT *")),
+        (0x04, table.sym_var("script",  "O_SCRIPT *")),
         (0x08, table.sym_var("scale",   "float")),
     ]],
 ]
@@ -3054,7 +3054,7 @@ struct_shape = [
     ]],
     [0x0C, "struct", "layer_list", [
         (0x00, table.sym_var("mtx",     "Mtx *")),
-        (0x04, table.sym_var("gfx",     "const Gfx *")),
+        (0x04, table.sym_var("gfx",     "Gfx *")),
         (0x08, table.sym_var("next",    "struct layer_list *")),
     ]],
     [0x14, "struct", "shape", [
@@ -3076,7 +3076,7 @@ struct_shape = [
     ]],
     [0x18, "struct", "shape_gfx", [
         (0x00, table.sym_var("s",   "SHAPE")),
-        (0x14, table.sym_var("gfx", "const Gfx *")),
+        (0x14, table.sym_var("gfx", "Gfx *")),
     ]],
     [0x24, "struct", "shape_scene", [
         (0x00, table.sym_var("s",       "SHAPE")),
@@ -3122,18 +3122,18 @@ struct_shape = [
         (0x1C, table.sym_var("arg",     "s16")),
         (0x1E, table.sym_var("index",   "s16")),
     ]],
-    [0x24, "struct", "shape_posrot", [
+    [0x24, "struct", "shape_posang", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
         (0x18, table.sym_var("pos", "VECS")),
-        (0x1E, table.sym_var("rot", "VECS")),
+        (0x1E, table.sym_var("ang", "VECS")),
     ]],
     [0x1E, "struct", "shape_pos", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
         (0x18, table.sym_var("pos", "VECS")),
     ]],
-    [0x1E, "struct", "shape_rot", [
+    [0x1E, "struct", "shape_ang", [
         (0x00, table.sym_var("s",   "SHAPE_GFX")),
-        (0x18, table.sym_var("rot", "VECS")),
+        (0x18, table.sym_var("ang", "VECS")),
     ]],
     [0x1C, "struct", "shape_scale", [
         (0x00, table.sym_var("s",       "SHAPE_GFX")),
@@ -3162,7 +3162,7 @@ struct_shape = [
         (0x14, table.sym_var("shape",       "SHAPE *")),
         (0x18, table.sym_var("scene",       "s8")),
         (0x19, table.sym_var("group",       "s8")),
-        (0x1A, table.sym_var("rot",         "VECS")),
+        (0x1A, table.sym_var("ang",         "VECS")),
         (0x20, table.sym_var("pos",         "VECF")),
         (0x2C, table.sym_var("scale",       "VECF")),
         (0x38, table.sym_var("skeleton",    "SKELETON")),

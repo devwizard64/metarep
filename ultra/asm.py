@@ -330,6 +330,10 @@ def fnc_j(argv):
     if argv[1][0] == I_JDST:
         jdst = inst_arg[I_JDST]
         inst_arg[I_JDST] = ultra.sym(jdst)
+        #if argv[0].startswith("j       "):
+        #    inst_arg[I_JDST] = sym(jdst)
+        #else:
+        #    inst_arg[I_JDST] = ultra.sym(jdst)
         inst_fmt[I_JDST] = "%s"
     return str_prc(argv[0], argv[1])
 
@@ -547,13 +551,13 @@ lst_special = [
     (fnc_clear, ["daddu   %s, %s, %s", I_RD, I_RS, I_RT]),
     (fnc_clear, ["dsub    %s, %s, %s", I_RD, I_RS, I_RT]),
     (fnc_clear, ["dsubu   %s, %s, %s", I_RD, I_RS, I_RT]),
-    None, # tge
-    None, # tgeu
-    None, # tlt
-    None, # tltu
-    None, # teq
+    ("tge     %s, %s, %s", [I_RS, I_RT, I_SA]),
+    ("tgeu    %s, %s, %s", [I_RS, I_RT, I_SA]),
+    ("tlt     %s, %s, %s", [I_RS, I_RT, I_SA]),
+    ("tltu    %s, %s, %s", [I_RS, I_RT, I_SA]),
+    ("teq     %s, %s, %s", [I_RS, I_RT, I_SA]),
     None,
-    None, # tne
+    ("tne     %s, %s, %s", [I_RS, I_RT, I_SA]),
     None,
     (fnc_clear, ["dsll    %s, %s, %s", I_RD, I_RT, I_SA]),
     None,

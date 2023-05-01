@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/segment.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/memory.h>
 #include <sm64/slidec.h>
 #include <sm64/timg.h>
@@ -46,7 +46,7 @@ void *virtual_to_segment(int segment, const void *addr)
 void segment_write(void)
 {
     int i;
-    for (i = 0; i < 16; i++) gSPSegment(video_gfx++, i, segment_table[i]);
+    for (i = 0; i < 16; i++) gSPSegment(gfx_ptr++, i, segment_table[i]);
 }
 
 void mem_init(void *start, void *end)
@@ -189,17 +189,17 @@ void *mem_load_data(int segment, const char *start, const char *end, int mode)
 void *mem_load_code(char *dst, const char *start, const char *end)
 {
     char *ptr = NULL;
-    size_t devsize = ALIGN16(end-start);
-    size_t alcsize = ALIGN16((char *)mem_blockr - dst);
-    if (devsize <= alcsize)
+    size_t srcsize = ALIGN16(end-start);
+    size_t dstsize = ALIGN16((char *)mem_blockr - dst);
+    if (srcsize <= dstsize)
     {
-        if ((ptr = mem_alloc(alcsize, MEM_ALLOC_R)) != NULL)
+        if ((ptr = mem_alloc(dstsize, MEM_ALLOC_R)) != NULL)
         {
-            bzero(ptr, alcsize);
+            bzero(ptr, dstsize);
             osWritebackDCacheAll();
             mem_dma(ptr, start, end);
-            osInvalICache(ptr, alcsize);
-            osInvalDCache(ptr, alcsize);
+            osInvalICache(ptr, dstsize);
+            osInvalDCache(ptr, dstsize);
         }
     }
     else
@@ -211,13 +211,13 @@ void *mem_load_code(char *dst, const char *start, const char *end)
 void *mem_load_szp(int segment, const char *start, const char *end)
 {
     char *ptr = NULL;
-    size_t devsize = ALIGN16(end-start);
-    char *src = mem_alloc(devsize, MEM_ALLOC_R);
-    u32 *alcsize = (u32 *)(src + 4);
+    size_t srcsize = ALIGN16(end-start);
+    char *src = mem_alloc(srcsize, MEM_ALLOC_R);
+    u32 *dstsize = (u32 *)(src + 4);
     if (src != NULL)
     {
         mem_dma(src, start, end);
-        if ((ptr = mem_alloc(*alcsize, MEM_ALLOC_L)) != NULL)
+        if ((ptr = mem_alloc(*dstsize, MEM_ALLOC_L)) != NULL)
         {
             slidec(src, ptr);
             segment_set(segment, ptr);
@@ -236,20 +236,20 @@ void *mem_load_szp(int segment, const char *start, const char *end)
 void *mem_load_txt(int segment, const char *start, const char *end)
 {
     UNUSED char *ptr = NULL;
-    size_t devsize = ALIGN16(end-start);
-    char *src = mem_alloc(devsize, MEM_ALLOC_R);
-    UNUSED u32 *alcsize = (u32 *)(src + 4);
+    size_t srcsize = ALIGN16(end-start);
+    char *src = mem_alloc(srcsize, MEM_ALLOC_R);
+    UNUSED u32 *dstsize = (u32 *)(src + 4);
     if (src != NULL)
     {
         mem_dma(src, start, end);
-        slidec(src, (char *)texture_buffer);
-        segment_set(segment, texture_buffer);
+        slidec(src, (char *)t_image);
+        segment_set(segment, t_image);
         mem_free(src);
     }
     else
     {
     }
-    return texture_buffer;
+    return t_image;
 }
 
 extern const char _libSegmentRomStart[];
@@ -258,13 +258,13 @@ extern const char _libSegmentRomEnd[];
 void mem_load_lib(void)
 {
     char *addr = (char *)SEGMENT_LIB;
-    size_t alcsize = SEGMENT_CIMG-SEGMENT_LIB;
-    UNUSED size_t devsize = ALIGN16(_libSegmentRomEnd-_libSegmentRomStart);
-    bzero(addr, alcsize);
+    size_t dstsize = SEGMENT_CIMG-SEGMENT_LIB;
+    UNUSED size_t srcsize = ALIGN16(_libSegmentRomEnd-_libSegmentRomStart);
+    bzero(addr, dstsize);
     osWritebackDCacheAll();
     mem_dma(addr, _libSegmentRomStart, _libSegmentRomEnd);
-    osInvalICache(addr, alcsize);
-    osInvalDCache(addr, alcsize);
+    osInvalICache(addr, dstsize);
+    osInvalDCache(addr, dstsize);
 }
 
 ARENA *arena_init(size_t size, int mode)
@@ -410,10 +410,10 @@ void *gfx_alloc(size_t size)
 {
     void *ptr = NULL;
     size = ALIGN8(size);
-    if (video_mem-size >= (char *)video_gfx)
+    if (gfx_mem-size >= (char *)gfx_ptr)
     {
-        video_mem -= size;
-        ptr = video_mem;
+        gfx_mem -= size;
+        ptr = gfx_mem;
     }
     else
     {
@@ -421,11 +421,11 @@ void *gfx_alloc(size_t size)
     return ptr;
 }
 
-FILE_TABLE *file_init_table(const char *src)
+BANK_TABLE *bank_table_init(const char *src)
 {
-    FILE_TABLE *table = mem_load(src, src+sizeof(table->len), MEM_ALLOC_L);
+    BANK_TABLE *table = mem_load(src, src+sizeof(table->len), MEM_ALLOC_L);
     size_t size =
-        sizeof(FILE_TABLE)-sizeof(table->table) +
+        sizeof(BANK_TABLE)-sizeof(table->table) +
         sizeof(table->table[0])*table->len;
     mem_free(table);
     table = mem_load(src, src+size, MEM_ALLOC_L);
@@ -433,25 +433,25 @@ FILE_TABLE *file_init_table(const char *src)
     return table;
 }
 
-void file_init(FILE *file, const char *src, void *buf)
+void bank_init(BANK *bank, const char *src, void *buf)
 {
-    if (src != NULL) file->table = file_init_table(src);
-    file->src = NULL;
-    file->buf = buf;
+    if (src != NULL) bank->table = bank_table_init(src);
+    bank->src = NULL;
+    bank->buf = buf;
 }
 
-int file_update(FILE *file, uint index)
+int bank_load(BANK *bank, uint index)
 {
     int flag = FALSE;
-    FILE_TABLE *table = file->table;
+    BANK_TABLE *table = bank->table;
     if (index < table->len)
     {
         const char *src  = table->table[index].start + table->src;
         size_t      size = table->table[index].size;
-        if (file->src != src)
+        if (bank->src != src)
         {
-            mem_dma(file->buf, src, src+size);
-            file->src = src;
+            mem_dma(bank->buf, src, src+size);
+            bank->src = src;
             flag = TRUE;
         }
     }

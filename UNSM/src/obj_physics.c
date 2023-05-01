@@ -72,10 +72,10 @@ void obj_physics_802C8BC8(int ismario, OBJECT *obj)
     VECF pos;
     VECF off;
     VECF new;
-    VECS rot;
-    rot[0] = obj->o_rot_vel_x;
-    rot[1] = obj->o_rot_vel_y;
-    rot[2] = obj->o_rot_vel_z;
+    VECS ang;
+    ang[0] = obj->o_ang_vel_x;
+    ang[1] = obj->o_ang_vel_y;
+    ang[2] = obj->o_ang_vel_z;
     if (ismario)
     {
         obj_physics_80330E20 = 0;
@@ -89,28 +89,28 @@ void obj_physics_802C8BC8(int ismario, OBJECT *obj)
     }
     px += obj->o_vel_x;
     pz += obj->o_vel_z;
-    if (rot[0] != 0 || rot[1] != 0 || rot[2] != 0)
+    if (ang[0] != 0 || ang[1] != 0 || ang[2] != 0)
     {
-        UNUSED SHORT rx = rot[0];
-        UNUSED SHORT rz = rot[2];
-        UNUSED SHORT ry = obj->o_shape_rot_y;
+        UNUSED SHORT ax = ang[0];
+        UNUSED SHORT az = ang[2];
+        UNUSED SHORT ay = obj->o_shape_ang_y;
         MTXF mf;
-        if (ismario) player_data[0].rot[1] += rot[1];
+        if (ismario) player_data[0].ang[1] += ang[1];
         gx = obj->o_pos_x;
         gy = obj->o_pos_y;
         gz = obj->o_pos_z;
         pos[0] = px - gx;
         pos[1] = py - gy;
         pos[2] = pz - gz;
-        rot[0] = obj->o_shape_rot_x - obj->o_rot_vel_x;
-        rot[1] = obj->o_shape_rot_y - obj->o_rot_vel_y;
-        rot[2] = obj->o_shape_rot_z - obj->o_rot_vel_z;
-        mtxf_posrot(mf, pos, rot);
+        ang[0] = obj->o_shape_ang_x - obj->o_ang_vel_x;
+        ang[1] = obj->o_shape_ang_y - obj->o_ang_vel_y;
+        ang[2] = obj->o_shape_ang_z - obj->o_ang_vel_z;
+        mtxf_posang(mf, pos, ang);
         obj_lib_8029F274(mf, off, pos);
-        rot[0] = obj->o_shape_rot_x;
-        rot[1] = obj->o_shape_rot_y;
-        rot[2] = obj->o_shape_rot_z;
-        mtxf_posrot(mf, pos, rot);
+        ang[0] = obj->o_shape_ang_x;
+        ang[1] = obj->o_shape_ang_y;
+        ang[2] = obj->o_shape_ang_z;
+        mtxf_posang(mf, pos, ang);
         obj_lib_8029F200(mf, new, off);
         px = new[0] + gx;
         py = new[1] + gy;

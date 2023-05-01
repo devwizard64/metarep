@@ -5,7 +5,7 @@ BUILD   := build/$(VERSION)
 
 CODE_OBJ := \
 	$(BUILD)/src/main.o             \
-	$(BUILD)/src/app.o              \
+	$(BUILD)/src/graphics.o         \
 	$(BUILD)/src/audio.o            \
 	$(BUILD)/src/game.o             $(BUILD)/src/game.data.o            \
 	$(BUILD)/src/pl_collision.o     $(BUILD)/src/pl_collision.data.o    \
@@ -90,7 +90,7 @@ FACE_OBJ := \
 
 IDO_OBJ := \
 	$(BUILD)/src/main.o             \
-	$(BUILD)/src/app.o              \
+	$(BUILD)/src/graphics.o         \
 	$(BUILD)/src/audio.o            \
 	$(BUILD)/src/memory.o           \
 	$(BUILD)/src/save.o             \
@@ -125,12 +125,12 @@ FLAG    += -DBUILD=$(BUILD)
 CC          := gcc
 CCFLAG      := -O2 -Wall -Wextra -Wpedantic
 
-U64_HOST    := mips-linux-gnu
-U64_CC      := $(U64_HOST)-gcc
-U64_LD      := $(U64_HOST)-ld
-U64_CPP     := $(U64_HOST)-cpp
-U64_OBJCOPY := $(U64_HOST)-objcopy
-U64_NM      := $(U64_HOST)-nm
+U64_PREFIX  := mips-linux-gnu-
+U64_CC      := $(U64_PREFIX)gcc
+U64_LD      := $(U64_PREFIX)ld
+U64_CPP     := $(U64_PREFIX)cpp
+U64_OBJCOPY := $(U64_PREFIX)objcopy
+U64_NM      := $(U64_PREFIX)nm
 U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 U64_OPT     := -Os
 U64_WARN    := -Wall -Wextra -Werror=implicit-function-declaration
@@ -182,7 +182,7 @@ include $(addsuffix .d,$(basename $(OBJ) $(CODE_OBJ) $(LIB_OBJ) $(AUDIO_OBJ) $(F
 
 $(BUILD)/code.o: make/rel.ld $(CODE_OBJ) $(AUDIO_OBJ)
 	@mkdir -p $(dir $@)
-	$(U64_LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra_rom
+	$(U64_LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra
 
 $(BUILD)/lib.o: make/rel.ld $(LIB_OBJ)
 	@mkdir -p $(dir $@)

@@ -3324,11 +3324,11 @@ sym_d_aspMain = {
 sym_J00_t_code = {
     # text
 
-    0x80247C9C: table.sym("video_draw_start"),
-    0x80247CE4: table.sym("video_draw_end"),
+    0x80247C9C: table.sym("gfx_start"),
+    0x80247CE4: table.sym("gfx_end"),
 
     0x80249148: table.sym("bgm_play"),
-    0x802491FC: table.sym("audio_fadeout"),
+    0x802491FC: table.sym("aud_fadeout"),
 
     0x802779A0: table.sym("segment_to_virtual"),
     0x80277B70: table.sym("mem_alloc"),
@@ -3414,8 +3414,8 @@ sym_J00_d_code = {
     0x8032C67C: table.sym("debug_time_index"),
     0x8032C680: table.sym("debug_mem_index"),
 
-    0x8032C694: table.sym("video_frame"),
-    0x8032C6AC: table.sym("cont_menu"),
+    0x8032C694: table.sym("gfx_frame"),
+    0x8032C6AC: table.sym("controller"),
 
     0x8032C9D8: table.sym("mario"),
 
@@ -3456,22 +3456,22 @@ sym_J00_d_code = {
     0x8035FE18: table.sym("object_80361188"),
     0x8035FEEC: table.sym("object_8036125C"),
 
-    0x80000400: table.sym("depth_buffer"),
-    0x801C1000: table.sym("texture_buffer"),
+    0x80000400: table.sym("z_image"),
+    0x801C1000: table.sym("t_image"),
     #0x801CE000: table.sym("Na_heap"),
     #0x80200200: table.sym("stack_entry"),
     #0x80200600: table.sym("stack_idle"),
     #0x80200E00: table.sym("stack_sc"),
-    #0x80202E00: table.sym("stack_audio"),
-    #0x80204E00: table.sym("stack_app"),
-    #0x80206E00: table.sym("video_yield"),
+    #0x80202E00: table.sym("stack_aud"),
+    #0x80204E00: table.sym("stack_gfx"),
+    #0x80206E00: table.sym("gfx_yield"),
     #0x80207700: table.sym("save"),
-    #0x80207900: table.sym("video_stack"),
-    #0x80207D00: table.sym("video_data"),
-    0x80227000: table.sym("fifo_buffer"),
-    0x8038F800: table.sym("colour_buffer_a"),
-    0x803B5000: table.sym("colour_buffer_b"),
-    0x803DA800: table.sym("colour_buffer_c"),
+    #0x80207900: table.sym("gfx_stack"),
+    0x80208100: table.sym("frame_data"),#
+    0x80227000: table.sym("gfx_fifo"),
+    0x8038F800: table.sym("c_image_a"),
+    0x803B5000: table.sym("c_image_b"),
+    0x803DA800: table.sym("c_image_c"),
 
     0x13001C34: table.sym("o_13001C34"),
     0x130032C0: table.sym("o_signpost"),
@@ -3537,72 +3537,72 @@ sym_E00_t_code = {
     0x80246C10: table.sym_fnc("sc_queue_gfxtask", arg=(
         "SC_TASK *task",
     ), flag=table.GLOBL),
-    0x80246C9C: table.sym_fnc("sc_audio_enable",  flag=table.GLOBL), # unused
-    0x80246CB8: table.sym_fnc("sc_audio_disable", flag=table.GLOBL), # unused
+    0x80246C9C: table.sym_fnc("sc_aud_enable",  flag=table.GLOBL), # unused
+    0x80246CB8: table.sym_fnc("sc_aud_disable", flag=table.GLOBL), # unused
     0x80246CF0: table.sym_fnc("idle_main", arg=(
         "void *arg",
     )),
     0x80246DF8: table.sym_fnc("entry", flag=table.GLOBL),
 
-    # src/app.c
-    0x80246E70: table.sym_fnc("video_init_dp"),
-    0x802471A4: table.sym_fnc("video_init_sp"),
-    0x80247284: table.sym_fnc("video_init_zimg"),
-    0x802473C8: table.sym_fnc("video_init_cimg"),
-    0x802474B8: table.sym_fnc("video_clear", arg=(
+    # src/graphics.c
+    0x80246E70: table.sym_fnc("gfx_init_dp"),
+    0x802471A4: table.sym_fnc("gfx_init_sp"),
+    0x80247284: table.sym_fnc("gfx_init_zimg"),
+    0x802473C8: table.sym_fnc("gfx_init_cimg"),
+    0x802474B8: table.sym_fnc("gfx_clear", arg=(
         "u32 fill",
     ), flag=table.GLOBL),
-    0x80247620: table.sym_fnc("video_vp_clear", arg=(
-        "const Vp *vp",
+    0x80247620: table.sym_fnc("gfx_vp_clear", arg=(
+        "Vp *vp",
         "u32 fill",
     ), flag=table.GLOBL),
-    0x8024784C: table.sym_fnc("video_draw_border"),
-    0x802479BC: table.sym_fnc("video_vp_scissor", arg=(
-        "const Vp *vp",
+    0x8024784C: table.sym_fnc("gfx_draw_border"),
+    0x802479BC: table.sym_fnc("gfx_vp_scissor", arg=(
+        "Vp *vp",
     ), flag=table.GLOBL),
-    0x80247B3C: table.sym_fnc("video_init_task"),
-    0x80247CCC: table.sym_fnc("video_draw_start", flag=table.GLOBL),
-    0x80247D14: table.sym_fnc("video_draw_end", flag=table.GLOBL),
-    0x80247DB4: table.sym_fnc("video_draw_reset"),
-    0x80247F08: table.sym_fnc("video_init"),
-    0x80247FDC: table.sym_fnc("video_start"),
-    0x80248090: table.sym_fnc("video_end"),
+    0x80247B3C: table.sym_fnc("gfx_make_task"),
+    0x80247CCC: table.sym_fnc("gfx_start", flag=table.GLOBL),
+    0x80247D14: table.sym_fnc("gfx_end", flag=table.GLOBL),
+    0x80247DB4: table.sym_fnc("gfx_reset"),
+    0x80247F08: table.sym_fnc("frame_init"),
+    0x80247FDC: table.sym_fnc("frame_start"),
+    0x80248090: table.sym_fnc("frame_end"),
     0x802481E0: table.sym_fnc("demo_record"), # unused
-    0x80248304: table.sym_fnc("input_update_stick", arg=(
+    0x80248304: table.sym_fnc("cont_update_stick", arg=(
         "CONTROLLER *cont",
     )),
     0x80248498: table.sym_fnc("demo_update"),
-    0x80248638: table.sym_fnc("input_update"),
-    0x80248824: table.sym_fnc("input_init"),
-    0x80248964: table.sym_fnc("app_init"),
-    0x80248AF0: table.sym_fnc("app_main", arg=(
+    0x80248638: table.sym_fnc("cont_update"),
+    0x80248824: table.sym_fnc("cont_init"),
+    0x80248964: table.sym_fnc("gfx_init"),
+    0x80248AF0: table.sym_fnc("gfx_main", arg=(
         "void *arg",
     ), flag=table.GLOBL),
 
     # src/audio.c
-    0x80248C40: table.sym_fnc("audio_mute_reset", flag=table.GLOBL),
-    0x80248C58: table.sym_fnc("audio_mute_start", arg=(
+    0x80248C40: table.sym_fnc("aud_mute_reset", flag=table.GLOBL),
+    0x80248C58: table.sym_fnc("aud_mute_start", arg=(
         "int flag",
     ), flag=table.GLOBL),
-    0x80248CE8: table.sym_fnc("audio_mute_end", arg=(
+    0x80248CE8: table.sym_fnc("aud_mute_end", arg=(
         "int flag",
     ), flag=table.GLOBL),
-    0x80248D78: table.sym_fnc("audio_se_lock",      flag=table.GLOBL),
-    0x80248DC0: table.sym_fnc("audio_se_unlock",    flag=table.GLOBL),
-    0x80248E08: table.sym_fnc("audio_output", arg=(
+    0x80248D78: table.sym_fnc("aud_se_lock",      flag=table.GLOBL),
+    0x80248DC0: table.sym_fnc("aud_se_unlock",    flag=table.GLOBL),
+    0x80248E08: table.sym_fnc("aud_output", arg=(
         "USHORT type",
     ), flag=table.GLOBL),
-    0x80248E54: table.sym_fnc("audio_face_sfx", arg=(
+    0x80248E54: table.sym_fnc("aud_face_sfx", arg=(
         "SHORT flag",
     ), flag=table.GLOBL),
-    0x80248FEC: table.sym_fnc("audio_se_ripple", flag=table.GLOBL),
+    0x80248FEC: table.sym_fnc("aud_se_ripple", flag=table.GLOBL),
     0x80249070: table.sym_fnc("bgm_endless", flag=table.GLOBL),
     0x80249178: table.sym_fnc("bgm_play", arg=(
         "USHORT mode",
         "USHORT bgm",
         "SHORT fadein",
     ), flag=table.GLOBL),
-    0x8024922C: table.sym_fnc("audio_fadeout", arg=(
+    0x8024922C: table.sym_fnc("aud_fadeout", arg=(
         "SHORT fadeout",
     ), flag=table.GLOBL),
     0x8024927C: table.sym_fnc("bgm_fadeout", arg=(
@@ -3618,12 +3618,12 @@ sym_E00_t_code = {
     ), flag=table.GLOBL),
     0x80249404: table.sym_fnc("bgm_special_fadeout", flag=table.GLOBL),
     0x80249448: table.sym_fnc("bgm_special_stop", flag=table.GLOBL),
-    0x80249494: table.sym_fnc("audio_env_se_play", arg=(
+    0x80249494: table.sym_fnc("aud_env_se_play", arg=(
         "int se",
         "VECF pos",
     ), flag=table.GLOBL),
-    0x802494D8: table.sym_fnc("audio_update", flag=table.GLOBL),
-    0x80249500: table.sym_fnc("audio_main", arg=(
+    0x802494D8: table.sym_fnc("aud_update", flag=table.GLOBL),
+    0x80249500: table.sym_fnc("aud_main", arg=(
         "void *arg",
     ), flag=table.GLOBL),
 
@@ -4669,13 +4669,13 @@ sym_E00_t_code = {
     0x802770A4: table.sym("s_player_alpha",         table.GLOBL), # s callback
     0x80277150: table.sym("s_player_select_lod",    table.GLOBL), # s callback
     0x802771BC: table.sym("s_player_select_eye",    table.GLOBL), # s callback
-    0x80277294: table.sym("s_player_rot_torso",     table.GLOBL), # s callback
-    0x802773A4: table.sym("s_player_rot_head",      table.GLOBL), # s callback
+    0x80277294: table.sym("s_player_ang_torso",     table.GLOBL), # s callback
+    0x802773A4: table.sym("s_player_ang_head",      table.GLOBL), # s callback
     0x802774F4: table.sym("s_player_select_glove",  table.GLOBL), # s callback
     0x802775CC: table.sym("s_player_scale",         table.GLOBL), # s callback
     0x802776D8: table.sym("s_player_select_cap",    table.GLOBL), # s callback
     0x80277740: table.sym("s_player_select_head",   table.GLOBL), # s callback
-    0x80277824: table.sym("s_player_rot_wing",      table.GLOBL), # s callback
+    0x80277824: table.sym("s_player_ang_wing",      table.GLOBL), # s callback
     0x8027795C: table.sym("s_player_hand",          table.GLOBL), # s callback
     0x80277B14: table.sym("s_inside_mirror",        table.GLOBL), # s callback
     0x80277D6C: table.sym("s_player_mirror",        table.GLOBL), # s callback
@@ -4773,16 +4773,16 @@ sym_E00_t_code = {
     0x80278F2C: table.sym_fnc("gfx_alloc", "void *", (
         "size_t size",
     ), table.GLOBL),
-    0x80278FA0: table.sym_fnc("file_init_table", "FILE_TABLE *", (
+    0x80278FA0: table.sym_fnc("bank_table_init", "BANK_TABLE *", (
         "const char *src",
     )),
-    0x80279028: table.sym_fnc("file_init", arg=(
-        "FILE *file",
+    0x80279028: table.sym_fnc("bank_init", arg=(
+        "BANK *bank",
         "const char *src",
         "void *buf",
     ), flag=table.GLOBL),
-    0x80279084: table.sym_fnc("file_update", "int", (
-        "FILE *file",
+    0x80279084: table.sym_fnc("bank_load", "int", (
+        "BANK *bank",
         "uint index",
     ), table.GLOBL),
 
@@ -4793,15 +4793,15 @@ sym_E00_t_code = {
         "int size",
     )),
     0x80279218: table.sym_fnc("save_wr", "int", (
-        "const void *data",
+        "void *data",
         "int size",
     )),
     0x802792C0: table.sym_fnc("save_check_sum", "USHORT", (
-        "const u8 *data",
+        "u8 *data",
         "int size",
     )),
     0x80279314: table.sym_fnc("save_check", "int", (
-        "const void *data",
+        "void *data",
         "int size",
         "USHORT key",
     )),
@@ -4903,7 +4903,7 @@ sym_E00_t_code = {
     0x8027A5D4: table.sym_fnc("save_cap_init", flag=table.GLOBL),
     0x8027A698: table.sym_fnc("save_mid_clear", flag=table.GLOBL),
     0x8027A6B0: table.sym_fnc("save_mid_set", arg=(
-        "const LINK *link",
+        "LINK *link",
     ), flag=table.GLOBL),
     0x8027A718: table.sym_fnc("save_mid_get", "int", (
         "LINK *link",
@@ -4967,7 +4967,7 @@ sym_E00_t_code = {
         "SHAPE_LAYER *layer",
     )),
     0x8027B904: table.sym_fnc("draw_layer_gfx", arg=(
-        "const Gfx *gfx",
+        "Gfx *gfx",
         "SHORT layer",
     )),
     0x8027BA00: table.sym_fnc("draw_layer", arg=(
@@ -4988,14 +4988,14 @@ sym_E00_t_code = {
     0x8027BF58: table.sym_fnc("draw_camera", arg=(
         "SHAPE_CAMERA *camera",
     )),
-    0x8027C114: table.sym_fnc("draw_posrot", arg=(
-        "SHAPE_POSROT *posrot",
+    0x8027C114: table.sym_fnc("draw_posang", arg=(
+        "SHAPE_POSANG *posang",
     )),
     0x8027C238: table.sym_fnc("draw_pos", arg=(
         "SHAPE_POS *pos",
     )),
-    0x8027C35C: table.sym_fnc("draw_rot", arg=(
-        "SHAPE_ROT *rot",
+    0x8027C35C: table.sym_fnc("draw_ang", arg=(
+        "SHAPE_ANG *ang",
     )),
     0x8027C474: table.sym_fnc("draw_scale", arg=(
         "SHAPE_SCALE *scale",
@@ -6158,13 +6158,13 @@ sym_E00_t_code = {
         "OBJECT *",
         "SHORT",
         "int shape",
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
         "SHORT px",
         "SHORT py",
         "SHORT pz",
-        "SHORT rx",
-        "SHORT ry",
-        "SHORT rz",
+        "SHORT ax",
+        "SHORT ay",
+        "SHORT az",
     ), table.GLOBL),
     0x8029EA24: table.sym("obj_lib_8029EA24", table.GLOBL),
     0x8029EAAC: table.sym("obj_lib_8029EAAC"), # unused
@@ -6173,7 +6173,7 @@ sym_E00_t_code = {
     0x8029EDCC: table.sym_fnc("obj_lib_8029EDCC", "OBJECT *", (
         "OBJECT *",
         "int",
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
     ), table.GLOBL),
     0x8029EE24: table.sym("obj_lib_8029EE24", table.GLOBL),
     0x8029EEB8: table.sym("obj_lib_8029EEB8", table.GLOBL),
@@ -6190,12 +6190,12 @@ sym_E00_t_code = {
     0x8029F200: table.sym_fnc("obj_lib_8029F200", arg=(
         "MTXF mf",
         "VECF dst",
-        "const VECF src",
+        "VECF src",
     ), flag=table.GLOBL),
     0x8029F274: table.sym_fnc("obj_lib_8029F274", arg=(
         "MTXF mf",
         "VECF dst",
-        "const VECF src",
+        "VECF src",
     ), flag=table.GLOBL),
     0x8029F2EC: table.sym("obj_lib_8029F2EC"),
     0x8029F3A8: table.sym("obj_lib_8029F3A8", table.GLOBL),
@@ -7495,30 +7495,30 @@ sym_E00_t_code = {
     0x802E1F48: table.sym("weather_lava_802E1F48", table.GLOBL),
 
     # src/obj_data.c
-    0x802E20A0: table.sym_fnc("cvt_ry", "SHORT", (
+    0x802E20A0: table.sym_fnc("cvt_ang", "SHORT", (
         "SHORT x",
     )),
     0x802E2134: table.sym_fnc("spawn_arg", arg=(
         "int shape",
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
         "SHORT px",
         "SHORT py",
         "SHORT pz",
-        "SHORT ry",
+        "SHORT ay",
         "SHORT arg",
     )),
     0x802E21DC: table.sym_fnc("spawn_code", arg=(
         "int shape",
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
         "SHORT px",
         "SHORT py",
         "SHORT pz",
-        "SHORT ry",
+        "SHORT ay",
         "SHORT code",
     )),
     0x802E2284: table.sym_fnc("spawn_xyz", arg=(
         "int shape",
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
         "SHORT px",
         "SHORT py",
         "SHORT pz",
@@ -7527,7 +7527,7 @@ sym_E00_t_code = {
         "SHORT vz",
     )),
     0x802E233C: table.sym_fnc("spawn_old", arg=(
-        "const O_SCRIPT *script",
+        "O_SCRIPT *script",
         "OBJ_DATA *data",
     )), # unused
     0x802E2414: table.sym_fnc("prg_obj_main", arg=(
@@ -7548,7 +7548,7 @@ sym_E00_t_code = {
     0x802E28C4: table.sym_fnc("L802E28C4", flag=table.GLOBL|table.LOCAL),
     0x802E28EC: table.sym_fnc("map_obj_main", arg=(
         "SHORT scene",
-        "const MAP_DATA **data",
+        "MAP_DATA **data",
     ), flag=table.GLOBL),
     0x802E2AAC: table.sym_fnc("L802E2AAC", flag=table.GLOBL|table.LOCAL),
     0x802E2AD8: table.sym_fnc("L802E2AD8", flag=table.GLOBL|table.LOCAL),
@@ -9072,7 +9072,7 @@ sym_E00_t_code = {
     0x803305F8: table.sym("object_a_803305F8+0x00"), # map
     0x803305FC: table.sym("object_a_803305F8+0x04"), # px
     0x803305FE: table.sym("object_a_803305F8+0x06"), # pz
-    0x80330600: table.sym("object_a_803305F8+0x08"), # ry
+    0x80330600: table.sym("object_a_803305F8+0x08"), # ay
     0x803306B4: table.sym("object_a_803306B4+0x00"), # offset
     0x803306C4: table.sym("object_a_803306B4+0x10"), # vel
     0x80330C48: table.sym("object_a_80330C48+0x00"), # offset
@@ -9171,11 +9171,11 @@ sym_E00_t_code = {
     0x8033AFA4: table.sym("controller_data+0x14"), # status
     0x8033AFA8: table.sym("controller_data+0x18"), # pad
 
-    0x8033B098: table.sym("file_demo+0x08"), # buf
+    0x8033B098: table.sym("demo_bank+0x08"), # buf
 
-    0x8033B1A2: table.sym("player_data+0x32+2*0"), # rot_vel[0]
-    0x8033B1A4: table.sym("player_data+0x32+2*1"), # rot_vel[1]
-    0x8033B1A6: table.sym("player_data+0x32+2*2"), # rot_vel[2]
+    0x8033B1A2: table.sym("player_data+0x32+2*0"), # ang_vel[0]
+    0x8033B1A4: table.sym("player_data+0x32+2*1"), # ang_vel[1]
+    0x8033B1A6: table.sym("player_data+0x32+2*2"), # ang_vel[2]
     0x8033B1AC: table.sym("player_data+0x3C+4*0"), # pos[0]
     0x8033B1B0: table.sym("player_data+0x3C+4*1"), # pos[1]
     0x8033B1B4: table.sym("player_data+0x3C+4*2"), # pos[2]
@@ -9235,7 +9235,7 @@ sym_E00_t_code = {
     0x8033BABE: table.sym("wipe+0x0E"), # arg.window.s_y
     0x8033BAC0: table.sym("wipe+0x10"), # arg.window.e_x
     0x8033BAC2: table.sym("wipe+0x12"), # arg.window.e_y
-    0x8033BAC4: table.sym("wipe+0x14"), # arg.window.rot_vel
+    0x8033BAC4: table.sym("wipe+0x14"), # arg.window.ang_vel
 
     0x8033BB18: table.sym("draw_mtxf+4*(4*3+0)"),
     0x8033BB1C: table.sym("draw_mtxf+4*(4*3+1)"),
@@ -9475,7 +9475,7 @@ sym_E00_d_code = {
     0x8032D570: table.sym_var("sc_gfxtask",         "SC_TASK *",    flag=table.GLOBL|ultra.DALIGN),
     0x8032D574: table.sym_var("sc_audtask_next",    "SC_TASK *",    flag=table.GLOBL|ultra.DALIGN),
     0x8032D578: table.sym_var("sc_gfxtask_next",    "SC_TASK *",    flag=table.GLOBL|ultra.DALIGN),
-    0x8032D57C: table.sym_var("sc_audio",           "s8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D57C: table.sym_var("sc_aud",             "s8",   flag=table.GLOBL|ultra.DALIGN),
     0x8032D580: table.sym_var("sc_vi",              "u32",  flag=table.GLOBL|ultra.DALIGN),
     0x8032D584: table.sym_var("reset_timer",        "s8",   flag=table.GLOBL|ultra.DALIGN),
     0x8032D588: table.sym_var("reset_frame",        "s8",   flag=table.GLOBL|ultra.DALIGN),
@@ -9488,30 +9488,30 @@ sym_E00_d_code = {
     0x8032D5BC: table.sym_var("debug_time_index",   "s16",  flag=ultra.DALIGN),
     0x8032D5C0: table.sym_var("debug_mem_index",    "s16",  flag=ultra.DALIGN),
 
-    # src/app.c
-    0x8032D5D0: table.sym_var("app_8032D5D0",   "u32",  flag=table.GLOBL|ultra.DALIGN), # unused
-    0x8032D5D4: table.sym_var("video_frame",    "u32",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D5D8: table.sym_var("video_vi",       "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D5DC: table.sym_var("video_dp",       "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D5E0: table.sym_var_fnc("video_callback", flag=table.GLOBL|ultra.DALIGN),
+    # src/graphics.c
+    0x8032D5D0: table.sym_var("gfx_8032D5D0",   "u32",  flag=table.GLOBL|ultra.DALIGN), # unused
+    0x8032D5D4: table.sym_var("gfx_frame",      "u32",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D5D8: table.sym_var("gfx_vi",         "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D5DC: table.sym_var("gfx_dp",         "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D5E0: table.sym_var_fnc("gfx_callback", flag=table.GLOBL|ultra.DALIGN),
     0x8032D5E4: table.sym_var("cont_1",         "CONTROLLER *", flag=table.GLOBL|ultra.DALIGN),
     0x8032D5E8: table.sym_var("cont_2",         "CONTROLLER *", flag=table.GLOBL|ultra.DALIGN),
-    0x8032D5EC: table.sym_var("cont_menu",      "CONTROLLER *", flag=table.GLOBL|ultra.DALIGN),
+    0x8032D5EC: table.sym_var("controller",     "CONTROLLER *", flag=table.GLOBL|ultra.DALIGN),
     0x8032D5F0: table.sym_var("demo",           "DEMO *",       flag=table.GLOBL|ultra.DALIGN),
     0x8032D5F4: table.sym_var("demo_index",     "u16",  flag=table.GLOBL|ultra.DALIGN),
     0x8032D5F8: table.sym_var("demo_record",    "DEMO"),
 
     # src/audio.c
-    0x8032D600: table.sym_var("audio_mute", "u8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D604: table.sym_var("audio_lock", "u8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D608: table.sym_var("bgm_stage",    "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D60C: table.sym_var("bgm_shell",    "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D610: table.sym_var("bgm_special",  "u16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032D614: table.sym_var("audio_endless",      "u8",   flag=table.GLOBL|ultra.DALIGN),
-    0x8032D618: table.sym_var("audio_8032D618",     "u32",      "[4]",  table.GLOBL),
-    0x8032D628: table.sym_var("audio_output_table", "s16",      "[]",   table.GLOBL),
-    0x8032D630: table.sym_var("audio_env_se_data",  "NA_SE",    "[]",   table.GLOBL),
-    0x8032D6C0: table.sym_var("audio_ripple",       "s8",   flag=ultra.DALIGN),
+    0x8032D600: table.sym_var("aud_mute",       "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D604: table.sym_var("aud_lock",       "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D608: table.sym_var("bgm_stage",      "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D60C: table.sym_var("bgm_shell",      "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D610: table.sym_var("bgm_special",    "u16",  flag=table.GLOBL|ultra.DALIGN),
+    0x8032D614: table.sym_var("aud_endless",        "u8",   flag=table.GLOBL|ultra.DALIGN),
+    0x8032D618: table.sym_var("aud_8032D618",       "u32",      "[4]",  table.GLOBL),
+    0x8032D628: table.sym_var("aud_output_table",   "s16",      "[]",   table.GLOBL),
+    0x8032D630: table.sym_var("aud_env_se_data",    "NA_SE",    "[]",   table.GLOBL),
+    0x8032D6C0: table.sym_var("aud_ripple",         "s8",   flag=ultra.DALIGN),
 
     # src/pl_physics.c
     0x8032DAF0: table.sym_var("pl_physics_8032DAF0",    "s16", "[]",    table.GLOBL),
@@ -9620,7 +9620,7 @@ sym_E00_d_code = {
     0x8032DDF0: table.sym_var("blank_b",        "u8",   flag=table.GLOBL|ultra.DALIGN),
     0x8032DDF4: table.sym_var("save_index",     "s16",  flag=table.GLOBL|ultra.DALIGN),
     0x8032DDF8: table.sym_var("stage_index",    "s16",  flag=table.GLOBL|ultra.DALIGN),
-    0x8032DDFC: table.sym_var("link_script",    "const O_SCRIPT *", "[]"),
+    0x8032DDFC: table.sym_var("link_script",    "O_SCRIPT *", "[]"),
     0x8032DE4C: table.sym_var("link_code",      "u8", "[]"),
     0x8032DE60: table.sym_var("vp_default",     "Vp"),
 
@@ -10268,8 +10268,8 @@ sym_E00_d_code = {
     # src/main.c
     0x80335B60: table.sym_var_fnc("main_80335B60", "const", "[]"),
 
-    # src/app.c
-    0x80335B80: table.sym_var("str_app_buf", "const char", "[]"),
+    # src/graphics.c
+    0x80335B80: table.sym_var("str_gfx_buf", "const char", "[]"),
 
     # src/audio.c
     0x80335B90: table.sym_var("audio_80335B90", "const float"),
@@ -11499,8 +11499,8 @@ sym_E00_d_code = {
     0x8033A580: table.sym_var("thread_rmon",    "OSThread",         flag=table.GLOBL|ultra.BALIGN),
     0x8033A730: table.sym_var("thread_idle",    "OSThread",         flag=table.GLOBL|ultra.BALIGN),
     0x8033A8E0: table.sym_var("thread_sc",      "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033AA90: table.sym_var("thread_app",     "OSThread",         flag=table.GLOBL|ultra.BALIGN),
-    0x8033AC40: table.sym_var("thread_audio",   "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AA90: table.sym_var("thread_gfx",     "OSThread",         flag=table.GLOBL|ultra.BALIGN),
+    0x8033AC40: table.sym_var("thread_aud",     "OSThread",         flag=table.GLOBL|ultra.BALIGN),
     0x8033ADF0: table.sym_var("pi_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AE08: table.sym_var("sc_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AE20: table.sym_var("sc_task_mq",     "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
@@ -11514,34 +11514,34 @@ sym_E00_d_code = {
     0x8033AF60: table.sym_var("dma_mq",         "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
     0x8033AF78: table.sym_var("si_mq",          "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
 
-    # src/app.c
+    # src/graphics.c
     0x8033AF90: table.sym_var("controller_data",    "CONTROLLER",   "[CONTROLLER_LEN+1]", table.GLOBL|ultra.BALIGN),
-    0x8033AFE8: table.sym_var("contstatus_data",    "OSContStatus", "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
-    0x8033AFF8: table.sym_var("contpad_data",       "OSContPad",    "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
-    0x8033B010: table.sym_var("video_vi_mq",        "OSMesgQueue",  flag=table.GLOBL|ultra.BALIGN),
-    0x8033B028: table.sym_var("video_dp_mq",        "OSMesgQueue",  flag=table.GLOBL|ultra.BALIGN),
-    0x8033B040: table.sym_var("video_vi_msg",       "OSMesg",       flag=table.GLOBL),
-    0x8033B044: table.sym_var("video_dp_msg",       "OSMesg",       flag=table.GLOBL),
-    0x8033B048: table.sym_var("sc_client_video",    "SC_CLIENT",    flag=table.GLOBL|ultra.BALIGN),
-    0x8033B050: table.sym_var("video_cimg",         "uintptr_t", "[3]", table.GLOBL|ultra.BALIGN),
-    0x8033B05C: table.sym_var("video_zimg",         "uintptr_t",        flag=table.GLOBL),
-    0x8033B060: table.sym_var("anime_mario_buffer", "void *",       flag=table.GLOBL),
-    0x8033B064: table.sym_var("demo_buffer",        "void *",       flag=table.GLOBL),
-    0x8033B068: table.sym_var("video_task",         "SC_TASK *",    flag=table.GLOBL),
-    0x8033B06C: table.sym_var("video_gfx",          "Gfx *",        flag=table.GLOBL),
-    0x8033B070: table.sym_var("video_mem",          "char *",       flag=table.GLOBL),
-    0x8033B074: table.sym_var("video",              "VIDEO *",      flag=table.GLOBL),
-    0x8033B078: table.sym_var("input_flag",         "u8",   flag=table.GLOBL),
+    0x8033AFE8: table.sym_var("cont_status",        "OSContStatus", "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
+    0x8033AFF8: table.sym_var("cont_pad",           "OSContPad",    "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
+    0x8033B010: table.sym_var("gfx_vi_mq",          "OSMesgQueue",  flag=table.GLOBL|ultra.BALIGN),
+    0x8033B028: table.sym_var("gfx_dp_mq",          "OSMesgQueue",  flag=table.GLOBL|ultra.BALIGN),
+    0x8033B040: table.sym_var("gfx_vi_msg",         "OSMesg",       flag=table.GLOBL),
+    0x8033B044: table.sym_var("gfx_dp_msg",         "OSMesg",       flag=table.GLOBL),
+    0x8033B048: table.sym_var("sc_client_gfx",      "SC_CLIENT",    flag=table.GLOBL|ultra.BALIGN),
+    0x8033B050: table.sym_var("gfx_cimg",           "uintptr_t", "[3]", table.GLOBL|ultra.BALIGN),
+    0x8033B05C: table.sym_var("gfx_zimg",           "uintptr_t",        flag=table.GLOBL),
+    0x8033B060: table.sym_var("anime_mario_buf",    "void *",       flag=table.GLOBL),
+    0x8033B064: table.sym_var("demo_buf",           "void *",       flag=table.GLOBL),
+    0x8033B068: table.sym_var("gfx_task",           "SC_TASK *",    flag=table.GLOBL),
+    0x8033B06C: table.sym_var("gfx_ptr",            "Gfx *",        flag=table.GLOBL),
+    0x8033B070: table.sym_var("gfx_mem",            "char *",       flag=table.GLOBL),
+    0x8033B074: table.sym_var("frame",              "FRAME *",      flag=table.GLOBL),
+    0x8033B078: table.sym_var("cont_bitpattern",    "u8",   flag=table.GLOBL),
     0x8033B079: table.sym_var("eeprom_status",      "s8",   flag=table.GLOBL),
-    0x8033B080: table.sym_var("file_anime_mario",   "FILE", flag=table.GLOBL|ultra.BALIGN),
-    0x8033B090: table.sym_var("file_demo",          "FILE", flag=table.GLOBL|ultra.BALIGN),
+    0x8033B080: table.sym_var("anime_mario_bank",   "BANK", flag=table.GLOBL|ultra.BALIGN),
+    0x8033B090: table.sym_var("demo_bank",          "BANK", flag=table.GLOBL|ultra.BALIGN),
 
     # src/audio.c
-    0x8033B0A0: table.sym_var("audio_env_se_8033B0A0",  "u32", "[]",    table.GLOBL|ultra.BALIGN), # unused
-    0x8033B130: table.sym_var("audio_0",            "VECF",             flag=table.GLOBL|ultra.BALIGN),
-    0x8033B140: table.sym_var("audio_vi_mq",        "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
-    0x8033B158: table.sym_var("audio_vi_msg",       "OSMesg",           flag=table.GLOBL),
-    0x8033B160: table.sym_var("sc_client_audio",    "SC_CLIENT",        flag=table.GLOBL|ultra.BALIGN),
+    0x8033B0A0: table.sym_var("aud_env_se_8033B0A0",    "u32", "[]",    table.GLOBL|ultra.BALIGN), # unused
+    0x8033B130: table.sym_var("aud_0",          "VECF",             flag=table.GLOBL|ultra.BALIGN),
+    0x8033B140: table.sym_var("aud_vi_mq",      "OSMesgQueue",      flag=table.GLOBL|ultra.BALIGN),
+    0x8033B158: table.sym_var("aud_vi_msg",     "OSMesg",           flag=table.GLOBL),
+    0x8033B160: table.sym_var("sc_client_aud",  "SC_CLIENT",        flag=table.GLOBL|ultra.BALIGN),
 
     # src/game.c
     0x8033B170: table.sym_var("player_data",    "PLAYER", "[1]",  table.GLOBL|ultra.BALIGN),
@@ -11789,7 +11789,7 @@ sym_E00_d_code = {
     0x80361158: table.sym_var("obj_mario",          "OBJECT *",  flag=table.GLOBL),
     0x8036115C: table.sym_var("obj_luigi",          "OBJECT *",  flag=table.GLOBL),
     0x80361160: table.sym_var("object",             "OBJECT *",  flag=table.GLOBL),
-    0x80361164: table.sym_var("object_pc",          "const O_SCRIPT *",   flag=table.GLOBL),
+    0x80361164: table.sym_var("object_pc",          "O_SCRIPT *",   flag=table.GLOBL),
     0x80361168: table.sym_var("object_80361168",    "s16",  flag=table.GLOBL), # prev "obj"
     0x8036116C: table.sym_var("object_8036116C",    "int",  flag=table.GLOBL), # movebg alloc
     0x80361170: table.sym_var("object_80361170",    "int",  flag=table.GLOBL), # movebg alloc
@@ -11911,10 +11911,10 @@ sym_E00_d_code = {
     # ==========================================================================
 
     # src/zimg.c
-    0x80000400: table.sym_var("depth_buffer",   "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
+    0x80000400: table.sym_var("z_image",    "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
 
     # src/timg.c
-    0x801C1000: table.sym_var("texture_buffer", "u16", "[13][2048]",    table.GLOBL|ultra.BALIGN),
+    0x801C1000: table.sym_var("t_image",    "u16", "[13][2048]",    table.GLOBL|ultra.BALIGN),
 
     # src/audio/heap.c
     0x801CE000: table.sym_var("Na_heap",        "u64", "[0x32200/8]",   table.GLOBL|ultra.BALIGN),
@@ -11923,23 +11923,23 @@ sym_E00_d_code = {
     0x80200200: table.sym_var("stack_entry",    "u64", "[0x400/8]",     table.GLOBL|ultra.BALIGN),
     0x80200600: table.sym_var("stack_idle",     "u64", "[0x800/8]",      table.GLOBL|ultra.BALIGN),
     0x80200E00: table.sym_var("stack_sc",       "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
-    0x80202E00: table.sym_var("stack_audio",    "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
-    0x80204E00: table.sym_var("stack_app",      "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
-    0x80206E00: table.sym_var("video_yield",    "u64", "[OS_YIELD_DATA_SIZE/8]",    table.GLOBL|ultra.BALIGN),
+    0x80202E00: table.sym_var("stack_aud",      "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
+    0x80204E00: table.sym_var("stack_gfx",      "u64", "[0x2000/8]",    table.GLOBL|ultra.BALIGN),
+    0x80206E00: table.sym_var("gfx_yield",      "u64", "[OS_YIELD_DATA_SIZE/8]",    table.GLOBL|ultra.BALIGN),
     0x80207700: table.sym_var("save",           "SAVE", flag=table.GLOBL|ultra.BALIGN),
-    0x80207900: table.sym_var("video_stack",    "u64", "[SP_DRAM_STACK_SIZE64]",    table.GLOBL|ultra.BALIGN),
-    0x80207D00: table.sym_var("video_data",     "VIDEO", "[2]", table.GLOBL|ultra.BALIGN),
+    0x80207900: table.sym_var("gfx_stack",      "u64", "[SP_DRAM_STACK_SIZE64]",    table.GLOBL|ultra.BALIGN),
+    0x80207D00: table.sym_var("frame_data",     "FRAME", "[2]", table.GLOBL|ultra.BALIGN),
 
     # src/audio/bss.c
     # 0x80220DA0 (max 0x6260)
 
     # src/fifo.c
-    0x80227000: table.sym_var("fifo_buffer",    "u64", "[FIFO_SIZE/8]", table.GLOBL|ultra.BALIGN),
+    0x80227000: table.sym_var("gfx_fifo",   "u64", "[FIFO_LEN]", table.GLOBL|ultra.BALIGN),
 
     # src/cimg.c
-    0x8038F800: table.sym_var("colour_buffer_a",    "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
-    0x803B5000: table.sym_var("colour_buffer_b",    "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
-    0x803DA800: table.sym_var("colour_buffer_c",    "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
+    0x8038F800: table.sym_var("c_image_a",  "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
+    0x803B5000: table.sym_var("c_image_b",  "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
+    0x803DA800: table.sym_var("c_image_c",  "u16", "[SCREEN_HT][SCREEN_WD]",    table.GLOBL|ultra.BALIGN),
 
     # scroll fix
     0x07001000: table.sym("(void *)0x07001000"),
@@ -12045,15 +12045,15 @@ sym_J00_E00_t_lib = {
         "VECF look",
         "SHORT rz",
     ), flag=table.GLOBL),
-    0x80379440: table.sym_fnc("mtxf_posrot", arg=(
+    0x80379440: table.sym_fnc("mtxf_posang", arg=(
         "MTXF mf",
         "VECF pos",
-        "VECS rot",
+        "VECS ang",
     ), flag=table.GLOBL),
     0x803795F0: table.sym_fnc("mtxf_joint", arg=(
         "MTXF mf",
         "VECF pos",
-        "VECS rot",
+        "VECS ang",
     ), flag=table.GLOBL),
     0x80379798: table.sym_fnc("mtxf_billboard", arg=(
         "MTXF dst",
@@ -12065,12 +12065,12 @@ sym_J00_E00_t_lib = {
         "MTXF mf",
         "VECF normal",
         "VECF pos",
-        "SHORT ry",
+        "SHORT ang",
     ), flag=table.GLOBL),
     0x80379AA4: table.sym_fnc("mtxf_ground", arg=(
         "MTXF mf",
         "VECF pos",
-        "SHORT ry",
+        "SHORT ang",
         "float radius",
     ), flag=table.GLOBL),
     0x80379F60: table.sym_fnc("mtxf_cat", arg=(
@@ -12104,15 +12104,15 @@ sym_J00_E00_t_lib = {
         "VECF a",
         "VECF b",
         "float *dist",
-        "s16 *rx",
-        "s16 *ry",
+        "s16 *ax",
+        "s16 *ay",
     ), flag=table.GLOBL),
     0x8037A788: table.sym_fnc("polar_to_cartesian", arg=(
         "VECF a",
         "VECF b",
         "float dist",
-        "SHORT rx",
-        "SHORT ry",
+        "SHORT ax",
+        "SHORT ay",
     ), flag=table.GLOBL),
     0x8037A860: table.sym_fnc("converge_i", "int", (
         "int x",
@@ -12149,7 +12149,7 @@ sym_J00_E00_t_lib = {
     0x8037AE5C: table.sym_fnc("L8037AE5C", flag=table.GLOBL|table.LOCAL),
     0x8037AF18: table.sym_fnc("L8037AF18", flag=table.GLOBL|table.LOCAL),
     0x8037AFB8: table.sym_fnc("bspline_init", arg=(
-        "const BSPLINE *b",
+        "BSPLINE *b",
     ), flag=table.GLOBL),
     0x8037AFE8: table.sym_fnc("bspline_update", "int", (
         "VECF dst",
@@ -12225,9 +12225,9 @@ sym_J00_E00_t_lib = {
     0x8037D55C: table.sym_fnc("s_cmd_lod",          flag=table.GLOBL), # data
     0x8037D5D4: table.sym_fnc("s_cmd_select",       flag=table.GLOBL), # data
     0x8037D640: table.sym_fnc("s_cmd_camera",       flag=table.GLOBL), # data
-    0x8037D6F0: table.sym_fnc("s_cmd_posrot",       flag=table.GLOBL), # data
+    0x8037D6F0: table.sym_fnc("s_cmd_posang",       flag=table.GLOBL), # data
     0x8037D8D4: table.sym_fnc("s_cmd_pos",          flag=table.GLOBL), # data
-    0x8037D998: table.sym_fnc("s_cmd_rot",          flag=table.GLOBL), # data
+    0x8037D998: table.sym_fnc("s_cmd_ang",          flag=table.GLOBL), # data
     0x8037DA5C: table.sym_fnc("s_cmd_scale",        flag=table.GLOBL), # data
     0x8037DB50: table.sym_fnc("s_cmd_1E",           flag=table.GLOBL), # data
     0x8037DB74: table.sym_fnc("s_cmd_joint",        flag=table.GLOBL), # data
@@ -12327,8 +12327,8 @@ sym_J00_E00_t_lib = {
     0x80380558: table.sym_fnc("L80380558", flag=table.GLOBL|table.LOCAL),
     0x80380570: table.sym_fnc("L80380570", flag=table.GLOBL|table.LOCAL),
     0x80380588: table.sym_fnc("L80380588", flag=table.GLOBL|table.LOCAL),
-    0x803805C8: table.sym_fnc("p_script_main", "const P_SCRIPT *", (
-        "const P_SCRIPT *pc",
+    0x803805C8: table.sym_fnc("p_script_main", "P_SCRIPT *", (
+        "P_SCRIPT *pc",
     ), table.GLOBL),
 
     # src/map.c
@@ -12377,8 +12377,8 @@ sym_J00_E00_t_lib = {
     0x80383340: table.sym("map_data_80383340", table.GLOBL),
     0x803833B8: table.sym_fnc("map_data_803833B8", arg=(
         "SHORT scene",
-        "const MAP_DATA *map_data",
-        "const AREA_DATA *area_data",
+        "MAP_DATA *map_data",
+        "AREA_DATA *area_data",
         "OBJ_DATA *obj_data",
     ), flag=table.GLOBL),
     0x803835A4: table.sym("map_data_803835A4", table.GLOBL),
@@ -12569,7 +12569,7 @@ sym_J00_E00_d_lib = {
     # ==========================================================================
 
     # src/math.c
-    0x8038BC90: table.sym_var("bspline",        "const BSPLINE *",  flag=table.GLOBL),
+    0x8038BC90: table.sym_var("bspline",        "BSPLINE *",  flag=table.GLOBL),
     0x8038BC94: table.sym_var("bspline_phase",  "float",    flag=table.GLOBL),
     0x8038BC98: table.sym_var("bspline_mode",   "int",      flag=table.GLOBL),
 

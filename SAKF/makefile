@@ -33,9 +33,9 @@ default: $(BUILD)/app.sfc
 clean:
 	rm -f -r build $(TOOLS_OBJ)
 
-$(BUILD)/%.sfc: make/main.ld $(OBJ) tools/mask
+$(BUILD)/app.sfc: main.ld $(OBJ) tools/mask
 	@mkdir -p $(dir $@)
-	$(SFC_LD) -m $(@:.sfc=.map) -o $@ -C make/main.ld $(OBJ)
+	$(SFC_LD) -m $(@:.sfc=.map) -o $@ -C main.ld $(OBJ)
 	tools/mask $@
 
 -include $(OBJ:.o=.d)

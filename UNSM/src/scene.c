@@ -1,6 +1,6 @@
 #include <sm64/types.h>
 #include <sm64/segment.h>
-#include <sm64/app.h>
+#include <sm64/graphics.h>
 #include <sm64/pl_demo.h>
 #include <sm64/memory.h>
 #include <sm64/scene.h>
@@ -63,9 +63,9 @@ static void scene_blank_set(UCHAR r, UCHAR g, UCHAR b)
 
 void scene_demo(void)
 {
-    if ((video_frame & 0x1F) < 20)
+    if ((gfx_frame & 0x1F) < 20)
     {
-        if (input_flag == 0)
+        if (cont_bitpattern == 0)
         {
             dprintc(SCREEN_WD/2, 20, "NO CONTROLLER");
         }
@@ -102,7 +102,7 @@ extern O_SCRIPT o_13003E3C[];
 
 int obj_link_code(OBJECT *obj)
 {
-    static const O_SCRIPT *link_script[LINK_LEN] =
+    static O_SCRIPT *link_script[LINK_LEN] =
     {
         o_linkdoor,
         o_13003E3C,
@@ -149,7 +149,7 @@ int obj_link_code(OBJECT *obj)
         37,
     };
     int i;
-    const S_SCRIPT *script = virtual_to_segment(SEG_DATA_OBJECT, obj->script);
+    O_SCRIPT *script = virtual_to_segment(SEG_DATA_OBJECT, obj->script);
     for (i = 0; i < LINK_LEN; i++)
     {
         if (link_script[i] == script) return link_code[i];
@@ -331,7 +331,7 @@ void scene_wipe(SHORT type, SHORT frame, UCHAR r, UCHAR g, UCHAR b)
         wipe.arg.window.s_y = SCREEN_HT/2;
         wipe.arg.window.e_x = SCREEN_WD/2;
         wipe.arg.window.e_y = SCREEN_HT/2;
-        wipe.arg.window.rot_vel = 0;
+        wipe.arg.window.ang_vel = 0;
         if (type & 1)
         {
             wipe.arg.window.s_size = SCREEN_WD;
@@ -363,15 +363,15 @@ void scene_draw(void)
             {4*(SCREEN_WD/2), 4*(SCREEN_HT/2), G_MAXZ/2, 0},
         }};
         draw_scene(scene->s, scene_viewport, scene_scissor, scene_fill);
-        gSPViewport(video_gfx++, K0_TO_PHYS(&vp));
+        gSPViewport(gfx_ptr++, K0_TO_PHYS(&vp));
         gDPSetScissor(
-            video_gfx++, G_SC_NON_INTERLACE,
+            gfx_ptr++, G_SC_NON_INTERLACE,
             0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
         );
         hud_draw();
 #if BORDER_HT > 0
         gDPSetScissor(
-            video_gfx++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT
+            gfx_ptr++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT
         );
 #endif
         dprint_draw();
@@ -379,14 +379,14 @@ void scene_draw(void)
         pl_demo_80256E88();
 #if BORDER_HT > 0
         gDPSetScissor(
-            video_gfx++, G_SC_NON_INTERLACE,
+            gfx_ptr++, G_SC_NON_INTERLACE,
             0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
         );
 #endif
         if ((msg_code = message_802DDCA4()) != 0) msg_latch = msg_code;
-        if (scene_scissor != NULL) video_vp_scissor(scene_scissor);
+        if (scene_scissor != NULL) gfx_vp_scissor(scene_scissor);
         else gDPSetScissor(
-            video_gfx++, G_SC_NON_INTERLACE,
+            gfx_ptr++, G_SC_NON_INTERLACE,
             0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
         );
         if (wipe.active)
@@ -410,8 +410,8 @@ void scene_draw(void)
     else
     {
         dprint_draw();
-        if (scene_scissor != NULL)  video_vp_clear(scene_scissor, blank_fill);
-        else                        video_clear(blank_fill);
+        if (scene_scissor != NULL)  gfx_vp_clear(scene_scissor, blank_fill);
+        else                        gfx_clear(blank_fill);
     }
     scene_viewport = NULL;
     scene_scissor  = NULL;
