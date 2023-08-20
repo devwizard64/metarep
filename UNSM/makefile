@@ -1,153 +1,51 @@
-VERSION ?= E00
-LABEL   := SUPER MARIO 64
+TARGET  ?= E0
 
-BUILD   := build/$(VERSION)
-
-CODE_OBJ := \
-	$(BUILD)/src/main.o             \
-	$(BUILD)/src/graphics.o         \
-	$(BUILD)/src/audio.o            \
-	$(BUILD)/src/game.o             $(BUILD)/src/game.data.o            \
-	$(BUILD)/src/pl_collision.o     $(BUILD)/src/pl_collision.data.o    \
-	$(BUILD)/src/player.o           $(BUILD)/src/player.data.o          \
-	$(BUILD)/src/pl_physics.o       $(BUILD)/src/pl_physics.data.o      \
-	$(BUILD)/src/pl_demo.o          $(BUILD)/src/pl_demo.data.o         \
-	$(BUILD)/src/pl_hang.o          $(BUILD)/src/pl_hang.data.o         \
-	$(BUILD)/src/pl_wait.o          $(BUILD)/src/pl_wait.data.o         \
-	$(BUILD)/src/pl_walk.o          $(BUILD)/src/pl_walk.data.o         \
-	$(BUILD)/src/pl_jump.o          $(BUILD)/src/pl_jump.data.o         \
-	$(BUILD)/src/pl_swim.o          $(BUILD)/src/pl_swim.data.o         \
-	$(BUILD)/src/pl_grab.o          $(BUILD)/src/pl_grab.data.o         \
-	$(BUILD)/src/pl_callback.o      $(BUILD)/src/pl_callback.data.o     \
-	$(BUILD)/src/memory.o           \
-	$(BUILD)/src/save.o             \
-	$(BUILD)/src/scene.o            \
-	$(BUILD)/src/draw.o             \
-	$(BUILD)/src/time.o             \
-	$(BUILD)/src/slidec.o           \
-	$(BUILD)/src/camera.o           $(BUILD)/src/camera.data.o          \
-	$(BUILD)/src/course.o           \
-	$(BUILD)/src/object.o           $(BUILD)/src/object.data.o          \
-	$(BUILD)/src/obj_lib.o          $(BUILD)/src/obj_lib.data.o         \
-	$(BUILD)/src/object_a.o         $(BUILD)/src/object_a.data.o        \
-	$(BUILD)/src/obj_physics.o      \
-	$(BUILD)/src/obj_collision.o    $(BUILD)/src/obj_collision.data.o   \
-	$(BUILD)/src/obj_list.o         $(BUILD)/src/obj_list.data.o        \
-	$(BUILD)/src/obj_sfx.o          \
-	$(BUILD)/src/obj_debug.o        $(BUILD)/src/obj_debug.data.o       \
-	$(BUILD)/src/wipe.o             $(BUILD)/src/wipe.data.o            \
-	$(BUILD)/src/shadow.o           $(BUILD)/src/shadow.data.o          \
-	$(BUILD)/src/background.o       $(BUILD)/src/background.data.o      \
-	$(BUILD)/src/scroll.o           $(BUILD)/src/scroll.data.o          \
-	$(BUILD)/src/obj_shape.o        $(BUILD)/src/obj_shape.data.o       \
-	$(BUILD)/src/ripple.o           $(BUILD)/src/ripple.data.o          \
-	$(BUILD)/src/dprint.o           \
-	$(BUILD)/src/message.o          $(BUILD)/src/message.data.o         \
-	$(BUILD)/src/weather_snow.o     $(BUILD)/src/weather_snow.data.o    \
-	$(BUILD)/src/weather_lava.o     $(BUILD)/src/weather_lava.data.o    \
-	$(BUILD)/src/obj_data.o         \
-	$(BUILD)/src/hud.o              $(BUILD)/src/hud.data.o             \
-	$(BUILD)/src/object_b.o         $(BUILD)/src/object_b.data.o        \
-	$(BUILD)/src/object_c.o         $(BUILD)/src/object_c.data.o
-
-LIB_OBJ := \
-	$(BUILD)/src/math.o             $(BUILD)/src/math.data.o            \
-	$(BUILD)/src/math_table.o       \
-	$(BUILD)/src/shape.o            \
-	$(BUILD)/src/s_script.o         $(BUILD)/src/s_script.data.o        \
-	$(BUILD)/src/p_script.o         $(BUILD)/src/p_script.data.o        \
-	$(BUILD)/src/map.o              $(BUILD)/src/map.data.o             \
-	$(BUILD)/src/map_data.o         $(BUILD)/src/map_data.data.o        \
-	$(BUILD)/src/o_script.o         $(BUILD)/src/o_script.data.o
-
-AUDIO_OBJ := \
-	$(BUILD)/src/audio/a.o          $(BUILD)/src/audio/a.data.o         \
-	$(BUILD)/src/audio/b.o          $(BUILD)/src/audio/b.data.o         \
-	$(BUILD)/src/audio/c.o          \
-	$(BUILD)/src/audio/d.o          $(BUILD)/src/audio/d.data.o         \
-	$(BUILD)/src/audio/e.o          $(BUILD)/src/audio/e.data.o         \
-	$(BUILD)/src/audio/f.o          $(BUILD)/src/audio/f.data.o         \
-	$(BUILD)/src/audio/g.o          $(BUILD)/src/audio/g.data.o         \
-	$(BUILD)/src/audio/data.o
-
-FACE_OBJ := \
-	$(BUILD)/src/face/main.o        $(BUILD)/src/face/main.data.o       \
-	$(BUILD)/src/face/mem.o         $(BUILD)/src/face/mem.data.o        \
-	$(BUILD)/src/face/sfx.o         \
-	$(BUILD)/src/face/draw.o        $(BUILD)/src/face/draw.data.o       \
-	$(BUILD)/src/face/object.o      $(BUILD)/src/face/object.data.o     \
-	$(BUILD)/src/face/skin.o        $(BUILD)/src/face/skin.data.o       \
-	$(BUILD)/src/face/particle.o    $(BUILD)/src/face/particle.data.o   \
-	$(BUILD)/src/face/dynlist.o     $(BUILD)/src/face/dynlist.data.o    \
-	$(BUILD)/src/face/gadget.o      $(BUILD)/src/face/gadget.data.o     \
-	$(BUILD)/src/face/stdio.o       $(BUILD)/src/face/stdio.data.o      \
-	$(BUILD)/src/face/joint.o       $(BUILD)/src/face/joint.data.o      \
-	$(BUILD)/src/face/net.o         $(BUILD)/src/face/net.data.o        \
-	$(BUILD)/src/face/math.o        $(BUILD)/src/face/math.data.o       \
-	$(BUILD)/src/face/shape.o       $(BUILD)/src/face/shape.data.o      \
-	$(BUILD)/src/face/gfx.o         $(BUILD)/src/face/gfx.data.o        \
-	$(BUILD)/src/face/data.o
-
-IDO_OBJ := \
-	$(BUILD)/src/main.o             \
-	$(BUILD)/src/graphics.o         \
-	$(BUILD)/src/audio.o            \
-	$(BUILD)/src/memory.o           \
-	$(BUILD)/src/save.o             \
-	$(BUILD)/src/scene.o            \
-	$(BUILD)/src/draw.o             \
-	$(BUILD)/src/time.o             \
-	$(BUILD)/src/course.o           \
-	$(BUILD)/src/obj_physics.o      \
-	$(BUILD)/src/obj_sfx.o          \
-	$(BUILD)/src/dprint.o           \
-	$(BUILD)/src/obj_data.o         \
-	$(BUILD)/src/title.o            \
-	$(BUILD)/src/title_bg.o
-
-INS_SRC := data/audio/se.ins data/audio/music.ins
-SBK_SRC := data/audio/se.sbk data/audio/music.sbk
-
-TOOLS_OBJ := tools/mask tools/slienc tools/texture
-
-$(eval REVISION := $$$(VERSION))
-REGION  := $(subst $(REVISION),,$(VERSION))
-
-DONOR   := donor
-
-ULTRA   := ultra
-RES != $(MAKE) -C $(ULTRA)
-
-FLAG    := -I$(ULTRA)/include -Iinclude -I. -D_ULTRA64
-FLAG    += -DVERSION_$(VERSION) -DREGION=\'$(REGION)\' -DREVISION=0x$(REVISION)
-FLAG    += -DBUILD=$(BUILD)
+BUILD   := build/$(TARGET)
+TITLE   := SUPER MARIO 64
+$(eval VERSION := $$$(TARGET))
+REGION  := $(subst $(VERSION),,$(TARGET))
 
 CC          := gcc
-CCFLAG      := -O2 -Wall -Wextra -Wpedantic
+CFLAGS      := -O2 -Wall -Wextra -Wpedantic
 
 U64_PREFIX  := mips-linux-gnu-
 U64_CC      := $(U64_PREFIX)gcc
 U64_LD      := $(U64_PREFIX)ld
-U64_CPP     := $(U64_PREFIX)cpp
+U64_AR      := $(U64_PREFIX)ar
 U64_OBJCOPY := $(U64_PREFIX)objcopy
-U64_NM      := $(U64_PREFIX)nm
-U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
+U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300
 U64_OPT     := -Os
 U64_WARN    := -Wall -Wextra -Werror=implicit-function-declaration
-U64_CCFLAG  := $(U64_ARCH) -mno-check-zero-division -ffreestanding
-U64_CCFLAG  += -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder
-U64_CCFLAG  += $(FLAG) $(U64_OPT) $(U64_WARN)
-U64_ASFLAG  := $(U64_ARCH) $(FLAG) -Wno-variadic-macros
-U64_CPPFLAG := $(FLAG) -DULTRA=$(ULTRA) -Umips
+U64_CPPFLAGS = -Ilibultra/include -Iinclude -I. -I$(BUILD) -D_ULTRA64 -DTARGET_$(TARGET) -DREGION=\'$(REGION)\' -DVERSION=$(VERSION)
+U64_CFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -mno-check-zero-division -ffreestanding -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder -G 0 $(U64_OPT) $(U64_WARN)
+U64_ASFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC
 
 IDO_CC      := $(IDO)/bin/cc
+IDO_ARCH    := -mips2
 IDO_OPT     := -g
 IDO_WARN    := -fullwarn -prototypes
-IDO_CCFLAG  := -Wab,-r4300_mul -mips2 -non_shared -signed -G 0 -Xcpluscomm
-IDO_CCFLAG  += -I$(IDO)/include $(FLAG) $(IDO_OPT) $(IDO_WARN)
+IDO_CPPFLAGS = -I$(IDO)/include $(U64_CPPFLAGS)
+IDO_CFLAGS = $(IDO_ARCH) -non_shared -Wab,-r4300_mul -signed -Xcpluscomm -G 0 $(IDO_OPT) $(IDO_WARN)
 
-OBJ := $(shell $(U64_CPP) $(U64_CPPFLAG) -P make/obj.mk)
-OBJ := $(sort $(filter $(BUILD)/%, $(OBJ)))
+IRIX_ARCH   := -mips2
+IRIX_OPT    := -O3
+IRIX_WARN   := -fullwarn -prototypes
+IRIX_CPPFLAGS = -I$(IDO)/include -Ilibultra/include -D_ULTRA64
+IRIX_CFLAGS = $(IRIX_ARCH) -non_shared -G 0 $(IRIX_OPT) $(IRIX_WARN)
+IRIX_ASFLAGS = -D__ASSEMBLER__ $(IRIX_ARCH) -non_shared -O2
+
+ROMHEADER   := libultra/src/PR/romheader
+BOOT        := $(BUILD)/libultra/src/PR/Boot
+FONT        := libultra/src/PR/font
+
+TOOLS := \
+	tools/fixobj \
+	tools/makerom \
+	tools/nrdc \
+	tools/sbc \
+	tools/slienc \
+	tools/symext \
+	tools/texture
 
 .PHONY: default
 default: $(BUILD)/app.z64
@@ -157,150 +55,179 @@ dist: $(BUILD)/app.bps
 
 .PHONY: clean
 clean:
-	rm -f -r build $(TOOLS_OBJ) tools/__pycache__ tools/*.pyc
+	rm -f -r build
+
+include dep.mk
+
+.PHONY: clobber
+clobber: clean
+	rm -f -r build $(TOOLS) tools/__pycache__ tools/*.pyc $(DEP)
+
+$(BUILD)/data/%.o: data/%.bin
+
+$(BUILD)/data/gfx.elf:          ADDRESS := 0x02000000
+$(BUILD)/shape/global/%.elf:    ADDRESS := 0x03000000
+$(BUILD)/shape/player/%.elf:    ADDRESS := 0x04000000
+$(BUILD)/shape/1%.elf:          ADDRESS := 0x05000000
+$(BUILD)/shape/2%.elf:          ADDRESS := 0x06000000
+$(BUILD)/stage/%.elf:           ADDRESS := 0x07000000
+$(BUILD)/shape/3%.elf:          ADDRESS := 0x08000000
+$(BUILD)/data/texture/%.elf:    ADDRESS := 0x09000000
+$(BUILD)/data/back/%.elf:       ADDRESS := 0x0A000000
+$(BUILD)/data/weather/%.elf:    ADDRESS := 0x0B000000
 
 $(BUILD)/app.bps: $(BUILD)/app.z64
-	flips $(DONOR)/UNSM$(VERSION).z64 $< $@
+	flips $(DONOR)/UNSM$(REGION)0$(VERSION).z64 $< $@
 
-$(BUILD)/app.z64: $(BUILD)/app.elf tools/mask
-	$(U64_OBJCOPY) --pad-to 0x800000 --gap-fill 0xFF -O binary $< $@
-	tools/mask $@ NSM$(VERSION) "$(LABEL)"
+$(BUILD)/app.z64: $(BUILD)/app.elf $(ROMHEADER) $(BOOT) $(FONT) tools/makerom tools/nrdc
+	tools/makerom -r $@ -h $(ROMHEADER) -b $(BOOT) -F $(FONT) -s 64 -f 0xff $<
+	tools/nrdc -b -t "$(TITLE)" -i NSM$(REGION) -v $(VERSION) $@
 
-$(BUILD)/app.elf: $(OBJ)
-$(BUILD)/%.elf: $(BUILD)/make/%.ld
+$(BUILD)/app.elf: $(BUILD)/app.ld $(OBJ) $(MENU_OBJ) $(DATA) $(SZP) $(OBJECT_DATA) $(SHAPE_SZP) $(SHAPE_DATA) $(BACK_SZP) $(TEXTURE_SZP) $(STAGE_SZP) $(STAGE_DATA) $(AUDIO_DATA)
+	$(U64_LD) -Map $(@:.elf=.map) -T$(BUILD)/app.ld -o $@
+
+$(BUILD)/app.ld: spec tools/spec
 	@mkdir -p $(dir $@)
-	$(U64_LD) -Map $(@:.elf=.map) -o $@ -T $<
+	BUILD=$(BUILD) tools/spec $(U64_CPPFLAGS) -DNEWSPEC -o $@ $<
 
--include $(BUILD)/make/app.d
--include $(BUILD)/make/segment.d
-$(BUILD)/make/app.ld:
-$(BUILD)/make/%: make/%
+$(BUILD)/code.o: $(CODE_OBJ) $(AUDIO_OBJ) $(BUILD)/libultra/libultra.a
+	$(U64_LD) --whole-archive -L$(BUILD)/libultra -Trel.ld -r -o $@ $(CODE_OBJ) $(AUDIO_OBJ) -lultra
+
+$(BUILD)/ulib.o: $(ULIB_OBJ)
+	$(U64_LD) -Trel.ld -r -o $@ $(ULIB_OBJ)
+
+$(BUILD)/face.o: $(FACE_OBJ)
+	$(U64_LD) -Trel.ld -r -o $@ $(FACE_OBJ)
+
+$(BUILD)/%.szp.s: %.bin tools/slienc
 	@mkdir -p $(dir $@)
-	$(U64_CPP) $(U64_CPPFLAG) -MMD -MP -MT $@ -P -o $@ $<
+	tools/slienc $< $(@:.szp.s=.szp) > $@
 
-include $(addsuffix .d,$(basename $(OBJ) $(CODE_OBJ) $(LIB_OBJ) $(AUDIO_OBJ) $(FACE_OBJ)))
+$(BUILD)/%.szp.h: $(BUILD)/%.elf tools/symext
+	tools/symext $< > $@
 
-$(BUILD)/code.o: make/rel.ld $(CODE_OBJ) $(AUDIO_OBJ)
-	@mkdir -p $(dir $@)
-	$(U64_LD) --whole-archive -L$(ULTRA)/lib -r -o $@ -T $^ -lultra
+$(BUILD)/%.szp.s: $(BUILD)/%.elf tools/slienc
+	tools/slienc $< $(@:.szp.s=.szp) > $@
 
-$(BUILD)/lib.o: make/rel.ld $(LIB_OBJ)
-	@mkdir -p $(dir $@)
-	$(U64_LD) -r -o $@ -T $^
-
-$(BUILD)/face.o: make/rel.ld $(FACE_OBJ)
-	@mkdir -p $(dir $@)
-	$(U64_LD) -r -o $@ -T $^
-
-$(BUILD)/code.d $(BUILD)/lib.d $(BUILD)/face.d:
-	@mkdir -p $(dir $@)
-	@echo $(@:.d=.o): $< > $@
+$(BUILD)/%.elf: $(BUILD)/%.o
+	$(U64_LD) -Tdata $(ADDRESS) -Telf.ld -o $@ $<
 
 $(BUILD)/%.o: %.asm
 	@mkdir -p $(dir $@)
 	armips -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
-	$(U64_CC) $(U64_ASFLAG) -c -o $@ $(<:.asm=.s)
-$(BUILD)/%.d: %.asm
-	@mkdir -p $(dir $@)
-	@echo $(@:.d=.o): $< > $@
+	$(U64_CC) -I$(BUILD) $(U64_ASFLAGS) -c -o $@ $(<:.asm=.s)
 
 $(BUILD)/%.o: %.s
 	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
-$(BUILD)/%.d: %.s
-	@mkdir -p $(dir $@)
-	@echo $(@:.d=.o): $< > $@
+	$(U64_CC) -Iinclude $(U64_ASFLAGS) -c -o $@ $<
 
 $(BUILD)/%.o: %.sx
 	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
-$(BUILD)/%.d: %.sx
-	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_ASFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(U64_CC) $(U64_CPPFLAGS) $(U64_ASFLAGS) -MMD -MP -c -o $@ $<
 
 $(BUILD)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_CCFLAG) -c -o $@ $<
-$(BUILD)/%.d: %.c
-	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.o) $<
+	$(U64_CC) $(U64_CPPFLAGS) $(U64_CFLAGS) -MMD -MP -c -o $@ $<
 
-$(IDO_OBJ): $(BUILD)/%.o: %.c
+$(IDO_C): $(BUILD)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(IDO_CC) $(IDO_CCFLAG) -c -o $@ $<
+	$(IDO_CC) $(IDO_CPPFLAGS) $(IDO_CFLAGS) -c -o $@ $<
 
 $(BUILD)/%.o: $(BUILD)/%.s
-	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_ASFLAGS) -c -o $@ $<
 
-include $(BUILD)/make/segment.mk
-$(BUILD)/%.szp.h: $(BUILD)/%.szp.s;
-$(BUILD)/%.szp.s: %.c make/szp.ld tools/slienc
+$(BUILD)/audio/ctl.s $(BUILD)/audio/tbl.s&: $(INS) tools/ic
 	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_CCFLAG) -c -o $(@:.szp.s=.o) $<
-	$(U64_LD) -Ttext $(ADDR) -T make/szp.ld -o $(@:.szp.s=.elf) $(@:.szp.s=.o)
-	$(U64_OBJCOPY) -O binary $(@:.szp.s=.elf) $(@:.szp.s=.bin)
-	$(U64_NM) -f posix $(@:.szp.s=.elf) > $(@:.szp.s=.sym)
-	tools/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $(@:.szp.s=.bin) $(@:.szp.s=.sym)
-$(BUILD)/%.szp.d: %.c
-	@mkdir -p $(dir $@)
-	$(U64_CC) $(U64_CCFLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $<
+	tools/ic $(U64_CPPFLAGS) -ctl $(BUILD)/audio/ctl.s -tbl $(BUILD)/audio/tbl.s $(INS)
 
-$(BUILD)/%.szp.s: %.bin tools/slienc
+$(BUILD)/audio/seq.s: $(SEQ) tools/sbc
 	@mkdir -p $(dir $@)
-	@python3 -c "import os; print(\"a t 0 %x\" % os.path.getsize(\"$<\"))" > $(@:.szp.s=.sym)
-	tools/slienc $@ $(@:.s=.h) $(@:.szp.s=.szp) $< $(@:.szp.s=.sym)
-$(BUILD)/%.szp.d: %.bin
-	@mkdir -p $(dir $@)
-	@echo $(@:.d=.s): $< > $@
+	tools/sbc 3 $(@:.s=.bin) $(SEQ) > $@
 
-$(BUILD)/data/audio/tbl.s: $(BUILD)/data/audio/ctl.s;
-$(BUILD)/data/audio/ctl.s: $(INS_SRC) tools/ic
+$(BUILD)/audio/bnk.s: audio/bnk.txt
 	@mkdir -p $(dir $@)
-	tools/ic $(FLAG) -ctl $@ -tbl $(@:ctl.s=tbl.s) $(INS_SRC)
-$(BUILD)/data/audio/tbl.d: $(BUILD)/data/audio/ctl.d;
-$(BUILD)/data/audio/ctl.d: $(INS_SRC) tools/ic
-	@mkdir -p $(dir $@)
-	tools/ic $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(INS_SRC)
+	tools/audiobnk $< > $@
 
-$(BUILD)/data/audio/bnk.s: $(BUILD)/data/audio/seq.s;
-$(BUILD)/data/audio/seq.s: $(SBK_SRC) tools/sbc
+$(BUILD)/%.seq: %.asm
 	@mkdir -p $(dir $@)
-	tools/sbc $(FLAG) -seq $@ -bnk $(@:seq.s=bnk.s) $(SBK_SRC)
-$(BUILD)/data/audio/bnk.d: $(BUILD)/data/audio/seq.d;
-$(BUILD)/data/audio/seq.d: $(SBK_SRC) tools/sbc
-	@mkdir -p $(dir $@)
-	tools/sbc $(FLAG) -MM -MG -MP -MF $@ -MT $(@:.d=.s) $(SBK_SRC)
+	armips -strequ BUILD $(BUILD) -sym $(@:.seq=.sym) $<
 
-$(BUILD)/%.h: %.png tools/texture
-	@mkdir -p $(dir $@)
-	tools/texture $@ $(filter %.png,$^)
+%.h: %.png tools/texture
+	tools/texture $(filter %.png,$^) > $@
 
--include $(addprefix $(BUILD)/,$(addsuffix .d,$(basename $(call obj,*.ply))))
-$(BUILD)/data/shape/global/butterfly/%.h: GFXFLAG += -g
-$(BUILD)/data/menu/title/debug/%.h: GFXFLAG += -g
-$(BUILD)/%.h: %.ply tools/gfx
-	@mkdir -p $(dir $@)
-	tools/gfx $(GFXFLAG) -o $@ $<
+%.h: %.txt tools/message
+	tools/message $< > $@
 
-$(BUILD)/%.h: %.obj tools/map
-	@mkdir -p $(dir $@)
-	tools/map $@ $<
+%.h: %.obj tools/map
+	tools/map $< > $@
 
-$(BUILD)/%.inc.h: $(BUILD)/%.h;
-$(BUILD)/%.h: %.txt tools/msg
-	@mkdir -p $(dir $@)
-	tools/msg $@ $<
-
-$(BUILD)/%.aifc: %.aiff
-	@mkdir -p $(dir $@)
+%.aifc: %.aiff
 	tabledesign -s 1 $< > $(@:.aifc=.table)
 	vadpcm_enc -c $(@:.aifc=.table) $< $@
 
-$(BUILD)/data/%.o: data/%.bin
+$(BUILD)/libultra/src/PR/gspFast3D.fifo.o: $(wildcard libultra/src/PR/gspFast3D/*)
 
-$(TOOLS_OBJ):
+$(BUILD)/libultra/libultra.a: $(LIBULTRA_OBJ)
+	$(U64_AR) rc $@ $(LIBULTRA_OBJ)
+
+$(BUILD)/libultra/src/PR/Boot: $(BUILD)/libultra/src/PR/Boot.elf
+	$(U64_OBJCOPY) -O binary $< $@
+
+$(BUILD)/libultra/src/PR/Boot.elf: $(BUILD)/libultra/src/PR/Boot.o
+	$(U64_LD) -Tlibultra/src/PR/Boot.ld -o $@ $<
+
+$(BUILD)/libultra/%.o: libultra/%.asm
+	@mkdir -p $(dir $@)
+	armips -strequ BUILD $(BUILD) -sym $(@:.o=.sym) $<
+	$(U64_CC) -I$(BUILD) $(U64_ASFLAGS) -c -o $@ $(<:.asm=.s)
+
+$(BUILD)/libultra/%.o: libultra/%.s
+	@mkdir -p $(dir $@)
+	$(U64_CC) $(U64_ASFLAGS) -c -o $@ $<
+
+$(BUILD)/libultra/%.o: libultra/%.sx
+	@mkdir -p $(dir $@)
+	$(U64_CC) $(U64_CPPFLAGS) $(U64_ASFLAGS) -c -o $@ $<
+
+$(BUILD)/libultra/%.o: libultra/%.c
+	@mkdir -p $(dir $@)
+	$(U64_CC) $(U64_CPPFLAGS) $(U64_CFLAGS) -c -o $@ $<
+
+$(IRIX_S): $(BUILD)/libultra/%.o: libultra/%.s tools/fixobj
+	@mkdir -p $(dir $@)
+	$(IRIX_CC) $(IRIX_CPPFLAGS) $(IRIX_ASFLAGS) -c -o $@ $<
+	tools/fixobj $@
+
+$(IRIX_C): $(BUILD)/libultra/%.o: libultra/%.c
+	@mkdir -p $(dir $@)
+	$(IRIX_CC) $(IRIX_CPPFLAGS) $(IRIX_CFLAGS) -c -o $@ $<
+
+$(TOOLS):
 tools/%: tools/%.c
-	$(CC) $(CCFLAG) -s -o $@ $<
+	$(CC) $(CFLAGS) -s -o $@ $<
 
 print-%:
 	$(info $* = $(flavor $*): [$($*)]) @true
+
+$(SZP:.szp.o=.o):
+$(SHAPE_SZP:.szp.o=.o):
+$(BACK_SZP:.szp.o=.o):
+$(TEXTURE_SZP:.szp.o=.o):
+$(STAGE_SZP:.szp.o=.o):
+
+-include $(CODE_OBJ:.o=.d)
+-include $(ULIB_OBJ:.o=.d)
+-include $(MENU_OBJ:.o=.d)
+-include $(AUDIO_OBJ:.o=.d)
+-include $(FACE_OBJ:.o=.d)
+
+-include $(DATA:.o=.d)
+-include $(SZP:.szp.o=.d)
+-include $(OBJECT_DATA:.o=.d)
+-include $(SHAPE_SZP:.szp.o=.d)
+-include $(SHAPE_DATA:.o=.d)
+-include $(BACK_SZP:.szp.o=.d)
+-include $(TEXTURE_SZP:.szp.o=.d)
+-include $(STAGE_SZP:.szp.o=.d)
+-include $(STAGE_DATA:.o=.d)
+-include $(AUDIO_DATA:.o=.d)

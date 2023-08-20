@@ -3,61 +3,38 @@
 import sys
 import os
 
-def main(argv):
-    if len(argv) != 3:
-        print("usage: %s <output> <input>" % argv[0])
-        return 1
-    path = argv[1].rpartition(".")[0]
-    with open(argv[2], "r") as f: data = f.read()
-    vtx_data = {"v": []}
-    obj_data = []
-    obj = None
-    o = "0"
-    for line in data.split("\n"):
-        arg = line.split()
-        if len(arg) == 0:
-            continue
-        elif arg[0] in vtx_data:
-            vtx_data[arg[0]].append([float(x) for x in arg[1:]])
-        elif arg[0] == "f":
-            if obj == None:
-                for i, obj in obj_data:
-                    if i == o: break
-                else:
-                    obj = []
-                    obj_data.append([o, obj])
-            face = [
-                [int(x)-1 if x != "" else None for x in vtx.split("/")]
-                for vtx in arg[1:]
-            ]
-            for i in range(len(face)-2):
-                obj.append((face[0], face[i+1], face[i+2]))
-        elif arg[0] == "o":
-            o = "".join([
-                x if x in (
-                    "0123456789"
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    "abcdefghijklmnopqrstuvwxyz"
-                ) else "_"
-                for x in arg[1].partition(";")[0]
-            ])
-            obj = None
-    data = "M_VTX, %d,\n" % len(vtx_data["v"]) + "".join([
-        "%d, %d, %d,\n" % tuple([
-            max(-0x8000, min(0x7FFF, int(round(x))))
-            for x in vtx
-        ])
-        for vtx in vtx_data["v"]
-    ])
-    for o, obj in obj_data:
-        data += "%s, %d,\n" % (o, len(obj)) + "".join([
-            "%d, %d, %d,\n" % tuple([
-                x[0] for x in face
-            ])
-            for face in obj
-        ])
-    data += "M_PLANEEND,\n"
-    with open(path + ".h", "w") as f: f.write(data)
-    return 0
+def sh(x): return max(-32768, min(32767, int(round(x))))
 
-if __name__ == "__main__": sys.exit(main(sys.argv))
+if len(sys.argv) != 2:
+	sys.stderr.write("usage: %s <obj>\n" % sys.argv[0])
+	sys.exit(1)
+fn = sys.argv[1]
+with open(fn, "r") as f:
+	vtx = []
+	obj = []
+	tri = None
+	mtl = "0"
+	for line in f:
+		arg = line.split()
+		if not arg: continue
+		elif arg[0] == "v":
+			vtx.append(tuple([sh(float(x)) for x in arg[1:4]]))
+		elif arg[0] == "f":
+			if tri is None:
+				for i, tri in obj:
+					if i == mtl: break
+				else:
+					tri = []
+					obj.append((mtl, tri))
+			face = [int(v.partition("/")[0])-1 for v in arg[1:]]
+			for i in range(len(face)-2):
+				tri.append((face[0], face[i+1], face[i+2]))
+		elif arg[0] == "usemtl":
+			mtl = arg[1]
+			tri = None
+print("M_VTX, %d," % len(vtx))
+for v in vtx: print("%d, %d, %d," % v)
+for mtl, tri in obj:
+	print("%s, %d," % (mtl, len(tri)))
+	for t in tri: print("%d, %d, %d," % t)
+print("M_PLANEEND,")

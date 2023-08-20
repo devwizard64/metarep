@@ -7,1166 +7,1079 @@ import ultra
 import UNSM
 
 def d_prg_prc(argv):
-    ultra.script.c_addr += 6
-    dst = ultra.ah()
-    return "0, 0, 0, %s" % dst
+	ultra.script.c_addr += 6
+	dst = ultra.ah()
+	return "0, 0, 0, %s" % dst
 d_prg = [".half", d_prg_prc]
 
-segment_table = {
-    0x02: "MAIN",
-    0x03: "GLOBAL",
-    0x04: "PLAYER",
-    0x05: "SHAPE1",
-    0x06: "SHAPE2",
-    0x07: "STAGE",
-    0x08: "SHAPE3",
-    0x09: "TEXTURE",
-    0x0A: "BACKGROUND",
-    0x0B: "WEATHER",
-    0x0C: "SHAPE1",
-    0x0D: "SHAPE2",
-    0x0E: "STAGE",
-    0x0F: "SHAPE3",
-    0x13: "OBJECT",
-    0x14: "MENU",
-    0x15: "GAME",
-    0x16: "GLOBAL",
-    0x17: "PLAYER",
+seg_table = {
+	0x02: "SEG_GFX",
+	0x03: "SEG_GLOBAL_GFX",
+	0x04: "SEG_PLAYER_GFX",
+	0x05: "SEG_SHAPE1_GFX",
+	0x06: "SEG_SHAPE2_GFX",
+	0x07: "SEG_STAGE_GFX",
+	0x08: "SEG_SHAPE3_GFX",
+	0x09: "SEG_TEXTURE",
+	0x0A: "SEG_BACK",
+	0x0B: "SEG_WEATHER",
+	0x0C: "SEG_SHAPE1_DATA",
+	0x0D: "SEG_SHAPE2_DATA",
+	0x0E: "SEG_STAGE_DATA",
+	0x0F: "SEG_SHAPE3_DATA",
+	0x13: "SEG_OBJECT",
+	0x14: "SEG_MENU_DATA",
+	0x15: "SEG_GAME",
+	0x16: "SEG_GLOBAL_DATA",
+	0x17: "SEG_PLAYER_DATA",
 }
 
-def segment(x, start, end):
-    if x.startswith(start) and x.endswith(end): return x[len(start):-len(end)]
-    return None
-
 # 00 01
-def p_push_jump(argv):
-    seg    = segment_table[ultra.uh()]
-    start  = ultra.uw()
-    end    = ultra.uw()
-    script = ultra.uw()
-    dev = ultra.script.addr + start
-    start  = ultra.sym(start,  dev)
-    script = ultra.sym(script, dev)
-    name = segment(start, "_", "_dataSegmentRomStart")
-    if name == None: raise RuntimeError("UNSM.asm.p_push_jump(): bad segment")
-    return (None, seg, name, script)
+def prg_execute(argv):
+	seg    = ultra.uh()
+	start  = ultra.uw()
+	end    = ultra.uw()
+	script = ultra.uw()
+	dev = ultra.script.addr + start
+	start  = ultra.sym(start,  dev)
+	# end    = ultra.sym(end,    dev)
+	if not start.endswith("SegmentRomStart"):
+		raise RuntimeError("prg_execute(): bad segment")
+	end    = start[:-5] + "End"
+	script = ultra.sym(script, dev)
+	seg = seg_table[seg]
+	return (None, seg, start, end, script)
 
 # 02 07 0A 1B 1C 1D 1E 20
-def p_null(argv):
-    ultra.script.c_addr += 2
-    return (None,)
+def prg_null(argv):
+	ultra.script.c_addr += 2
+	return (None,)
 
 # 03 04
-def p_time(argv):
-    time = UNSM.table.fmt_time(ultra.sh())
-    return (None, time)
+def prg_time(argv):
+	time = UNSM.table.fmt_time(ultra.sh())
+	return (None, time)
 
 # 05 06 2E 2F 39
-def p_script(argv):
-    g, = argv
-    ultra.script.c_addr += 2
-    script = ultra.aw() if g else ultra.asm.aw()
-    return (None, script)
+def prg_script(argv):
+	g, = argv
+	ultra.script.c_addr += 2
+	script = ultra.aw() if g else ultra.asm.aw()
+	return (None, script)
 
 # (08) (09)
 
 # 0B 0C
-def p_if_jump(argv):
-    s, = argv
-    cmp_ = (
-        "AND",
-        "NAND",
-        "EQ",
-        "NE",
-        "GT",
-        "GE",
-        "LT",
-        "LE",
-    )[ultra.ub()]
-    ultra.script.c_addr += 1
-    val = "%d" % ultra.sw()
-    if s:
-        script = ultra.asm.aw()
-        return (None, cmp_, val, script)
-    return (None, cmp_, val)
+def prg_jump_if(argv):
+	s, = argv
+	cmp_ = (
+		"AND",
+		"NAND",
+		"EQ",
+		"NE",
+		"GT",
+		"GE",
+		"LT",
+		"LE",
+	)[ultra.ub()]
+	ultra.script.c_addr += 1
+	val = "%d" % ultra.sw()
+	if s:
+		script = ultra.asm.aw()
+		return (None, cmp_, val, script)
+	return (None, cmp_, val)
 
 # (0D) (0E) (0F) (10)
 
 # 11 12
-def p_callback(argv):
-    arg = "%d" % ultra.uh()
-    callback = ultra.aw()
-    return (None, callback, arg)
+def prg_callback(argv):
+	arg = "%d" % ultra.uh()
+	callback = ultra.aw()
+	return (None, callback, arg)
 
 # 13 19
-def p_arg(argv):
-    x = "%d" % ultra.sh()
-    return (None, x)
+def prg_arg(argv):
+	x = "%d" % ultra.sh()
+	return (None, x)
 
 # (14) (15)
 
 # 16 17 18 1A
-def p_load(argv):
-    a, b, = argv
-    seg = ultra.uh()
-    if b != None:
-        dst = ultra.aw()
-        name = segment(dst, "_", b)
-        if name == None: raise RuntimeError("UNSM.asm.p_load(): bad dst")
-    start = ultra.uw()
-    end   = ultra.uw()
-    dev   = ultra.script.addr + start
-    start = ultra.sym(start, dev)
-    name = segment(start, "_", a)
-    if name == None: raise RuntimeError("UNSM.asm.p_load(): bad segment")
-    if b != None: return (None, name)
-    seg = "MENU" if "menu" in start else segment_table[seg]
-    return (None, seg, name)
+def prg_load(argv):
+	flag, = argv
+	seg   = ultra.uh()
+	if flag: addr = ultra.uw()
+	start = ultra.uw()
+	end   = ultra.uw()
+	dev   = ultra.script.addr + start
+	# if flag: addr = ultra.sym(addr, dev)
+	start = ultra.sym(start, dev)
+	# end   = ultra.sym(end,   dev)
+	if not start.endswith("SegmentRomStart"):
+		raise RuntimeError("p_load(): bad segment")
+	if flag: addr = start[:-8] + "Start"
+	end = start[:-5] + "End"
+	if flag: return (None, addr, start, end)
+	seg = seg_table[seg]
+	return (None, seg, start, end)
 
 # 1F
-def p_scene_start(argv):
-    scene = "%d" % ultra.ub()
-    ultra.script.c_addr += 1
-    script = ultra.aw()
-    return (None, scene, script)
+def prg_scene_start(argv):
+	scene = "%d" % ultra.ub()
+	ultra.script.c_addr += 1
+	script = ultra.aw()
+	return (None, scene, script)
 
 # 21
-def p_shape_gfx(argv):
-    x = ultra.uh()
-    layer = UNSM.table.fmt_s_layer_x[x >> 12]
-    shape = UNSM.table.fmt_shape(x & 0x0FFF)
-    ultra.tag = "gfx"
-    gfx = ultra.aw()
-    return (None, shape, gfx, layer)
+def prg_shape_gfx(argv):
+	x = ultra.uh()
+	layer = UNSM.table.fmt_layer(x >> 12)
+	shape = UNSM.table.fmt_shape(x & 0x0FFF)
+	ultra.tag = "gfx"
+	gfx = ultra.aw()
+	return (None, shape, gfx, layer)
 
 # 22
-def p_shape_script(argv):
-    shape = UNSM.table.fmt_shape(ultra.uh())
-    script = ultra.aw()
-    return (None, shape, script)
+def prg_shape_script(argv):
+	shape = UNSM.table.fmt_shape(ultra.uh())
+	script = ultra.aw()
+	return (None, shape, script)
 
 # (23)
 
 # 24
-def p_object(argv):
-    mask = ultra.ub()
-    shape = UNSM.table.fmt_shape(ultra.ub())
-    px = "%d" % ultra.sh()
-    py = "%d" % ultra.sh()
-    pz = "%d" % ultra.sh()
-    ax = "%d" % ultra.sh()
-    ay = "%d" % ultra.sh()
-    az = "%d" % ultra.sh()
-    arg0 = "%d" % ultra.ub()
-    arg1 = "%d" % ultra.ub()
-    flag = "%d" % ultra.uh()
-    script = ultra.aw()
-    if mask == 0x1F: return ("object_globl",
-        shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script
-    )
-    mask = "0x%02X" % mask
-    return (None, mask, shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script)
+def prg_object(argv):
+	mask = ultra.ub()
+	shape = UNSM.table.fmt_shape(ultra.ub())
+	px = "%d" % ultra.sh()
+	py = "%d" % ultra.sh()
+	pz = "%d" % ultra.sh()
+	ax = "%d" % ultra.sh()
+	ay = "%d" % ultra.sh()
+	az = "%d" % ultra.sh()
+	arg0 = "%d" % ultra.ub()
+	arg1 = "%d" % ultra.ub()
+	flag = "%d" % ultra.uh()
+	script = ultra.aw()
+	if mask != 0x1F:
+		mask = "0%02o" % mask
+		return (
+			"ObjectMask", mask, shape, px, py, pz, ax, ay, az,
+			arg0, arg1, flag, script
+		)
+	return (None, shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script)
 
 # 25
-def p_player(argv):
-    shape = UNSM.table.fmt_shape(ultra.uh())
-    arg0 = ultra.ub()
-    arg1 = ultra.ub()
-    flag = ultra.uh()
-    script = ultra.aw()
-    if (shape, arg0, arg1, flag, script) == ("S_MARIO", 0, 0, 1, "o_mario"):
-        return ("mario",)
-    arg0 = "%d" % arg0
-    arg1 = "%d" % arg1
-    flag = "%d" % flag # T:flag
-    return (None, shape, arg0, arg1, flag, script)
+def prg_player(argv):
+	shape = UNSM.table.fmt_shape(ultra.uh())
+	arg0 = ultra.ub()
+	arg1 = ultra.ub()
+	flag = ultra.uh()
+	script = ultra.aw()
+	if (shape, arg0, arg1, flag, script) == ("S_MARIO", 0, 0, 1, "o_mario"):
+		return ("Mario",)
+	arg0 = "%d" % arg0
+	arg1 = "%d" % arg1
+	flag = "%d" % flag # T:flag
+	return (None, shape, arg0, arg1, flag, script)
 
 # 26 27
-def p_link(argv):
-    m, = argv
-    index = "%d" % ultra.ub()
-    stage = UNSM.table.fmt_stage(ultra.ub())
-    scene = "%d" % ultra.ub()
-    link  = "%d" % ultra.ub()
-    flag  = ultra.ub()
-    ultra.script.c_addr += 1
-    return (m if flag == 0x80 else None, index, stage, scene, link)
+def prg_port(argv):
+	m, = argv
+	index = "%d" % ultra.ub()
+	stage = UNSM.table.fmt_stage(ultra.ub())
+	scene = "%d" % ultra.ub()
+	port  = "%d" % ultra.ub()
+	flag  = ultra.ub()
+	ultra.script.c_addr += 1
+	return (m if flag == 0x80 else None, index, stage, scene, port)
 
 # 28
-def p_connect(argv):
-    index = "%d" % ultra.ub()
-    scene = "%d" % ultra.ub()
-    px = "%d" % ultra.sh()
-    py = "%d" % ultra.sh()
-    pz = "%d" % ultra.sh()
-    ultra.script.c_addr += 2
-    return (None, index, scene, px, py, pz)
+def prg_connect(argv):
+	index = "%d" % ultra.ub()
+	scene = "%d" % ultra.ub()
+	px = "%d" % ultra.sh()
+	py = "%d" % ultra.sh()
+	pz = "%d" % ultra.sh()
+	ultra.script.c_addr += 2
+	return (None, index, scene, px, py, pz)
 
 # 29 2A
-def p_scene(argv):
-    scene = "%d" % ultra.ub()
-    ultra.script.c_addr += 1
-    return (None, scene)
+def prg_scene(argv):
+	scene = "%d" % ultra.ub()
+	ultra.script.c_addr += 1
+	return (None, scene)
 
 # 2B
-def p_player_open(argv):
-    scene = "%d" % ultra.ub()
-    ultra.script.c_addr += 1
-    ay = "%d" % ultra.sh()
-    px = "%d" % ultra.sh()
-    py = "%d" % ultra.sh()
-    pz = "%d" % ultra.sh()
-    return (None, scene, ay, px, py, pz)
+def prg_player_open(argv):
+	scene = "%d" % ultra.ub()
+	ultra.script.c_addr += 1
+	ay = "%d" % ultra.sh()
+	px = "%d" % ultra.sh()
+	py = "%d" % ultra.sh()
+	pz = "%d" % ultra.sh()
+	return (None, scene, ay, px, py, pz)
 
 # (2C) (2D)
 
 # 30
-def p_msg(argv):
-    type_ = "%d" % ultra.ub() # T:enum(msgtype)
-    msg   = UNSM.msg_table[ultra.ub()]
-    return (None, type_, msg)
+def prg_msg(argv):
+	type_ = "%d" % ultra.ub() # T:enum(msgtype)
+	msg   = UNSM.table.fmt_msg(ultra.ub())
+	return (None, type_, msg)
 
 # 31
-def p_env(argv):
-    env = (
-        "GRASS",
-        "ROCK",
-        "SNOW",
-        "SAND",
-        "GHOST",
-        "WATER",
-        "SLIDER",
-    )[ultra.sh()]
-    return (None, env)
+def prg_env(argv):
+	env = (
+		"ENV_GRASS",
+		"ENV_ROCK",
+		"ENV_SNOW",
+		"ENV_SAND",
+		"ENV_GHOST",
+		"ENV_WATER",
+		"ENV_SLIDER",
+	)[ultra.sh()]
+	return (None, env)
 
 # 33
-def p_wipe(argv):
-    type_ = "0x%02X" % ultra.ub() # T:enum(wipe)
-    time  = UNSM.table.fmt_time(ultra.ub())
-    r     = "0x%02X" % ultra.ub()
-    g     = "0x%02X" % ultra.ub()
-    b     = "0x%02X" % ultra.ub()
-    ultra.script.c_addr += 1
-    return (None, type_, time, r, g, b)
+def prg_wipe(argv):
+	type_ = "0x%02X" % ultra.ub() # T:enum(wipe)
+	time  = UNSM.table.fmt_time(ultra.ub())
+	r     = "0x%02X" % ultra.ub()
+	g     = "0x%02X" % ultra.ub()
+	b     = "0x%02X" % ultra.ub()
+	ultra.script.c_addr += 1
+	return (None, type_, time, r, g, b)
 
 # 34
-def p_bool(argv):
-    x = ultra.fmt_bool[ultra.ub()]
-    ultra.script.c_addr += 1
-    return (None, x)
+def prg_bool(argv):
+	x = ultra.fmt_bool[ultra.ub()]
+	ultra.script.c_addr += 1
+	return (None, x)
 
 # (35)
 
 # 36
-def p_bgm(argv):
-    mode = UNSM.table.fmt_na_mode(ultra.uh())
-    bgm  = UNSM.table.fmt_na_bgm(ultra.uh())
-    ultra.script.c_addr += 2
-    return (None, mode, bgm)
+def prg_bgm(argv):
+	mode = UNSM.table.fmt_na_mode(ultra.uh())
+	bgm  = UNSM.table.fmt_na_bgm(ultra.uh())
+	ultra.script.c_addr += 2
+	return (None, mode, bgm)
 
 # 37
-def p_bgm_play(argv):
-    bgm = UNSM.table.fmt_na_bgm(ultra.uh())
-    return (None, bgm)
+def prg_bgm_play(argv):
+	bgm = UNSM.table.fmt_na_bgm(ultra.uh())
+	return (None, bgm)
 
 # 38
-def p_bgm_stop(argv):
-    time = "%d" % (ultra.sh()+2) # T:audtime
-    return (None, time)
+def prg_bgm_stop(argv):
+	time = "%d" % (ultra.sh()+2) # T:audtime
+	return (None, time)
 
 # (3A)
 
 # 3B
-def p_jet(argv):
-    index = "%d" % ultra.ub()
-    mode  = "%d" % ultra.ub()
-    px    = "%d" % ultra.sh()
-    py    = "%d" % ultra.sh()
-    pz    = "%d" % ultra.sh()
-    arg   = "%d" % ultra.sh()
-    return (None, index, mode, px, py, pz, arg)
+def prg_jet(argv):
+	index = "%d" % ultra.ub()
+	mode  = "%d" % ultra.ub()
+	px    = "%d" % ultra.sh()
+	py    = "%d" % ultra.sh()
+	pz    = "%d" % ultra.sh()
+	arg   = "%d" % ultra.sh()
+	return (None, index, mode, px, py, pz, arg)
 
 # 3C
-def p_var(argv):
-    cmd = (
-        "store",
-        "load",
-    )[ultra.ub()]
-    var = (
-        "SAVE",
-        "COURSE",
-        "LEVEL",
-        "STAGE",
-        "SCENE",
-    )[ultra.ub()]
-    return (cmd, var)
+def prg_var(argv):
+	cmd = (
+		"Store",
+		"Load",
+	)[ultra.ub()]
+	var = (
+		"SAVE",
+		"COURSE",
+		"LEVEL",
+		"STAGE",
+		"SCENE",
+	)[ultra.ub()]
+	return (cmd, var)
 
-p_str = [
-    "push_call",    # 0x00 jsl
-    "push_jump",    # 0x01 jml
-    "pull_return",  # 0x02 rtl
-    "sleep",        # 0x03
-    "freeze",       # 0x04
-    "jump",         # 0x05 jmp
-    "call",         # 0x06 jsr
-    "return",       # 0x07 rts
-    "for",          # 0x08
-    "done",         # 0x09
-    "do",           # 0x0A
-    "while",        # 0x0B
-    "if_jump",      # 0x0C b*
-    "if_call",      # 0x0D c*
-    "if",           # 0x0E
-    "else",         # 0x0F
-    "endif",        # 0x10
-    "callback",     # 0x11
-    "process",      # 0x12
-    "set",          # 0x13
-    "push",         # 0x14
-    "pull",         # 0x15
-    "load_code",    # 0x16
-    "load_data",    # 0x17
-    "load_szp",     # 0x18
-    "load_face",    # 0x19
-    "load_txt",     # 0x1A
-    "stage_init",   # 0x1B
-    "stage_exit",   # 0x1C
-    "stage_start",  # 0x1D
-    "stage_end",    # 0x1E
-    "scene_start",  # 0x1F
-    "scene_end",    # 0x20
-    "shape_gfx",    # 0x21
-    "shape_script", # 0x22
-    "shape_scale",  # 0x23
-    "object",       # 0x24
-    "player",       # 0x25
-    "link",         # 0x26
-    "linkbg",       # 0x27
-    "connect",      # 0x28
-    "scene_open",   # 0x29
-    "scene_close",  # 0x2A
-    "player_open",  # 0x2B
-    "player_close", # 0x2C
-    "scene_update", # 0x2D
-    "map",          # 0x2E
-    "area",         # 0x2F
-    "msg",          # 0x30
-    "env",          # 0x31
-    None,           # 0x32
-    "wipe",         # 0x33
-    "vi_black",     # 0x34
-    "vi_gamma",     # 0x35
-    "bgm",          # 0x36
-    "bgm_play",     # 0x37
-    "bgm_stop",     # 0x38
-    "obj",          # 0x39
-    "wind",         # 0x3A
-    "jet",          # 0x3B
-    None,           # 0x3C
+prg_str = [
+	"Execute",      # 0x00
+	"Chain",        # 0x01
+	"Exit",         # 0x02
+	"Sleep",        # 0x03
+	"Freeze",       # 0x04
+	"Jump",         # 0x05
+	"Call",         # 0x06
+	"Return",       # 0x07
+	"For",          # 0x08
+	"Done",         # 0x09
+	"Do",           # 0x0A
+	"While",        # 0x0B
+	"JumpIf",       # 0x0C
+	"CallIf",       # 0x0D
+	"If",           # 0x0E
+	"Else",         # 0x0F
+	"Endif",        # 0x10
+	"Callback",     # 0x11
+	"Process",      # 0x12
+	"Set",          # 0x13
+	"Push",         # 0x14
+	"Pull",         # 0x15
+	"LoadCode",     # 0x16
+	"LoadData",     # 0x17
+	"LoadSzp",      # 0x18
+	"LoadFace",     # 0x19
+	"LoadTxt",      # 0x1A
+	"StageInit",    # 0x1B
+	"StageExit",    # 0x1C
+	"StageStart",   # 0x1D
+	"StageEnd",     # 0x1E
+	"SceneStart",   # 0x1F
+	"SceneEnd",     # 0x20
+	"ShapeGfx",     # 0x21
+	"ShapeScript",  # 0x22
+	"ShapeScale",   # 0x23
+	"Object",       # 0x24
+	"Player",       # 0x25
+	"Port",         # 0x26
+	"BGPort",       # 0x27
+	"Connect",      # 0x28
+	"SceneOpen",    # 0x29
+	"SceneClose",   # 0x2A
+	"PlayerOpen",   # 0x2B
+	"PlayerClose",  # 0x2C
+	"SceneUpdate",  # 0x2D
+	"Map",          # 0x2E
+	"Area",         # 0x2F
+	"Msg",          # 0x30
+	"Env",          # 0x31
+	None,           # 0x32
+	"Wipe",         # 0x33
+	"ViBlack",      # 0x34
+	"ViGamma",      # 0x35
+	"Bgm",          # 0x36
+	"BgmPlay",      # 0x37
+	"BgmStop",      # 0x38
+	"Obj",          # 0x39
+	"Wind",         # 0x3A
+	"Jet",          # 0x3B
+	None,           # 0x3C
 ]
 
-p_fnc = [
-    (p_push_jump,), # 0x00
-    (p_push_jump,), # 0x01
-    (p_null,), # 0x02
-    (p_time,), # 0x03
-    (p_time,), # 0x04
-    (p_script, False), # 0x05
-    (p_script, True), # 0x06
-    (p_null,), # 0x07
-    None, # 0x08
-    None, # 0x09
-    (p_null,), # 0x0A
-    (p_if_jump, False), # 0x0B
-    (p_if_jump, True), # 0x0C
-    None, # 0x0D
-    None, # 0x0E
-    None, # 0x0F
-    None, # 0x10
-    (p_callback,), # 0x11
-    (p_callback,), # 0x12
-    (p_arg,), # 0x13
-    None, # 0x14
-    None, # 0x15
-    (p_load, "SegmentRomStart", "SegmentStart"), # 0x16
-    (p_load, "_dataSegmentRomStart", None), # 0x17
-    (p_load, "_szpSegmentRomStart", None), # 0x18
-    (p_arg,), # 0x19 T:enum(face)
-    (p_load, "_szpSegmentRomStart", None), # 0x1A
-    (p_null,), # 0x1B
-    (p_null,), # 0x1C
-    (p_null,), # 0x1D
-    (p_null,), # 0x1E
-    (p_scene_start,), # 0x1F
-    (p_null,), # 0x20
-    (p_shape_gfx,), # 0x21
-    (p_shape_script,), # 0x22
-    None, # 0x23
-    (p_object,), # 0x24
-    (p_player,), # 0x25
-    (p_link, "link_mid"), # 0x26
-    (p_link, "linkbg_mid"), # 0x27
-    (p_connect,), # 0x28
-    (p_scene,), # 0x29
-    (p_scene,), # 0x2A
-    (p_player_open,), # 0x2B
-    None, # 0x2C
-    None, # 0x2D
-    (p_script, True), # 0x2E
-    (p_script, True), # 0x2F
-    (p_msg,), # 0x30
-    (p_env,), # 0x31
-    None, # 0x32
-    (p_wipe,), # 0x33
-    (p_bool,), # 0x34
-    None, # 0x35
-    (p_bgm,), # 0x36
-    (p_bgm_play,), # 0x37
-    (p_bgm_stop,), # 0x38
-    (p_script, True), # 0x39
-    None, # 0x3A
-    (p_jet,), # 0x3B
-    (p_var,), # 0x3C
+prg_fnc = [
+	(prg_execute,), # 0x00
+	(prg_execute,), # 0x01
+	(prg_null,), # 0x02
+	(prg_time,), # 0x03
+	(prg_time,), # 0x04
+	(prg_script, False), # 0x05
+	(prg_script, True), # 0x06
+	(prg_null,), # 0x07
+	None, # 0x08
+	None, # 0x09
+	(prg_null,), # 0x0A
+	(prg_jump_if, False), # 0x0B
+	(prg_jump_if, True), # 0x0C
+	None, # 0x0D
+	None, # 0x0E
+	None, # 0x0F
+	None, # 0x10
+	(prg_callback,), # 0x11
+	(prg_callback,), # 0x12
+	(prg_arg,), # 0x13
+	None, # 0x14
+	None, # 0x15
+	(prg_load, True), # 0x16
+	(prg_load, False), # 0x17
+	(prg_load, False), # 0x18
+	(prg_arg,), # 0x19 T:enum(face)
+	(prg_load, False), # 0x1A
+	(prg_null,), # 0x1B
+	(prg_null,), # 0x1C
+	(prg_null,), # 0x1D
+	(prg_null,), # 0x1E
+	(prg_scene_start,), # 0x1F
+	(prg_null,), # 0x20
+	(prg_shape_gfx,), # 0x21
+	(prg_shape_script,), # 0x22
+	None, # 0x23
+	(prg_object,), # 0x24
+	(prg_player,), # 0x25
+	(prg_port, "PortMid"), # 0x26
+	(prg_port, "BGPortMid"), # 0x27
+	(prg_connect,), # 0x28
+	(prg_scene,), # 0x29
+	(prg_scene,), # 0x2A
+	(prg_player_open,), # 0x2B
+	None, # 0x2C
+	None, # 0x2D
+	(prg_script, True), # 0x2E
+	(prg_script, True), # 0x2F
+	(prg_msg,), # 0x30
+	(prg_env,), # 0x31
+	None, # 0x32
+	(prg_wipe,), # 0x33
+	(prg_bool,), # 0x34
+	None, # 0x35
+	(prg_bgm,), # 0x36
+	(prg_bgm_play,), # 0x37
+	(prg_bgm_stop,), # 0x38
+	(prg_script, True), # 0x39
+	None, # 0x3A
+	(prg_jet,), # 0x3B
+	(prg_var,), # 0x3C
 ]
 
-p_inc = {0x08, 0x0A, 0x0E, 0x0F, 0x1D, 0x1F}
-p_dec = {0x09, 0x0B, 0x0F, 0x10, 0x1E, 0x20}
-
-mem_table = (
-    "VAR", # 0
-    "FLAG", # 1
-    "MSG", # 2
-    "3", # 3
-    "4", # 4
-    "COL_TIMER", # 5
-    "POS_X", # 6
-    "POS_Y", # 7
-    "POS_Z", # 8
-    "VEL_X", # 9
-    "VEL_Y", # 10
-    "VEL_Z", # 11
-    "VEL_F", # 12
-    "VEL_L", # 13
-    "VEL_U", # 14
-    "ANG_X", # 15
-    "ANG_Y", # 16
-    "ANG_Z", # 17
-    "SHAPE_ANG_X", # 18
-    "SHAPE_ANG_Y", # 19
-    "SHAPE_ANG_Z", # 20
-    "SHAPE_OFF_Y", # 21
-    "PARTICLE", # 22
-    "GRAVITY", # 23
-    "GROUND_Y", # 24
-    "MOVE_FLAG", # 25
-    "ANIME_CODE", # 26
-    "V0", # 27
-    "V1", # 28
-    "V2", # 29
-    "V3", # 30
-    "V4", # 31
-    "V5", # 32
-    "V6", # 33
-    "V7", # 34
-    "ANG_VEL_X", # 35
-    "ANG_VEL_Y", # 36
-    "ANG_VEL_Z", # 37
-    "ANIME", # 38
-    "HOLD", # 39
-    "WALL_R", # 40
-    "DRAG", # 41
-    "COL_TYPE", # 42
-    "COL_FLAG", # 43
-    "OFF_X", # 44
-    "OFF_Y", # 45
-    "OFF_Z", # 46
-    "CODE", # 47
-    "48", # 48
-    "STATE", # 49
-    "MODE", # 50
-    "TIMER", # 51
-    "BOUNCE", # 52
-    "PL_DIST", # 53
-    "PL_ANG", # 54
-    "ORG_X", # 55
-    "ORG_Y", # 56
-    "ORG_Z", # 57
-    "FRICTION", # 58
-    "DENSITY", # 59
-    "ANIME_INDEX", # 60
-    "ALPHA", # 61
-    "AP", # 62
-    "HP", # 63
-    "ARG", # 64
-    "STATE_PREV", # 65
-    "COL_ARG", # 66
-    "COL_DIST", # 67
-    "COIN", # 68
-    "SHAPE_DIST", # 69
-    "AREA", # 70
-    "71", # 71
-    "PRG_ARG", # 72
-    "V8", # 73
-    "V9", # 74
-    "WALL_ANG", # 75
-    "GROUND_ARG", # 76
-    "ORG_ANG", # 77
-    "GROUND", # 78
-    "SE_DIE", # 79
-)
-
-def mb():
-    return mem_table[ultra.ub()]
+prg_inc = {0x08, 0x0A, 0x0E, 0x0F, 0x1D, 0x1F}
+prg_dec = {0x09, 0x0B, 0x0F, 0x10, 0x1E, 0x20}
 
 # 00
-def o_init(argv):
-    type_ = UNSM.table.fmt_o_type_x[ultra.ub()]
-    ultra.script.c_addr += 2
-    return (None, type_)
+def obj_init(argv):
+	type_ = UNSM.table.fmt_o_type(ultra.ub())
+	ultra.script.c_addr += 2
+	return (None, type_)
 
 # 01
-def o_time(argv):
-    ultra.script.c_addr += 1
-    time = UNSM.table.fmt_time(ultra.sh())
-    return (None, time)
+def obj_time(argv):
+	ultra.script.c_addr += 1
+	time = UNSM.table.fmt_time(ultra.sh())
+	return (None, time)
 
 # 02 04 0C 2A 37
-def o_script(argv):
-    g, = argv
-    ultra.script.c_addr += 3
-    script = ultra.aw() if g else ultra.asm.aw()
-    return (None, script)
+def obj_script(argv):
+	g, = argv
+	ultra.script.c_addr += 3
+	script = ultra.aw() if g else ultra.asm.aw()
+	return (None, script)
 
 # 03 06 07 08 09 0A (0B) 1D 1E 21 22 2D 35
-def o_null(argv):
-    ultra.script.c_addr += 3
-    return (None,)
+def obj_null(argv):
+	ultra.script.c_addr += 3
+	return (None,)
 
 # 05 32
-def o_arg(argv):
-    ultra.script.c_addr += 1
-    x = "%d" % ultra.sh()
-    return (None, x)
+def obj_arg(argv):
+	ultra.script.c_addr += 1
+	x = "%d" % ultra.sh()
+	return (None, x)
 
 # 0D 0E 0F 10
-def o_md(argv):
-    mem = mb()
-    val = "%d" % ultra.sh()
-    return (None, mem, val)
+def obj_md(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	val = "%d" % ultra.sh()
+	return (None, mem, val)
 
 # 11 (12)
-def o_mh(argv):
-    mem = mb()
-    val = "0x%04X" % ultra.uh()
-    return (None, mem, val)
+def obj_mh(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	val = "0x%04X" % ultra.uh()
+	return (None, mem, val)
 
 # 13 14 15 16 (17)
-def o_mdd(argv):
-    mem = mb()
-    val = "%d" % ultra.sh()
-    mul = "%d" % ultra.sh()
-    ultra.script.c_addr += 2
-    return (None, mem, val, mul)
+def obj_mdd(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	val = "%d" % ultra.sh()
+	mul = "%d" % ultra.sh()
+	ultra.script.c_addr += 2
+	return (None, mem, val, mul)
 
 # 1B
-def o_shape(argv):
-    ultra.script.c_addr += 1
-    shape = UNSM.table.fmt_shape(ultra.uh())
-    return (None, shape)
+def obj_shape(argv):
+	ultra.script.c_addr += 1
+	shape = UNSM.table.fmt_shape(ultra.uh())
+	return (None, shape)
 
 # 1C 29 2C
-def o_object(argv):
-    m, = argv
-    ultra.script.c_addr += 1
-    arg = "%d" % ultra.sh()
-    shape = UNSM.table.fmt_shape(ultra.uw())
-    script = ultra.aw()
-    if m: return (None, shape, script, arg)
-    return (None, shape, script)
+def obj_object(argv):
+	m, = argv
+	ultra.script.c_addr += 1
+	arg = "%d" % ultra.sh()
+	shape = UNSM.table.fmt_shape(ultra.uw())
+	script = ultra.aw()
+	if m: return (None, shape, script, arg)
+	return (None, shape, script)
 
 # 1F (20)
-def o_mmm(argv):
-    mem = mb()
-    a   = mb()
-    b   = mb()
-    return (None, mem, a, b)
+def obj_mmm(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	a   = UNSM.table.fmt_o_mem[ultra.ub()]
+	b   = UNSM.table.fmt_o_mem[ultra.ub()]
+	return (None, mem, a, b)
 
 # 23 2B 2E
-def o_collision(argv):
-    m, = argv
-    ultra.script.c_addr += 3
-    radius = "%d" % ultra.sh()
-    height = "%d" % ultra.sh()
-    if m:
-        offset = "%d" % ultra.sh()
-        ultra.script.c_addr += 2
-        return (None, radius, height, offset)
-    return (None, radius, height)
+def obj_collision(argv):
+	m, = argv
+	ultra.script.c_addr += 3
+	radius = "%d" % ultra.sh()
+	height = "%d" % ultra.sh()
+	if m:
+		offset = "%d" % ultra.sh()
+		ultra.script.c_addr += 2
+		return (None, radius, height, offset)
+	return (None, radius, height)
 
 # 25 (26)
-def o_m(argv):
-    mem = mb()
-    ultra.script.c_addr += 2
-    return (None, mem)
+def obj_m(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	ultra.script.c_addr += 2
+	return (None, mem)
 
 # 27
-def o_mp(argv):
-    mem = mb()
-    ultra.script.c_addr += 2
-    script = ultra.aw()
-    return (None, mem, script)
+def obj_mp(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	ultra.script.c_addr += 2
+	script = ultra.aw()
+	return (None, mem, script)
 
 # 28
-def o_anime(argv):
-    anime = "0x%02X" % ultra.ub() # T:enum(anime)
-    ultra.script.c_addr += 2
-    return (None, anime)
+def obj_anime(argv):
+	anime = "0x%02X" % ultra.ub() # T:enum(anime)
+	ultra.script.c_addr += 2
+	return (None, anime)
 
 # 2F (31) (36)
-def o_w(argv):
-    ultra.script.c_addr += 3
-    x = "0x%08X" % ultra.uw()
-    return (None, x)
+def obj_w(argv):
+	ultra.script.c_addr += 3
+	x = "0x%08X" % ultra.uw()
+	return (None, x)
 
 # 30
-def o_physics(argv):
-    ultra.script.c_addr += 3
-    a = "%d" % ultra.sh()
-    b = "%d" % ultra.sh()
-    c = "%d" % ultra.sh()
-    d = "%d" % ultra.sh()
-    e = "%d" % ultra.sh()
-    f = "%d" % ultra.sh()
-    g = "%d" % ultra.sh()
-    h = "%d" % ultra.sh()
-    return (None, a, b, c, d, e, f, g, h)
+def obj_physics(argv):
+	ultra.script.c_addr += 3
+	a = "%d" % ultra.sh()
+	b = "%d" % ultra.sh()
+	c = "%d" % ultra.sh()
+	d = "%d" % ultra.sh()
+	e = "%d" % ultra.sh()
+	f = "%d" % ultra.sh()
+	g = "%d" % ultra.sh()
+	h = "%d" % ultra.sh()
+	return (None, a, b, c, d, e, f, g, h)
 
 # 33
-def o_memclrflag(argv):
-    mem = mb()
-    ultra.script.c_addr += 2
-    flag = "0x%08X" % ultra.uw() # T:flag
-    return (None, mem, flag)
+def obj_memclrflag(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	ultra.script.c_addr += 2
+	flag = "0x%08X" % ultra.uw() # T:flag
+	return (None, mem, flag)
 
 # 34
-def o_mt(argv):
-    mem = mb()
-    time = UNSM.table.fmt_time(ultra.sh())
-    return (None, mem, time)
+def obj_mt(argv):
+	mem = UNSM.table.fmt_o_mem[ultra.ub()]
+	time = UNSM.table.fmt_time(ultra.sh())
+	return (None, mem, time)
 
-o_str = [
-    "init",     # 0x00
-    "sleep",    # 0x01
-    "call",     # 0x02
-    "return",   # 0x03
-    "jump",     # 0x04
-    "for",      # 0x05
-    "fend",     # 0x06
-    "fcontinue",    # 0x07
-    "while",    # 0x08
-    "wend",     # 0x09
-    "exit",     # 0x0A
-    "exit2",    # 0x0B
-    "callback", # 0x0C
-    "addf",     # 0x0D
-    "setf",     # 0x0E
-    "addi",     # 0x0F
-    "seti",     # 0x10
-    "setflag",  # 0x11
-    "clrflag",  # 0x12
-    "setrandr", # 0x13
-    "setrandf", # 0x14
-    "setrandi", # 0x15
-    "addrandf", # 0x16
-    "addrandr", # 0x17
-    None,       # 0x18
-    None,       # 0x19
-    None,       # 0x1A
-    "shape",    # 0x1B
-    "object",   # 0x1C
-    "destroy",  # 0x1D
-    "ground",   # 0x1E
-    "memaddf",  # 0x1F
-    "memaddi",  # 0x20
-    "billboard",    # 0x21
-    "shapehide",    # 0x22
-    "col_hit",  # 0x23
-    None,       # 0x24
-    "memsleep", # 0x25
-    "for2",     # 0x26
-    "ptr",      # 0x27
-    "anime",    # 0x28
-    "objectarg",    # 0x29
-    "map",      # 0x2A
-    "col_off",  # 0x2B
-    "child",    # 0x2C
-    "origin",   # 0x2D
-    "col_dmg",  # 0x2E
-    "col_type", # 0x2F
-    "physics",  # 0x30
-    "col_arg",  # 0x31
-    "scale",    # 0x32
-    "memclrflag",   # 0x33
-    "inc",      # 0x34
-    "shapedisable", # 0x35
-    "sets",     # 0x36
-    "splash",   # 0x37
+obj_str = [
+	"Init",     # 0x00
+	"Sleep",    # 0x01
+	"Call",     # 0x02
+	"Return",   # 0x03
+	"Jump",     # 0x04
+	"For",      # 0x05
+	"Fend",     # 0x06
+	"Fcontinue",    # 0x07
+	"While",    # 0x08
+	"Wend",     # 0x09
+	"Exit",     # 0x0A
+	"Exit2",    # 0x0B
+	"Callback", # 0x0C
+	"AddF",     # 0x0D
+	"SetF",     # 0x0E
+	"AddI",     # 0x0F
+	"SetI",     # 0x10
+	"SetFlag",  # 0x11
+	"ClrFlag",  # 0x12
+	"SetRandA", # 0x13
+	"SetRandF", # 0x14
+	"SetRandI", # 0x15
+	"AddRandF", # 0x16
+	"AddRandA", # 0x17
+	None,       # 0x18
+	None,       # 0x19
+	None,       # 0x1A
+	"Shape",    # 0x1B
+	"Object",   # 0x1C
+	"Destroy",  # 0x1D
+	"Ground",   # 0x1E
+	"MemAddF",  # 0x1F
+	"MemAddI",  # 0x20
+	"Billboard",    # 0x21
+	"ShapeHide",    # 0x22
+	"ColHit",   # 0x23
+	None,       # 0x24
+	"MemSleep", # 0x25
+	"For2",     # 0x26
+	"Ptr",      # 0x27
+	"Anime",    # 0x28
+	"ObjectArg",    # 0x29
+	"Map",      # 0x2A
+	"ColOff",   # 0x2B
+	"Child",    # 0x2C
+	"Origin",   # 0x2D
+	"ColDmg",   # 0x2E
+	"ColType",  # 0x2F
+	"Physics",  # 0x30
+	"ColArg",   # 0x31
+	"Scale",    # 0x32
+	"MemClrFlag",   # 0x33
+	"Inc",      # 0x34
+	"ShapeDisable", # 0x35
+	"SetS",     # 0x36
+	"Splash",   # 0x37
 ]
 
-o_fnc = [
-    (o_init,), # 0x00
-    (o_time,), # 0x01
-    (o_script, True), # 0x02
-    (o_null,), # 0x03
-    (o_script, False), # 0x04
-    (o_arg,), # 0x05
-    (o_null,), # 0x06
-    (o_null,), # 0x07
-    (o_null,), # 0x08
-    (o_null,), # 0x09
-    (o_null,), # 0x0A
-    None, # 0x0B
-    (o_script, True), # 0x0C
-    (o_md,), # 0x0D
-    (o_md,), # 0x0E
-    (o_md,), # 0x0F
-    (o_md,), # 0x10
-    (o_mh,), # 0x11 T:flag
-    None, # 0x12
-    (o_mdd,), # 0x13
-    (o_mdd,), # 0x14
-    (o_mdd,), # 0x15
-    (o_mdd,), # 0x16
-    None, # 0x17
-    None, # 0x18
-    None, # 0x19
-    None, # 0x1A
-    (o_shape,), # 0x1B
-    (o_object, False), # 0x1C
-    (o_null,), # 0x1D
-    (o_null,), # 0x1E
-    (o_mmm,), # 0x1F
-    None, # 0x20
-    (o_null,), # 0x21
-    (o_null,), # 0x22
-    (o_collision, False), # 0x23
-    None, # 0x24
-    (o_m,), # 0x25
-    None, # 0x26
-    (o_mp,), # 0x27
-    (o_anime,), # 0x28
-    (o_object, True), # 0x29
-    (o_script, True), # 0x2A
-    (o_collision, True), # 0x2B
-    (o_object, False), # 0x2C
-    (o_null,), # 0x2D
-    (o_collision, False), # 0x2E
-    (o_w,), # 0x2F T:flag
-    (o_physics,), # 0x30
-    None, # 0x31
-    (o_arg,), # 0x32
-    (o_memclrflag,), # 0x33
-    (o_mt,), # 0x34
-    (o_null,), # 0x35
-    None, # 0x36
-    (o_script, True), # 0x37
+obj_fnc = [
+	(obj_init,), # 0x00
+	(obj_time,), # 0x01
+	(obj_script, True), # 0x02
+	(obj_null,), # 0x03
+	(obj_script, False), # 0x04
+	(obj_arg,), # 0x05
+	(obj_null,), # 0x06
+	(obj_null,), # 0x07
+	(obj_null,), # 0x08
+	(obj_null,), # 0x09
+	(obj_null,), # 0x0A
+	None, # 0x0B
+	(obj_script, True), # 0x0C
+	(obj_md,), # 0x0D
+	(obj_md,), # 0x0E
+	(obj_md,), # 0x0F
+	(obj_md,), # 0x10
+	(obj_mh,), # 0x11 T:flag
+	None, # 0x12
+	(obj_mdd,), # 0x13
+	(obj_mdd,), # 0x14
+	(obj_mdd,), # 0x15
+	(obj_mdd,), # 0x16
+	None, # 0x17
+	None, # 0x18
+	None, # 0x19
+	None, # 0x1A
+	(obj_shape,), # 0x1B
+	(obj_object, False), # 0x1C
+	(obj_null,), # 0x1D
+	(obj_null,), # 0x1E
+	(obj_mmm,), # 0x1F
+	None, # 0x20
+	(obj_null,), # 0x21
+	(obj_null,), # 0x22
+	(obj_collision, False), # 0x23
+	None, # 0x24
+	(obj_m,), # 0x25
+	None, # 0x26
+	(obj_mp,), # 0x27
+	(obj_anime,), # 0x28
+	(obj_object, True), # 0x29
+	(obj_script, True), # 0x2A
+	(obj_collision, True), # 0x2B
+	(obj_object, False), # 0x2C
+	(obj_null,), # 0x2D
+	(obj_collision, False), # 0x2E
+	(obj_w,), # 0x2F T:flag
+	(obj_physics,), # 0x30
+	None, # 0x31
+	(obj_arg,), # 0x32
+	(obj_memclrflag,), # 0x33
+	(obj_mt,), # 0x34
+	(obj_null,), # 0x35
+	None, # 0x36
+	(obj_script, True), # 0x37
 ]
 
-o_inc = {0x05, 0x08, 0x26}
-o_dec = {0x06, 0x07, 0x09}
+obj_inc = {0x05, 0x08, 0x26}
+obj_dec = {0x06, 0x07, 0x09}
 
-s_table = [
-    (p_str, p_fnc, p_inc, p_dec, "p"),
-    (o_str, o_fnc, o_inc, o_dec, "o"),
+scr_table = [
+	(prg_str, prg_fnc, prg_inc, prg_dec, "p"),
+	(obj_str, obj_fnc, obj_inc, obj_dec, "o"),
 ]
 
 def s_script(self, argv):
-    start, end, data, i = argv
-    ultra.asm.init(self, start, data)
-    s_str, s_fnc, s_inc, s_dec, s_t = s_table[i]
-    line = []
-    tab = 0
-    while self.c_addr < end:
-        self.c_push()
-        c = ultra.ub()
-        if i == 0: self.c_addr += 1
-        f = s_fnc[c]
-        scrtbl = {
-            0x22: "s_script",
-            0x2E: "map",
-            0x2F: "area",
-            0x39: "obj",
-        }
-        objtbl = {
-            0x27: "anime",
-            0x2A: "map",
-            0x37: "splash",
-        }
-        if i == 0 and c in scrtbl: ultra.tag = scrtbl[c]
-        if i == 1 and c in objtbl: ultra.tag = objtbl[c]
-        argv = f[0](f[1:])
-        s = argv[0] if argv[0] != None else s_str[c]
-        if c in s_dec: tab -= 1
-        ln = "%s%s_%s(%s)" % ("\t"*tab, s_t, s, ", ".join(argv[1:]))
-        if c in s_inc: tab += 1
-        line.append((self.c_dst, ln))
-    ultra.asm.fmt(self, line)
+	start, end, data, i = argv
+	ultra.asm.init(self, start, data)
+	s_str, s_fnc, s_inc, s_dec, s_t = scr_table[i]
+	line = []
+	tab = 0
+	while self.c_addr < end:
+		self.c_push()
+		c = ultra.ub()
+		if i == 0: self.c_addr += 1
+		f = s_fnc[c]
+		scrtbl = {
+			0x22: "s_script",
+			0x2E: "map",
+			0x2F: "area",
+			0x39: "obj",
+		}
+		objtbl = {
+			0x27: "anime",
+			0x2A: "map",
+			0x37: "splash",
+		}
+		if i == 0 and c in scrtbl: ultra.tag = scrtbl[c]
+		if i == 1 and c in objtbl: ultra.tag = objtbl[c]
+		argv = f[0](f[1:])
+		s = argv[0] if argv[0] != None else s_str[c]
+		if c in s_dec: tab -= 1
+		ln = "%s%s%s(%s)" % ("\t"*tab, s_t, s, ", ".join(argv[1:]))
+		if c in s_inc: tab += 1
+		line.append((self.c_dst, ln))
+	ultra.asm.fmt(self, line)
 
 def stbl_add(stbl, i, t, s):
-    if i not in stbl: stbl[i] = [t]
-    stbl[i].append(s)
+	if i not in stbl: stbl[i] = [t]
+	stbl[i].append(s)
 
 def etbl_add(etbl, i, s):
-    if i not in etbl: etbl[i] = []
-    etbl[i].append(s)
+	if i not in etbl: etbl[i] = []
+	etbl[i].append(s)
 
 def bank_init(self, argv):
-    end, data, name, tbl = argv
-    ultra.asm.init(self, 0, data)
-    cnt = ultra.uw()
-    self.c_addr += 4
-    line = self.file[-1][1]
-    stbl = {}
-    etbl = {}
-    line.append("TABLE()\ntable:\n")
-    for i in range(cnt):
-        s = "%s_%s" % (name, tbl[0][i])
-        line.append("\tBANK(%s)\n" % s)
-        start = ultra.uw()
-        size  = ultra.uw()
-        stbl_add(stbl, start, 0, s)
-        etbl_add(etbl, start+size, s)
-    line.append("table_end:\n\n")
-    return end, name, tbl, cnt, line, stbl, etbl
+	end, data, name, tbl = argv
+	ultra.asm.init(self, 0, data)
+	cnt = ultra.uw()
+	self.c_addr += 4
+	line = self.file[-1][1]
+	stbl = {}
+	etbl = {}
+	line.append("TABLE()\ntable:\n")
+	for i in range(cnt):
+		s = "%s_%s" % (name, tbl[0][i])
+		line.append("\tBANK(%s)\n" % s)
+		start = ultra.uw()
+		size  = ultra.uw()
+		stbl_add(stbl, start, 0, s)
+		etbl_add(etbl, start+size, s)
+	line.append("table_end:\n\n")
+	return end, name, tbl, cnt, line, stbl, etbl
 
 def bank_s(self, line, stbl):
-    self.c_push()
-    if self.c_addr in stbl:
-        label = stbl[self.c_addr]
-        line.append("\n")
-        for s in label[1:]: line.append("%s:\n" % s)
-        return label
-    return None
+	self.c_push()
+	if self.c_addr in stbl:
+		label = stbl[self.c_addr]
+		line.append("\n")
+		for s in label[1:]: line.append("%s:\n" % s)
+		return label
+	return None
 
 def bank_e(self, line, etbl):
-    if self.c_addr in etbl:
-        for s in etbl[self.c_addr]: line.append("%s_end:\n" % s)
-        return True
-    return False
+	if self.c_addr in etbl:
+		for s in etbl[self.c_addr]: line.append("%s_end:\n" % s)
+		return True
+	return False
 
 def s_anime(self, argv):
-    end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
-    init = True
-    i = 0
-    while self.c_addr < end:
-        if init:
-            fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".sx"
-            line.append("#include \"%s/%s\"\n" % (name, fn))
-            c = [".balign 4\n"]
-        label = bank_s(self, c, stbl)
-        if label != None:
-            t = label[0]
-            if t == 0: s = label[-1]
-        init = False
-        # anime
-        if t == 0:
-            a_flag  = UNSM.table.fmt_anime_flag(ultra.sh())
-            a_waist = ultra.sh()
-            a_start = ultra.sh()
-            a_end   = ultra.sh()
-            a_frame = ultra.sh()
-            a_joint = ultra.sh()
-            a_val   = self.c_dst + ultra.uw()
-            a_tbl   = self.c_dst + ultra.uw()
-            a_siz   = self.c_dst + ultra.uw()
-            stbl_add(stbl, a_val, 1, s + "_val")
-            stbl_add(stbl, a_tbl, 2, s + "_tbl")
-            c.append((
-                "\tANIME(%s, %s, %d, %d, %d, %d, %d)\n"
-            ) % (s, a_flag, a_waist, a_start, a_end, a_frame, a_joint))
-            i += 1
-        # val
-        elif t == 1:
-            c.append("\t.short %s\n" % ", ".join([
-                "0x%04X" % ultra.uh()
-                for _ in range(min(8, (a_siz-self.c_dst)//2))
-            ]))
-            if self.c_addr == a_siz: c.append("\n")
-        # tbl
-        elif t == 2:
-            c.append("\t.short %s\n" % ", ".join([
-                "%5d" % ultra.uh()
-                for _ in range(6)
-            ]))
-        else:
-            raise RuntimeError("bad mode")
-        if bank_e(self, c, etbl):
-            data = main.line_prc(c)
-            fn = self.path_join([name, fn])
-            main.mkdir(fn)
-            with open(fn, "w") as f: f.write(data)
-            self.c_addr = (self.c_addr+3) & ~3
-            init = True
+	end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
+	init = True
+	i = 0
+	while self.c_addr < end:
+		if init:
+			fn = (tbl[1][i] if i in tbl[1] else tbl[0][i]) + ".sx"
+			line.append("#include \"%s/%s\"\n" % (name, fn))
+			c = [".balign 4\n"]
+		label = bank_s(self, c, stbl)
+		if label != None:
+			t = label[0]
+			if t == 0: s = label[-1]
+		init = False
+		# anime
+		if t == 0:
+			a_flag  = UNSM.table.fmt_anime_flag(ultra.sh())
+			a_waist = ultra.sh()
+			a_start = ultra.sh()
+			a_end   = ultra.sh()
+			a_frame = ultra.sh()
+			a_joint = ultra.sh()
+			a_val   = self.c_dst + ultra.uw()
+			a_tbl   = self.c_dst + ultra.uw()
+			a_siz   = self.c_dst + ultra.uw()
+			stbl_add(stbl, a_val, 1, s + "_val")
+			stbl_add(stbl, a_tbl, 2, s + "_tbl")
+			c.append((
+				"\tANIME(%s, %s, %d, %d, %d, %d, %d)\n"
+			) % (s, a_flag, a_waist, a_start, a_end, a_frame, a_joint))
+			i += 1
+		# val
+		elif t == 1:
+			c.append("\t.short %s\n" % ", ".join([
+				"0x%04X" % ultra.uh()
+				for _ in range(min(8, (a_siz-self.c_dst)//2))
+			]))
+			if self.c_addr == a_siz: c.append("\n")
+		# tbl
+		elif t == 2:
+			c.append("\t.short %s\n" % ", ".join([
+				"%5d" % ultra.uh()
+				for _ in range(6)
+			]))
+		else:
+			raise RuntimeError("bad mode")
+		if bank_e(self, c, etbl):
+			data = main.line_prc(c)
+			fn = self.path_join([name, fn])
+			main.mkdir(fn)
+			with open(fn, "w") as f: f.write(data)
+			self.c_addr = (self.c_addr+3) & ~3
+			init = True
 
 def s_demo(self, argv):
-    end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
-    while self.c_addr < end:
-        if bank_s(self, line, stbl) != None:
-            stage = UNSM.table.fmt_stage(ultra.ub())
-            self.c_addr += 3
-            line.append("\tDEMO(%s)\n" % stage)
-        else:
-            count   = ultra.ub()
-            stick_x = ultra.sb()
-            stick_y = ultra.sb()
-            button  = ultra.ub()
-            line.append("\t.byte %3d, %3d, %3d, 0x%02X\n" % (
-                count, stick_x, stick_y, button
-            ))
-        bank_e(self, line, etbl)
+	end, name, tbl, cnt, line, stbl, etbl = bank_init(self, argv)
+	while self.c_addr < end:
+		if bank_s(self, line, stbl) != None:
+			stage = UNSM.table.fmt_stage(ultra.ub())
+			self.c_addr += 3
+			line.append("\tDEMO(%s)\n" % stage)
+		else:
+			count   = ultra.ub()
+			stick_x = ultra.sb()
+			stick_y = ultra.sb()
+			button  = ultra.ub()
+			line.append("\t.byte %3d, %3d, %3d, 0x%02X\n" % (
+				count, stick_x, stick_y, button
+			))
+		bank_e(self, line, etbl)
 
 def pstr(s):
-    if not len(s) & 1: s += B"\0"
-    return struct.pack(">B", len(s)) + s
+	if not len(s) & 1: s += B"\0"
+	return struct.pack(">B", len(s)) + s
 
 def iff_chunk(code, data):
-    return struct.pack(">4sI", code, len(data)) + data
+	return struct.pack(">4sI", code, len(data)) + data
 
 def aifc_pack(rate, wave, book=None, loop=None):
-    x, = struct.unpack(">Q", struct.pack(">d", rate))
-    e = 0x3FFF + (x >> 52)-0x3FF
-    f = 1 << 63 | (x & 0xFFFFFFFFFFFFF) << 11
-    data = B"AIFC"
-    data += iff_chunk(
-        B"COMM", struct.pack(">HIHHQ", 1, 16*len(wave)//9, 16, e, f) +
-        B"VAPC" + pstr(B"VADPCM ~4-1")
-    )
-    if book: data += iff_chunk(
-        B"APPL", B"stoc" + pstr(B"VADPCMCODES") +
-        struct.pack(">HHH", 1, book[0], book[1]) + book[2]
-    )
-    if loop: data += iff_chunk(
-        B"APPL", B"stoc" + pstr(B"VADPCMLOOPS") +
-        struct.pack(">HHIII", 1, 1, loop[0], loop[1], loop[2]) +
-        (loop[3] if loop[2] > 0 else struct.pack(">32x"))
-    )
-    data += iff_chunk(B"SSND", struct.pack(">II", 0, 0) + wave)
-    if len(data) & 1: data += B"\0"
-    return iff_chunk(B"FORM", data)
+	x, = struct.unpack(">Q", struct.pack(">d", rate))
+	e = 0x3FFF + (x >> 52)-0x3FF
+	f = 1 << 63 | (x & 0xFFFFFFFFFFFFF) << 11
+	data = B"AIFC"
+	data += iff_chunk(
+		B"COMM", struct.pack(">HIHHQ", 1, 16*len(wave)//9, 16, e, f) +
+		B"VAPC" + pstr(B"VADPCM ~4-1")
+	)
+	if book: data += iff_chunk(
+		B"APPL", B"stoc" + pstr(B"VADPCMCODES") +
+		struct.pack(">HHH", 1, book[0], book[1]) + book[2]
+	)
+	if loop: data += iff_chunk(
+		B"APPL", B"stoc" + pstr(B"VADPCMLOOPS") +
+		struct.pack(">HHIII", 1, 1, loop[0], loop[1], loop[2]) +
+		(loop[3] if loop[2] > 0 else struct.pack(">32x"))
+	)
+	data += iff_chunk(B"SSND", struct.pack(">II", 0, 0) + wave)
+	if len(data) & 1: data += B"\0"
+	return iff_chunk(B"FORM", data)
 
 def al_book(self, book):
-    if book == 0: return None
-    self.c_addr = book
-    order       = ultra.uw()
-    npredictors = ultra.uw()
-    book = self.c_next(16 << npredictors)
-    return (order, npredictors, book)
+	if book == 0: return None
+	self.c_addr = book
+	order       = ultra.uw()
+	npredictors = ultra.uw()
+	book = self.c_next(16 << npredictors)
+	return (order, npredictors, book)
 
 def al_loop(self, loop):
-    if loop == 0: return None
-    self.c_addr = loop
-    start = ultra.uw()
-    end   = ultra.uw()
-    count = ultra.uw()
-    if count > 0:
-        self.c_addr += 4
-        state = self.c_next(32)
-        return (start, end, count, state)
-    return (start, end, count)
+	if loop == 0: return None
+	self.c_addr = loop
+	start = ultra.uw()
+	end   = ultra.uw()
+	count = ultra.uw()
+	if count > 0:
+		self.c_addr += 4
+		state = self.c_next(32)
+		return (start, end, count, state)
+	return (start, end, count)
 
 def al_sound(self, bankdata, wavedata, tbl, snd, key):
-    if snd == 0: return None
-    self.c_addr = snd
-    self.c_addr += 4
-    wave = ultra.uw()
-    loop = ultra.uw()
-    book = ultra.uw()
-    size = ultra.uw()
-    x = key
-    key *= 32000
-    wave = tbl+wave
-    imm = table.imm_addr(self, wave)
-    rate = imm[0] if imm[0] != None else int(round(key))
-    name = imm[1]
-    if wave not in wavedata:
-        path = imm[2]
-        book = al_book(self, book)
-        loop = al_loop(self, loop)
-        wavedata[wave] = [size, book, loop, rate, path, name]
-    return (name, int(round(12*math.log2(round(key/rate, 6)))))
+	if snd == 0: return None
+	self.c_addr = snd
+	self.c_addr += 4
+	wave = ultra.uw()
+	loop = ultra.uw()
+	book = ultra.uw()
+	size = ultra.uw()
+	x = key
+	key *= 32000
+	wave = tbl+wave
+	imm = table.imm_addr(self, wave)
+	rate = imm[0] if imm[0] != None else int(round(key))
+	name = imm[1]
+	if wave not in wavedata:
+		path = imm[2]
+		book = al_book(self, book)
+		loop = al_loop(self, loop)
+		wavedata[wave] = [size, book, loop, rate, path, name]
+	return (name, int(round(12*math.log2(round(key/rate, 6)))))
 
 def al_envelope(self, bankdata, env):
-    self.c_addr = env
-    if env not in bankdata[1]:
-        envelope = []
-        while True:
-            envelope.append((ultra.sh(), ultra.sh()))
-            if envelope[-1][0] in {-1, -2, -3}: break
-        name = "env%d" % bankdata[0]
-        bankdata[0] += 1
-        bankdata[1][env] = (name, ", ".join("%d, %d" % x for x in envelope))
+	self.c_addr = env
+	if env not in bankdata[1]:
+		envelope = []
+		while True:
+			envelope.append((ultra.sh(), ultra.sh()))
+			if envelope[-1][0] in {-1, -2, -3}: break
+		name = "env%d" % bankdata[0]
+		bankdata[0] += 1
+		bankdata[1][env] = (name, ", ".join("%d, %d" % x for x in envelope))
 
 def al_note(x):
-    return (
-        "C", "Cs", "D", "Eb", "E",
-        "F", "Fs", "G", "Ab", "A", "Bb", "B",
-    )[(x+9) % 12] + "%d" % ((x+9) // 12)
+	return (
+		"C", "Cs", "D", "Eb", "E",
+		"F", "Fs", "G", "Ab", "A", "Bb", "B",
+	)[(x+9) % 12] + "%d" % ((x+9) // 12)
 
 def al_instrument(self, bankdata, wavedata, tbl, inst, i):
-    if inst == 0: return
-    self.c_push()
-    self.c_addr = inst
-    self.c_addr += 1
-    min_ = ultra.ub()
-    max_ = ultra.ub()
-    rel = ultra.ub()
-    env = ultra.uw()
-    sound = [(ultra.uw(), ultra.f()) for i in range(3)]
-    al_envelope(self, bankdata, env)
-    if self.c_addr-self.addr in {0x57D350, 0x57D3C0}:
-        al_envelope(self, bankdata, (self.c_addr+15) & ~15)
-    sound = [
-        al_sound(self, bankdata, wavedata, tbl, snd, key)
-        for snd, key in sound
-    ]
-    bankdata[2].append((
-        "    instrument[%d] =\n"
-        "    {\n"
-        "        release = %d;\n"
-        "        envelope = %s;\n"
-    ) % (i, rel, bankdata[1][env][0]))
-    if sound[0] != None: bankdata[2].append((
-        "        soundL = {%s, %s, %s};\n"
-    ) % (al_note(min_), sound[0][0], al_note(39-sound[0][1])))
-    bankdata[2].append((
-        "        sound = {%s, %s};\n"
-    ) % (               sound[1][0], al_note(39-sound[1][1])))
-    if sound[2] != None: bankdata[2].append((
-        "        soundH = {%s, %s, %s};\n"
-    ) % (al_note(max_), sound[2][0], al_note(39-sound[2][1])))
-    bankdata[2].append("    };\n")
-    self.c_pull()
+	if inst == 0: return
+	self.c_push()
+	self.c_addr = inst
+	self.c_addr += 1
+	min_ = ultra.ub()
+	max_ = ultra.ub()
+	rel = ultra.ub()
+	env = ultra.uw()
+	sound = [(ultra.uw(), ultra.f()) for i in range(3)]
+	al_envelope(self, bankdata, env)
+	if self.c_addr-self.addr in {0x57D350, 0x57D3C0}:
+		al_envelope(self, bankdata, (self.c_addr+15) & ~15)
+	sound = [
+		al_sound(self, bankdata, wavedata, tbl, snd, key)
+		for snd, key in sound
+	]
+	bankdata[2].append((
+		"\tinstrument[%d] =\n"
+		"\t{\n"
+		"\t\trelease = %d;\n"
+		"\t\tenvelope = %s;\n"
+	) % (i, rel, bankdata[1][env][0]))
+	if sound[0] != None: bankdata[2].append((
+		"\t\tsoundL = {%s, %s, %s};\n"
+	) % (al_note(min_), sound[0][0], al_note(39-sound[0][1])))
+	bankdata[2].append((
+		"\t\tsound = {%s, %s};\n"
+	) % (               sound[1][0], al_note(39-sound[1][1])))
+	if sound[2] != None: bankdata[2].append((
+		"\t\tsoundH = {%s, %s, %s};\n"
+	) % (al_note(max_), sound[2][0], al_note(39-sound[2][1])))
+	bankdata[2].append("\t};\n")
+	self.c_pull()
 
 def al_percussion(self, bankdata, wavedata, tbl, perc, i):
-    if perc == 0: return
-    self.c_push()
-    self.c_addr = perc
-    rel = ultra.ub()
-    pan = ultra.ub()
-    self.c_addr += 2
-    snd, key = ultra.uw(), ultra.f()
-    env = ultra.uw()
-    al_envelope(self, bankdata, env)
-    snd, note = al_sound(self, bankdata, wavedata, tbl, snd, key)
-    bankdata[2].append((
-        "    percussion[%d] =\n"
-        "    {\n"
-        "        release = %d;\n"
-        "        pan = %d;\n"
-        "        envelope = %s;\n"
-        "        sound = {%s, %s};\n"
-        "    };\n"
-    ) % (i, rel, pan, bankdata[1][env][0], snd, al_note(39+note)))
-    self.c_pull()
+	if perc == 0: return
+	self.c_push()
+	self.c_addr = perc
+	rel = ultra.ub()
+	pan = ultra.ub()
+	self.c_addr += 2
+	snd, key = ultra.uw(), ultra.f()
+	env = ultra.uw()
+	al_envelope(self, bankdata, env)
+	snd, note = al_sound(self, bankdata, wavedata, tbl, snd, key)
+	bankdata[2].append((
+		"\tpercussion[%d] =\n"
+		"\t{\n"
+		"\t\trelease = %d;\n"
+		"\t\tpan = %d;\n"
+		"\t\tenvelope = %s;\n"
+		"\t\tsound = {%s, %s};\n"
+		"\t};\n"
+	) % (i, rel, pan, bankdata[1][env][0], snd, al_note(39+note)))
+	self.c_pull()
 
 def s_audio_ctltbl(self, argv):
-    ctl, tbl, data, ctlname, tblname = argv
-    line = self.file[-1][1]
-    wavetbl = {i: {} for i in tblname}
-    banktbl = {}
-    self.addr = 0-tbl
-    ultra.asm.init(self, 0, data)
-    self.c_addr += 2
-    cnt = ultra.uh()
-    for i in range(cnt):
-        start = ultra.uw()
-        self.c_addr += 4
-        if i not in ctlname: continue
-        banktbl[i] = [[0, {}, []], wavetbl[tbl+start], ctl, tbl+start]
-    self.addr = 0-ctl
-    ultra.asm.init(self, 0, self.c_data)
-    self.c_addr += 2
-    cnt = ultra.uh()
-    for i in range(cnt):
-        start = ultra.uw()
-        self.c_addr += 4
-        if i not in ctlname: continue
-        self.c_push()
-        self.c_addr = start
-        icnt = ultra.uw()
-        pcnt = ultra.uw()
-        flag = ultra.uw()
-        date = ultra.uw()
-        banktbl[i][2] += self.c_addr
-        banktbl[i] += [icnt, pcnt, flag, date]
-        self.c_pull()
-    for i in banktbl:
-        bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
-        self.addr = 0-ctl
-        ultra.asm.init(self, 0, self.c_data)
-        imm = table.imm_addr(self, ctl)
-        perc = ultra.uw()
-        itbl = [ultra.uw() for i in range(icnt)]
-        self.c_addr = perc
-        ptbl = [ultra.uw() for i in range(pcnt)]
-        for inst in sorted(itbl):
-            i = itbl.index(inst)
-            if i == imm:
-                for perc in sorted(ptbl):
-                    p = ptbl.index(perc)
-                    al_percussion(self, bankdata, wavedata, tbl, perc, p)
-            al_instrument(self, bankdata, wavedata, tbl, inst, i)
-    for tbl in sorted(wavetbl.keys()):
-        wavedata = wavetbl[tbl]
-        line.append("wave %s\n{\n" % tblname[tbl])
-        for wave in sorted(wavedata.keys()):
-            size, book, loop, rate, path, name = wavedata[wave]
-            wave = self.data[self.c_data][wave:wave+size]
-            data = aifc_pack(rate, wave, book, loop)
-            fn = self.path_join(path)
-            main.mkdir(fn)
-            with open(fn, "wb") as f: f.write(data)
-            line.append("    sound %s \"%s\";\n" % (name, "/".join(path)))
-        line.append("};\n\n")
-    for i in sorted(banktbl.keys()):
-        bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
-        line.append("bank %s\n{\n" % ctlname[i])
-        line.append("    date = {%X, %X, %X};\n" % (
-            date >> 16, date >> 8 & 0xFF, date >> 0 & 0xFF
-        ))
-        line.append("    wave %s;\n" % tblname[tbl])
-        for env in sorted(bankdata[1].keys()):
-            line.append("    envelope %s {%s};\n" % bankdata[1][env])
-        line += bankdata[2]
-        line.append("};\n\n")
+	ctl, tbl, data, ctlname, tblname = argv
+	line = self.file[-1][1]
+	wavetbl = {i: {} for i in tblname}
+	banktbl = {}
+	self.addr = 0-tbl
+	ultra.asm.init(self, 0, data)
+	self.c_addr += 2
+	cnt = ultra.uh()
+	for i in range(cnt):
+		start = ultra.uw()
+		self.c_addr += 4
+		if i not in ctlname: continue
+		banktbl[i] = [[0, {}, []], wavetbl[tbl+start], ctl, tbl+start]
+	self.addr = 0-ctl
+	ultra.asm.init(self, 0, self.c_data)
+	self.c_addr += 2
+	cnt = ultra.uh()
+	for i in range(cnt):
+		start = ultra.uw()
+		self.c_addr += 4
+		if i not in ctlname: continue
+		self.c_push()
+		self.c_addr = start
+		icnt = ultra.uw()
+		pcnt = ultra.uw()
+		flag = ultra.uw()
+		date = ultra.uw()
+		banktbl[i][2] += self.c_addr
+		banktbl[i] += [icnt, pcnt, flag, date]
+		self.c_pull()
+	for i in banktbl:
+		bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
+		self.addr = 0-ctl
+		ultra.asm.init(self, 0, self.c_data)
+		imm = table.imm_addr(self, ctl)
+		perc = ultra.uw()
+		itbl = [ultra.uw() for i in range(icnt)]
+		self.c_addr = perc
+		ptbl = [ultra.uw() for i in range(pcnt)]
+		for inst in sorted(itbl):
+			i = itbl.index(inst)
+			if i == imm:
+				for perc in sorted(ptbl):
+					p = ptbl.index(perc)
+					al_percussion(self, bankdata, wavedata, tbl, perc, p)
+			al_instrument(self, bankdata, wavedata, tbl, inst, i)
+	for tbl in sorted(wavetbl.keys()):
+		wavedata = wavetbl[tbl]
+		line.append("wave %s\n{\n" % tblname[tbl])
+		for wave in sorted(wavedata.keys()):
+			size, book, loop, rate, path, name = wavedata[wave]
+			wave = self.data[self.c_data][wave:wave+size]
+			data = aifc_pack(rate, wave, book, loop)
+			fn = self.path_join(path)
+			main.mkdir(fn)
+			with open(fn, "wb") as f: f.write(data)
+			line.append("\tsound %s \"%s\";\n" % (name, "/".join(path)))
+		line.append("};\n\n")
+	for i in sorted(banktbl.keys()):
+		bankdata, wavedata, ctl, tbl, icnt, pcnt, flag, date = banktbl[i]
+		line.append("bank %s\n{\n" % ctlname[i])
+		line.append("\tdate = {%X, %X, %X};\n" % (
+			date >> 16, date >> 8 & 0xFF, date >> 0 & 0xFF
+		))
+		line.append("\twave %s;\n" % tblname[tbl])
+		for env in sorted(bankdata[1].keys()):
+			line.append("\tenvelope %s {%s};\n" % bankdata[1][env])
+		line += bankdata[2]
+		line.append("};\n\n")
 
 def s_audio_seqbnk(self, argv):
-    seq, bnk, data, seqname, path = argv
-    line = self.file[-1][1]
-    self.addr = 0-seq
-    ultra.asm.init(self, 0, data)
-    self.c_addr += 2
-    cnt = ultra.uh()
-    for i in range(cnt):
-        start = ultra.uw()
-        size  = ultra.uw()
-        if i not in seqname: continue
-        start = seq+start
-        imm = table.imm_addr(self, start)
-        if imm != None: size = imm
-        data = self.data[self.c_data][start:start+size]
-        fn = self.path_join(path + ["%s.seq" % seqname[i]])
-        main.mkdir(fn)
-        with open(fn, "wb") as f: f.write(data)
-    self.addr = 0-bnk
-    ultra.asm.init(self, 0, self.c_data)
-    for i in range(cnt):
-        start = ultra.uh()
-        if i not in seqname: continue
-        self.c_push()
-        self.c_addr = start
-        line.append("\"%s\" %s\n" % (
-            "/".join(path + ["%s.seq" % seqname[i]]),
-            " ".join(["%d" % ultra.ub() for _ in range(ultra.ub())])
-        ))
-        self.c_pull()
+	seq, bnk, data, path = argv
+	line = self.file[-1][1]
+	self.addr = 0-seq
+	ultra.asm.init(self, 0, data)
+	self.c_addr += 2
+	cnt = ultra.uh()
+	for i in range(cnt):
+		start = ultra.uw()
+		size  = ultra.uw()
+		start = seq+start
+		imm = table.imm_addr(self, start)
+		if imm != None: size = imm
+		data = self.data[self.c_data][start:start+size]
+		fn = self.path_join(path[i])
+		main.mkdir(fn)
+		with open(fn, "wb") as f: f.write(data)
+	self.addr = 0-bnk
+	ultra.asm.init(self, 0, self.c_data)
+	for i in range(cnt):
+		start = ultra.uh()
+		self.c_push()
+		self.c_addr = start
+		line.append("%s\n" % " ".join([
+			"%d" % ultra.ub() for _ in range(ultra.ub())
+		]))
+		self.c_pull()

@@ -1,6 +1,11 @@
-VERSION ?= J00
+TARGET  ?= J00
 
-BUILD   := build/$(VERSION)
+BUILD   := build/$(TARGET)
+$(eval VERSION := $$$(TARGET))
+REGION  := $(subst $(VERSION),,$(TARGET))
+REGION  := $(subst J,0,$(REGION))
+REGION  := $(subst E,1,$(REGION))
+REGION  := $(subst P,2,$(REGION))
 
 OBJ := \
 	$(BUILD)/src/code.o     \
@@ -8,42 +13,40 @@ OBJ := \
 	$(BUILD)/src/code_01.o  \
 	$(BUILD)/src/bank.o
 
-TOOLS_OBJ := tools/mask
-
-$(eval REVISION := $$$(VERSION))
-REGION  := $(subst $(REVISION),,$(VERSION))
-REGION  := $(subst J,0,$(REGION))
-REGION  := $(subst E,1,$(REGION))
-REGION  := $(subst P,2,$(REGION))
-
-FLAG    := -Iinclude -I$(BUILD)
-FLAG    += -DVERSION_$(VERSION) -DREGION=$(REGION) -DREVISION=$(REVISION)
+TOOLS := tools/checksum
 
 CC      := gcc
-CCFLAG  := -O2 -Wall -Wextra -Wpedantic
+CFLAGS  := -O2 -Wall -Wextra -Wpedantic
+
+FLAGS   := -Iinclude -I$(BUILD)
+FLAGS   += -DTARGET_$(TARGET) -DREGION=$(REGION) -DVERSION=$(VERSION)
 
 SFC_AS      := ca65
 SFC_LD      := ld65
-SFC_ASFLAG  := --cpu 65816 --feature c_comments -U -s $(FLAG)
+SFC_ASFLAGS := --cpu 65816 --feature c_comments -U -s $(FLAGS)
 
 .PHONY: default
 default: $(BUILD)/app.sfc
 
 .PHONY: clean
 clean:
-	rm -f -r build $(TOOLS_OBJ)
+	rm -f -r build
 
-$(BUILD)/app.sfc: main.ld $(OBJ) tools/mask
+.PHONY: clobber
+clobber:
+	rm -f -r build $(TOOLS)
+
+$(BUILD)/app.sfc: main.ld $(OBJ) tools/checksum
 	@mkdir -p $(dir $@)
 	$(SFC_LD) -m $(@:.sfc=.map) -o $@ -C main.ld $(OBJ)
-	tools/mask $@
+	tools/checksum $@
 
 -include $(OBJ:.o=.d)
 
 $(BUILD)/%.o: %.s
 	@mkdir -p $(dir $@)
-	$(SFC_AS) $(SFC_ASFLAG) -o $@ $<
+	$(SFC_AS) $(SFC_ASFLAGS) -o $@ $<
 
-$(TOOLS_OBJ):
+$(TOOLS):
 tools/%: tools/%.c
-	$(CC) $(CCFLAG) -s -o $@ $<
+	$(CC) $(CFLAGS) -s -o $@ $<

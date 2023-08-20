@@ -1,40 +1,40 @@
 .macro jss addr
-    lda #.loword(addr)
-    ldx #.hiword(addr)
-    jsl code_008C3F
+	lda #.loword(addr)
+	ldx #.hiword(addr)
+	jsl code_008C3F
 .endmacro
 
 .macro jms addr
-    lda #.loword(addr)
-    ldx #.hiword(addr)
-    jml code_008C3F
+	lda #.loword(addr)
+	ldx #.hiword(addr)
+	jml code_008C3F
 .endmacro
 
 .macro jsc addr
-    lda #.loword(addr)
-    ldx #.hiword(addr)
-    jsl code_008C6D
+	lda #.loword(addr)
+	ldx #.hiword(addr)
+	jsl code_008C6D
 .endmacro
 
 .macro jmc addr
-    lda #.loword(addr)
-    ldx #.hiword(addr)
-    jml code_008C6D
+	lda #.loword(addr)
+	ldx #.hiword(addr)
+	jml code_008C6D
 .endmacro
 
 .macro MEM arg, size, src, dst
-    .byte arg
-    .word size
-    .faraddr src
-    .word dst
+	.byte arg
+	.word size
+	.faraddr src
+	.word dst
 .endmacro
 
 .macro _00841C arg0, arg1
-    .byte arg0
-    .word arg1
+	.byte arg0
+	.word arg1
 .endmacro
 
-.ifdef VERSION_J00
+.ifdef TARGET_J00
 code_0397F4 = $0397F4
 code_03A02A = $03A02A
 code_03A103 = $03A103
@@ -104,7 +104,7 @@ bss_7ABF = $7ABF
 bss_7B2B = $7B2B
 .endif
 
-.ifdef VERSION_E00
+.ifdef TARGET_E00
 code_01DFC6_E0 = $01DFC6
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A04A
@@ -175,7 +175,7 @@ bss_7ABF = $7AC1
 bss_7B2B = $7B2D
 .endif
 
-.ifdef VERSION_P00
+.ifdef TARGET_P00
 code_01DFC6_E0 = $01DFC6 ;
 code_0397F4 = $0397F4 ;
 code_03A02A = $03A04A ;
