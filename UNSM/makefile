@@ -158,8 +158,8 @@ $(BUILD)/%.seq: %.asm
 %.h: %.txt tools/message
 	tools/message $< > $@
 
-%.h: %.obj tools/map
-	tools/map $< > $@
+%.h: %.obj tools/obj
+	tools/obj $< $@
 
 %.aifc: %.aiff
 	tabledesign -s 1 $< > $(@:.aifc=.table)

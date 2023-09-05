@@ -11,7 +11,7 @@
 #define NA_MODE_STAFF           7
 
 #define NA_SEQ_SE               0
-#define NA_SEQ_STAR_CATCH       1
+#define NA_SEQ_STARCATCH        1
 #define NA_SEQ_TITLE            2
 #define NA_SEQ_FIELD            3
 #define NA_SEQ_CASTLE           4
@@ -23,31 +23,31 @@
 #define NA_SEQ_GHOST            10
 #define NA_SEQ_LULLABY          11
 #define NA_SEQ_DUNGEON          12
-#define NA_SEQ_STAR_SELECT      13
+#define NA_SEQ_STARSELECT       13
 #define NA_SEQ_WING             14
 #define NA_SEQ_METAL            15
-#define NA_SEQ_MSG_BOWSER       16
+#define NA_SEQ_BOWSERMSG        16
 #define NA_SEQ_BOWSER           17
 #define NA_SEQ_HI_SCORE         18
-#define NA_SEQ_MERRY_GO_ROUND   19
+#define NA_SEQ_MERRYGOROUND     19
 #define NA_SEQ_FANFARE          20
 #define NA_SEQ_STAR             21
 #define NA_SEQ_BATTLE           22
-#define NA_SEQ_ARENA_CLEAR      23
+#define NA_SEQ_ARENACLEAR       23
 #define NA_SEQ_ENDLESS          24
 #define NA_SEQ_FINAL            25
 #define NA_SEQ_STAFF            26
 #define NA_SEQ_SOLUTION         27
-#define NA_SEQ_MSG_TOAD         28
-#define NA_SEQ_MSG_PEACH        29
+#define NA_SEQ_TOADMSG          28
+#define NA_SEQ_PEACHMSG         29
 #define NA_SEQ_INTRO            30
-#define NA_SEQ_FINAL_CLEAR      31
+#define NA_SEQ_FINALCLEAR       31
 #define NA_SEQ_ENDING           32
-#define NA_SEQ_FILE_SELECT      33
-#define NA_SEQ_MSG_LAKITU       34
+#define NA_SEQ_FILESELECT       33
+#define NA_SEQ_LAKITUMSG        34
 
 #define NA_BGM_NULL             0
-/* #define NA_BGM_STAR_CATCH       NA_SEQ_STAR_CATCH */
+/* #define NA_BGM_STARCATCH        NA_SEQ_STARCATCH */
 #define NA_BGM_TITLE            NA_SEQ_TITLE
 #define NA_BGM_GAMEOVER         (0x080 | NA_SEQ_TITLE)
 #define NA_BGM_FIELD            NA_SEQ_FIELD
@@ -61,29 +61,29 @@
 #define NA_BGM_GHOST            NA_SEQ_GHOST
 /* #define NA_BGM_LULLABY          NA_SEQ_LULLABY */
 #define NA_BGM_DUNGEON          NA_SEQ_DUNGEON
-#define NA_BGM_STAR_SELECT      NA_SEQ_STAR_SELECT
+#define NA_BGM_STARSELECT       NA_SEQ_STARSELECT
 /* #define NA_BGM_WING             NA_SEQ_WING */
 #define NA_BGM_SHELL            (0x480 | NA_SEQ_WING)
 /* #define NA_BGM_METAL            NA_SEQ_METAL */
-/* #define NA_BGM_MSG_BOWSER       NA_SEQ_MSG_BOWSER */
+/* #define NA_BGM_BOWSERMSG        NA_SEQ_BOWSERMSG */
 #define NA_BGM_BOWSER           NA_SEQ_BOWSER
-/* #define NA_BGM_HI_SCORE         NA_SEQ_HI_SCORE */
-/* #define NA_BGM_MERRY_GO_ROUND   NA_SEQ_MERRY_GO_ROUND */
+/* #define NA_BGM_HISCORE          NA_SEQ_HISCORE */
+/* #define NA_BGM_MERRYGOROUND     NA_SEQ_MERRYGOROUND */
 /* #define NA_BGM_FANFARE          NA_SEQ_FANFARE */
 /* #define NA_BGM_STAR             NA_SEQ_STAR */
 /* #define NA_BGM_BATTLE           NA_SEQ_BATTLE */
-/* #define NA_BGM_ARENA_CLEAR      NA_SEQ_ARENA_CLEAR */
+/* #define NA_BGM_ARENACLEAR       NA_SEQ_ARENACLEAR */
 #define NA_BGM_ENDLESS          NA_SEQ_ENDLESS
 #define NA_BGM_FINAL            NA_SEQ_FINAL
 /* #define NA_BGM_STAFF            NA_SEQ_STAFF */
 /* #define NA_BGM_SOLUTION         NA_SEQ_SOLUTION */
-/* #define NA_BGM_MSG_TOAD         NA_SEQ_MSG_TOAD */
-/* #define NA_BGM_MSG_PEACH        NA_SEQ_MSG_PEACH */
+/* #define NA_BGM_TOADMSG          NA_SEQ_TOADMSG */
+/* #define NA_BGM_PEACHMSG         NA_SEQ_PEACHMSG */
 /* #define NA_BGM_INTRO            NA_SEQ_INTRO */
-/* #define NA_BGM_FINAL_CLEAR      NA_SEQ_FINAL_CLEAR */
+/* #define NA_BGM_FINALCLEAR       NA_SEQ_FINALCLEAR */
 /* #define NA_BGM_ENDING           NA_SEQ_ENDING */
-#define NA_BGM_FILE_SELECT      NA_SEQ_FILE_SELECT
-/* #define NA_BGM_MSG_LAKITU       NA_SEQ_MSG_LAKITU */
+#define NA_BGM_FILESELECT       NA_SEQ_FILESELECT
+/* #define NA_BGM_LAKITUMSG       NA_SEQ_LAKITUMSG */
 
 #define NA_SE_NULL              0x00000000
 

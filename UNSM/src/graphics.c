@@ -1,42 +1,100 @@
 #include <sm64.h>
 
-CONTROLLER   controller_data[CONTROLLER_LEN+1];
-OSContStatus cont_status[MAXCONTROLLERS];
-OSContPad    cont_pad[MAXCONTROLLERS];
+UNUSED static char gfx_8032D5D0 = 0;
 
-OSMesgQueue gfx_vi_mq;
-OSMesgQueue gfx_dp_mq;
-OSMesg gfx_vi_mbox;
-OSMesg gfx_dp_mbox;
-SC_CLIENT sc_client_gfx;
+static OSContStatus cont_status[MAXCONTROLLERS];
+static OSContPad cont_pad[MAXCONTROLLERS];
 
-uintptr_t gfx_cimg[3];
-uintptr_t gfx_zimg;
-void    *anime_mario_buf;
-void    *demo_buf;
+static OSMesgQueue gfx_vi_mq;
+static OSMesgQueue gfx_dp_mq;
+static OSMesg gfx_vi_mbox;
+static OSMesg gfx_dp_mbox;
+static SC_CLIENT gfx_client;
+
+static uintptr_t gfx_cimg[3];
+static uintptr_t gfx_zimg;
+static void *anime_mario_buf;
+static void *demo_buf;
+
+u32 gfx_frame = 0;
+u16 gfx_vi = 0;
+u16 gfx_dp = 0;
 SC_TASK *gfx_task;
-Gfx     *gfx_ptr;
-char    *gfx_mem;
-FRAME   *frame;
+Gfx *gfx_ptr;
+char *gfx_mem;
+FRAME *frame;
+void (*gfx_callback)(void) = NULL;
 
+CONTROLLER controller_data[CONTROLLER_LEN+1];
+CONTROLLER *cont1 = &controller_data[0];
+CONTROLLER *cont2 = &controller_data[1];
+CONTROLLER *controller = &controller_data[2];
+DEMO *demo = NULL;
+u16 demo_index = 0;
 u8 cont_bitpattern;
 s8 eeprom_status;
 
 BANK anime_mario_bank;
 BANK demo_bank;
 
-u32 gfx_8032D5D0 = 0;
-u32 gfx_frame = 0;
-u16 gfx_vi = 0;
-u16 gfx_dp = 0;
-void (*gfx_callback)(void) = NULL;
+#ifdef GATEWAY
 
-CONTROLLER *cont1 = &controller_data[0];
-CONTROLLER *cont2 = &controller_data[1];
-CONTROLLER *controller = &controller_data[2];
+#define HALT_REG_START_ADDR 0x0ff70000
+#define HALT_REG_latency 0x5
+#define HALT_REG_pulse 0x0c
+#define HALT_REG_pageSize 0xd
+#define HALT_REG_relDuration 0x2
 
-DEMO *demo = NULL;
-u16   demo_index = 0;
+extern void __osPiGetAccess(void);
+extern void __osPiRelAccess(void);
+
+static void WriteGatewayRegister(int active)
+{
+	register u32 stat;
+	IO_WRITE(PI_BSD_DOM2_LAT_REG, HALT_REG_latency);
+	IO_WRITE(PI_BSD_DOM2_PWD_REG, HALT_REG_pulse);
+	IO_WRITE(PI_BSD_DOM2_PGS_REG, HALT_REG_pageSize);
+	IO_WRITE(PI_BSD_DOM2_RLS_REG, HALT_REG_relDuration);
+	__osPiGetAccess();
+	stat = IO_READ(PI_STATUS_REG);
+	while (stat & (PI_STATUS_IO_BUSY|PI_STATUS_DMA_BUSY))
+	{
+		stat = IO_READ(PI_STATUS_REG);
+	}
+	if (active) IO_WRITE(HALT_REG_START_ADDR, 0x01010101);
+	else        IO_WRITE(HALT_REG_START_ADDR, 0x00000000);
+	__osPiRelAccess();
+}
+
+static void cont_read(void)
+{
+	osRecvMesg(&si_mq, NULL, OS_MESG_BLOCK);
+	osContGetReadData(cont_pad);
+	if ((cont1->pad->button & (U_JPAD|D_JPAD)) == (U_JPAD|D_JPAD))
+	{
+		sys_halt = TRUE;
+		WriteGatewayRegister(1);
+		do
+		{
+			osContStartReadData(&si_mq);
+			osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
+			osContGetReadData(cont_pad);
+		}
+		while ((cont1->pad->button & (L_JPAD|R_JPAD)) != (L_JPAD|R_JPAD));
+		WriteGatewayRegister(0);
+		sys_halt = FALSE;
+	}
+}
+
+#else
+
+#define cont_read() \
+{ \
+	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK); \
+	osContGetReadData(cont_pad); \
+}
+
+#endif
 
 static void gfx_init_dp(void)
 {
@@ -259,7 +317,8 @@ static void frame_end(void)
 	gfx_frame++;
 }
 
-UNUSED static void demo_record(void)
+UNUSED
+static void demo_record(void)
 {
 	static DEMO record = {0};
 	u8 button = (cont1->held & 0xF000) >> 8 | (cont1->held & 0x000F);
@@ -338,11 +397,7 @@ static void demo_update(void)
 static void cont_update(void)
 {
 	int i;
-	if (cont_bitpattern != 0)
-	{
-		osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
-		osContGetReadData(cont_pad);
-	}
+	if (cont_bitpattern != 0) cont_read();
 	demo_update();
 	for (i = 0; i < CONTROLLER_LEN; i++)
 	{
@@ -430,7 +485,7 @@ void gfx_main(UNUSED void *arg)
 	gfx_init();
 	cont_init();
 	save_init();
-	sc_client_init(2, &sc_client_gfx, &gfx_vi_mq, (OSMesg)1);
+	sc_client_init(2, &gfx_client, &gfx_vi_mq, (OSMesg)1);
 	pc = segment_to_virtual(p_main);
 	Na_BGM_play(2, NA_SEQ_SE, 0);
 	aud_output(save_output_get());
@@ -447,7 +502,7 @@ void gfx_main(UNUSED void *arg)
 		aud_update();
 		frame_start();
 		cont_update();
-		pc = p_script_main(pc);
+		pc = p_execute(pc);
 		frame_end();
 		if (debug_mem) dprintf(180, 20, "BUF %d", gfx_mem-(char *)gfx_ptr);
 	}

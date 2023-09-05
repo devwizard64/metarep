@@ -65,7 +65,7 @@ flag_anime_flag = [
 	(0x0001, 0x0000, "ANIME_LOOP"),
 	(0x0001, 0x0001, "ANIME_NOLOOP"),
 	(0x0002, 0x0002, "ANIME_REVERSE"),
-	(0x0004, 0x0004, "ANIME_FIXFRAME"),
+	(0x0004, 0x0004, "ANIME_NOSTEP"),
 	(0x0058, 0x0000, "ANIME_XYZ"),
 	(0x0008, 0x0008, "ANIME_Y"),
 	(0x0010, 0x0010, "ANIME_XZ"),
@@ -368,7 +368,7 @@ def fmt_msg(x):
 	if s != None: return "MSG_" + s
 	return "%d" % x
 
-fmt_p_obj_x = [
+fmt_tag_x = [
 	"COIN",
 	"1", # coin
 	"2", # bluecoin (slider)
@@ -739,12 +739,12 @@ fmt_p_obj_x = [
 	None,
 ]
 
-def fmt_p_obj(x):
-	s = fmt_p_obj_x[x]
-	if s != None: return "P_OBJ_" + s
+def fmt_tag(x):
+	s = fmt_tag_x[x]
+	if s != None: return "TAG_" + s
 	return "%d" % x
 
-fmt_m_obj_x = {
+fmt_map_obj_x = {
 	0: "PLAYER",
 	1: "COIN", # unused
 	2: "2", # unused, coin
@@ -821,8 +821,8 @@ fmt_m_obj_x = {
 	135: "PORTDOOR_F", # unused
 }
 
-def fmt_m_obj(x):
-	if x in fmt_m_obj_x: return "M_OBJ_" + fmt_m_obj_x[x]
+def fmt_map_obj(x):
+	if x in fmt_map_obj_x: return "MAP_OBJ_" + fmt_map_obj_x[x]
 	if x == 255: return "-1"
 	return "%d" % x
 
@@ -1017,14 +1017,14 @@ shp_2a = {
 }
 
 shp_2b = {
-	100: "2B_100",
-	101: "2B_101",
-	102: "2B_102",
-	103: "2B_103",
-	104: "2B_104",
-	105: "2B_105",
-	179: "2B_179",
-	193: "2B_193",
+	100: "BUB",
+	101: "CHEST",
+	102: "CHESTLID",
+	103: "PIRANHA",
+	104: "WATERRING",
+	105: "SKEETER",
+	179: "WATERMINE",
+	193: "KELP",
 }
 
 shp_2c = {
@@ -1759,12 +1759,12 @@ fmt_na_bgm_x = {
 	0x000 |  9: "SLIDER",
 	0x000 | 10: "GHOST",
 	0x000 | 12: "DUNGEON",
-	0x000 | 13: "STAR_SELECT",
+	0x000 | 13: "STARSELECT",
 	0x480 | 14: "SHELL",
 	0x000 | 17: "BOWSER",
 	0x000 | 24: "ENDLESS",
 	0x000 | 25: "FINAL",
-	0x000 | 33: "FILE_SELECT",
+	0x000 | 33: "FILESELECT",
 }
 
 def fmt_na_bgm(x):
@@ -2176,7 +2176,7 @@ tblname_music = {
 
 seqpath = [
 	["se", "se.seq"],
-	["music", "star_catch.seq"],
+	["music", "starcatch.seq"],
 	["music", "title.seq"],
 	["music", "field.seq"],
 	["music", "castle.seq"],
@@ -2188,28 +2188,28 @@ seqpath = [
 	["music", "ghost.seq"],
 	["music", "lullaby.seq"],
 	["music", "dungeon.seq"],
-	["music", "star_select.seq"],
+	["music", "starselect.seq"],
 	["music", "wing.seq"],
 	["music", "metal.seq"],
-	["music", "msg_bowser.seq"],
+	["music", "bowsermsg.seq"],
 	["music", "bowser.seq"],
-	["music", "hi_score.seq"],
-	["music", "merry_go_round.seq"],
+	["music", "hiscore.seq"],
+	["music", "merrygoround.seq"],
 	["music", "fanfare.seq"],
 	["music", "star.seq"],
 	["music", "battle.seq"],
-	["music", "arena_clear.seq"],
+	["music", "arenaclear.seq"],
 	["music", "endless.seq"],
 	["music", "final.seq"],
 	["music", "staff.seq"],
 	["music", "solution.seq"],
-	["music", "msg_toad.seq"],
-	["music", "msg_peach.seq"],
+	["music", "toadmsg.seq"],
+	["music", "peachmsg.seq"],
 	["music", "intro.seq"],
-	["music", "final_clear.seq"],
+	["music", "finalclear.seq"],
 	["music", "ending.seq"],
-	["music", "file_select.seq"],
-	["music", "msg_lakitu.seq"],
+	["music", "fileselect.seq"],
+	["music", "lakitumsg.seq"],
 ]
 
 sym_globl = {
@@ -3619,32 +3619,32 @@ sym_J0_t_code = {
 
 	0x8029CA60: table.sym("object_8029D1E8"),
 
-	0x8029D62C: table.sym("obj_lib_8029DDA8"),
-	0x8029DB7C: table.sym("obj_lib_8029E2F8"),
-	0x8029DF18: table.sym("obj_lib_8029E694"),
-	0x8029E388: table.sym("obj_lib_8029EB04"),
-	0x8029E5A4: table.sym("obj_lib_8029ED20"),
-	0x8029E964: table.sym("obj_lib_8029F0E0"),
-	0x8029ECB4: table.sym("obj_lib_8029F430"),
-	0x8029EF40: table.sym("obj_lib_8029F6BC"),
-	0x8029F170: table.sym("obj_lib_8029F8EC"),
-	0x802A0A90: table.sym("obj_lib_802A120C"),
-	0x802A0B28: table.sym("obj_lib_802A12A4"),
-	0x802A0D80: table.sym("obj_lib_802A14FC"),
-	0x802A2188: table.sym("obj_lib_802A2930"),
-	0x802A2270: table.sym("obj_lib_802A2A18"),
-	0x802A22DC: table.sym("obj_lib_802A2A84"),
-	0x802A3978: table.sym("obj_lib_802A4120"),
-	0x802A3A68: table.sym("obj_lib_802A4210"),
+	0x8029D62C: table.sym("objlib_8029DDA8"),
+	0x8029DB7C: table.sym("objlib_8029E2F8"),
+	0x8029DF18: table.sym("objlib_8029E694"),
+	0x8029E388: table.sym("objlib_8029EB04"),
+	0x8029E5A4: table.sym("objlib_8029ED20"),
+	0x8029E964: table.sym("objlib_8029F0E0"),
+	0x8029ECB4: table.sym("objlib_8029F430"),
+	0x8029EF40: table.sym("objlib_8029F6BC"),
+	0x8029F170: table.sym("objlib_8029F8EC"),
+	0x802A0A90: table.sym("objlib_802A120C"),
+	0x802A0B28: table.sym("objlib_802A12A4"),
+	0x802A0D80: table.sym("objlib_802A14FC"),
+	0x802A2188: table.sym("objlib_802A2930"),
+	0x802A2270: table.sym("objlib_802A2A18"),
+	0x802A22DC: table.sym("objlib_802A2A84"),
+	0x802A3978: table.sym("objlib_802A4120"),
+	0x802A3A68: table.sym("objlib_802A4210"),
 
 	0x802C9A3C: table.sym("obj_debug_802CA51C"),
 	0x802C9B38: table.sym("obj_debug_802CA618"),
 
 	0x802DA4DC: table.sym("message_802DB350"),
 
-	0x802E1504: table.sym("prg_obj_main"),
-	0x802E1780: table.sym("obj_data_main"),
-	0x802E19DC: table.sym("map_obj_main"),
+	0x802E1504: table.sym("tag_obj_load"),
+	0x802E1780: table.sym("tag_load"),
+	0x802E19DC: table.sym("map_obj_load"),
 
 	0x80320890: table.sym("Na_SE_clear"),
 
@@ -3652,9 +3652,9 @@ sym_J0_t_code = {
 
 	0x8033A568: table.sym("scene_data+0x08"), # map
 
-	0x8033BF04: table.sym("object_8033D274+0x00"), # ground
-	0x8033BF06: table.sym("object_8033D274+0x02"), # roof
-	0x8033BF08: table.sym("object_8033D274+0x04"), # wall
+	0x8033BF04: table.sym("bg_debug+0x00"), # ground
+	0x8033BF06: table.sym("bg_debug+0x02"), # roof
+	0x8033BF08: table.sym("bg_debug+0x04"), # wall
 
 	# menu
 
@@ -3684,11 +3684,11 @@ sym_J0_d_code = {
 	0x8032CE94: table.sym("save_index"),
 	0x8032CE98: table.sym("stage_index"),
 
-	0x8032CF90: table.sym("shape_scene"),
-	0x8032CF94: table.sym("shape_layer"),
-	0x8032CF98: table.sym("shape_persp"),
-	0x8032CF9C: table.sym("shape_camera"),
-	0x8032CFA0: table.sym("shape_object"),
+	0x8032CF90: table.sym("s_scene"),
+	0x8032CF94: table.sym("s_layer"),
+	0x8032CF98: table.sym("s_persp"),
+	0x8032CF9C: table.sym("s_camera"),
+	0x8032CFA0: table.sym("s_object"),
 	0x8032CFA8: table.sym("draw_timer"),
 
 	# bss
@@ -3697,8 +3697,8 @@ sym_J0_d_code = {
 	0x8033A758: table.sym("level_index"),
 	0x8033A75A: table.sym("scene_index"),
 
-	0x8033BEF4: table.sym("object_8033D264"),
-	0x8033BF04: table.sym("object_8033D274"),
+	0x8033BEF4: table.sym("nullbg_count"),
+	0x8033BF04: table.sym("bg_debug"),
 	0x8033C110: table.sym("object_8033D480"),
 	0x8035FDE8: table.sym("obj_mario"),
 	0x8035FDEC: table.sym("obj_luigi"),
@@ -4051,34 +4051,34 @@ sym_E0_t_code = {
 	0x8024D998: table.sym("collision_8024D998"),
 	0x8024DAAC: table.sym("collision_8024DAAC"),
 	0x8024DB2C: table.sym_fnc("collision_8024DB2C", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024DBF0: table.sym_fnc("collision_8024DBF0", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024DC28: table.sym_fnc("collision_8024DC28", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024DE4C: table.sym_fnc("collision_8024DE4C", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024DF10: table.sym_fnc("collision_8024DF10", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E0C4: table.sym_fnc("collision_8024E0C4", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E2FC: table.sym("collision_8024E2FC", table.GLOBL),
 	0x8024E388: table.sym_fnc("L8024E388", flag=table.GLOBL|table.LOCAL),
@@ -4088,9 +4088,9 @@ sym_E0_t_code = {
 	0x8024E3F8: table.sym_fnc("L8024E3F8", flag=table.GLOBL|table.LOCAL),
 	0x8024E408: table.sym_fnc("L8024E408", flag=table.GLOBL|table.LOCAL),
 	0x8024E420: table.sym_fnc("collision_8024E420", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E5A4: table.sym_fnc("L8024E5A4", flag=table.GLOBL|table.LOCAL),
 	0x8024E5B4: table.sym_fnc("L8024E5B4", flag=table.GLOBL|table.LOCAL),
@@ -4100,119 +4100,119 @@ sym_E0_t_code = {
 	0x8024E5F4: table.sym_fnc("L8024E5F4", flag=table.GLOBL|table.LOCAL),
 	0x8024E604: table.sym_fnc("L8024E604", flag=table.GLOBL|table.LOCAL),
 	0x8024E6EC: table.sym_fnc("collision_8024E6EC", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E778: table.sym_fnc("collision_8024E778", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E7D4: table.sym_fnc("collision_8024E7D4", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E8F0: table.sym_fnc("collision_8024E8F0", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024E9D0: table.sym_fnc("collision_8024E9D0", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024EAD8: table.sym_fnc("collision_8024EAD8", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024EC54: table.sym_fnc("collision_8024EC54", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024ED84: table.sym_fnc("collision_8024ED84", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024EE44: table.sym_fnc("collision_8024EE44", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024EFF8: table.sym_fnc("collision_8024EFF8", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F134: table.sym("collision_8024F134"), # unused
 	0x8024F170: table.sym_fnc("collision_8024F170", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F1E0: table.sym_fnc("collision_8024F1E0", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F354: table.sym_fnc("collision_8024F354", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F4AC: table.sym_fnc("collision_8024F4AC", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F55C: table.sym_fnc("collision_8024F55C", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F5CC: table.sym_fnc("collision_8024F5CC", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F6A4: table.sym_fnc("collision_8024F6A4", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024F7A8: table.sym("collision_8024F7A8"),
 	0x8024F8BC: table.sym_fnc("collision_8024F8BC", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024FA60: table.sym_fnc("collision_8024FA60", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024FB30: table.sym_fnc("collision_8024FB30", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024FD2C: table.sym_fnc("collision_8024FD2C", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x8024FE6C: table.sym("collision_8024FE6C"),
 	0x8024FF04: table.sym("collision_8024FF04"),
 	0x80250098: table.sym("collision_80250098"),
 	0x80250198: table.sym_fnc("collision_80250198", "int", (
-		"struct player *pl",
+		"PLAYER *pl",
 		"u32 flag",
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL), # data
 	0x80250230: table.sym("collision_80250230"),
 	0x802503F0: table.sym("collision_802503F0", table.GLOBL),
@@ -4304,7 +4304,7 @@ sym_E0_t_code = {
 	0x80254B20: table.sym("player_80254B20", table.GLOBL),
 	0x80254F44: table.sym("player_80254F44", table.GLOBL),
 
-	# src/pl_physics.c
+	# src/plphysics.c
 	0x80255080: table.sym("pl_physics_80255080", table.GLOBL),
 	0x8025509C: table.sym("pl_physics_8025509C", table.GLOBL),
 	0x802550B0: table.sym("pl_physics_802550B0", table.GLOBL),
@@ -4335,7 +4335,7 @@ sym_E0_t_code = {
 	0x80256CD8: table.sym("pl_physics_80256CD8"), # unused
 	0x80256D8C: table.sym("pl_physics_80256D8C"), # unused
 
-	# src/pl_demo.c
+	# src/pldemo.c
 	0x80256E00: table.sym("pl_demo_80256E00"),
 	0x80256E88: table.sym_fnc("pl_demo_80256E88", flag=table.GLOBL),
 	0x80257060: table.sym("pl_demo_80257060", table.GLOBL), # o callback
@@ -4502,7 +4502,7 @@ sym_E0_t_code = {
 	0x8025DD00: table.sym_fnc("L8025DD00", flag=table.GLOBL|table.LOCAL),
 	0x8025DD14: table.sym_fnc("L8025DD14", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_hang.c
+	# src/plhang.c
 	0x8025DD70: table.sym("pl_hang_8025DD70"),
 	0x8025DE1C: table.sym("pl_hang_8025DE1C"),
 	0x8025DF04: table.sym("pl_hang_8025DF04"),
@@ -4537,7 +4537,7 @@ sym_E0_t_code = {
 	0x80260784: table.sym_fnc("L80260784", flag=table.GLOBL|table.LOCAL),
 	0x80260798: table.sym_fnc("L80260798", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_wait.c
+	# src/plwait.c
 	0x802608B0: table.sym("pl_wait_802608B0"),
 	0x80260AAC: table.sym("pl_wait_80260AAC"),
 	0x80260CB4: table.sym("pl_wait_80260CB4"),
@@ -4609,7 +4609,7 @@ sym_E0_t_code = {
 	0x80263DE0: table.sym_fnc("L80263DE0", flag=table.GLOBL|table.LOCAL),
 	0x80263E08: table.sym_fnc("L80263E08", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_walk.c
+	# src/plwalk.c
 	0x80263E60: table.sym("pl_walk_80263E60"),
 	0x80263EE4: table.sym("pl_walk_80263EE4", table.GLOBL),
 	0x80264024: table.sym("pl_walk_80264024"),
@@ -4710,7 +4710,7 @@ sym_E0_t_code = {
 	0x80269EBC: table.sym_fnc("L80269EBC", flag=table.GLOBL|table.LOCAL),
 	0x80269ED0: table.sym_fnc("L80269ED0", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_jump.c
+	# src/pljump.c
 	0x80269F40: table.sym("pl_jump_80269F40"),
 	0x80269FC0: table.sym("pl_jump_80269FC0"),
 	0x8026A090: table.sym("pl_jump_8026A090"),
@@ -4815,7 +4815,7 @@ sym_E0_t_code = {
 	0x802700B8: table.sym_fnc("L802700B8", flag=table.GLOBL|table.LOCAL),
 	0x802700E0: table.sym_fnc("L802700E0", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_swim.c
+	# src/plswim.c
 	0x80270110: table.sym("pl_swim_80270110"),
 	0x802701CC: table.sym("pl_swim_802701CC"),
 	0x80270234: table.sym("pl_swim_80270234"),
@@ -4902,7 +4902,7 @@ sym_E0_t_code = {
 	0x80274E74: table.sym_fnc("L80274E74", flag=table.GLOBL|table.LOCAL),
 	0x80274E88: table.sym_fnc("L80274E88", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_grab.c
+	# src/plgrab.c
 	0x80274EB0: table.sym("pl_grab_80274EB0"),
 	0x80274F10: table.sym("pl_grab_80274F10", table.GLOBL),
 	0x80274F90: table.sym_fnc("L80274F90", flag=table.GLOBL|table.LOCAL),
@@ -4935,39 +4935,108 @@ sym_E0_t_code = {
 	0x80276168: table.sym_fnc("L80276168", flag=table.GLOBL|table.LOCAL),
 	0x8027617C: table.sym_fnc("L8027617C", flag=table.GLOBL|table.LOCAL),
 
-	# src/pl_callback.c
-	0x802761D0: table.sym("s_stage_weather", table.GLOBL), # s callback
-	0x802763D4: table.sym("s_stage_back", table.GLOBL), # s callback
-	0x802764B0: table.sym("s_face_main", table.GLOBL), # s callback
-	0x8027657C: table.sym("pl_callback_8027657C"),
-	0x802765FC: table.sym("pl_callback_802765FC"),
-	0x802766B4: table.sym("pl_callback_802766B4"),
-	0x802767B8: table.sym("pl_callback_802767B8"),
-	0x80276804: table.sym("pl_callback_80276804"),
-	0x8027684C: table.sym("pl_callback_8027684C", table.GLOBL), # o callback
+	# src/plcallback.c
+	0x802761D0: table.sym_fnc("s_stage_weather", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802763D4: table.sym_fnc("s_stage_back", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802764B0: table.sym_fnc("s_face_main", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x8027657C: table.sym_fnc("pl_callback_8027657C"),
+	0x802765FC: table.sym_fnc("pl_callback_802765FC"),
+	0x802766B4: table.sym_fnc("pl_callback_802766B4"),
+	0x802767B8: table.sym_fnc("pl_callback_802767B8"),
+	0x80276804: table.sym_fnc("pl_callback_80276804"),
+	0x8027684C: table.sym_fnc("pl_callback_8027684C", flag=table.GLOBL), # o callback
 	0x802768A8: table.sym_fnc("L802768A8", flag=table.GLOBL|table.LOCAL),
 	0x802768B8: table.sym_fnc("L802768B8", flag=table.GLOBL|table.LOCAL),
 	0x802768C8: table.sym_fnc("L802768C8", flag=table.GLOBL|table.LOCAL),
 	0x802768D8: table.sym_fnc("L802768D8", flag=table.GLOBL|table.LOCAL),
 	0x802768E8: table.sym_fnc("L802768E8", flag=table.GLOBL|table.LOCAL),
-	0x80276910: table.sym("pl_callback_80276910", table.GLOBL), # o callback
-	0x80276AA0: table.sym("pl_callback_80276AA0"),
-	0x80276BB8: table.sym("pl_callback_80276BB8", table.GLOBL), # o callback
-	0x80276CCC: table.sym("pl_callback_80276CCC", table.GLOBL), # o callback
-	0x80276F90: table.sym("pl_callback_80276F90"),
-	0x802770A4: table.sym("s_player_alpha", table.GLOBL), # s callback
-	0x80277150: table.sym("s_player_select_lod", table.GLOBL), # s callback
-	0x802771BC: table.sym("s_player_select_eyes", table.GLOBL), # s callback
-	0x80277294: table.sym("s_player_ang_torso", table.GLOBL), # s callback
-	0x802773A4: table.sym("s_player_ang_head", table.GLOBL), # s callback
-	0x802774F4: table.sym("s_player_select_glove", table.GLOBL), # s callback
-	0x802775CC: table.sym("s_player_scale", table.GLOBL), # s callback
-	0x802776D8: table.sym("s_player_select_cap", table.GLOBL), # s callback
-	0x80277740: table.sym("s_player_select_head", table.GLOBL), # s callback
-	0x80277824: table.sym("s_player_ang_wing", table.GLOBL), # s callback
-	0x8027795C: table.sym("s_player_hand", table.GLOBL), # s callback
-	0x80277B14: table.sym("s_inside_mirror", table.GLOBL), # s callback
-	0x80277D6C: table.sym("s_player_mirror", table.GLOBL), # s callback
+	0x80276910: table.sym_fnc("pl_callback_80276910", flag=table.GLOBL), # o callback
+	0x80276AA0: table.sym_fnc("pl_callback_80276AA0", arg=(
+		"SHORT ay",
+	)),
+	0x80276BB8: table.sym_fnc("pl_callback_80276BB8", flag=table.GLOBL), # o callback
+	0x80276CCC: table.sym_fnc("pl_callback_80276CCC", flag=table.GLOBL), # o callback
+	0x80276F90: table.sym_fnc("pl_callback_80276F90", "Gfx *", (
+		"S_CALLBACK *shp",
+		"SHORT alpha",
+	)),
+	0x802770A4: table.sym_fnc("s_player_alpha", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277150: table.sym_fnc("s_player_select_lod", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802771BC: table.sym_fnc("s_player_select_eyes", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277294: table.sym_fnc("s_player_ang_torso", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802773A4: table.sym_fnc("s_player_ang_neck", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802774F4: table.sym_fnc("s_mario_select_glove", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802775CC: table.sym_fnc("s_mario_punch", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802776D8: table.sym_fnc("s_player_select_cap", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277740: table.sym_fnc("s_player_select_head", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277824: table.sym_fnc("s_player_ang_wing", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x8027795C: table.sym_fnc("s_player_hand", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277B14: table.sym_fnc("s_inside_mirror", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x80277D6C: table.sym_fnc("s_player_mirror", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
 
 	# src/memory.c
 	0x80277EE0: table.sym_fnc("segment_set", "uintptr_t", (
@@ -5214,13 +5283,13 @@ sym_E0_t_code = {
 	)),
 	0x8027A8B0: table.sym_fnc("scene_demo", flag=table.GLOBL),
 	0x8027A93C: table.sym_fnc("obj_port_code", "int", (
-		"struct object *obj",
+		"OBJECT *obj",
 	), table.GLOBL),
 	0x8027A9C8: table.sym_fnc("port_get", "PORT *", (
 		"UCHAR index",
 	), table.GLOBL),
 	0x8027AA28: table.sym_fnc("obj_port_get", "PORT *", (
-		"struct object *obj",
+		"OBJECT *obj",
 	)),
 	0x8027AA74: table.sym_fnc("port_init"),
 	0x8027AB04: table.sym_fnc("scene_init", flag=table.GLOBL),
@@ -5254,76 +5323,76 @@ sym_E0_t_code = {
 
 	# src/draw.c
 	0x8027B6C0: table.sym_fnc("draw_layer_list", arg=(
-		"SHAPE_LAYER *layer",
+		"S_LAYER *shp",
 	)),
 	0x8027B904: table.sym_fnc("draw_layer_gfx", arg=(
 		"Gfx *gfx",
 		"SHORT layer",
 	)),
 	0x8027BA00: table.sym_fnc("draw_layer", arg=(
-		"SHAPE_LAYER *layer",
+		"S_LAYER *shp",
 	)),
 	0x8027BA98: table.sym_fnc("draw_ortho", arg=(
-		"SHAPE_ORTHO *ortho",
+		"S_ORTHO *shp",
 	)),
 	0x8027BC74: table.sym_fnc("draw_persp", arg=(
-		"SHAPE_PERSP *persp",
+		"S_PERSP *shp",
 	)),
 	0x8027BDF0: table.sym_fnc("draw_lod", arg=(
-		"SHAPE_LOD *lod",
+		"S_LOD *shp",
 	)),
 	0x8027BE84: table.sym_fnc("draw_select", arg=(
-		"SHAPE_SELECT *select",
+		"S_SELECT *shp",
 	)),
 	0x8027BF58: table.sym_fnc("draw_camera", arg=(
-		"SHAPE_CAMERA *camera",
+		"S_CAMERA *shp",
 	)),
-	0x8027C114: table.sym_fnc("draw_posang", arg=(
-		"SHAPE_POSANG *posang",
+	0x8027C114: table.sym_fnc("draw_coord", arg=(
+		"S_COORD *shp",
 	)),
 	0x8027C238: table.sym_fnc("draw_pos", arg=(
-		"SHAPE_POS *pos",
+		"S_POS *shp",
 	)),
 	0x8027C35C: table.sym_fnc("draw_ang", arg=(
-		"SHAPE_ANG *ang",
+		"S_ANG *shp",
 	)),
 	0x8027C474: table.sym_fnc("draw_scale", arg=(
-		"SHAPE_SCALE *scale",
+		"S_SCALE *shp",
 	)),
 	0x8027C594: table.sym_fnc("draw_billboard", arg=(
-		"SHAPE_BILLBOARD *billboard",
+		"S_BILLBOARD *shp",
 	)),
 	0x8027C73C: table.sym_fnc("draw_gfx", arg=(
-		"SHAPE_GFX *gfx",
+		"S_GFX *shp",
 	)),
 	0x8027C7A4: table.sym_fnc("draw_callback", arg=(
-		"SHAPE_CALLBACK *callback",
+		"S_CALLBACK *shp",
 	)),
 	0x8027C858: table.sym_fnc("draw_back", arg=(
-		"SHAPE_BACK *back",
+		"S_BACK *shp",
 	)),
 	0x8027CA70: table.sym_fnc("draw_joint", arg=(
-		"SHAPE_JOINT *joint",
+		"S_JOINT *shp",
 	)),
 	0x8027CF38: table.sym_fnc("draw_skeleton", arg=(
-		"SKELETON *skeleton",
+		"SKELETON *skel",
 		"int flag",
 	)),
 	0x8027D0B8: table.sym_fnc("draw_shadow", arg=(
-		"SHAPE_SHADOW *shadow",
+		"S_SHADOW *shp",
 	)),
-	0x8027D518: table.sym_fnc("draw_object_isvisible", "int", (
-		"SHAPE_OBJECT *object",
+	0x8027D518: table.sym_fnc("sobj_isvisible", "int", (
+		"S_OBJECT *shp",
 		"MTXF *mf",
 	)),
 	0x8027D6FC: table.sym_fnc("draw_object", arg=(
-		"SHAPE_OBJECT *object",
+		"S_OBJECT *shp",
 	)),
 	0x8027DA10: table.sym_fnc("draw_list", arg=(
-		"SHAPE_LIST *list",
+		"S_LIST *shp",
 	)),
 	0x8027DA84: table.sym_fnc("draw_hand", arg=(
-		"SHAPE_HAND *hand",
+		"S_HAND *shp",
 	)),
 	0x8027DE68: table.sym_fnc("draw_child", arg=(
 		"SHAPE *shape",
@@ -5352,7 +5421,7 @@ sym_E0_t_code = {
 	0x8027E0B0: table.sym_fnc("L8027E0B0", flag=table.GLOBL|table.LOCAL),
 	0x8027E0C0: table.sym_fnc("L8027E0C0", flag=table.GLOBL|table.LOCAL),
 	0x8027E130: table.sym_fnc("draw_scene", arg=(
-		"SHAPE_SCENE *scene",
+		"S_SCENE *shp",
 		"Vp *viewport",
 		"Vp *scissor",
 		"u32 fill",
@@ -5411,12 +5480,12 @@ sym_E0_t_code = {
 	0x802804F4: table.sym("camera_802804F4"),
 	0x802806A4: table.sym("camera_802806A4"),
 	0x80280810: table.sym_fnc("camera_80280810", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x80280970: table.sym_fnc("camera_80280970", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5427,28 +5496,28 @@ sym_E0_t_code = {
 	0x8028146C: table.sym("camera_8028146C"),
 	0x80281588: table.sym("camera_80281588"),
 	0x802816A0: table.sym_fnc("camera_802816A0", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x802817FC: table.sym("camera_802817FC"),
 	0x80281904: table.sym_fnc("camera_80281904", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x80282280: table.sym_fnc("camera_80282280", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x802826A0: table.sym_fnc("camera_802826A0", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x80282C0C: table.sym_fnc("camera_80282C0C", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5457,7 +5526,7 @@ sym_E0_t_code = {
 	0x80282C7C: table.sym("camera_80282C7C"),
 	0x80282CE0: table.sym("camera_80282CE0"),
 	0x80282D78: table.sym_fnc("camera_80282D78", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5465,13 +5534,13 @@ sym_E0_t_code = {
 	0x80283578: table.sym("camera_80283578"),
 	0x802839E4: table.sym("camera_802839E4"),
 	0x80283A18: table.sym_fnc("camera_80283A18", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x80283A34: table.sym("camera_80283A34"),
 	0x80283A68: table.sym_fnc("camera_80283A68", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5480,13 +5549,13 @@ sym_E0_t_code = {
 	0x80284CFC: table.sym("camera_80284CFC"),
 	0x80284D38: table.sym("camera_80284D38"),
 	0x80284D74: table.sym_fnc("camera_80284D74", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
 	0x802850AC: table.sym("camera_802850AC"),
 	0x802850EC: table.sym_fnc("camera_802850EC", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5496,7 +5565,7 @@ sym_E0_t_code = {
 	0x802852F4: table.sym("camera_802852F4"),
 	0x80285370: table.sym("camera_80285370"),
 	0x80285808: table.sym_fnc("camera_80285808", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5504,7 +5573,7 @@ sym_E0_t_code = {
 	0x80285A2C: table.sym("camera_80285A2C"),
 	0x80285D20: table.sym("camera_80285D20"),
 	0x80285ED8: table.sym_fnc("camera_80285ED8", "int", (
-		"struct camera *cam",
+		"CAMERA *cam",
 		"VECF",
 		"VECF",
 	), table.GLOBL), # data / tbl
@@ -5659,189 +5728,189 @@ sym_E0_t_code = {
 	0x8028D888: table.sym("camera_8028D888"),
 	0x8028D92C: table.sym("camera_8028D92C"),
 	0x8028DA18: table.sym_fnc("camera_8028DA18", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DA50: table.sym_fnc("camera_8028DA50", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DAEC: table.sym_fnc("camera_8028DAEC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DB38: table.sym_fnc("camera_8028DB38", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DBB4: table.sym_fnc("camera_8028DBB4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DBF4: table.sym_fnc("camera_8028DBF4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DC1C: table.sym_fnc("camera_8028DC1C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DC70: table.sym_fnc("camera_8028DC70", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DCA4: table.sym("camera_8028DCA4"),
 	0x8028DD48: table.sym_fnc("camera_8028DD48", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DE2C: table.sym_fnc("camera_8028DE2C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DE5C: table.sym_fnc("camera_8028DE5C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DE90: table.sym_fnc("camera_8028DE90", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DEC4: table.sym_fnc("camera_8028DEC4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DEF8: table.sym_fnc("camera_8028DEF8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DF24: table.sym_fnc("camera_8028DF24", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DF6C: table.sym_fnc("camera_8028DF6C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DFB4: table.sym_fnc("camera_8028DFB4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028DFE8: table.sym_fnc("camera_8028DFE8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E01C: table.sym_fnc("camera_8028E01C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E064: table.sym_fnc("camera_8028E064", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E098: table.sym_fnc("camera_8028E098", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E0EC: table.sym_fnc("camera_8028E0EC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E164: table.sym_fnc("camera_8028E164", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E210: table.sym_fnc("camera_8028E210", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E298: table.sym_fnc("camera_8028E298", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E300: table.sym_fnc("camera_8028E300", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E334: table.sym("camera_8028E334"), # unused
 	0x8028E38C: table.sym_fnc("camera_8028E38C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E3B8: table.sym_fnc("camera_8028E3B8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E3F0: table.sym_fnc("camera_8028E3F0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E41C: table.sym_fnc("camera_8028E41C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E450: table.sym_fnc("camera_8028E450", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E47C: table.sym_fnc("camera_8028E47C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E524: table.sym_fnc("camera_8028E524", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E55C: table.sym_fnc("camera_8028E55C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E594: table.sym_fnc("camera_8028E594", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E5CC: table.sym_fnc("camera_8028E5CC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E604: table.sym_fnc("camera_8028E604", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E63C: table.sym_fnc("camera_8028E63C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E674: table.sym_fnc("camera_8028E674", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E6C4: table.sym_fnc("camera_8028E6C4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E714: table.sym_fnc("camera_8028E714", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E758: table.sym_fnc("camera_8028E758", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E790: table.sym_fnc("camera_8028E790", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E7C8: table.sym_fnc("camera_8028E7C8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E818: table.sym_fnc("camera_8028E818", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E868: table.sym_fnc("camera_8028E868", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E8A0: table.sym_fnc("camera_8028E8A0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E8CC: table.sym_fnc("camera_8028E8CC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E930: table.sym_fnc("camera_8028E930", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E974: table.sym_fnc("camera_8028E974", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E9A0: table.sym_fnc("camera_8028E9A0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028E9D8: table.sym_fnc("camera_8028E9D8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EA28: table.sym_fnc("camera_8028EA28", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EA60: table.sym_fnc("camera_8028EA60", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EAB0: table.sym_fnc("camera_8028EAB0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EAE8: table.sym_fnc("camera_8028EAE8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EB38: table.sym_fnc("camera_8028EB38", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EB88: table.sym_fnc("camera_8028EB88", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EBC0: table.sym_fnc("camera_8028EBC0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EC04: table.sym_fnc("camera_8028EC04", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EC2C: table.sym_fnc("camera_8028EC2C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / ctl
 	0x8028EC58: table.sym("camera_8028EC58"),
 	0x8028ED30: table.sym("camera_8028ED30"),
@@ -5865,7 +5934,7 @@ sym_E0_t_code = {
 	0x802903B8: table.sym("camera_802903B8"),
 	0x8029040C: table.sym("camera_8029040C"), # unused
 	0x80290440: table.sym_fnc("camera_80290440", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290474: table.sym("camera_80290474"), # unused
 	0x802904A8: table.sym("camera_802904A8"),
@@ -5887,60 +5956,60 @@ sym_E0_t_code = {
 	0x80290BD8: table.sym("camera_80290BD8"),
 	0x80290C08: table.sym("camera_80290C08"), # unused
 	0x80290C1C: table.sym_fnc("camera_80290C1C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290C30: table.sym_fnc("camera_80290C30", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290C44: table.sym("camera_80290C44"),
 	0x80290C9C: table.sym("camera_80290C9C"),
 	0x80290D90: table.sym_fnc("camera_80290D90", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290E00: table.sym_fnc("camera_80290E00", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290E74: table.sym("camera_80290E74"),
 	0x80290EB0: table.sym("camera_80290EB0"),
 	0x80290F1C: table.sym_fnc("camera_80290F1C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80290F8C: table.sym_fnc("camera_80290F8C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80291074: table.sym("camera_80291074"),
 	0x80291108: table.sym_fnc("camera_80291108", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802911C8: table.sym("camera_802911C8"),
 	0x80291208: table.sym("camera_80291208"),
 	0x8029127C: table.sym("camera_8029127C"),
 	0x802912B8: table.sym("camera_802912B8"),
 	0x80291354: table.sym_fnc("camera_80291354", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x8029142C: table.sym_fnc("camera_8029142C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802914CC: table.sym("camera_802914CC"),
 	0x80291514: table.sym_fnc("camera_80291514", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802915D4: table.sym_fnc("camera_802915D4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80291654: table.sym("camera_80291654"),
 	0x802916B8: table.sym("camera_802916B8"),
 	0x80291774: table.sym_fnc("camera_80291774", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802917E4: table.sym("camera_802917E4"),
 	0x8029184C: table.sym("camera_8029184C"),
 	0x80291870: table.sym_fnc("camera_80291870", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80291924: table.sym_fnc("camera_80291924", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80291964: table.sym("camera_80291964"),
 	0x802919DC: table.sym("camera_802919DC"),
@@ -5950,14 +6019,14 @@ sym_E0_t_code = {
 	0x80291BF4: table.sym("camera_80291BF4"),
 	0x80291C3C: table.sym("camera_80291C3C"),
 	0x80291CD0: table.sym_fnc("camera_80291CD0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80291DB0: table.sym("camera_80291DB0"),
 	0x80291E84: table.sym("camera_80291E84"),
 	0x80291F18: table.sym("camera_80291F18"),
 	0x80292038: table.sym("camera_80292038"),
 	0x80292164: table.sym_fnc("camera_80292164", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802921FC: table.sym("camera_802921FC"),
 	0x8029228C: table.sym("camera_8029228C"),
@@ -5969,7 +6038,7 @@ sym_E0_t_code = {
 	0x8029244C: table.sym("camera_8029244C"),
 	0x80292484: table.sym("camera_80292484"),
 	0x802924B8: table.sym_fnc("camera_802924B8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80292628: table.sym("camera_80292628"),
 	0x802926DC: table.sym("camera_802926DC"),
@@ -5979,7 +6048,7 @@ sym_E0_t_code = {
 	0x80292A20: table.sym("camera_80292A20"),
 	0x80292A4C: table.sym("camera_80292A4C"),
 	0x80292A80: table.sym_fnc("camera_80292A80", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80292C00: table.sym("camera_80292C00"),
 	0x80292D80: table.sym("camera_80292D80"),
@@ -5989,7 +6058,7 @@ sym_E0_t_code = {
 	0x80292F98: table.sym("camera_80292F98"),
 	0x80292FE4: table.sym("camera_80292FE4"),
 	0x80293018: table.sym_fnc("camera_80293018", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802930F0: table.sym("camera_802930F0"),
 	0x80293164: table.sym("camera_80293164"),
@@ -6000,7 +6069,7 @@ sym_E0_t_code = {
 	0x80293328: table.sym("camera_80293328"),
 	0x80293354: table.sym("camera_80293354"),
 	0x8029338C: table.sym_fnc("camera_8029338C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293488: table.sym("camera_80293488"),
 	0x802934B4: table.sym("camera_802934B4"),
@@ -6014,38 +6083,38 @@ sym_E0_t_code = {
 	0x80293734: table.sym("camera_80293734"),
 	0x802937E8: table.sym("camera_802937E8"),
 	0x8029386C: table.sym_fnc("camera_8029386C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802938C8: table.sym_fnc("camera_802938C8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293944: table.sym_fnc("camera_80293944", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293ABC: table.sym("camera_80293ABC"),
 	0x80293AE8: table.sym("camera_80293AE8"),
 	0x80293B70: table.sym("camera_80293B70"),
 	0x80293BF4: table.sym("camera_80293BF4"),
 	0x80293C2C: table.sym_fnc("camera_80293C2C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293CB0: table.sym_fnc("camera_80293CB0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293D5C: table.sym_fnc("camera_80293D5C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293D90: table.sym("camera_80293D90"),
 	0x80293DD4: table.sym("camera_80293DD4"),
 	0x80293E7C: table.sym_fnc("camera_80293E7C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293ED8: table.sym_fnc("camera_80293ED8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293F2C: table.sym("camera_80293F2C"),
 	0x80293F70: table.sym_fnc("camera_80293F70", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80293FCC: table.sym("camera_80293FCC"),
 	0x80294024: table.sym("camera_80294024"),
@@ -6054,10 +6123,10 @@ sym_E0_t_code = {
 	0x8029410C: table.sym("camera_8029410C"),
 	0x802942CC: table.sym("camera_802942CC"),
 	0x802942F0: table.sym_fnc("camera_802942F0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802943D4: table.sym_fnc("camera_802943D4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294428: table.sym("camera_80294428"),
 	0x80294718: table.sym("camera_80294718"),
@@ -6065,44 +6134,44 @@ sym_E0_t_code = {
 	0x8029480C: table.sym("camera_8029480C"),
 	0x802948A0: table.sym("camera_802948A0"),
 	0x80294A14: table.sym_fnc("camera_80294A14", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294A94: table.sym_fnc("camera_80294A94", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294AE8: table.sym("camera_80294AE8"),
 	0x80294B78: table.sym("camera_80294B78"),
 	0x80294BB4: table.sym("camera_80294BB4"),
 	0x80294C28: table.sym("camera_80294C28"),
 	0x80294C5C: table.sym_fnc("camera_80294C5C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294CC4: table.sym("camera_80294CC4"),
 	0x80294D48: table.sym("camera_80294D48"),
 	0x80294D88: table.sym("camera_80294D88"), # unused
 	0x80294DB4: table.sym_fnc("camera_80294DB4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294E24: table.sym("camera_80294E24"),
 	0x80294EA8: table.sym("camera_80294EA8"),
 	0x80294EE8: table.sym_fnc("camera_80294EE8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80294F58: table.sym("camera_80294F58"),
 	0x80294F94: table.sym("camera_80294F94"),
 	0x80294FEC: table.sym_fnc("camera_80294FEC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802950B0: table.sym("camera_802950B0"),
 	0x80295140: table.sym("camera_80295140"),
 	0x802951F0: table.sym("camera_802951F0"),
 	0x80295270: table.sym_fnc("camera_80295270", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80295310: table.sym("camera_80295310"),
 	0x802953DC: table.sym("camera_802953DC"),
 	0x80295418: table.sym_fnc("camera_80295418", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80295480: table.sym("camera_80295480"),
 	0x802954EC: table.sym("camera_802954EC"),
@@ -6112,38 +6181,38 @@ sym_E0_t_code = {
 	0x80295740: table.sym("camera_80295740"),
 	0x8029576C: table.sym("camera_8029576C"),
 	0x802957C8: table.sym_fnc("camera_802957C8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80295894: table.sym_fnc("camera_80295894", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802958D4: table.sym("camera_802958D4"),
 	0x80295930: table.sym_fnc("camera_80295930", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802959CC: table.sym("camera_802959CC"), # unused
 	0x80295A58: table.sym("camera_80295A58"),
 	0x80295BF0: table.sym("camera_80295BF0"),
 	0x80295E24: table.sym("camera_80295E24"),
 	0x80295E8C: table.sym_fnc("camera_80295E8C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80295FB0: table.sym_fnc("camera_80295FB0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80295FD8: table.sym_fnc("camera_80295FD8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80296020: table.sym("camera_80296020"),
 	0x802960B0: table.sym("camera_802960B0"), # unused
 	0x80296160: table.sym_fnc("camera_80296160", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802962C8: table.sym_fnc("camera_802962C8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802962F0: table.sym_fnc("camera_802962F0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80296318: table.sym("camera_80296318"),
 	0x802963B8: table.sym("camera_802963B8"),
@@ -6152,22 +6221,22 @@ sym_E0_t_code = {
 	0x8029669C: table.sym("camera_8029669C"),
 	0x802966E4: table.sym("camera_802966E4"),
 	0x80296710: table.sym_fnc("camera_80296710", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802967C4: table.sym_fnc("camera_802967C4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x8029685C: table.sym("camera_8029685C"),
 	0x802968A0: table.sym_fnc("camera_802968A0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x8029695C: table.sym("camera_8029695C"),
 	0x802969F8: table.sym_fnc("camera_802969F8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80296A64: table.sym("camera_80296A64"),
 	0x80296B30: table.sym_fnc("camera_80296B30", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80296BC8: table.sym("camera_80296BC8"),
 	0x80296C4C: table.sym("camera_80296C4C"),
@@ -6177,7 +6246,7 @@ sym_E0_t_code = {
 	0x80296F38: table.sym("camera_80296F38"),
 	0x80296F70: table.sym("camera_80296F70"), # unused
 	0x80296FA8: table.sym_fnc("camera_80296FA8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297148: table.sym("camera_80297148"),
 	0x8029720C: table.sym("camera_8029720C"),
@@ -6186,14 +6255,14 @@ sym_E0_t_code = {
 	0x80297300: table.sym("camera_80297300"),
 	0x80297384: table.sym("camera_80297384"),
 	0x802973B0: table.sym_fnc("camera_802973B0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297464: table.sym("camera_80297464"),
 	0x80297560: table.sym("camera_80297560"),
 	0x8029758C: table.sym("camera_8029758C"),
 	0x802975C4: table.sym("camera_802975C4"),
 	0x8029762C: table.sym_fnc("camera_8029762C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802976BC: table.sym("camera_802976BC"),
 	0x80297728: table.sym("camera_80297728"),
@@ -6203,24 +6272,24 @@ sym_E0_t_code = {
 	0x802977F4: table.sym("camera_802977F4"),
 	0x80297820: table.sym("camera_80297820"),
 	0x8029784C: table.sym_fnc("camera_8029784C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297908: table.sym_fnc("camera_80297908", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297A38: table.sym_fnc("camera_80297A38", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297A64: table.sym_fnc("camera_80297A64", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297B58: table.sym("camera_80297B58"),
 	0x80297B84: table.sym_fnc("camera_80297B84", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297C14: table.sym("camera_80297C14"),
 	0x80297C40: table.sym_fnc("camera_80297C40", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80297D60: table.sym_fnc("L80297D60", flag=table.GLOBL|table.LOCAL),
 	0x80297DA0: table.sym_fnc("L80297DA0", flag=table.GLOBL|table.LOCAL),
@@ -6239,59 +6308,59 @@ sym_E0_t_code = {
 	0x80298254: table.sym("camera_80298254"),
 	0x80298290: table.sym("camera_80298290"),
 	0x802983B4: table.sym_fnc("camera_802983B4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298458: table.sym_fnc("camera_80298458", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802984A0: table.sym("camera_802984A0"),
 	0x802984B4: table.sym_fnc("camera_802984B4", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802987B0: table.sym("camera_802987B0"),
 	0x8029894C: table.sym("camera_8029894C"),
 	0x802989E8: table.sym("camera_802989E8"),
 	0x80298AF8: table.sym_fnc("camera_80298AF8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298BA0: table.sym_fnc("camera_80298BA0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298C2C: table.sym_fnc("camera_80298C2C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298CCC: table.sym_fnc("camera_80298CCC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298D44: table.sym_fnc("camera_80298D44", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298D9C: table.sym_fnc("camera_80298D9C", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80298FE8: table.sym_fnc("camera_80298FE8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80299100: table.sym_fnc("camera_80299100", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80299154: table.sym_fnc("camera_80299154", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802991A8: table.sym_fnc("camera_802991A8", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802991F0: table.sym_fnc("camera_802991F0", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802992CC: table.sym_fnc("camera_802992CC", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80299360: table.sym_fnc("camera_80299360", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x80299404: table.sym_fnc("camera_80299404", arg=(
-		"struct camera *cam",
+		"CAMERA *cam",
 	), flag=table.GLOBL), # data / demo
 	0x802994E8: table.sym("camera_802994E8"),
 	0x8029956C: table.sym_fnc("L8029956C", flag=table.GLOBL|table.LOCAL),
@@ -6394,7 +6463,7 @@ sym_E0_t_code = {
 	0x8029C5EC: table.sym_fnc("L8029C5EC", flag=table.GLOBL|table.LOCAL),
 
 	# src/course.c
-	0x8029C770: table.sym("course_8029C770", table.GLOBL),
+	0x8029C770: table.sym("course_init", table.GLOBL),
 
 	# src/object.c
 	0x8029C780: table.sym("object_8029C780"),
@@ -6414,7 +6483,7 @@ sym_E0_t_code = {
 		"struct spawn *",
 	), flag=table.GLOBL),
 	0x8029D1D8: table.sym("object_8029D1D8"),
-	0x8029D1E8: table.sym("object_8029D1E8", table.GLOBL),
+	0x8029D1E8: table.sym_fnc("object_8029D1E8", flag=table.GLOBL),
 	0x8029D324: table.sym("object_8029D324"),
 	0x8029D374: table.sym("object_8029D374"),
 	0x8029D428: table.sym("object_8029D428"),
@@ -6423,28 +6492,35 @@ sym_E0_t_code = {
 		"int",
 	), flag=table.GLOBL),
 
-	# src/obj_lib.c
-	0x8029D890: table.sym("s_obj_lib_8029D890", table.GLOBL), # s callback
-	0x8029D924: table.sym("s_obj_lib_8029D924", table.GLOBL), # s callback
-	0x8029DB48: table.sym("s_obj_lib_8029DB48", table.GLOBL), # s callback
-	0x8029DBD4: table.sym("s_obj_lib_8029DBD4", table.GLOBL), # s callback
-	0x8029DCD4: table.sym("obj_lib_8029DCD4", table.GLOBL),
-	0x8029DDA8: table.sym("obj_lib_8029DDA8", table.GLOBL),
-	0x8029DE80: table.sym("obj_lib_8029DE80", table.GLOBL),
-	0x8029E1B0: table.sym("obj_lib_8029E1B0", table.GLOBL),
-	0x8029E27C: table.sym("obj_lib_8029E27C", table.GLOBL),
-	0x8029E2F8: table.sym("obj_lib_8029E2F8", table.GLOBL),
-	0x8029E398: table.sym("obj_lib_8029E398", table.GLOBL),
-	0x8029E3E8: table.sym("obj_lib_8029E3E8", table.GLOBL),
-	0x8029E494: table.sym("obj_lib_8029E494", table.GLOBL),
-	0x8029E530: table.sym("obj_lib_8029E530", table.GLOBL),
-	0x8029E5EC: table.sym("obj_lib_8029E5EC", table.GLOBL),
-	0x8029E694: table.sym("obj_lib_8029E694", table.GLOBL),
-	0x8029E714: table.sym("obj_lib_8029E714", table.GLOBL),
-	0x8029E8BC: table.sym("obj_lib_8029E8BC", table.GLOBL),
-	0x8029E914: table.sym("obj_lib_8029E914", table.GLOBL),
-	0x8029E96C: table.sym("obj_lib_8029E96C", table.GLOBL),
-	0x8029E9AC: table.sym_fnc("obj_lib_8029E9AC", "OBJECT *", (
+	# src/objlib.c
+	0x8029D890: table.sym("s_objlib_8029D890", table.GLOBL), # s callback
+	0x8029D924: table.sym("s_objlib_8029D924", table.GLOBL), # s callback
+	0x8029DB48: table.sym("s_objlib_8029DB48", table.GLOBL), # s callback
+	0x8029DBD4: table.sym("s_objlib_8029DBD4", table.GLOBL), # s callback
+	0x8029DCD4: table.sym("objlib_8029DCD4", table.GLOBL),
+	0x8029DDA8: table.sym_fnc("objlib_8029DDA8", arg=(
+		"OBJECT *obj",
+		"MTXF a",
+		"MTXF b",
+	), flag=table.GLOBL),
+	0x8029DE80: table.sym("objlib_8029DE80", table.GLOBL),
+	0x8029E1B0: table.sym("objlib_8029E1B0", table.GLOBL),
+	0x8029E27C: table.sym("objlib_8029E27C", table.GLOBL),
+	0x8029E2F8: table.sym_fnc("objlib_8029E2F8", "float", (
+		"OBJECT *obj",
+		"OBJECT *",
+	), table.GLOBL),
+	0x8029E398: table.sym("objlib_8029E398", table.GLOBL),
+	0x8029E3E8: table.sym("objlib_8029E3E8", table.GLOBL),
+	0x8029E494: table.sym("objlib_8029E494", table.GLOBL),
+	0x8029E530: table.sym("objlib_8029E530", table.GLOBL),
+	0x8029E5EC: table.sym("objlib_8029E5EC", table.GLOBL),
+	0x8029E694: table.sym("objlib_8029E694", table.GLOBL),
+	0x8029E714: table.sym("objlib_8029E714", table.GLOBL),
+	0x8029E8BC: table.sym("objlib_8029E8BC", table.GLOBL),
+	0x8029E914: table.sym("objlib_8029E914", table.GLOBL),
+	0x8029E96C: table.sym("objlib_8029E96C", table.GLOBL),
+	0x8029E9AC: table.sym_fnc("objlib_8029E9AC", "OBJECT *", (
 		"OBJECT *",
 		"SHORT",
 		"int shape",
@@ -6456,235 +6532,249 @@ sym_E0_t_code = {
 		"SHORT ay",
 		"SHORT az",
 	), table.GLOBL),
-	0x8029EA24: table.sym("obj_lib_8029EA24", table.GLOBL),
-	0x8029EAAC: table.sym("obj_lib_8029EAAC"), # unused
-	0x8029EB04: table.sym("obj_lib_8029EB04", table.GLOBL),
-	0x8029ED20: table.sym("obj_lib_8029ED20", table.GLOBL),
-	0x8029EDCC: table.sym_fnc("obj_lib_8029EDCC", "OBJECT *", (
+	0x8029EA24: table.sym("objlib_8029EA24", table.GLOBL),
+	0x8029EAAC: table.sym("objlib_8029EAAC"), # unused
+	0x8029EB04: table.sym("objlib_8029EB04", table.GLOBL),
+	0x8029ED20: table.sym("objlib_8029ED20", table.GLOBL),
+	0x8029EDCC: table.sym_fnc("objlib_8029EDCC", "OBJECT *", (
 		"OBJECT *",
 		"int",
 		"O_SCRIPT *script",
 	), table.GLOBL),
-	0x8029EE24: table.sym("obj_lib_8029EE24", table.GLOBL),
-	0x8029EEB8: table.sym("obj_lib_8029EEB8", table.GLOBL),
-	0x8029EF20: table.sym("obj_lib_8029EF20"),
-	0x8029EF64: table.sym("obj_lib_8029EF64", table.GLOBL),
-	0x8029EFFC: table.sym("obj_lib_8029EFFC", table.GLOBL),
-	0x8029F070: table.sym("obj_lib_8029F070"), # unused
-	0x8029F0C8: table.sym("obj_lib_8029F0C8", table.GLOBL),
-	0x8029F0E0: table.sym("obj_lib_8029F0E0", table.GLOBL),
-	0x8029F120: table.sym("obj_lib_8029F120", table.GLOBL),
-	0x8029F148: table.sym("obj_lib_8029F148"),
-	0x8029F188: table.sym("obj_lib_8029F188", table.GLOBL),
-	0x8029F1B0: table.sym("obj_lib_8029F1B0"), # unused
-	0x8029F200: table.sym_fnc("obj_lib_8029F200", arg=(
+	0x8029EE24: table.sym("objlib_8029EE24", table.GLOBL),
+	0x8029EEB8: table.sym("objlib_8029EEB8", table.GLOBL),
+	0x8029EF20: table.sym("objlib_8029EF20"),
+	0x8029EF64: table.sym("objlib_8029EF64", table.GLOBL),
+	0x8029EFFC: table.sym("objlib_8029EFFC", table.GLOBL),
+	0x8029F070: table.sym("objlib_8029F070"), # unused
+	0x8029F0C8: table.sym("objlib_8029F0C8", table.GLOBL),
+	0x8029F0E0: table.sym("objlib_8029F0E0", table.GLOBL),
+	0x8029F120: table.sym("objlib_8029F120", table.GLOBL),
+	0x8029F148: table.sym("objlib_8029F148"),
+	0x8029F188: table.sym("objlib_8029F188", table.GLOBL),
+	0x8029F1B0: table.sym("objlib_8029F1B0"), # unused
+	0x8029F200: table.sym_fnc("objlib_8029F200", arg=(
 		"MTXF mf",
 		"VECF dst",
 		"VECF src",
 	), flag=table.GLOBL),
-	0x8029F274: table.sym_fnc("obj_lib_8029F274", arg=(
+	0x8029F274: table.sym_fnc("objlib_8029F274", arg=(
 		"MTXF mf",
 		"VECF dst",
 		"VECF src",
 	), flag=table.GLOBL),
-	0x8029F2EC: table.sym("obj_lib_8029F2EC"),
-	0x8029F3A8: table.sym("obj_lib_8029F3A8", table.GLOBL),
-	0x8029F3D0: table.sym("obj_lib_8029F3D0", table.GLOBL),
-	0x8029F404: table.sym("obj_lib_8029F404", table.GLOBL),
-	0x8029F430: table.sym("obj_lib_8029F430", table.GLOBL),
-	0x8029F464: table.sym("obj_lib_8029F464", table.GLOBL),
-	0x8029F4B4: table.sym("obj_lib_8029F4B4", table.GLOBL),
-	0x8029F514: table.sym("obj_lib_8029F514", table.GLOBL),
-	0x8029F59C: table.sym("obj_lib_8029F59C", table.GLOBL),
-	0x8029F600: table.sym("obj_lib_8029F600"), # unused
-	0x8029F620: table.sym("obj_lib_8029F620", table.GLOBL),
-	0x8029F644: table.sym("obj_lib_8029F644"), # unused
-	0x8029F66C: table.sym("obj_lib_8029F66C", table.GLOBL),
-	0x8029F694: table.sym("obj_lib_8029F694", table.GLOBL),
-	0x8029F6BC: table.sym("obj_lib_8029F6BC", table.GLOBL),
-	0x8029F6E0: table.sym("obj_lib_8029F6E0", table.GLOBL),
-	0x8029F7D8: table.sym("obj_lib_8029F7D8"),
-	0x8029F820: table.sym("obj_lib_8029F820", table.GLOBL),
-	0x8029F848: table.sym("obj_lib_8029F848"), # unused
-	0x8029F8EC: table.sym("obj_lib_8029F8EC", table.GLOBL),
-	0x8029F914: table.sym("obj_lib_8029F914", table.GLOBL),
-	0x8029F95C: table.sym("obj_lib_8029F95C", table.GLOBL),
-	0x8029F998: table.sym("obj_lib_8029F998", table.GLOBL),
-	0x8029F9EC: table.sym("obj_lib_8029F9EC", table.GLOBL),
-	0x8029FB1C: table.sym("obj_lib_8029FB1C", table.GLOBL),
-	0x8029FB68: table.sym("obj_lib_8029FB68"), # unused
-	0x8029FBDC: table.sym("obj_lib_8029FBDC", table.GLOBL),
-	0x8029FC9C: table.sym("obj_lib_8029FC9C", table.GLOBL),
-	0x8029FD8C: table.sym("obj_lib_8029FD8C"),
-	0x8029FDB4: table.sym("obj_lib_8029FDB4", table.GLOBL),
-	0x8029FE00: table.sym("obj_lib_8029FE00", table.GLOBL),
-	0x8029FE6C: table.sym("obj_lib_8029FE6C", table.GLOBL),
-	0x8029FEA4: table.sym("obj_lib_8029FEA4", table.GLOBL),
-	0x8029FF04: table.sym("obj_lib_8029FF04", table.GLOBL),
-	0x8029FFA4: table.sym("obj_lib_8029FFA4", table.GLOBL),
-	0x802A0008: table.sym_fnc("obj_lib_802A0008", "int", (
+	0x8029F2EC: table.sym("objlib_8029F2EC"),
+	0x8029F3A8: table.sym("objlib_8029F3A8", table.GLOBL),
+	0x8029F3D0: table.sym("objlib_8029F3D0", table.GLOBL),
+	0x8029F404: table.sym_fnc("objlib_8029F404", arg=(
+		"OBJECT *obj",
+		"float",
+	), flag=table.GLOBL),
+	0x8029F430: table.sym("objlib_8029F430", table.GLOBL),
+	0x8029F464: table.sym("objlib_8029F464", table.GLOBL),
+	0x8029F4B4: table.sym("objlib_8029F4B4", table.GLOBL),
+	0x8029F514: table.sym("objlib_8029F514", table.GLOBL),
+	0x8029F59C: table.sym("objlib_8029F59C", table.GLOBL),
+	0x8029F600: table.sym("objlib_8029F600"), # unused
+	0x8029F620: table.sym("objlib_8029F620", table.GLOBL),
+	0x8029F644: table.sym("objlib_8029F644"), # unused
+	0x8029F66C: table.sym("objlib_8029F66C", table.GLOBL),
+	0x8029F694: table.sym("objlib_8029F694", table.GLOBL),
+	0x8029F6BC: table.sym_fnc("objlib_8029F6BC", flag=table.GLOBL),
+	0x8029F6E0: table.sym("objlib_8029F6E0", table.GLOBL),
+	0x8029F7D8: table.sym("objlib_8029F7D8"),
+	0x8029F820: table.sym("objlib_8029F820", table.GLOBL),
+	0x8029F848: table.sym("objlib_8029F848"), # unused
+	0x8029F8EC: table.sym("objlib_8029F8EC", table.GLOBL),
+	0x8029F914: table.sym("objlib_8029F914", table.GLOBL),
+	0x8029F95C: table.sym("objlib_8029F95C", table.GLOBL),
+	0x8029F998: table.sym("objlib_8029F998", table.GLOBL),
+	0x8029F9EC: table.sym("objlib_8029F9EC", table.GLOBL),
+	0x8029FB1C: table.sym_fnc("objlib_8029FB1C", "OBJECT *", flag=table.GLOBL),
+	0x8029FB68: table.sym("objlib_8029FB68"), # unused
+	0x8029FBDC: table.sym("objlib_8029FBDC", table.GLOBL),
+	0x8029FC9C: table.sym("objlib_8029FC9C", table.GLOBL),
+	0x8029FD8C: table.sym("objlib_8029FD8C"),
+	0x8029FDB4: table.sym("objlib_8029FDB4", table.GLOBL),
+	0x8029FE00: table.sym("objlib_8029FE00", table.GLOBL),
+	0x8029FE6C: table.sym("objlib_8029FE6C", table.GLOBL),
+	0x8029FEA4: table.sym("objlib_8029FEA4", table.GLOBL),
+	0x8029FF04: table.sym("objlib_8029FF04", table.GLOBL),
+	0x8029FFA4: table.sym("objlib_8029FFA4", table.GLOBL),
+	0x802A0008: table.sym_fnc("objlib_802A0008", "int", (
 		"int",
 	), table.GLOBL),
-	0x802A0050: table.sym("obj_lib_802A0050", table.GLOBL),
-	0x802A00AC: table.sym("obj_lib_802A00AC"), # unused
-	0x802A0114: table.sym("obj_lib_802A0114", table.GLOBL),
-	0x802A0154: table.sym("obj_lib_802A0154", table.GLOBL),
-	0x802A0198: table.sym("obj_lib_802A0198", table.GLOBL),
-	0x802A01D8: table.sym("obj_lib_802A01D8", table.GLOBL),
-	0x802A0234: table.sym("obj_lib_802A0234"),
-	0x802A0380: table.sym("obj_lib_802A0380", table.GLOBL),
-	0x802A0474: table.sym("obj_lib_802A0474", table.GLOBL),
-	0x802A04C0: table.sym("obj_lib_802A04C0", table.GLOBL),
-	0x802A04F0: table.sym("obj_lib_802A04F0"), # unused
-	0x802A0514: table.sym("obj_lib_802A0514", table.GLOBL),
-	0x802A0568: table.sym("obj_lib_802A0568", table.GLOBL),
-	0x802A057C: table.sym("obj_lib_802A057C", table.GLOBL),
-	0x802A05B4: table.sym("obj_lib_802A05B4", table.GLOBL),
-	0x802A05D4: table.sym("obj_lib_802A05D4", table.GLOBL),
-	0x802A05F0: table.sym("obj_lib_802A05F0", table.GLOBL),
-	0x802A0604: table.sym("obj_lib_802A0604", table.GLOBL),
-	0x802A064C: table.sym("obj_lib_802A064C", table.GLOBL),
-	0x802A069C: table.sym("obj_lib_802A069C"),
-	0x802A079C: table.sym("obj_lib_802A079C", table.GLOBL),
-	0x802A07E8: table.sym("obj_lib_802A07E8"),
-	0x802A0AB0: table.sym("obj_lib_802A0AB0"),
-	0x802A0BDC: table.sym("obj_lib_802A0BDC"),
-	0x802A0D84: table.sym("obj_lib_802A0D84"),
-	0x802A0E68: table.sym("obj_lib_802A0E68", table.GLOBL),
-	0x802A10E0: table.sym("obj_lib_802A10E0"), # unused
-	0x802A10F0: table.sym("obj_lib_802A10F0"),
-	0x802A113C: table.sym("obj_lib_802A113C"), # unused
-	0x802A11A8: table.sym("obj_lib_802A11A8", table.GLOBL),
-	0x802A120C: table.sym("obj_lib_802A120C", table.GLOBL),
-	0x802A12A4: table.sym("obj_lib_802A12A4", table.GLOBL),
-	0x802A1308: table.sym("obj_lib_802A1308", table.GLOBL), # o callback
-	0x802A1370: table.sym("obj_lib_802A1370", table.GLOBL),
-	0x802A1424: table.sym("obj_lib_802A1424", table.GLOBL),
-	0x802A148C: table.sym("obj_lib_802A148C", table.GLOBL),
-	0x802A14C4: table.sym("obj_lib_802A14C4", table.GLOBL),
-	0x802A14FC: table.sym("obj_lib_802A14FC", table.GLOBL),
-	0x802A1554: table.sym("obj_lib_802A1554", table.GLOBL),
-	0x802A15AC: table.sym("obj_lib_802A15AC", table.GLOBL),
-	0x802A1634: table.sym("obj_lib_802A1634", table.GLOBL),
-	0x802A16AC: table.sym("obj_lib_802A16AC"), # unused
-	0x802A1774: table.sym("obj_lib_802A1774"), # unused
-	0x802A184C: table.sym("obj_lib_802A184C", table.GLOBL),
-	0x802A188C: table.sym("obj_lib_802A188C", table.GLOBL),
-	0x802A18DC: table.sym("obj_lib_802A18DC", table.GLOBL),
-	0x802A1930: table.sym("obj_lib_802A1930", table.GLOBL),
-	0x802A1960: table.sym("obj_lib_802A1960"), # unused
-	0x802A19AC: table.sym("obj_lib_802A19AC", table.GLOBL),
-	0x802A19C8: table.sym("obj_lib_802A19C8", table.GLOBL),
-	0x802A19F0: table.sym("obj_lib_802A19F0", table.GLOBL),
-	0x802A1A18: table.sym("obj_lib_802A1A18"),
-	0x802A1B34: table.sym("obj_lib_802A1B34"),
-	0x802A1B8C: table.sym("obj_lib_802A1B8C", table.GLOBL),
-	0x802A1BDC: table.sym("obj_lib_802A1BDC", table.GLOBL),
-	0x802A1C68: table.sym("obj_lib_802A1C68"), # unused
-	0x802A1CC4: table.sym("obj_lib_802A1CC4"), # unused
-	0x802A1D7C: table.sym("obj_lib_802A1D7C"),
-	0x802A1F3C: table.sym("obj_lib_802A1F3C", table.GLOBL),
-	0x802A20F4: table.sym("obj_lib_802A20F4"),
-	0x802A21D4: table.sym("obj_lib_802A21D4"),
-	0x802A2320: table.sym("obj_lib_802A2320", table.GLOBL), # o callback
-	0x802A2348: table.sym("obj_lib_802A2348", table.GLOBL),
-	0x802A24D0: table.sym("obj_lib_802A24D0"),
-	0x802A25B4: table.sym("obj_lib_802A25B4", table.GLOBL),
-	0x802A2644: table.sym("obj_lib_802A2644", table.GLOBL), # o callback
-	0x802A2674: table.sym("obj_lib_802A2674"), # unused
-	0x802A2748: table.sym("obj_lib_802A2748", table.GLOBL),
-	0x802A27B0: table.sym("obj_lib_802A27B0", table.GLOBL),
-	0x802A2804: table.sym("obj_lib_802A2804", table.GLOBL),
-	0x802A2930: table.sym("obj_lib_802A2930", table.GLOBL),
-	0x802A2A18: table.sym("obj_lib_802A2A18", table.GLOBL),
-	0x802A2A84: table.sym("obj_lib_802A2A84", table.GLOBL),
-	0x802A2B28: table.sym("obj_lib_802A2B28"), # unused
-	0x802A2B6C: table.sym("obj_lib_802A2B6C"), # unused
-	0x802A2BC4: table.sym("obj_lib_802A2BC4", table.GLOBL), # o callback
-	0x802A2C1C: table.sym("obj_lib_802A2C1C"), # unused
-	0x802A2C5C: table.sym("obj_lib_802A2C5C", table.GLOBL),
-	0x802A2ED4: table.sym("obj_lib_802A2ED4", table.GLOBL),
-	0x802A2F14: table.sym("obj_lib_802A2F14", table.GLOBL),
-	0x802A2F5C: table.sym("obj_lib_802A2F5C", table.GLOBL),
-	0x802A2FC0: table.sym("obj_lib_802A2FC0", table.GLOBL),
-	0x802A308C: table.sym("obj_lib_802A308C", table.GLOBL),
-	0x802A3124: table.sym("obj_lib_802A3124"),
-	0x802A31E0: table.sym("obj_lib_802A31E0", table.GLOBL),
-	0x802A3268: table.sym("obj_lib_802A3268", table.GLOBL),
-	0x802A32AC: table.sym("obj_lib_802A32AC", table.GLOBL),
-	0x802A34A4: table.sym("obj_lib_802A34A4", table.GLOBL),
-	0x802A3604: table.sym("obj_lib_802A3604", table.GLOBL),
-	0x802A3634: table.sym_fnc("obj_lib_802A3634", "float", (
+	0x802A0050: table.sym("objlib_802A0050", table.GLOBL),
+	0x802A00AC: table.sym("objlib_802A00AC"), # unused
+	0x802A0114: table.sym("objlib_802A0114", table.GLOBL),
+	0x802A0154: table.sym("objlib_802A0154", table.GLOBL),
+	0x802A0198: table.sym("objlib_802A0198", table.GLOBL),
+	0x802A01D8: table.sym("objlib_802A01D8", table.GLOBL),
+	0x802A0234: table.sym("objlib_802A0234"),
+	0x802A0380: table.sym("objlib_802A0380", table.GLOBL),
+	0x802A0474: table.sym("objlib_802A0474", table.GLOBL),
+	0x802A04C0: table.sym("objlib_802A04C0", table.GLOBL),
+	0x802A04F0: table.sym("objlib_802A04F0"), # unused
+	0x802A0514: table.sym("objlib_802A0514", table.GLOBL),
+	0x802A0568: table.sym_fnc("objlib_802A0568", arg=(
+		"OBJECT *obj",
+	), flag=table.GLOBL),
+	0x802A057C: table.sym("objlib_802A057C", table.GLOBL),
+	0x802A05B4: table.sym("objlib_802A05B4", table.GLOBL),
+	0x802A05D4: table.sym("objlib_802A05D4", table.GLOBL),
+	0x802A05F0: table.sym("objlib_802A05F0", table.GLOBL),
+	0x802A0604: table.sym("objlib_802A0604", table.GLOBL),
+	0x802A064C: table.sym("objlib_802A064C", table.GLOBL),
+	0x802A069C: table.sym("objlib_802A069C"),
+	0x802A079C: table.sym("objlib_802A079C", table.GLOBL),
+	0x802A07E8: table.sym("objlib_802A07E8"),
+	0x802A0AB0: table.sym("objlib_802A0AB0"),
+	0x802A0BDC: table.sym("objlib_802A0BDC"),
+	0x802A0D84: table.sym("objlib_802A0D84"),
+	0x802A0E68: table.sym("objlib_802A0E68", table.GLOBL),
+	0x802A10E0: table.sym("objlib_802A10E0"), # unused
+	0x802A10F0: table.sym("objlib_802A10F0"),
+	0x802A113C: table.sym("objlib_802A113C"), # unused
+	0x802A11A8: table.sym("objlib_802A11A8", table.GLOBL),
+	0x802A120C: table.sym("objlib_802A120C", table.GLOBL),
+	0x802A12A4: table.sym("objlib_802A12A4", table.GLOBL),
+	0x802A1308: table.sym("objlib_802A1308", table.GLOBL), # o callback
+	0x802A1370: table.sym("objlib_802A1370", table.GLOBL),
+	0x802A1424: table.sym("objlib_802A1424", table.GLOBL),
+	0x802A148C: table.sym("objlib_802A148C", table.GLOBL),
+	0x802A14C4: table.sym("objlib_802A14C4", table.GLOBL),
+	0x802A14FC: table.sym("objlib_802A14FC", table.GLOBL),
+	0x802A1554: table.sym("objlib_802A1554", table.GLOBL),
+	0x802A15AC: table.sym("objlib_802A15AC", table.GLOBL),
+	0x802A1634: table.sym("objlib_802A1634", table.GLOBL),
+	0x802A16AC: table.sym("objlib_802A16AC"), # unused
+	0x802A1774: table.sym("objlib_802A1774"), # unused
+	0x802A184C: table.sym("objlib_802A184C", table.GLOBL),
+	0x802A188C: table.sym("objlib_802A188C", table.GLOBL),
+	0x802A18DC: table.sym("objlib_802A18DC", table.GLOBL),
+	0x802A1930: table.sym("objlib_802A1930", table.GLOBL),
+	0x802A1960: table.sym("objlib_802A1960"), # unused
+	0x802A19AC: table.sym("objlib_802A19AC", table.GLOBL),
+	0x802A19C8: table.sym("objlib_802A19C8", table.GLOBL),
+	0x802A19F0: table.sym("objlib_802A19F0", table.GLOBL),
+	0x802A1A18: table.sym("objlib_802A1A18"),
+	0x802A1B34: table.sym("objlib_802A1B34"),
+	0x802A1B8C: table.sym("objlib_802A1B8C", table.GLOBL),
+	0x802A1BDC: table.sym("objlib_802A1BDC", table.GLOBL),
+	0x802A1C68: table.sym("objlib_802A1C68"), # unused
+	0x802A1CC4: table.sym("objlib_802A1CC4"), # unused
+	0x802A1D7C: table.sym("objlib_802A1D7C"),
+	0x802A1F3C: table.sym("objlib_802A1F3C", table.GLOBL),
+	0x802A20F4: table.sym("objlib_802A20F4"),
+	0x802A21D4: table.sym("objlib_802A21D4"),
+	0x802A2320: table.sym("objlib_802A2320", table.GLOBL), # o callback
+	0x802A2348: table.sym("objlib_802A2348", table.GLOBL),
+	0x802A24D0: table.sym("objlib_802A24D0"),
+	0x802A25B4: table.sym("objlib_802A25B4", table.GLOBL),
+	0x802A2644: table.sym("objlib_802A2644", table.GLOBL), # o callback
+	0x802A2674: table.sym("objlib_802A2674"), # unused
+	0x802A2748: table.sym("objlib_802A2748", table.GLOBL),
+	0x802A27B0: table.sym("objlib_802A27B0", table.GLOBL),
+	0x802A2804: table.sym("objlib_802A2804", table.GLOBL),
+	0x802A2930: table.sym_fnc("objlib_802A2930", arg=(
+		"OBJECT *obj",
+		"int pos",
+		"int ang",
+	), flag=table.GLOBL),
+	0x802A2A18: table.sym("objlib_802A2A18", table.GLOBL),
+	0x802A2A84: table.sym("objlib_802A2A84", table.GLOBL),
+	0x802A2B28: table.sym("objlib_802A2B28"), # unused
+	0x802A2B6C: table.sym("objlib_802A2B6C"), # unused
+	0x802A2BC4: table.sym("objlib_802A2BC4", table.GLOBL), # o callback
+	0x802A2C1C: table.sym("objlib_802A2C1C"), # unused
+	0x802A2C5C: table.sym("objlib_802A2C5C", table.GLOBL),
+	0x802A2ED4: table.sym("objlib_802A2ED4", table.GLOBL),
+	0x802A2F14: table.sym("objlib_802A2F14", table.GLOBL),
+	0x802A2F5C: table.sym("objlib_802A2F5C", table.GLOBL),
+	0x802A2FC0: table.sym("objlib_802A2FC0", table.GLOBL),
+	0x802A308C: table.sym("objlib_802A308C", table.GLOBL),
+	0x802A3124: table.sym("objlib_802A3124"),
+	0x802A31E0: table.sym("objlib_802A31E0", table.GLOBL),
+	0x802A3268: table.sym("objlib_802A3268", table.GLOBL),
+	0x802A32AC: table.sym("objlib_802A32AC", table.GLOBL),
+	0x802A34A4: table.sym("objlib_802A34A4", table.GLOBL),
+	0x802A3604: table.sym("objlib_802A3604", table.GLOBL),
+	0x802A3634: table.sym_fnc("objlib_802A3634", "float", (
 		"float",
 	), table.GLOBL),
-	0x802A3674: table.sym("obj_lib_802A3674", table.GLOBL),
-	0x802A36A4: table.sym("obj_lib_802A36A4", table.GLOBL),
-	0x802A3754: table.sym("obj_lib_802A3754", table.GLOBL),
-	0x802A37AC: table.sym("obj_lib_802A37AC", table.GLOBL),
-	0x802A37DC: table.sym("obj_lib_802A37DC", table.GLOBL),
-	0x802A3818: table.sym("obj_lib_802A3818", table.GLOBL),
-	0x802A390C: table.sym("obj_lib_802A390C", table.GLOBL),
-	0x802A399C: table.sym("obj_lib_802A399C", table.GLOBL), # o callback
-	0x802A3A3C: table.sym("obj_lib_802A3A3C"), # unused
-	0x802A3A4C: table.sym("obj_lib_802A3A4C", table.GLOBL),
-	0x802A3A88: table.sym("obj_lib_802A3A88", table.GLOBL),
-	0x802A3B28: table.sym("obj_lib_802A3B28"), # unused
-	0x802A3B40: table.sym("obj_lib_802A3B40", table.GLOBL),
-	0x802A3C18: table.sym("obj_lib_802A3C18", table.GLOBL),
-	0x802A3CEC: table.sym("obj_lib_802A3CEC"), # unused
-	0x802A3CFC: table.sym("obj_lib_802A3CFC", table.GLOBL),
-	0x802A3D40: table.sym("obj_lib_802A3D40"), # unused
-	0x802A3DD4: table.sym("obj_lib_802A3DD4", table.GLOBL),
-	0x802A3E30: table.sym("obj_lib_802A3E30", table.GLOBL),
-	0x802A3E80: table.sym("obj_lib_802A3E80"),
-	0x802A3EF8: table.sym("obj_lib_802A3EF8"), # unused
-	0x802A3F24: table.sym("obj_lib_802A3F24", table.GLOBL),
-	0x802A3F48: table.sym("obj_lib_802A3F48", table.GLOBL),
-	0x802A404C: table.sym("obj_lib_802A404C", table.GLOBL),
-	0x802A40B8: table.sym("obj_lib_802A40B8", table.GLOBL),
-	0x802A4110: table.sym("obj_lib_802A4110"), # unused
-	0x802A4120: table.sym("obj_lib_802A4120", table.GLOBL), # o callback
-	0x802A4210: table.sym("obj_lib_802A4210", table.GLOBL),
-	0x802A4360: table.sym("obj_lib_802A4360", table.GLOBL),
-	0x802A4440: table.sym("obj_lib_802A4440", table.GLOBL),
-	0x802A44F4: table.sym("obj_lib_802A44F4", table.GLOBL),
-	0x802A452C: table.sym("obj_lib_802A452C", table.GLOBL),
-	0x802A4564: table.sym("obj_lib_802A4564", table.GLOBL),
-	0x802A45E4: table.sym("s_obj_lib_802A45E4", table.GLOBL), # s callback
-	0x802A462C: table.sym("obj_lib_802A462C"), # unused
-	0x802A46CC: table.sym("obj_lib_802A46CC", table.GLOBL),
-	0x802A4704: table.sym("obj_lib_802A4704", table.GLOBL),
-	0x802A4728: table.sym("obj_lib_802A4728", table.GLOBL),
-	0x802A4750: table.sym("obj_lib_802A4750", table.GLOBL),
-	0x802A4774: table.sym("obj_lib_802A4774", table.GLOBL),
-	0x802A47A0: table.sym("obj_lib_802A47A0", table.GLOBL),
-	0x802A48BC: table.sym("obj_lib_802A48BC", table.GLOBL),
-	0x802A48FC: table.sym("obj_lib_802A48FC"),
-	0x802A4960: table.sym("obj_lib_802A4960", table.GLOBL),
+	0x802A3674: table.sym("objlib_802A3674", table.GLOBL),
+	0x802A36A4: table.sym("objlib_802A36A4", table.GLOBL),
+	0x802A3754: table.sym("objlib_802A3754", table.GLOBL),
+	0x802A37AC: table.sym("objlib_802A37AC", table.GLOBL),
+	0x802A37DC: table.sym("objlib_802A37DC", table.GLOBL),
+	0x802A3818: table.sym("objlib_802A3818", table.GLOBL),
+	0x802A390C: table.sym("objlib_802A390C", table.GLOBL),
+	0x802A399C: table.sym("objlib_802A399C", table.GLOBL), # o callback
+	0x802A3A3C: table.sym("objlib_802A3A3C"), # unused
+	0x802A3A4C: table.sym("objlib_802A3A4C", table.GLOBL),
+	0x802A3A88: table.sym("objlib_802A3A88", table.GLOBL),
+	0x802A3B28: table.sym("objlib_802A3B28"), # unused
+	0x802A3B40: table.sym("objlib_802A3B40", table.GLOBL),
+	0x802A3C18: table.sym("objlib_802A3C18", table.GLOBL),
+	0x802A3CEC: table.sym("objlib_802A3CEC"), # unused
+	0x802A3CFC: table.sym("objlib_802A3CFC", table.GLOBL),
+	0x802A3D40: table.sym("objlib_802A3D40"), # unused
+	0x802A3DD4: table.sym("objlib_802A3DD4", table.GLOBL),
+	0x802A3E30: table.sym("objlib_802A3E30", table.GLOBL),
+	0x802A3E80: table.sym("objlib_802A3E80"),
+	0x802A3EF8: table.sym("objlib_802A3EF8"), # unused
+	0x802A3F24: table.sym("objlib_802A3F24", table.GLOBL),
+	0x802A3F48: table.sym("objlib_802A3F48", table.GLOBL),
+	0x802A404C: table.sym("objlib_802A404C", table.GLOBL),
+	0x802A40B8: table.sym("objlib_802A40B8", table.GLOBL),
+	0x802A4110: table.sym("objlib_802A4110"), # unused
+	0x802A4120: table.sym("objlib_802A4120", table.GLOBL), # o callback
+	0x802A4210: table.sym("objlib_802A4210", table.GLOBL),
+	0x802A4360: table.sym("objlib_802A4360", table.GLOBL),
+	0x802A4440: table.sym("objlib_802A4440", table.GLOBL),
+	0x802A44F4: table.sym("objlib_802A44F4", table.GLOBL),
+	0x802A452C: table.sym("objlib_802A452C", table.GLOBL),
+	0x802A4564: table.sym("objlib_802A4564", table.GLOBL),
+	0x802A45E4: table.sym("s_objlib_802A45E4", table.GLOBL), # s callback
+	0x802A462C: table.sym("objlib_802A462C"), # unused
+	0x802A46CC: table.sym("objlib_802A46CC", table.GLOBL),
+	0x802A4704: table.sym("objlib_802A4704", table.GLOBL),
+	0x802A4728: table.sym("objlib_802A4728", table.GLOBL),
+	0x802A4750: table.sym("objlib_802A4750", table.GLOBL),
+	0x802A4774: table.sym("objlib_802A4774", table.GLOBL),
+	0x802A47A0: table.sym("objlib_802A47A0", table.GLOBL),
+	0x802A48BC: table.sym("objlib_802A48BC", table.GLOBL),
+	0x802A48FC: table.sym("objlib_802A48FC"),
+	0x802A4960: table.sym("objlib_802A4960", table.GLOBL),
 	0x802A49B4: table.sym_fnc("L802A49B4", flag=table.GLOBL|table.LOCAL),
 	0x802A4A28: table.sym_fnc("L802A4A28", flag=table.GLOBL|table.LOCAL),
 	0x802A4A58: table.sym_fnc("L802A4A58", flag=table.GLOBL|table.LOCAL),
 	0x802A4AAC: table.sym_fnc("L802A4AAC", flag=table.GLOBL|table.LOCAL),
 	0x802A4B30: table.sym_fnc("L802A4B30", flag=table.GLOBL|table.LOCAL),
-	0x802A4BE4: table.sym("obj_lib_802A4BE4", table.GLOBL),
-	0x802A4F04: table.sym("obj_lib_802A4F04", table.GLOBL),
-	0x802A4F58: table.sym("obj_lib_802A4F58", table.GLOBL),
-	0x802A5034: table.sym("obj_lib_802A5034"), # unused
-	0x802A50FC: table.sym("obj_lib_802A50FC", table.GLOBL),
-	0x802A513C: table.sym("obj_lib_802A513C", table.GLOBL),
-	0x802A51AC: table.sym("obj_lib_802A51AC", table.GLOBL),
-	0x802A5228: table.sym("obj_lib_802A5228", table.GLOBL),
-	0x802A5248: table.sym("obj_lib_802A5248", table.GLOBL),
-	0x802A5288: table.sym("obj_lib_802A5288", table.GLOBL),
-	0x802A52C4: table.sym("obj_lib_802A52C4", table.GLOBL),
-	0x802A52F8: table.sym("obj_lib_802A52F8", table.GLOBL),
-	0x802A5358: table.sym("obj_lib_802A5358", table.GLOBL),
-	0x802A540C: table.sym("obj_lib_802A540C"), # unused
-	0x802A5460: table.sym("obj_lib_802A5460"), # unused
-	0x802A5498: table.sym("obj_lib_802A5498", table.GLOBL),
-	0x802A54D8: table.sym("obj_lib_802A54D8", table.GLOBL),
-	0x802A5524: table.sym("obj_lib_802A5524", table.GLOBL),
-	0x802A5588: table.sym("obj_lib_802A5588", table.GLOBL),
+	0x802A4BE4: table.sym_fnc("objlib_802A4BE4", "int", (
+		"int",
+		"int",
+		"int",
+		"int",
+	), table.GLOBL),
+	0x802A4F04: table.sym("objlib_802A4F04", table.GLOBL),
+	0x802A4F58: table.sym("objlib_802A4F58", table.GLOBL),
+	0x802A5034: table.sym("objlib_802A5034"), # unused
+	0x802A50FC: table.sym("objlib_802A50FC", table.GLOBL),
+	0x802A513C: table.sym("objlib_802A513C", table.GLOBL),
+	0x802A51AC: table.sym("objlib_802A51AC", table.GLOBL),
+	0x802A5228: table.sym("objlib_802A5228", table.GLOBL),
+	0x802A5248: table.sym("objlib_802A5248", table.GLOBL),
+	0x802A5288: table.sym("objlib_802A5288", table.GLOBL),
+	0x802A52C4: table.sym("objlib_802A52C4", table.GLOBL),
+	0x802A52F8: table.sym("objlib_802A52F8", table.GLOBL),
+	0x802A5358: table.sym("objlib_802A5358", table.GLOBL),
+	0x802A540C: table.sym("objlib_802A540C"), # unused
+	0x802A5460: table.sym("objlib_802A5460"), # unused
+	0x802A5498: table.sym("objlib_802A5498", table.GLOBL),
+	0x802A54D8: table.sym("objlib_802A54D8", table.GLOBL),
+	0x802A5524: table.sym("objlib_802A5524", table.GLOBL),
+	0x802A5588: table.sym("objlib_802A5588", table.GLOBL),
 
 	# src/object_a.c
 	0x802A5620: table.sym("object_a_802A5620"),
@@ -6787,7 +6877,9 @@ sym_E0_t_code = {
 	0x802AB158: table.sym("object_a_802AB158"),
 	0x802AB18C: table.sym("object_a_802AB18C"),
 	0x802AB1C8: table.sym("object_a_802AB1C8", table.GLOBL), # o callback
-	0x802AB558: table.sym("object_a_802AB558", table.GLOBL),
+	0x802AB558: table.sym_fnc("object_a_802AB558", arg=(
+		"int",
+	), flag=table.GLOBL),
 	0x802AB5C8: table.sym("object_a_802AB5C8"),
 	0x802AB650: table.sym("object_a_802AB650", table.GLOBL), # o callback
 	0x802AB70C: table.sym("object_a_802AB70C", table.GLOBL), # o callback
@@ -7357,7 +7449,7 @@ sym_E0_t_code = {
 	0x802C85A4: table.sym("object_a_802C85A4"),
 	0x802C863C: table.sym("object_a_802C863C", table.GLOBL), # o callback
 
-	# src/obj_physics.c
+	# src/objphysics.c
 	0x802C89F0: table.sym_fnc("obj_physics_802C89F0", flag=table.GLOBL),
 	0x802C8B4C: table.sym_fnc("mario_pos_get", arg=(
 		"float *x",
@@ -7371,12 +7463,12 @@ sym_E0_t_code = {
 	), flag=table.GLOBL),
 	0x802C8BC8: table.sym_fnc("obj_physics_802C8BC8", arg=(
 		"int ismario",
-		"struct object *obj",
+		"OBJECT *obj",
 	), flag=table.GLOBL),
 	0x802C8EC0: table.sym_fnc("obj_physics_802C8EC0", flag=table.GLOBL),
 	0x802C8F28: table.sym_fnc("obj_physics_802C8F28", flag=table.GLOBL),
 
-	# src/obj_collision.c
+	# src/objcollision.c
 	0x802C8F40: table.sym("obj_collision_802C8F40"), # unused
 	0x802C8FE4: table.sym("obj_collision_802C8FE4"),
 	0x802C91EC: table.sym("obj_collision_802C91EC"),
@@ -7387,42 +7479,74 @@ sym_E0_t_code = {
 	0x802C9630: table.sym("obj_collision_802C9630"),
 	0x802C9724: table.sym("obj_collision_802C9724", table.GLOBL),
 
-	# src/obj_list.c
-	0x802C97D0: table.sym("obj_list_802C97D0"), # unused
-	0x802C9840: table.sym("obj_list_802C9840"), # unused
-	0x802C98A4: table.sym("obj_list_802C98A4"),
-	0x802C9950: table.sym("obj_list_802C9950"), # unused
-	0x802C9984: table.sym("obj_list_802C9984"),
-	0x802C99B8: table.sym("obj_list_802C99B8", table.GLOBL),
-	0x802C9A3C: table.sym("obj_list_802C9A3C", table.GLOBL),
-	0x802C9AD8: table.sym("obj_list_802C9AD8"),
-	0x802C9B68: table.sym("obj_list_802C9B68", table.GLOBL),
-	0x802C9C00: table.sym("obj_list_802C9C00"),
-	0x802C9E5C: table.sym("obj_list_802C9E5C"),
-	0x802C9F04: table.sym("obj_list_802C9F04", table.GLOBL),
-	0x802CA028: table.sym("obj_list_802CA028", table.GLOBL),
+	# src/objlist.c
+	0x802C97D0: table.sym_fnc("list_init", arg=(
+		"LIST *root",
+		"LIST *free",
+		"LIST *data",
+		"size_t size",
+		"int count",
+	)), # unused
+	0x802C9840: table.sym_fnc("list_alloc", "LIST *", (
+		"LIST *root",
+		"LIST *free",
+	)), # unused
+	0x802C98A4: table.sym_fnc("objlist_alloc", "OBJECT *", (
+		"OBJLIST *root",
+		"OBJLIST *free",
+	)),
+	0x802C9950: table.sym_fnc("list_free", arg=(
+		"LIST *free",
+		"LIST *item",
+	)), # unused
+	0x802C9984: table.sym_fnc("objlist_free", arg=(
+		"OBJLIST *free",
+		"OBJLIST *item",
+	)),
+	0x802C99B8: table.sym_fnc("obj_freelist_init", flag=table.GLOBL),
+	0x802C9A3C: table.sym_fnc("obj_rootlist_init", arg=(
+		"OBJLIST *root",
+	), flag=table.GLOBL),
+	0x802C9AD8: table.sym_fnc("objlist_802C9AD8", arg=(
+		"SHAPE *shape",
+	)), # unused
+	0x802C9B68: table.sym_fnc("obj_free", arg=(
+		"OBJECT *obj",
+	), flag=table.GLOBL),
+	0x802C9C00: table.sym_fnc("obj_alloc", "OBJECT *", (
+		"OBJLIST *root",
+	)),
+	0x802C9E5C: table.sym_fnc("obj_init_ground", arg=(
+		"OBJECT *obj",
+	)),
+	0x802C9F04: table.sym_fnc("obj_create", "OBJECT *", (
+		"O_SCRIPT *script",
+	), table.GLOBL),
+	0x802CA028: table.sym_fnc("obj_destroy", arg=(
+		"OBJECT *obj",
+	), flag=table.GLOBL),
 
-	# src/obj_sfx.c
-	0x802CA040: table.sym_fnc("obj_sfx_802CA040", arg=(
+	# src/objsfx.c
+	0x802CA040: table.sym_fnc("objsfx_802CA040", arg=(
 		"OBJ_SFX *sfx",
 	), flag=table.GLOBL),
-	0x802CA144: table.sym_fnc("obj_sfx_802CA144", arg=(
+	0x802CA144: table.sym_fnc("objsfx_802CA144", arg=(
 		"NA_SE se",
 	), flag=table.GLOBL),
-	0x802CA190: table.sym_fnc("obj_sfx_802CA190", arg=(
+	0x802CA190: table.sym_fnc("objsfx_802CA190", arg=(
 		"NA_SE se",
 	), flag=table.GLOBL),
-	0x802CA1E0: table.sym_fnc("obj_sfx_802CA1E0", arg=(
+	0x802CA1E0: table.sym_fnc("objsfx_802CA1E0", arg=(
 		"NA_SE se",
 	), flag=table.GLOBL),
-	0x802CA230: table.sym_fnc("obj_sfx_802CA230", "int", (
+	0x802CA230: table.sym_fnc("objsfx_802CA230", "int", (
 		"float x",
 	)), # unused
-	0x802CA2D4: table.sym_fnc("obj_sfx_802CA2D4", "int", (
+	0x802CA2D4: table.sym_fnc("objsfx_802CA2D4", "int", (
 		"float x",
 	)), # unused
 
-	# src/obj_debug.c
+	# src/objdebug.c
 	0x802CA370: table.sym("_802CA370"), # unused
 	0x802CA380: table.sym("_802CA380"), # unused
 	0x802CA390: table.sym("_802CA390"), # unused
@@ -7431,10 +7555,16 @@ sym_E0_t_code = {
 	0x802CA3E0: table.sym("obj_debug_802CA3E0", table.GLOBL),
 	0x802CA418: table.sym("obj_debug_802CA418"),
 	0x802CA460: table.sym("obj_debug_802CA460"),
-	0x802CA51C: table.sym("obj_debug_802CA51C", table.GLOBL),
+	0x802CA51C: table.sym_fnc("obj_debug_802CA51C", arg=(
+		"int",
+		"int",
+	), flag=table.GLOBL),
 	0x802CA568: table.sym("obj_debug_802CA568", table.GLOBL),
 	0x802CA5B8: table.sym("obj_debug_802CA5B8", table.GLOBL),
-	0x802CA618: table.sym("obj_debug_802CA618", table.GLOBL),
+	0x802CA618: table.sym_fnc("obj_debug_802CA618", arg=(
+		"const char *fmt",
+		"int value",
+	), flag=table.GLOBL),
 	0x802CA680: table.sym("obj_debug_802CA680"),
 	0x802CA6D0: table.sym("obj_debug_802CA6D0"),
 	0x802CA8E8: table.sym("obj_debug_802CA8E8"),
@@ -7544,7 +7674,17 @@ sym_E0_t_code = {
 	0x802CFA2C: table.sym("back_802CFA2C"),
 	0x802CFC68: table.sym("back_802CFC68"),
 	0x802CFD88: table.sym("back_802CFD88"),
-	0x802CFEF4: table.sym("back_802CFEF4", table.GLOBL),
+	0x802CFEF4: table.sym_fnc("back_802CFEF4", "Gfx *", (
+		"int",
+		"u32 code",
+		"float fovy",
+		"float eye_x",
+		"float eye_y",
+		"float eye_z",
+		"float look_x",
+		"float look_y",
+		"float look_z",
+	), table.GLOBL),
 
 	# src/scroll.c
 	0x802D0080: table.sym("s_scroll_802D0080", table.GLOBL), # s callback
@@ -7566,13 +7706,43 @@ sym_E0_t_code = {
 	0x802D1FA8: table.sym("s_scroll_802D1FA8", table.GLOBL), # s callback
 	0x802D2108: table.sym("s_scroll_802D2108", table.GLOBL), # s callback
 
-	# src/obj_shape.c
-	0x802D2210: table.sym("obj_shape_802D2210", table.GLOBL),
-	0x802D22C4: table.sym("obj_shape_802D22C4", table.GLOBL),
-	0x802D2360: table.sym("s_obj_shape_802D2360", table.GLOBL), # s callback
-	0x802D2470: table.sym("s_obj_shape_802D2470", table.GLOBL), # s callback
-	0x802D2520: table.sym("s_obj_shape_802D2520", table.GLOBL), # s callback
-	0x802D28CC: table.sym("s_obj_shape_802D28CC", table.GLOBL), # s callback
+	# src/objshape.c
+	0x802D2210: table.sym_fnc("vtx_set", arg=(
+		"Vtx *vtx",
+		"int i",
+		"SHORT x",
+		"SHORT y",
+		"SHORT z",
+		"SHORT s",
+		"SHORT t",
+		"UCHAR r",
+		"UCHAR g",
+		"UCHAR b",
+		"UCHAR a",
+	), flag=table.GLOBL),
+	0x802D22C4: table.sym_fnc("roundftos", "SHORT", (
+		"float x",
+	), table.GLOBL),
+	0x802D2360: table.sym_fnc("s_obj_shape_802D2360", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802D2470: table.sym_fnc("s_obj_shape_802D2470", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802D2520: table.sym_fnc("s_obj_shape_802D2520", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
+	0x802D28CC: table.sym_fnc("s_obj_shape_802D28CC", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), table.GLOBL), # s callback
 
 	# src/wave.c
 	0x802D29C0: table.sym("wave_802D29C0"),
@@ -7721,7 +7891,7 @@ sym_E0_t_code = {
 	0x802DAB58: table.sym_fnc("message_802DAB58", flag=table.GLOBL),
 	0x802DAD54: table.sym("message_802DAD54"),
 	0x802DB08C: table.sym("message_802DB08C", table.GLOBL),
-	0x802DB350: table.sym("message_802DB350", table.GLOBL),
+	0x802DB350: table.sym_fnc("message_802DB350", flag=table.GLOBL),
 	0x802DB368: table.sym("message_802DB368"),
 	0x802DB3B8: table.sym("message_802DB3B8"),
 	0x802DB498: table.sym("message_802DB498"),
@@ -7743,52 +7913,57 @@ sym_E0_t_code = {
 	0x802DDAE0: table.sym("message_802DDAE0"),
 	0x802DDCA4: table.sym_fnc("message_802DDCA4", "SHORT", flag=table.GLOBL),
 
-	# src/weather_snow.c
-	0x802DDDF0: table.sym("weather_snow_802DDDF0"),
-	0x802DDF38: table.sym("weather_snow_802DDF38"),
-	0x802DE0BC: table.sym("weather_snow_802DE0BC"),
-	0x802DE114: table.sym("weather_snow_802DE114", table.GLOBL),
-	0x802DE23C: table.sym("weather_snow_802DE23C"),
-	0x802DE360: table.sym("weather_snow_802DE360"),
-	0x802DE458: table.sym("weather_snow_802DE458"),
-	0x802DE888: table.sym("weather_snow_802DE888"),
-	0x802DECD4: table.sym("weather_snow_802DECD4"), # unused
-	0x802DED38: table.sym("weather_snow_802DED38"),
-	0x802DEF2C: table.sym("weather_snow_802DEF2C", table.GLOBL),
-	0x802DF334: table.sym("weather_snow_802DF334"),
-	0x802DF748: table.sym("weather_snow_802DF748"),
-	0x802DFBC8: table.sym("weather_snow_802DFBC8", table.GLOBL),
+	# src/snow.c
+	0x802DDDF0: table.sym("snow_802DDDF0"),
+	0x802DDF38: table.sym("snow_802DDF38"),
+	0x802DE0BC: table.sym("snow_802DE0BC"),
+	0x802DE114: table.sym("snow_802DE114", table.GLOBL),
+	0x802DE23C: table.sym("snow_802DE23C"),
+	0x802DE360: table.sym("snow_802DE360"),
+	0x802DE458: table.sym("snow_802DE458"),
+	0x802DE888: table.sym("snow_802DE888"),
+	0x802DECD4: table.sym("snow_802DECD4"), # unused
+	0x802DED38: table.sym("snow_802DED38"),
+	0x802DEF2C: table.sym("snow_802DEF2C", table.GLOBL),
+	0x802DF334: table.sym("snow_802DF334"),
+	0x802DF748: table.sym("snow_802DF748"),
+	0x802DFBC8: table.sym_fnc("snow_802DFBC8", "Gfx *", (
+		"int code",
+		"VECS pos",
+		"VECS look",
+		"VECS eye",
+	), table.GLOBL),
 
-	# src/weather_lava.c
-	0x802DFD50: table.sym("weather_lava_802DFD50"),
-	0x802DFE00: table.sym("weather_lava_802DFE00"),
-	0x802DFE80: table.sym("weather_lava_802DFE80"),
-	0x802E0120: table.sym("weather_lava_802E0120"),
-	0x802E048C: table.sym("weather_lava_802E048C"),
-	0x802E065C: table.sym("weather_lava_802E065C"),
-	0x802E08A8: table.sym("weather_lava_802E08A8"),
-	0x802E0934: table.sym("weather_lava_802E0934"),
-	0x802E0E24: table.sym("weather_lava_802E0E24"),
-	0x802E0EB8: table.sym("weather_lava_802E0EB8"),
-	0x802E1238: table.sym("weather_lava_802E1238"),
+	# src/lava.c
+	0x802DFD50: table.sym("lava_802DFD50"),
+	0x802DFE00: table.sym("lava_802DFE00"),
+	0x802DFE80: table.sym("lava_802DFE80"),
+	0x802E0120: table.sym("lava_802E0120"),
+	0x802E048C: table.sym("lava_802E048C"),
+	0x802E065C: table.sym("lava_802E065C"),
+	0x802E08A8: table.sym("lava_802E08A8"),
+	0x802E0934: table.sym("lava_802E0934"),
+	0x802E0E24: table.sym("lava_802E0E24"),
+	0x802E0EB8: table.sym("lava_802E0EB8"),
+	0x802E1238: table.sym("lava_802E1238"),
 	0x802E126C: table.sym_fnc("L802E126C", flag=table.GLOBL|table.LOCAL),
 	0x802E1274: table.sym_fnc("L802E1274", flag=table.GLOBL|table.LOCAL),
 	0x802E1294: table.sym_fnc("L802E1294", flag=table.GLOBL|table.LOCAL),
 	0x802E12B4: table.sym_fnc("L802E12B4", flag=table.GLOBL|table.LOCAL),
 	0x802E12C8: table.sym_fnc("L802E12C8", flag=table.GLOBL|table.LOCAL),
 	0x802E12DC: table.sym_fnc("L802E12DC", flag=table.GLOBL|table.LOCAL),
-	0x802E1414: table.sym("weather_lava_802E1414"),
-	0x802E1618: table.sym("weather_lava_802E1618"),
-	0x802E1A20: table.sym("weather_lava_802E1A20"),
-	0x802E1BB8: table.sym("weather_lava_802E1BB8"),
-	0x802E1ED8: table.sym("weather_lava_802E1ED8"),
-	0x802E1F48: table.sym("weather_lava_802E1F48", table.GLOBL),
+	0x802E1414: table.sym("lava_802E1414"),
+	0x802E1618: table.sym("lava_802E1618"),
+	0x802E1A20: table.sym("lava_802E1A20"),
+	0x802E1BB8: table.sym("lava_802E1BB8"),
+	0x802E1ED8: table.sym("lava_802E1ED8"),
+	0x802E1F48: table.sym("lava_802E1F48", table.GLOBL),
 
-	# src/obj_data.c
-	0x802E20A0: table.sym_fnc("cvt_ang", "SHORT", (
+	# src/tag.c
+	0x802E20A0: table.sym_fnc("tag_ang", "SHORT", (
 		"SHORT x",
 	)),
-	0x802E2134: table.sym_fnc("spawn_arg", arg=(
+	0x802E2134: table.sym_fnc("tag_spawn_arg", arg=(
 		"int shape",
 		"O_SCRIPT *script",
 		"SHORT px",
@@ -7797,7 +7972,7 @@ sym_E0_t_code = {
 		"SHORT ay",
 		"SHORT arg",
 	)),
-	0x802E21DC: table.sym_fnc("spawn_code", arg=(
+	0x802E21DC: table.sym_fnc("tag_spawn_code", arg=(
 		"int shape",
 		"O_SCRIPT *script",
 		"SHORT px",
@@ -7806,7 +7981,7 @@ sym_E0_t_code = {
 		"SHORT ay",
 		"SHORT code",
 	)),
-	0x802E2284: table.sym_fnc("spawn_xyz", arg=(
+	0x802E2284: table.sym_fnc("tag_spawn_xyz", arg=(
 		"int shape",
 		"O_SCRIPT *script",
 		"SHORT px",
@@ -7816,17 +7991,17 @@ sym_E0_t_code = {
 		"SHORT vy",
 		"SHORT vz",
 	)),
-	0x802E233C: table.sym_fnc("spawn_old", arg=(
+	0x802E233C: table.sym_fnc("tag_spawn_old", arg=(
 		"O_SCRIPT *script",
-		"OBJ_DATA *data",
+		"TAG *tag",
 	)), # unused
-	0x802E2414: table.sym_fnc("prg_obj_main", arg=(
+	0x802E2414: table.sym_fnc("tag_obj_load", arg=(
 		"SHORT scene",
-		"OBJ_DATA *data",
+		"TAG *tag",
 	), flag=table.GLOBL),
-	0x802E2690: table.sym_fnc("obj_data_main", arg=(
+	0x802E2690: table.sym_fnc("tag_load", arg=(
 		"SHORT scene",
-		"OBJ_DATA *data",
+		"TAG *tag",
 	), flag=table.GLOBL),
 	0x802E2758: table.sym_fnc("L802E2758", flag=table.GLOBL|table.LOCAL),
 	0x802E278C: table.sym_fnc("L802E278C", flag=table.GLOBL|table.LOCAL),
@@ -7836,9 +8011,9 @@ sym_E0_t_code = {
 	0x802E285C: table.sym_fnc("L802E285C", flag=table.GLOBL|table.LOCAL),
 	0x802E2890: table.sym_fnc("L802E2890", flag=table.GLOBL|table.LOCAL),
 	0x802E28C4: table.sym_fnc("L802E28C4", flag=table.GLOBL|table.LOCAL),
-	0x802E28EC: table.sym_fnc("map_obj_main", arg=(
+	0x802E28EC: table.sym_fnc("map_obj_load", arg=(
 		"SHORT scene",
-		"MAP_DATA **data",
+		"MAP **map",
 	), flag=table.GLOBL),
 	0x802E2AAC: table.sym_fnc("L802E2AAC", flag=table.GLOBL|table.LOCAL),
 	0x802E2AD8: table.sym_fnc("L802E2AD8", flag=table.GLOBL|table.LOCAL),
@@ -9224,8 +9399,8 @@ sym_E0_t_code = {
 	0x8032D5FA: table.sym("demo_record+0x02"), # stick_y
 	0x8032D5FB: table.sym("demo_record+0x03"), # button
 
-	0x8032D950: table.sym("collision_data+0x00"), # type
-	0x8032D954: table.sym("collision_data+0x04"), # callback
+	0x8032D950: table.sym("collision_table+0x00"), # type
+	0x8032D954: table.sym("collision_table+0x04"), # callback
 
 	0x8032DADB: table.sym("player_8032DACC+1*15"),
 	0x8032DAE0: table.sym("player_8032DAE0+0"),
@@ -9363,31 +9538,31 @@ sym_E0_t_code = {
 	0x80330DAC: table.sym("object_a_80330DAC+0x00"), # time
 	0x80330DB4: table.sym("object_a_80330DAC+0x08"), # vel
 
-	0x80330EE0: table.sym("shadow_rect_data+0x00"), # sx
-	0x80330EE4: table.sym("shadow_rect_data+0x04"), # sz
-	0x80330EE8: table.sym("shadow_rect_data+0x08"), # y_scale
+	0x80330EE0: table.sym("shadow_rect_table+0x00"), # sx
+	0x80330EE4: table.sym("shadow_rect_table+0x04"), # sz
+	0x80330EE8: table.sym("shadow_rect_table+0x08"), # y_scale
 
-	0x80330F64: table.sym("scroll_data_a+0x00"), # index
-	0x80330F70: table.sym("scroll_data_a+0x0C"), # data
-	0x80330F84: table.sym("scroll_data_a+0x20"), # layer
+	0x80330F64: table.sym("scroll_table_a+0x00"), # index
+	0x80330F70: table.sym("scroll_table_a+0x0C"), # data
+	0x80330F84: table.sym("scroll_table_a+0x20"), # layer
 
-	0x803311A4: table.sym("scroll_data_b+0x00"), # index
-	0x803311B0: table.sym("scroll_data_b+0x0C"), # data
-	0x803311C4: table.sym("scroll_data_b+0x20"), # layer
+	0x803311A4: table.sym("scroll_table_b+0x00"), # index
+	0x803311B0: table.sym("scroll_table_b+0x0C"), # data
+	0x803311C4: table.sym("scroll_table_b+0x20"), # layer
 
-	0x8033127C: table.sym("scroll_data_c+0x00"), # index
-	0x80331288: table.sym("scroll_data_c+0x0C"), # data
-	0x8033129C: table.sym("scroll_data_c+0x20"), # layer
+	0x8033127C: table.sym("scroll_table_c+0x00"), # index
+	0x80331288: table.sym("scroll_table_c+0x0C"), # data
+	0x8033129C: table.sym("scroll_table_c+0x20"), # layer
 
-	0x803317E0: table.sym("prg_obj_data+0x00"), # script
-	0x803317E4: table.sym("prg_obj_data+0x04"), # shape
-	0x803317E6: table.sym("prg_obj_data+0x06"), # arg
+	0x803317E0: table.sym("tag_obj_table+0x00"), # script
+	0x803317E4: table.sym("tag_obj_table+0x04"), # shape
+	0x803317E6: table.sym("tag_obj_table+0x06"), # arg
 
-	0x80332350: table.sym("map_obj_data+0x00"), # index
-	0x80332351: table.sym("map_obj_data+0x01"), # type
-	0x80332352: table.sym("map_obj_data+0x02"), # arg
-	0x80332353: table.sym("map_obj_data+0x03"), # shape
-	0x80332354: table.sym("map_obj_data+0x04"), # script
+	0x80332350: table.sym("map_obj_table+0x00"), # index
+	0x80332351: table.sym("map_obj_table+0x01"), # type
+	0x80332352: table.sym("map_obj_table+0x02"), # arg
+	0x80332353: table.sym("map_obj_table+0x03"), # shape
+	0x80332354: table.sym("map_obj_table+0x04"), # script
 
 	0x803325F0: table.sym("meter+0x00"), # mode
 	0x803325F2: table.sym("meter+0x02"), # x
@@ -9475,8 +9650,8 @@ sym_E0_t_code = {
 	0x8033B26A: table.sym("hud+0x0A"), # flag
 	0x8033B26C: table.sym("hud+0x0C"), # timer
 
-	0x8033B364: table.sym("shape_object_mirror+0x14"), # shape
-	0x8033B368: table.sym("shape_object_mirror+0x18"), # scene
+	0x8033B364: table.sym("sobj_mirror+0x14"), # shape
+	0x8033B368: table.sym("sobj_mirror+0x18"), # scene
 
 	0x8033B3B7: table.sym("pl_shape_data+0x07"), # wing
 
@@ -9526,13 +9701,139 @@ sym_E0_t_code = {
 	0x8033C3C0: table.sym("time+0x30+0"), # gfxrcp
 	0x8033C3C4: table.sym("time+0x30+4"), # gfxrcp
 
-	0x8033D274: table.sym("object_8033D274+0x00"), # ground
-	0x8033D276: table.sym("object_8033D274+0x02"), # roof
-	0x8033D278: table.sym("object_8033D274+0x04"), # wall
+	0x8033C568: table.sym("_camera_bss_48-0x48+0x48"), # la
+	0x8033C578: table.sym("_camera_bss_48-0x48+0x58"), # la
+	0x8033C588: table.sym("_camera_bss_48-0x48+0x68"), # la
+	0x8033C594: table.sym("_camera_bss_48-0x48+0x74"),
+	0x8033C596: table.sym("_camera_bss_48-0x48+0x76"),
+	0x8033C598: table.sym("_camera_bss_48-0x48+0x78"),
+	0x8033C5A0: table.sym("_camera_bss_48-0x48+0x80"),
+	0x8033C5A4: table.sym("_camera_bss_48-0x48+0x84"),
+	0x8033C5A8: table.sym("_camera_bss_48-0x48+0x88"),
+	0x8033C5AC: table.sym("_camera_bss_48-0x48+0x8C"),
+	0x8033C5B0: table.sym("_camera_bss_48-0x48+0x90"),
+	0x8033C5B4: table.sym("_camera_bss_48-0x48+0x94"),
+	0x8033C5B6: table.sym("_camera_bss_48-0x48+0x96"),
+	0x8033C5B8: table.sym("_camera_bss_48-0x48+0x98"),
+	0x8033C5C0: table.sym("_camera_bss_48-0x48+0xA0"),
+	0x8033C5C2: table.sym("_camera_bss_48-0x48+0xA2"),
+	0x8033C5C4: table.sym("_camera_bss_48-0x48+0xA4"),
+	0x8033C5C8: table.sym("_camera_bss_48-0x48+0xA8"),
+	0x8033C5CA: table.sym("_camera_bss_48-0x48+0xAA"),
+	0x8033C5CC: table.sym("_camera_bss_48-0x48+0xAC"),
+	0x8033C5D0: table.sym("_camera_bss_48-0x48+0xB0"),
+	0x8033C5D2: table.sym("_camera_bss_48-0x48+0xB2"),
+	0x8033C5D4: table.sym("_camera_bss_48-0x48+0xB4"),
+	0x8033C5E8: table.sym("_camera_bss_48-0x48+0xC8"),
+	0x8033C5EC: table.sym("_camera_bss_48-0x48+0xCC"),
+	0x8033C5F0: table.sym("_camera_bss_48-0x48+0xD0"),
+	0x8033C5F4: table.sym("_camera_bss_48-0x48+0xD4"),
+	0x8033C5F8: table.sym("_camera_bss_48-0x48+0xD8"),
+	0x8033C5FC: table.sym("_camera_bss_48-0x48+0xDC"),
+	0x8033C600: table.sym("_camera_bss_48-0x48+0xE0"),
+	0x8033C604: table.sym("_camera_bss_48-0x48+0xE4"),
+	0x8033C608: table.sym("_camera_bss_48-0x48+0xE8"),
+	0x8033C60C: table.sym("_camera_bss_48-0x48+0xEC"),
+	0x8033C610: table.sym("_camera_bss_48-0x48+0xF0"),
+	0x8033C614: table.sym("_camera_bss_48-0x48+0xF4"),
+	0x8033C61C: table.sym("_camera_bss_48-0x48+0xFC"),
+	0x8033C61E: table.sym("_camera_bss_48-0x48+0xFE"),
+	0x8033C620: table.sym("_camera_bss_48-0x48+0x100"),
+	0x8033C622: table.sym("_camera_bss_48-0x48+0x102"),
+	0x8033C624: table.sym("_camera_bss_48-0x48+0x104"),
+	0x8033C628: table.sym("_camera_bss_48-0x48+0x108"),
+	0x8033C630: table.sym("_camera_bss_48-0x48+0x110"),
+	0x8033C632: table.sym("_camera_bss_48-0x48+0x112"),
+	0x8033C634: table.sym("_camera_bss_48-0x48+0x114"),
+	0x8033C668: table.sym("_camera_bss_48-0x48+0x148"),
+	0x8033C66C: table.sym("_camera_bss_48-0x48+0x14C"),
+	0x8033C670: table.sym("_camera_bss_48-0x48+0x150"),
+	0x8033C674: table.sym("_camera_bss_48-0x48+0x154"),
+	0x8033C676: table.sym("_camera_bss_48-0x48+0x156"),
+	0x8033C678: table.sym("_camera_bss_48-0x48+0x158"),
+	0x8033C67C: table.sym("_camera_bss_48-0x48+0x15C"),
+	0x8033C680: table.sym("_camera_bss_48-0x48+0x160"),
+	0x8033C684: table.sym("_camera_bss_48-0x48+0x164"),
+	0x8033C686: table.sym("_camera_bss_48-0x48+0x166"),
+	0x8033C688: table.sym("_camera_bss_48-0x48+0x168"),
+	0x8033C68A: table.sym("_camera_bss_48-0x48+0x16A"),
+	0x8033C68C: table.sym("_camera_bss_48-0x48+0x16C"),
+	0x8033C68E: table.sym("_camera_bss_48-0x48+0x16E"),
+	0x8033C690: table.sym("_camera_bss_48-0x48+0x170"),
+
+	0x8033C6D4: table.sym("camdata+0x3C"),
+	0x8033C6D5: table.sym("camdata+0x3D"),
+	0x8033C6F0: table.sym("camdata+0x58"),
+	0x8033C6F2: table.sym("camdata+0x5A"),
+	0x8033C6F4: table.sym("camdata+0x5C"),
+	0x8033C712: table.sym("camdata+0x7A"),
+	0x8033C714: table.sym("camdata+0x7C"),
+	0x8033C716: table.sym("camdata+0x7E"),
+	0x8033C730: table.sym("camdata+0x98"),
+	0x8033C732: table.sym("camdata+0x9A"),
+	0x8033C734: table.sym("camdata+0x9C"),
+	0x8033C736: table.sym("camdata+0x9E"),
+	0x8033C738: table.sym("camdata+0xA0"),
+	0x8033C73A: table.sym("camdata+0xA2"),
+	0x8033C73C: table.sym("camdata+0xA4"),
+	0x8033C740: table.sym("camdata+0xA8"),
+	0x8033C744: table.sym("camdata+0xAC"),
+	0x8033C748: table.sym("camdata+0xB0"),
+	0x8033C74C: table.sym("camdata+0xB4"),
+	0x8033C750: table.sym("camdata+0xB8"),
+	0x8033C754: table.sym("camdata+0xBC"),
+
+	0x8033C75A: table.sym("_camera_bss_238-0x238+0x23A"),
+	0x8033C75C: table.sym("_camera_bss_238-0x238+0x23C"),
+	0x8033C75E: table.sym("_camera_bss_238-0x238+0x23E"),
+	0x8033C760: table.sym("_camera_bss_238-0x238+0x240"),
+	0x8033C764: table.sym("_camera_bss_238-0x238+0x244"),
+	0x8033C768: table.sym("_camera_bss_238-0x238+0x248"),
+	0x8033C76A: table.sym("_camera_bss_238-0x238+0x24A"),
+	0x8033C76C: table.sym("_camera_bss_238-0x238+0x24C"),
+	0x8033C770: table.sym("_camera_bss_238-0x238+0x250"),
+	0x8033C772: table.sym("_camera_bss_238-0x238+0x252"),
+	0x8033C774: table.sym("_camera_bss_238-0x238+0x254"),
+	0x8033C776: table.sym("_camera_bss_238-0x238+0x256"),
+	0x8033C778: table.sym("_camera_bss_238-0x238+0x258"),
+	0x8033C77C: table.sym("_camera_bss_238-0x238+0x25C"),
+	0x8033C780: table.sym("_camera_bss_238-0x238+0x260"),
+	0x8033C788: table.sym("_camera_bss_238-0x238+0x268"),
+	0x8033C78A: table.sym("_camera_bss_238-0x238+0x26A"),
+	0x8033C78C: table.sym("_camera_bss_238-0x238+0x26C"),
+	0x8033C78E: table.sym("_camera_bss_238-0x238+0x26E"),
+	0x8033C7A8: table.sym("_camera_bss_238-0x238+0x288"),
+	0x8033C7AE: table.sym("_camera_bss_238-0x238+0x28E"),
+	0x8033C7D0: table.sym("_camera_bss_238-0x238+0x2B0"), # la
+	0x8033C7DC: table.sym("_camera_bss_238-0x238+0x2BC"),
+	0x8033C7E0: table.sym("_camera_bss_238-0x238+0x2C0"),
+	0x8033C7E8: table.sym("_camera_bss_238-0x238+0x2C8"), # la
+	0x8033C808: table.sym("_camera_bss_238-0x238+0x2E8"), # la
+	0x8033C828: table.sym("_camera_bss_238-0x238+0x308"), # la
+	0x8033C840: table.sym("_camera_bss_238-0x238+0x320"),
+	0x8033C844: table.sym("_camera_bss_238-0x238+0x324"),
+	0x8033C848: table.sym("_camera_bss_238-0x238+0x328"),
+	0x8033C84A: table.sym("_camera_bss_238-0x238+0x32A"),
+	0x8033C850: table.sym("_camera_bss_238-0x238+0x330"),
+	0x8033C950: table.sym("_camera_bss_238-0x238+0x430"),
+	0x8033CA50: table.sym("_camera_bss_238-0x238+0x530"),
+	0x8033CA54: table.sym("_camera_bss_238-0x238+0x534"),
+	0x8033CA58: table.sym("_camera_bss_238-0x238+0x538"),
+	0x8033CA5A: table.sym("_camera_bss_238-0x238+0x53A"),
+	0x8033CA5C: table.sym("_camera_bss_238-0x238+0x53C"),
+	0x8033CA60: table.sym("_camera_bss_238-0x238+0x540"),
+	0x8033CA82: table.sym("_camera_bss_238-0x238+0x562"),
+	0x8033CBC8: table.sym("_camera_bss_238-0x238+0x6A8"),
+	0x8033CBCC: table.sym("_camera_bss_238-0x238+0x6AC"),
+	0x8033CBD0: table.sym("_camera_bss_238-0x238+0x6B0"),
+
+	0x8033D274: table.sym("bg_debug+0x00"), # ground
+	0x8033D276: table.sym("bg_debug+0x02"), # roof
+	0x8033D278: table.sym("bg_debug+0x04"), # wall
 	0x8033D4FC: table.sym("object_data+0x74"), # flag
 	0x80360EA0: table.sym("object_dummy+0x0C"), # list.s.scene
 	0x80360EA1: table.sym("object_dummy+0x0D"), # list.s.group
-	0x80361150: table.sym("obj_list_free+0x60"), # next
+	0x80361150: table.sym("obj_freelist+0x60"), # next
 	0x803611D8: table.sym("object_803611D8+1*0"),
 	0x803611D9: table.sym("object_803611D8+1*1"),
 
@@ -9746,15 +10047,15 @@ sym_E0_d_code = {
 	# ==========================================================================
 
 	# src/main.c
-	0x8032D560: table.sym_var("sc_client_1", "SC_CLIENT *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D564: table.sym_var("sc_client_2", "SC_CLIENT *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D568: table.sym_var("sc_task", "SC_TASK *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D56C: table.sym_var("sc_audtask", "SC_TASK *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D570: table.sym_var("sc_gfxtask", "SC_TASK *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D574: table.sym_var("sc_audtask_next", "SC_TASK *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D578: table.sym_var("sc_gfxtask_next", "SC_TASK *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D57C: table.sym_var("sc_aud", "char", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D580: table.sym_var("sc_vi", "u32", flag=table.GLOBL|ultra.DALIGN),
+	0x8032D560: table.sym_var("sc_client_1", "SC_CLIENT *", flag=ultra.DALIGN),
+	0x8032D564: table.sym_var("sc_client_2", "SC_CLIENT *", flag=ultra.DALIGN),
+	0x8032D568: table.sym_var("sc_task", "SC_TASK *", flag=ultra.DALIGN),
+	0x8032D56C: table.sym_var("sc_audtask", "SC_TASK *", flag=ultra.DALIGN),
+	0x8032D570: table.sym_var("sc_gfxtask", "SC_TASK *", flag=ultra.DALIGN),
+	0x8032D574: table.sym_var("sc_audtask_next", "SC_TASK *", flag=ultra.DALIGN),
+	0x8032D578: table.sym_var("sc_gfxtask_next", "SC_TASK *", flag=ultra.DALIGN),
+	0x8032D57C: table.sym_var("sc_aud", "char", flag=ultra.DALIGN),
+	0x8032D580: table.sym_var("sc_vi", "u32", flag=ultra.DALIGN),
 	0x8032D584: table.sym_var("reset_timer", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032D588: table.sym_var("reset_frame", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032D58C: table.sym_var("debug_stage", "char", flag=table.GLOBL|ultra.DALIGN),
@@ -9767,7 +10068,7 @@ sym_E0_d_code = {
 	0x8032D5C0: table.sym_var("debug_mem_index", "s16", flag=ultra.DALIGN),
 
 	# src/graphics.c
-	0x8032D5D0: table.sym_var("gfx_8032D5D0", "u32", flag=table.GLOBL|ultra.DALIGN), # unused
+	0x8032D5D0: table.sym_var("gfx_8032D5D0", "char", flag=ultra.DALIGN), # unused
 	0x8032D5D4: table.sym_var("gfx_frame", "u32", flag=table.GLOBL|ultra.DALIGN),
 	0x8032D5D8: table.sym_var("gfx_vi", "u16", flag=table.GLOBL|ultra.DALIGN),
 	0x8032D5DC: table.sym_var("gfx_dp", "u16", flag=table.GLOBL|ultra.DALIGN),
@@ -9780,22 +10081,23 @@ sym_E0_d_code = {
 	0x8032D5F8: table.sym_var("demo_record", "DEMO"),
 
 	# src/audio.c
-	0x8032D600: table.sym_var("aud_mute", "u8", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D604: table.sym_var("aud_lock", "u8", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D608: table.sym_var("bgm_stage", "u16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D60C: table.sym_var("bgm_shell", "u16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D610: table.sym_var("bgm_special", "u16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D614: table.sym_var("aud_endless", "unsigned char", flag=table.GLOBL|ultra.DALIGN),
-	0x8032D618: table.sym_var("aud_8032D618", "u32", "[4]", table.GLOBL),
-	0x8032D628: table.sym_var("aud_output_table", "s16", "[]", table.GLOBL),
-	0x8032D630: table.sym_var("aud_env_se_data", "NA_SE", "[]", table.GLOBL),
+	0x8032D600: table.sym_var("aud_mute", "u8", flag=ultra.DALIGN),
+	0x8032D604: table.sym_var("aud_lock", "u8", flag=ultra.DALIGN),
+	0x8032D608: table.sym_var("bgm_stage", "u16", flag=ultra.DALIGN),
+	0x8032D60C: table.sym_var("bgm_shell", "u16", flag=ultra.DALIGN),
+	0x8032D610: table.sym_var("bgm_special", "u16", flag=ultra.DALIGN),
+	0x8032D614: table.sym_var("aud_endless", "unsigned char", flag=ultra.DALIGN),
+	0x8032D618: table.sym_var("aud_8032D618", "char"), # unused
+	0x8032D61C: table.sym_var("aud_8032D61C", "VECF"), # unused
+	0x8032D628: table.sym_var("aud_output_table", "s16", "[]"),
+	0x8032D630: table.sym_var("aud_env_se_table", "NA_SE", "[]"),
 	0x8032D6C0: table.sym_var("aud_wave", "char", flag=ultra.DALIGN),
 
-	# src/pl_physics.c
+	# src/plphysics.c
 	0x8032DAF0: table.sym_var("pl_physics_8032DAF0", "s16", "[]", table.GLOBL),
-	0x8032DAF8: table.sym_var("pl_physics_8032DAF8", "MAP_PLANE", flag=table.GLOBL),
+	0x8032DAF8: table.sym_var("pl_physics_8032DAF8", "BGFACE", flag=table.GLOBL),
 
-	# src/pl_grab.c
+	# src/plgrab.c
 	0x8032DD40: table.sym_var("pl_grab_8032DD40", "s8", "[]", table.GLOBL),
 
 	# src/game.c
@@ -9819,13 +10121,13 @@ sym_E0_d_code = {
 	0x8032D7AC: table.sym_var("staff_18", "static const char *", "[]"),
 	0x8032D7BC: table.sym_var("staff_19", "static const char *", "[]"),
 	0x8032D7C4: table.sym_var("staff_20", "static const char *", "[]"),
-	0x8032D7CC: table.sym_var("staff_data", "STAFF", "[]", table.GLOBL),
+	0x8032D7CC: table.sym_var("staff_table", "STAFF", "[]", table.GLOBL),
 	0x8032D93C: table.sym_var("mario", "PLAYER *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032D940: table.sym_var("game_8032D940", "s16", flag=table.GLOBL|ultra.DALIGN), # unused
 	0x8032D944: table.sym_var("game_8032D944", "s8", flag=table.GLOBL|ultra.DALIGN),
 
 	# src/collision.c
-	0x8032D950: table.sym_var("collision_data", "COLLISION", "[]", table.GLOBL),
+	0x8032D950: table.sym_var("collision_table", "COLLISION", "[]", table.GLOBL),
 	0x8032DA48: table.sym_var("collision_8032DA48", "u32", "[]", table.GLOBL),
 	0x8032DA6C: table.sym_var("collision_8032DA6C", "u32", "[]", table.GLOBL),
 	0x8032DA90: table.sym_var("collision_8032DA90", "u8", flag=table.GLOBL|ultra.DALIGN),
@@ -9837,9 +10139,9 @@ sym_E0_d_code = {
 	0x8032DACC: table.sym_var("player_8032DACC", "u8", "[]", table.GLOBL),
 	0x8032DAE0: table.sym_var("player_8032DAE0", "u64", flag=table.GLOBL),
 
-	# src/pl_demo.c
+	# src/pldemo.c
 	0x8032DB30: table.sym_var("vp_pl_demo", "Vp", flag=table.GLOBL),
-	0x8032DB40: table.sym_var("pl_demo_staff", "struct staff *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DB40: table.sym_var("pl_demo_staff", "STAFF *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DB44: table.sym_var("pl_demo_8032DB44", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DB48: table.sym_var("pl_demo_8032DB48", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DB4C: table.sym_var("pl_demo_8032DB4C", "s8", "[]", table.GLOBL),
@@ -9849,7 +10151,7 @@ sym_E0_d_code = {
 	0x8032DC38: table.sym_var("pl_demo_8032DC38", "s32", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DC3C: table.sym_var("pl_demo_8032DC3C", "u8", "[]", table.GLOBL),
 
-	# src/pl_walk.c
+	# src/plwalk.c
 	0x8032DC50: table.sym_var("pl_walk_8032DC50", "PL_WALK", flag=table.GLOBL),
 	0x8032DC68: table.sym_var("pl_walk_8032DC68", "PL_WALK", flag=table.GLOBL),
 	0x8032DC80: table.sym_var("pl_walk_8032DC80", "PL_WALK", flag=table.GLOBL),
@@ -9860,18 +10162,18 @@ sym_E0_d_code = {
 	0x8032DCF8: table.sym_var("pl_walk_8032DCF8", "PL_WALK", flag=table.GLOBL),
 	0x8032DD10: table.sym_var("pl_walk_8032DD10", "PL_WALK", flag=table.GLOBL),
 
-	# src/pl_swim.c
+	# src/plswim.c
 	0x8032DD30: table.sym_var("pl_swim_8032DD30", "s16", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DD34: table.sym_var("pl_swim_8032DD34", "s16", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DD38: table.sym_var("pl_swim_8032DD38", "s16", "[]", table.GLOBL),
 
-	# src/pl_callback.c
-	0x8032DD50: table.sym_var("pl_callback_8032DD50", "s8", "[]", table.GLOBL),
-	0x8032DD58: table.sym_var("pl_callback_8032DD58", "s8", "[]", table.GLOBL),
-	0x8032DD6C: table.sym_var("pl_callback_8032DD6C", "s16", flag=table.GLOBL|ultra.DALIGN),
+	# src/plcallback.c
+	0x8032DD50: table.sym_var("pl_eyes_table", "s8", "[]"),
+	0x8032DD58: table.sym_var("pl_punch_table", "s8", "[]"),
+	0x8032DD6C: table.sym_var("pl_punch_timer", "s16", flag=ultra.DALIGN),
 
 	# src/memory.c
-	0x8032DD70: table.sym_var("mem_frame", "MEM_FRAME *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DD70: table.sym_var("mem_frame", "MEM_FRAME *", flag=ultra.DALIGN),
 
 	# src/save.c
 	0x8032DD80: table.sym_var("save_course", "u8", flag=table.GLOBL|ultra.DALIGN),
@@ -9888,14 +10190,14 @@ sym_E0_d_code = {
 	0x8032DDC8: table.sym_var("scene_table", "SCENE *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DDCC: table.sym_var("scene", "SCENE *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DDD0: table.sym_var("staff", "STAFF *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDD4: table.sym_var("scene_viewport", "Vp *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDD8: table.sym_var("scene_scissor", "Vp *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDDC: table.sym_var("wipe_delay", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDE0: table.sym_var("scene_fill", "u32", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDE4: table.sym_var("blank_fill", "u32", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDE8: table.sym_var("blank_r", "u8", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDEC: table.sym_var("blank_g", "u8", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DDF0: table.sym_var("blank_b", "u8", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DDD4: table.sym_var("scene_viewport", "Vp *", flag=ultra.DALIGN),
+	0x8032DDD8: table.sym_var("scene_scissor", "Vp *", flag=ultra.DALIGN),
+	0x8032DDDC: table.sym_var("wipe_delay", "s16", flag=ultra.DALIGN),
+	0x8032DDE0: table.sym_var("scene_fill", "u32", flag=ultra.DALIGN),
+	0x8032DDE4: table.sym_var("blank_fill", "u32", flag=ultra.DALIGN),
+	0x8032DDE8: table.sym_var("blank_r", "u8", flag=ultra.DALIGN),
+	0x8032DDEC: table.sym_var("blank_g", "u8", flag=ultra.DALIGN),
+	0x8032DDF0: table.sym_var("blank_b", "u8", flag=ultra.DALIGN),
 	0x8032DDF4: table.sym_var("save_index", "s16", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DDF8: table.sym_var("stage_index", "s16", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DDFC: table.sym_var("port_script", "O_SCRIPT *", "[]"),
@@ -9903,20 +10205,20 @@ sym_E0_d_code = {
 	0x8032DE60: table.sym_var("vp_default", "Vp"),
 
 	# src/draw.c
-	0x8032DE70: table.sym_var("draw_rendermode_1", "u32", "[2][8]", table.GLOBL),
-	0x8032DEB0: table.sym_var("draw_rendermode_2", "u32", "[2][8]", table.GLOBL),
-	0x8032DEF0: table.sym_var("shape_scene", "SHAPE_SCENE *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DEF4: table.sym_var("shape_layer", "SHAPE_LAYER *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DEF8: table.sym_var("shape_persp", "SHAPE_PERSP *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DEFC: table.sym_var("shape_camera", "SHAPE_CAMERA *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DF00: table.sym_var("shape_object", "SHAPE_OBJECT *", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DF04: table.sym_var("shape_hand", "SHAPE_HAND *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DE70: table.sym_var("draw_rendermode_1", "u32", "[2][8]"),
+	0x8032DEB0: table.sym_var("draw_rendermode_2", "u32", "[2][8]"),
+	0x8032DEF0: table.sym_var("s_scene", "S_SCENE *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DEF4: table.sym_var("s_layer", "S_LAYER *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DEF8: table.sym_var("s_persp", "S_PERSP *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DEFC: table.sym_var("s_camera", "S_CAMERA *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DF00: table.sym_var("s_object", "S_OBJECT *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DF04: table.sym_var("s_hand", "S_HAND *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DF08: table.sym_var("draw_timer", "u16", flag=table.GLOBL|ultra.DALIGN),
 
 	# src/time.c
-	0x8032DF10: table.sym_var("time_mode", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DF14: table.sym_var("time_cpu", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DF18: table.sym_var("time_rcp", "s16", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DF10: table.sym_var("time_mode", "s16", flag=ultra.DALIGN),
+	0x8032DF14: table.sym_var("time_cpu", "s16", flag=ultra.DALIGN),
+	0x8032DF18: table.sym_var("time_rcp", "s16", flag=ultra.DALIGN),
 
 	# src/camera.c
 	0x8032DF20: table.sym_var("camera_8032DF20", "s32", flag=table.GLOBL|ultra.DALIGN), # unused
@@ -9935,8 +10237,8 @@ sym_E0_d_code = {
 	0x8032DF54: table.sym_var("camera_8032DF54", "u8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DF58: table.sym_var("camera_8032DF58", "u8", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DF5C: table.sym_var("camera_8032DF5C", "u8", flag=table.GLOBL|ultra.DALIGN),
-	0x8032DF60: table.sym_var("camera_8032DF60", "void *", flag=table.GLOBL|ultra.DALIGN), # type
-	0x8032DF64: table.sym_var("camera_8032DF64", "void *", flag=table.GLOBL|ultra.DALIGN), # type
+	0x8032DF60: table.sym_var("mario_camera", "PL_CAMERA *", flag=table.GLOBL|ultra.DALIGN),
+	0x8032DF64: table.sym_var("luigi_camera", "PL_CAMERA *", flag=table.GLOBL|ultra.DALIGN),
 	0x8032DF68: table.sym_var("camera_8032DF68", "s32", flag=table.GLOBL|ultra.DALIGN), # unused
 	0x8032DF6C: table.sym_var("camera_8032DF6C", "VECF", flag=table.GLOBL),
 	0x8032DF78: table.sym_var("camera_8032DF78", "VECF", flag=table.GLOBL), # unused
@@ -9944,7 +10246,7 @@ sym_E0_d_code = {
 	0x8032DF90: table.sym_var("camera_8032DF90", "VECF", flag=table.GLOBL), # unused
 	0x8032DF9C: table.sym_var("camera_8032DF9C", "VECF", flag=table.GLOBL), # unused
 	0x8032DFA8: table.sym_var_fnc("camera_8032DFA8", lst="[]", val="int", arg=(
-		"struct camera *",
+		"CAMERA *",
 		"VECF",
 		"VECF",
 	), flag=table.GLOBL),
@@ -9964,7 +10266,7 @@ sym_E0_d_code = {
 	0x8032E368: table.sym_var("camctl_ccm", "CAMCTL", "[]", flag=table.GLOBL),
 	0x8032E3B0: table.sym_var("camctl_inside", "CAMCTL", "[]", flag=table.GLOBL),
 	0x8032E6F8: table.sym_var("camctl_bbh", "CAMCTL", "[]", flag=table.GLOBL),
-	0x8032ECB0: table.sym_var("camctl_data", "CAMCTL *", "[]", flag=table.GLOBL),
+	0x8032ECB0: table.sym_var("camctl_table", "CAMCTL *", "[]", flag=table.GLOBL),
 	0x8032ED50: table.sym_var("campath_8032ED50", "CAMPATH", "[]", flag=table.GLOBL),
 	0x8032EE08: table.sym_var("campath_8032EE08", "CAMPATH", "[]", flag=table.GLOBL),
 	0x8032EEC0: table.sym_var("campath_8032EEC0", "CAMPATH", "[]", flag=table.GLOBL),
@@ -10026,8 +10328,8 @@ sym_E0_d_code = {
 	0x8032F7C4: table.sym_var("camdemo_8032F7C4", "CAMDEMO", "[]", flag=table.GLOBL),
 	0x8032F7D4: table.sym_var("camdemo_8032F7D4", "CAMDEMO", "[]", flag=table.GLOBL),
 	0x8032F7EC: table.sym_var("camdemo_8032F7EC", "CAMDEMO", "[]", flag=table.GLOBL),
-	0x8032F804: table.sym_var("camera_windemo_data", "u8", "[][4]", table.GLOBL),
-	0x8032F870: table.sym_var("camera_pause_data", "u8", "[]", table.GLOBL),
+	0x8032F804: table.sym_var("camera_windemo_table", "u8", "[][4]", table.GLOBL),
+	0x8032F870: table.sym_var("camera_pause_table", "u8", "[]", table.GLOBL),
 	0x8032F884: table.sym_var("campath_battlefield_eye", "CAMPATH", "[]", flag=table.GLOBL),
 	0x8032F8AC: table.sym_var("campath_battlefield_look", "CAMPATH", "[]", flag=table.GLOBL),
 	0x8032F8D4: table.sym_var("campath_wf1_eye", "CAMPATH", "[]", flag=table.GLOBL),
@@ -10071,93 +10373,93 @@ sym_E0_d_code = {
 
 	# src/object.c
 	0x8032FEC0: table.sym_var("object_8032FEC0", "s8", "[]", table.GLOBL),
-	0x8032FECC: table.sym_var("pl_pcl_data", "PL_PCL", "[]", table.GLOBL),
+	0x8032FECC: table.sym_var("pl_pcl_table", "PL_PCL", "[]", table.GLOBL),
 
-	# src/obj_lib.c
-	0x80330000: table.sym_var("obj_lib_80330000", "s8", "[]", table.GLOBL),
-	0x80330004: table.sym_var("obj_lib_80330004", "s16", "[]", table.GLOBL),
-	0x80330014: table.sym_var("obj_lib_80330014", "s8", "[]", table.GLOBL),
+	# src/objlib.c
+	0x80330000: table.sym_var("objlib_80330000", "s8", "[]", table.GLOBL),
+	0x80330004: table.sym_var("objlib_80330004", "s16", "[]", table.GLOBL),
+	0x80330014: table.sym_var("objlib_80330014", "s8", "[]", table.GLOBL),
 
 	# src/object_a.c
 	0x80330020: table.sym_var("object_a_80330020", "u32", "[]", table.GLOBL),
 	0x8033002C: table.sym_var("object_a_8033002C", "s16", "[]", table.GLOBL),
-	0x8033006C: table.sym_var("object_a_8033006C", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330074: table.sym_var("object_a_80330074", "O_CALLBACK *", "[]", table.GLOBL),
+	0x8033006C: table.sym_var("object_a_8033006C", "OBJCALL *", "[]", table.GLOBL),
+	0x80330074: table.sym_var("object_a_80330074", "OBJCALL *", "[]", table.GLOBL),
 	0x80330084: table.sym_var("object_a_80330084", "OBJ_COL", flag=table.GLOBL),
 	0x80330094: table.sym_var("object_a_80330094", "OBJ_PCL", flag=table.GLOBL),
 	0x803300A8: table.sym_var("object_a_803300A8", "u8", "[]", table.GLOBL), # unused
-	0x803300AC: table.sym_var("object_a_803300AC", "O_CALLBACK *", "[]", table.GLOBL),
-	0x803300BC: table.sym_var("object_a_803300BC", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803300AC: table.sym_var("object_a_803300AC", "OBJCALL *", "[]", table.GLOBL),
+	0x803300BC: table.sym_var("object_a_803300BC", "OBJCALL *", "[]", table.GLOBL),
 	0x803300E0: table.sym_var("object_a_803300E0", "OBJ_SFX", "[]", table.GLOBL),
-	0x80330140: table.sym_var("object_a_80330140", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330140: table.sym_var("object_a_80330140", "OBJCALL *", "[]", table.GLOBL),
 	0x8033015C: table.sym_var("object_a_8033015C", "struct object_a_0", "[]", table.GLOBL), # unused
-	0x80330198: table.sym_var("object_a_80330198", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330198: table.sym_var("object_a_80330198", "OBJCALL *", "[]", table.GLOBL),
 	0x803301A8: table.sym_var("object_a_803301A8", "struct object_a_1", "[]", table.GLOBL),
 	0x803301C0: table.sym_var("object_a_803301C0", "OBJ_COL", flag=table.GLOBL),
 	0x803301D0: table.sym_var("object_a_803301D0", "OBJ_PCL", flag=table.GLOBL),
 	0x803301E4: table.sym_var("object_a_803301E4", "OBJ_COL", flag=table.GLOBL),
 	0x803301F4: table.sym_var("object_a_803301F4", "OBJ_COL", flag=table.GLOBL),
 	0x80330204: table.sym_var("object_a_80330204", "s16", "[][2]", table.GLOBL),
-	0x80330224: table.sym_var("object_a_80330224", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330224: table.sym_var("object_a_80330224", "OBJCALL *", "[]", table.GLOBL),
 	0x8033022C: table.sym_var("object_a_8033022C", "s16", "[][2]", table.GLOBL),
 	0x80330244: table.sym_var("object_a_80330244", "s16", "[][2]", table.GLOBL),
 	0x80330260: table.sym_var("object_a_80330260", "s32", "[][2]", table.GLOBL),
 	0x80330288: table.sym_var("object_a_80330288", "NA_SE", "[]", table.GLOBL),
 	0x80330290: table.sym_var("object_a_80330290", "NA_SE", "[]", table.GLOBL),
-	0x80330298: table.sym_var("object_a_80330298", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330298: table.sym_var("object_a_80330298", "OBJCALL *", "[]", table.GLOBL),
 	0x803302AC: table.sym_var("object_a_803302AC", "struct object_a_2", "[]", table.GLOBL),
-	0x803302DC: table.sym_var("object_a_803302DC", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803302DC: table.sym_var("object_a_803302DC", "OBJCALL *", "[]", table.GLOBL),
 	0x803302EC: table.sym_var("object_a_803302EC", "s16", "[][3]", table.GLOBL),
-	0x80330318: table.sym_var("object_a_80330318", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330318: table.sym_var("object_a_80330318", "OBJCALL *", "[]", table.GLOBL),
 	0x8033032C: table.sym_var("object_a_8033032C", "OBJ_PCL", flag=table.GLOBL),
 	0x80330340: table.sym_var("object_a_80330340", "OBJ_PCL", flag=table.GLOBL),
 	0x80330354: table.sym_var("object_a_80330354", "s16", "[]", table.GLOBL),
 	0x8033035C: table.sym_var("object_a_8033035C", "OBJ_PCL", flag=table.GLOBL),
-	0x80330370: table.sym_var("object_a_80330370", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330370: table.sym_var("object_a_80330370", "OBJCALL *", "[]", table.GLOBL),
 	0x80330380: table.sym_var("object_a_80330380", "f32", "[]", table.GLOBL),
 	0x80330390: table.sym_var("object_a_80330390", "OBJ_COL", flag=table.GLOBL),
 	0x803303A0: table.sym_var("object_a_803303A0", "OBJ_COL", flag=table.GLOBL),
 	0x803303B0: table.sym_var("object_a_803303B0", "OBJ_COL", flag=table.GLOBL),
 	0x803303C0: table.sym_var("object_a_803303C0", "s16", "[][2]", table.GLOBL),
-	0x803303E8: table.sym_var("object_a_803303E8", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803303E8: table.sym_var("object_a_803303E8", "OBJCALL *", "[]", table.GLOBL),
 	0x803303F8: table.sym_var("object_a_803303F8", "OBJ_COL", flag=table.GLOBL),
-	0x80330408: table.sym_var("object_a_80330408", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330408: table.sym_var("object_a_80330408", "OBJCALL *", "[]", table.GLOBL),
 	0x80330410: table.sym_var("object_a_80330410", "OBJ_COL", flag=table.GLOBL),
-	0x80330420: table.sym_var("object_a_80330420", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330420: table.sym_var("object_a_80330420", "OBJCALL *", "[]", table.GLOBL),
 	0x8033042C: table.sym_var("object_a_8033042C", "OBJ_COL", flag=table.GLOBL),
-	0x8033043C: table.sym_var("object_a_8033043C", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330450: table.sym_var("object_a_80330450", "O_CALLBACK *", "[]", table.GLOBL),
+	0x8033043C: table.sym_var("object_a_8033043C", "OBJCALL *", "[]", table.GLOBL),
+	0x80330450: table.sym_var("object_a_80330450", "OBJCALL *", "[]", table.GLOBL),
 	0x8033045C: table.sym_var("object_a_8033045C", "s8", "[]", table.GLOBL),
 	0x8033046C: table.sym_var("object_a_8033046C", "s16", "[]", table.GLOBL),
 	0x80330470: table.sym_var("object_a_80330470", "s16", "[]", table.GLOBL),
 	0x80330474: table.sym_var("object_a_80330474", "s8", "[]", table.GLOBL),
 	0x80330478: table.sym_var("object_a_80330478", "s16", "[]", table.GLOBL),
 	0x80330480: table.sym_var("object_a_80330480", "s16", "[][3]", table.GLOBL),
-	0x803304C8: table.sym_var("object_a_803304C8", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803304C8: table.sym_var("object_a_803304C8", "OBJCALL *", "[]", table.GLOBL),
 	0x80330518: table.sym_var("object_a_80330518", "OBJ_SFX", "[]", table.GLOBL),
 	0x803305F0: table.sym_var("object_a_803305F0", "s8", "[]", table.GLOBL),
 	0x803305F4: table.sym_var("object_a_803305F4", "s8", "[]", table.GLOBL),
 	0x803305F8: table.sym_var("object_a_803305F8", "struct object_a_3", "[]", table.GLOBL),
-	0x8033067C: table.sym_var("object_a_8033067C", "O_CALLBACK *", "[]", table.GLOBL),
+	0x8033067C: table.sym_var("object_a_8033067C", "OBJCALL *", "[]", table.GLOBL),
 	0x80330688: table.sym_var("object_a_80330688", "OBJ_COL", flag=table.GLOBL),
 	0x80330698: table.sym_var("object_a_80330698", "OBJ_COL", flag=table.GLOBL),
 	0x803306A8: table.sym_var("object_a_803306A8", "f32", "[]", table.GLOBL),
 	0x803306B4: table.sym_var("object_a_803306B4", "struct object_a_4", "[]", table.GLOBL),
-	0x803306DC: table.sym_var("object_a_803306DC", "PATH_DATA", "[]", table.GLOBL),
+	0x803306DC: table.sym_var("object_a_803306DC", "PATH", "[]", table.GLOBL),
 	0x80330738: table.sym_var("object_a_80330738", "OBJ_SFX", "[]", table.GLOBL),
-	0x803307A0: table.sym_var("object_a_803307A0", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803307A0: table.sym_var("object_a_803307A0", "OBJCALL *", "[]", table.GLOBL),
 	0x803307C0: table.sym_var("object_a_803307C0", "static s16", "[]"),
 	0x803307F4: table.sym_var("object_a_803307F4", "static s16", "[]"),
 	0x80330828: table.sym_var("object_a_80330828", "s16 *", "[]", table.GLOBL),
-	0x80330830: table.sym_var("object_a_80330830", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330830: table.sym_var("object_a_80330830", "OBJCALL *", "[]", table.GLOBL),
 	0x80330840: table.sym_var("object_a_80330840", "OBJ_COL", flag=table.GLOBL),
 	0x80330850: table.sym_var("object_a_80330850", "static s8", "[]"),
 	0x80330884: table.sym_var("object_a_80330884", "static s8", "[]"),
 	0x803308A8: table.sym_var("object_a_803308A8", "static s8", "[]"),
 	0x803308CC: table.sym_var("object_a_803308CC", "s8 *", "[]", table.GLOBL),
-	0x803308D8: table.sym_var("object_a_803308D8", "O_CALLBACK *", "[]", table.GLOBL),
+	0x803308D8: table.sym_var("object_a_803308D8", "OBJCALL *", "[]", table.GLOBL),
 	0x803308F8: table.sym_var("object_a_803308F8", "s8", "[]", table.GLOBL),
-	0x80330900: table.sym_var("object_a_80330900", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330900: table.sym_var("object_a_80330900", "OBJCALL *", "[]", table.GLOBL),
 	0x80330924: table.sym_var("object_a_80330924", "static s8", "[]"),
 	0x80330940: table.sym_var("object_a_80330940", "static s8", "[]"),
 	0x8033095C: table.sym_var("object_a_8033095C", "static s8", "[]"),
@@ -10173,27 +10475,27 @@ sym_E0_d_code = {
 	0x80330A74: table.sym_var("object_a_80330A74", "static s8", "[]"),
 	0x80330A90: table.sym_var("object_a_80330A90", "static s8", "[]"),
 	0x80330AAC: table.sym_var("object_a_80330AAC", "struct object_a_5", "[]", table.GLOBL),
-	0x80330B1C: table.sym_var("object_a_80330B1C", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B38: table.sym_var("object_a_80330B38", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B44: table.sym_var("object_a_80330B44", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B5C: table.sym_var("object_a_80330B5C", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B68: table.sym_var("object_a_80330B68", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B74: table.sym_var("object_a_80330B74", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330B84: table.sym_var("object_a_80330B84", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330B1C: table.sym_var("object_a_80330B1C", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B38: table.sym_var("object_a_80330B38", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B44: table.sym_var("object_a_80330B44", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B5C: table.sym_var("object_a_80330B5C", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B68: table.sym_var("object_a_80330B68", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B74: table.sym_var("object_a_80330B74", "OBJCALL *", "[]", table.GLOBL),
+	0x80330B84: table.sym_var("object_a_80330B84", "OBJCALL *", "[]", table.GLOBL),
 	0x80330B90: table.sym_var("object_a_80330B90", "OBJ_COL", flag=table.GLOBL),
 	0x80330BA0: table.sym_var("object_a_80330BA0", "struct object_a_6", "[]", flag=table.GLOBL),
-	0x80330C20: table.sym_var("object_a_80330C20", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330C20: table.sym_var("object_a_80330C20", "OBJCALL *", "[]", table.GLOBL),
 	0x80330C38: table.sym_var("object_a_80330C38", "OBJ_COL", flag=table.GLOBL),
 	0x80330C48: table.sym_var("object_a_80330C48", "struct object_a_7", "[]", flag=table.GLOBL),
 	0x80330C58: table.sym_var("object_a_80330C58", "OBJ_COL", flag=table.GLOBL),
-	0x80330C68: table.sym_var("object_a_80330C68", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330C68: table.sym_var("object_a_80330C68", "OBJCALL *", "[]", table.GLOBL),
 	0x80330C74: table.sym_var("object_a_80330C74", "OBJ_COL", flag=table.GLOBL),
 	0x80330C84: table.sym_var("object_a_80330C84", "s16", "[][3]", table.GLOBL),
-	0x80330C98: table.sym_var("object_a_80330C98", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330CB0: table.sym_var("object_a_80330CB0", "O_CALLBACK *", "[]", table.GLOBL),
-	0x80330CC4: table.sym_var("object_a_80330CC4", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330C98: table.sym_var("object_a_80330C98", "OBJCALL *", "[]", table.GLOBL),
+	0x80330CB0: table.sym_var("object_a_80330CB0", "OBJCALL *", "[]", table.GLOBL),
+	0x80330CC4: table.sym_var("object_a_80330CC4", "OBJCALL *", "[]", table.GLOBL),
 	0x80330CD4: table.sym_var("object_a_80330CD4", "OBJ_COL", flag=table.GLOBL),
-	0x80330CE4: table.sym_var("object_a_80330CE4", "O_CALLBACK *", "[]", table.GLOBL),
+	0x80330CE4: table.sym_var("object_a_80330CE4", "OBJCALL *", "[]", table.GLOBL),
 	0x80330D0C: table.sym_var("object_a_80330D0C", "OBJ_SPLASH", flag=table.GLOBL),
 	0x80330D30: table.sym_var("object_a_80330D30", "OBJ_SPLASH", flag=table.GLOBL),
 	0x80330D54: table.sym_var("object_a_80330D54", "OBJ_SPLASH", flag=table.GLOBL),
@@ -10201,12 +10503,12 @@ sym_E0_d_code = {
 	0x80330D9C: table.sym_var("object_a_80330D9C", "OBJ_COL", flag=table.GLOBL),
 	0x80330DAC: table.sym_var("object_a_80330DAC", "struct object_a_8", "[]", table.GLOBL),
 
-	# src/obj_physics.c
+	# src/objphysics.c
 	0x80330E20: table.sym_var("obj_physics_80330E20", "s16", flag=table.GLOBL|ultra.DALIGN),
 	0x80330E24: table.sym_var("obj_physics_80330E24", "u32", "[4]", table.GLOBL), # unused
 	0x80330E34: table.sym_var("obj_ground", "OBJECT *", flag=table.GLOBL|ultra.DALIGN),
 
-	# src/obj_debug.c
+	# src/objdebug.c
 	0x80330E40: table.sym_var("obj_debug_80330E40", "const char *", "[]", table.GLOBL),
 	0x80330E64: table.sym_var("obj_debug_80330E64", "const char *", "[]", table.GLOBL),
 	0x80330E88: table.sym_var("obj_debug_80330E88", "s32", flag=table.GLOBL|ultra.DALIGN),
@@ -10225,10 +10527,10 @@ sym_E0_d_code = {
 	0x80330EC8: table.sym_var("txt_wipe", "u8 *", "[]", table.GLOBL),
 
 	# src/shadow.c
-	0x80330EE0: table.sym_var("shadow_rect_data", "SHADOW_RECT", "[]", table.GLOBL),
+	0x80330EE0: table.sym_var("shadow_rect_table", "SHADOW_RECT", "[]", table.GLOBL),
 
 	# src/back.c
-	0x80330F00: table.sym_var("back_data", "u16 **", "[]", table.GLOBL),
+	0x80330F00: table.sym_var("back_table", "u16 **", "[]", table.GLOBL),
 	0x80330F28: table.sym_var("back_shade", "u8", "[][3]", table.GLOBL),
 
 	# src/scroll.c
@@ -10238,15 +10540,15 @@ sym_E0_d_code = {
 	0x80330F3C: table.sym_var("scroll_80330F3C", "f32", flag=table.GLOBL|ultra.DALIGN),
 	0x80330F40: table.sym_var("scroll_80330F40", "s32", flag=table.GLOBL|ultra.DALIGN),
 	0x80330F44: table.sym_var("txt_scroll", "u16 *", "[]", table.GLOBL),
-	0x80330F64: table.sym_var("scroll_data_a", "SCROLL", "[]", table.GLOBL),
-	0x803311A4: table.sym_var("scroll_data_b", "SCROLL", "[]", table.GLOBL),
-	0x8033127C: table.sym_var("scroll_data_c", "SCROLL", "[]", table.GLOBL),
+	0x80330F64: table.sym_var("scroll_table_a", "SCROLL", "[]", table.GLOBL),
+	0x803311A4: table.sym_var("scroll_table_b", "SCROLL", "[]", table.GLOBL),
+	0x8033127C: table.sym_var("scroll_table_c", "SCROLL", "[]", table.GLOBL),
 	0x803312E8: table.sym_var("scroll_803312E8", "s8", "[]", table.GLOBL), # unused
 
-	# src/obj_shape.c
-	0x803312F0: table.sym_var("obj_shape_803312F0", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x803312F4: table.sym_var("obj_shape_803312F4", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x803312F8: table.sym_var("obj_shape_803312F8", "s16", flag=table.GLOBL|ultra.DALIGN),
+	# src/objshape.c
+	0x803312F0: table.sym_var("obj_shape_803312F0", "s16", flag=ultra.DALIGN),
+	0x803312F4: table.sym_var("obj_shape_803312F4", "s16", flag=ultra.DALIGN),
+	0x803312F8: table.sym_var("obj_shape_803312F8", "s16", flag=ultra.DALIGN),
 
 	# src/wave.c
 	0x80331300: table.sym_var("wave_80331300", "void *", "[]", table.GLOBL), # type
@@ -10257,7 +10559,7 @@ sym_E0_d_code = {
 	0x8033135C: table.sym_var("wave_8033135C", "s16", flag=table.GLOBL|ultra.DALIGN),
 
 	# src/dprint.c
-	0x80331360: table.sym_var("dprint_index", "s16", flag=table.GLOBL|ultra.DALIGN),
+	0x80331360: table.sym_var("dprint_index", "s16", flag=ultra.DALIGN),
 
 	# src/message.c
 	0x80331370: table.sym_var("message_80331370", "u8", "[256]", table.GLOBL),
@@ -10323,20 +10625,20 @@ sym_E0_d_code = {
 	0x80331728: table.sym_var("str_80331728", "unsigned char", "[]", table.GLOBL), # SAVE & QUIT
 	0x80331734: table.sym_var("str_80331734", "unsigned char", "[]", table.GLOBL), # CONTINUE, DON'T SAVE
 
-	# src/weather_snow.c
-	0x80331750: table.sym_var("weather_snow_80331750", "s8", flag=table.GLOBL|ultra.DALIGN),
+	# src/snow.c
+	0x80331750: table.sym_var("snow_80331750", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x80331758: table.sym_var("vtx_weather_snow", "Vtx", "[]", table.GLOBL),
-	0x80331788: table.sym_var("weather_snow_80331788", "VECS", flag=table.GLOBL),
-	0x80331790: table.sym_var("weather_snow_80331790", "VECS", flag=table.GLOBL),
-	0x80331798: table.sym_var("weather_snow_80331798", "VECS", flag=table.GLOBL),
+	0x80331788: table.sym_var("snow_80331788", "VECS", flag=table.GLOBL),
+	0x80331790: table.sym_var("snow_80331790", "VECS", flag=table.GLOBL),
+	0x80331798: table.sym_var("snow_80331798", "VECS", flag=table.GLOBL),
 
-	# src/weather_lava.c
-	0x803317A0: table.sym_var("weather_lava_803317A0", "s8", flag=table.GLOBL|ultra.DALIGN),
+	# src/lava.c
+	0x803317A0: table.sym_var("lava_803317A0", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x803317A8: table.sym_var("vtx_weather_lava", "Vtx", "[]", table.GLOBL),
 
-	# src/obj_data.c
-	0x803317E0: table.sym_var("prg_obj_data", "PRG_OBJ", "[]", table.GLOBL),
-	0x80332350: table.sym_var("map_obj_data", "MAP_OBJ", "[]", table.GLOBL),
+	# src/tag.c
+	0x803317E0: table.sym_var("tag_obj_table", "TAG_OBJ", "[]"),
+	0x80332350: table.sym_var("map_obj_table", "MAP_OBJ", "[]"),
 
 	# src/hud.c
 	0x803325F0: table.sym_var("meter", "METER", flag=table.GLOBL),
@@ -10361,15 +10663,15 @@ sym_E0_d_code = {
 	0x80332694: table.sym_var("object_b_80332694", "OBJ_COL", flag=table.GLOBL),
 	0x803326A4: table.sym_var("object_b_803326A4", "OBJ_COL", flag=table.GLOBL),
 	0x803326B4: table.sym_var("object_b_803326B4", "OBJ_COL", flag=table.GLOBL),
-	0x803326C4: table.sym_var("object_b_803326C4", "PATH_DATA", "[]", table.GLOBL),
-	0x80332718: table.sym_var("object_b_80332718", "PATH_DATA", "[]", table.GLOBL),
+	0x803326C4: table.sym_var("object_b_803326C4", "PATH", "[]", table.GLOBL),
+	0x80332718: table.sym_var("object_b_80332718", "PATH", "[]", table.GLOBL),
 	0x80332764: table.sym_var("object_b_80332764", "OBJ_COL", flag=table.GLOBL),
 	0x80332774: table.sym_var("object_b_80332774", "OBJ_COL", flag=table.GLOBL),
 	0x80332784: table.sym_var("object_b_80332784", "OBJ_COL", flag=table.GLOBL),
 	0x80332794: table.sym_var("obj_col_redcoin", "OBJ_COL", flag=table.GLOBL),
 	0x803327A4: table.sym_var("object_b_803327A4", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x803327A8: table.sym_var("object_b_803327A8", "OBJ_COL", flag=table.GLOBL),
-	0x803327B8: table.sym_var("object_b_803327B8", "PATH_DATA", "[]", table.GLOBL),
+	0x803327B8: table.sym_var("object_b_803327B8", "PATH", "[]", table.GLOBL),
 	0x803327FC: table.sym_var("object_b_803327FC", "OBJ_COL", flag=table.GLOBL),
 	0x8033280C: table.sym_var("object_b_8033280C", "OBJ_COL", flag=table.GLOBL),
 	0x8033281C: table.sym_var("object_b_8033281C", "OBJ_COL", flag=table.GLOBL),
@@ -10402,24 +10704,24 @@ sym_E0_d_code = {
 	0x80332998: table.sym_var("object_c_80332998", "OBJ_COL", flag=table.GLOBL),
 	0x803329A8: table.sym_var("object_c_803329A8", "OBJ_COL", flag=table.GLOBL),
 	0x803329B8: table.sym_var("object_c_803329B8", "OBJ_PCL", flag=table.GLOBL),
-	0x803329CC: table.sym_var("object_c_803329CC", "MAP_DATA *", "[]", table.GLOBL),
-	0x803329DC: table.sym_var("object_c_803329DC", "PATH_DATA *", "[]", table.GLOBL),
-	0x80332A00: table.sym_var("object_c_80332A00", "MAP_DATA *", "[]", table.GLOBL),
+	0x803329CC: table.sym_var("object_c_803329CC", "MAP *", "[]", table.GLOBL),
+	0x803329DC: table.sym_var("object_c_803329DC", "PATH *", "[]", table.GLOBL),
+	0x80332A00: table.sym_var("object_c_80332A00", "MAP *", "[]", table.GLOBL),
 	0x80332A20: table.sym_var("object_c_80332A20", "struct object_c_2", "[]", table.GLOBL),
 	0x80332A38: table.sym_var("object_c_80332A38", "OBJ_COL", flag=table.GLOBL),
 	0x80332A48: table.sym_var("object_c_80332A48", "OBJ_PCL", flag=table.GLOBL),
 	0x80332A5C: table.sym_var("object_c_80332A5C", "OBJ_PCL", flag=table.GLOBL),
-	0x80332A70: table.sym_var("object_c_80332A70", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332A70: table.sym_var("object_c_80332A70", "MAP *", "[]", table.GLOBL),
 	0x80332A78: table.sym_var("object_c_80332A78", "u8", "[]", table.GLOBL),
 	0x80332A7C: table.sym_var("object_c_80332A7C", "f32", "[]", table.GLOBL),
-	0x80332A8C: table.sym_var("object_c_80332A8C", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332A8C: table.sym_var("object_c_80332A8C", "MAP *", "[]", table.GLOBL),
 	0x80332A94: table.sym_var("object_c_80332A94", "s16", "[]", table.GLOBL),
 	0x80332A9C: table.sym_var("object_c_80332A9C", "s16", "[]", table.GLOBL),
 	0x80332AA4: table.sym_var("object_c_80332AA4", "s8", "[]", table.GLOBL),
-	0x80332AA8: table.sym_var("object_c_80332AA8", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332AA8: table.sym_var("object_c_80332AA8", "MAP *", "[]", table.GLOBL),
 	0x80332AB0: table.sym_var("object_c_80332AB0", "s8", "[]", table.GLOBL),
 	0x80332AB4: table.sym_var("object_c_80332AB4", "s16", "[]", table.GLOBL),
-	0x80332AB8: table.sym_var("object_c_80332AB8", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332AB8: table.sym_var("object_c_80332AB8", "MAP *", "[]", table.GLOBL),
 	0x80332AC0: table.sym_var("object_c_80332AC0", "s16", "[][2][2]", table.GLOBL),
 	0x80332AE0: table.sym_var("object_c_80332AE0", "s8", "[]", table.GLOBL),
 	0x80332AE4: table.sym_var("object_c_80332AE4", "s16", "[]", table.GLOBL),
@@ -10428,12 +10730,12 @@ sym_E0_d_code = {
 	0x80332B00: table.sym_var("object_c_80332B00", "OBJ_COL", flag=table.GLOBL),
 	0x80332B10: table.sym_var("object_c_80332B10", "OBJ_PCL", flag=table.GLOBL),
 	0x80332B24: table.sym_var("object_c_80332B24", "OBJ_COL", flag=table.GLOBL),
-	0x80332B34: table.sym_var("object_c_80332B34", "MAP_DATA *", "[]", table.GLOBL),
-	0x80332B54: table.sym_var("object_c_80332B54", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332B34: table.sym_var("object_c_80332B34", "MAP *", "[]", table.GLOBL),
+	0x80332B54: table.sym_var("object_c_80332B54", "MAP *", "[]", table.GLOBL),
 	0x80332B5C: table.sym_var("object_c_80332B5C", "s16", "[]", table.GLOBL),
 	0x80332B64: table.sym_var("object_c_80332B64", "struct object_c_3", "[][5]", table.GLOBL),
 	0x80332BDC: table.sym_var("object_c_80332BDC", "s16", "[]", table.GLOBL),
-	0x80332BE4: table.sym_var("object_c_80332BE4", "MAP_DATA *", "[]", table.GLOBL),
+	0x80332BE4: table.sym_var("object_c_80332BE4", "MAP *", "[]", table.GLOBL),
 	0x80332BF0: table.sym_var("object_c_80332BF0", "OBJ_COL", flag=table.GLOBL),
 	0x80332C00: table.sym_var("object_c_80332C00", "OBJ_COL", flag=table.GLOBL),
 	0x80332C10: table.sym_var("object_c_80332C10", "OBJ_COL", flag=table.GLOBL),
@@ -10509,10 +10811,10 @@ sym_E0_d_code = {
 	0x80333290: table.sym_var("Na_g_80333290", "u8", "[]", table.GLOBL),
 
 	# src/audio/data.c
-	0x803332A0: table.sym_var("Na_cfg_data", "NA_CFG", "[]", table.GLOBL), # 18
+	0x803332A0: table.sym_var("Na_cfg_table", "NA_CFG", "[]", table.GLOBL), # 18
 	0x80333498: table.sym_var("Na_data_80333498", "s16", "[]", table.GLOBL), # unused
 	0x80333598: table.sym_var("Na_data_80333598", "f32", "[]", table.GLOBL),
-	0x80333994: table.sym_var("Na_freq_data", "f32", "[]", table.GLOBL),
+	0x80333994: table.sym_var("Na_freq_table", "f32", "[]", table.GLOBL),
 	0x80333B94: table.sym_var("Na_data_80333B94", "u8", "[]", table.GLOBL),
 	0x80333BA4: table.sym_var("Na_data_80333BA4", "u8", "[]", table.GLOBL),
 	0x80333BB4: table.sym_var("Na_data_80333BB4", "s8", "[]", table.GLOBL),
@@ -10658,7 +10960,7 @@ sym_E0_d_code = {
 	0x80336664: table.sym_var("player_80336664", "const float"),
 	0x80336668: table.sym_var("player_80336668", "const float"),
 
-	# src/pl_physics.c
+	# src/plphysics.c
 	0x80336670: table.sym_var("pl_physics_80336670", "const float"),
 	0x80336674: table.sym_var("pl_physics_80336674", "const float"),
 	0x80336678: table.sym_var_fnc("pl_physics_80336678", "const", "[]"),
@@ -10669,7 +10971,7 @@ sym_E0_d_code = {
 	0x803366BC: table.sym_var("pl_physics_803366BC", "const float"),
 	0x803366C0: table.sym_var("pl_physics_803366C0", "const float"),
 
-	# src/pl_demo.c
+	# src/pldemo.c
 	0x803366D0: table.sym_var("pl_demo_803366D0", "const float"),
 	0x803366D4: table.sym_var_fnc("pl_demo_803366D4", "const", "[]"),
 	0x803366E8: table.sym_var("pl_demo_803366E8", "const float"),
@@ -10686,14 +10988,14 @@ sym_E0_d_code = {
 	0x80336784: table.sym_var_fnc("pl_demo_80336784", "const", "[]"),
 	0x80336848: table.sym_var_fnc("pl_demo_80336848", "const", "[]"),
 
-	# src/pl_hang.c
+	# src/plhang.c
 	0x80336940: table.sym_var("pl_hang_80336940", "const float"),
 	0x80336944: table.sym_var("pl_hang_80336944", "const float"),
 	0x80336948: table.sym_var("pl_hang_80336948", "const float"),
 	0x8033694C: table.sym_var("pl_hang_8033694C", "const float"),
 	0x80336950: table.sym_var_fnc("pl_hang_80336950", "const", "[]"),
 
-	# src/pl_wait.c
+	# src/plwait.c
 	0x80336970: table.sym_var("pl_wait_80336970", "const float"),
 	0x80336974: table.sym_var("pl_wait_80336974", "const float"),
 	0x80336978: table.sym_var_fnc("pl_wait_80336978", "const", "[]"),
@@ -10701,7 +11003,7 @@ sym_E0_d_code = {
 	0x803369B8: table.sym_var_fnc("pl_wait_803369B8", "const", "[]"),
 	0x80336A18: table.sym_var_fnc("pl_wait_80336A18", "const", "[]"),
 
-	# src/pl_walk.c
+	# src/plwalk.c
 	0x80336A80: table.sym_var("pl_walk_80336A80", "const float"),
 	0x80336A84: table.sym_var("pl_walk_80336A84", "const float"),
 	0x80336A88: table.sym_var("pl_walk_80336A88", "const float"),
@@ -10740,7 +11042,7 @@ sym_E0_d_code = {
 	0x80336BB4: table.sym_var_fnc("pl_walk_80336BB4", "const", "[]"),
 	0x80336BCC: table.sym_var_fnc("pl_walk_80336BCC", "const", "[]"),
 
-	# src/pl_jump.c
+	# src/pljump.c
 	0x80336C00: table.sym_var("pl_jump_80336C00", "const float"),
 	0x80336C04: table.sym_var("pl_jump_80336C04", "const float"),
 	0x80336C08: table.sym_var("pl_jump_80336C08", "const float"),
@@ -10762,7 +11064,7 @@ sym_E0_d_code = {
 	0x80336D20: table.sym_var_fnc("pl_jump_80336D20", "const", "[]"),
 	0x80336D5C: table.sym_var_fnc("pl_jump_80336D5C", "const", "[]"),
 
-	# src/pl_swim.c
+	# src/plswim.c
 	0x80336E10: table.sym_var("pl_swim_80336E10", "const float"),
 	0x80336E14: table.sym_var_fnc("pl_swim_80336E14", "const", "[]"),
 	0x80336E2C: table.sym_var_fnc("pl_swim_80336E2C", "const", "[]"),
@@ -10775,11 +11077,11 @@ sym_E0_d_code = {
 	0x80336E5C: table.sym_var_fnc("pl_swim_80336E5C", "const", "[]"),
 	0x80336EA4: table.sym_var_fnc("pl_swim_80336EA4", "const", "[]"),
 
-	# src/pl_grab.c
+	# src/plgrab.c
 	0x80336ED0: table.sym_var_fnc("pl_grab_80336ED0", "const", "[]"),
 	0x80336EF8: table.sym_var_fnc("pl_grab_80336EF8", "const", "[]"),
 
-	# src/pl_callback.c
+	# src/plcallback.c
 	0x80336F40: table.sym_var_fnc("pl_callback_80336F40", "const", "[]"),
 	0x80336F54: table.sym_var("pl_callback_80336F54", "const float"),
 	0x80336F58: table.sym_var("pl_callback_80336F58", "const float"),
@@ -10957,32 +11259,32 @@ sym_E0_d_code = {
 	0x803377A0: table.sym_var("object_803377A0", "const double"),
 	0x803377A8: table.sym_var("object_803377A8", "const double"),
 
-	# src/obj_lib.c
+	# src/objlib.c
 	0x803377B0: table.sym_var("str_obj_lib_areainfo", "const char", "[]"),
-	0x803377BC: table.sym_var("obj_lib_803377BC", "const float"),
-	0x803377C0: table.sym_var("obj_lib_803377C0", "const float"),
-	0x803377C4: table.sym_var("obj_lib_803377C4", "const float"),
-	0x803377C8: table.sym_var("obj_lib_803377C8", "const float"),
-	0x803377CC: table.sym_var("obj_lib_803377CC", "const float"),
-	0x803377D0: table.sym_var("obj_lib_803377D0", "const float"),
-	0x803377D8: table.sym_var("obj_lib_803377D8", "const double"),
-	0x803377E0: table.sym_var("obj_lib_803377E0", "const double"),
-	0x803377E8: table.sym_var("obj_lib_803377E8", "const double"),
-	0x803377F0: table.sym_var("obj_lib_803377F0", "const float"),
-	0x803377F4: table.sym_var("obj_lib_803377F4", "const float"),
-	0x803377F8: table.sym_var("obj_lib_803377F8", "const double"),
-	0x80337800: table.sym_var("obj_lib_80337800", "const float"),
-	0x80337808: table.sym_var("obj_lib_80337808", "const double"),
-	0x80337810: table.sym_var("obj_lib_80337810", "const float"),
-	0x80337814: table.sym_var("obj_lib_80337814", "const float"),
-	0x80337818: table.sym_var("obj_lib_80337818", "const float"),
-	0x8033781C: table.sym_var("obj_lib_8033781C", "const float"),
-	0x80337820: table.sym_var("obj_lib_80337820", "const float"),
-	0x80337824: table.sym_var("obj_lib_80337824", "const float"),
-	0x80337828: table.sym_var("obj_lib_80337828", "const float"),
-	0x8033782C: table.sym_var("obj_lib_8033782C", "const float"),
-	0x80337830: table.sym_var("obj_lib_80337830", "const float"),
-	0x80337834: table.sym_var_fnc("obj_lib_80337834", "const", "[]"),
+	0x803377BC: table.sym_var("objlib_803377BC", "const float"),
+	0x803377C0: table.sym_var("objlib_803377C0", "const float"),
+	0x803377C4: table.sym_var("objlib_803377C4", "const float"),
+	0x803377C8: table.sym_var("objlib_803377C8", "const float"),
+	0x803377CC: table.sym_var("objlib_803377CC", "const float"),
+	0x803377D0: table.sym_var("objlib_803377D0", "const float"),
+	0x803377D8: table.sym_var("objlib_803377D8", "const double"),
+	0x803377E0: table.sym_var("objlib_803377E0", "const double"),
+	0x803377E8: table.sym_var("objlib_803377E8", "const double"),
+	0x803377F0: table.sym_var("objlib_803377F0", "const float"),
+	0x803377F4: table.sym_var("objlib_803377F4", "const float"),
+	0x803377F8: table.sym_var("objlib_803377F8", "const double"),
+	0x80337800: table.sym_var("objlib_80337800", "const float"),
+	0x80337808: table.sym_var("objlib_80337808", "const double"),
+	0x80337810: table.sym_var("objlib_80337810", "const float"),
+	0x80337814: table.sym_var("objlib_80337814", "const float"),
+	0x80337818: table.sym_var("objlib_80337818", "const float"),
+	0x8033781C: table.sym_var("objlib_8033781C", "const float"),
+	0x80337820: table.sym_var("objlib_80337820", "const float"),
+	0x80337824: table.sym_var("objlib_80337824", "const float"),
+	0x80337828: table.sym_var("objlib_80337828", "const float"),
+	0x8033782C: table.sym_var("objlib_8033782C", "const float"),
+	0x80337830: table.sym_var("objlib_80337830", "const float"),
+	0x80337834: table.sym_var_fnc("objlib_80337834", "const", "[]"),
 
 	# src/object_a.c
 	0x80337850: table.sym_var("str_object_a_0_fmt", "const char", "[]"),
@@ -11170,21 +11472,21 @@ sym_E0_d_code = {
 	0x80337DE8: table.sym_var("object_a_80337DE8", "const float"),
 	0x80337DEC: table.sym_var("object_a_80337DEC", "const float"),
 
-	# src/obj_collision.c
+	# src/objcollision.c
 	0x80337DF0: table.sym_var("str_obj_collision_on", "const char", "[]"),
 
-	# src/obj_list.c
-	0x80337E00: table.sym_var("obj_list_80337E00", "const float"),
-	0x80337E04: table.sym_var("obj_list_80337E04", "const float"),
-	0x80337E08: table.sym_var("obj_list_80337E08", "const float"),
-	0x80337E0C: table.sym_var("obj_list_80337E0C", "const float"),
+	# src/objlist.c
+	0x80337E00: table.sym_var("objlist_80337E00", "const float"),
+	0x80337E04: table.sym_var("objlist_80337E04", "const float"),
+	0x80337E08: table.sym_var("objlist_80337E08", "const float"),
+	0x80337E0C: table.sym_var("objlist_80337E0C", "const float"),
 
-	# src/obj_sfx.c
-	0x80337E10: table.sym_var("obj_sfx_80337E10", "const float"),
-	0x80337E14: table.sym_var("obj_sfx_80337E14", "const float"),
-	0x80337E18: table.sym_var("obj_sfx_80337E18", "const float"),
+	# src/objsfx.c
+	0x80337E10: table.sym_var("objsfx_80337E10", "const float"),
+	0x80337E14: table.sym_var("objsfx_80337E14", "const float"),
+	0x80337E18: table.sym_var("objsfx_80337E18", "const float"),
 
-	# src/obj_debug.c
+	# src/objdebug.c
 	0x80337E20: table.sym_var("str_obj_debug_a0", "const char", "[]"),
 	0x80337E28: table.sym_var("str_obj_debug_a1", "const char", "[]"),
 	0x80337E30: table.sym_var("str_obj_debug_a2", "const char", "[]"),
@@ -11285,26 +11587,26 @@ sym_E0_d_code = {
 	0x803381B0: table.sym_var("message_803381B0", "const double"),
 	0x803381B8: table.sym_var_fnc("message_803381B8", "const", "[]"),
 
-	# src/weather_snow.c
-	0x80338280: table.sym_var("weather_snow_80338280", "const double"),
-	0x80338288: table.sym_var("weather_snow_80338288", "const double"),
-	0x80338290: table.sym_var("weather_snow_80338290", "const double"),
-	0x80338298: table.sym_var("weather_snow_80338298", "const double"),
-	0x803382A0: table.sym_var("weather_snow_803382A0", "const double"),
-	0x803382A8: table.sym_var("weather_snow_803382A8", "const double"),
-	0x803382B0: table.sym_var("weather_snow_803382B0", "const double"),
+	# src/snow.c
+	0x80338280: table.sym_var("snow_80338280", "const double"),
+	0x80338288: table.sym_var("snow_80338288", "const double"),
+	0x80338290: table.sym_var("snow_80338290", "const double"),
+	0x80338298: table.sym_var("snow_80338298", "const double"),
+	0x803382A0: table.sym_var("snow_803382A0", "const double"),
+	0x803382A8: table.sym_var("snow_803382A8", "const double"),
+	0x803382B0: table.sym_var("snow_803382B0", "const double"),
 
-	# src/weather_lava.c
-	0x803382C0: table.sym_var("weather_lava_803382C0", "const float"),
-	0x803382C4: table.sym_var("weather_lava_803382C4", "const float"),
-	0x803382C8: table.sym_var("weather_lava_803382C8", "const float"),
-	0x803382CC: table.sym_var("weather_lava_803382CC", "const float"),
-	0x803382D0: table.sym_var("weather_lava_803382D0", "const float"),
-	0x803382D4: table.sym_var_fnc("weather_lava_803382D4", "const", "[]"),
+	# src/lava.c
+	0x803382C0: table.sym_var("lava_803382C0", "const float"),
+	0x803382C4: table.sym_var("lava_803382C4", "const float"),
+	0x803382C8: table.sym_var("lava_803382C8", "const float"),
+	0x803382CC: table.sym_var("lava_803382CC", "const float"),
+	0x803382D0: table.sym_var("lava_803382D0", "const float"),
+	0x803382D4: table.sym_var_fnc("lava_803382D4", "const", "[]"),
 
-	# src/obj_data.c
-	0x80338310: table.sym_var_fnc("obj_data_80338310", "const", "[]"),
-	0x80338368: table.sym_var_fnc("obj_data_80338368", "const", "[]"),
+	# src/tag.c
+	0x80338310: table.sym_var_fnc("tag_80338310", "const", "[]"),
+	0x80338368: table.sym_var_fnc("tag_80338368", "const", "[]"),
 
 	# src/hud.c
 	0x80338380: table.sym_var("str_hud_life_icon", "const char", "[]"),
@@ -11774,19 +12076,19 @@ sym_E0_d_code = {
 	# ==========================================================================
 
 	# src/main.c
-	0x8033A580: table.sym_var("rmon_thread", "OSThread", flag=table.GLOBL|ultra.BALIGN),
-	0x8033A730: table.sym_var("idle_thread", "OSThread", flag=table.GLOBL|ultra.BALIGN),
-	0x8033A8E0: table.sym_var("sc_thread", "OSThread", flag=table.GLOBL|ultra.BALIGN),
-	0x8033AA90: table.sym_var("gfx_thread", "OSThread", flag=table.GLOBL|ultra.BALIGN),
-	0x8033AC40: table.sym_var("aud_thread", "OSThread", flag=table.GLOBL|ultra.BALIGN),
-	0x8033ADF0: table.sym_var("pi_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033AE08: table.sym_var("sc_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033AE20: table.sym_var("sc_task_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033AE38: table.sym_var("dma_mbox", "OSMesg", flag=table.GLOBL),
-	0x8033AE40: table.sym_var("pi_mbox", "OSMesg", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8033AEC0: table.sym_var("si_mbox", "OSMesg", flag=table.GLOBL),
-	0x8033AEC8: table.sym_var("sc_mbox", "OSMesg", "[16]", table.GLOBL|ultra.BALIGN),
-	0x8033AF08: table.sym_var("sc_task_mbox", "OSMesg", "[16]", table.GLOBL|ultra.BALIGN),
+	0x8033A580: table.sym_var("rmon_thread", "OSThread", flag=ultra.BALIGN),
+	0x8033A730: table.sym_var("idle_thread", "OSThread", flag=ultra.BALIGN),
+	0x8033A8E0: table.sym_var("sc_thread", "OSThread", flag=ultra.BALIGN),
+	0x8033AA90: table.sym_var("gfx_thread", "OSThread", flag=ultra.BALIGN),
+	0x8033AC40: table.sym_var("aud_thread", "OSThread", flag=ultra.BALIGN),
+	0x8033ADF0: table.sym_var("pi_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033AE08: table.sym_var("sc_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033AE20: table.sym_var("sc_task_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033AE38: table.sym_var("dma_mbox", "OSMesg"),
+	0x8033AE40: table.sym_var("pi_mbox", "OSMesg", "[32]", ultra.BALIGN),
+	0x8033AEC0: table.sym_var("si_mbox", "OSMesg"),
+	0x8033AEC8: table.sym_var("sc_mbox", "OSMesg", "[16]", ultra.BALIGN),
+	0x8033AF08: table.sym_var("sc_task_mbox", "OSMesg", "[16]", ultra.BALIGN),
 	0x8033AF48: table.sym_var("dma_mb", "OSIoMesg", flag=table.GLOBL|ultra.BALIGN),
 	0x8033AF5C: table.sym_var("null_msg", "OSMesg", flag=table.GLOBL),
 	0x8033AF60: table.sym_var("dma_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
@@ -11794,17 +12096,17 @@ sym_E0_d_code = {
 
 	# src/graphics.c
 	0x8033AF90: table.sym_var("controller_data", "CONTROLLER", "[CONTROLLER_LEN+1]", table.GLOBL|ultra.BALIGN),
-	0x8033AFE8: table.sym_var("cont_status", "OSContStatus", "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
-	0x8033AFF8: table.sym_var("cont_pad", "OSContPad", "[MAXCONTROLLERS]", table.GLOBL|ultra.BALIGN),
-	0x8033B010: table.sym_var("gfx_vi_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033B028: table.sym_var("gfx_dp_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033B040: table.sym_var("gfx_vi_mbox", "OSMesg", flag=table.GLOBL),
-	0x8033B044: table.sym_var("gfx_dp_mbox", "OSMesg", flag=table.GLOBL),
-	0x8033B048: table.sym_var("sc_client_gfx", "SC_CLIENT", flag=table.GLOBL|ultra.BALIGN),
-	0x8033B050: table.sym_var("gfx_cimg", "uintptr_t", "[3]", table.GLOBL|ultra.BALIGN),
-	0x8033B05C: table.sym_var("gfx_zimg", "uintptr_t", flag=table.GLOBL),
-	0x8033B060: table.sym_var("anime_mario_buf", "void *", flag=table.GLOBL),
-	0x8033B064: table.sym_var("demo_buf", "void *", flag=table.GLOBL),
+	0x8033AFE8: table.sym_var("cont_status", "OSContStatus", "[MAXCONTROLLERS]", ultra.BALIGN),
+	0x8033AFF8: table.sym_var("cont_pad", "OSContPad", "[MAXCONTROLLERS]", ultra.BALIGN),
+	0x8033B010: table.sym_var("gfx_vi_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033B028: table.sym_var("gfx_dp_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033B040: table.sym_var("gfx_vi_mbox", "OSMesg"),
+	0x8033B044: table.sym_var("gfx_dp_mbox", "OSMesg"),
+	0x8033B048: table.sym_var("sc_client_gfx", "SC_CLIENT", flag=ultra.BALIGN),
+	0x8033B050: table.sym_var("gfx_cimg", "uintptr_t", "[3]", ultra.BALIGN),
+	0x8033B05C: table.sym_var("gfx_zimg", "uintptr_t"),
+	0x8033B060: table.sym_var("anime_mario_buf", "void *"),
+	0x8033B064: table.sym_var("demo_buf", "void *"),
 	0x8033B068: table.sym_var("gfx_task", "SC_TASK *", flag=table.GLOBL),
 	0x8033B06C: table.sym_var("gfx_ptr", "Gfx *", flag=table.GLOBL),
 	0x8033B070: table.sym_var("gfx_mem", "char *", flag=table.GLOBL),
@@ -11815,11 +12117,11 @@ sym_E0_d_code = {
 	0x8033B090: table.sym_var("demo_bank", "BANK", flag=table.GLOBL|ultra.BALIGN),
 
 	# src/audio.c
-	0x8033B0A0: table.sym_var("aud_env_se_8033B0A0", "u32", "[]", table.GLOBL|ultra.BALIGN), # unused
-	0x8033B130: table.sym_var("aud_0", "VECF", flag=table.GLOBL|ultra.BALIGN),
-	0x8033B140: table.sym_var("aud_vi_mq", "OSMesgQueue", flag=table.GLOBL|ultra.BALIGN),
-	0x8033B158: table.sym_var("aud_vi_mbox", "OSMesg", flag=table.GLOBL),
-	0x8033B160: table.sym_var("sc_client_aud", "SC_CLIENT", flag=table.GLOBL|ultra.BALIGN),
+	0x8033B0A0: table.sym_var("aud_env_se_8033B0A0", "u32", "[]", ultra.BALIGN), # unused
+	0x8033B130: table.sym_var("aud_0", "VECF", flag=ultra.BALIGN),
+	0x8033B140: table.sym_var("aud_vi_mq", "OSMesgQueue", flag=ultra.BALIGN),
+	0x8033B158: table.sym_var("aud_vi_mbox", "OSMesg"),
+	0x8033B160: table.sym_var("aud_client", "SC_CLIENT", flag=ultra.BALIGN),
 
 	# src/game.c
 	0x8033B170: table.sym_var("player_data", "PLAYER", "[1]", table.GLOBL|ultra.BALIGN),
@@ -11845,10 +12147,10 @@ sym_E0_d_code = {
 	# src/player.c
 	0x8033B280: table.sym_var("player_8033B280", "s32", flag=table.GLOBL),
 
-	# src/pl_physics.c
+	# src/plphysics.c
 	0x8033B290: table.sym_var("pl_physics_8033B290", "s32", flag=table.GLOBL), # unused
 
-	# src/pl_demo.c
+	# src/pldemo.c
 	0x8033B2A0: table.sym_var("pl_demo_8033B2A0", "OBJECT *", flag=table.GLOBL),
 	0x8033B2A4: table.sym_var("pl_demo_8033B2A4", "OBJECT *", flag=table.GLOBL),
 	0x8033B2A8: table.sym_var("pl_demo_8033B2A8", "OBJECT *", flag=table.GLOBL),
@@ -11858,35 +12160,35 @@ sym_E0_d_code = {
 	0x8033B2B8: table.sym_var("pl_demo_8033B2B8", "s16", flag=table.GLOBL),
 	0x8033B2BC: table.sym_var("pl_demo_8033B2BC", "s16", "[2]", table.GLOBL),
 
-	# src/pl_walk.c
+	# src/plwalk.c
 	0x8033B2C0: table.sym_var("pl_walk_8033B2C0", "MTXF", "[2]", table.GLOBL),
 
-	# src/pl_swim.c
+	# src/plswim.c
 	0x8033B340: table.sym_var("pl_swim_8033B340", "s16", flag=table.GLOBL),
 	0x8033B342: table.sym_var("pl_swim_8033B342", "s16", flag=table.GLOBL),
 	0x8033B344: table.sym_var("pl_swim_8033B344", "f32", flag=table.GLOBL),
 
-	# src/pl_callback.c
-	0x8033B350: table.sym_var("shape_object_mirror", "SHAPE_OBJECT", flag=table.GLOBL|ultra.BALIGN),
+	# src/plcallback.c
+	0x8033B350: table.sym_var("sobj_mirror", "S_OBJECT", flag=ultra.BALIGN),
 	0x8033B3B0: table.sym_var("pl_shape_data", "PL_SHAPE", "[2]", table.GLOBL|ultra.BALIGN),
 
 	# src/memory.c
-	0x8033B400: table.sym_var("segment_table", "uintptr_t", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8033B480: table.sym_var("mem_size", "size_t", flag=table.GLOBL),
-	0x8033B484: table.sym_var("mem_start", "char *", flag=table.GLOBL),
-	0x8033B488: table.sym_var("mem_end", "char *", flag=table.GLOBL),
-	0x8033B48C: table.sym_var("mem_blockl", "MEM_BLOCK *", flag=table.GLOBL),
-	0x8033B490: table.sym_var("mem_blockr", "MEM_BLOCK *", flag=table.GLOBL),
+	0x8033B400: table.sym_var("segment_table", "uintptr_t", "[32]", ultra.BALIGN),
+	0x8033B480: table.sym_var("mem_size", "size_t"),
+	0x8033B484: table.sym_var("mem_start", "char *"),
+	0x8033B488: table.sym_var("mem_end", "char *"),
+	0x8033B48C: table.sym_var("mem_blockl", "MEM_BLOCK *"),
+	0x8033B490: table.sym_var("mem_blockr", "MEM_BLOCK *"),
 	0x8033B494: table.sym_var("mem_heap", "HEAP *", flag=table.GLOBL),
 
 	# src/save.c
-	0x8033B4A0: table.sym_var("save_mid_level", "u8", flag=table.GLOBL),
-	0x8033B4A1: table.sym_var("save_mid_course", "u8", flag=table.GLOBL),
-	0x8033B4A2: table.sym_var("save_mid_stage", "u8", flag=table.GLOBL),
-	0x8033B4A3: table.sym_var("save_mid_scene", "u8", flag=table.GLOBL),
-	0x8033B4A4: table.sym_var("save_mid_port", "u8", flag=table.GLOBL),
-	0x8033B4A5: table.sym_var("save_data_dirty", "char", flag=table.GLOBL),
-	0x8033B4A6: table.sym_var("save_file_dirty", "char", flag=table.GLOBL),
+	0x8033B4A0: table.sym_var("save_mid_level", "u8"),
+	0x8033B4A1: table.sym_var("save_mid_course", "u8"),
+	0x8033B4A2: table.sym_var("save_mid_stage", "u8"),
+	0x8033B4A3: table.sym_var("save_mid_scene", "u8"),
+	0x8033B4A4: table.sym_var("save_mid_port", "u8"),
+	0x8033B4A5: table.sym_var("save_data_dirty", "char"),
+	0x8033B4A6: table.sym_var("save_file_dirty", "char"),
 
 	# src/scene.c
 	0x8033B4B0: table.sym_var("spawn_player", "SPAWN", "[1]", table.GLOBL|ultra.BALIGN),
@@ -11901,182 +12203,58 @@ sym_E0_d_code = {
 	0x8033BAD0: table.sym_var("msg_latch", "s16", flag=table.GLOBL),
 
 	# src/draw.c
-	0x8033BAE0: table.sym_var("draw_m", "s16", flag=table.GLOBL),
-	0x8033BAE8: table.sym_var("draw_mtxf", "MTXF", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8033C2E8: table.sym_var("draw_mtx", "Mtx *", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8033C368: table.sym_var("joint_prev_type", "u8", flag=table.GLOBL),
-	0x8033C369: table.sym_var("joint_prev_shadow", "u8", flag=table.GLOBL),
-	0x8033C36A: table.sym_var("joint_prev_frame", "s16", flag=table.GLOBL),
-	0x8033C36C: table.sym_var("joint_prev_scale", "f32", flag=table.GLOBL),
-	0x8033C370: table.sym_var("joint_prev_tbl", "u16 *", flag=table.GLOBL),
-	0x8033C374: table.sym_var("joint_prev_val", "s16 *", flag=table.GLOBL),
-	0x8033C378: table.sym_var("joint_type", "u8", flag=table.GLOBL),
-	0x8033C379: table.sym_var("joint_shadow", "u8", flag=table.GLOBL),
-	0x8033C37A: table.sym_var("joint_frame", "s16", flag=table.GLOBL),
-	0x8033C37C: table.sym_var("joint_scale", "f32", flag=table.GLOBL),
-	0x8033C380: table.sym_var("joint_tbl", "u16 *", flag=table.GLOBL),
-	0x8033C384: table.sym_var("joint_val", "s16 *", flag=table.GLOBL),
-	0x8033C388: table.sym_var("draw_arena", "ARENA *", flag=table.GLOBL),
+	0x8033BAE0: table.sym_var("draw_m", "s16"),
+	0x8033BAE8: table.sym_var("draw_mtxf", "MTXF", "[32]", ultra.BALIGN),
+	0x8033C2E8: table.sym_var("draw_mtx", "Mtx *", "[32]", ultra.BALIGN),
+	0x8033C368: table.sym_var("joint_prev_type", "u8"),
+	0x8033C369: table.sym_var("joint_prev_shadow", "u8"),
+	0x8033C36A: table.sym_var("joint_prev_frame", "s16"),
+	0x8033C36C: table.sym_var("joint_prev_scale", "float"),
+	0x8033C370: table.sym_var("joint_prev_tbl", "u16 *"),
+	0x8033C374: table.sym_var("joint_prev_val", "short *"),
+	0x8033C378: table.sym_var("joint_type", "u8"),
+	0x8033C379: table.sym_var("joint_shadow", "u8"),
+	0x8033C37A: table.sym_var("joint_frame", "s16"),
+	0x8033C37C: table.sym_var("joint_scale", "float"),
+	0x8033C380: table.sym_var("joint_tbl", "u16 *"),
+	0x8033C384: table.sym_var("joint_val", "short *"),
+	0x8033C388: table.sym_var("draw_arena", "ARENA *"),
 
 	# src/time.c
-	0x8033C390: table.sym_var("time_data", "TIME", "[2]", table.GLOBL|ultra.BALIGN),
+	0x8033C390: table.sym_var("time_data", "TIME", "[2]", ultra.BALIGN),
 
-	# 0x8033C520 camera
-	0x8033C520: table.sym("_camera_bss+0x00"), # la
-	0x8033C544: table.sym("_camera_bss+0x24"), # data
-	0x8033C568: table.sym("_camera_bss+0x48"), # la
-	0x8033C578: table.sym("_camera_bss+0x58"), # la
-	0x8033C588: table.sym("_camera_bss+0x68"), # la
-	0x8033C594: table.sym("_camera_bss+0x74"),
-	0x8033C596: table.sym("_camera_bss+0x76"),
-	0x8033C598: table.sym("_camera_bss+0x78"),
-	0x8033C5A0: table.sym("_camera_bss+0x80"),
-	0x8033C5A4: table.sym("_camera_bss+0x84"),
-	0x8033C5A8: table.sym("_camera_bss+0x88"),
-	0x8033C5AC: table.sym("_camera_bss+0x8C"),
-	0x8033C5B0: table.sym("_camera_bss+0x90"),
-	0x8033C5B4: table.sym("_camera_bss+0x94"),
-	0x8033C5B6: table.sym("_camera_bss+0x96"),
-	0x8033C5B8: table.sym("_camera_bss+0x98"),
-	0x8033C5C0: table.sym("_camera_bss+0xA0"),
-	0x8033C5C2: table.sym("_camera_bss+0xA2"),
-	0x8033C5C4: table.sym("_camera_bss+0xA4"),
-	0x8033C5C8: table.sym("_camera_bss+0xA8"),
-	0x8033C5CA: table.sym("_camera_bss+0xAA"),
-	0x8033C5CC: table.sym("_camera_bss+0xAC"),
-	0x8033C5D0: table.sym("_camera_bss+0xB0"),
-	0x8033C5D2: table.sym("_camera_bss+0xB2"),
-	0x8033C5D4: table.sym("_camera_bss+0xB4"),
-	0x8033C5E8: table.sym("_camera_bss+0xC8"),
-	0x8033C5EC: table.sym("_camera_bss+0xCC"),
-	0x8033C5F0: table.sym("_camera_bss+0xD0"),
-	0x8033C5F4: table.sym("_camera_bss+0xD4"),
-	0x8033C5F8: table.sym("_camera_bss+0xD8"),
-	0x8033C5FC: table.sym("_camera_bss+0xDC"),
-	0x8033C600: table.sym("_camera_bss+0xE0"),
-	0x8033C604: table.sym("_camera_bss+0xE4"),
-	0x8033C608: table.sym("_camera_bss+0xE8"),
-	0x8033C60C: table.sym("_camera_bss+0xEC"),
-	0x8033C610: table.sym("_camera_bss+0xF0"),
-	0x8033C614: table.sym("_camera_bss+0xF4"),
-	0x8033C61C: table.sym("_camera_bss+0xFC"),
-	0x8033C61E: table.sym("_camera_bss+0xFE"),
-	0x8033C620: table.sym("_camera_bss+0x100"),
-	0x8033C622: table.sym("_camera_bss+0x102"),
-	0x8033C624: table.sym("_camera_bss+0x104"),
-	0x8033C628: table.sym("_camera_bss+0x108"),
-	0x8033C630: table.sym("_camera_bss+0x110"),
-	0x8033C632: table.sym("_camera_bss+0x112"),
-	0x8033C634: table.sym("_camera_bss+0x114"),
-	0x8033C668: table.sym("_camera_bss+0x148"),
-	0x8033C66C: table.sym("_camera_bss+0x14C"),
-	0x8033C670: table.sym("_camera_bss+0x150"),
-	0x8033C674: table.sym("_camera_bss+0x154"),
-	0x8033C676: table.sym("_camera_bss+0x156"),
-	0x8033C678: table.sym("_camera_bss+0x158"),
-	0x8033C67C: table.sym("_camera_bss+0x15C"),
-	0x8033C680: table.sym("_camera_bss+0x160"),
-	0x8033C684: table.sym("_camera_bss+0x164"),
-	0x8033C686: table.sym("_camera_bss+0x166"),
-	0x8033C688: table.sym("_camera_bss+0x168"),
-	0x8033C68A: table.sym("_camera_bss+0x16A"),
-	0x8033C68C: table.sym("_camera_bss+0x16C"),
-	0x8033C68E: table.sym("_camera_bss+0x16E"),
-	0x8033C690: table.sym("_camera_bss+0x170"),
-	0x8033C698: table.sym("_camera_bss+0x178"), # la
-	0x8033C6D4: table.sym("_camera_bss+0x1B4"),
-	0x8033C6D5: table.sym("_camera_bss+0x1B5"),
-	0x8033C6F0: table.sym("_camera_bss+0x1D0"),
-	0x8033C6F2: table.sym("_camera_bss+0x1D2"),
-	0x8033C6F4: table.sym("_camera_bss+0x1D4"),
-	0x8033C712: table.sym("_camera_bss+0x1F2"),
-	0x8033C714: table.sym("_camera_bss+0x1F4"),
-	0x8033C716: table.sym("_camera_bss+0x1F6"),
-	0x8033C730: table.sym("_camera_bss+0x210"),
-	0x8033C732: table.sym("_camera_bss+0x212"),
-	0x8033C734: table.sym("_camera_bss+0x214"),
-	0x8033C736: table.sym("_camera_bss+0x216"),
-	0x8033C738: table.sym("_camera_bss+0x218"),
-	0x8033C73A: table.sym("_camera_bss+0x21A"),
-	0x8033C73C: table.sym("_camera_bss+0x21C"),
-	0x8033C740: table.sym("_camera_bss+0x220"),
-	0x8033C744: table.sym("_camera_bss+0x224"),
-	0x8033C748: table.sym("_camera_bss+0x228"),
-	0x8033C74C: table.sym("_camera_bss+0x22C"),
-	0x8033C750: table.sym("_camera_bss+0x230"),
-	0x8033C754: table.sym("_camera_bss+0x234"),
-	0x8033C75A: table.sym("_camera_bss+0x23A"),
-	0x8033C75C: table.sym("_camera_bss+0x23C"),
-	0x8033C75E: table.sym("_camera_bss+0x23E"),
-	0x8033C760: table.sym("_camera_bss+0x240"),
-	0x8033C764: table.sym("_camera_bss+0x244"),
-	0x8033C768: table.sym("_camera_bss+0x248"),
-	0x8033C76A: table.sym("_camera_bss+0x24A"),
-	0x8033C76C: table.sym("_camera_bss+0x24C"),
-	0x8033C770: table.sym("_camera_bss+0x250"),
-	0x8033C772: table.sym("_camera_bss+0x252"),
-	0x8033C774: table.sym("_camera_bss+0x254"),
-	0x8033C776: table.sym("_camera_bss+0x256"),
-	0x8033C778: table.sym("_camera_bss+0x258"),
-	0x8033C77C: table.sym("_camera_bss+0x25C"),
-	0x8033C780: table.sym("_camera_bss+0x260"),
-	0x8033C788: table.sym("_camera_bss+0x268"),
-	0x8033C78A: table.sym("_camera_bss+0x26A"),
-	0x8033C78C: table.sym("_camera_bss+0x26C"),
-	0x8033C78E: table.sym("_camera_bss+0x26E"),
-	0x8033C7A8: table.sym("_camera_bss+0x288"),
-	0x8033C7AE: table.sym("_camera_bss+0x28E"),
-	0x8033C7D0: table.sym("_camera_bss+0x2B0"), # la
-	0x8033C7DC: table.sym("_camera_bss+0x2BC"),
-	0x8033C7E0: table.sym("_camera_bss+0x2C0"),
-	0x8033C7E8: table.sym("_camera_bss+0x2C8"), # la
-	0x8033C808: table.sym("_camera_bss+0x2E8"), # la
-	0x8033C828: table.sym("_camera_bss+0x308"), # la
-	0x8033C840: table.sym("_camera_bss+0x320"),
-	0x8033C844: table.sym("_camera_bss+0x324"),
-	0x8033C848: table.sym("_camera_bss+0x328"),
-	0x8033C84A: table.sym("_camera_bss+0x32A"),
-	0x8033C850: table.sym("_camera_bss+0x330"),
-	0x8033C950: table.sym("_camera_bss+0x430"),
-	0x8033CA50: table.sym("_camera_bss+0x530"),
-	0x8033CA54: table.sym("_camera_bss+0x534"),
-	0x8033CA58: table.sym("_camera_bss+0x538"),
-	0x8033CA5A: table.sym("_camera_bss+0x53A"),
-	0x8033CA5C: table.sym("_camera_bss+0x53C"),
-	0x8033CA60: table.sym("_camera_bss+0x540"),
-	0x8033CA82: table.sym("_camera_bss+0x562"),
-	0x8033CBC8: table.sym("_camera_bss+0x6A8"),
-	0x8033CBCC: table.sym("_camera_bss+0x6AC"),
-	0x8033CBD0: table.sym("_camera_bss+0x6B0"),
+	# src/camera.c
+	0x8033C520: table.sym_var("pl_camera_data", "PL_CAMERA", "[2]", table.GLOBL|ultra.BALIGN),
+	0x8033C698: table.sym_var("camdata", "CAMDATA", flag=table.GLOBL|ultra.BALIGN),
 
 	# src/object.c
-	0x8033CBE0: table.sym_var("obj_list_data", "OBJ_LIST", "[16]", table.GLOBL|ultra.BALIGN),
+	0x8033CBE0: table.sym_var("obj_rootdata", "OBJLIST", "[16]", table.GLOBL|ultra.BALIGN),
 	0x8033D260: table.sym_var("object_debug_flag", "u32", flag=table.GLOBL),
-	0x8033D264: table.sym_var("object_8033D264", "int", flag=table.GLOBL), # "NULLBG"
+	0x8033D264: table.sym_var("nullbg_count", "int", flag=table.GLOBL),
 	0x8033D268: table.sym_var("object_8033D268", "int", flag=table.GLOBL), # unused
 	0x8033D26C: table.sym_var("object_8033D26C", "int", flag=table.GLOBL), # "WALL"
-	0x8033D270: table.sym_var("object_8033D270", "int", flag=table.GLOBL), # "obj"
-	0x8033D274: table.sym_var("object_8033D274", "struct struct_8033D274", flag=table.GLOBL), # no balign?
+	0x8033D270: table.sym_var("obj_count", "int", flag=table.GLOBL),
+	0x8033D274: table.sym_var("bg_debug", "BG_DEBUG", flag=table.GLOBL),
 	0x8033D280: table.sym_var("object_8033D280", "s16", "[16][8]", table.GLOBL|ultra.BALIGN),
 	0x8033D380: table.sym_var("object_8033D380", "s16", "[16][8]", table.GLOBL|ultra.BALIGN),
 	0x8033D480: table.sym_var("object_8033D480", "int", flag=table.GLOBL), # obj freeze
 	0x8033D488: table.sym_var("object_data", "OBJECT", "[240]", table.GLOBL|ultra.BALIGN),
 	0x80360E88: table.sym_var("object_dummy", "OBJECT", flag=table.GLOBL|ultra.BALIGN),
-	0x803610E8: table.sym_var("obj_list", "OBJ_LIST *", flag=table.GLOBL),
-	0x803610F0: table.sym_var("obj_list_free", "OBJ_LIST", flag=table.GLOBL|ultra.BALIGN),
+	0x803610E8: table.sym_var("obj_rootlist", "OBJLIST *", flag=table.GLOBL),
+	0x803610F0: table.sym_var("obj_freelist", "OBJLIST", flag=table.GLOBL|ultra.BALIGN),
 	0x80361158: table.sym_var("obj_mario", "OBJECT *", flag=table.GLOBL),
 	0x8036115C: table.sym_var("obj_luigi", "OBJECT *", flag=table.GLOBL),
 	0x80361160: table.sym_var("object", "OBJECT *", flag=table.GLOBL),
 	0x80361164: table.sym_var("object_pc", "O_SCRIPT *", flag=table.GLOBL),
-	0x80361168: table.sym_var("object_80361168", "s16", flag=table.GLOBL), # prev "obj"
-	0x8036116C: table.sym_var("object_8036116C", "int", flag=table.GLOBL), # movebg alloc
-	0x80361170: table.sym_var("object_80361170", "int", flag=table.GLOBL), # movebg alloc
-	0x80361174: table.sym_var("object_80361174", "int", flag=table.GLOBL), # statbg alloc
-	0x80361178: table.sym_var("object_80361178", "int", flag=table.GLOBL), # statbg alloc
+	0x80361168: table.sym_var("obj_count_prev", "s16", flag=table.GLOBL),
+	0x8036116C: table.sym_var("bglist_count", "int", flag=table.GLOBL),
+	0x80361170: table.sym_var("bgface_count", "int", flag=table.GLOBL),
+	0x80361174: table.sym_var("bglist_static", "int", flag=table.GLOBL),
+	0x80361178: table.sym_var("bgface_static", "int", flag=table.GLOBL),
 	0x8036117C: table.sym_var("object_heap", "HEAP *", flag=table.GLOBL),
 	0x80361180: table.sym_var("object_80361180", "s16", flag=table.GLOBL),
 	0x80361182: table.sym_var("object_80361182", "s16", flag=table.GLOBL),
-	0x80361184: table.sym_var("object_80361184", "void *", flag=table.GLOBL), # type
+	0x80361184: table.sym_var("object_80361184", "short *", flag=table.GLOBL), # type
 	0x80361188: table.sym_var("object_80361188", "int", "[20]", table.GLOBL|ultra.BALIGN),
 	0x803611D8: table.sym_var("object_803611D8", "s8", "[60][2]", table.GLOBL|ultra.BALIGN),
 	0x80361250: table.sym_var("object_80361250", "s16", flag=table.GLOBL),
@@ -12091,13 +12269,13 @@ sym_E0_d_code = {
 	0x80361262: table.sym_var("object_80361262", "s16", flag=table.GLOBL),
 	0x80361264: table.sym_var("object_80361264", "s16", flag=table.GLOBL),
 
-	# src/obj_lib.c
-	0x80361270: table.sym_var("obj_lib_80361270", "s32", flag=table.GLOBL),
+	# src/objlib.c
+	0x80361270: table.sym_var("objlib_80361270", "s32", flag=table.GLOBL),
 
 	# src/object_a.c
 	0x80361280: table.sym_var("object_a_80361280", "s16", flag=table.GLOBL),
 
-	# src/obj_debug.c
+	# src/objdebug.c
 	0x80361290: table.sym_var("obj_debug_80361290", "OBJ_DEBUG", flag=table.GLOBL|ultra.BALIGN),
 	0x803612A0: table.sym_var("obj_debug_803612A0", "OBJ_DEBUG", flag=table.GLOBL|ultra.BALIGN),
 
@@ -12113,7 +12291,7 @@ sym_E0_d_code = {
 	# src/scroll.c
 	0x803612E0: table.sym_var("scroll_803612E0", "s16", flag=table.GLOBL),
 
-	# src/obj_shape.c
+	# src/objshape.c
 	0x803612F0: table.sym_var("obj_shape_803612F0", "s8", flag=table.GLOBL),
 
 	# src/wave.c
@@ -12127,7 +12305,7 @@ sym_E0_d_code = {
 	0x8036131C: table.sym_var("wave_8036131C", "s8", flag=table.GLOBL),
 
 	# src/dprint.c
-	0x80361320: table.sym_var("dprint_table", "DPRINT *", "[50]", table.GLOBL|ultra.BALIGN),
+	0x80361320: table.sym_var("dprint_table", "DPRINT *", "[50]", ultra.BALIGN),
 
 	# src/message.c
 	0x803613F0: table.sym_var("message_803613F0", "s16", flag=table.GLOBL),
@@ -12138,23 +12316,23 @@ sym_E0_d_code = {
 	0x803613FC: table.sym_var("message_803613FC", "s16", flag=table.GLOBL),
 	0x803613FE: table.sym_var("message_803613FE", "s8", flag=table.GLOBL),
 
-	# src/weather_snow.c
+	# src/snow.c
 	0x80361400: table.sym_var("weather_snow", "struct weather *", flag=table.GLOBL),
-	0x80361408: table.sym_var("weather_snow_80361408", "s32", "[3]", table.GLOBL|ultra.BALIGN),
-	0x80361414: table.sym_var("weather_snow_80361414", "s16", flag=table.GLOBL),
-	0x80361416: table.sym_var("weather_snow_80361416", "s16", flag=table.GLOBL),
+	0x80361408: table.sym_var("snow_80361408", "s32", "[3]", table.GLOBL|ultra.BALIGN),
+	0x80361414: table.sym_var("snow_80361414", "s16", flag=table.GLOBL),
+	0x80361416: table.sym_var("snow_80361416", "s16", flag=table.GLOBL),
 
-	# src/weather_lava.c
-	0x80361420: table.sym_var("weather_lava_80361420", "s16", "[10]", table.GLOBL|ultra.BALIGN),
+	# src/lava.c
+	0x80361420: table.sym_var("lava_80361420", "s16", "[10]", table.GLOBL|ultra.BALIGN),
 	0x80361434: table.sym_var("gfx_weather_lava", "Gfx *", flag=table.GLOBL),
-	0x80361438: table.sym_var("weather_lava_80361438", "s32", flag=table.GLOBL),
-	0x8036143C: table.sym_var("weather_lava_8036143C", "s32", flag=table.GLOBL),
+	0x80361438: table.sym_var("lava_80361438", "s32", flag=table.GLOBL),
+	0x8036143C: table.sym_var("lava_8036143C", "s32", flag=table.GLOBL),
 
 	# src/hud.c
 	0x80361440: table.sym_var("hud_80361440", "s16", flag=table.GLOBL),
 
 	# src/object_b.c
-	0x80361450: table.sym_var("object_b_80361450", "MAP_PLANE *", flag=table.GLOBL),
+	0x80361450: table.sym_var("object_b_80361450", "BGFACE *", flag=table.GLOBL),
 
 	# src/object_c.c
 	0x80361460: table.sym_var("object_c_80361460", "s32", flag=table.GLOBL),
@@ -12242,68 +12420,68 @@ sym_J0_E0_t_ulib = {
 	# ==========================================================================
 
 	# src/math.c
-	0x80378800: table.sym_fnc("vecf_cpy", "VECF *", (
+	0x80378800: table.sym_fnc("vecf_cpy", "float *", (
 		"VECF dst",
 		"VECF src",
 	), table.GLOBL),
-	0x80378840: table.sym_fnc("vecf_set", "VECF *", (
+	0x80378840: table.sym_fnc("vecf_set", "float *", (
 		"VECF vf",
 		"float x",
 		"float y",
 		"float z",
 	), table.GLOBL),
-	0x8037888C: table.sym_fnc("vecf_add", "VECF *", (
+	0x8037888C: table.sym_fnc("vecf_add", "float *", (
 		"VECF vf",
 		"VECF a",
 	), table.GLOBL),
-	0x803788E4: table.sym_fnc("vecf_addto", "VECF *", (
+	0x803788E4: table.sym_fnc("vecf_addto", "float *", (
 		"VECF vf",
 		"VECF a",
 		"VECF b",
 	), table.GLOBL), # unused
-	0x8037893C: table.sym_fnc("vecs_cpy", "VECS *", (
+	0x8037893C: table.sym_fnc("vecs_cpy", "short *", (
 		"VECS dst",
 		"VECS src",
 	), table.GLOBL),
-	0x8037897C: table.sym_fnc("vecs_set", "VECS *", (
+	0x8037897C: table.sym_fnc("vecs_set", "short *", (
 		"VECS vs",
 		"SHORT x",
 		"SHORT y",
 		"SHORT z",
 	), table.GLOBL),
-	0x803789C8: table.sym_fnc("vecs_add", "VECS *", (
+	0x803789C8: table.sym_fnc("vecs_add", "short *", (
 		"VECS vs",
 		"VECS a",
 	), table.GLOBL), # unused
-	0x80378A20: table.sym_fnc("vecs_addto", "VECS *", (
+	0x80378A20: table.sym_fnc("vecs_addto", "short *", (
 		"VECS vs",
 		"VECS a",
 		"VECS b",
 	), table.GLOBL), # unused
-	0x80378A78: table.sym_fnc("vecs_sub", "VECS *", (
+	0x80378A78: table.sym_fnc("vecs_sub", "short *", (
 		"VECS vs",
 		"VECS a",
 	), table.GLOBL), # unused
-	0x80378AD0: table.sym_fnc("vecs_to_vecf", "VECF *", (
+	0x80378AD0: table.sym_fnc("vecs_to_vecf", "float *", (
 		"VECF dst",
 		"VECS src",
 	), table.GLOBL),
-	0x80378B34: table.sym_fnc("vecf_to_vecs", "VECS *", (
+	0x80378B34: table.sym_fnc("vecf_to_vecs", "short *", (
 		"VECS dst",
 		"VECF src",
 	), table.GLOBL),
-	0x80378C50: table.sym_fnc("vecf_normal", "VECF *", (
+	0x80378C50: table.sym_fnc("vecf_normal", "float *", (
 		"VECF vf",
 		"VECF v0",
 		"VECF v1",
 		"VECF v2",
 	), table.GLOBL), # static
-	0x80378D38: table.sym_fnc("vecf_cross", "VECF *", (
+	0x80378D38: table.sym_fnc("vecf_cross", "float *", (
 		"VECF vf",
 		"VECF a",
 		"VECF b",
 	), table.GLOBL), # static
-	0x80378DC0: table.sym_fnc("vecf_normalise", "VECF *", (
+	0x80378DC0: table.sym_fnc("vecf_normalize", "float *", (
 		"VECF vf",
 	), table.GLOBL), # static
 	0x80378E68: table.sym_fnc("mtxf_cpy", arg=(
@@ -12321,9 +12499,9 @@ sym_J0_E0_t_ulib = {
 		"MTXF mf",
 		"VECF eye",
 		"VECF look",
-		"SHORT rz",
+		"SHORT az",
 	), flag=table.GLOBL),
-	0x80379440: table.sym_fnc("mtxf_posang", arg=(
+	0x80379440: table.sym_fnc("mtxf_coord", arg=(
 		"MTXF mf",
 		"VECF pos",
 		"VECS ang",
@@ -12337,18 +12515,18 @@ sym_J0_E0_t_ulib = {
 		"MTXF dst",
 		"MTXF src",
 		"VECF pos",
-		"SHORT rz",
+		"SHORT az",
 	), flag=table.GLOBL),
 	0x80379918: table.sym_fnc("mtxf_stand", arg=(
 		"MTXF mf",
-		"VECF normal",
+		"VECF vy",
 		"VECF pos",
-		"SHORT ang",
+		"SHORT ay",
 	), flag=table.GLOBL),
 	0x80379AA4: table.sym_fnc("mtxf_ground", arg=(
 		"MTXF mf",
 		"VECF pos",
-		"SHORT ang",
+		"SHORT ay",
 		"float radius",
 	), flag=table.GLOBL),
 	0x80379F60: table.sym_fnc("mtxf_cat", arg=(
@@ -12369,9 +12547,9 @@ sym_J0_E0_t_ulib = {
 		"Mtx *m",
 		"MTXF mf",
 	), flag=table.GLOBL),
-	0x8037A4B8: table.sym_fnc("mtx_rz", arg=(
+	0x8037A4B8: table.sym_fnc("mtx_az", arg=(
 		"Mtx *m",
-		"SHORT rz",
+		"SHORT az",
 	), flag=table.GLOBL),
 	0x8037A550: table.sym_fnc("vecf_untransform", arg=(
 		"VECF vf",
@@ -12405,19 +12583,19 @@ sym_J0_E0_t_ulib = {
 		"float dec",
 	), table.GLOBL),
 	0x8037A924: table.sym_fnc("atan_yx", "USHORT", (
-		"float x",
 		"float y",
+		"float x",
 	)),
-	0x8037A9A8: table.sym_fnc("atan2", "SHORT", (
-		"float x",
+	0x8037A9A8: table.sym_fnc("atan2", "short", (
 		"float y",
+		"float x",
 	), table.GLOBL),
 	0x8037AB88: table.sym_fnc("atan2f", "float", (
-		"float x",
 		"float y",
+		"float x",
 	), table.GLOBL), # unused
 	0x8037ABEC: table.sym_fnc("bspline_curve", arg=(
-		"float dst[4]",
+		"float curve[4]",
 		"float phase",
 		"int mode",
 	)),
@@ -12434,95 +12612,271 @@ sym_J0_E0_t_ulib = {
 	), table.GLOBL),
 
 	# src/shape.c
-	0x8037B220: table.sym("shape_8037B220"),
-	0x8037B24C: table.sym("shape_8037B24C", table.GLOBL),
-	0x8037B30C: table.sym("shape_8037B30C", table.GLOBL),
-	0x8037B380: table.sym("shape_8037B380", table.GLOBL),
-	0x8037B448: table.sym("shape_8037B448", table.GLOBL),
-	0x8037B4AC: table.sym("shape_8037B4AC", table.GLOBL),
-	0x8037B530: table.sym("shape_8037B530", table.GLOBL),
-	0x8037B5B4: table.sym("shape_8037B5B4", table.GLOBL),
-	0x8037B670: table.sym("shape_8037B670", table.GLOBL),
-	0x8037B744: table.sym("shape_8037B744", table.GLOBL),
-	0x8037B7F8: table.sym("shape_8037B7F8", table.GLOBL),
-	0x8037B89C: table.sym("shape_8037B89C", table.GLOBL),
-	0x8037B940: table.sym("shape_8037B940", table.GLOBL),
-	0x8037B9E0: table.sym("shape_8037B9E0", table.GLOBL),
-	0x8037BAD4: table.sym("shape_8037BAD4", table.GLOBL),
-	0x8037BB48: table.sym("shape_8037BB48", table.GLOBL),
-	0x8037BBEC: table.sym("shape_8037BBEC", table.GLOBL),
-	0x8037BC90: table.sym("shape_8037BC90", table.GLOBL),
-	0x8037BD24: table.sym("shape_8037BD24", table.GLOBL),
-	0x8037BDB4: table.sym("shape_8037BDB4", table.GLOBL),
-	0x8037BE28: table.sym("shape_8037BE28", table.GLOBL),
-	0x8037BECC: table.sym("shape_8037BECC", table.GLOBL),
-	0x8037BF84: table.sym("shape_8037BF84", table.GLOBL),
-	0x8037C044: table.sym("shape_8037C044", table.GLOBL),
-	0x8037C0BC: table.sym("shape_8037C0BC", table.GLOBL),
-	0x8037C138: table.sym("shape_8037C138", table.GLOBL),
-	0x8037C1E4: table.sym("shape_8037C1E4"),
-	0x8037C360: table.sym_fnc("shape_8037C360", arg=(
-		"SHAPE_SCENE *scene",
+	0x8037B220: table.sym_fnc("shape_init", arg=(
+		"SHAPE *shape",
+		"int type",
+	)),
+	0x8037B24C: table.sym_fnc("s_create_scene", "S_SCENE *", (
+		"ARENA *arena",
+		"S_SCENE *shp",
+		"SHORT index",
+		"SHORT x",
+		"SHORT y",
+		"SHORT w",
+		"SHORT h",
+	), table.GLOBL),
+	0x8037B30C: table.sym_fnc("s_create_ortho", "S_ORTHO *", (
+		"ARENA *arena",
+		"S_ORTHO *shp",
+		"float scale",
+	), table.GLOBL),
+	0x8037B380: table.sym_fnc("s_create_persp", "S_PERSP *", (
+		"ARENA *arena",
+		"S_PERSP *shp",
+		"float fovy",
+		"SHORT near",
+		"SHORT far",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037B448: table.sym_fnc("s_create_empty", "SHAPE *", (
+		"ARENA *arena",
+		"SHAPE *shp",
+	), table.GLOBL),
+	0x8037B4AC: table.sym_fnc("s_create_layer", "S_LAYER *", (
+		"ARENA *arena",
+		"S_LAYER *shp",
+		"SHORT zb",
+	), table.GLOBL),
+	0x8037B530: table.sym_fnc("s_create_lod", "S_LOD *", (
+		"ARENA *arena",
+		"S_LOD *shp",
+		"SHORT min",
+		"SHORT max",
+	), table.GLOBL),
+	0x8037B5B4: table.sym_fnc("s_create_select", "S_SELECT *", (
+		"ARENA *arena",
+		"S_SELECT *shp",
+		"SHORT code",
+		"SHORT index",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037B670: table.sym_fnc("s_create_camera", "S_CAMERA *", (
+		"ARENA *arena",
+		"S_CAMERA *shp",
+		"VECF eye",
+		"VECF look",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037B744: table.sym_fnc("s_create_coord", "S_COORD *", (
+		"ARENA *arena",
+		"S_COORD *shp",
+		"int layer",
+		"Gfx *gfx",
+		"VECS pos",
+		"VECS ang",
+	), table.GLOBL),
+	0x8037B7F8: table.sym_fnc("s_create_pos", "S_POS *", (
+		"ARENA *arena",
+		"S_POS *shp",
+		"int layer",
+		"Gfx *gfx",
+		"VECS pos",
+	), table.GLOBL),
+	0x8037B89C: table.sym_fnc("s_create_ang", "S_ANG *", (
+		"ARENA *arena",
+		"S_ANG *shp",
+		"int layer",
+		"Gfx *gfx",
+		"VECS ang",
+	), table.GLOBL),
+	0x8037B940: table.sym_fnc("s_create_scale", "S_SCALE *", (
+		"ARENA *arena",
+		"S_SCALE *shp",
+		"int layer",
+		"Gfx *gfx",
+		"float scale",
+	), table.GLOBL),
+	0x8037B9E0: table.sym_fnc("s_create_object", "S_OBJECT *", (
+		"ARENA *arena",
+		"S_OBJECT *shp",
+		"SHAPE *shape",
+		"VECF pos",
+		"VECS ang",
+		"VECF scale",
+	), table.GLOBL),
+	0x8037BAD4: table.sym_fnc("s_create_cull", "S_CULL *", (
+		"ARENA *arena",
+		"S_CULL *shp",
+		"SHORT dist",
+	), table.GLOBL),
+	0x8037BB48: table.sym_fnc("s_create_joint", "S_JOINT *", (
+		"ARENA *arena",
+		"S_JOINT *shp",
+		"int layer",
+		"Gfx *gfx",
+		"VECS pos",
+	), table.GLOBL),
+	0x8037BBEC: table.sym_fnc("s_create_billboard", "S_BILLBOARD *", (
+		"ARENA *arena",
+		"S_BILLBOARD *shp",
+		"int layer",
+		"Gfx *gfx",
+		"VECS pos",
+	), table.GLOBL),
+	0x8037BC90: table.sym_fnc("s_create_gfx", "S_GFX *", (
+		"ARENA *arena",
+		"S_GFX *shp",
+		"int layer",
+		"Gfx *gfx",
+	), table.GLOBL),
+	0x8037BD24: table.sym_fnc("s_create_shadow", "S_SHADOW *", (
+		"ARENA *arena",
+		"S_SHADOW *shp",
+		"SHORT size",
+		"UCHAR alpha",
+		"UCHAR type",
+	), table.GLOBL),
+	0x8037BDB4: table.sym_fnc("s_create_list", "S_LIST *", (
+		"ARENA *arena",
+		"S_LIST *shp",
+		"SHAPE *shape",
+	), table.GLOBL),
+	0x8037BE28: table.sym_fnc("s_create_callback", "S_CALLBACK *", (
+		"ARENA *arena",
+		"S_CALLBACK *shp",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037BECC: table.sym_fnc("s_create_back", "S_BACK *", (
+		"ARENA *arena",
+		"S_BACK *shp",
+		"USHORT code",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037BF84: table.sym_fnc("s_create_hand", "S_HAND *", (
+		"ARENA *arena",
+		"S_HAND *shp",
+		"S_OBJECT *obj",
+		"VECS pos",
+		"SHPCALL *callback",
+		"uintptr_t arg",
+	), table.GLOBL),
+	0x8037C044: table.sym_fnc("shape_link", "SHAPE *", (
+		"SHAPE *parent",
+		"SHAPE *shape",
+	), table.GLOBL),
+	0x8037C0BC: table.sym_fnc("shape_unlink", "SHAPE *", (
+		"SHAPE *shape",
+	), table.GLOBL),
+	0x8037C138: table.sym_fnc("shape_makefirst", "SHAPE *", (
+		"SHAPE *shape",
+	), table.GLOBL),
+	0x8037C1E4: table.sym_fnc("shape_notify", arg=(
+		"SHAPE *shape",
+		"int code",
+	)),
+	0x8037C360: table.sym_fnc("s_scene_notify", arg=(
+		"S_SCENE *shp",
 		"int code",
 	), flag=table.GLOBL),
-	0x8037C3D0: table.sym("shape_8037C3D0", table.GLOBL),
-	0x8037C448: table.sym("shape_8037C448", table.GLOBL),
-	0x8037C51C: table.sym("shape_8037C51C", table.GLOBL),
-	0x8037C658: table.sym("shape_8037C658", table.GLOBL),
-	0x8037C708: table.sym("shape_8037C708", table.GLOBL),
-	0x8037C7D8: table.sym_fnc("shape_8037C7D8", "int", (
+	0x8037C3D0: table.sym_fnc("shape_8037C3D0", arg=(
+		"S_OBJECT *shp",
+	), flag=table.GLOBL), # sobj init
+	0x8037C448: table.sym_fnc("shape_8037C448", arg=(
+		"S_OBJECT *shp",
+		"SHAPE *shape",
+		"VECF pos",
+		"VECS ang",
+	), flag=table.GLOBL), # sobj start
+	0x8037C51C: table.sym_fnc("shape_8037C51C", arg=(
+		"S_OBJECT *shp",
+		"SPAWN *spawn",
+	), flag=table.GLOBL), # sobj spawn
+	0x8037C658: table.sym_fnc("shape_8037C658", arg=(
+		"S_OBJECT *shp",
+		"ANIME **animep",
+	), flag=table.GLOBL), # set anime
+	0x8037C708: table.sym_fnc("shape_8037C708", arg=(
+		"S_OBJECT *shp",
+		"ANIME **animep",
+		"s32 vel",
+	), flag=table.GLOBL), # set anime vel
+	0x8037C7D8: table.sym_fnc("anime_index", "int", (
 		"int frame",
 		"u16 **tbl"
 	), table.GLOBL),
-	0x8037C844: table.sym_fnc("shape_8037C844", "int", (
-		"SKELETON *skeleton",
+	0x8037C844: table.sym_fnc("anime_step", "int", (
+		"SKELETON *skel",
 		"s32 *dst",
 	), table.GLOBL),
-	0x8037C9E8: table.sym("shape_8037C9E8"), # unused
-	0x8037CB10: table.sym("shape_8037CB10"), # unused
-	0x8037CB60: table.sym("shape_8037CB60", table.GLOBL),
-	0x8037CBC0: table.sym("shape_8037CBC0", table.GLOBL),
-	0x8037CBFC: table.sym("shape_8037CBFC", table.GLOBL),
-	0x8037CC74: table.sym("shape_8037CC74", table.GLOBL),
+	0x8037C9E8: table.sym_fnc("anime_pos_get", arg=(
+		"S_OBJECT *shp",
+		"VECF pos",
+	)), # unused
+	0x8037CB10: table.sym_fnc("shape_scene_get", "S_SCENE *", (
+		"SHAPE *shape",
+	)), # unused
 
-	# src/s_script.c
-	0x8037CD60: table.sym_fnc("s_cmd_script", flag=table.GLOBL), # data
-	0x8037CE24: table.sym_fnc("s_cmd_end", flag=table.GLOBL), # data
-	0x8037CEE8: table.sym_fnc("s_cmd_jump", flag=table.GLOBL), # data
-	0x8037CF70: table.sym_fnc("s_cmd_return", flag=table.GLOBL), # data
-	0x8037CFC0: table.sym_fnc("s_cmd_push", flag=table.GLOBL), # data
-	0x8037D018: table.sym_fnc("s_cmd_pull", flag=table.GLOBL), # data
-	0x8037D050: table.sym_fnc("s_cmd_store", flag=table.GLOBL), # data
-	0x8037D0D0: table.sym_fnc("s_cmd_flag", flag=table.GLOBL), # data
-	0x8037D1D0: table.sym_fnc("s_cmd_scene", flag=table.GLOBL), # data
-	0x8037D328: table.sym_fnc("s_cmd_ortho", flag=table.GLOBL), # data
-	0x8037D3A4: table.sym_fnc("s_cmd_persp", flag=table.GLOBL), # data
-	0x8037D48C: table.sym_fnc("s_cmd_empty", flag=table.GLOBL), # data
-	0x8037D4DC: table.sym_fnc("s_cmd_1F", flag=table.GLOBL), # data
-	0x8037D500: table.sym_fnc("s_cmd_layer", flag=table.GLOBL), # data
-	0x8037D55C: table.sym_fnc("s_cmd_lod", flag=table.GLOBL), # data
-	0x8037D5D4: table.sym_fnc("s_cmd_select", flag=table.GLOBL), # data
-	0x8037D640: table.sym_fnc("s_cmd_camera", flag=table.GLOBL), # data
-	0x8037D6F0: table.sym_fnc("s_cmd_posang", flag=table.GLOBL), # data
-	0x8037D8D4: table.sym_fnc("s_cmd_pos", flag=table.GLOBL), # data
-	0x8037D998: table.sym_fnc("s_cmd_ang", flag=table.GLOBL), # data
-	0x8037DA5C: table.sym_fnc("s_cmd_scale", flag=table.GLOBL), # data
-	0x8037DB50: table.sym_fnc("s_cmd_1E", flag=table.GLOBL), # data
-	0x8037DB74: table.sym_fnc("s_cmd_joint", flag=table.GLOBL), # data
-	0x8037DC10: table.sym_fnc("s_cmd_billboard", flag=table.GLOBL), # data
-	0x8037DCD4: table.sym_fnc("s_cmd_gfx", flag=table.GLOBL), # data
-	0x8037DD4C: table.sym_fnc("s_cmd_shadow", flag=table.GLOBL), # data
-	0x8037DDDC: table.sym_fnc("s_cmd_object", flag=table.GLOBL), # data
-	0x8037DE34: table.sym_fnc("s_cmd_callback", flag=table.GLOBL), # data
-	0x8037DE94: table.sym_fnc("s_cmd_back", flag=table.GLOBL), # data
-	0x8037DEF8: table.sym_fnc("s_cmd_1A", flag=table.GLOBL), # data
-	0x8037DF1C: table.sym_fnc("s_cmd_load", flag=table.GLOBL), # data
-	0x8037DFD4: table.sym_fnc("s_cmd_hand", flag=table.GLOBL), # data
-	0x8037E058: table.sym_fnc("s_cmd_cull", flag=table.GLOBL), # data
-	0x8037E0B4: table.sym("s_script_main", table.GLOBL),
+	# src/shplang.c
+	0x8037CB60: table.sym_fnc("s_read_vecf", "short *", (
+		"VECF dst",
+		"short *src",
+	)),
+	0x8037CBC0: table.sym_fnc("s_read_vecs", "short *", (
+		"VECS dst",
+		"short *src",
+	)),
+	0x8037CBFC: table.sym_fnc("s_read_ang", "short *", (
+		"VECS dst",
+		"short *src",
+	)),
+	0x8037CC74: table.sym_fnc("s_link", arg=(
+		"SHAPE *shape",
+	)),
+	0x8037CD60: table.sym_fnc("s_cmd_execute"), # data
+	0x8037CE24: table.sym_fnc("s_cmd_exit"), # data
+	0x8037CEE8: table.sym_fnc("s_cmd_jump"), # data
+	0x8037CF70: table.sym_fnc("s_cmd_return"), # data
+	0x8037CFC0: table.sym_fnc("s_cmd_start"), # data
+	0x8037D018: table.sym_fnc("s_cmd_end"), # data
+	0x8037D050: table.sym_fnc("s_cmd_store"), # data
+	0x8037D0D0: table.sym_fnc("s_cmd_flag"), # data
+	0x8037D1D0: table.sym_fnc("s_cmd_scene"), # data
+	0x8037D328: table.sym_fnc("s_cmd_ortho"), # data
+	0x8037D3A4: table.sym_fnc("s_cmd_persp"), # data
+	0x8037D48C: table.sym_fnc("s_cmd_empty"), # data
+	0x8037D4DC: table.sym_fnc("s_cmd_31"), # data
+	0x8037D500: table.sym_fnc("s_cmd_layer"), # data
+	0x8037D55C: table.sym_fnc("s_cmd_lod"), # data
+	0x8037D5D4: table.sym_fnc("s_cmd_select"), # data
+	0x8037D640: table.sym_fnc("s_cmd_camera"), # data
+	0x8037D6F0: table.sym_fnc("s_cmd_coord"), # data
+	0x8037D8D4: table.sym_fnc("s_cmd_pos"), # data
+	0x8037D998: table.sym_fnc("s_cmd_ang"), # data
+	0x8037DA5C: table.sym_fnc("s_cmd_scale"), # data
+	0x8037DB50: table.sym_fnc("s_cmd_30"), # data
+	0x8037DB74: table.sym_fnc("s_cmd_joint"), # data
+	0x8037DC10: table.sym_fnc("s_cmd_billboard"), # data
+	0x8037DCD4: table.sym_fnc("s_cmd_gfx"), # data
+	0x8037DD4C: table.sym_fnc("s_cmd_shadow"), # data
+	0x8037DDDC: table.sym_fnc("s_cmd_object"), # data
+	0x8037DE34: table.sym_fnc("s_cmd_callback"), # data
+	0x8037DE94: table.sym_fnc("s_cmd_back"), # data
+	0x8037DEF8: table.sym_fnc("s_cmd_26"), # data
+	0x8037DF1C: table.sym_fnc("s_cmd_load"), # data
+	0x8037DFD4: table.sym_fnc("s_cmd_hand"), # data
+	0x8037E058: table.sym_fnc("s_cmd_cull"), # data
+	0x8037E0B4: table.sym_fnc("s_process", "SHAPE *", (
+		"ARENA *arena",
+		"S_SCRIPT *script",
+	), table.GLOBL),
 
-	# src/p_script.c
-	0x8037E1A0: table.sym_fnc("p_script_cmp", "int", (
+	# src/prglang.c
+	0x8037E1A0: table.sym_fnc("p_cmp", "int", (
 		"CHAR cmp",
 		"int x",
 	)),
@@ -12534,67 +12888,67 @@ sym_J0_E0_t_ulib = {
 	0x8037E25C: table.sym_fnc("L8037E25C", flag=table.GLOBL|table.LOCAL),
 	0x8037E278: table.sym_fnc("L8037E278", flag=table.GLOBL|table.LOCAL),
 	0x8037E290: table.sym_fnc("L8037E290", flag=table.GLOBL|table.LOCAL),
-	0x8037E2C4: table.sym_fnc("p_cmd_push_call", flag=table.GLOBL), # data
-	0x8037E388: table.sym_fnc("p_cmd_push_jump", flag=table.GLOBL), # data
-	0x8037E404: table.sym_fnc("p_cmd_pull_return", flag=table.GLOBL), # data
-	0x8037E47C: table.sym_fnc("p_cmd_sleep", flag=table.GLOBL), # data
-	0x8037E4FC: table.sym_fnc("p_cmd_freeze", flag=table.GLOBL), # data
-	0x8037E580: table.sym_fnc("p_cmd_jump", flag=table.GLOBL), # data
-	0x8037E5B8: table.sym_fnc("p_cmd_call", flag=table.GLOBL), # data
-	0x8037E620: table.sym_fnc("p_cmd_return", flag=table.GLOBL), # data
-	0x8037E650: table.sym_fnc("p_cmd_for", flag=table.GLOBL), # data
-	0x8037E6D4: table.sym_fnc("p_cmd_done", flag=table.GLOBL), # data
-	0x8037E780: table.sym_fnc("p_cmd_do", flag=table.GLOBL), # data
-	0x8037E7F8: table.sym_fnc("p_cmd_while", flag=table.GLOBL), # data
-	0x8037E878: table.sym_fnc("p_cmd_if_jump", flag=table.GLOBL), # data
-	0x8037E8E8: table.sym_fnc("p_cmd_if_call", flag=table.GLOBL), # data
-	0x8037E988: table.sym_fnc("p_cmd_if", flag=table.GLOBL), # data
-	0x8037EA18: table.sym_fnc("p_cmd_else", flag=table.GLOBL), # data
-	0x8037EA70: table.sym_fnc("p_cmd_endif", flag=table.GLOBL), # data
-	0x8037EA98: table.sym_fnc("p_cmd_callback", flag=table.GLOBL), # data
-	0x8037EB04: table.sym_fnc("p_cmd_process", flag=table.GLOBL), # data
-	0x8037EB98: table.sym_fnc("p_cmd_set", flag=table.GLOBL), # data
-	0x8037EBD4: table.sym_fnc("p_cmd_push", flag=table.GLOBL), # data
-	0x8037EC14: table.sym_fnc("p_cmd_pull", flag=table.GLOBL), # data
-	0x8037EC54: table.sym_fnc("p_cmd_load_code", flag=table.GLOBL), # data
-	0x8037ECA4: table.sym_fnc("p_cmd_load_data", flag=table.GLOBL), # data
-	0x8037ECF8: table.sym_fnc("p_cmd_load_szp", flag=table.GLOBL), # data
-	0x8037ED48: table.sym_fnc("p_cmd_load_face", flag=table.GLOBL), # data
-	0x8037EDF8: table.sym_fnc("p_cmd_load_txt", flag=table.GLOBL), # data
-	0x8037EE48: table.sym_fnc("p_cmd_stage_init", flag=table.GLOBL), # data
-	0x8037EEA8: table.sym_fnc("p_cmd_stage_exit", flag=table.GLOBL), # data
-	0x8037EF00: table.sym_fnc("p_cmd_stage_start", flag=table.GLOBL), # data
-	0x8037EF70: table.sym_fnc("p_cmd_stage_end", flag=table.GLOBL), # data
-	0x8037F010: table.sym_fnc("p_cmd_scene_start", flag=table.GLOBL), # data
-	0x8037F130: table.sym_fnc("p_cmd_scene_end", flag=table.GLOBL), # data
-	0x8037F164: table.sym_fnc("p_cmd_shape_gfx", flag=table.GLOBL), # data
-	0x8037F214: table.sym_fnc("p_cmd_shape_script", flag=table.GLOBL), # data
-	0x8037F2A4: table.sym_fnc("p_cmd_shape_scale", flag=table.GLOBL), # data
-	0x8037F36C: table.sym_fnc("p_cmd_player", flag=table.GLOBL), # data
-	0x8037F45C: table.sym_fnc("p_cmd_object", flag=table.GLOBL), # data
-	0x8037F67C: table.sym_fnc("p_cmd_port", flag=table.GLOBL), # data
-	0x8037F790: table.sym_fnc("p_cmd_connect", flag=table.GLOBL), # data
-	0x8037F920: table.sym_fnc("p_cmd_env", flag=table.GLOBL), # data
-	0x8037F994: table.sym_fnc("p_cmd_bgport", flag=table.GLOBL), # data
-	0x8037FB18: table.sym_fnc("p_cmd_wind", flag=table.GLOBL), # data
-	0x8037FC38: table.sym_fnc("p_cmd_jet", flag=table.GLOBL), # data
-	0x8037FDE4: table.sym_fnc("p_cmd_vi_black", flag=table.GLOBL), # data
-	0x8037FE2C: table.sym_fnc("p_cmd_vi_gamma", flag=table.GLOBL), # data
-	0x8037FE94: table.sym_fnc("p_cmd_map", flag=table.GLOBL), # data
-	0x8037FF14: table.sym_fnc("p_cmd_area", flag=table.GLOBL), # data
-	0x8037FF94: table.sym_fnc("p_cmd_obj", flag=table.GLOBL), # data
-	0x80380014: table.sym_fnc("p_cmd_scene_open", flag=table.GLOBL), # data
-	0x8038007C: table.sym_fnc("p_cmd_scene_close", flag=table.GLOBL), # data
-	0x803800BC: table.sym_fnc("p_cmd_player_open", flag=table.GLOBL), # data
-	0x80380160: table.sym_fnc("p_cmd_player_close", flag=table.GLOBL), # data
-	0x803801A0: table.sym_fnc("p_cmd_scene_update", flag=table.GLOBL), # data
-	0x803801E0: table.sym_fnc("p_cmd_wipe", flag=table.GLOBL), # data
-	0x8038024C: table.sym_fnc("p_cmd_32", flag=table.GLOBL), # data
-	0x80380274: table.sym_fnc("p_cmd_msg", flag=table.GLOBL), # data
-	0x80380300: table.sym_fnc("p_cmd_bgm", flag=table.GLOBL), # data
-	0x8038039C: table.sym_fnc("p_cmd_bgm_play", flag=table.GLOBL), # data
-	0x803803EC: table.sym_fnc("p_cmd_bgm_stop", flag=table.GLOBL), # data
-	0x80380434: table.sym_fnc("p_cmd_var", flag=table.GLOBL), # data
+	0x8037E2C4: table.sym_fnc("p_cmd_execute"), # data
+	0x8037E388: table.sym_fnc("p_cmd_chain"), # data
+	0x8037E404: table.sym_fnc("p_cmd_exit"), # data
+	0x8037E47C: table.sym_fnc("p_cmd_sleep"), # data
+	0x8037E4FC: table.sym_fnc("p_cmd_freeze"), # data
+	0x8037E580: table.sym_fnc("p_cmd_jump"), # data
+	0x8037E5B8: table.sym_fnc("p_cmd_call"), # data
+	0x8037E620: table.sym_fnc("p_cmd_return"), # data
+	0x8037E650: table.sym_fnc("p_cmd_for"), # data
+	0x8037E6D4: table.sym_fnc("p_cmd_done"), # data
+	0x8037E780: table.sym_fnc("p_cmd_repeat"), # data
+	0x8037E7F8: table.sym_fnc("p_cmd_until"), # data
+	0x8037E878: table.sym_fnc("p_cmd_jump_if"), # data
+	0x8037E8E8: table.sym_fnc("p_cmd_call_if"), # data
+	0x8037E988: table.sym_fnc("p_cmd_if"), # data
+	0x8037EA18: table.sym_fnc("p_cmd_else"), # data
+	0x8037EA70: table.sym_fnc("p_cmd_endif"), # data
+	0x8037EA98: table.sym_fnc("p_cmd_callback"), # data
+	0x8037EB04: table.sym_fnc("p_cmd_process"), # data
+	0x8037EB98: table.sym_fnc("p_cmd_set"), # data
+	0x8037EBD4: table.sym_fnc("p_cmd_push"), # data
+	0x8037EC14: table.sym_fnc("p_cmd_pull"), # data
+	0x8037EC54: table.sym_fnc("p_cmd_load_code"), # data
+	0x8037ECA4: table.sym_fnc("p_cmd_load_data"), # data
+	0x8037ECF8: table.sym_fnc("p_cmd_load_szp"), # data
+	0x8037ED48: table.sym_fnc("p_cmd_load_face"), # data
+	0x8037EDF8: table.sym_fnc("p_cmd_load_txt"), # data
+	0x8037EE48: table.sym_fnc("p_cmd_stage_init"), # data
+	0x8037EEA8: table.sym_fnc("p_cmd_stage_exit"), # data
+	0x8037EF00: table.sym_fnc("p_cmd_stage_start"), # data
+	0x8037EF70: table.sym_fnc("p_cmd_stage_end"), # data
+	0x8037F010: table.sym_fnc("p_cmd_scene_start"), # data
+	0x8037F130: table.sym_fnc("p_cmd_scene_end"), # data
+	0x8037F164: table.sym_fnc("p_cmd_shape_gfx"), # data
+	0x8037F214: table.sym_fnc("p_cmd_shape_script"), # data
+	0x8037F2A4: table.sym_fnc("p_cmd_shape_scale"), # data
+	0x8037F36C: table.sym_fnc("p_cmd_player"), # data
+	0x8037F45C: table.sym_fnc("p_cmd_object"), # data
+	0x8037F67C: table.sym_fnc("p_cmd_port"), # data
+	0x8037F790: table.sym_fnc("p_cmd_connect"), # data
+	0x8037F920: table.sym_fnc("p_cmd_env"), # data
+	0x8037F994: table.sym_fnc("p_cmd_bgport"), # data
+	0x8037FB18: table.sym_fnc("p_cmd_wind"), # data
+	0x8037FC38: table.sym_fnc("p_cmd_jet"), # data
+	0x8037FDE4: table.sym_fnc("p_cmd_vi_black"), # data
+	0x8037FE2C: table.sym_fnc("p_cmd_vi_gamma"), # data
+	0x8037FE94: table.sym_fnc("p_cmd_map"), # data
+	0x8037FF14: table.sym_fnc("p_cmd_area"), # data
+	0x8037FF94: table.sym_fnc("p_cmd_tag"), # data
+	0x80380014: table.sym_fnc("p_cmd_scene_open"), # data
+	0x8038007C: table.sym_fnc("p_cmd_scene_close"), # data
+	0x803800BC: table.sym_fnc("p_cmd_player_open"), # data
+	0x80380160: table.sym_fnc("p_cmd_player_close"), # data
+	0x803801A0: table.sym_fnc("p_cmd_scene_update"), # data
+	0x803801E0: table.sym_fnc("p_cmd_wipe"), # data
+	0x8038024C: table.sym_fnc("p_cmd_32"), # data
+	0x80380274: table.sym_fnc("p_cmd_msg"), # data
+	0x80380300: table.sym_fnc("p_cmd_bgm"), # data
+	0x8038039C: table.sym_fnc("p_cmd_bgm_play"), # data
+	0x803803EC: table.sym_fnc("p_cmd_bgm_stop"), # data
+	0x80380434: table.sym_fnc("p_cmd_var"), # data
 	0x80380478: table.sym_fnc("L80380478", flag=table.GLOBL|table.LOCAL),
 	0x80380490: table.sym_fnc("L80380490", flag=table.GLOBL|table.LOCAL),
 	0x803804A8: table.sym_fnc("L803804A8", flag=table.GLOBL|table.LOCAL),
@@ -12605,149 +12959,264 @@ sym_J0_E0_t_ulib = {
 	0x80380558: table.sym_fnc("L80380558", flag=table.GLOBL|table.LOCAL),
 	0x80380570: table.sym_fnc("L80380570", flag=table.GLOBL|table.LOCAL),
 	0x80380588: table.sym_fnc("L80380588", flag=table.GLOBL|table.LOCAL),
-	0x803805C8: table.sym_fnc("p_script_main", "P_SCRIPT *", (
+	0x803805C8: table.sym_fnc("p_execute", "P_SCRIPT *", (
 		"P_SCRIPT *pc",
 	), table.GLOBL),
 
-	# src/map.c
-	0x80380690: table.sym("map_80380690"),
-	0x80380DE8: table.sym("map_80380DE8", table.GLOBL),
-	0x80380E8C: table.sym("map_80380E8C", table.GLOBL),
-	0x80381038: table.sym("map_80381038"),
-	0x80381264: table.sym("map_80381264", table.GLOBL),
-	0x80381470: table.sym("map_80381470"), # unused
-	0x803814B8: table.sym("map_803814B8", table.GLOBL),
-	0x8038156C: table.sym("map_8038156C"),
-	0x80381794: table.sym("map_80381794", table.GLOBL),
-	0x803817E0: table.sym("map_803817E0"), # unused
-	0x80381900: table.sym_fnc("map_80381900", "float", (
+	# src/bgcheck.c
+	0x80380690: table.sym_fnc("bglist_check_wall", "int", (
+		"BGLIST *list",
+		"WALL_CHECK *check",
+	)),
+	0x80380DE8: table.sym_fnc("bg_hit_wall", "int", (
+		"float *x",
+		"float *y",
+		"float *z",
+		"float offset",
+		"float radius",
+	), table.GLOBL),
+	0x80380E8C: table.sym_fnc("bg_check_wall", "int", (
+		"WALL_CHECK *check",
+	), table.GLOBL),
+	0x80381038: table.sym_fnc("bglist_check_roof", "BGFACE *", (
+		"BGLIST *list",
+		"int x",
+		"int y",
+		"int z",
+		"float *roof_y",
+	)),
+	0x80381264: table.sym_fnc("bg_check_roof", "float", (
 		"float x",
 		"float y",
 		"float z",
-		"MAP_PLANE **ground",
-	), table.GLOBL), # ground at
-	0x80381BA0: table.sym("map_80381BA0", table.GLOBL),
-	0x80381D3C: table.sym("map_80381D3C", table.GLOBL),
-	0x80381EC8: table.sym("map_80381EC8"),
-	0x80381F08: table.sym("map_80381F08", table.GLOBL),
-	0x80382294: table.sym("map_80382294"), # unused
+		"BGFACE **roof",
+	), table.GLOBL),
+	0x80381470: table.sym_fnc("obj_ground_y", "float", (
+		"OBJECT *obj",
+	)), # unused
+	0x803814B8: table.sym_fnc("bg_check_plane", "float", (
+		"float x",
+		"float y",
+		"float z",
+		"PLANE **plane",
+	), table.GLOBL),
+	0x8038156C: table.sym_fnc("bglist_check_ground", "float", (
+		"BGLIST *list",
+		"int x",
+		"int y",
+		"int z",
+		"float *ground_y",
+	)),
+	0x80381794: table.sym_fnc("bg_check_ground_y", "float", (
+		"float x",
+		"float y",
+		"float z",
+	), table.GLOBL),
+	0x803817E0: table.sym_fnc("bg_check_ground_movebg", "float", (
+		"float x",
+		"float y",
+		"float z",
+		"BGFACE **ground",
+	)), # unused
+	0x80381900: table.sym_fnc("bg_check_ground", "float", (
+		"float x",
+		"float y",
+		"float z",
+		"BGFACE **ground",
+	), table.GLOBL),
+	0x80381BA0: table.sym_fnc("bg_check_water_y", "float", (
+		"float x",
+		"float z",
+	), table.GLOBL),
+	0x80381D3C: table.sym_fnc("bg_check_gas_y", "float", (
+		"float x",
+		"float z",
+	), table.GLOBL),
+	0x80381EC8: table.sym_fnc("bglist_len", "int", (
+		"BGLIST *list",
+	)),
+	0x80381F08: table.sym_fnc("bgcheck_debug", arg=(
+		"float x",
+		"float z",
+	), flag=table.GLOBL),
+	0x80382294: table.sym_fnc("bg_hit_ground_roof", "int", (
+		"int flag",
+		"float *x",
+		"float *y",
+		"float *z",
+		"float radius",
+		"BGFACE **face",
+		"float *face_y",
+	)), # unused
 
-	# src/map_data.c
-	0x80382490: table.sym("map_data_80382490"),
-	0x803824F8: table.sym("map_data_803824F8"),
-	0x80382590: table.sym("map_data_80382590"),
-	0x803825D0: table.sym("map_data_803825D0"),
-	0x803825FC: table.sym("map_data_803825FC"),
-	0x8038283C: table.sym("map_data_8038283C"),
-	0x8038289C: table.sym("map_data_8038289C"),
-	0x803828FC: table.sym("map_data_803828FC"),
-	0x80382990: table.sym("map_data_80382990"),
-	0x80382A2C: table.sym("map_data_80382A2C"),
-	0x80382B6C: table.sym("map_data_80382B6C"), # unused
-	0x80382B7C: table.sym("map_data_80382B7C"),
-	0x80382F84: table.sym("map_data_80382F84"),
+	# src/bgload.c
+	0x80382490: table.sym_fnc("bglist_alloc", "BGLIST *"),
+	0x803824F8: table.sym_fnc("bgface_alloc", "BGFACE *"),
+	0x80382590: table.sym_fnc("bgroot_clear", arg=(
+		"BGROOT *root",
+	)),
+	0x803825D0: table.sym_fnc("statbg_clear"),
+	0x803825FC: table.sym_fnc("bglist_create", arg=(
+		"SHORT flag",
+		"SHORT ix",
+		"SHORT iz",
+		"BGFACE *face",
+	)),
+	0x8038283C: table.sym_fnc("min3", "SHORT", (
+		"SHORT x",
+		"SHORT y",
+		"SHORT z",
+	)),
+	0x8038289C: table.sym_fnc("max3", "SHORT", (
+		"SHORT x",
+		"SHORT y",
+		"SHORT z",
+	)),
+	0x803828FC: table.sym_fnc("bgarea_min", "SHORT", (
+		"SHORT x",
+	)),
+	0x80382990: table.sym_fnc("bgarea_max", "SHORT", (
+		"SHORT x",
+	)),
+	0x80382A2C: table.sym_fnc("bgface_link", arg=(
+		"BGFACE *face",
+		"int flag",
+	)),
+	0x80382B6C: table.sym_fnc("bgload_80382B6C"), # unused
+	0x80382B7C: table.sym_fnc("bgface_create", "BGFACE *", (
+		"MAP *vtx",
+		"MAP **map",
+	)),
+	0x80382F84: table.sym_fnc("bgface_isarg", "int", (
+		"SHORT type",
+	)),
 	0x80382FBC: table.sym_fnc("L80382FBC", flag=table.GLOBL|table.LOCAL),
 	0x80382FCC: table.sym_fnc("L80382FCC", flag=table.GLOBL|table.LOCAL),
-	0x80382FEC: table.sym("map_data_80382FEC"),
-	0x80383068: table.sym("map_data_80383068"),
-	0x803831D0: table.sym("map_data_803831D0"),
-	0x80383228: table.sym("map_data_80383228"),
-	0x80383340: table.sym("map_data_80383340", table.GLOBL),
-	0x803833B8: table.sym_fnc("map_data_803833B8", arg=(
+	0x80382FEC: table.sym_fnc("bgface_flag", "int", (
+		"SHORT type",
+	)),
+	0x80383068: table.sym_fnc("statbg_face", arg=(
+		"MAP **map",
+		"MAP *vtx",
+		"SHORT type",
+		"AREA **area",
+	)),
+	0x803831D0: table.sym_fnc("statbg_vtx", "MAP *", (
+		"MAP **map",
+	)),
+	0x80383228: table.sym_fnc("statbg_water", arg=(
+		"MAP **map",
+	)),
+	0x80383340: table.sym_fnc("map_init", flag=table.GLOBL),
+	0x803833B8: table.sym_fnc("map_load", arg=(
 		"SHORT scene",
-		"MAP_DATA *map_data",
-		"AREA_DATA *area_data",
-		"OBJ_DATA *obj_data",
+		"MAP *map",
+		"AREA *area",
+		"TAG *tag",
 	), flag=table.GLOBL),
-	0x803835A4: table.sym("map_data_803835A4", table.GLOBL),
-	0x80383604: table.sym("map_data_80383604"), # unused
-	0x80383614: table.sym("map_data_80383614"),
-	0x80383828: table.sym("map_data_80383828"),
-	0x803839CC: table.sym("map_data_803839CC", table.GLOBL), # o callback
+	0x803835A4: table.sym_fnc("movebg_clear", flag=table.GLOBL),
+	0x80383604: table.sym_fnc("bgload_80383604"), # unused
+	0x80383614: table.sym_fnc("movebg_vtx", arg=(
+		"MAP **map",
+		"MAP *vtx",
+	)),
+	0x80383828: table.sym_fnc("movebg_face", arg=(
+		"MAP **map",
+		"MAP *vtx",
+	)),
+	0x803839CC: table.sym_fnc("object_map_load", flag=table.GLOBL), # o callback
 
-	# src/o_script.c
-	0x80383B70: table.sym("o_script_80383B70"), # unused
+	# src/objlang.c
+	0x80383B70: table.sym_fnc("o_jump", arg=(
+		"O_SCRIPT *script",
+	)), # unused
 	0x80383BB0: table.sym_fnc("rand", "u16", flag=table.GLOBL),
-	0x80383CB4: table.sym("o_script_80383CB4", table.GLOBL),
-	0x80383D1C: table.sym("o_script_80383D1C", table.GLOBL),
-	0x80383D68: table.sym("o_script_80383D68"),
-	0x80383DBC: table.sym("o_script_80383DBC"),
-	0x80383DF8: table.sym("o_script_80383DF8"),
-	0x80383E44: table.sym("o_script_80383E44"), # unused
-	0x80383E5C: table.sym_fnc("o_script_22", "int", flag=table.GLOBL), # data
-	0x80383EA0: table.sym_fnc("o_script_35", "int", flag=table.GLOBL), # data
-	0x80383EE4: table.sym_fnc("o_script_21", "int", flag=table.GLOBL), # data
-	0x80383F24: table.sym_fnc("o_script_1B", "int", flag=table.GLOBL), # data
-	0x80383F94: table.sym_fnc("o_script_1C", "int", flag=table.GLOBL), # data
-	0x8038401C: table.sym_fnc("o_script_2C", "int", flag=table.GLOBL), # data
-	0x803840B4: table.sym_fnc("o_script_29", "int", flag=table.GLOBL), # data
-	0x80384164: table.sym_fnc("o_script_1D", "int", flag=table.GLOBL), # data
-	0x80384188: table.sym_fnc("o_script_0A", "int", flag=table.GLOBL), # data
-	0x803841A0: table.sym_fnc("o_script_0B", "int", flag=table.GLOBL), # data
-	0x803841B8: table.sym_fnc("o_script_02", "int", flag=table.GLOBL), # data
-	0x80384224: table.sym_fnc("o_script_03", "int", flag=table.GLOBL), # data
-	0x8038425C: table.sym_fnc("o_script_01", "int", flag=table.GLOBL), # data
-	0x803842E4: table.sym_fnc("o_script_25", "int", flag=table.GLOBL), # data
-	0x8038438C: table.sym_fnc("o_script_04", "int", flag=table.GLOBL), # data
-	0x803843E0: table.sym_fnc("o_script_26", "int", flag=table.GLOBL), # data
-	0x80384450: table.sym_fnc("o_script_05", "int", flag=table.GLOBL), # data
-	0x803844C0: table.sym_fnc("o_script_06", "int", flag=table.GLOBL), # data
-	0x80384554: table.sym_fnc("o_script_07", "int", flag=table.GLOBL), # data
-	0x803845E8: table.sym_fnc("o_script_08", "int", flag=table.GLOBL), # data
-	0x80384634: table.sym_fnc("o_script_09", "int", flag=table.GLOBL), # data
-	0x80384678: table.sym_fnc("o_script_0C", "int", flag=table.GLOBL), # data
-	0x803846D0: table.sym_fnc("o_script_0E", "int", flag=table.GLOBL), # data
-	0x8038475C: table.sym_fnc("o_script_10", "int", flag=table.GLOBL), # data
-	0x803847D4: table.sym_fnc("o_script_36", "int", flag=table.GLOBL), # data
-	0x80384854: table.sym_fnc("o_script_14", "int", flag=table.GLOBL), # data
-	0x80384928: table.sym_fnc("o_script_15", "int", flag=table.GLOBL), # data
-	0x803849F8: table.sym_fnc("o_script_13", "int", flag=table.GLOBL), # data
-	0x80384AB4: table.sym_fnc("o_script_16", "int", flag=table.GLOBL), # data
-	0x80384B90: table.sym_fnc("o_script_17", "int", flag=table.GLOBL), # data
-	0x80384C5C: table.sym_fnc("o_script_0D", "int", flag=table.GLOBL), # data
-	0x80384CF0: table.sym_fnc("o_script_0F", "int", flag=table.GLOBL), # data
-	0x80384D70: table.sym_fnc("o_script_11", "int", flag=table.GLOBL), # data
-	0x80384E04: table.sym_fnc("o_script_12", "int", flag=table.GLOBL), # data
-	0x80384E9C: table.sym_fnc("o_script_27", "int", flag=table.GLOBL), # data
-	0x80384F08: table.sym_fnc("o_script_28", "int", flag=table.GLOBL), # data
-	0x80384F8C: table.sym_fnc("o_script_1E", "int", flag=table.GLOBL), # data
-	0x8038503C: table.sym_fnc("o_script_18", "int", flag=table.GLOBL), # data
-	0x80385084: table.sym_fnc("o_script_1A", "int", flag=table.GLOBL), # data
-	0x803850CC: table.sym_fnc("o_script_19", "int", flag=table.GLOBL), # data
-	0x80385114: table.sym_fnc("o_script_1F", "int", flag=table.GLOBL), # data
-	0x803851D0: table.sym_fnc("o_script_20", "int", flag=table.GLOBL), # data
-	0x8038528C: table.sym_fnc("o_script_23", "int", flag=table.GLOBL), # data
-	0x8038531C: table.sym_fnc("o_script_2E", "int", flag=table.GLOBL), # data
-	0x803853AC: table.sym_fnc("o_script_2B", "int", flag=table.GLOBL), # data
-	0x8038546C: table.sym_fnc("o_script_24", "int", flag=table.GLOBL), # data
-	0x803854CC: table.sym_fnc("o_script_00", "int", flag=table.GLOBL), # data
-	0x8038556C: table.sym("o_script_8038556C"), # unused
-	0x803856A0: table.sym_fnc("o_script_2A", "int", flag=table.GLOBL), # data
-	0x80385700: table.sym_fnc("o_script_2D", "int", flag=table.GLOBL), # data
-	0x8038575C: table.sym_fnc("o_script_2F", "int", flag=table.GLOBL), # data
-	0x803857A0: table.sym_fnc("o_script_31", "int", flag=table.GLOBL), # data
-	0x803857E4: table.sym_fnc("o_script_32", "int", flag=table.GLOBL), # data
-	0x8038586C: table.sym_fnc("o_script_30", "int", flag=table.GLOBL), # data
-	0x80385A60: table.sym_fnc("o_script_33", "int", flag=table.GLOBL), # data
-	0x80385AF0: table.sym_fnc("o_script_37", "int", flag=table.GLOBL), # data
-	0x80385B4C: table.sym_fnc("o_script_34", "int", flag=table.GLOBL), # data
-	0x80385BF0: table.sym("o_script_80385BF0", table.GLOBL),
-	0x80385C00: table.sym("o_script_main", table.GLOBL),
+	0x80383CB4: table.sym_fnc("randf", "float", flag=table.GLOBL),
+	0x80383D1C: table.sym_fnc("randsign", "int", flag=table.GLOBL),
+	0x80383D68: table.sym_fnc("obj_update_shapecoord", arg=(
+		"OBJECT *obj",
+	)),
+	0x80383DBC: table.sym_fnc("o_push", arg=(
+		"uintptr_t x",
+	)),
+	0x80383DF8: table.sym_fnc("o_pull", "uintptr_t"),
+	0x80383E44: table.sym_fnc("o_error"), # unused
+	0x80383E5C: table.sym_fnc("o_cmd_shapehide", "int", flag=table.GLOBL), # data
+	0x80383EA0: table.sym_fnc("o_cmd_shapedisable", "int", flag=table.GLOBL), # data
+	0x80383EE4: table.sym_fnc("o_cmd_billboard", "int", flag=table.GLOBL), # data
+	0x80383F24: table.sym_fnc("o_cmd_shape", "int", flag=table.GLOBL), # data
+	0x80383F94: table.sym_fnc("o_cmd_object", "int", flag=table.GLOBL), # data
+	0x8038401C: table.sym_fnc("o_cmd_child", "int", flag=table.GLOBL), # data
+	0x803840B4: table.sym_fnc("o_cmd_objectarg", "int", flag=table.GLOBL), # data
+	0x80384164: table.sym_fnc("o_cmd_destroy", "int", flag=table.GLOBL), # data
+	0x80384188: table.sym_fnc("o_cmd_exit", "int", flag=table.GLOBL), # data
+	0x803841A0: table.sym_fnc("o_cmd_end", "int", flag=table.GLOBL), # data
+	0x803841B8: table.sym_fnc("o_cmd_call", "int", flag=table.GLOBL), # data
+	0x80384224: table.sym_fnc("o_cmd_return", "int", flag=table.GLOBL), # data
+	0x8038425C: table.sym_fnc("o_cmd_sleep", "int", flag=table.GLOBL), # data
+	0x803842E4: table.sym_fnc("o_cmd_memsleep", "int", flag=table.GLOBL), # data
+	0x8038438C: table.sym_fnc("o_cmd_jump", "int", flag=table.GLOBL), # data
+	0x803843E0: table.sym_fnc("o_cmd_for2", "int", flag=table.GLOBL), # data
+	0x80384450: table.sym_fnc("o_cmd_for", "int", flag=table.GLOBL), # data
+	0x803844C0: table.sym_fnc("o_cmd_fend", "int", flag=table.GLOBL), # data
+	0x80384554: table.sym_fnc("o_cmd_fcontinue", "int", flag=table.GLOBL), # data
+	0x803845E8: table.sym_fnc("o_cmd_while", "int", flag=table.GLOBL), # data
+	0x80384634: table.sym_fnc("o_cmd_wend", "int", flag=table.GLOBL), # data
+	0x80384678: table.sym_fnc("o_cmd_callback", "int", flag=table.GLOBL), # data
+	0x803846D0: table.sym_fnc("o_cmd_setf", "int", flag=table.GLOBL), # data
+	0x8038475C: table.sym_fnc("o_cmd_seti", "int", flag=table.GLOBL), # data
+	0x803847D4: table.sym_fnc("o_cmd_sets", "int", flag=table.GLOBL), # data
+	0x80384854: table.sym_fnc("o_cmd_setrandf", "int", flag=table.GLOBL), # data
+	0x80384928: table.sym_fnc("o_cmd_setrandi", "int", flag=table.GLOBL), # data
+	0x803849F8: table.sym_fnc("o_cmd_setranda", "int", flag=table.GLOBL), # data
+	0x80384AB4: table.sym_fnc("o_cmd_addrandf", "int", flag=table.GLOBL), # data
+	0x80384B90: table.sym_fnc("o_cmd_addranda", "int", flag=table.GLOBL), # data
+	0x80384C5C: table.sym_fnc("o_cmd_addf", "int", flag=table.GLOBL), # data
+	0x80384CF0: table.sym_fnc("o_cmd_addi", "int", flag=table.GLOBL), # data
+	0x80384D70: table.sym_fnc("o_cmd_setflag", "int", flag=table.GLOBL), # data
+	0x80384E04: table.sym_fnc("o_cmd_clrflag", "int", flag=table.GLOBL), # data
+	0x80384E9C: table.sym_fnc("o_cmd_ptr", "int", flag=table.GLOBL), # data
+	0x80384F08: table.sym_fnc("o_cmd_anime", "int", flag=table.GLOBL), # data
+	0x80384F8C: table.sym_fnc("o_cmd_ground", "int", flag=table.GLOBL), # data
+	0x8038503C: table.sym_fnc("o_cmd_18", "int", flag=table.GLOBL), # data
+	0x80385084: table.sym_fnc("o_cmd_1A", "int", flag=table.GLOBL), # data
+	0x803850CC: table.sym_fnc("o_cmd_19", "int", flag=table.GLOBL), # data
+	0x80385114: table.sym_fnc("o_cmd_memaddf", "int", flag=table.GLOBL), # data
+	0x803851D0: table.sym_fnc("o_cmd_memaddi", "int", flag=table.GLOBL), # data
+	0x8038528C: table.sym_fnc("o_cmd_colhit", "int", flag=table.GLOBL), # data
+	0x8038531C: table.sym_fnc("o_cmd_coldmg", "int", flag=table.GLOBL), # data
+	0x803853AC: table.sym_fnc("o_cmd_coloff", "int", flag=table.GLOBL), # data
+	0x8038546C: table.sym_fnc("o_cmd_24", "int", flag=table.GLOBL), # data
+	0x803854CC: table.sym_fnc("o_cmd_init", "int", flag=table.GLOBL), # data
+	0x8038556C: table.sym_fnc("o_setrandtbl", arg=(
+		"int size",
+	)), # unused
+	0x803856A0: table.sym_fnc("o_cmd_map", "int", flag=table.GLOBL), # data
+	0x80385700: table.sym_fnc("o_cmd_origin", "int", flag=table.GLOBL), # data
+	0x8038575C: table.sym_fnc("o_cmd_coltype", "int", flag=table.GLOBL), # data
+	0x803857A0: table.sym_fnc("o_cmd_colarg", "int", flag=table.GLOBL), # data
+	0x803857E4: table.sym_fnc("o_cmd_scale", "int", flag=table.GLOBL), # data
+	0x8038586C: table.sym_fnc("o_cmd_physics", "int", flag=table.GLOBL), # data
+	0x80385A60: table.sym_fnc("o_cmd_memclrflag", "int", flag=table.GLOBL), # data
+	0x80385AF0: table.sym_fnc("o_cmd_splash", "int", flag=table.GLOBL), # data
+	0x80385B4C: table.sym_fnc("o_cmd_inc", "int", flag=table.GLOBL), # data
+	0x80385BF0: table.sym_fnc("o_init", flag=table.GLOBL),
+	0x80385C00: table.sym_fnc("o_execute", flag=table.GLOBL),
 
-	0x8038BCF4: table.sym("s_script_8038BCF8-4"),
+	0x8038BCF4: table.sym("shp_stack-4"),
 
-	0x8038BD98: table.sym("s_script_8038BD88+0x10"), # child
+	0x8038BD98: table.sym("sobj_list+0x10"), # child
 
-	0x8038BE40: table.sym("map_8038BE30+0x10"),
-	0x8038BE44: table.sym("map_8038BE30+0x14"),
-	0x8038BE48: table.sym("map_8038BE30+0x18"),
-	0x8038BE4C: table.sym("map_8038BE30+0x1C"),
+	0x8038BE40: table.sym("ground_plane+0x10"), # nx
+	0x8038BE44: table.sym("ground_plane+0x14"), # ny
+	0x8038BE48: table.sym("ground_plane+0x18"), # nz
+	0x8038BE4C: table.sym("ground_plane+0x1C"), # nw
 
-	0x8038BEA0: table.sym("map_data_8038BE98+0x08"),
-	0x8038BEA8: table.sym("map_data_8038BE98+0x10"),
+	0x8038BEA0: table.sym("statbg_root+0x08"), # roof
+	0x8038BEA8: table.sym("movebg_root+0x10"), # wall
 
-	0x8038D6A0: table.sym("map_data_8038D698+0x08"),
-	0x8038D6A8: table.sym("map_data_8038D698+0x10"),
+	0x8038D6A0: table.sym("statbg_root+0x08"), # roof
+	0x8038D6A8: table.sym("movebg_root+0x10"), # wall
 
 	0x80400000: table.sym("_zimgSegmentBssStart"),
 	0x8038F800: table.sym("_cimgSegmentBssStart"),
@@ -12765,25 +13234,25 @@ sym_J0_E0_d_ulib = {
 	0x80385FE4: table.sym_var("vecf_1", "VECF", flag=table.GLOBL),
 	0x80385FF0: table.sym_var("vecs_1", "VECS", flag=table.GLOBL), # unused
 
-	# src/math_table.c
+	# src/mathtbl.s
 	0x80386000: table.sym_var("math_sin", "float", "[]", table.GLOBL),
 	0x80387000: table.sym_var("math_cos", "float", "[]", table.GLOBL),
 	0x8038B000: table.sym_var("math_atan", "short", "[]", table.GLOBL),
 
-	# src/s_script.c
-	0x8038B810: table.sym_var_fnc("s_script_table", lst="[]", flag=table.GLOBL),
+	# src/shplang.c
+	0x8038B810: table.sym_var_fnc("s_cmd_table", lst="[]"),
 
-	# src/p_script.c
-	0x8038B8A0: table.sym_var("p_script_arena", "ARENA *", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8A4: table.sym_var("p_script_sleep", "u16", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8A8: table.sym_var("p_script_freeze", "u16", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8AC: table.sym_var("p_script_scene", "s16", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8B0: table.sym_var("p_script_sp", "void **", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8B4: table.sym_var("p_script_fp", "void **", flag=table.GLOBL|ultra.DALIGN),
-	0x8038B8B8: table.sym_var_fnc("p_script_table", lst="[]", flag=table.GLOBL),
+	# src/prglang.c
+	0x8038B8A0: table.sym_var("p_arena", "ARENA *", flag=ultra.DALIGN),
+	0x8038B8A4: table.sym_var("p_sleep", "u16", flag=ultra.DALIGN),
+	0x8038B8A8: table.sym_var("p_freeze", "u16", flag=ultra.DALIGN),
+	0x8038B8AC: table.sym_var("p_scene", "s16", flag=ultra.DALIGN),
+	0x8038B8B0: table.sym_var("p_sp", "uintptr_t *", flag=ultra.DALIGN),
+	0x8038B8B4: table.sym_var("p_fp", "uintptr_t *", flag=ultra.DALIGN),
+	0x8038B8B8: table.sym_var_fnc("p_cmd_table", lst="[]"),
 
-	# src/o_script.c
-	0x8038B9B0: table.sym_var_fnc("o_script_table", lst="[]", val="int", flag=table.GLOBL),
+	# src/objlang.c
+	0x8038B9B0: table.sym_var_fnc("o_cmd_table", lst="[]", val="int", flag=table.GLOBL),
 
 	# ==========================================================================
 	# rodata
@@ -12809,82 +13278,83 @@ sym_J0_E0_d_ulib = {
 	0x8038BAE4: table.sym_var("math_8038BAE4", "const float"),
 	0x8038BAE8: table.sym_var("math_8038BAE8", "const float"),
 
-	# src/p_script.c
-	0x8038BAF0: table.sym_var_fnc("p_script_8038BAF0", "const", "[]"),
-	0x8038BB10: table.sym_var_fnc("p_script_8038BB10", "const", "[]"),
-	0x8038BB24: table.sym_var_fnc("p_script_8038BB24", "const", "[]"),
+	# src/prglang.c
+	0x8038BAF0: table.sym_var_fnc("prglang_8038BAF0", "const", "[]"),
+	0x8038BB10: table.sym_var_fnc("prglang_8038BB10", "const", "[]"),
+	0x8038BB24: table.sym_var_fnc("prglang_8038BB24", "const", "[]"),
 
-	# src/map.c
-	0x8038BB40: table.sym_var("str_map_area", "const char", "[]"),
-	0x8038BB4C: table.sym_var("str_map_dg", "const char", "[]"),
-	0x8038BB54: table.sym_var("str_map_dw", "const char", "[]"),
-	0x8038BB5C: table.sym_var("str_map_dr", "const char", "[]"),
-	0x8038BB64: table.sym_var("str_map_x", "const char", "[]"), # %d
-	0x8038BB68: table.sym_var("str_map_y", "const char", "[]"), # %d
-	0x8038BB6C: table.sym_var("str_map_z", "const char", "[]"), # %d
-	0x8038BB70: table.sym_var("str_map_listal", "const char", "[]"),
-	0x8038BB7C: table.sym_var("str_map_statbg", "const char", "[]"),
-	0x8038BB88: table.sym_var("str_map_movebg", "const char", "[]"),
-	0x8038BB94: table.sym_var("map_8038BB94", "const float"),
-	0x8038BB98: table.sym_var("map_8038BB98", "const float"),
-	0x8038BB9C: table.sym_var("map_8038BB9C", "const float"),
-	0x8038BBA0: table.sym_var("map_8038BBA0", "const float"),
-	0x8038BBA4: table.sym_var("map_8038BBA4", "const float"),
-	0x8038BBA8: table.sym_var("map_8038BBA8", "const float"),
-	0x8038BBAC: table.sym_var("map_8038BBAC", "const float"),
+	# src/bgcheck.c
+	0x8038BB40: table.sym_var("str_bgcheck_area", "const char", "[]"),
+	0x8038BB4C: table.sym_var("str_bgcheck_dg", "const char", "[]"),
+	0x8038BB54: table.sym_var("str_bgcheck_dw", "const char", "[]"),
+	0x8038BB5C: table.sym_var("str_bgcheck_dr", "const char", "[]"),
+	0x8038BB64: table.sym_var("str_bgcheck_ground", "const char", "[]"), # %d
+	0x8038BB68: table.sym_var("str_bgcheck_wall", "const char", "[]"), # %d
+	0x8038BB6C: table.sym_var("str_bgcheck_roof", "const char", "[]"), # %d
+	0x8038BB70: table.sym_var("str_bgcheck_listal", "const char", "[]"),
+	0x8038BB7C: table.sym_var("str_bgcheck_statbg", "const char", "[]"),
+	0x8038BB88: table.sym_var("str_bgcheck_movebg", "const char", "[]"),
+	0x8038BB94: table.sym_var("bgcheck_8038BB94", "const float"),
+	0x8038BB98: table.sym_var("bgcheck_8038BB98", "const float"),
+	0x8038BB9C: table.sym_var("bgcheck_8038BB9C", "const float"),
+	0x8038BBA0: table.sym_var("bgcheck_8038BBA0", "const float"),
+	0x8038BBA4: table.sym_var("bgcheck_8038BBA4", "const float"),
+	0x8038BBA8: table.sym_var("bgcheck_8038BBA8", "const float"),
+	0x8038BBAC: table.sym_var("bgcheck_8038BBAC", "const float"),
 
-	# src/map_data.c
-	0x8038BBB0: table.sym_var("map_data_8038BBB0", "const double"),
-	0x8038BBB8: table.sym_var("map_data_8038BBB8", "const double"),
-	0x8038BBC0: table.sym_var("map_data_8038BBC0", "const double"),
-	0x8038BBC8: table.sym_var("map_data_8038BBC8", "const double"),
-	0x8038BBD0: table.sym_var("map_data_8038BBD0", "const double"),
-	0x8038BBD8: table.sym_var_fnc("map_data_8038BBD8", "const", "[]"),
-	0x8038BC80: table.sym_var("map_data_8038BC80", "const float"),
+	# src/bgload.c
+	0x8038BBB0: table.sym_var("bgload_8038BBB0", "const double"),
+	0x8038BBB8: table.sym_var("bgload_8038BBB8", "const double"),
+	0x8038BBC0: table.sym_var("bgload_8038BBC0", "const double"),
+	0x8038BBC8: table.sym_var("bgload_8038BBC8", "const double"),
+	0x8038BBD0: table.sym_var("bgload_8038BBD0", "const double"),
+	0x8038BBD8: table.sym_var_fnc("bgload_8038BBD8", "const", "[]"),
+	0x8038BC80: table.sym_var("bgload_8038BC80", "const float"),
 
 	# ==========================================================================
 	# bss
 	# ==========================================================================
 
 	# src/math.c
-	0x8038BC90: table.sym_var("bspline", "BSPLINE *", flag=table.GLOBL),
-	0x8038BC94: table.sym_var("bspline_phase", "float", flag=table.GLOBL),
-	0x8038BC98: table.sym_var("bspline_mode", "int", flag=table.GLOBL),
+	0x8038BC90: table.sym_var("bspline", "BSPLINE *"),
+	0x8038BC94: table.sym_var("bspline_phase", "float"),
+	0x8038BC98: table.sym_var("bspline_mode", "int"),
 
-	# src/s_script.c
-	0x8038BCA0: table.sym_var("s_script_arena", "ARENA *", flag=table.GLOBL),
-	0x8038BCA4: table.sym_var("s_script_8038BCA4", "SHAPE *", flag=table.GLOBL),
-	0x8038BCA8: table.sym_var("s_script_8038BCA8", "SHAPE *", flag=table.GLOBL),
-	0x8038BCAC: table.sym_var("s_script_8038BCAC", "SHAPE **", flag=table.GLOBL),
-	0x8038BCB0: table.sym_var("s_script_8038BCB0", "u16", flag=table.GLOBL),
-	0x8038BCB8: table.sym_var("s_script_8038BCB8", "void *", "[16]", table.GLOBL|ultra.BALIGN),
-	0x8038BCF8: table.sym_var("s_script_8038BCF8", "SHAPE *", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8038BD78: table.sym_var("s_script_8038BD78", "s16", flag=table.GLOBL),
-	0x8038BD7A: table.sym_var("s_script_8038BD7A", "s16", flag=table.GLOBL),
-	0x8038BD7C: table.sym_var("s_script_8038BD7C", "s16", flag=table.GLOBL), # unused
-	0x8038BD7E: table.sym_var("s_script_8038BD7E", "s16", flag=table.GLOBL),
-	0x8038BD80: table.sym_var("s_script_8038BD80", "u8 *", flag=table.GLOBL),
-	0x8038BD88: table.sym_var("s_script_8038BD88", "SHAPE", flag=table.GLOBL|ultra.BALIGN),
+	# src/shplang.c
+	0x8038BCA0: table.sym_var("s_arena", "ARENA *"),
+	0x8038BCA4: table.sym_var("shp_root", "SHAPE *"),
+	0x8038BCA8: table.sym_var("shp_8038BCA8", "SHAPE *"), # unused
+	0x8038BCAC: table.sym_var("shp_table", "SHAPE **"),
+	0x8038BCB0: table.sym_var("shp_count", "u16"),
+	0x8038BCB8: table.sym_var("s_stack", "uintptr_t", "[16]", ultra.BALIGN),
+	0x8038BCF8: table.sym_var("shp_stack", "SHAPE *", "[32]", ultra.BALIGN),
+	0x8038BD78: table.sym_var("shp_sp", "s16"),
+	0x8038BD7A: table.sym_var("s_sp", "s16"),
+	0x8038BD7C: table.sym_var("shp_fp", "s16"), # unused
+	0x8038BD7E: table.sym_var("s_fp", "s16"),
+	0x8038BD80: table.sym_var("s_pc", "S_SCRIPT *",),
+	0x8038BD88: table.sym_var("sobj_list", "SHAPE", flag=table.GLOBL|ultra.BALIGN),
 
-	# src/p_script.c
-	0x8038BDA0: table.sym_var("p_script_stack", "void *", "[32]", table.GLOBL|ultra.BALIGN),
-	0x8038BE20: table.sym_var("p_script_state", "s16", flag=table.GLOBL),
-	0x8038BE24: table.sym_var("p_script_code", "int", flag=table.GLOBL),
-	0x8038BE28: table.sym_var("p_script_pc", "u8 *", flag=table.GLOBL),
+	# src/prglang.c
+	0x8038BDA0: table.sym_var("p_stack", "uintptr_t", "[32]", ultra.BALIGN),
+	0x8038BE20: table.sym_var("p_state", "s16"),
+	0x8038BE24: table.sym_var("p_code", "int"),
+	0x8038BE28: table.sym_var("p_pc", "P_SCRIPT *"),
 
-	# src/map.c
-	0x8038BE30: table.sym_var("map_8038BE30", "u8", "[0x60]", table.GLOBL),
+	# src/bgcheck.c
+	0x8038BE30: table.sym_var("ground_plane", "PLANE"),
+	0x8038BE58: table.sym_var("bgcheck_8038BE58", "char", "[56]"),
 
-	# src/map_data.c
-	0x8038BE90: table.sym_var("map_data_8038BE90", "u32", flag=table.GLOBL),
-	0x8038BE98: table.sym_var("map_data_8038BE98", "u32", "[16][16][6]", table.GLOBL|ultra.BALIGN), # type
-	0x8038D698: table.sym_var("map_data_8038D698", "u32", "[16][16][6]", table.GLOBL|ultra.BALIGN), # type
-	0x8038EE98: table.sym_var("map_data_8038EE98", "void *", flag=table.GLOBL),
-	0x8038EE9C: table.sym_var("map_data_8038EE9C", "void *", flag=table.GLOBL),
-	0x8038EEA0: table.sym_var("map_data_8038EEA0", "s16", flag=table.GLOBL),
-	0x8038EEA4: table.sym_var("map_data_8038EEA4", "u32", "[12]", table.GLOBL), # unused
+	# src/bgload.c
+	0x8038BE90: table.sym_var("bgload_8038BE90", "int"),
+	0x8038BE98: table.sym_var("statbg_root", "BGROOT", "[16][16]", table.GLOBL|ultra.BALIGN),
+	0x8038D698: table.sym_var("movebg_root", "BGROOT", "[16][16]", table.GLOBL|ultra.BALIGN),
+	0x8038EE98: table.sym_var("bglist_data", "BGLIST *", flag=table.GLOBL),
+	0x8038EE9C: table.sym_var("bgface_data", "BGFACE *", flag=table.GLOBL),
+	0x8038EEA0: table.sym_var("bgface_max", "s16", flag=table.GLOBL),
+	0x8038EEA4: table.sym_var("bgload_8038EEA4", "int", "[12]", table.GLOBL), # unused
 
-	# src/o_script.c
+	# src/objlang.c
 	0x8038EEE0: table.sym_var("rand_seed", "u16", flag=table.GLOBL),
 }
 
@@ -12908,33 +13378,33 @@ sym_E0_t_menu = {
 		"int code",
 	), table.GLOBL), # p callback
 
-	# src/title_bg.c
-	0x8016F670: table.sym_fnc("s_logo_shape", "void *", (
+	# src/titlebg.c
+	0x8016F670: table.sym_fnc("s_title_logo", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
 	), table.GLOBL), # s callback
-	0x8016F984: table.sym_fnc("s_logo_symbol", "void *", (
+	0x8016F984: table.sym_fnc("s_title_symbol", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
 	), table.GLOBL), # s callback
-	0x8016FBB0: table.sym_fnc("title_bg_tile", "Gfx *", (
+	0x8016FBB0: table.sym_fnc("titlebg_tile", "Gfx *", (
 		"int index",
 		"s8 *bg",
 	)),
-	0x8016FE70: table.sym_fnc("s_title_bg", "void *", (
+	0x8016FE70: table.sym_fnc("s_title_back", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
 	), table.GLOBL), # s callback
-	0x8016FFFC: table.sym_fnc("s_gameover_bg", "void *", (
+	0x8016FFFC: table.sym_fnc("s_gameover_back", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
 	), table.GLOBL), # s callback
 
-	# src/file_select.c
+	# src/fileselect.c
 	0x80170280: table.sym("file_select_80170280", table.GLOBL), # o callback
 	0x801702B8: table.sym("file_select_801702B8", table.GLOBL), # o callback
 	0x801702E8: table.sym("file_select_801702E8"),
@@ -13058,20 +13528,20 @@ sym_E0_t_menu = {
 	0x80176598: table.sym_fnc("L80176598", flag=table.GLOBL|table.LOCAL),
 	0x801765A8: table.sym_fnc("L801765A8", flag=table.GLOBL|table.LOCAL),
 	0x801765B8: table.sym_fnc("L801765B8", flag=table.GLOBL|table.LOCAL),
-	0x80176688: table.sym("s_file_select_main", table.GLOBL), # s callback
-	0x801766DC: table.sym("p_file_select_init", table.GLOBL), # p callback
-	0x801768A0: table.sym("p_file_select_update", table.GLOBL), # p callback
+	0x80176688: table.sym("s_fileselect_main", table.GLOBL), # s callback
+	0x801766DC: table.sym("p_fileselect_init", table.GLOBL), # p callback
+	0x801768A0: table.sym("p_fileselect_update", table.GLOBL), # p callback
 
-	# src/star_select.c
+	# src/starselect.c
 	0x801768E0: table.sym("star_select_801768E0", table.GLOBL), # o callback
 	0x80176A74: table.sym("star_select_80176A74"),
 	0x80176B20: table.sym("star_select_80176B20", table.GLOBL), # o callback
 	0x80176DF0: table.sym("star_select_80176DF0", table.GLOBL), # o callback
 	0x80176FC4: table.sym("star_select_80176FC4"),
 	0x80177144: table.sym("star_select_80177144"),
-	0x80177518: table.sym("s_star_select_main", table.GLOBL), # s callback
-	0x80177560: table.sym("p_star_select_init", table.GLOBL), # p callback
-	0x80177610: table.sym("p_star_select_update", table.GLOBL), # p callback
+	0x80177518: table.sym("s_starselect_main", table.GLOBL), # s callback
+	0x80177560: table.sym("p_starselect_init", table.GLOBL), # p callback
+	0x80177610: table.sym("p_starselect_update", table.GLOBL), # p callback
 
 	# src/face/main.c
 	0x80177710: table.sym("face_main"), # unused
@@ -13741,13 +14211,21 @@ sym_E0_t_menu = {
 	0x8019C240: table.sym("face_gfx_8019C240"),
 	0x8019C3B0: table.sym("face_gfx_8019C3B0"), # unused
 	0x8019C3C8: table.sym("face_gfx_8019C3C8"), # unused
-	0x8019C418: table.sym("face_gfx_8019C418", table.GLOBL), # ext
-	0x8019C450: table.sym("gdm_init", table.GLOBL), # ext
-	0x8019C4EC: table.sym("gdm_setup", table.GLOBL), # ext
+	0x8019C418: table.sym_fnc("face_gfx_8019C418", arg=(
+		"void *",
+		"size_t",
+	), flag=table.GLOBL), # ext
+	0x8019C450: table.sym_fnc("gdm_init", arg=(
+		"void *",
+		"size_t",
+	), flag=table.GLOBL), # ext
+	0x8019C4EC: table.sym_fnc("gdm_setup", flag=table.GLOBL), # ext
 	0x8019C588: table.sym("face_gfx_8019C588"), # unused
 	0x8019C59C: table.sym("face_gfx_8019C59C"), # unused
 	0x8019C5F0: table.sym("face_gfx_8019C5F0"),
-	0x8019C684: table.sym("gdm_maketestdl", table.GLOBL), # ext
+	0x8019C684: table.sym_fnc("gdm_maketestdl", arg=(
+		"int",
+	), flag=table.GLOBL), # ext
 	0x8019C6CC: table.sym_fnc("L8019C6CC", flag=table.GLOBL|table.LOCAL),
 	0x8019C6F0: table.sym_fnc("L8019C6F0", flag=table.GLOBL|table.LOCAL),
 	0x8019C708: table.sym_fnc("L8019C708", flag=table.GLOBL|table.LOCAL),
@@ -13756,10 +14234,14 @@ sym_E0_t_menu = {
 	0x8019C7E4: table.sym_fnc("L8019C7E4", flag=table.GLOBL|table.LOCAL),
 	0x8019C828: table.sym("face_gfx_8019C828"), # unused
 	0x8019C840: table.sym("face_gfx_8019C840"), # unused
-	0x8019C874: table.sym("face_gfx_8019C874", table.GLOBL), # ext
-	0x8019C930: table.sym("face_gfx_8019C930", table.GLOBL), # ext
-	0x8019C9C8: table.sym("face_gfx_8019C9C8", table.GLOBL), # ext
-	0x8019C9F8: table.sym("gdm_gettestdl", table.GLOBL), # ext
+	0x8019C874: table.sym_fnc("face_gfx_8019C874", flag=table.GLOBL), # ext
+	0x8019C930: table.sym_fnc("face_gfx_8019C930", arg=(
+		"OSContPad *",
+	), flag=table.GLOBL), # ext
+	0x8019C9C8: table.sym_fnc("face_gfx_8019C9C8", "int", flag=table.GLOBL), # ext
+	0x8019C9F8: table.sym_fnc("gdm_gettestdl", "Gfx *", (
+		"int",
+	), table.GLOBL), # ext
 	0x8019CA58: table.sym_fnc("L8019CA58", flag=table.GLOBL|table.LOCAL),
 	0x8019CADC: table.sym_fnc("L8019CADC", flag=table.GLOBL|table.LOCAL),
 	0x8019CB54: table.sym_fnc("L8019CB54", flag=table.GLOBL|table.LOCAL),
@@ -14462,18 +14944,18 @@ sym_E0_d_menu = {
 	0x801A7C64: table.sym_var("str_title_stage_fmt", "const char", "[]"),
 
 	# data
-	# src/title_bg.c
-	0x801A7C70: table.sym_var("gfx_title_bg", "Gfx *", "[]"),
-	0x801A7C80: table.sym_var("title_bg_x", "float", "[]"),
-	0x801A7CB0: table.sym_var("title_bg_y", "float", "[]"),
-	0x801A7CE0: table.sym_var("txt_title_bg", "u16 **", "[]"),
-	0x801A7CE8: table.sym_var("title_bg_mario", "static s8", "[]"),
-	0x801A7CF4: table.sym_var("title_bg_table", "s8 *", "[]"),
-	0x801A7CF8: table.sym_var("title_bg_gameover", "s8", "[]"),
-	0x801A7D04: table.sym_var("title_bg_flip", "s8", "[]"),
+	# src/titlebg.c
+	0x801A7C70: table.sym_var("gfx_titlebg", "Gfx *", "[]"),
+	0x801A7C80: table.sym_var("titlebg_x", "float", "[]"),
+	0x801A7CB0: table.sym_var("titlebg_y", "float", "[]"),
+	0x801A7CE0: table.sym_var("txt_titlebg", "u16 **", "[]"),
+	0x801A7CE8: table.sym_var("titlebg_mario", "static s8", "[]"),
+	0x801A7CF4: table.sym_var("titlebg_table", "s8 *", "[]"),
+	0x801A7CF8: table.sym_var("titlebg_gameover", "s8", "[]"),
+	0x801A7D04: table.sym_var("titlebg_flip", "s8", "[]"),
 
 	# data
-	# src/file_select.c
+	# src/fileselect.c
 	0x801A7D10: table.sym_var("file_select_801A7D10", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x801A7D14: table.sym_var("file_select_801A7D14", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x801A7D18: table.sym_var("file_select_801A7D18", "u8", flag=table.GLOBL|ultra.DALIGN),
@@ -14532,7 +15014,7 @@ sym_E0_d_menu = {
 	0x801A7F3C: table.sym_var("file_select_801A7F3C", "s16", flag=table.GLOBL|ultra.DALIGN),
 
 	# rodata
-	# src/file_select.c
+	# src/fileselect.c
 	0x801A7F40: table.sym_var("file_select_801A7F40", "const float"),
 	0x801A7F48: table.sym_var("file_select_801A7F48", "const double"),
 	0x801A7F50: table.sym_var("file_select_801A7F50", "const double"),
@@ -14573,7 +15055,7 @@ sym_E0_d_menu = {
 	0x801A811C: table.sym_var_fnc("file_select_801A811C", "const", "[]"),
 
 	# data
-	# src/star_select.c
+	# src/starselect.c
 	0x801A81A0: table.sym_var("star_select_801A81A0", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x801A81A4: table.sym_var("star_select_801A81A4", "s8", flag=table.GLOBL|ultra.DALIGN),
 	0x801A81A8: table.sym_var("star_select_801A81A8", "s32", flag=table.GLOBL|ultra.DALIGN),
@@ -14581,7 +15063,7 @@ sym_E0_d_menu = {
 	0x801A81B4: table.sym_var("star_select_801A81B4", "u16", flag=table.GLOBL|ultra.DALIGN),
 
 	# rodata
-	# src/star_select.c
+	# src/starselect.c
 	0x801A81C0: table.sym_var("star_select_801A81C0", "const double"),
 	0x801A81C8: table.sym_var("star_select_801A81C8", "const double"),
 	0x801A81D0: table.sym_var("star_select_801A81D0", "const double"),
@@ -14592,18 +15074,18 @@ sym_E0_d_menu = {
 	# bss
 	# ==========================================================================
 
-	# src/title_bg.c
-	0x801B99E0: table.sym_var("title_bg_timer", "s32", flag=table.GLOBL),
-	0x801B99E4: table.sym_var("title_bg_count", "s32", flag=table.GLOBL),
-	0x801B99E8: table.sym_var("title_bg_frame", "s16", flag=table.GLOBL),
-	0x801B99EC: table.sym_var("title_bg_alpha", "s32", flag=table.GLOBL),
+	# src/titlebg.c
+	0x801B99E0: table.sym_var("titlebg_timer", "s32", flag=table.GLOBL),
+	0x801B99E4: table.sym_var("titlebg_count", "s32", flag=table.GLOBL),
+	0x801B99E8: table.sym_var("titlebg_frame", "s16", flag=table.GLOBL),
+	0x801B99EC: table.sym_var("titlebg_alpha", "s32", flag=table.GLOBL),
 
-	# src/file_select.c
+	# src/fileselect.c
 	0x801B99F0: table.sym_var("file_select_801B99F0", "s16", flag=table.GLOBL),
 	0x801B99F8: table.sym_var("file_select_801B99F8", "OBJECT *", "[32]", table.GLOBL|ultra.BALIGN),
 	0x801B9A78: table.sym_var("file_select_801B9A78", "u8", "[2]", table.GLOBL|ultra.BALIGN),
 
-	# src/star_select.c
+	# src/starselect.c
 	0x801B9A80: table.sym_var("star_select_801B9A80", "OBJECT *", "[8]", table.GLOBL|ultra.BALIGN),
 	0x801B9AA0: table.sym_var("star_select_801B9AA0", "s8", flag=table.GLOBL),
 	0x801B9AA1: table.sym_var("star_select_801B9AA1", "u8", flag=table.GLOBL),
@@ -15802,20 +16284,20 @@ sym_E0_shp_pl = {
 	0x0400F400: table.sym_var("gfx_mario_h_shoeR", "static Gfx", "[]"),
 	0x0400F4E8: table.sym_var("gfx_mario_h_shoeR_s", "Gfx", "[]"),
 	0x0400F528: table.sym_var("gfx_mario_h_shoeR_e", "Gfx", "[]"),
-	0x0400FF28: table.sym_var("gfx_mario_h_torso0", "static Gfx", "[]"),
-	0x0400FF88: table.sym_var("gfx_mario_h_torso1", "static Gfx", "[]"),
-	0x04010260: table.sym_var("gfx_mario_h_torso2", "static Gfx", "[]"),
-	0x04010348: table.sym_var("gfx_mario_h_torso12_s", "static Gfx", "[]"),
+	0x0400FF28: table.sym_var("gfx_mario_h_torso_button", "static Gfx", "[]"),
+	0x0400FF88: table.sym_var("gfx_mario_h_torso_blue", "static Gfx", "[]"),
+	0x04010260: table.sym_var("gfx_mario_h_torso_red", "static Gfx", "[]"),
+	0x04010348: table.sym_var("gfx_mario_h_torso_shade", "static Gfx", "[]"),
 	0x04010370: table.sym_var("gfx_mario_h_torso_s", "Gfx", "[]"),
 	0x040103F0: table.sym_var("gfx_mario_h_torso", "Gfx", "[]"),
-	0x040112B0: table.sym_var("gfx_mario_h_cap0", "static Gfx", "[]"),
-	0x040112E8: table.sym_var("gfx_mario_h_cap1", "static Gfx", "[]"),
-	0x04011350: table.sym_var("gfx_mario_h_cap2", "static Gfx", "[]"),
-	0x040113A0: table.sym_var("gfx_mario_h_cap3", "static Gfx", "[]"),
-	0x04011438: table.sym_var("gfx_mario_h_cap4", "static Gfx", "[]"),
-	0x040116F8: table.sym_var("gfx_mario_h_cap5", "static Gfx", "[]"),
-	0x04011870: table.sym_var("gfx_mario_h_cap6", "static Gfx", "[]"),
-	0x04011960: table.sym_var("gfx_mario_h_cap456_s", "static Gfx", "[]"),
+	0x040112B0: table.sym_var("gfx_mario_h_cap_logo", "static Gfx", "[]"),
+	0x040112E8: table.sym_var("gfx_mario_h_cap_eyes", "static Gfx", "[]"),
+	0x04011350: table.sym_var("gfx_mario_h_cap_sideburn", "static Gfx", "[]"),
+	0x040113A0: table.sym_var("gfx_mario_h_cap_moustache", "static Gfx", "[]"),
+	0x04011438: table.sym_var("gfx_mario_h_cap_skin", "static Gfx", "[]"),
+	0x040116F8: table.sym_var("gfx_mario_h_cap_red", "static Gfx", "[]"),
+	0x04011870: table.sym_var("gfx_mario_h_cap_hair", "static Gfx", "[]"),
+	0x04011960: table.sym_var("gfx_mario_h_cap_shade", "static Gfx", "[]"),
 	0x040119A0: table.sym_var("gfx_mario_h_cap_open", "Gfx", "[]"),
 	0x04011A90: table.sym_var("gfx_mario_h_cap_half", "Gfx", "[]"),
 	0x04011B80: table.sym_var("gfx_mario_h_cap_closed", "Gfx", "[]"),
@@ -15826,12 +16308,12 @@ sym_E0_shp_pl = {
 	0x04012030: table.sym_var("gfx_mario_h_cap_dead", "Gfx", "[]"),
 	0x04012120: table.sym_var("gfx_mario_h_cap", "Gfx", "[]"),
 	0x04012160: table.sym_var("light_mario_old", "UNUSED static Lights1", "[]"),
-	0x040132B0: table.sym_var("gfx_mario_h_hair0", "static Gfx", "[]"),
-	0x04013318: table.sym_var("gfx_mario_h_hair1", "static Gfx", "[]"),
-	0x040133A8: table.sym_var("gfx_mario_h_hair2", "static Gfx", "[]"),
-	0x040133F8: table.sym_var("gfx_mario_h_hair3", "static Gfx", "[]"),
-	0x040136D0: table.sym_var("gfx_mario_h_hair4", "static Gfx", "[]"),
-	0x040139C0: table.sym_var("gfx_mario_h_hair34_s", "static Gfx", "[]"),
+	0x040132B0: table.sym_var("gfx_mario_h_hair_eyes", "static Gfx", "[]"),
+	0x04013318: table.sym_var("gfx_mario_h_hair_moustache", "static Gfx", "[]"),
+	0x040133A8: table.sym_var("gfx_mario_h_hair_sideburn", "static Gfx", "[]"),
+	0x040133F8: table.sym_var("gfx_mario_h_hair_skin", "static Gfx", "[]"),
+	0x040136D0: table.sym_var("gfx_mario_h_hair_hair", "static Gfx", "[]"),
+	0x040139C0: table.sym_var("gfx_mario_h_hair_shade", "static Gfx", "[]"),
 	0x040139E8: table.sym_var("gfx_mario_h_hair_open", "Gfx", "[]"),
 	0x04013AB8: table.sym_var("gfx_mario_h_hair_half", "Gfx", "[]"),
 	0x04013B88: table.sym_var("gfx_mario_h_hair_closed", "Gfx", "[]"),
@@ -15867,10 +16349,10 @@ sym_E0_shp_pl = {
 	0x04016000: table.sym_var("gfx_mario_m_shoeR", "static Gfx", "[]"),
 	0x040160C8: table.sym_var("gfx_mario_m_shoeR_s", "Gfx", "[]"),
 	0x04016108: table.sym_var("gfx_mario_m_shoeR_e", "Gfx", "[]"),
-	0x04016668: table.sym_var("gfx_mario_m_torso0", "static Gfx", "[]"),
-	0x040166B8: table.sym_var("gfx_mario_m_torso1", "static Gfx", "[]"),
-	0x04016800: table.sym_var("gfx_mario_m_torso2", "static Gfx", "[]"),
-	0x040168A0: table.sym_var("gfx_mario_m_torso12_s", "static Gfx", "[]"),
+	0x04016668: table.sym_var("gfx_mario_m_torso_button", "static Gfx", "[]"),
+	0x040166B8: table.sym_var("gfx_mario_m_torso_blue", "static Gfx", "[]"),
+	0x04016800: table.sym_var("gfx_mario_m_torso_red", "static Gfx", "[]"),
+	0x040168A0: table.sym_var("gfx_mario_m_torso_shade", "static Gfx", "[]"),
 	0x040168C8: table.sym_var("gfx_mario_m_torso_s", "Gfx", "[]"),
 	0x04016948: table.sym_var("gfx_mario_m_torso_e", "Gfx", "[]"),
 	0x04016A18: table.sym_var("gfx_mario_l_waist", "static Gfx", "[]"),
@@ -15899,19 +16381,19 @@ sym_E0_shp_pl = {
 	0x04017A68: table.sym_var("gfx_mario_l_shoeR", "static Gfx", "[]"),
 	0x04017AD8: table.sym_var("gfx_mario_l_shoeR_s", "Gfx", "[]"),
 	0x04017B18: table.sym_var("gfx_mario_l_shoeR_e", "Gfx", "[]"),
-	0x04017D68: table.sym_var("gfx_mario_l_torso0", "static Gfx", "[]"),
-	0x04017D98: table.sym_var("gfx_mario_l_torso1", "static Gfx", "[]"),
-	0x04017E20: table.sym_var("gfx_mario_l_torso2", "static Gfx", "[]"),
-	0x04017E78: table.sym_var("gfx_mario_l_torso12_s", "static Gfx", "[]"),
+	0x04017D68: table.sym_var("gfx_mario_l_torso_button", "static Gfx", "[]"),
+	0x04017D98: table.sym_var("gfx_mario_l_torso_blue", "static Gfx", "[]"),
+	0x04017E20: table.sym_var("gfx_mario_l_torso_red", "static Gfx", "[]"),
+	0x04017E78: table.sym_var("gfx_mario_l_torso_shade", "static Gfx", "[]"),
 	0x04017EA0: table.sym_var("gfx_mario_l_torso_s", "Gfx", "[]"),
 	0x04017F20: table.sym_var("gfx_mario_l_torso_e", "Gfx", "[]"),
-	0x04018270: table.sym_var("gfx_mario_l_cap0", "static Gfx", "[]"),
-	0x04018298: table.sym_var("gfx_mario_l_cap1", "static Gfx", "[]"),
-	0x040182C0: table.sym_var("gfx_mario_l_cap2", "static Gfx", "[]"),
-	0x04018300: table.sym_var("gfx_mario_l_cap3", "static Gfx", "[]"),
-	0x04018370: table.sym_var("gfx_mario_l_cap4", "static Gfx", "[]"),
-	0x040183F0: table.sym_var("gfx_mario_l_cap5", "static Gfx", "[]"),
-	0x04018420: table.sym_var("gfx_mario_l_cap345_s", "static Gfx", "[]"),
+	0x04018270: table.sym_var("gfx_mario_l_cap_logo", "static Gfx", "[]"),
+	0x04018298: table.sym_var("gfx_mario_l_cap_eyes", "static Gfx", "[]"),
+	0x040182C0: table.sym_var("gfx_mario_l_cap_moustache", "static Gfx", "[]"),
+	0x04018300: table.sym_var("gfx_mario_l_cap_skin", "static Gfx", "[]"),
+	0x04018370: table.sym_var("gfx_mario_l_cap_red", "static Gfx", "[]"),
+	0x040183F0: table.sym_var("gfx_mario_l_cap_hair", "static Gfx", "[]"),
+	0x04018420: table.sym_var("gfx_mario_l_cap_shade", "static Gfx", "[]"),
 	0x04018460: table.sym_var("gfx_mario_l_cap_open", "Gfx", "[]"),
 	0x04018530: table.sym_var("gfx_mario_l_cap_half", "Gfx", "[]"),
 	0x04018600: table.sym_var("gfx_mario_l_cap_closed", "Gfx", "[]"),
@@ -15921,11 +16403,11 @@ sym_E0_shp_pl = {
 	0x04018940: table.sym_var("gfx_mario_l_cap_down", "Gfx", "[]"),
 	0x04018A10: table.sym_var("gfx_mario_l_cap_dead", "Gfx", "[]"),
 	0x04018AE0: table.sym_var("gfx_mario_l_cap", "Gfx", "[]"),
-	0x04018DC8: table.sym_var("gfx_mario_l_hair0", "static Gfx", "[]"),
-	0x04018DF0: table.sym_var("gfx_mario_l_hair1", "static Gfx", "[]"),
-	0x04018E30: table.sym_var("gfx_mario_l_hair2", "static Gfx", "[]"),
-	0x04018EA0: table.sym_var("gfx_mario_l_hair3", "static Gfx", "[]"),
-	0x04018F68: table.sym_var("gfx_mario_l_hair23_s", "static Gfx", "[]"),
+	0x04018DC8: table.sym_var("gfx_mario_l_hair_eyes", "static Gfx", "[]"),
+	0x04018DF0: table.sym_var("gfx_mario_l_hair_moustache", "static Gfx", "[]"),
+	0x04018E30: table.sym_var("gfx_mario_l_hair_skin", "static Gfx", "[]"),
+	0x04018EA0: table.sym_var("gfx_mario_l_hair_hair", "static Gfx", "[]"),
+	0x04018F68: table.sym_var("gfx_mario_l_hair_shade", "static Gfx", "[]"),
 	0x04018F90: table.sym_var("gfx_mario_l_hair_open", "Gfx", "[]"),
 	0x04019040: table.sym_var("gfx_mario_l_hair_half", "Gfx", "[]"),
 	0x040190F0: table.sym_var("gfx_mario_l_hair_closed", "Gfx", "[]"),
@@ -15940,11 +16422,11 @@ sym_E0_shp_pl = {
 	0x0401A1F0: table.sym_var("gfx_mario_handR", "static Gfx", "[]"),
 	0x0401A428: table.sym_var("gfx_mario_handR_s", "Gfx", "[]"),
 	0x0401A448: table.sym_var("gfx_mario_handR_e", "Gfx", "[]"),
-	0x0401ABA8: table.sym_var("gfx_mario_capR0", "static Gfx", "[]"),
-	0x0401ABD0: table.sym_var("gfx_mario_capR1", "static Gfx", "[]"),
-	0x0401AD40: table.sym_var("gfx_mario_capR2", "static Gfx", "[]"),
-	0x0401AED0: table.sym_var("gfx_mario_capR3", "static Gfx", "[]"),
-	0x0401AF20: table.sym_var("gfx_mario_capR123_s", "static Gfx", "[]"),
+	0x0401ABA8: table.sym_var("gfx_mario_capR_logo", "static Gfx", "[]"),
+	0x0401ABD0: table.sym_var("gfx_mario_capR_red", "static Gfx", "[]"),
+	0x0401AD40: table.sym_var("gfx_mario_capR_white", "static Gfx", "[]"),
+	0x0401AED0: table.sym_var("gfx_mario_capR_hair", "static Gfx", "[]"),
+	0x0401AF20: table.sym_var("gfx_mario_capR_shade", "static Gfx", "[]"),
 	0x0401B080: table.sym_var("gfx_mario_wingsR_l", "static Gfx", "[]"),
 	0x0401B0B0: table.sym_var("gfx_mario_wingsR_r", "static Gfx", "[]"),
 	0x0401B0E0: table.sym_var("gfx_mario_wingsR_start", "static Gfx", "[]"),
@@ -15955,20 +16437,20 @@ sym_E0_shp_pl = {
 	0x0401B278: table.sym_var("gfx_mario_wingsR_e", "Gfx", "[]"),
 	0x0401BC80: table.sym_var("gfx_mario_peaceR", "Gfx", "[]"),
 	0x0401BF30: table.sym_var("gfx_mario_peaceR_s", "Gfx", "[]"),
-	0x0401C330: table.sym_var("gfx_mario_cap0", "static Gfx", "[]"),
-	0x0401C368: table.sym_var("gfx_mario_cap1", "static Gfx", "[]"),
-	0x0401C4C8: table.sym_var("gfx_mario_cap2", "static Gfx", "[]"),
-	0x0401C510: table.sym_var("gfx_mario_cap12_s", "static Gfx", "[]"),
-	0x0401C678: table.sym_var("gfx_mario_wings_l", "static Gfx", "[]"),
-	0x0401C6A8: table.sym_var("gfx_mario_wings_r", "static Gfx", "[]"),
+	0x0401C330: table.sym_var("gfx_mario_cap_logo", "static Gfx", "[]"),
+	0x0401C368: table.sym_var("gfx_mario_cap_red", "static Gfx", "[]"),
+	0x0401C4C8: table.sym_var("gfx_mario_cap_hair", "static Gfx", "[]"),
+	0x0401C510: table.sym_var("gfx_mario_cap_shade", "static Gfx", "[]"),
+	0x0401C678: table.sym_var("gfx_mario_wings_wing_l", "static Gfx", "[]"),
+	0x0401C6A8: table.sym_var("gfx_mario_wings_wing_r", "static Gfx", "[]"),
 	0x0401C6D8: table.sym_var("gfx_mario_wings_start", "static Gfx", "[]"),
 	0x0401C730: table.sym_var("gfx_mario_wings_end", "static Gfx", "[]"),
 	0x0401C758: table.sym_var("gfx_mario_cap_s", "Gfx", "[]"), # unused
 	0x0401C7E8: table.sym_var("gfx_mario_cap_e", "Gfx", "[]"), # unused
 	0x0401C890: table.sym_var("gfx_mario_wings_s", "Gfx", "[]"), # unused
 	0x0401C8E8: table.sym_var("gfx_mario_wings_e", "Gfx", "[]"), # unused
-	0x0401C9C0: table.sym_var("gfx_mario_wing_l", "static Gfx", "[]"),
-	0x0401C9E0: table.sym_var("gfx_mario_wing_r", "static Gfx", "[]"),
+	0x0401C9C0: table.sym_var("gfx_mario_wing_wing_l", "static Gfx", "[]"),
+	0x0401C9E0: table.sym_var("gfx_mario_wing_wing_r", "static Gfx", "[]"),
 	0x0401CA00: table.sym_var("gfx_mario_wing_so", "Gfx", "[]"),
 	0x0401CAB8: table.sym_var("gfx_mario_wing_sx", "Gfx", "[]"),
 	0x0401CB70: table.sym_var("gfx_mario_wing_eo", "Gfx", "[]"),
@@ -16003,9 +16485,9 @@ sym_E0_shp_pl = {
 	0x040217C0: table.sym_var("vtx_smoke", "static Vtx", "[]"),
 	0x04021800: table.sym_var("txt_smoke", "static u16", "[]"),
 	0x04022000: table.sym_var("gfx_smoke_start", "static Gfx", "[]"),
-	0x04022028: table.sym_var("gfx_smoke", "static Gfx", "[]"),
+	0x04022028: table.sym_var("gfx_smoke_smoke", "static Gfx", "[]"),
 	0x04022048: table.sym_var("gfx_smoke_end", "static Gfx", "[]"),
-	0x04022070: table.sym_var("gfx_smoke_s", "Gfx", "[]"),
+	0x04022070: table.sym_var("gfx_smoke", "Gfx", "[]"),
 
 	# wave
 	0x040220C8: table.sym_var("vtx_wave", "static Vtx", "[]"),
@@ -16292,8 +16774,8 @@ sym_E0_shp_1b = {
 
 	# bully
 	0x050000E0: table.sym_var("txt_bully_horn", "static u16", "[]"),
-	0x050002E0: table.sym_var("gfx_bully_horn", "static Gfx", "[]"),
-	0x05000398: table.sym_var("gfx_bully_horn_s", "Gfx", "[]"),
+	0x050002E0: table.sym_var("gfx_bully_horn_horn", "static Gfx", "[]"),
+	0x05000398: table.sym_var("gfx_bully_horn", "Gfx", "[]"),
 	0x05000408: table.sym_var("light_bully", "static Lights1", "[]"),
 	0x05000468: table.sym_var("txt_bully_body_l", "static u16", "[]"),
 	0x05001468: table.sym_var("txt_bully_body_r", "static u16", "[]"),
@@ -16302,14 +16784,14 @@ sym_E0_shp_1b = {
 	0x050037A0: table.sym_var("gfx_bully_shoeR", "Gfx", "[]"),
 	0x05003838: table.sym_var("gfx_bully_eyes_old", "Gfx", "[]"), # unused
 	0x05003878: table.sym_var("gfx_bully_body_old", "Gfx", "[]"), # unused
-	0x05003CD0: table.sym_var("gfx_bully_body_l", "static Gfx", "[]"),
-	0x05003D08: table.sym_var("gfx_bully_body_r", "static Gfx", "[]"),
-	0x05003D40: table.sym_var("gfx_bully_body_s", "Gfx", "[]"),
-	0x05003E38: table.sym_var("gfx_bully_body_big_l", "static Gfx", "[]"),
-	0x05003E70: table.sym_var("gfx_bully_body_big_r", "static Gfx", "[]"),
-	0x05003EA8: table.sym_var("gfx_bully_body_big_s", "Gfx", "[]"),
-	0x05003F80: table.sym_var("gfx_bully_eyes", "static Gfx", "[]"),
-	0x05003FC8: table.sym_var("gfx_bully_eyes_s", "Gfx", "[]"),
+	0x05003CD0: table.sym_var("gfx_bully_body_body_l", "static Gfx", "[]"),
+	0x05003D08: table.sym_var("gfx_bully_body_body_r", "static Gfx", "[]"),
+	0x05003D40: table.sym_var("gfx_bully_body", "Gfx", "[]"),
+	0x05003E38: table.sym_var("gfx_bully_body_big_body_l", "static Gfx", "[]"),
+	0x05003E70: table.sym_var("gfx_bully_body_big_body_r", "static Gfx", "[]"),
+	0x05003EA8: table.sym_var("gfx_bully_body_big", "Gfx", "[]"),
+	0x05003F80: table.sym_var("gfx_bully_eyes_eye", "static Gfx", "[]"),
+	0x05003FC8: table.sym_var("gfx_bully_eyes", "Gfx", "[]"),
 	0x050042A4: table.sym_var("anime_bully_2", "static ANIME"),
 	0x050043D8: table.sym_var("anime_bully_1", "static ANIME"),
 	0x05004598: table.sym_var("anime_bully_0", "static ANIME"),
@@ -16454,22 +16936,123 @@ sym_E0_shp_2b = {
 	0x001B9CC0: table.sym("_Shape2B_gfxSegmentRomStart"),
 	0x001C3DB0: table.sym("_Shape2B_dataSegmentRomStart"),
 
-	0x06000000: table.sym_var("gfx_2b_06000000", "UNUSED static Gfx", "[]"), # fake
+	# skeeter
+	0x06000000: table.sym_var("light_skeeter", "UNUSED static Lights1", "[]"), # unused
+	0x06000090: table.sym_var("txt_skeeter_sphere", "static u16", "[]"),
+	0x06000890: table.sym_var("txt_skeeter_iris", "static u16", "[]"),
+	0x060009D0: table.sym_var("gfx_skeeter_body_sphere", "static Gfx", "[]"),
+	0x06000A08: table.sym_var("gfx_skeeter_body", "Gfx", "[]"),
+	0x06000AB8: table.sym_var("gfx_skeeter_tail_end_sphere", "static Gfx", "[]"),
+	0x06000AF0: table.sym_var("gfx_skeeter_tail_end", "Gfx", "[]"),
+	0x06000BA0: table.sym_var("gfx_skeeter_eye_sphere", "static Gfx", "[]"),
+	0x06000BD8: table.sym_var("gfx_skeeter_eye", "Gfx", "[]"),
+	0x06000C78: table.sym_var("gfx_skeeter_irisR_iris", "static Gfx", "[]"),
+	0x06000CA8: table.sym_var("gfx_skeeter_irisR", "Gfx", "[]"),
+	0x06000D48: table.sym_var("gfx_skeeter_irisL_iris", "static Gfx", "[]"),
+	0x06000D78: table.sym_var("gfx_skeeter_irisL", "Gfx", "[]"),
+	0x06000DE8: table.sym_var("light_skeeter_foot", "static Lights1", "[]"),
+	0x06000E60: table.sym_var("gfx_skeeter_foot_shade", "static Gfx", "[]"),
+	0x06000EC0: table.sym_var("gfx_skeeter_foot", "Gfx", "[]"),
+	0x06003FF0: table.sym_var("gfx_skeeter_footBR_old", "UNUSED static Gfx", "[]"), # unused
+	0x06004040: table.sym_var("gfx_skeeter_llegBR", "Gfx", "[]"),
+	0x06004070: table.sym_var("gfx_skeeter_ulegBR", "Gfx", "[]"),
+	0x060040A0: table.sym_var("gfx_skeeter_footFR_old", "UNUSED static Gfx", "[]"), # unused
+	0x060040F0: table.sym_var("gfx_skeeter_llegFR", "Gfx", "[]"),
+	0x06004120: table.sym_var("gfx_skeeter_ulegFR", "Gfx", "[]"),
+	0x06004150: table.sym_var("gfx_skeeter_footFL_old", "UNUSED static Gfx", "[]"), # unused
+	0x060041A0: table.sym_var("gfx_skeeter_llegFL", "Gfx", "[]"),
+	0x060041D0: table.sym_var("gfx_skeeter_ulegFL", "Gfx", "[]"),
+	0x06004200: table.sym_var("gfx_skeeter_eyeR_old", "UNUSED static Gfx", "[]"), # unused
+	0x060045C8: table.sym_var("gfx_skeeter_footBL_old", "UNUSED static Gfx", "[]"), # unused
+	0x06004618: table.sym_var("gfx_skeeter_llegBL", "Gfx", "[]"),
+	0x06004648: table.sym_var("gfx_skeeter_ulegBL", "Gfx", "[]"),
+	0x06004678: table.sym_var("gfx_skeeter_eyeL_old", "UNUSED static Gfx", "[]"), # unused
+	0x06004A40: table.sym_var("gfx_skeeter_tail_end_old", "UNUSED static Gfx", "[]"), # unused
+	0x06005328: table.sym_var("gfx_skeeter_tail", "Gfx", "[]"),
+	0x06005358: table.sym_var("gfx_skeeter_body_old", "UNUSED static Gfx", "[]"), # unused
+	0x06005D44: table.sym_var("anime_skeeter_0", "static ANIME"),
+	0x06006B70: table.sym_var("anime_skeeter_1", "static ANIME"),
+	0x060071E0: table.sym_var("anime_skeeter_2", "static ANIME"),
+	0x06007DC8: table.sym_var("anime_skeeter_3", "static ANIME"),
+	0x06007DE0: table.sym_var("anime_skeeter", "ANIME *", "[]"),
 	0x06007DF0: table.sym_var("align_0", "UNUSED static u64"),
 
-	0x06007DF8: table.sym_var("gfx_2b_06007DF8", "UNUSED static Gfx", "[]"), # fake
+	# kelp
+	0x06007DF8: table.sym_var("light_kelp", "static Lights1", "[]"),
+	0x06007E10: table.sym_var("txt_kelp_0", "static u16", "[]"),
+	0x06008610: table.sym_var("txt_kelp_1", "static u16", "[]"),
+	0x06008E10: table.sym_var("txt_kelp_2", "static u16", "[]"),
+	0x06009610: table.sym_var("txt_kelp_3", "static u16", "[]"),
+	0x06009E50: table.sym_var("gfx_kelp_0_0", "static Gfx", "[]"),
+	0x06009E98: table.sym_var("gfx_kelp_0", "Gfx", "[]"),
+	0x06009F48: table.sym_var("gfx_kelp_1_1", "static Gfx", "[]"),
+	0x06009F90: table.sym_var("gfx_kelp_1", "Gfx", "[]"),
+	0x0600A040: table.sym_var("gfx_kelp_2_2", "static Gfx", "[]"),
+	0x0600A088: table.sym_var("gfx_kelp_2", "Gfx", "[]"),
+	0x0600A138: table.sym_var("gfx_kelp_3_3", "static Gfx", "[]"),
+	0x0600A180: table.sym_var("gfx_kelp_3", "Gfx", "[]"),
+	0x0600A4BC: table.sym_var("anime_kelp_0", "static ANIME"),
+	0x0600A4D4: table.sym_var("anime_kelp", "ANIME *", "[]"),
 	0x0600A4D8: table.sym_var("align_1", "UNUSED static u64"),
 
-	0x0600A4E0: table.sym_var("gfx_2b_0600A4E0", "UNUSED static Gfx", "[]"), # fake
+	# watermine
+	0x0600A4E0: table.sym_var("light_watermine", "static Lights1", "[]"),
+	0x0600A4F8: table.sym_var("txt_watermine_l", "static u16", "[]"),
+	0x0600B4F8: table.sym_var("txt_watermine_r", "static u16", "[]"),
+	0x0600C4F8: table.sym_var("txt_watermine_spike", "static u16", "[]"),
+	0x0600D1F8: table.sym_var("gfx_watermine_mine_l", "static Gfx", "[]"),
+	0x0600D230: table.sym_var("gfx_watermine_mine_r", "static Gfx", "[]"),
+	0x0600D268: table.sym_var("gfx_watermine_mine", "Gfx", "[]"),
+	0x0600D2E0: table.sym_var("gfx_watermine_spike_spike", "static Gfx", "[]"),
+	0x0600D3F8: table.sym_var("gfx_watermine_spike", "Gfx", "[]"),
 	0x0600D458: table.sym_var("align_2", "UNUSED static u64"),
 
-	0x0600D460: table.sym_var("gfx_2b_0600D460", "UNUSED static Gfx", "[]"), # fake
+	# piranha
+	0x0600D460: table.sym_var("align_piranha_start", "UNUSED static u64"),
+	0x0600D468: table.sym_var("txt_piranha", "static u16", "[]"),
+	0x0600DC68: table.sym_var("light_piranha_body", "static Lights1", "[]"),
+	0x0600DD20: table.sym_var("gfx_piranha_body_piranha", "static Gfx", "[]"),
+	0x0600DDD8: table.sym_var("gfx_piranha_body", "Gfx", "[]"),
+	0x0600DE38: table.sym_var("light_piranha_fin", "static Lights1", "[]"),
+	0x0600DE90: table.sym_var("gfx_piranha_fin_piranha", "static Gfx", "[]"),
+	0x0600DED8: table.sym_var("gfx_piranha_fin", "Gfx", "[]"),
+	0x0600DF48: table.sym_var("light_piranha_tail", "static Lights1", "[]"),
+	0x0600DFC0: table.sym_var("gfx_piranha_tail_piranha", "static Gfx", "[]"),
+	0x0600E038: table.sym_var("gfx_piranha_tail", "Gfx", "[]"),
+	0x0600E24C: table.sym_var("anime_piranha_0", "static ANIME"),
+	0x0600E264: table.sym_var("anime_piranha", "ANIME *", "[]"),
+	0x0600E268: table.sym_var("align_piranha_end", "UNUSED static u64"),
 	0x0600E270: table.sym_var("align_3", "UNUSED static u64"),
 
-	0x0600E278: table.sym_var("gfx_2b_0600E278", "UNUSED static Gfx", "[]"), # fake
+	# bub
+	0x0600E278: table.sym_var("light_bub", "static Lights1", "[]"),
+	0x0600E2A8: table.sym_var("txt_bub_goggles", "static u16", "[]"),
+	0x0600EAA8: table.sym_var("txt_bub_fin", "static u16", "[]"),
+	0x0600F2A8: table.sym_var("txt_bub_eyes", "static u16", "[]"),
+	0x060102A8: table.sym_var("txt_bub_scale", "static u16", "[]"),
+	0x06011848: table.sym_var("gfx_bub_body_goggles", "static Gfx", "[]"),
+	0x060118C0: table.sym_var("gfx_bub_body_fin", "static Gfx", "[]"),
+	0x06011918: table.sym_var("gfx_bub_body_eyes", "static Gfx", "[]"),
+	0x06011968: table.sym_var("gfx_bub_body_scale", "static Gfx", "[]"),
+	0x06011A50: table.sym_var("gfx_bub_body_shade", "static Gfx", "[]"),
+	0x06011B28: table.sym_var("gfx_bub_body", "Gfx", "[]"),
+	0x06011C58: table.sym_var("gfx_bub_tail_fin", "static Gfx", "[]"),
+	0x06011CF0: table.sym_var("gfx_bub_tail", "Gfx", "[]"),
+	0x06011DC0: table.sym_var("gfx_bub_finL_fin", "static Gfx", "[]"),
+	0x06011E48: table.sym_var("gfx_bub_finL", "Gfx", "[]"),
+	0x06011F18: table.sym_var("gfx_bub_finR_fin", "static Gfx", "[]"),
+	0x06011FA0: table.sym_var("gfx_bub_finR", "Gfx", "[]"),
+	0x0601233C: table.sym_var("anime_bub_0", "static ANIME"),
+	0x06012354: table.sym_var("anime_bub", "ANIME *", "[]"),
 	0x06012360: table.sym_var("align_4", "UNUSED static u64"),
 
-	0x06012368: table.sym_var("gfx_2b_06012368", "UNUSED static Gfx", "[]"), # fake
+	# waterring
+	0x06012368: table.sym_var("light_waterring", "static Lights1", "[]"),
+	0x06012380: table.sym_var("txt_waterring", "static u16", "[]"),
+	0x06013380: table.sym_var("vtx_waterring", "static Vtx", "[]"),
+	0x06013AC0: table.sym_var("gfx_waterring", "Gfx", "[]"),
+	0x06013F64: table.sym_var("anime_waterring_0", "static ANIME"),
+	0x06013F7C: table.sym_var("anime_waterring", "ANIME *", "[]"),
 	0x06013F88: table.sym_var("align_5", "UNUSED static u64"),
 
 	# chest
@@ -16478,34 +17061,79 @@ sym_E0_shp_2b = {
 	0x060147A8: table.sym_var("txt_chest_inside", "static u16", "[]"),
 	0x06014FA8: table.sym_var("txt_chest_latch", "static u16", "[]"),
 	0x060157A8: table.sym_var("txt_chest_outside", "static u16", "[]"),
-	0x06016D58: table.sym_var("gfx_chest_06016D58", "static Gfx", "[]"),
-	0x06016DA0: table.sym_var("gfx_chest_06016DA0", "static Gfx", "[]"),
-	0x06016E18: table.sym_var("gfx_chest_06016E18", "static Gfx", "[]"),
-	0x06016EE0: table.sym_var("gfx_chest_06016EE0", "static Gfx", "[]"),
-	0x06016F90: table.sym_var("gfx_chest_06016F90", "Gfx", "[]"),
-	0x06017680: table.sym_var("gfx_chest_06017680", "static Gfx", "[]"),
-	0x06017790: table.sym_var("gfx_chest_06017790", "static Gfx", "[]"),
-	0x06017810: table.sym_var("gfx_chest_06017810", "static Gfx", "[]"),
-	0x060178C0: table.sym_var("gfx_chest_060178C0", "Gfx", "[]"),
+	0x06016D58: table.sym_var("gfx_chest_box_keyhole", "static Gfx", "[]"),
+	0x06016DA0: table.sym_var("gfx_chest_box_latch", "static Gfx", "[]"),
+	0x06016E18: table.sym_var("gfx_chest_box_inside", "static Gfx", "[]"),
+	0x06016EE0: table.sym_var("gfx_chest_box_outside", "static Gfx", "[]"),
+	0x06016F90: table.sym_var("gfx_chest_box", "Gfx", "[]"),
+	0x06017680: table.sym_var("gfx_chest_lid_inside", "static Gfx", "[]"),
+	0x06017790: table.sym_var("gfx_chest_lid_latch", "static Gfx", "[]"),
+	0x06017810: table.sym_var("gfx_chest_lid_outside", "static Gfx", "[]"),
+	0x060178C0: table.sym_var("gfx_chest_lid", "Gfx", "[]"),
 	0x06017958: table.sym_var("align_6", "UNUSED static u64"),
 
-	0x0D000000: table.sym_var("s_2b_105", "S_SCRIPT", "[]", table.GLOBL),
+	# skeeter
+	0x0D000000: table.sym_var("s_skeeter", "S_SCRIPT", "[]", table.GLOBL), # 105
 
-	0x0D000284: table.sym_var("s_2b_193", "S_SCRIPT", "[]", table.GLOBL),
+	# kelp
+	0x0D000284: table.sym_var("s_kelp", "S_SCRIPT", "[]", table.GLOBL), # 193
 
-	0x0D0002F4: table.sym_var("s_2b_179", "S_SCRIPT", "[]", table.GLOBL),
+	# watermine
+	0x0D0002F4: table.sym_var("s_watermine", "S_SCRIPT", "[]", table.GLOBL), # 179
 
-	0x0D000324: table.sym_var("s_2b_103", "S_SCRIPT", "[]", table.GLOBL),
+	# piranha
+	0x0D000324: table.sym_var("s_piranha", "S_SCRIPT", "[]", table.GLOBL), # 103
 
-	0x0D00038C: table.sym_var("s_2b_100", "S_SCRIPT", "[]", table.GLOBL),
+	# bub
+	0x0D00038C: table.sym_var("s_bub", "S_SCRIPT", "[]", table.GLOBL), # 100
 
-	0x0D000414: table.sym_var("s_2b_104", "S_SCRIPT", "[]", table.GLOBL),
+	# waterring
+	0x0D000414: table.sym_var("s_waterring", "S_SCRIPT", "[]", table.GLOBL), # 104
 
-	0x0D000450: table.sym_var("s_2b_101", "S_SCRIPT", "[]", table.GLOBL),
-	0x0D000468: table.sym_var("s_2b_102", "S_SCRIPT", "[]", table.GLOBL),
+	# chest
+	0x0D000450: table.sym_var("s_chest", "S_SCRIPT", "[]", table.GLOBL), # 101
+	0x0D000468: table.sym_var("s_chestlid", "S_SCRIPT", "[]", table.GLOBL), # 102
 }
 
 imm_E0_shp_2b = {
+	0x06000E60: 0x06000DE8,
+	# ideally there would be a full set of normals, but i only need these to
+	# be distinct
+	0x06000F50: (127, 0, 0),
+	0x06000F60: (127, 0, 0),
+	0x06000F70: (127, 0, 0),
+	0x06000F80: (127, 0, 0),
+	0x06000F90: (127, 0, 0),
+	0x06001080: (127, 0, 0),
+	0x06001090: (127, 0, 0),
+	0x060010A0: (127, 0, 0),
+	0x060010B0: (127, 0, 0),
+	0x060010C0: (127, 0, 0),
+	0x060011B0: (127, 0, 0),
+	0x060011C0: (127, 0, 0),
+	0x060011D0: (127, 0, 0),
+	0x060011E0: (127, 0, 0),
+	0x060011F0: (127, 0, 0),
+	0x06001AE0: (127, 0, 0),
+	0x06001AF0: (127, 0, 0),
+	0x06001B00: (127, 0, 0),
+	0x06001B10: (127, 0, 0),
+	0x06001B20: (127, 0, 0),
+	0x06009E68: 0x06007DF8,
+	0x06009F60: 0x06007DF8,
+	0x0600A058: 0x06007DF8,
+	0x0600A150: 0x06007DF8,
+	0x0600D2F8: 0x0600A4E0,
+	0x0600DD38: 0x0600DC68,
+	0x0600DEA8: 0x0600DE38,
+	0x0600DFD8: 0x0600DF48,
+	0x06011860: 0x0600E278,
+	0x06011A50: 0x0600E278,
+	0x06011AD8: 0x0600E278,
+	0x06011C70: 0x0600E278,
+	0x06011DD8: 0x0600E278,
+	0x06011F30: 0x0600E278,
+	0x06013B18: 0x06012368,
 	0x06016D70: 0x06013F90,
 	0x06017698: 0x06013F90,
 }
@@ -16513,6 +17141,7 @@ imm_E0_shp_2b = {
 sym_E0_shp_2c = {
 	0x001C4230: table.sym("_Shape2C_gfxSegmentRomStart"),
 	0x001D7C90: table.sym("_Shape2C_dataSegmentRomStart"),
+	0x06000A08: table.sym("0x06000A08"),
 	0x0D000000: table.sym_var("s_2c_106", "S_SCRIPT", "[]", table.GLOBL),
 	0x0D0000B8: table.sym_var("s_2c_107", "S_SCRIPT", "[]", table.GLOBL),
 	0x0D0000D0: table.sym_var("s_2c_191", "S_SCRIPT", "[]", table.GLOBL),
@@ -16534,64 +17163,64 @@ sym_E0_shp_2d = {
 	0x06002800: table.sym_var("txt_lakitu2_shell", "static u16", "[]"),
 	0x06003000: table.sym_var("txt_lakitu2_mouth", "static u16", "[]"),
 	0x06003800: table.sym_var("txt_lakitu2_lens", "static u16", "[]"),
-	0x06003A00: table.sym_var("light_lakitu2_06003A00", "static Lights1", "[]"),
-	0x06003C80: table.sym_var("gfx_lakitu2_06003C80", "static Gfx", "[]"),
-	0x06003DB0: table.sym_var("gfx_lakitu2_06003DB0", "static Gfx", "[]"),
-	0x06003E30: table.sym_var("gfx_lakitu2_06003E30", "Gfx", "[]"),
-	0x06003E98: table.sym_var("light_lakitu2_06003E98", "static Lights1", "[]"),
-	0x06004410: table.sym_var("gfx_lakitu2_06004410", "static Gfx", "[]"),
-	0x06004680: table.sym_var("gfx_lakitu2_06004680", "Gfx", "[]"),
-	0x060046E0: table.sym_var("light_lakitu2_060046E0", "static Lights1", "[]"),
-	0x060047E8: table.sym_var("gfx_lakitu2_060047E8", "Gfx", "[]"),
-	0x060048D8: table.sym_var("light_lakitu2_060048D8", "static Lights1", "[]"),
-	0x060049E0: table.sym_var("gfx_lakitu2_060049E0", "Gfx", "[]"),
-	0x06004AD0: table.sym_var("light_lakitu2_06004AD0", "static Lights1", "[]"),
-	0x06004BA8: table.sym_var("gfx_lakitu2_06004BA8", "static Gfx", "[]"),
-	0x06004BE8: table.sym_var("gfx_lakitu2_06004BE8", "static Gfx", "[]"),
-	0x06004C30: table.sym_var("gfx_lakitu2_06004C30", "static Gfx", "[]"),
-	0x06004C60: table.sym_var("gfx_lakitu2_06004C60", "Gfx", "[]"),
-	0x06004C88: table.sym_var("gfx_lakitu2_06004C88", "Gfx", "[]"),
-	0x06004CB0: table.sym_var("light_lakitu2_06004CB0", "static Lights1", "[]"),
-	0x060051D0: table.sym_var("gfx_lakitu2_060051D0", "static Gfx", "[]"),
-	0x06005218: table.sym_var("gfx_lakitu2_06005218", "static Gfx", "[]"),
-	0x06005360: table.sym_var("gfx_lakitu2_06005360", "Gfx", "[]"),
-	0x060053D8: table.sym_var("light_lakitu2_060053D8", "static Lights1", "[]"),
-	0x06005598: table.sym_var("gfx_lakitu2_06005598", "Gfx", "[]"),
-	0x060055E8: table.sym_var("gfx_lakitu2_060055E8", "Gfx", "[]"),
-	0x06005610: table.sym_var("gfx_lakitu2_06005610", "Gfx", "[]"),
+	0x06003A00: table.sym_var("light_lakitu2_body", "static Lights1", "[]"),
+	0x06003C80: table.sym_var("gfx_lakitu2_body_shell", "static Gfx", "[]"),
+	0x06003DB0: table.sym_var("gfx_lakitu2_body_skin", "static Gfx", "[]"),
+	0x06003E30: table.sym_var("gfx_lakitu2_body", "Gfx", "[]"),
+	0x06003E98: table.sym_var("light_lakitu2_mouth", "static Lights1", "[]"),
+	0x06004410: table.sym_var("gfx_lakitu2_mouth_mouth", "static Gfx", "[]"),
+	0x06004680: table.sym_var("gfx_lakitu2_mouth", "Gfx", "[]"),
+	0x060046E0: table.sym_var("light_lakitu2_armR", "static Lights1", "[]"),
+	0x060047E8: table.sym_var("gfx_lakitu2_armR", "Gfx", "[]"),
+	0x060048D8: table.sym_var("light_lakitu2_armL", "static Lights1", "[]"),
+	0x060049E0: table.sym_var("gfx_lakitu2_armL", "Gfx", "[]"),
+	0x06004AD0: table.sym_var("light_lakitu2_eyes", "static Lights1", "[]"),
+	0x06004BA8: table.sym_var("gfx_lakitu2_eyes_eyes", "static Gfx", "[]"),
+	0x06004BE8: table.sym_var("gfx_lakitu2_eyes_start", "static Gfx", "[]"),
+	0x06004C30: table.sym_var("gfx_lakitu2_eyes_end", "static Gfx", "[]"),
+	0x06004C60: table.sym_var("gfx_lakitu2_eyes_open", "Gfx", "[]"),
+	0x06004C88: table.sym_var("gfx_lakitu2_eyes_closed", "Gfx", "[]"),
+	0x06004CB0: table.sym_var("light_lakitu2_camera", "static Lights1", "[]"),
+	0x060051D0: table.sym_var("gfx_lakitu2_camera_lens", "static Gfx", "[]"),
+	0x06005218: table.sym_var("gfx_lakitu2_camera_shade", "static Gfx", "[]"),
+	0x06005360: table.sym_var("gfx_lakitu2_camera", "Gfx", "[]"),
+	0x060053D8: table.sym_var("light_lakitu2_rod", "static Lights1", "[]"),
+	0x06005598: table.sym_var("gfx_lakitu2_rod0", "Gfx", "[]"),
+	0x060055E8: table.sym_var("gfx_lakitu2_rod1", "Gfx", "[]"),
+	0x06005610: table.sym_var("gfx_lakitu2_rod2", "Gfx", "[]"),
 	0x060058E0: table.sym_var("anime_lakitu2_0", "static ANIME"),
 	0x060058F8: table.sym_var("anime_lakitu2", "ANIME *", "[]"),
 	0x06005900: table.sym_var("align_0", "UNUSED static u64"),
 
 	# toad
-	0x06005908: table.sym_var("light_toad_06005908", "static Lights1", "[]"),
+	0x06005908: table.sym_var("light_toad_head", "static Lights1", "[]"),
 	0x06005920: table.sym_var("txt_toad_face", "static u16", "[]"),
 	0x06006120: table.sym_var("txt_toad_spot", "static u16", "[]"),
-	0x06007300: table.sym_var("gfx_toad_06007300", "static Gfx", "[]"),
-	0x06007498: table.sym_var("gfx_toad_06007498", "static Gfx", "[]"),
-	0x060076C0: table.sym_var("gfx_toad_060076C0", "static Gfx", "[]"),
-	0x06007710: table.sym_var("gfx_toad_06007710", "Gfx", "[]"),
-	0x06007788: table.sym_var("gfx_toad_06007788", "Gfx", "[]"),
-	0x06007808: table.sym_var("light_toad_06007808", "static Lights1", "[]"),
-	0x060079E0: table.sym_var("gfx_toad_060079E0", "static Gfx", "[]"),
-	0x06007AC8: table.sym_var("gfx_toad_06007AC8", "Gfx", "[]"),
-	0x06007B00: table.sym_var("gfx_toad_06007B00", "Gfx", "[]"),
-	0x06007B28: table.sym_var("light_toad_06007B28", "static Lights1", "[]"),
-	0x06007DB8: table.sym_var("gfx_toad_06007DB8", "static Gfx", "[]"),
-	0x06007F58: table.sym_var("gfx_toad_06007F58", "Gfx", "[]"),
-	0x06007F80: table.sym_var("light_toad_06007F80", "static Lights1", "[]"),
-	0x06008168: table.sym_var("gfx_toad_06008168", "static Gfx", "[]"),
-	0x060082A0: table.sym_var("gfx_toad_060082A0", "Gfx", "[]"),
-	0x060082C8: table.sym_var("light_toad_060082C8", "static Lights1", "[]"),
-	0x06008490: table.sym_var("gfx_toad_06008490", "static Gfx", "[]"),
-	0x060085C8: table.sym_var("gfx_toad_060085C8", "Gfx", "[]"),
-	0x06008608: table.sym_var("gfx_toad_06008608", "Gfx", "[]"),
-	0x06008650: table.sym_var("light_toad_06008650", "static Lights1", "[]"),
-	0x06008838: table.sym_var("gfx_toad_06008838", "static Gfx", "[]"),
-	0x06008980: table.sym_var("gfx_toad_06008980", "Gfx", "[]"),
-	0x060089A8: table.sym_var("light_toad_060089A8", "static Lights1", "[]"),
-	0x06008B80: table.sym_var("gfx_toad_06008B80", "static Gfx", "[]"),
-	0x06008CC8: table.sym_var("gfx_toad_06008CC8", "Gfx", "[]"),
+	0x06007300: table.sym_var("gfx_toad_head_face", "static Gfx", "[]"),
+	0x06007498: table.sym_var("gfx_toad_head_spot", "static Gfx", "[]"),
+	0x060076C0: table.sym_var("gfx_toad_head_shade", "static Gfx", "[]"),
+	0x06007710: table.sym_var("gfx_toad_head_opa", "Gfx", "[]"),
+	0x06007788: table.sym_var("gfx_toad_head_xlu", "Gfx", "[]"),
+	0x06007808: table.sym_var("light_toad_vest", "static Lights1", "[]"),
+	0x060079E0: table.sym_var("gfx_toad_vest_shade", "static Gfx", "[]"),
+	0x06007AC8: table.sym_var("gfx_toad_vest_opa", "Gfx", "[]"),
+	0x06007B00: table.sym_var("gfx_toad_vest_xlu", "Gfx", "[]"),
+	0x06007B28: table.sym_var("light_toad_body", "static Lights1", "[]"),
+	0x06007DB8: table.sym_var("gfx_toad_body_shade", "static Gfx", "[]"),
+	0x06007F58: table.sym_var("gfx_toad_body", "Gfx", "[]"),
+	0x06007F80: table.sym_var("light_toad_armR", "static Lights1", "[]"),
+	0x06008168: table.sym_var("gfx_toad_armR_shade", "static Gfx", "[]"),
+	0x060082A0: table.sym_var("gfx_toad_armR", "Gfx", "[]"),
+	0x060082C8: table.sym_var("light_toad_armL", "static Lights1", "[]"),
+	0x06008490: table.sym_var("gfx_toad_armL_shade", "static Gfx", "[]"),
+	0x060085C8: table.sym_var("gfx_toad_armL_opa", "Gfx", "[]"),
+	0x06008608: table.sym_var("gfx_toad_armL_xlu", "Gfx", "[]"),
+	0x06008650: table.sym_var("light_toad_shoeR", "static Lights1", "[]"),
+	0x06008838: table.sym_var("gfx_toad_shoeR_shade", "static Gfx", "[]"),
+	0x06008980: table.sym_var("gfx_toad_shoeR", "Gfx", "[]"),
+	0x060089A8: table.sym_var("light_toad_shoeL", "static Lights1", "[]"),
+	0x06008B80: table.sym_var("gfx_toad_shoeL_shade", "static Gfx", "[]"),
+	0x06008CC8: table.sym_var("gfx_toad_shoeL", "Gfx", "[]"),
 	0x0600906C: table.sym_var("anime_toad_6", "static ANIME"),
 	0x06009400: table.sym_var("anime_toad_7", "static ANIME"),
 	0x06009AE0: table.sym_var("anime_toad_4", "static ANIME"),
@@ -16669,9 +17298,9 @@ sym_E0_shp_2d = {
 	0x0D0003E4: table.sym_var("s_toad", "S_SCRIPT", "[]", table.GLOBL), # 221
 
 	# mips
-	0x0D000440: table.sym_var("_0D000440", "UNUSED static u64"),
+	0x0D000440: table.sym_var("align_mips_start", "UNUSED static u64"),
 	0x0D000448: table.sym_var("s_mips", "S_SCRIPT", "[]", table.GLOBL), # 100
-	0x0D0005A8: table.sym_var("_0D0005A8", "UNUSED static u64"),
+	0x0D0005A8: table.sym_var("align_mips_end", "UNUSED static u64"),
 
 	# boo2
 	0x0D0005B0: table.sym_var("s_boo2", "S_SCRIPT", "[]", table.GLOBL), # 101
@@ -16736,6 +17365,7 @@ sym_E0_shp_2e = {
 sym_E0_shp_2f = {
 	0x001E7EE0: table.sym("_Shape2F_gfxSegmentRomStart"),
 	0x001F1B30: table.sym("_Shape2F_dataSegmentRomStart"),
+	0x0600DE38: table.sym("0x0600DE38"),
 	0x06013AE8: table.sym("0x06013AE8"),
 	0x0D000000: table.sym_var("s_2f_103", "S_SCRIPT", "[]", table.GLOBL),
 	0x0D00001C: table.sym_var("s_2f_102", "S_SCRIPT", "[]", table.GLOBL),
@@ -16841,14 +17471,14 @@ sym_E0_shp_gl = {
 	# pipe
 	0x030079E8: table.sym_var("light_pipe_side", "static Lights1", "[]"),
 	0x03007E40: table.sym_var("txt_pipe_side", "static u16", "[]"),
-	0x03008E40: table.sym_var("gfx_pipe_side", "static Gfx", "[]"),
-	0x03008F98: table.sym_var("gfx_pipe_side_s", "Gfx", "[]"),
+	0x03008E40: table.sym_var("gfx_pipe_side_side", "static Gfx", "[]"),
+	0x03008F98: table.sym_var("gfx_pipe_side", "Gfx", "[]"),
 	0x03008FF8: table.sym_var("light_pipe_end", "static Lights1", "[]"),
 	0x03009168: table.sym_var("txt_pipe_top", "static u16", "[]"),
-	0x03009968: table.sym_var("gfx_pipe_top", "static Gfx", "[]"),
-	0x03009A20: table.sym_var("gfx_pipe_bottom", "static Gfx", "[]"),
-	0x03009A50: table.sym_var("gfx_pipe_end_s", "Gfx", "[]"),
-	0x03009AC8: table.sym_var("map_pipe", "MAP_DATA", "[]"),
+	0x03009968: table.sym_var("gfx_pipe_end_top", "static Gfx", "[]"),
+	0x03009A20: table.sym_var("gfx_pipe_end_bottom", "static Gfx", "[]"),
+	0x03009A50: table.sym_var("gfx_pipe_end", "Gfx", "[]"),
+	0x03009AC8: table.sym_var("map_pipe", "MAP", "[]"),
 	0x03009CD8: table.sym_var("align_4", "UNUSED static u64"),
 
 	# door
@@ -16962,10 +17592,10 @@ sym_E0_shp_gl = {
 	# fish
 	0x0301B5C8: table.sym_var("light_fish", "static Lights1", "[]"),
 	0x0301B5E0: table.sym_var("txt_fish", "static u16", "[]"),
-	0x0301BEC0: table.sym_var("gfx_fish_body", "static Gfx", "[]"),
-	0x0301BFB8: table.sym_var("gfx_fish_body_s", "Gfx", "[]"),
-	0x0301C0A8: table.sym_var("gfx_fish_tail", "static Gfx", "[]"),
-	0x0301C150: table.sym_var("gfx_fish_tail_s", "Gfx", "[]"),
+	0x0301BEC0: table.sym_var("gfx_fish_body_fish", "static Gfx", "[]"),
+	0x0301BFB8: table.sym_var("gfx_fish_body", "Gfx", "[]"),
+	0x0301C0A8: table.sym_var("gfx_fish_tail_fish", "static Gfx", "[]"),
+	0x0301C150: table.sym_var("gfx_fish_tail", "Gfx", "[]"),
 	0x0301C298: table.sym_var("anime_fish_0", "static ANIME"),
 	0x0301C2B0: table.sym_var("anime_fish", "ANIME *", "[]"),
 	0x0301C2B8: table.sym_var("align_8", "UNUSED static u64"),
@@ -16983,8 +17613,8 @@ sym_E0_shp_gl = {
 	0x0301CE70: table.sym_var("align_10", "UNUSED static u64"),
 
 	# map
-	0x0301CE78: table.sym_var("map_door", "MAP_DATA", "[]"),
-	0x0301CECC: table.sym_var("map_13002018", "MAP_DATA", "[]"), # this is for some platform in LLL
+	0x0301CE78: table.sym_var("map_door", "MAP", "[]"),
+	0x0301CECC: table.sym_var("map_13002018", "MAP", "[]"), # this is for some platform in LLL
 	0x0301CF00: table.sym_var("align_11", "UNUSED static u64"),
 
 	# cap
@@ -16995,12 +17625,12 @@ sym_E0_shp_gl = {
 	0x0301F750: table.sym_var("txt_cap_wing_r", "static u16", "[]"),
 	0x03020750: table.sym_var("txt_cap_metal_wing_l", "static u16", "[]"),
 	0x03021750: table.sym_var("txt_cap_metal_wing_r", "static u16", "[]"),
-	0x03022B30: table.sym_var("gfx_cap0", "static Gfx", "[]"),
-	0x03022B68: table.sym_var("gfx_cap1", "static Gfx", "[]"),
-	0x03022CC8: table.sym_var("gfx_cap2", "static Gfx", "[]"),
-	0x03022D10: table.sym_var("gfx_cap12_s", "static Gfx", "[]"),
-	0x03022E78: table.sym_var("gfx_wings_l", "static Gfx", "[]"),
-	0x03022EA8: table.sym_var("gfx_wings_r", "static Gfx", "[]"),
+	0x03022B30: table.sym_var("gfx_cap_logo", "static Gfx", "[]"),
+	0x03022B68: table.sym_var("gfx_cap_red", "static Gfx", "[]"),
+	0x03022CC8: table.sym_var("gfx_cap_hair", "static Gfx", "[]"),
+	0x03022D10: table.sym_var("gfx_cap_shade", "static Gfx", "[]"),
+	0x03022E78: table.sym_var("gfx_wings_wing_l", "static Gfx", "[]"),
+	0x03022EA8: table.sym_var("gfx_wings_wing_r", "static Gfx", "[]"),
 	0x03022ED8: table.sym_var("gfx_wings_start", "static Gfx", "[]"),
 	0x03022F20: table.sym_var("gfx_wings_end", "static Gfx", "[]"),
 	0x03022F48: table.sym_var("gfx_cap_s", "Gfx", "[]"),
@@ -17037,19 +17667,19 @@ sym_E0_shp_gl = {
 	# 1up
 	0x030295E8: table.sym_var("vtx_1up", "static Vtx", "[]"),
 	0x03029628: table.sym_var("txt_1up", "static u16", "[]"),
-	0x0302A628: table.sym_var("gfx_1up", "static Gfx", "[]"),
-	0x0302A660: table.sym_var("gfx_1up_s", "Gfx", "[]"),
+	0x0302A628: table.sym_var("gfx_1up_1up", "static Gfx", "[]"),
+	0x0302A660: table.sym_var("gfx_1up", "Gfx", "[]"),
 	0x0302A6D0: table.sym_var("align_15", "UNUSED static u64"),
 
 	# powerstar
 	0x0302A6D8: table.sym_var("light_powerstar_star", "static Lights1", "[]"),
 	0x0302A6F0: table.sym_var("txt_powerstar_star", "static u16", "[]"),
 	0x0302AEF0: table.sym_var("txt_powerstar_eye", "static u16", "[]"),
-	0x0302B7B0: table.sym_var("gfx_powerstar_star", "static Gfx", "[]"),
-	0x0302B870: table.sym_var("gfx_powerstar_star_s", "Gfx", "[]"),
+	0x0302B7B0: table.sym_var("gfx_powerstar_star_shade", "static Gfx", "[]"),
+	0x0302B870: table.sym_var("gfx_powerstar_star", "Gfx", "[]"),
 	0x0302B908: table.sym_var("light_powerstar_eyes", "static Lights1", "[]"),
-	0x0302B9C0: table.sym_var("gfx_powerstar_eyes", "static Gfx", "[]"),
-	0x0302BA18: table.sym_var("gfx_powerstar_eyes_s", "Gfx", "[]"),
+	0x0302B9C0: table.sym_var("gfx_powerstar_eyes_shade", "static Gfx", "[]"),
+	0x0302BA18: table.sym_var("gfx_powerstar_eyes", "Gfx", "[]"),
 	0x0302BA88: table.sym_var("align_16", "UNUSED static u64"),
 
 	# sand
@@ -17062,8 +17692,8 @@ sym_E0_shp_gl = {
 	0x0302BD68: table.sym_var("light_shard", "static Lights1", "[]"),
 	0x0302BDC8: table.sym_var("vtx_shard_cork", "static Vtx", "[]"),
 	0x0302BDF8: table.sym_var("txt_shard_cork", "static u16", "[]"),
-	0x0302BFF8: table.sym_var("gfx_shard_cork", "static Gfx", "[]"),
-	0x0302C028: table.sym_var("gfx_shard_cork_s", "Gfx", "[]"),
+	0x0302BFF8: table.sym_var("gfx_shard_cork_cork", "static Gfx", "[]"),
+	0x0302C028: table.sym_var("gfx_shard_cork", "Gfx", "[]"),
 	0x0302C098: table.sym_var("vtx_shard_s", "static Vtx", "[]"),
 	0x0302C0C8: table.sym_var("vtx_shard_y", "static Vtx", "[]"),
 	0x0302C0F8: table.sym_var("vtx_star_s", "static Vtx", "[]"),
@@ -17083,8 +17713,8 @@ sym_E0_shp_gl = {
 
 	# shadestar
 	0x0302C488: table.sym_var("light_shadestar", "static Lights1", "[]"),
-	0x0302C560: table.sym_var("gfx_shadestar", "static Gfx", "[]"),
-	0x0302C620: table.sym_var("gfx_shadestar_s", "Gfx", "[]"),
+	0x0302C560: table.sym_var("gfx_shadestar_shade", "static Gfx", "[]"),
+	0x0302C620: table.sym_var("gfx_shadestar", "Gfx", "[]"),
 	0x0302C658: table.sym_var("align_19", "UNUSED static u64"),
 
 	# snow
@@ -17097,13 +17727,13 @@ sym_E0_shp_gl = {
 	0x0302C940: table.sym_var("light_signpost_post", "static Lights1", "[]"),
 	0x0302C9C8: table.sym_var("txt_signpost_wood", "static u16", "[]"),
 	0x0302D1C8: table.sym_var("txt_signpost_face", "static u16", "[]"),
-	0x0302D9C8: table.sym_var("gfx_signpost_post", "static Gfx", "[]"),
-	0x0302DA48: table.sym_var("gfx_signpost_post_s", "Gfx", "[]"),
+	0x0302D9C8: table.sym_var("gfx_signpost_post_wood", "static Gfx", "[]"),
+	0x0302DA48: table.sym_var("gfx_signpost_post", "Gfx", "[]"),
 	0x0302DAA8: table.sym_var("light_signpost_sign", "static Lights1", "[]"),
-	0x0302DC40: table.sym_var("gfx_signpost_sign", "static Gfx", "[]"),
-	0x0302DCD0: table.sym_var("gfx_signpost_face", "static Gfx", "[]"),
-	0x0302DD08: table.sym_var("gfx_signpost_sign_s", "Gfx", "[]"),
-	0x0302DD80: table.sym_var("map_signpost", "MAP_DATA", "[]"),
+	0x0302DC40: table.sym_var("gfx_signpost_sign_wood", "static Gfx", "[]"),
+	0x0302DCD0: table.sym_var("gfx_signpost_sign_face", "static Gfx", "[]"),
+	0x0302DD08: table.sym_var("gfx_signpost_sign", "Gfx", "[]"),
+	0x0302DD80: table.sym_var("map_signpost", "MAP", "[]"),
 	0x0302DE08: table.sym_var("align_21", "UNUSED static u64"),
 
 	# tree
@@ -17778,6 +18408,8 @@ sym_E0_object = {
 	0x1300565C: table.sym_var("o_1300565C", "O_SCRIPT", "[]", table.GLOBL),
 	0x13005680: table.sym_var("o_13005680", "O_SCRIPT", "[]", table.GLOBL),
 	0x130056A4: table.sym_var("o_130056A4", "O_SCRIPT", "[]", table.GLOBL),
+
+	0x0700FA00: table.sym("0x0700FA00"),
 }
 
 sym_E0_m_title = {
@@ -17787,7 +18419,7 @@ sym_E0_m_title = {
 	0x14000078: table.sym("p_face", table.GLOBL),
 	0x14000104: table.sym("p_gameover", table.GLOBL),
 	0x14000190: table.sym("p_debug", table.GLOBL),
-	0x1400020C: table.sym("goto_file_select"),
+	0x1400020C: table.sym("goto_fileselect"),
 	0x14000238: table.sym("goto_debug"),
 	0x1400025C: table.sym("goto_game"),
 	0x14000284: table.sym("goto_demo"),
@@ -17809,10 +18441,10 @@ sym_E0_m_logo = {
 	0x07008EA0: table.sym_var("gfx_logo_marble", "static Gfx", "[]"),
 	0x07009E38: table.sym_var("gfx_logo_wood", "static Gfx", "[]"),
 	0x0700ADC0: table.sym_var("gfx_logo_shade", "static Gfx", "[]"),
-	0x0700B3A0: table.sym_var("gfx_logo_s", "Gfx", "[]"),
+	0x0700B3A0: table.sym_var("gfx_logo", "Gfx", "[]"),
 	0x0700B4A0: table.sym_var("txt_logo_copyright", "static u16", "[]"),
 	0x0700C4A0: table.sym_var("txt_logo_trademark", "static u16", "[]"),
-	0x0700C6A0: table.sym_var("gfx_logo_symbol", "Gfx", "[]"),
+	0x0700C6A0: table.sym_var("gfx_symbol", "Gfx", "[]"),
 	0x0700C790: table.sym_var("logo_scale_a", "float", "[]"),
 	0x0700C880: table.sym_var("logo_scale_b", "float", "[]"),
 }
@@ -17939,24 +18571,24 @@ imm_E0_m_debug = {
 
 sym_E0_back_title = {
 	0x002708C0: table.sym("_TitleBackSegmentRomStart"),
-	0x0A000000: table.sym_var("vtx_title_bg", "static Vtx", "[]"),
-	0x0A000100: table.sym_var("gfx_title_bg_start", "Gfx", "[]"),
-	0x0A000118: table.sym_var("gfx_title_bg_vtx", "Gfx", "[]"),
-	0x0A000130: table.sym_var("gfx_title_bg_0", "Gfx", "[]"),
-	0x0A000148: table.sym_var("gfx_title_bg_1", "Gfx", "[]"),
-	0x0A000160: table.sym_var("gfx_title_bg_2", "Gfx", "[]"),
-	0x0A000178: table.sym_var("gfx_title_bg_3", "Gfx", "[]"),
-	0x0A000190: table.sym_var("gfx_title_bg_end", "Gfx", "[]"),
-	0x0A0001C0: table.sym_var("txt_title_bg_mario_0", "static u16", "[]"),
-	0x0A000E40: table.sym_var("txt_title_bg_mario_1", "static u16", "[]"),
-	0x0A001AC0: table.sym_var("txt_title_bg_mario_2", "static u16", "[]"),
-	0x0A002740: table.sym_var("txt_title_bg_mario_3", "static u16", "[]"),
-	0x0A0033C0: table.sym_var("txt_title_bg_gameover_0", "static u16", "[]"),
-	0x0A004040: table.sym_var("txt_title_bg_gameover_1", "static u16", "[]"),
-	0x0A004CC0: table.sym_var("txt_title_bg_gameover_2", "static u16", "[]"),
-	0x0A005940: table.sym_var("txt_title_bg_gameover_3", "static u16", "[]"),
-	0x0A0065C0: table.sym_var("txt_title_bg_mario", "u16 *", "[]"),
-	0x0A0065D0: table.sym_var("txt_title_bg_gameover", "u16 *", "[]"),
+	0x0A000000: table.sym_var("vtx_titlebg", "static Vtx", "[]"),
+	0x0A000100: table.sym_var("gfx_titlebg_start", "Gfx", "[]"),
+	0x0A000118: table.sym_var("gfx_titlebg_vtx", "Gfx", "[]"),
+	0x0A000130: table.sym_var("gfx_titlebg_0", "Gfx", "[]"),
+	0x0A000148: table.sym_var("gfx_titlebg_1", "Gfx", "[]"),
+	0x0A000160: table.sym_var("gfx_titlebg_2", "Gfx", "[]"),
+	0x0A000178: table.sym_var("gfx_titlebg_3", "Gfx", "[]"),
+	0x0A000190: table.sym_var("gfx_titlebg_end", "Gfx", "[]"),
+	0x0A0001C0: table.sym_var("txt_titlebg_mario_0", "static u16", "[]"),
+	0x0A000E40: table.sym_var("txt_titlebg_mario_1", "static u16", "[]"),
+	0x0A001AC0: table.sym_var("txt_titlebg_mario_2", "static u16", "[]"),
+	0x0A002740: table.sym_var("txt_titlebg_mario_3", "static u16", "[]"),
+	0x0A0033C0: table.sym_var("txt_titlebg_gameover_0", "static u16", "[]"),
+	0x0A004040: table.sym_var("txt_titlebg_gameover_1", "static u16", "[]"),
+	0x0A004CC0: table.sym_var("txt_titlebg_gameover_2", "static u16", "[]"),
+	0x0A005940: table.sym_var("txt_titlebg_gameover_3", "static u16", "[]"),
+	0x0A0065C0: table.sym_var("txt_titlebg_mario", "u16 *", "[]"),
+	0x0A0065D0: table.sym_var("txt_titlebg_gameover", "u16 *", "[]"),
 	0x0A0065E0: table.sym_var("align_0", "UNUSED static u64"),
 }
 
@@ -18098,10 +18730,10 @@ sym_E0_m_select = {
 	0x0700DD20: table.sym_var("vtx_select_course_l", "static Vtx", "[]"),
 	0x0700DD60: table.sym_var("gfx_select_course", "Gfx", "[]"),
 
-	0x0700DE30: table.sym_var("map_select", "MAP_DATA", "[]"),
+	0x0700DE30: table.sym_var("map_select", "MAP", "[]"),
 
-	0x14000000: table.sym("p_file_select", table.GLOBL),
-	0x14000118: table.sym("p_star_select", table.GLOBL),
+	0x14000000: table.sym("p_fileselect", table.GLOBL),
+	0x14000118: table.sym("p_starselect", table.GLOBL),
 	0x140001C0: table.sym(".return", table.LOCAL),
 	0x140001D0: table.sym_var("s_file_mario", "S_SCRIPT", "[]", table.GLOBL), # 3
 	0x14000200: table.sym_var("s_file_mario_s", "S_SCRIPT", "[]", table.GLOBL), # 8
@@ -18113,8 +18745,8 @@ sym_E0_m_select = {
 	0x14000308: table.sym_var("s_tile_score", "S_SCRIPT", "[]", table.GLOBL), # 7
 	0x14000330: table.sym_var("s_tile_sound", "S_SCRIPT", "[]", table.GLOBL), # 11
 	0x14000358: table.sym_var("s_tile_button", "S_SCRIPT", "[]", table.GLOBL), # 12
-	0x14000380: table.sym_var("s_file_select", "S_SCRIPT", "[]", table.GLOBL),
-	0x14000408: table.sym_var("s_star_select", "S_SCRIPT", "[]", table.GLOBL),
+	0x14000380: table.sym_var("s_fileselect", "S_SCRIPT", "[]", table.GLOBL),
+	0x14000408: table.sym_var("s_starselect", "S_SCRIPT", "[]", table.GLOBL),
 }
 
 imm_E0_m_select = {
@@ -19123,24 +19755,24 @@ sym_E0_weather = {
 	0x0B001008: table.sym_var("txt_weather_flower_2", "static u16", "[]"),
 	0x0B001808: table.sym_var("txt_weather_flower_3", "static u16", "[]"),
 	0x0B002008: table.sym_var("txt_weather_flower", "u16 *", "[]"),
-	0x0B002020: table.sym_var("txt_weather_lava_0", "static u16", "[]"),
-	0x0B002820: table.sym_var("txt_weather_lava_1", "static u16", "[]"),
-	0x0B003020: table.sym_var("txt_weather_lava_2", "static u16", "[]"),
-	0x0B003820: table.sym_var("txt_weather_lava_3", "static u16", "[]"),
-	0x0B004020: table.sym_var("txt_weather_lava_4", "static u16", "[]"),
-	0x0B004820: table.sym_var("txt_weather_lava_5", "static u16", "[]"),
-	0x0B005020: table.sym_var("txt_weather_lava_6", "static u16", "[]"),
-	0x0B005820: table.sym_var("txt_weather_lava_7", "static u16", "[]"),
+	0x0B002020: table.sym_var("txt_lava_0", "static u16", "[]"),
+	0x0B002820: table.sym_var("txt_lava_1", "static u16", "[]"),
+	0x0B003020: table.sym_var("txt_lava_2", "static u16", "[]"),
+	0x0B003820: table.sym_var("txt_lava_3", "static u16", "[]"),
+	0x0B004020: table.sym_var("txt_lava_4", "static u16", "[]"),
+	0x0B004820: table.sym_var("txt_lava_5", "static u16", "[]"),
+	0x0B005020: table.sym_var("txt_lava_6", "static u16", "[]"),
+	0x0B005820: table.sym_var("txt_lava_7", "static u16", "[]"),
 	0x0B006020: table.sym_var("txt_weather_lava", "u16 *", "[]"),
 	0x0B006048: table.sym_var("txt_weather_bubble_0", "static u16", "[]"),
 	0x0B006848: table.sym_var("txt_weather_bubble", "u16 *", "[]"),
-	0x0B00684C: table.sym_var("txt_weather_snow_a", "static u16", "[]"),
-	0x0B006A50: table.sym_var("gfx_weather_snow_a", "Gfx", "[]"),
+	0x0B00684C: table.sym_var("txt_snow_a", "static u16", "[]"),
+	0x0B006A50: table.sym_var("gfx_snow_a", "Gfx", "[]"),
 	0x0B006AB0: table.sym_var("gfx_weather_end", "Gfx", "[]"),
-	0x0B006AD8: table.sym_var("txt_weather_snow_b", "static u16", "[]"),
-	0x0B006CD8: table.sym_var("gfx_weather_snow_b", "Gfx", "[]"),
-	0x0B006D38: table.sym_var("gfx_weather_lava_start", "Gfx", "[]"),
-	0x0B006D68: table.sym_var("gfx_weather_lava_txt", "Gfx", "[]"),
+	0x0B006AD8: table.sym_var("txt_snow_b", "static u16", "[]"),
+	0x0B006CD8: table.sym_var("gfx_snow_b", "Gfx", "[]"),
+	0x0B006D38: table.sym_var("gfx_lava_start", "Gfx", "[]"),
+	0x0B006D68: table.sym_var("gfx_lava_txt", "Gfx", "[]"),
 }
 
 sym_E0_s_bbh = {
@@ -19218,6 +19850,7 @@ sym_E0_s_ccm = {
 sym_E0_s_inside = {
 	0x00396340: table.sym("_Inside_gfxSegmentRomStart"),
 	0x003CF0D0: table.sym("_Inside_dataSegmentRomStart"),
+	0x0702A880: table.sym_var("gfx_inside_0702A880", "Gfx", "[]"),
 	0x0E000000: table.sym("p_inside_0E000000"),
 	0x0E0003F4: table.sym("p_inside_0E0003F4"),
 	0x0E000790: table.sym("p_inside_0E000790"),
@@ -19342,62 +19975,57 @@ sym_E0_s_bob = {
 	0x07002000: table.sym_var("txt_bob_4", "static u16", "[]"),
 
 	0x07002800: table.sym_var("light_battlefield_smooth", "static Lights1", "[]"),
-	0x07003CA8: table.sym_var("gfx_battlefield_0", "static Gfx", "[]"),
-	0x070041E0: table.sym_var("gfx_battlefield_1", "static Gfx", "[]"),
-	0x070042B8: table.sym_var("gfx_battlefield_2", "static Gfx", "[]"),
+	0x07003CA8: table.sym_var("gfx_battlefield_smooth_c11", "static Gfx", "[]"),
+	0x070041E0: table.sym_var("gfx_battlefield_smooth_c18", "static Gfx", "[]"),
+	0x070042B8: table.sym_var("gfx_battlefield_smooth_c12", "static Gfx", "[]"),
 	0x07004390: table.sym_var("gfx_battlefield_smooth", "Gfx", "[]"),
-
 	0x07004478: table.sym_var("light_battlefield_flat", "static Lights1", "[]"),
-	0x07008AF0: table.sym_var("gfx_battlefield_3", "static Gfx", "[]"),
-	0x07008C28: table.sym_var("gfx_battlefield_4", "static Gfx", "[]"),
-	0x07009050: table.sym_var("gfx_battlefield_5", "static Gfx", "[]"),
-	0x07009370: table.sym_var("gfx_battlefield_6", "static Gfx", "[]"),
-	0x07009490: table.sym_var("gfx_battlefield_7", "static Gfx", "[]"),
-	0x070095B8: table.sym_var("gfx_battlefield_8", "static Gfx", "[]"),
-	0x07009768: table.sym_var("gfx_battlefield_9", "static Gfx", "[]"),
-	0x070097F8: table.sym_var("gfx_battlefield_10", "static Gfx", "[]"),
-	0x07009960: table.sym_var("gfx_battlefield_11", "static Gfx", "[]"),
-	0x070099E0: table.sym_var("gfx_battlefield_12", "static Gfx", "[]"),
+	0x07008AF0: table.sym_var("gfx_battlefield_flat_c7", "static Gfx", "[]"),
+	0x07008C28: table.sym_var("gfx_battlefield_flat_c4", "static Gfx", "[]"),
+	0x07009050: table.sym_var("gfx_battlefield_flat_c3", "static Gfx", "[]"),
+	0x07009370: table.sym_var("gfx_battlefield_flat_c10", "static Gfx", "[]"),
+	0x07009490: table.sym_var("gfx_battlefield_flat_c9", "static Gfx", "[]"),
+	0x070095B8: table.sym_var("gfx_battlefield_flat_c6", "static Gfx", "[]"),
+	0x07009768: table.sym_var("gfx_battlefield_flat_2", "static Gfx", "[]"),
+	0x070097F8: table.sym_var("gfx_battlefield_flat_3", "static Gfx", "[]"),
+	0x07009960: table.sym_var("gfx_battlefield_flat_1", "static Gfx", "[]"),
+	0x070099E0: table.sym_var("gfx_battlefield_flat_c12", "static Gfx", "[]"),
 	0x07009D80: table.sym_var("gfx_battlefield_flat", "Gfx", "[]"),
-
-	0x0700A318: table.sym_var("gfx_battlefield_13", "static Gfx", "[]"),
+	0x0700A318: table.sym_var("gfx_battlefield_xlu_decal_c21", "static Gfx", "[]"),
 	0x0700A470: table.sym_var("gfx_battlefield_xlu_decal", "Gfx", "[]"),
-
-	0x0700A800: table.sym_var("gfx_battlefield_14", "static Gfx", "[]"),
-	0x0700A848: table.sym_var("gfx_battlefield_15", "static Gfx", "[]"),
+	0x0700A800: table.sym_var("gfx_battlefield_tex_edge_c16", "static Gfx", "[]"),
+	0x0700A848: table.sym_var("gfx_battlefield_tex_edge_0", "static Gfx", "[]"),
 	0x0700A920: table.sym_var("gfx_battlefield_tex_edge", "Gfx", "[]"),
-
 	0x0700A9E0: table.sym_var("light_battlefield_shade", "static Lights1", "[]"),
-	0x0700CFC0: table.sym_var("gfx_battlefield_16_17", "static Gfx", "[]"),
-	0x0700D7D8: table.sym_var("gfx_battlefield_18", "static Gfx", "[]"),
-	0x0700D910: table.sym_var("gfx_battlefield_19", "static Gfx", "[]"),
-	0x0700DC40: table.sym_var("gfx_battlefield_20", "static Gfx", "[]"),
-	0x0700DC88: table.sym_var("gfx_battlefield_21", "static Gfx", "[]"),
-	0x0700DCE0: table.sym_var("gfx_battlefield_22", "static Gfx", "[]"),
+	0x0700CFC0: table.sym_var("gfx_battlefield_shade_c17", "static Gfx", "[]"),
+	0x0700D7D8: table.sym_var("gfx_battlefield_shade_c11", "static Gfx", "[]"),
+	0x0700D910: table.sym_var("gfx_battlefield_shade_c18", "static Gfx", "[]"),
+	0x0700DC40: table.sym_var("gfx_battlefield_shade_4", "static Gfx", "[]"),
+	0x0700DC88: table.sym_var("gfx_battlefield_shade_c19", "static Gfx", "[]"),
+	0x0700DCE0: table.sym_var("gfx_battlefield_shade_c12", "static Gfx", "[]"),
 	0x0700DD18: table.sym_var("gfx_battlefield_shade", "Gfx", "[]"),
+	0x0700DE30: table.sym_var("light_battlefield_cave", "static Lights1", "[]"),
+	0x0700E1E8: table.sym_var("gfx_battlefield_cave_c17", "static Gfx", "[]"),
+	0x0700E338: table.sym_var("gfx_battlefield_cave", "Gfx", "[]"),
 
-	0x0700DE30: table.sym_var("light_battlefield_23", "static Lights1", "[]"),
-	0x0700E1E8: table.sym_var("gfx_battlefield_23", "static Gfx", "[]"),
-	0x0700E338: table.sym_var("gfx_battlefield_23_s", "Gfx", "[]"),
-
-	0x0700E420: table.sym_var("gfx_bob_54", "static Gfx", "[]"),
-	0x0700E458: table.sym_var("gfx_bob_54_s", "Gfx", "[]"),
+	0x0700E420: table.sym_var("gfx_bob_54_c16", "static Gfx", "[]"),
+	0x0700E458: table.sym_var("gfx_bob_54", "Gfx", "[]"),
 
 	0x0700E510: table.sym_var("light_bob_55", "static Lights1", "[]"),
-	0x0700E6C8: table.sym_var("gfx_bob_55", "static Gfx", "[]"),
-	0x0700E768: table.sym_var("gfx_bob_55_s", "Gfx", "[]"),
+	0x0700E6C8: table.sym_var("gfx_bob_55_c12", "static Gfx", "[]"),
+	0x0700E768: table.sym_var("gfx_bob_55", "Gfx", "[]"),
 
-	0x0700E860: table.sym_var("gfx_bob_56", "static Gfx", "[]"),
-	0x0700E8A0: table.sym_var("gfx_bob_56_s", "Gfx", "[]"),
+	0x0700E860: table.sym_var("gfx_bob_56_c16", "static Gfx", "[]"),
+	0x0700E8A0: table.sym_var("gfx_bob_56", "Gfx", "[]"),
 
-	0x0700E958: table.sym_var("map_battlefield", "MAP_DATA", "[]"),
-	0x0701104C: table.sym_var("obj_battlefield", "OBJ_DATA", "[]"),
-	0x070113C0: table.sym_var("map_bob_54", "MAP_DATA", "[]", table.GLOBL),
-	0x070113F0: table.sym_var("map_bob_55", "MAP_DATA", "[]", table.GLOBL),
-	0x07011474: table.sym_var("map_bob_56", "MAP_DATA", "[]", table.GLOBL),
-	0x07011530: table.sym_var("path_07011530", "PATH_DATA", "[]", table.GLOBL),
-	0x070115C4: table.sym_var("path_070115C4", "PATH_DATA", "[]", table.GLOBL),
-	0x070116A0: table.sym_var("path_070116A0", "PATH_DATA", "[]", table.GLOBL),
+	0x0700E958: table.sym_var("map_battlefield", "MAP", "[]"),
+	0x0701104C: table.sym_var("tag_battlefield", "TAG", "[]"),
+	0x070113C0: table.sym_var("map_bob_54", "MAP", "[]", table.GLOBL),
+	0x070113F0: table.sym_var("map_bob_55", "MAP", "[]", table.GLOBL),
+	0x07011474: table.sym_var("map_bob_56", "MAP", "[]", table.GLOBL),
+	0x07011530: table.sym_var("path_07011530", "PATH", "[]", table.GLOBL),
+	0x070115C4: table.sym_var("path_070115C4", "PATH", "[]", table.GLOBL),
+	0x070116A0: table.sym_var("path_070116A0", "PATH", "[]", table.GLOBL),
 
 	0x0E000000: table.sym("p_bob_0E000000"),
 	0x0E00007C: table.sym("p_bob_0E00007C"),
@@ -19548,6 +20176,10 @@ sym_E0_s_ttc = {
 sym_E0_s_rr = {
 	0x00437870: table.sym("_RR_gfxSegmentRomStart"),
 	0x0044A140: table.sym("_RR_dataSegmentRomStart"),
+	0x07019080: table.sym_var("rr_07019080", "short", "[]"),
+	0x07019128: table.sym_var("gfx_rr_07019128", "Gfx", "[]"),
+	0x07019198: table.sym_var("gfx_rr_07019198", "Gfx", "[]"),
+	0x07019200: table.sym_var("gfx_rr_07019200", "Gfx", "[]"),
 	0x0E000000: table.sym("p_rr_0E000000"),
 	0x0E0002EC: table.sym("p_rr_0E0002EC"),
 	0x0E000368: table.sym("p_rr_0E000368"),
@@ -19594,6 +20226,7 @@ sym_E0_s_rr = {
 sym_E0_s_grounds = {
 	0x0044ABC0: table.sym("_Grounds_gfxSegmentRomStart"),
 	0x004545E0: table.sym("_Grounds_dataSegmentRomStart"),
+	0x0700BB80: table.sym("0x0700BB80"),
 	0x0E000000: table.sym("p_grounds_0E000000"),
 	0x0E00013C: table.sym("p_grounds_0E00013C"),
 	0x0E000368: table.sym("p_grounds_0E000368"),
@@ -19747,6 +20380,7 @@ sym_E0_s_bits = {
 sym_E0_s_lll = {
 	0x004784A0: table.sym("_LLL_gfxSegmentRomStart"),
 	0x0048C9B0: table.sym("_LLL_dataSegmentRomStart"),
+	0x07018380: table.sym("0x07018380"),
 	0x0E000000: table.sym("p_lll_0E000000"),
 	0x0E000154: table.sym("p_lll_0E000154"),
 	0x0E000290: table.sym("p_lll_0E000290"),
@@ -19859,9 +20493,110 @@ sym_E0_s_wf = {
 sym_E0_s_ending = {
 	0x0049E710: table.sym("_Ending_gfxSegmentRomStart"),
 	0x004AC4B0: table.sym("_Ending_dataSegmentRomStart"),
+	0x07000000: table.sym_var("txt_ending_0", "static u16", "[]"),
+	0x07000C80: table.sym_var("txt_ending_1", "static u16", "[]"),
+	0x07001900: table.sym_var("txt_ending_2", "static u16", "[]"),
+	0x07002580: table.sym_var("txt_ending_3", "static u16", "[]"),
+	0x07003200: table.sym_var("txt_ending_4", "static u16", "[]"),
+	0x07003E80: table.sym_var("txt_ending_5", "static u16", "[]"),
+	0x07004B00: table.sym_var("txt_ending_6", "static u16", "[]"),
+	0x07005780: table.sym_var("txt_ending_7", "static u16", "[]"),
+	0x07006400: table.sym_var("txt_ending_8", "static u16", "[]"),
+	0x07007080: table.sym_var("txt_ending_9", "static u16", "[]"),
+	0x07007D00: table.sym_var("txt_ending_10", "static u16", "[]"),
+	0x07008980: table.sym_var("txt_ending_11", "static u16", "[]"),
+	0x07009600: table.sym_var("txt_ending_12", "static u16", "[]"),
+	0x0700A280: table.sym_var("txt_ending_13", "static u16", "[]"),
+	0x0700AF00: table.sym_var("txt_ending_14", "static u16", "[]"),
+	0x0700BB80: table.sym_var("txt_ending_15", "static u16", "[]"),
+	0x0700C800: table.sym_var("txt_ending_16", "static u16", "[]"),
+	0x0700D480: table.sym_var("txt_ending_17", "static u16", "[]"),
+	0x0700E100: table.sym_var("txt_ending_18", "static u16", "[]"),
+	0x0700ED80: table.sym_var("txt_ending_19", "static u16", "[]"),
+	0x0700FA00: table.sym_var("txt_ending_20", "static u16", "[]"),
+	0x07010680: table.sym_var("txt_ending_21", "static u16", "[]"),
+	0x07011300: table.sym_var("txt_ending_22", "static u16", "[]"),
+	0x07011F80: table.sym_var("txt_ending_23", "static u16", "[]"),
+	0x07012C00: table.sym_var("txt_ending_24", "static u16", "[]"),
+	0x07013880: table.sym_var("txt_ending_25", "static u16", "[]"),
+	0x07014500: table.sym_var("txt_ending_26", "static u16", "[]"),
+	0x07015180: table.sym_var("txt_ending_27", "static u16", "[]"),
+	0x07015E00: table.sym_var("txt_ending_28", "static u16", "[]"),
+	0x07016A80: table.sym_var("txt_ending_29", "static u16", "[]"),
+	0x07017700: table.sym_var("txt_ending_30", "static u16", "[]"),
+	0x07018380: table.sym_var("txt_ending_31", "static u16", "[]"),
+	0x07019000: table.sym_var("txt_ending_32", "static u16", "[]"),
+	0x07019C80: table.sym_var("txt_ending_33", "static u16", "[]"),
+	0x0701A900: table.sym_var("txt_ending_34", "static u16", "[]"),
+	0x0701B580: table.sym_var("txt_ending_35", "static u16", "[]"),
+	0x0701C200: table.sym_var("txt_ending_36", "static u16", "[]"),
+	0x0701CE80: table.sym_var("txt_ending_37", "static u16", "[]"),
+	0x0701DB00: table.sym_var("txt_ending_38", "static u16", "[]"),
+	0x0701E780: table.sym_var("txt_ending_39", "static u16", "[]"),
+	0x0701F400: table.sym_var("txt_ending_40", "static u16", "[]"),
+	0x07020080: table.sym_var("txt_ending_41", "static u16", "[]"),
+	0x07020D00: table.sym_var("txt_ending_42", "static u16", "[]"),
+	0x07021980: table.sym_var("txt_ending_43", "static u16", "[]"),
+	0x07022600: table.sym_var("txt_ending_44", "static u16", "[]"),
+	0x07023280: table.sym_var("txt_ending_45", "static u16", "[]"),
+	0x07023F00: table.sym_var("txt_ending_46", "static u16", "[]"),
+	0x07024B80: table.sym_var("txt_ending_47", "static u16", "[]"),
+	0x07025800: table.sym_var("vtx_ending", "static Vtx", "[]"),
+	0x07026400: table.sym_var("gfx_ending", "Gfx", "[]"),
 	0x0E000000: table.sym("p_ending", table.GLOBL),
 	0x0E000044: table.sym(".loop", table.LOCAL),
-	0x0E000050: table.sym_var("s_ending1", "S_SCRIPT", "[]", table.GLOBL),
+	0x0E000050: table.sym_var("s_ending", "S_SCRIPT", "[]", table.GLOBL),
+}
+
+imm_E0_s_ending = {
+	0x07026458: 0x07025800,
+	0x070264A8: 0x07025800,
+	0x070264F8: 0x07025800,
+	0x07026548: 0x07025800,
+	0x07026598: 0x07025800,
+	0x070265E8: 0x07025800,
+	0x07026638: 0x07025800,
+	0x07026688: 0x07025800,
+	0x070266D8: 0x07025800,
+	0x07026728: 0x07025800,
+	0x07026778: 0x07025800,
+	0x070267C8: 0x07025800,
+	0x07026818: 0x07025800,
+	0x07026868: 0x07025800,
+	0x070268B8: 0x07025800,
+	0x07026908: 0x07025800,
+	0x07026958: 0x07025800,
+	0x070269A8: 0x07025800,
+	0x070269F8: 0x07025800,
+	0x07026A48: 0x07025800,
+	0x07026A98: 0x07025800,
+	0x07026AE8: 0x07025800,
+	0x07026B38: 0x07025800,
+	0x07026B88: 0x07025800,
+	0x07026BD8: 0x07025800,
+	0x07026C28: 0x07025800,
+	0x07026C78: 0x07025800,
+	0x07026CC8: 0x07025800,
+	0x07026D18: 0x07025800,
+	0x07026D68: 0x07025800,
+	0x07026DB8: 0x07025800,
+	0x07026E08: 0x07025800,
+	0x07026E58: 0x07025800,
+	0x07026EA8: 0x07025800,
+	0x07026EF8: 0x07025800,
+	0x07026F48: 0x07025800,
+	0x07026F98: 0x07025800,
+	0x07026FE8: 0x07025800,
+	0x07027038: 0x07025800,
+	0x07027088: 0x07025800,
+	0x070270D8: 0x07025800,
+	0x07027128: 0x07025800,
+	0x07027178: 0x07025800,
+	0x070271C8: 0x07025800,
+	0x07027218: 0x07025800,
+	0x07027268: 0x07025800,
+	0x070272B8: 0x07025800,
+	0x07027308: 0x07025800,
 }
 
 sym_E0_s_courtyard = {
@@ -20264,7 +20999,7 @@ imm_E0_audio = {
 	0x007AD140: (24000, "choir_ooh", ["music", "choir_ooh.aifc"]),
 
 	0x007B0980: 0x348C, # se
-	0x007B3E10: 0x026B, # star_catch
+	0x007B3E10: 0x026B, # starcatch
 	0x007B4080: 0x203E, # title
 	0x007B60C0: 0x1402, # field
 	0x007B74D0: 0x09BE, # castle
@@ -20276,13 +21011,13 @@ imm_E0_audio = {
 	0x007BE520: 0x162A, # ghost
 	0x007BFB50: 0x0573, # lullaby
 	0x007C00D0: 0x1317, # dungeon
-	0x007C13F0: 0x0086, # star_select
+	0x007C13F0: 0x0086, # starselect
 	0x007C1480: 0x0C39, # wing
 	0x007C20C0: 0x0AD2, # metal
-	0x007C2BA0: 0x0228, # msg_bowser
+	0x007C2BA0: 0x0228, # bowsermsg
 	0x007C2DD0: 0x1285, # bowser
-	0x007C4060: 0x010F, # hi_score
-	0x007C4170: 0x0679, # merry_go_round
+	0x007C4060: 0x010F, # hiscore
+	0x007C4170: 0x0679, # merrygoround
 	0x007C47F0: 0x00C5, # fanfare
 	0x007C48C0: 0x0284, # star
 	0x007C4B50: 0x0D6B, # battle
@@ -20291,13 +21026,13 @@ imm_E0_audio = {
 	0x007C6260: 0x0DBB, # final
 	0x007C7020: 0x37E9, # staff
 	0x007CA810: 0x00D8, # solution
-	0x007CA8F0: 0x00D0, # msg_toad
-	0x007CA9C0: 0x01B0, # msg_peach
+	0x007CA8F0: 0x00D0, # toadmsg
+	0x007CA9C0: 0x01B0, # peachmsg
 	0x007CAB70: 0x06E4, # intro
-	0x007CB260: 0x080A, # final_clear
+	0x007CB260: 0x080A, # finalclear
 	0x007CBA70: 0x075A, # ending
-	0x007CC1D0: 0x030D, # file_select
-	0x007CC4E0: 0x0139, # msg_lakitu
+	0x007CC1D0: 0x030D, # fileselect
+	0x007CC4E0: 0x0139, # lakitumsg
 }
 
 sym_G0_t_code = {
@@ -20316,7 +21051,6 @@ sym_G0_t_code = {
 	0x8030EF74: table.sym("null_msg"),
 	0x8030EF90: table.sym("si_mq"),
 	0x8030F178: table.sym("cont_pad"),
-
 }
 
 tbl = [
@@ -20435,7 +21169,7 @@ tbl = [
 	(0x004784A0, 0x0048D930, "E0", sym_E0_s_lll,      {}, {}),
 	(0x0048D930, 0x00496090, "E0", sym_E0_s_ddd,      {}, {}),
 	(0x00496090, 0x0049E710, "E0", sym_E0_s_wf,       {}, {}),
-	(0x0049E710, 0x004AC570, "E0", sym_E0_s_ending,   {}, {}),
+	(0x0049E710, 0x004AC570, "E0", sym_E0_s_ending,   {}, imm_E0_s_ending),
 	(0x004AC570, 0x004AF930, "E0", sym_E0_s_courtyard, {}, {}),
 	(0x004AF930, 0x004B80D0, "E0", sym_E0_s_pss,      {}, {}),
 	(0x004B80D0, 0x004BEC30, "E0", sym_E0_s_cotmc,    {}, {}),

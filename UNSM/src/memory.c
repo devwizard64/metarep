@@ -5,14 +5,15 @@
 #define ALIGN16(x)  (((uintptr_t)(x)+15) & ~15)
 #define BOUND16(x)  (((uintptr_t)(x)   ) & ~15)
 
-uintptr_t segment_table[NUM_SEGMENTS+16];
-size_t mem_size;
-char *mem_start;
-char *mem_end;
-MEM_BLOCK *mem_blockl;
-MEM_BLOCK *mem_blockr;
+static uintptr_t segment_table[NUM_SEGMENTS+16];
+static size_t mem_size;
+static char *mem_start;
+static char *mem_end;
+static MEM_BLOCK *mem_blockl;
+static MEM_BLOCK *mem_blockr;
+static MEM_FRAME *mem_frame = NULL;
+
 HEAP *mem_heap;
-MEM_FRAME *mem_frame = NULL;
 
 uintptr_t segment_set(int segment, void *addr)
 {
@@ -437,7 +438,7 @@ void bank_init(BANK *bank, const char *src, void *buf)
 
 int bank_load(BANK *bank, unsigned int index)
 {
-	int flag = FALSE;
+	int result = FALSE;
 	BANK_TABLE *table = bank->table;
 	if (index < table->len)
 	{
@@ -447,8 +448,8 @@ int bank_load(BANK *bank, unsigned int index)
 		{
 			mem_dma(bank->buf, src, src+size);
 			bank->src = src;
-			flag = TRUE;
+			result = TRUE;
 		}
 	}
-	return flag;
+	return result;
 }

@@ -6,38 +6,43 @@
 #define SC_EVENT_GFXTASK        103
 #define SC_EVENT_PRENMI         104
 
-OSThread rmon_thread;
-OSThread idle_thread;
-OSThread sc_thread;
-OSThread gfx_thread;
-OSThread aud_thread;
+UNUSED static OSThread rmon_thread;
+static OSThread idle_thread;
+static OSThread sc_thread;
+static OSThread gfx_thread;
+static OSThread aud_thread;
 
-OSMesgQueue pi_mq;
-OSMesgQueue sc_mq;
-OSMesgQueue sc_task_mq;
-OSMesg dma_mbox;
-OSMesg pi_mbox[32];
-OSMesg si_mbox;
-OSMesg sc_mbox[16];
-OSMesg sc_task_mbox[16];
+static OSMesgQueue pi_mq;
+static OSMesgQueue sc_mq;
+static OSMesgQueue sc_task_mq;
+
+static OSMesg dma_mbox;
+static OSMesg pi_mbox[32];
+static OSMesg si_mbox;
+static OSMesg sc_mbox[16];
+static OSMesg sc_task_mbox[16];
+
+static SC_CLIENT *sc_client_1 = NULL;
+static SC_CLIENT *sc_client_2 = NULL;
+static SC_TASK *sc_task    = NULL;
+static SC_TASK *sc_audtask = NULL;
+static SC_TASK *sc_gfxtask = NULL;
+static SC_TASK *sc_audtask_next = NULL;
+static SC_TASK *sc_gfxtask_next = NULL;
+static char sc_aud = TRUE;
+static u32 sc_vi = 0;
 
 OSIoMesg dma_mb;
 OSMesg null_msg;
 OSMesgQueue dma_mq;
 OSMesgQueue si_mq;
 
-SC_CLIENT *sc_client_1 = NULL;
-SC_CLIENT *sc_client_2 = NULL;
-SC_TASK *sc_task    = NULL;
-SC_TASK *sc_audtask = NULL;
-SC_TASK *sc_gfxtask = NULL;
-SC_TASK *sc_audtask_next = NULL;
-SC_TASK *sc_gfxtask_next = NULL;
-char sc_aud = TRUE;
-u32 sc_vi = 0;
-
 s8 reset_timer = 0;
 s8 reset_frame = 0;
+
+#ifdef GATEWAY
+char sys_halt = FALSE;
+#endif
 
 char debug_stage  = FALSE;
 char debug_thread = FALSE;
@@ -47,27 +52,9 @@ char debug_mem    = FALSE;
 void debug_update(void)
 {
 	static u16 button_t[] =
-	{
-		U_JPAD,
-		U_JPAD,
-		D_JPAD,
-		D_JPAD,
-		L_JPAD,
-		R_JPAD,
-		L_JPAD,
-		R_JPAD,
-	};
+		{U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
 	static u16 button_m[] =
-	{
-		D_JPAD,
-		D_JPAD,
-		U_JPAD,
-		U_JPAD,
-		L_JPAD,
-		R_JPAD,
-		L_JPAD,
-		R_JPAD,
-	};
+		{D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
 	static s16 t = 0;
 	static s16 m = 0;
 	if (controller->down != 0)
@@ -248,7 +235,11 @@ static void sc_event_vi(void)
 			sc_task_start(M_GFXTASK);
 		}
 	}
+#ifdef GATEWAY
+	if (sc_client_1 && !sys_halt)
+#else
 	if (sc_client_1)
+#endif
 	{
 		osSendMesg(sc_client_1->mq, sc_client_1->msg, OS_MESG_NOBLOCK);
 	}

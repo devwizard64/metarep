@@ -5,15 +5,15 @@ CODE_OBJ := \
 	$(BUILD)/src/game.o $(BUILD)/src/game.data.o \
 	$(BUILD)/src/collision.o $(BUILD)/src/collision.data.o \
 	$(BUILD)/src/player.o $(BUILD)/src/player.data.o \
-	$(BUILD)/src/pl_physics.o $(BUILD)/src/pl_physics.data.o \
-	$(BUILD)/src/pl_demo.o $(BUILD)/src/pl_demo.data.o \
-	$(BUILD)/src/pl_hang.o $(BUILD)/src/pl_hang.data.o \
-	$(BUILD)/src/pl_wait.o $(BUILD)/src/pl_wait.data.o \
-	$(BUILD)/src/pl_walk.o $(BUILD)/src/pl_walk.data.o \
-	$(BUILD)/src/pl_jump.o $(BUILD)/src/pl_jump.data.o \
-	$(BUILD)/src/pl_swim.o $(BUILD)/src/pl_swim.data.o \
-	$(BUILD)/src/pl_grab.o $(BUILD)/src/pl_grab.data.o \
-	$(BUILD)/src/pl_callback.o $(BUILD)/src/pl_callback.data.o \
+	$(BUILD)/src/plphysics.o $(BUILD)/src/plphysics.data.o \
+	$(BUILD)/src/pldemo.o $(BUILD)/src/pldemo.data.o \
+	$(BUILD)/src/plhang.o $(BUILD)/src/plhang.data.o \
+	$(BUILD)/src/plwait.o $(BUILD)/src/plwait.data.o \
+	$(BUILD)/src/plwalk.o $(BUILD)/src/plwalk.data.o \
+	$(BUILD)/src/pljump.o $(BUILD)/src/pljump.data.o \
+	$(BUILD)/src/plswim.o $(BUILD)/src/plswim.data.o \
+	$(BUILD)/src/plgrab.o $(BUILD)/src/plgrab.data.o \
+	$(BUILD)/src/plcallback.o \
 	$(BUILD)/src/memory.o \
 	$(BUILD)/src/save.o \
 	$(BUILD)/src/scene.o \
@@ -23,43 +23,43 @@ CODE_OBJ := \
 	$(BUILD)/src/camera.o $(BUILD)/src/camera.data.o \
 	$(BUILD)/src/course.o \
 	$(BUILD)/src/object.o $(BUILD)/src/object.data.o \
-	$(BUILD)/src/obj_lib.o $(BUILD)/src/obj_lib.data.o \
+	$(BUILD)/src/objlib.o $(BUILD)/src/objlib.data.o \
 	$(BUILD)/src/object_a.o $(BUILD)/src/object_a.data.o \
-	$(BUILD)/src/obj_physics.o \
-	$(BUILD)/src/obj_collision.o $(BUILD)/src/obj_collision.data.o \
-	$(BUILD)/src/obj_list.o $(BUILD)/src/obj_list.data.o \
-	$(BUILD)/src/obj_sfx.o \
-	$(BUILD)/src/obj_debug.o $(BUILD)/src/obj_debug.data.o \
+	$(BUILD)/src/objphysics.o \
+	$(BUILD)/src/objcollision.o $(BUILD)/src/objcollision.data.o \
+	$(BUILD)/src/objlist.o \
+	$(BUILD)/src/objsfx.o \
+	$(BUILD)/src/objdebug.o $(BUILD)/src/objdebug.data.o \
 	$(BUILD)/src/wipe.o $(BUILD)/src/wipe.data.o \
 	$(BUILD)/src/shadow.o $(BUILD)/src/shadow.data.o \
 	$(BUILD)/src/back.o $(BUILD)/src/back.data.o \
 	$(BUILD)/src/scroll.o $(BUILD)/src/scroll.data.o \
-	$(BUILD)/src/obj_shape.o $(BUILD)/src/obj_shape.data.o \
+	$(BUILD)/src/objshape.o \
 	$(BUILD)/src/wave.o $(BUILD)/src/wave.data.o \
 	$(BUILD)/src/dprint.o \
 	$(BUILD)/src/message.o $(BUILD)/src/message.data.o \
-	$(BUILD)/src/weather_snow.o $(BUILD)/src/weather_snow.data.o \
-	$(BUILD)/src/weather_lava.o $(BUILD)/src/weather_lava.data.o \
-	$(BUILD)/src/obj_data.o \
+	$(BUILD)/src/snow.o $(BUILD)/src/snow.data.o \
+	$(BUILD)/src/lava.o $(BUILD)/src/lava.data.o \
+	$(BUILD)/src/tag.o \
 	$(BUILD)/src/hud.o $(BUILD)/src/hud.data.o \
 	$(BUILD)/src/object_b.o $(BUILD)/src/object_b.data.o \
 	$(BUILD)/src/object_c.o $(BUILD)/src/object_c.data.o
 
 ULIB_OBJ := \
-	$(BUILD)/src/math.o $(BUILD)/src/math.data.o \
-	$(BUILD)/src/math_table.o \
+	$(BUILD)/src/math.o \
+	$(BUILD)/src/mathtbl.o \
 	$(BUILD)/src/shape.o \
-	$(BUILD)/src/s_script.o $(BUILD)/src/s_script.data.o \
-	$(BUILD)/src/p_script.o $(BUILD)/src/p_script.data.o \
-	$(BUILD)/src/map.o $(BUILD)/src/map.data.o \
-	$(BUILD)/src/map_data.o $(BUILD)/src/map_data.data.o \
-	$(BUILD)/src/o_script.o $(BUILD)/src/o_script.data.o
+	$(BUILD)/src/shplang.o \
+	$(BUILD)/src/prglang.o \
+	$(BUILD)/src/bgcheck.o \
+	$(BUILD)/src/bgload.o \
+	$(BUILD)/src/objlang.o $(BUILD)/src/objlang.data.o
 
 MENU_OBJ := \
 	$(BUILD)/src/title.o \
-	$(BUILD)/src/title_bg.o \
-	$(BUILD)/src/file_select.o $(BUILD)/src/file_select.data.o \
-	$(BUILD)/src/star_select.o $(BUILD)/src/star_select.data.o
+	$(BUILD)/src/titlebg.o \
+	$(BUILD)/src/fileselect.o $(BUILD)/src/fileselect.data.o \
+	$(BUILD)/src/starselect.o $(BUILD)/src/starselect.data.o
 
 AUDIO_OBJ := \
 	$(BUILD)/src/audio/a.o $(BUILD)/src/audio/a.data.o \
@@ -93,18 +93,27 @@ IDO_C := \
 	$(BUILD)/src/main.o \
 	$(BUILD)/src/graphics.o \
 	$(BUILD)/src/audio.o \
+	$(BUILD)/src/plcallback.o \
 	$(BUILD)/src/memory.o \
 	$(BUILD)/src/save.o \
 	$(BUILD)/src/scene.o \
 	$(BUILD)/src/draw.o \
 	$(BUILD)/src/time.o \
 	$(BUILD)/src/course.o \
-	$(BUILD)/src/obj_physics.o \
-	$(BUILD)/src/obj_sfx.o \
+	$(BUILD)/src/objphysics.o \
+	$(BUILD)/src/objlist.o \
+	$(BUILD)/src/objsfx.o \
+	$(BUILD)/src/objshape.o \
 	$(BUILD)/src/dprint.o \
-	$(BUILD)/src/obj_data.o \
+	$(BUILD)/src/tag.o \
+	$(BUILD)/src/math.o \
+	$(BUILD)/src/shape.o \
+	$(BUILD)/src/shplang.o \
+	$(BUILD)/src/prglang.o \
+	$(BUILD)/src/bgcheck.o \
+	$(BUILD)/src/bgload.o \
 	$(BUILD)/src/title.o \
-	$(BUILD)/src/title_bg.o \
+	$(BUILD)/src/titlebg.o \
 	$(BUILD)/data/cimg.o \
 	$(BUILD)/data/zimg.o \
 	$(BUILD)/data/timg.o \
@@ -328,7 +337,7 @@ AUDIO_DATA := \
 INS := audio/se.ins audio/music.ins
 SEQ := \
 	audio/se/se.seq \
-	audio/music/star_catch.seq \
+	audio/music/starcatch.seq \
 	audio/music/title.seq \
 	audio/music/field.seq \
 	audio/music/castle.seq \
@@ -340,28 +349,28 @@ SEQ := \
 	audio/music/ghost.seq \
 	audio/music/lullaby.seq \
 	audio/music/dungeon.seq \
-	audio/music/star_select.seq \
+	audio/music/starselect.seq \
 	audio/music/wing.seq \
 	audio/music/metal.seq \
-	audio/music/msg_bowser.seq \
+	audio/music/bowsermsg.seq \
 	audio/music/bowser.seq \
-	audio/music/hi_score.seq \
-	audio/music/merry_go_round.seq \
+	audio/music/hiscore.seq \
+	audio/music/merrygoround.seq \
 	audio/music/fanfare.seq \
 	audio/music/star.seq \
 	audio/music/battle.seq \
-	audio/music/arena_clear.seq \
+	audio/music/arenaclear.seq \
 	audio/music/endless.seq \
 	audio/music/final.seq \
 	audio/music/staff.seq \
 	audio/music/solution.seq \
-	audio/music/msg_toad.seq \
-	audio/music/msg_peach.seq \
+	audio/music/toadmsg.seq \
+	audio/music/peachmsg.seq \
 	audio/music/intro.seq \
-	audio/music/final_clear.seq \
+	audio/music/finalclear.seq \
 	audio/music/ending.seq \
-	audio/music/file_select.seq \
-	audio/music/msg_lakitu.seq
+	audio/music/fileselect.seq \
+	audio/music/lakitumsg.seq
 
 LIBULTRA_OBJ := \
 	$(BUILD)/libultra/src/parameters.o \
@@ -657,16 +666,108 @@ BLARGG_DEP := \
 ################################################################################
 # Shape2B
 
+SKEETER_DEP := \
+	shape/2b/skeeter/body.h \
+	shape/2b/skeeter/body.sphere.h \
+	shape/2b/skeeter/tail_end.h \
+	shape/2b/skeeter/tail_end.sphere.h \
+	shape/2b/skeeter/eye.h \
+	shape/2b/skeeter/eye.sphere.h \
+	shape/2b/skeeter/irisR.h \
+	shape/2b/skeeter/irisR.iris.h \
+	shape/2b/skeeter/irisL.h \
+	shape/2b/skeeter/irisL.iris.h \
+	shape/2b/skeeter/foot.h \
+	shape/2b/skeeter/foot.foot.h \
+	shape/2b/skeeter/footBR_old.h \
+	shape/2b/skeeter/footBR_old.shade.h \
+	shape/2b/skeeter/llegBR.h \
+	shape/2b/skeeter/llegBR.shade.h \
+	shape/2b/skeeter/ulegBR.h \
+	shape/2b/skeeter/ulegBR.shade.h \
+	shape/2b/skeeter/footFR_old.h \
+	shape/2b/skeeter/footFR_old.shade.h \
+	shape/2b/skeeter/llegFR.h \
+	shape/2b/skeeter/llegFR.shade.h \
+	shape/2b/skeeter/ulegFR.h \
+	shape/2b/skeeter/ulegFR.shade.h \
+	shape/2b/skeeter/footFL_old.h \
+	shape/2b/skeeter/footFL_old.shade.h \
+	shape/2b/skeeter/llegFL.h \
+	shape/2b/skeeter/llegFL.shade.h \
+	shape/2b/skeeter/ulegFL.h \
+	shape/2b/skeeter/ulegFL.shade.h \
+	shape/2b/skeeter/eyeR_old.h \
+	shape/2b/skeeter/eyeR_old.shade.h \
+	shape/2b/skeeter/footBL_old.h \
+	shape/2b/skeeter/footBL_old.shade.h \
+	shape/2b/skeeter/llegBL.h \
+	shape/2b/skeeter/llegBL.shade.h \
+	shape/2b/skeeter/ulegBL.h \
+	shape/2b/skeeter/ulegBL.shade.h \
+	shape/2b/skeeter/eyeL_old.h \
+	shape/2b/skeeter/eyeL_old.shade.h \
+	shape/2b/skeeter/tail_end_old.h \
+	shape/2b/skeeter/tail_end_old.shade.h \
+	shape/2b/skeeter/tail.h \
+	shape/2b/skeeter/tail.shade.h \
+	shape/2b/skeeter/body_old.h \
+	shape/2b/skeeter/body_old.shade.h
+
+KELP_DEP := \
+	shape/2b/kelp/0.h \
+	shape/2b/kelp/0.0.h \
+	shape/2b/kelp/1.h \
+	shape/2b/kelp/1.1.h \
+	shape/2b/kelp/2.h \
+	shape/2b/kelp/2.2.h \
+	shape/2b/kelp/3.h \
+	shape/2b/kelp/3.3.h
+
+WATERMINE_DEP := \
+	shape/2b/watermine/mine.h \
+	shape/2b/watermine/mine.l.h \
+	shape/2b/watermine/mine.r.h \
+	shape/2b/watermine/spike.h \
+	shape/2b/watermine/spike.spike.h
+
+PIRANHA_DEP := \
+	shape/2b/piranha/body.h \
+	shape/2b/piranha/body.piranha.h \
+	shape/2b/piranha/fin.h \
+	shape/2b/piranha/fin.piranha.h \
+	shape/2b/piranha/tail.h \
+	shape/2b/piranha/tail.piranha.h
+
+BUB_DEP := \
+	shape/2b/bub/body.h \
+	shape/2b/bub/body.goggles.h \
+	shape/2b/bub/body.fin.h \
+	shape/2b/bub/body.eyes.h \
+	shape/2b/bub/body.scale.h \
+	shape/2b/bub/body.mouth.h \
+	shape/2b/bub/body.white.h \
+	shape/2b/bub/tail.h \
+	shape/2b/bub/tail.fin.h \
+	shape/2b/bub/finL.h \
+	shape/2b/bub/finL.fin.h \
+	shape/2b/bub/finR.h \
+	shape/2b/bub/finR.fin.h
+
+WATERRING_DEP := \
+	shape/2b/waterring/waterring.h \
+	shape/2b/waterring/waterring.shade.h
+
 CHEST_DEP := \
-	shape/2b/chest/bottom.h \
-	shape/2b/chest/bottom.keyhole.h \
-	shape/2b/chest/bottom.latch.h \
-	shape/2b/chest/bottom.inside.h \
-	shape/2b/chest/bottom.outside.h \
-	shape/2b/chest/top.h \
-	shape/2b/chest/top.inside.h \
-	shape/2b/chest/top.latch.h \
-	shape/2b/chest/top.outside.h
+	shape/2b/chest/box.h \
+	shape/2b/chest/box.keyhole.h \
+	shape/2b/chest/box.latch.h \
+	shape/2b/chest/box.inside.h \
+	shape/2b/chest/box.outside.h \
+	shape/2b/chest/lid.h \
+	shape/2b/chest/lid.inside.h \
+	shape/2b/chest/lid.latch.h \
+	shape/2b/chest/lid.outside.h
 
 ################################################################################
 # Shape2D
@@ -1200,6 +1301,27 @@ SHAPE_1K_DEP :=
 SHAPE_2A_DEP :=
 
 SHAPE_2B_DEP := \
+	shape/2b/skeeter/sphere.rgba16.h \
+	shape/2b/skeeter/iris.rgba16.h \
+	$(SKEETER_DEP) \
+	shape/2b/kelp/0.rgba16.h \
+	shape/2b/kelp/1.rgba16.h \
+	shape/2b/kelp/2.rgba16.h \
+	shape/2b/kelp/3.rgba16.h \
+	$(KELP_DEP) \
+	shape/2b/watermine/l.rgba16.h \
+	shape/2b/watermine/r.rgba16.h \
+	shape/2b/watermine/spike.rgba16.h \
+	$(WATERMINE_DEP) \
+	shape/2b/piranha/piranha.rgba16.h \
+	$(PIRANHA_DEP) \
+	shape/2b/bub/goggles.rgba16.h \
+	shape/2b/bub/fin.rgba16.h \
+	shape/2b/bub/eyes.rgba16.h \
+	shape/2b/bub/scale.rgba16.h \
+	$(BUB_DEP) \
+	shape/2b/waterring/waterring.rgba16.h \
+	$(WATERRING_DEP) \
 	shape/2b/chest/keyhole.rgba16.h \
 	shape/2b/chest/inside.rgba16.h \
 	shape/2b/chest/latch.rgba16.h \
@@ -2340,7 +2462,57 @@ BITS_DEP :=
 LLL_DEP :=
 DDD_DEP :=
 WF_DEP :=
-ENDING_DEP :=
+
+ENDING_DEP := \
+	stage/ending/0.rgba16.h \
+	stage/ending/1.rgba16.h \
+	stage/ending/2.rgba16.h \
+	stage/ending/3.rgba16.h \
+	stage/ending/4.rgba16.h \
+	stage/ending/5.rgba16.h \
+	stage/ending/6.rgba16.h \
+	stage/ending/7.rgba16.h \
+	stage/ending/8.rgba16.h \
+	stage/ending/9.rgba16.h \
+	stage/ending/10.rgba16.h \
+	stage/ending/11.rgba16.h \
+	stage/ending/12.rgba16.h \
+	stage/ending/13.rgba16.h \
+	stage/ending/14.rgba16.h \
+	stage/ending/15.rgba16.h \
+	stage/ending/16.rgba16.h \
+	stage/ending/17.rgba16.h \
+	stage/ending/18.rgba16.h \
+	stage/ending/19.rgba16.h \
+	stage/ending/20.rgba16.h \
+	stage/ending/21.rgba16.h \
+	stage/ending/22.rgba16.h \
+	stage/ending/23.rgba16.h \
+	stage/ending/24.rgba16.h \
+	stage/ending/25.rgba16.h \
+	stage/ending/26.rgba16.h \
+	stage/ending/27.rgba16.h \
+	stage/ending/28.rgba16.h \
+	stage/ending/29.rgba16.h \
+	stage/ending/30.rgba16.h \
+	stage/ending/31.rgba16.h \
+	stage/ending/32.rgba16.h \
+	stage/ending/33.rgba16.h \
+	stage/ending/34.rgba16.h \
+	stage/ending/35.rgba16.h \
+	stage/ending/36.rgba16.h \
+	stage/ending/37.rgba16.h \
+	stage/ending/38.rgba16.h \
+	stage/ending/39.rgba16.h \
+	stage/ending/40.rgba16.h \
+	stage/ending/41.rgba16.h \
+	stage/ending/42.rgba16.h \
+	stage/ending/43.rgba16.h \
+	stage/ending/44.rgba16.h \
+	stage/ending/45.rgba16.h \
+	stage/ending/46.rgba16.h \
+	stage/ending/47.rgba16.h
+
 COURTYARD_DEP :=
 PSS_DEP :=
 COTMC_DEP :=
@@ -2435,8 +2607,8 @@ DEP := \
 	$(TTM_DEP)
 
 src/message.data.c: src/str.h src/803315E4.h
-src/file_select.data.c: src/str.h
-src/star_select.data.c: src/str.h
+src/fileselect.data.c: src/str.h
+src/starselect.data.c: src/str.h
 
 data/gfx.c: $(GFX_DEP)
 shape/player/gfx.c: $(PLAYER_DEP)
@@ -2518,14 +2690,25 @@ stage/bitfsa/gfx.c: $(BITFSA_DEP)
 stage/bitsa/gfx.c: $(BITSA_DEP)
 stage/ttm/gfx.c: $(TTM_DEP)
 
+# Player
 $(MARIO_DEP)&: shape/player/mario/mario.glb tools/gltf; tools/gltf $<
+# Shape1B
 $(BULLY_DEP)&: shape/1b/bully/bully.glb tools/gltf; tools/gltf $<
 $(BLARGG_DEP)&: shape/1b/blargg/blargg.glb tools/gltf; tools/gltf $<
+# Shape2B
+$(SKEETER_DEP)&: shape/2b/skeeter/skeeter.glb tools/gltf; tools/gltf $<
+$(KELP_DEP)&: shape/2b/kelp/kelp.glb tools/gltf; tools/gltf $<
+$(WATERMINE_DEP)&: shape/2b/watermine/watermine.glb tools/gltf; tools/gltf $<
+$(PIRANHA_DEP)&: shape/2b/piranha/piranha.glb tools/gltf; tools/gltf $<
+$(BUB_DEP)&: shape/2b/bub/bub.glb tools/gltf; tools/gltf $<
+$(WATERRING_DEP)&: shape/2b/waterring/waterring.glb tools/gltf; tools/gltf $<
 $(CHEST_DEP)&: shape/2b/chest/chest.glb tools/gltf; tools/gltf $<
+# Shape2D
 $(LAKITU2_DEP)&: shape/2d/lakitu2/lakitu2.glb tools/gltf; tools/gltf $<
 $(TOAD_DEP)&: shape/2d/toad/toad.glb tools/gltf; tools/gltf $<
 $(MIPS_DEP)&: shape/2d/mips/mips.glb tools/gltf; tools/gltf $<
 $(BOO2_DEP)&: shape/2d/boo2/boo2.glb tools/gltf; tools/gltf -g $<
+# Global
 $(BUTTERFLY_DEP)&: shape/global/butterfly/butterfly.glb tools/gltf; tools/gltf -g $<
 $(PIPE_DEP)&: shape/global/pipe/pipe.glb tools/gltf; tools/gltf $<
 $(DOOR_DEP)&: shape/global/door/door.glb tools/gltf; tools/gltf $<
@@ -2536,11 +2719,27 @@ $(POWERSTAR_DEP)&: shape/global/powerstar/powerstar.glb tools/gltf; tools/gltf $
 $(SHADESTAR_DEP)&: shape/global/shadestar/shadestar.glb tools/gltf; tools/gltf $<
 $(SIGNPOST_DEP)&: shape/global/signpost/signpost.glb tools/gltf; tools/gltf $<
 $(TREE_DEP)&: shape/global/tree/tree.glb tools/gltf; tools/gltf $<
+# Title
 $(LOGO_DEP)&: stage/title/logo.glb tools/gltf; tools/gltf $<
 $(DEBUG_DEP)&: stage/title/debug.glb tools/gltf; tools/gltf -g $<
+# Select
 $(FILE_DEP)&: stage/select/file/file.glb tools/gltf; tools/gltf $<
 $(TILE_DEP)&: stage/select/tile/tile.glb tools/gltf; tools/gltf $<
+# BoB
 $(BATTLEFIELD_DEP)&: stage/bob/battlefield/battlefield.glb tools/gltf; tools/gltf $<
 $(BOB_54_DEP)&: stage/bob/54/54.glb tools/gltf; tools/gltf $<
 $(BOB_55_DEP)&: stage/bob/55/55.glb tools/gltf; tools/gltf $<
 $(BOB_56_DEP)&: stage/bob/56/56.glb tools/gltf; tools/gltf $<
+
+# Global
+shape/global/pipe/map.h: shape/global/pipe/pipe.obj tools/obj; tools/obj $< $@
+shape/global/map/door.h: shape/global/map/door.obj tools/obj; tools/obj $< $@
+shape/global/map/13002018.h: shape/global/map/13002018.obj tools/obj; tools/obj $< $@
+shape/global/signpost/map.h: shape/global/signpost/signpost.obj tools/obj; tools/obj $< $@
+# Select
+stage/select/map.h: stage/select/select.obj tools/obj; tools/obj $< $@
+# BoB
+stage/bob/battlefield/map.h: stage/bob/battlefield/battlefield.obj tools/obj; tools/obj $< $@
+stage/bob/54/map.h: stage/bob/54/54.obj tools/obj; tools/obj $< $@
+stage/bob/55/map.h: stage/bob/55/55.obj tools/obj; tools/obj $< $@
+stage/bob/56/map.h: stage/bob/56/56.obj tools/obj; tools/obj $< $@

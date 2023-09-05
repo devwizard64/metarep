@@ -1,9 +1,9 @@
 #include <sm64.h>
 
-TIME time_data[2];
-s16 time_mode = 0;
-s16 time_cpu = 1;
-s16 time_rcp = 0;
+static TIME time_data[2];
+static s16 time_mode = 0;
+static s16 time_cpu = 1;
+static s16 time_rcp = 0;
 
 void time_gfxcpu(int index)
 {
@@ -64,10 +64,8 @@ static void time_draw_d(
 	OSTime start, OSTime tl, OSTime th, SHORT y, USHORT fill
 )
 {
-	s64 dl;
-	s64 dh;
-	int xl;
-	int xh;
+	s64 dl, dh;
+	int xl, xh;
 	if ((dl = tl-start) < 0) dl = 0;
 	if ((dh = th-start) < 0) dh = 0;
 	xl = TIME_X + dl * 1000000/osClockRate * 3/1000;

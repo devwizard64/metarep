@@ -2,19 +2,27 @@
 
 #define BGM_NULL                ((u16)-1)
 
-u8 aud_mute = 0;
-u8 aud_lock = FALSE;
+static u8 aud_mute = 0;
+static u8 aud_lock = FALSE;
 
-u16 bgm_stage   = BGM_NULL;
-u16 bgm_shell   = BGM_NULL;
-u16 bgm_special = BGM_NULL;
+static u16 bgm_stage   = BGM_NULL;
+static u16 bgm_shell   = BGM_NULL;
+static u16 bgm_special = BGM_NULL;
 
-unsigned char aud_endless = FALSE;
+static unsigned char aud_endless = FALSE;
 
-u32 aud_8032D618[4] = {0};
-s16 aud_output_table[] = {0, 3, 1};
+UNUSED static char aud_8032D618 = 0;
+UNUSED static u32 aud_env_se_8033B0A0[36];
+UNUSED static VECF aud_8032D61C = {0};
+static VECF aud_0;
 
-NA_SE aud_env_se_data[36] =
+static OSMesgQueue aud_vi_mq;
+static OSMesg aud_vi_mbox;
+static SC_CLIENT aud_client;
+
+static s16 aud_output_table[] = {0, 3, 1};
+
+static NA_SE aud_env_se_data[36] =
 {
 	NA_SE1_00 + (0 << 16),
 	NA_SE1_00 + (1 << 16),
@@ -53,7 +61,6 @@ NA_SE aud_env_se_data[36] =
 	NA_SE6_04_80,
 	NA_SE4_0D_0,
 };
-u32 aud_env_se_8033B0A0[36];
 
 void aud_mute_reset(void)
 {
@@ -242,18 +249,13 @@ void aud_update(void)
 	Na_update();
 }
 
-VECF aud_0;
-OSMesgQueue aud_vi_mq;
-OSMesg aud_vi_mbox;
-SC_CLIENT sc_client_aud;
-
 void aud_main(UNUSED void *arg)
 {
 	Na_load();
 	Na_init();
 	vecf_cpy(aud_0, vecf_0);
 	osCreateMesgQueue(&aud_vi_mq, &aud_vi_mbox, 1);
-	sc_client_init(1, &sc_client_aud, &aud_vi_mq, (OSMesg)0x200);
+	sc_client_init(1, &aud_client, &aud_vi_mq, (OSMesg)0x200);
 	for (;;)
 	{
 		OSMesg msg;

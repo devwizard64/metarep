@@ -80,7 +80,7 @@
 #define O_COIN              68
 #define O_SHAPE_DIST        69
 #define O_AREA              70
-#define O_PRG_ARG           72
+#define O_TAG_ARG           72
 #define O_V8                73
 #define O_V9                74
 #define O_WALL_ANG          75

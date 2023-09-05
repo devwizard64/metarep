@@ -1,5 +1,5 @@
-#ifndef __SM64_O_SCRIPT_H__
-#define __SM64_O_SCRIPT_H__
+#ifndef __SM64_OBJLANG_H__
+#define __SM64_OBJLANG_H__
 
 #include <sm64/defshape.h>
 #include <sm64/defobject.h>
@@ -29,7 +29,7 @@
 	_C(0x09, 0, 0)
 #define oExit() \
 	_C(0x0A, 0, 0)
-#define oExit2() \
+#define oEnd() \
 	_C(0x0B, 0, 0)
 #define oCallback(callback) \
 	_C(0x0C, 0, 0); \
@@ -143,4 +143,4 @@
 	_C(0x37, 0, 0); \
 	_P(splash)
 
-#endif /* __SM64_O_SCRIPT_H__ */
+#endif /* __SM64_OBJLANG_H__ */

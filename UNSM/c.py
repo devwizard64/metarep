@@ -75,7 +75,7 @@ def s_gltf_mesh(self, argv):
 	name, mesh = argv
 	gltf_mesh.append((name, mesh))
 	gltf_meshinfo[name] = mesh
-	gltf_meshdata[name] = [None]*len(mesh)
+	gltf_meshdata[name] = [False, [None]*len(mesh)]
 	self.file[-1][1].append("#include \"%s.h\"\n" % self.path_rel([name]))
 	# print("\t%s.h \\" % self.path_join([name], 1))
 	# for light, mtl in mesh:
@@ -101,28 +101,31 @@ def s_gltf_write(self, argv):
 	buf = []
 	for mtl in gltf_mtl:
 		material = {"name": mtl[0]}
-		pbr = {}
-		if len(mtl) > 1 and mtl[1]:
+		if len(mtl) > 1:
+			pbr = {}
+			if mtl[1]:
+				# mtl[1][0]
+				pbr["baseColorFactor"] = [
+					mtl[1][1+i]/255.0 for i in range(3)
+				] + [1]
+			if len(mtl) > 2:
+				pbr["baseColorTexture"] = {"index": len(gltf["textures"])}
+				gltf["textures"].append({"source": len(gltf["images"])})
+				gltf["images"].append({"uri": mtl[2][0]})
+				if len(mtl) > 3: material["extras"] = mtl[3]
+			pbr["metallicFactor"] = 0
 			material["pbrMetallicRoughness"] = pbr
-			pbr["metallicFactor"] = mtl[1][0]
-			pbr["baseColorFactor"] = [
-				mtl[1][1+i]/255.0 for i in range(3)
-			] + [1]
-		if len(mtl) > 2:
-			material["pbrMetallicRoughness"] = pbr
-			pbr["baseColorTexture"] = {"index": len(gltf["textures"])}
-			gltf["textures"].append({"source": len(gltf["images"])})
-			gltf["images"].append({"uri": mtl[2][0]})
-			if len(mtl) > 3: material["extras"] = mtl[3]
 		gltf["materials"].append(material)
 	for i in ("materials", "textures", "images"):
 		if not gltf[i]: gltf.pop(i)
 	for i, mesh in enumerate(gltf_mesh):
 		name, mesh = mesh
+		flag, prim = gltf_meshdata[name]
 		mesh = {"name": name, "primitives": [
 			gltf_primitive(gltf, buf, attrib, tri, mtl)
-			for attrib, tri, mtl in gltf_meshdata[name]
+			for attrib, tri, mtl in prim
 		]}
+		if flag: mesh["extras"] = {"r": 0, "g": 1, "b": 2}
 		gltf["meshes"].append(mesh)
 		gltf["nodes"].append({"name": name, "mesh": i})
 	gltf["scenes"].append({
@@ -146,7 +149,8 @@ def s_gltf_write(self, argv):
 def gfx_prc(self, line, tab, end, name, index):
 	light, mtl = gltf_meshinfo[name][index]
 	txt = False
-	shade = False
+	normal = False
+	color = False
 	alpha = False
 	if mtl:
 		m = gltf_mtl[gltf_mtltab[mtl]]
@@ -174,6 +178,7 @@ def gfx_prc(self, line, tab, end, name, index):
 			e = w1 + (w0 & 0xFFFF)
 			i = w0 >> 16 & 0x0F
 			while self.c_addr < e:
+				imm = table.imm_addr(self, self.c_addr)
 				x = ultra.sh()
 				y = ultra.sh()
 				z = ultra.sh()
@@ -181,15 +186,17 @@ def gfx_prc(self, line, tab, end, name, index):
 				s = ultra.sh()
 				t = ultra.sh()
 				if light:
-					r = ultra.sb()
-					g = ultra.sb()
-					b = ultra.sb()
+					nx = ultra.sb()
+					ny = ultra.sb()
+					nz = ultra.sb()
+					r, g, b = imm if imm is not None else (0, 0, 0)
 				else:
+					nx, ny, nz = imm if imm is not None else (0, 0, 0)
 					r = ultra.ub()
 					g = ultra.ub()
 					b = ultra.ub()
 				a = ultra.ub()
-				buf[i] = (x, y, z, s, t, r, g, b, a)
+				buf[i] = (x, y, z, s, t, nx, ny, nz, r, g, b, a)
 				i += 1
 			self.c_addr = addr
 		elif cmd == 0xBF:
@@ -204,10 +211,9 @@ def gfx_prc(self, line, tab, end, name, index):
 				else:
 					tri.append(len(vtx))
 					vtx.append(buf[v])
-					if vtx[-1][5] != 0: shade = True
-					if vtx[-1][6] != 0: shade = True
-					if vtx[-1][7] != 0: shade = True
-					if vtx[-1][8] != 0: alpha = True
+					if buf[v][5:8] != (0, 0, 0): normal = True
+					if buf[v][8:10] != (0, 0, 0): color = True
+					if buf[v][11] != 0: alpha = True
 		else:
 			self.c_addr -= 8
 			break
@@ -217,27 +223,53 @@ def gfx_prc(self, line, tab, end, name, index):
 		(v[3]*ss/32.0 - ts)/w,
 		(v[4]*st/32.0 - tt)/h,
 	) for v in vtx], GLTF_FLOAT, 2, False, False))
-	if light:
-		attrib.append(("NORMAL", [
-			(v[5]/128.0, v[6]/128.0, v[7]/128.0) for v in vtx
-		], GLTF_FLOAT, 3, False, False))
-		if alpha: attrib.append(("COLOR_0", [
-			(0xFF, 0xFF, 0xFF, v[8]) for v in vtx
-		], GLTF_UBYTE, 4, True, False))
-	elif shade:
-		attrib.append(("COLOR_0", [
-			v[5:8+alpha] for v in vtx
-		], GLTF_UBYTE, 3+alpha, True, False))
-	gltf_meshdata[name][index] = (attrib, tri, mtl)
+	if normal: attrib.append(("NORMAL", [
+		(v[5]/128.0, v[6]/128.0, v[7]/128.0) for v in vtx
+	], GLTF_FLOAT, 3, False, False))
+	if color: attrib.append(("COLOR_0", [
+		v[8:11+alpha] for v in vtx
+	], GLTF_UBYTE, 3+alpha, True, False))
+	elif alpha: attrib.append(("COLOR_0", [
+		(0xFF, 0xFF, 0xFF, v[11]) for v in vtx
+	], GLTF_UBYTE, 4, True, False))
+	if not light and normal: gltf_meshdata[name][0] = True
+	gltf_meshdata[name][1][index] = (attrib, tri, mtl)
 	name = "%s.%s" % (name, mtl)
 	line[-1][-1].append("#include \"%s.h\"" % self.path_rel([name]))
 	return 1
 
-# main.h
-# graphics.h
-# audio.h
+def s_obj(self, argv):
+	global obj_name
+	global obj_vtx
+	global obj_tri
+	global obj_area
+	obj_name, = argv
+	obj_vtx = None
+	obj_tri = []
+	obj_area = None
 
-# game.h
+def s_obj_write(self, argv):
+	fn = ultra.script.path_join([obj_name + ".obj"])
+	main.mkdir(fn)
+	with open(fn, "w") as f:
+		f.write("# metarep\n")
+		for v in obj_vtx: f.write("v %d %d %d\n" % v)
+		f.write("o %s\n" % obj_name)
+		mtl = None
+		for i, t in enumerate(obj_tri):
+			m = t[0]
+			if len(t) > 4: m += ",%d" % t[4]
+			if obj_area: m += ";%d" % obj_area[i]
+			if mtl != m:
+				mtl = m
+				f.write("usemtl %s\n" % mtl)
+			f.write("f %d %d %d\n" % (1+t[1], 1+t[2], 1+t[3]))
+
+# main.c
+# graphics.c
+# audio.c
+
+# game.c
 
 # todo: macro
 def d_staff_prc(argv):
@@ -255,7 +287,7 @@ def d_staff_prc(argv):
 	)]
 d_staff = [False, d_staff_prc]
 
-# collision.h
+# collision.c
 
 def d_collision_prc(argv):
 	flag     = ultra.uw() # T:flag(collision)
@@ -263,31 +295,31 @@ def d_collision_prc(argv):
 	return ["{0x%08X, %s}" % (flag, callback)]
 d_collision = [False, d_collision_prc]
 
-# player.h
-# pl_physics.h
-# pl_demo.h
-# pl_hang.h
-# pl_wait.h
+# player.c
+# plphysics.c
+# pldemo.c
+# plhang.c
+# plwait.c
 
-# pl_walk.h
+# plwalk.c
 
 d_pl_walk = [
 	[0, -2, 1, ultra.c.d_s16],
 	[0, -5, 1, ultra.c.d_u32, "0x%08X"],
 ]
 
-# pl_jump.h
-# pl_swim.h
-# pl_grab.h
-# pl_callback.h
-# memory.h
-# save.h
-# scene.h
-# draw.h
-# time.h
-# slidec.h
+# pljump.c
+# plswim.c
+# plgrab.c
+# plcallback.c
+# memory.c
+# save.c
+# scene.c
+# draw.c
+# time.c
+# slidec.c
 
-# camera.h
+# camera.c
 
 def d_campos_prc(argv):
 	code = ultra.sh()
@@ -357,9 +389,9 @@ def d_camera_pause_prc(argv):
 	])]
 d_camera_pause = [False, d_camera_pause_prc]
 
-# course.h
+# course.c
 
-# object.h
+# object.c
 
 def d_pl_pcl_prc(argv):
 	code    = ultra.uw() # T:flag
@@ -372,7 +404,7 @@ def d_pl_pcl_prc(argv):
 	return ["{0x%08X, 0x%08X, %s, %s}" % (code, flag, shape, script)]
 d_pl_pcl = [False, d_pl_pcl_prc]
 
-# obj_lib.h
+# objlib.c
 
 def d_obj_splash_prc(argv):
 	flag    = ultra.fmt_s16(ultra.sh())
@@ -444,7 +476,7 @@ def d_obj_col_prc(argv):
 	]
 d_obj_col = [False, d_obj_col_prc]
 
-# object_a.h
+# object_a.c
 
 def d_object_a_0_prc(argv):
 	_00 = ultra.fmt_s16(ultra.sh())
@@ -530,11 +562,11 @@ def d_object_a_8_prc(argv):
 	return ["{%d, %d, %s, %s}" % (time, anime, vel, anime_vel)]
 d_object_a_8 = [False, d_object_a_8_prc]
 
-# obj_physics.h
-# obj_collision.h
-# obj_list.h
+# objphysics.c
+# objcollision.c
+# objlist.c
 
-# obj_sfx.h
+# objsfx.c
 
 def d_obj_sfx_prc(argv):
 	flag    = ultra.sh()
@@ -546,10 +578,10 @@ def d_obj_sfx_prc(argv):
 	return ["{%d, %d, %d, %s}" % (flag, l, r, se)]
 d_obj_sfx = [False, d_obj_sfx_prc]
 
-# obj_debug.h
-# wipe.h
+# objdebug.c
+# wipe.c
 
-# shadow.h
+# shadow.c
 
 def d_shadow_rect_prc(argv):
 	sx = ultra.fmt_float(ultra.f())
@@ -559,9 +591,9 @@ def d_shadow_rect_prc(argv):
 	return ["{%s, %s, %s}" % (sx, sz, y_scale)]
 d_shadow_rect = [False, d_shadow_rect_prc]
 
-# back.h
+# back.c
 
-# scroll.h
+# scroll.c
 
 def d_scroll_prc(argv):
 	index   = ultra.sw()
@@ -594,9 +626,9 @@ def d_scroll_prc(argv):
 	]
 d_scroll = [False, d_scroll_prc]
 
-# obj_shape.h
+# objshape.c
 
-# wave.h
+# wave.c
 
 def d_wave_shape_prc(argv):
 	n = ultra.sh()
@@ -619,21 +651,21 @@ def d_wave_shade_prc(argv):
 	return lst
 d_wave_shade = [False, d_wave_shade_prc]
 
-# dprint.h
-# message.h
-# weather_snow.h
-# weather_lava.h
+# dprint.c
+# message.c
+# snow.c
+# lava.c
 
-# obj_data.h
+# tag.c
 
-def d_prg_obj_prc(argv):
+def d_tag_obj_prc(argv):
 	start, = argv
 	i       = (ultra.script.c_dst-start) // 8
 	script  = ultra.aw(extern=True)
 	shape   = UNSM.table.fmt_shape(ultra.sh())
 	arg     = ultra.sh()
 	return ["/* %3d */   {%s, %s, %d}" % (i, script, shape, arg)]
-d_prg_obj = [False, d_prg_obj_prc]
+d_tag_obj = [False, d_tag_obj_prc]
 
 map_obj_ext = {}
 
@@ -644,8 +676,8 @@ def d_map_obj_prc(argv):
 	shape  = UNSM.table.fmt_shape(ultra.ub())
 	script = ultra.aw(extern=True)
 	map_obj_ext[index] = ext
-	index = UNSM.table.fmt_m_obj(index)
-	ext   = "M_EXT_" + (
+	index = UNSM.table.fmt_map_obj(index)
+	ext   = "MAP_EXT_" + (
 		"NULL",
 		"AY",
 		"AY_ARG",
@@ -655,14 +687,14 @@ def d_map_obj_prc(argv):
 	return ["{%s, %s, %d, %s, %s}" % (index, ext, code, shape, script)]
 d_map_obj = [False, d_map_obj_prc]
 
-def d_obj_data_prc(argv):
+def d_tag_prc(argv):
 	lst = []
 	while True:
 		x = ultra.uh()
 		o = (x & 0x1FF) - 31
 		ay = x >> 9
 		if o == -1:
-			lst.append("P_OBJ_END,")
+			lst.append("TAG_END,")
 			break
 		elif o < 0:
 			lst.append("%d," % x)
@@ -672,14 +704,14 @@ def d_obj_data_prc(argv):
 			py  = ultra.sh()
 			pz  = ultra.sh()
 			arg = ultra.sh()
-			lst.append("P_OBJ(%s, %d, %d, %d, %d, %d)," % (
-				UNSM.table.fmt_p_obj_x[o], ay, px, py, pz, arg,
+			lst.append("TAG(%s, %d, %d, %d, %d, %d)," % (
+				UNSM.table.fmt_tag_x[o], ay, px, py, pz, arg,
 			))
 	ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
 	return lst
-d_obj_data = [False, d_obj_data_prc]
+d_tag = [False, d_tag_prc]
 
-# hud.h
+# hud.c
 
 def d_meter_prc(argv):
 	mode    = ultra.sb()
@@ -691,9 +723,9 @@ def d_meter_prc(argv):
 	return ["{%d, %d, %d, %s}" % (mode, x, y, scale)]
 d_meter = [False, d_meter_prc]
 
-# object_b.h
+# object_b.c
 
-# object_c.h
+# object_c.c
 
 def d_object_c_0_prc(argv):
 	msg_start   = UNSM.table.fmt_msg(ultra.sh())
@@ -753,7 +785,7 @@ def d_object_c_5_prc(argv):
 	return ["{%s, %s, %s}" % (shape, script, scale)]
 d_object_c_5 = [False, d_object_c_5_prc]
 
-# math.h
+# math.c
 
 def d_bspline_prc(argv):
 	time = ultra.sh()
@@ -763,7 +795,7 @@ def d_bspline_prc(argv):
 	return ["{%2d, {%5d, %5d, %5d}}" % (time, x, y, z)]
 d_bspline = [False, d_bspline_prc]
 
-# shape.h
+# shape.c
 
 def d_anime_prc(self, line, tab, argv):
 	anime, = argv
@@ -772,7 +804,7 @@ def d_anime_prc(self, line, tab, argv):
 	flag    = UNSM.table.fmt_anime_flag(ultra.sh())
 	waist   = ultra.sh()
 	start   = ultra.sh()
-	end     = ultra.sh()
+	loop    = ultra.sh()
 	frame   = ultra.sh()
 	joint   = ultra.sh()
 	val     = ultra.uw()
@@ -788,11 +820,12 @@ def d_anime_prc(self, line, tab, argv):
 		tbl_data = [(ultra.uh(), ultra.uh()) for _ in range(3*(1+joint))]
 		self.c_addr = val
 		val_data = [ultra.sh() for _ in range(max([f+i for f, i in tbl_data]))]
-		sym_val = table.sym_var(sym_anime.label+"_val", "static s16", "[]")
+		sym_val = table.sym_var(sym_anime.label+"_val", "static short", "[]")
 		sym_tbl = table.sym_var(sym_anime.label+"_tbl", "static u16", "[]")
 		line.append((val, sym_val, set(), [
 			" ".join([
-				"-0x%04X," % -x if x < 0 else " 0x%04X," % x
+				# "-0x%04X," % -x if x < 0 else " 0x%04X," % x
+				"%6d," % x
 				for x in val_data[i:i+8]
 			])
 			for i in range(0, len(val_data), 8)
@@ -809,7 +842,7 @@ def d_anime_prc(self, line, tab, argv):
 		"/* flag     */  %s," % flag,
 		"/* waist    */  %d," % waist,
 		"/* start    */  %d," % start,
-		"/* end      */  %d," % end,
+		"/* loop     */  %d," % loop,
 		"/* frame    */  %d," % frame,
 		"/* joint    */  %d," % joint,
 		"%s," % sym_val.label,
@@ -818,12 +851,12 @@ def d_anime_prc(self, line, tab, argv):
 	]))
 d_anime = [True, d_anime_prc]
 
-# s_script.h
-# p_script.h
+# shplang.c
+# prglang.c
 
-# map.h
+# bgcheck.c
 
-d_map_plane = [
+d_bgface = [
 	[0, -1, 2, ultra.c.d_s16],
 	[0, -2, 1, ultra.c.d_s8],
 	[0, -1, 2, ultra.c.d_s16],
@@ -832,58 +865,62 @@ d_map_plane = [
 	[0, -1, 1, ultra.c.d_addr, 0],
 ]
 
-# map_data.h
+# bgload.c
 
-def d_map_data_prc(argv):
+def d_map_prc(argv):
+	global obj_vtx
+	global obj_tri
+	name, = argv
 	lst = []
 	while True:
 		x = ultra.sh()
 		if x == 64:
-			name = argv.pop(0)
-			data = [
-				"v %d %d %d\n" % (ultra.sh(), ultra.sh(), ultra.sh())
+			obj_vtx = [
+				(ultra.sh(), ultra.sh(), ultra.sh())
 				for _ in range(ultra.sh())
 			]
-			data.append("o %s\n" % name)
 		elif x == 65:
-			fn = ultra.script.path_join([name + ".obj"])
-			main.mkdir(fn)
-			with open(fn, "w") as f:
-				for x in data: f.write(x)
 			lst.append("#include \"%s.h\"" % ultra.script.path_rel([name]))
 		elif x == 66:
-			lst.append("M_END,")
+			lst.append("MAP_END,")
 			break
 		elif x == 67:
 			n = ultra.sh()
-			lst.append("M_OBJ, %d," % n)
+			lst.append("MAP_OBJECT, %d," % n)
 			for _ in range(n):
 				o = ultra.sh()
 				n = (3, 4, 5, 6, 4)[map_obj_ext[o]]
-				o = UNSM.table.fmt_m_obj(o)
+				o = UNSM.table.fmt_map_obj(o)
 				lst.append(" ".join(
 					[o + ","] + ["%d," % ultra.sh() for _ in range(n)]
 				))
 		elif x == 68:
 			n = ultra.sh()
-			lst.append("M_WATER, %d," % n)
+			lst.append("MAP_WATER, %d," % n)
 			for _ in range(n):
 				lst.append(" ".join(["%d," % ultra.sh() for _ in range(6)]))
 		else:
-			if x in {4, 14, 36, 37, 39, 44, 45}:
-				raise RuntimeError("map face arg unimplemented (%d)" % x)
-			data.append("usemtl %d\n" % x) # T:enum(M_FACE)
-			data.extend([
-				"f %d %d %d\n" % (1+ultra.sh(), 1+ultra.sh(), 1+ultra.sh())
+			n = 4 if x in {4, 14, 36, 37, 39, 44, 45} else 3
+			x = "%d" % x # T:enum(bg)
+			obj_tri.extend([
+				[x] + [ultra.sh() for _ in range(n)]
 				for _ in range(ultra.sh())
 			])
 	ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
 	return lst
-d_map_data = [False, d_map_data_prc]
+d_map = [False, d_map_prc]
 
-# o_script.h
+def d_area_prc(argv):
+	global obj_area
+	name, n = argv
+	obj_area = [ultra.sb() for _ in range(n)]
+	ultra.script.c_addr = (ultra.script.c_addr+3) & ~3
+	return ["#include \"%s.h\"" % ultra.script.path_rel([name])]
+d_area = [False, d_area_prc]
 
-# audio/g.h
+# objlang.c
+
+# audio/g.c
 
 def d_Na_bgmctl_prc(argv):
 	n, = argv
@@ -928,7 +965,7 @@ def d_Na_bgmctl_data_prc(argv):
 	)]
 d_Na_bgmctl_data = [False, d_Na_bgmctl_data_prc]
 
-# audio/data.h
+# audio/data.c
 
 def d_Na_cfg_prc(argv):
 	freq    = ultra.uw()
@@ -1092,7 +1129,7 @@ def g_movemem(argv):
 	d0_1 = ultra.uw()
 	if a_0 == 0x03860010 and d0_0 == 0x03880010 and a_1-d0_1 == 8:
 		imm = table.imm_addr(ultra.script, ultra.script.c_dst)
-		if imm != None:
+		if imm is not None:
 			light = ultra.fmt_addr(d0_1, array=(imm, 0x18))
 		else:
 			light = ultra.fmt_addr(d0_1)
@@ -1387,8 +1424,32 @@ def shp_lod(argv):
 # 0E 18
 def shp_callback(argv):
 	ultra.script.c_addr += 1
-	arg = "%d" % ultra.sh() # T:enum(*)
+	arg = ultra.sh()
 	callback = ultra.c.aw()
+	# s_stage_weather
+	# s_face_main
+	# s_obj_lib_8029D924
+	# s_wave_802D5B98
+	if callback == "s_stage_weather":
+		arg = "WEATHER_" + {
+			0: "NULL",
+			1: "SNOW",
+			2: "BUBBLE",
+			12: "LAVA",
+			13: "WHIRLPOOL",
+			14: "JET",
+		}[arg]
+	elif callback in {
+		"s_scroll_802D104C",
+		"s_scroll_802D1B70",
+		"s_scroll_802D1CDC",
+		"s_scroll_802D1E48",
+		"s_scroll_802D1FA8",
+		"s_scroll_802D2108",
+	}:
+		arg = "0x%04X" % arg
+	else:
+		arg = "%d" % arg # T:enum(*)
 	return (None, arg, callback)
 
 # 0F
@@ -1405,7 +1466,7 @@ def shp_camera(argv):
 	return (None, arg, px, py, pz, lx, ly, lz, callback)
 
 # 10
-def shp_gfx_posang(argv):
+def shp_gfx_coord(argv):
 	arg = ultra.ub()
 	x = arg >> 4 & 7
 	if x == 0:
@@ -1416,26 +1477,26 @@ def shp_gfx_posang(argv):
 		ax = "%d" % ultra.sh()
 		ay = "%d" % ultra.sh()
 		az = "%d" % ultra.sh()
-		s = "PosAng"
+		s = "Coord"
 		a = (px, py, pz, ax, ay, az)
 	if x == 1:
 		px = "%d" % ultra.sh()
 		py = "%d" % ultra.sh()
 		pz = "%d" % ultra.sh()
-		s = "PAPos"
+		s = "CoordPos"
 		a = (px, py, pz)
 	if x == 2:
 		ax = "%d" % ultra.sh()
 		ay = "%d" % ultra.sh()
 		az = "%d" % ultra.sh()
-		s = "PAAng"
+		s = "CoordAng"
 		a = (ax, ay, az)
 	if x == 3:
 		ay = "%d" % ultra.sh()
-		s = "PAYaw"
+		s = "CoordAY"
 		a = (ay,)
 	if arg & 0x80:
-		layer = UNSM.table.fmt_layer(arg & 0x0F)
+		layer = UNSM.table.fmt_layer(arg & 15)
 		ultra.tag = "gfx"
 		gfx = ultra.aw(extern=True)
 		return ("Gfx"+s, layer, gfx) + a
@@ -1503,7 +1564,7 @@ def shp_back(argv):
 		a = arg & 1
 		arg = "GPACK_RGBA5551(0x%02X, 0x%02X, 0x%02X, %d)" % (r, g, b, a)
 	else:
-		arg = "%d" % arg # T:enum(back)
+		arg = "BACK_" + "ADEFBGHICJ"[arg]
 	return (None, arg, callback)
 
 # 1C
@@ -1516,7 +1577,7 @@ def shp_hand(argv):
 	return (None, x, y, z, arg, callback)
 
 shp_str = (
-	"Script", # 0x00
+	"Execute", # 0x00
 	"Exit", # 0x01
 	"Jump", # 0x02
 	"Return", # 0x03
@@ -1532,7 +1593,7 @@ shp_str = (
 	"LOD", # 0x0D
 	"Select", # 0x0E
 	"Camera", # 0x0F
-	"PosAng", # 0x10
+	"Coord", # 0x10
 	"Pos", # 0x11
 	"Ang", # 0x12
 	"Joint", # 0x13
@@ -1568,7 +1629,7 @@ shp_fnc = (
 	(shp_lod,), # 0x0D
 	(shp_callback,), # 0x0E
 	(shp_camera,), # 0x0F
-	(shp_gfx_posang,), # 0x10
+	(shp_gfx_coord,), # 0x10
 	(shp_gfx_arg, "GfxPos", 0), # 0x11
 	(shp_gfx_arg, "GfxAng", 0), # 0x12
 	(shp_gfx_pos,), # 0x13
@@ -1596,7 +1657,7 @@ def d_s_script_prc(self, line, tab, argv):
 		c = ultra.ub()
 		f = shp_fnc[c]
 		argv = f[0](f[1:])
-		s = argv[0] if argv[0] != None else shp_str[c]
+		s = argv[0] if argv[0] is not None else shp_str[c]
 		if self.addr == 0x0E000000-0x004EB1F0 and self.c_dst == 0x0E00093C:
 			c = 0x05
 		if c in {0x05} and t > 0: t -= 1

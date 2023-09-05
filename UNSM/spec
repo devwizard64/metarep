@@ -373,11 +373,11 @@ beginseg
 	address ADDRESS_MENU
 	MAXADDR(ADDRESS_MEM_END-16)
 	include "$(BUILD)/src/title.o"
-	include "$(BUILD)/src/title_bg.o"
-	include "$(BUILD)/src/file_select.o"
-	include "$(BUILD)/src/file_select.data.o"
-	include "$(BUILD)/src/star_select.o"
-	include "$(BUILD)/src/star_select.data.o"
+	include "$(BUILD)/src/titlebg.o"
+	include "$(BUILD)/src/fileselect.o"
+	include "$(BUILD)/src/fileselect.data.o"
+	include "$(BUILD)/src/starselect.o"
+	include "$(BUILD)/src/starselect.data.o"
 	include "$(BUILD)/face.o"
 endseg
 

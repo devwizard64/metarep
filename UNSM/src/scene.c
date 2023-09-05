@@ -3,29 +3,31 @@
 SPAWN spawn_player[1];
 SHAPE *shape_data[SHAPE_LEN];
 SCENE scene_data[SCENE_LEN];
-WIPE wipe;
-s16 course_index;
-s16 level_index;
-s16 scene_index;
-s16 course_prev;
-s16 msg_code;
-s16 msg_latch;
-
 SPAWN *spawn_mario = &spawn_player[0];
 SHAPE **shape_table = shape_data;
 SCENE *scene_table = scene_data;
 SCENE *scene = NULL;
 STAFF *staff = NULL;
-Vp *scene_viewport = NULL;
-Vp *scene_scissor = NULL;
-s16 wipe_delay = 0;
-u32 scene_fill = 0;
-u32 blank_fill = 0;
-u8 blank_r = 0;
-u8 blank_g = 0;
-u8 blank_b = 0;
+WIPE wipe;
+
+static Vp *scene_viewport = NULL;
+static Vp *scene_scissor = NULL;
+static s16 wipe_delay = 0;
+static u32 scene_fill = 0;
+static u32 blank_fill = 0;
+static u8 blank_r = 0;
+static u8 blank_g = 0;
+static u8 blank_b = 0;
+
 s16 save_index = 1;
+s16 course_index;
+s16 level_index;
 s16 stage_index = 1;
+s16 scene_index;
+s16 course_prev;
+
+s16 msg_code;
+s16 msg_latch;
 
 #define RGBA16(r, g, b, a) \
 	(((r) >> 3) << 11 | ((g) >> 3) << 6 | ((b) >> 3) << 1 | ((a) >> 7))
@@ -162,7 +164,7 @@ static PORT *obj_port_get(OBJECT *obj)
 static void port_init(void)
 {
 	PORT *port;
-	SHAPE *shape = s_script_8038BD88.child;
+	SHAPE *shape = sobj_list.child;
 	do
 	{
 		OBJECT *obj = (OBJECT *)shape;
@@ -171,7 +173,7 @@ static void port_init(void)
 			if ((port = obj_port_get(obj))) port->obj = obj;
 		}
 	}
-	while ((shape = shape->next) != s_script_8038BD88.child);
+	while ((shape = shape->next) != sobj_list.child);
 }
 
 void scene_init(void)
@@ -186,10 +188,10 @@ void scene_init(void)
 		scene_data[i].index     = i;
 		scene_data[i].flag      = 0;
 		scene_data[i].env       = 0;
-		scene_data[i].s         = NULL;
+		scene_data[i].shp       = NULL;
 		scene_data[i].map       = NULL;
 		scene_data[i].area      = NULL;
-		scene_data[i].obj       = NULL;
+		scene_data[i].tag       = NULL;
 		scene_data[i].port      = NULL;
 		scene_data[i].bgport    = NULL;
 		scene_data[i].connect   = NULL;
@@ -210,32 +212,30 @@ void scene_exit(void)
 	int i;
 	if (scene)
 	{
-		shape_8037C360(scene->s, S_CODE_CLOSE);
+		s_scene_notify(scene->shp, S_CODE_CLOSE);
 		scene = NULL;
 		wipe.active = FALSE;
 	}
 	for (i = 0; i < SCENE_LEN; i++)
 	{
-		if (scene_data[i].s)
+		if (scene_data[i].shp)
 		{
-			shape_8037C360(scene_data[i].s, S_CODE_EXIT);
-			scene_data[i].s = NULL;
+			s_scene_notify(scene_data[i].shp, S_CODE_EXIT);
+			scene_data[i].shp = NULL;
 		}
 	}
 }
 
 void scene_open(int index)
 {
-	if (!scene && scene_data[index].s)
+	if (!scene && scene_data[index].shp)
 	{
 		scene = &scene_data[index];
 		scene_index = scene->index;
-		if (scene->map) map_data_803833B8(
-			index, scene->map, scene->area, scene->obj
-		);
+		if (scene->map) map_load(index, scene->map, scene->area, scene->tag);
 		if (scene->spawn) object_8029CFB0(0, scene->spawn);
 		port_init();
-		shape_8037C360(scene->s, S_CODE_OPEN);
+		s_scene_notify(scene->shp, S_CODE_OPEN);
 	}
 }
 
@@ -244,7 +244,7 @@ void scene_close(void)
 	if (scene)
 	{
 		object_8029CEDC(0, scene->index);
-		shape_8037C360(scene->s, S_CODE_CLOSE);
+		s_scene_notify(scene->shp, S_CODE_CLOSE);
 		scene->flag = 0;
 		scene = NULL;
 		wipe.active = FALSE;
@@ -348,7 +348,7 @@ void scene_draw(void)
 			{4*(SCREEN_WD/2), 4*(SCREEN_HT/2), G_MAXZ/2, 0},
 			{4*(SCREEN_WD/2), 4*(SCREEN_HT/2), G_MAXZ/2, 0},
 		}};
-		draw_scene(scene->s, scene_viewport, scene_scissor, scene_fill);
+		draw_scene(scene->shp, scene_viewport, scene_scissor, scene_fill);
 		gSPViewport(gfx_ptr++, K0_TO_PHYS(&vp));
 		gDPSetScissor(
 			gfx_ptr++, G_SC_NON_INTERLACE,

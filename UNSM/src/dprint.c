@@ -1,7 +1,7 @@
 #include <sm64.h>
 
-DPRINT *dprint_table[50];
-s16 dprint_index = 0;
+static DPRINT *dprint_table[50];
+static s16 dprint_index = 0;
 
 static unsigned int dprint_powi(int base, int exponent)
 {

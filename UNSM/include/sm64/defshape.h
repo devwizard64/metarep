@@ -14,7 +14,7 @@
 #define ANIME_LOOP              0x0000
 #define ANIME_NOLOOP            0x0001
 #define ANIME_REVERSE           0x0002
-#define ANIME_FIXFRAME          0x0004
+#define ANIME_NOSTEP            0x0004
 #define ANIME_XYZ               0x0000
 #define ANIME_Y                 0x0008
 #define ANIME_XZ                0x0010
@@ -191,14 +191,14 @@
 #define S_2A_105                105
 #define S_2A_179                179
 
-#define S_2B_100                100
-#define S_2B_101                101
-#define S_2B_102                102
-#define S_2B_103                103
-#define S_2B_104                104
-#define S_2B_105                105
-#define S_2B_179                179
-#define S_2B_193                193
+#define S_BUB                   100
+#define S_CHEST                 101
+#define S_CHESTLID              102
+#define S_PIRANHA               103
+#define S_WATERRING             104
+#define S_SKEETER               105
+#define S_WATERMINE             179
+#define S_KELP                  193
 
 #define S_2C_100                100
 #define S_2C_101                101

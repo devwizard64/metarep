@@ -70,18 +70,9 @@ def prg_script(argv):
 # (08) (09)
 
 # 0B 0C
-def prg_jump_if(argv):
+def prg_cmp(argv):
 	s, = argv
-	cmp_ = (
-		"AND",
-		"NAND",
-		"EQ",
-		"NE",
-		"GT",
-		"GE",
-		"LT",
-		"LE",
-	)[ultra.ub()]
+	cmp_ = ("AND", "NAND", "EQ", "NE", "LT", "LE", "GT", "GE")[ultra.ub()]
 	ultra.script.c_addr += 1
 	val = "%d" % ultra.sw()
 	if s:
@@ -164,7 +155,7 @@ def prg_object(argv):
 	if mask != 0x1F:
 		mask = "0%02o" % mask
 		return (
-			"ObjectMask", mask, shape, px, py, pz, ax, ay, az,
+			"Obj", mask, shape, px, py, pz, ax, ay, az,
 			arg0, arg1, flag, script
 		)
 	return (None, shape, px, py, pz, ax, ay, az, arg0, arg1, flag, script)
@@ -314,8 +305,8 @@ prg_str = [
 	"Return",       # 0x07
 	"For",          # 0x08
 	"Done",         # 0x09
-	"Do",           # 0x0A
-	"While",        # 0x0B
+	"Repeat",       # 0x0A
+	"Until",        # 0x0B
 	"JumpIf",       # 0x0C
 	"CallIf",       # 0x0D
 	"If",           # 0x0E
@@ -361,7 +352,7 @@ prg_str = [
 	"Bgm",          # 0x36
 	"BgmPlay",      # 0x37
 	"BgmStop",      # 0x38
-	"Obj",          # 0x39
+	"Tag",          # 0x39
 	"Wind",         # 0x3A
 	"Jet",          # 0x3B
 	None,           # 0x3C
@@ -379,8 +370,8 @@ prg_fnc = [
 	None, # 0x08
 	None, # 0x09
 	(prg_null,), # 0x0A
-	(prg_jump_if, False), # 0x0B
-	(prg_jump_if, True), # 0x0C
+	(prg_cmp, False), # 0x0B
+	(prg_cmp, True), # 0x0C
 	None, # 0x0D
 	None, # 0x0E
 	None, # 0x0F
@@ -582,7 +573,7 @@ obj_str = [
 	"While",    # 0x08
 	"Wend",     # 0x09
 	"Exit",     # 0x0A
-	"Exit2",    # 0x0B
+	"End",      # 0x0B
 	"Callback", # 0x0C
 	"AddF",     # 0x0D
 	"SetF",     # 0x0E
@@ -711,7 +702,7 @@ def s_script(self, argv):
 			0x22: "s_script",
 			0x2E: "map",
 			0x2F: "area",
-			0x39: "obj",
+			0x39: "tag",
 		}
 		objtbl = {
 			0x27: "anime",
@@ -789,7 +780,7 @@ def s_anime(self, argv):
 			a_flag  = UNSM.table.fmt_anime_flag(ultra.sh())
 			a_waist = ultra.sh()
 			a_start = ultra.sh()
-			a_end   = ultra.sh()
+			a_loop  = ultra.sh()
 			a_frame = ultra.sh()
 			a_joint = ultra.sh()
 			a_val   = self.c_dst + ultra.uw()
@@ -799,7 +790,7 @@ def s_anime(self, argv):
 			stbl_add(stbl, a_tbl, 2, s + "_tbl")
 			c.append((
 				"\tANIME(%s, %s, %d, %d, %d, %d, %d)\n"
-			) % (s, a_flag, a_waist, a_start, a_end, a_frame, a_joint))
+			) % (s, a_flag, a_waist, a_start, a_loop, a_frame, a_joint))
 			i += 1
 		# val
 		elif t == 1:

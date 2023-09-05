@@ -3,14 +3,14 @@
 #define SAVE_DATA_KEY   0x4849  /* HI */
 #define SAVE_FILE_KEY   0x4441  /* DA */
 
-u8 save_mid_level;
-u8 save_mid_course;
-u8 save_mid_stage;
-u8 save_mid_scene;
-u8 save_mid_port;
+static u8 save_mid_level;
+static u8 save_mid_course;
+static u8 save_mid_stage;
+static u8 save_mid_scene;
+static u8 save_mid_port;
 
-char save_data_dirty;
-char save_file_dirty;
+static char save_data_dirty;
+static char save_file_dirty;
 
 u8 save_course  = 0;
 u8 save_level   = 0;
@@ -100,11 +100,11 @@ static int save_wr(void *data, int size)
 	return code;
 }
 
-static USHORT save_check_sum(unsigned char *data, int size)
+static u16 save_check_sum(unsigned char *data, int size)
 {
 	USHORT sum = 0;
 	while (size-- > 2) sum += *data++;
-	return (u16)sum;
+	return sum;
 }
 
 static int save_check(void *data, int size, USHORT key)
@@ -481,7 +481,7 @@ void save_mid_set(PORT *port)
 
 int save_mid_get(PORT *port)
 {
-	short flag = FALSE;
+	short result = FALSE;
 	SHORT course = stage_to_course(port->stage & 0x7F);
 	if (
 		save_mid_course != 0 &&
@@ -492,11 +492,11 @@ int save_mid_get(PORT *port)
 		port->stage = save_mid_stage;
 		port->scene = save_mid_scene;
 		port->port  = save_mid_port;
-		flag = TRUE;
+		result = TRUE;
 	}
 	else
 	{
 		save_mid_course = 0;
 	}
-	return flag;
+	return result;
 }

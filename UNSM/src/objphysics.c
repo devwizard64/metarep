@@ -6,19 +6,17 @@ OBJECT *obj_ground = NULL;
 
 void obj_physics_802C89F0(void)
 {
-	MAP_PLANE *ground;
+	BGFACE *ground;
 	UNUSED OBJECT *obj;
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 	float ground_y;
 	int code;
 	if (!obj_mario) return;
 	x = obj_mario->o_pos_x;
 	y = obj_mario->o_pos_y;
 	z = obj_mario->o_pos_z;
-	ground_y = map_80381900(x, y, z, &ground);
-	if (obj_lib_802A3634(y - ground_y) < 4) code = 0;
+	ground_y = bg_check_ground(x, y, z, &ground);
+	if (objlib_802A3634(y-ground_y) < 4)    code = 0;
 	else                                    code = 1;
 	switch (code)
 	{
@@ -57,15 +55,8 @@ void mario_pos_set(float x, float y, float z)
 
 void obj_physics_802C8BC8(int ismario, OBJECT *obj)
 {
-	float px;
-	float py;
-	float pz;
-	float gx;
-	float gy;
-	float gz;
-	VECF pos;
-	VECF off;
-	VECF new;
+	float px, py, pz, gx, gy, gz;
+	VECF pos, off, new;
 	VECS ang;
 	ang[0] = obj->o_ang_vel_x;
 	ang[1] = obj->o_ang_vel_y;
@@ -99,13 +90,13 @@ void obj_physics_802C8BC8(int ismario, OBJECT *obj)
 		ang[0] = obj->o_shape_ang_x - obj->o_ang_vel_x;
 		ang[1] = obj->o_shape_ang_y - obj->o_ang_vel_y;
 		ang[2] = obj->o_shape_ang_z - obj->o_ang_vel_z;
-		mtxf_posang(mf, pos, ang);
-		obj_lib_8029F274(mf, off, pos);
+		mtxf_coord(mf, pos, ang);
+		objlib_8029F274(mf, off, pos);
 		ang[0] = obj->o_shape_ang_x;
 		ang[1] = obj->o_shape_ang_y;
 		ang[2] = obj->o_shape_ang_z;
-		mtxf_posang(mf, pos, ang);
-		obj_lib_8029F200(mf, new, off);
+		mtxf_coord(mf, pos, ang);
+		objlib_8029F200(mf, new, off);
 		px = new[0] + gx;
 		py = new[1] + gy;
 		pz = new[2] + gz;

@@ -1,12 +1,14 @@
-#ifndef __SM64_S_SCRIPT_H__
-#define __SM64_S_SCRIPT_H__
+#ifndef __SM64_SHPLANG_H__
+#define __SM64_SHPLANG_H__
 
 #include <ultra64.h>
 #include <sm64/types.h>
 #include <sm64/defshape.h>
+#include <sm64/defback.h>
+#include <sm64/defweather.h>
 #include <sm64/script_c.h>
 
-#define sScript(script) \
+#define sExecute(script) \
 	_C(0x00, 0, 0), \
 	_P(script)
 #define sExit() \
@@ -60,33 +62,33 @@
 	_H(pz, lx), \
 	_H(ly, lz), \
 	_P(callback)
-#define sPosAng(px, py, pz, ax, ay, az) \
+#define sCoord(px, py, pz, ax, ay, az) \
 	_C(0x10, 0x00, 0), \
 	_H(px, py), \
 	_H(pz, ax), \
 	_H(ay, az)
-#define sPAPos(px, py, pz) \
+#define sCoordPos(px, py, pz) \
 	_C(0x10, 0x10, px), \
 	_H(py, pz)
-#define sPAAng(ax, ay, az) \
+#define sCoordAng(ax, ay, az) \
 	_C(0x10, 0x20, ax), \
 	_H(ay, az)
-#define sPAYaw(ay) \
+#define sCoordAY(ay) \
 	_C(0x10, 0x30, ay)
-#define sGfxPosAng(layer, gfx, px, py, pz, ax, ay, az) \
+#define sGfxCoord(layer, gfx, px, py, pz, ax, ay, az) \
 	_C(0x10, 0x80 | layer, 0), \
 	_H(px, py), \
 	_H(pz, ax), \
 	_H(ay, az), \
 	_P(gfx)
-#define sGfxPAPos(layer, gfx, px, py, pz) \
+#define sGfxCoordPos(layer, gfx, px, py, pz) \
 	_C(0x10, 0x90 | layer, px), \
 	_H(py, pz)
-#define sGfxPAAng(layer, gfx, ax, ay, az) \
+#define sGfxCoordAng(layer, gfx, ax, ay, az) \
 	_C(0x10, 0xA0 | layer, ax), \
 	_H(ay, az), \
 	_P(gfx)
-#define sGfxPAYaw(layer, gfx, ay) \
+#define sGfxCoordAY(layer, gfx, ay) \
 	_C(0x10, 0xB0 | layer, ay), \
 	_P(gfx)
 #define sPos(px, py, pz) \
@@ -158,9 +160,9 @@ extern void *s_player_alpha(int, SHAPE *, void *);
 extern void *s_player_select_lod(int, SHAPE *, void *);
 extern void *s_player_select_eyes(int, SHAPE *, void *);
 extern void *s_player_ang_torso(int, SHAPE *, void *);
-extern void *s_player_ang_head(int, SHAPE *, void *);
-extern void *s_player_select_glove(int, SHAPE *, void *);
-extern void *s_player_scale(int, SHAPE *, void *);
+extern void *s_player_ang_neck(int, SHAPE *, void *);
+extern void *s_mario_select_glove(int, SHAPE *, void *);
+extern void *s_mario_punch(int, SHAPE *, void *);
 extern void *s_player_select_cap(int, SHAPE *, void *);
 extern void *s_player_select_head(int, SHAPE *, void *);
 extern void *s_player_ang_wing(int, SHAPE *, void *);
@@ -171,11 +173,11 @@ extern void *s_player_mirror(int, SHAPE *, void *);
 extern void *s_stage_camera(int, SHAPE *, void *);
 extern void *s_stage_perspective(int, SHAPE *, void *);
 
-extern void *s_obj_lib_8029D890(int, SHAPE *, void *); /* callback */
-extern void *s_obj_lib_8029D924(int, SHAPE *, void *); /* callback */
-extern void *s_obj_lib_8029DB48(int, SHAPE *, void *); /* select */
-extern void *s_obj_lib_8029DBD4(int, SHAPE *, void *); /* select */
-extern void *s_obj_lib_802A45E4(int, SHAPE *, void *); /* callback */
+extern void *s_objlib_8029D890(int, SHAPE *, void *); /* callback */
+extern void *s_objlib_8029D924(int, SHAPE *, void *); /* callback */
+extern void *s_objlib_8029DB48(int, SHAPE *, void *); /* select */
+extern void *s_objlib_8029DBD4(int, SHAPE *, void *); /* select */
+extern void *s_objlib_802A45E4(int, SHAPE *, void *); /* callback */
 
 extern void *s_object_a_802A719C(int, SHAPE *, void *); /* callback */
 extern void *s_mario_pos_child(int, SHAPE *, void *);
@@ -207,13 +209,13 @@ extern void *s_wave_802D5D0C(int, SHAPE *, void *); /* callback */
 extern void *s_object_c_8030D93C(int, SHAPE *, void *); /* callback */
 extern void *s_object_c_8030D9AC(int, SHAPE *, void *); /* callback */
 
-extern void *s_logo_shape(int, SHAPE *, void *);
-extern void *s_logo_symbol(int, SHAPE *, void *);
-extern void *s_title_bg(int, SHAPE *, void *);
-extern void *s_gameover_bg(int, SHAPE *, void *);
+extern void *s_title_logo(int, SHAPE *, void *);
+extern void *s_title_symbol(int, SHAPE *, void *);
+extern void *s_title_back(int, SHAPE *, void *);
+extern void *s_gameover_back(int, SHAPE *, void *);
 
-extern void *s_file_select_main(int, SHAPE *, void *);
+extern void *s_fileselect_main(int, SHAPE *, void *);
 
-extern void *s_star_select_main(int, SHAPE *, void *);
+extern void *s_starselect_main(int, SHAPE *, void *);
 
-#endif /* __SM64_S_SCRIPT_H__ */
+#endif /* __SM64_SHPLANG_H__ */

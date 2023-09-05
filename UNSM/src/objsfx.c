@@ -1,23 +1,21 @@
 #include <sm64.h>
 
-void obj_sfx_802CA040(OBJ_SFX *sfx)
+void objsfx_802CA040(OBJ_SFX *sfx)
 {
 	int i = object->o_anime_index;
+	int frame;
 	switch (sfx[i].flag)
 	{
 	case 0:
 		break;
 	case 1:
+		if ((frame = sfx[i].l) >= 0)
 		{
-			int frame;
-			if ((frame = sfx[i].l) >= 0)
-			{
-				if (obj_lib_802A0008(frame)) obj_sfx_802CA1E0(sfx[i].se);
-			}
-			if ((frame = sfx[i].r) >= 0)
-			{
-				if (obj_lib_802A0008(frame)) obj_sfx_802CA1E0(sfx[i].se);
-			}
+			if (objlib_802A0008(frame)) objsfx_802CA1E0(sfx[i].se);
+		}
+		if ((frame = sfx[i].r) >= 0)
+		{
+			if (objlib_802A0008(frame)) objsfx_802CA1E0(sfx[i].se);
 		}
 		break;
 	}
@@ -25,23 +23,24 @@ void obj_sfx_802CA040(OBJ_SFX *sfx)
 
 extern O_SCRIPT o_1300229C[];
 
-void obj_sfx_802CA144(NA_SE se)
+void objsfx_802CA144(NA_SE se)
 {
-	OBJECT *obj = obj_lib_8029EDCC(object, 0, o_1300229C);
-	obj->mem[O_V0].s32 = se;
+	OBJECT *obj = objlib_8029EDCC(object, 0, o_1300229C);
+	obj->mem[O_V0].i = se;
 }
 
-void obj_sfx_802CA190(NA_SE se)
-{
-	if (object->list.s.s.flag & S_FLAG_ACTIVE) Na_SE_obj(se, object);
-}
-
-void obj_sfx_802CA1E0(NA_SE se)
+void objsfx_802CA190(NA_SE se)
 {
 	if (object->list.s.s.flag & S_FLAG_ACTIVE) Na_SE_obj(se, object);
 }
 
-UNUSED static int obj_sfx_802CA230(float x)
+void objsfx_802CA1E0(NA_SE se)
+{
+	if (object->list.s.s.flag & S_FLAG_ACTIVE) Na_SE_obj(se, object);
+}
+
+UNUSED static
+int objsfx_802CA230(float x)
 {
 	int y;
 	if      (x <  500) y = 127;
@@ -50,7 +49,8 @@ UNUSED static int obj_sfx_802CA230(float x)
 	return y;
 }
 
-UNUSED static int obj_sfx_802CA2D4(float x)
+UNUSED static
+int objsfx_802CA2D4(float x)
 {
 	int y;
 	if      (x < 1300) y = 127;
