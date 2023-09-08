@@ -1037,7 +1037,7 @@ include_code = [
 	s_header_code(0x802D6F20, 0x802DDDEC, 0x80331370, 0x8033174C, 0x803613F0, 0x803613FF, "message", header.struct_message),
 	s_header_code(0x802DDDF0, 0x802E2094, 0x80331750, 0x803317D8, 0x80361400, 0x80361440, "weather", header.struct_weather),
 	s_header_code(0x802E20A0, 0x802E2CF0, 0x803317E0, 0x803325E8,          0,          0, "tag", header.struct_tag, header.str_tag),
-	s_header_code(0x802E2CF0, 0x802E3E50, 0x803325F0, 0x8033260C, 0x80361440, 0x80361442, "hud", header.struct_hud),
+	s_header_code(0x802E2CF0, 0x802E3E50, 0x803325F0, 0x8033260C, 0x80361440, 0x80361442, "hud", header.struct_hud, header.str_hud),
 	s_header_code(0x802E3E50, 0x802F972C, 0x80332610, 0x8033283C, 0x80361450, 0x80361454, "object_b", header.struct_object_b),
 	s_header_code(0x802F9730, 0x80314A2C, 0x80332840, 0x80332E4C, 0x80361460, 0x8036148C, "object_c", header.struct_object_c),
 ]
@@ -1149,7 +1149,7 @@ src_code = [
 	s_code(0x802DDDF0, 0x802DFD50, "snow"),
 	s_code(0x802DFD50, 0x802E2094, "lava"),
 	# s_code(0x802E20A0, 0x802E2CF0, "tag"),
-	s_code(0x802E2CF0, 0x802E3E50, "hud"),
+	# s_code(0x802E2CF0, 0x802E3E50, "hud"),
 	s_code(0x802E3E50, 0x802F972C, "object_b", [], str_fp),
 
 	s_code(0x802F9730, 0x80314A2C, "object_c"),
@@ -1844,18 +1844,18 @@ src_code = [
 	s_data(0x80332350, 0x803325E8, 0x80338380, 0x80338380, 0, 0, "map_obj", [], [
 		[0,  -83, 1, c.d_map_obj],
 	], []),
-	s_data(0x803325F0, 0x8033260C, 0x80338380, 0x803383D0, 0x80361440, 0x80361442, "hud.data", ["sm64"], [
-		[0, 1, 1, c.d_meter],
-		[0, 1, 1, ultra.c.d_s32],
-		[0, 3, ultra.c.d_align_s16],
-	], [
-		[0, 10, 4, "str"],
-		[0,  1, 8, "str"],
-		[0,  1, 4, "str"],
-		[0,  1, 8, "str"],
-		[0,  1, 4, "str"],
-		[0,  2, 1, ultra.c.d_f64],
-	]),
+	# s_data(0x803325F0, 0x8033260C, 0x80338380, 0x803383D0, 0x80361440, 0x80361442, "hud.data", ["sm64"], [
+	# 	[0, 1, 1, c.d_meter],
+	# 	[0, 1, 1, ultra.c.d_s32],
+	# 	[0, 3, ultra.c.d_align_s16],
+	# ], [
+	# 	[0, 10, 4, "str"],
+	# 	[0,  1, 8, "str"],
+	# 	[0,  1, 4, "str"],
+	# 	[0,  1, 8, "str"],
+	# 	[0,  1, 4, "str"],
+	# 	[0,  2, 1, ultra.c.d_f64],
+	# ]),
 	s_data(0x80332610, 0x8033283C, 0x803383D0, 0x803389A4, 0x80361450, 0x80361454, "object_b.data", ["sm64"], [
 		[0, 1, ultra.c.d_align_s8],
 		[0, 1, ultra.c.d_align_s16],

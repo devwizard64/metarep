@@ -81,7 +81,7 @@ void *s_stage_back(int code, SHAPE *shape, UNUSED void *data)
 
 void *s_face_main(int code, SHAPE *shape, void *data)
 {
-	Gfx *gfx = 0;
+	Gfx *gfx = NULL;
 	SHORT sfx = 0;
 	S_CALLBACK *shp = (S_CALLBACK *)shape;
 	UNUSED MTXF *mf = data;
@@ -539,7 +539,7 @@ void *s_player_hand(int code, SHAPE *shape, void *data)
 void *s_inside_mirror(int code, SHAPE *shape, UNUSED void *data)
 {
 	float x;
-	S_OBJECT *obj = &player_data[0].obj->list.s;
+	S_OBJECT *shp = &player_data[0].obj->list.s;
 	switch (code)
 	{
 	case S_CODE_INIT:
@@ -552,14 +552,14 @@ void *s_inside_mirror(int code, SHAPE *shape, UNUSED void *data)
 		shape_unlink(&sobj_mirror.s);
 		break;
 	case S_CODE_DRAW:
-		if (obj->pos[0] > 1700)
+		if (shp->pos[0] > 1700)
 		{
-			sobj_mirror.shape = obj->shape;
-			sobj_mirror.scene = obj->scene;
-			vecs_cpy(sobj_mirror.ang, obj->ang);
-			vecf_cpy(sobj_mirror.pos, obj->pos);
-			vecf_cpy(sobj_mirror.scale, obj->scale);
-			sobj_mirror.skeleton = obj->skeleton;
+			sobj_mirror.shape = shp->shape;
+			sobj_mirror.scene = shp->scene;
+			vecs_cpy(sobj_mirror.ang, shp->ang);
+			vecf_cpy(sobj_mirror.pos, shp->pos);
+			vecf_cpy(sobj_mirror.scale, shp->scale);
+			sobj_mirror.skeleton = shp->skeleton;
 			x = (DOUBLE)4331.53 - sobj_mirror.pos[0];
 			sobj_mirror.pos[0] = (DOUBLE)4331.53 + x;
 			sobj_mirror.ang[1] = -sobj_mirror.ang[1];

@@ -26,6 +26,64 @@
 #define gdSPDefLight(a, r, g, b) \
 	gdSPDefLights1((a)*(r), (a)*(g), (a)*(b), r, g, b, 40, 40, 40)
 
+#ifndef gSP2Triangles
+#define gSP2Triangles(pkt, v00, v01, v02, flag0, v10, v11, v12, flag1) \
+{ \
+	gSP1Triangle(pkt, v00, v01, v02, flag0); \
+	gSP1Triangle(pkt, v10, v11, v12, flag1); \
+}
+#endif
+
+#define gSPSetLights1N(pkt, name) \
+{ \
+	gSPLight(pkt,&name.l[0],1); \
+	gSPLight(pkt,&name.a,2); \
+}
+
+#define gDPLoadTextureBlockN(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt) \
+{ \
+	gDPSetTile(pkt, fmt, siz##_LOAD_BLOCK, 0, 0, G_TX_LOADTILE,  0 , cmt, maskt, shiftt, cms, masks, shifts); \
+	gDPLoadSync(pkt); \
+	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, (((width)*(height) + siz##_INCR) >> siz##_SHIFT)-1, CALC_DXT(width, siz##_BYTES)); \
+	gDPSetTile(pkt, fmt, siz, ((((width) * siz##_LINE_BYTES)+7)>>3), 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks, shifts); \
+	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC, ((height)-1) << G_TEXTURE_IMAGE_FRAC); \
+}
+
+#define gDPLoadTextureBlock_4bN(pkt, fmt, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt) \
+{ \
+	gDPSetTile(pkt, fmt, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0 , cmt, maskt, shiftt, cms, masks, shifts); \
+	gDPLoadSync(pkt); \
+	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, (((width)*(height)+3)>>2)-1, CALC_DXT_4b(width)); \
+	gDPSetTile(pkt, fmt, G_IM_SIZ_4b, ((((width)>>1)+7)>>3), 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks, shifts); \
+	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC, ((height)-1) << G_TEXTURE_IMAGE_FRAC); \
+}
+
+#define gDPSetLoadTile(pkt, fmt, siz) \
+	gDPSetTile(pkt, fmt, siz, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0)
+
+#define gDPLoadImageBlockT(pkt, timg, fmt, siz, width, height) \
+{ \
+	gDPSetTextureImage(pkt, fmt, siz, 1, timg); \
+	gDPTileSync(pkt); \
+	gDPSetTile(pkt, fmt, siz, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0); \
+	gDPLoadSync(pkt); \
+	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, (width)*(height)-1, CALC_DXT(width, siz##_BYTES)); \
+}
+
+#define gDPLoadImageBlock(pkt, timg, fmt, siz, width, height) \
+{ \
+	gDPSetTextureImage(pkt, fmt, siz, 1, timg); \
+	gDPLoadSync(pkt); \
+	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, (width)*(height)-1, CALC_DXT(width, siz##_BYTES)); \
+}
+
+#define gDPSetImageBlock(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt) \
+{ \
+	gDPTileSync(pkt); \
+	gDPSetTile(pkt, fmt, siz, ((((width) * siz##_LINE_BYTES)+7)>>3), 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks, shifts); \
+	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC, ((height)-1) << G_TEXTURE_IMAGE_FRAC); \
+}
+
 #ifndef gsSP2Triangles
 #define gsSP2Triangles(v00, v01, v02, flag0, v10, v11, v12, flag1) \
 	gsSP1Triangle(v00, v01, v02, flag0), \
@@ -49,6 +107,9 @@
 	gsDPLoadBlock(G_TX_LOADTILE, 0, 0, (((width)*(height)+3)>>2)-1, CALC_DXT_4b(width)), \
 	gsDPSetTile(fmt, G_IM_SIZ_4b, ((((width)>>1)+7)>>3), 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks, shifts), \
 	gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC, ((height)-1) << G_TEXTURE_IMAGE_FRAC)
+
+#define gsDPSetLoadTile(fmt, siz) \
+	gsDPSetTile(fmt, siz, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0)
 
 #define gsDPLoadImageBlockT(timg, fmt, siz, width, height) \
 	gsDPSetTextureImage(fmt, siz, 1, timg), \

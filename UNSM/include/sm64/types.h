@@ -42,4 +42,8 @@ typedef uintptr_t O_SCRIPT;
 typedef int PRGCALL(SHORT arg, int code);
 typedef void OBJCALL(void);
 
+typedef struct dummy0 DUMMY0;
+typedef struct dummy1 DUMMY1;
+typedef struct dummy2 DUMMY2;
+
 #endif /* __SM64_TYPES_H__ */

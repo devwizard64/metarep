@@ -443,7 +443,7 @@ void shape_8037C3D0(S_OBJECT *shp)
 {
 	s_create_object(NULL, shp, NULL, vecf_0, vecs_0, vecf_1);
 	shape_link(&sobj_list, &shp->s);
-	shp->s.flag &= ~1;
+	shp->s.flag &= ~S_FLAG_ACTIVE;
 }
 
 void shape_8037C448(S_OBJECT *shp, SHAPE *shape, VECF pos, VECS ang)

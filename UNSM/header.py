@@ -116,9 +116,6 @@ str_map = """
 #define BG_MOVE                 1
 #define BG_0002                 2
 #define BG_WALL_Z               8
-
-#define BGLIST_MAX              7000
-#define BGFACE_MAX              2300
 """
 
 str_tag = """
@@ -133,6 +130,16 @@ str_tag = """
 
 #define TAG(tag, ay, px, py, pz, arg) \\
 	(TAG)((TAG_START+TAG_##tag) | (ay) << 9), px, py, pz, arg
+"""
+
+str_hud = """
+#define HUD_LIFE                0x0001
+#define HUD_COIN                0x0002
+#define HUD_STAR                0x0004
+#define HUD_METER               0x0008
+#define HUD_KEY                 0x0010
+#define HUD_TIME                0x0040
+#define HUD_8000                0x8000
 """
 
 str_scene = """
@@ -769,12 +776,12 @@ struct_wave = [
 ]
 
 struct_dprint = [
-	[0x3C, "struct", "dprint", [
-		(0x00, table.sym_var("x", "s32")),
-		(0x04, table.sym_var("y", "s32")),
-		(0x08, table.sym_var("len", "s16")),
-		(0x0A, table.sym_var("str", "char", "[50]")),
-	]],
+	# [0x3C, "struct", "dprint", [
+	# 	(0x00, table.sym_var("x", "int")),
+	# 	(0x04, table.sym_var("y", "int")),
+	# 	(0x08, table.sym_var("len", "s16")),
+	# 	(0x0A, table.sym_var("str", "char", "[50]")),
+	# ]],
 ]
 
 struct_message = [
@@ -813,14 +820,14 @@ struct_hud = [
 		(0x06, table.sym_var("power", "s16")),
 		(0x08, table.sym_var("key", "s16")),
 		(0x0A, table.sym_var("flag", "s16")),
-		(0x0C, table.sym_var("timer", "u16")),
+		(0x0C, table.sym_var("time", "u16")),
 	]],
-	[0x0C, "struct", "meter", [
-		(0x00, table.sym_var("mode", "s8")),
-		(0x02, table.sym_var("x", "s16")),
-		(0x04, table.sym_var("y", "s16")),
-		(0x08, table.sym_var("scale", "f32")),
-	]],
+	# [0x0C, "struct", "meter", [
+	# 	(0x00, table.sym_var("state", "s8")),
+	# 	(0x02, table.sym_var("x", "s16")),
+	# 	(0x04, table.sym_var("y", "s16")),
+	# 	(0x08, table.sym_var("scale", "float")),
+	# ]],
 ]
 
 struct_scene = [

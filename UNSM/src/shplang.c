@@ -19,7 +19,7 @@ static uintptr_t s_stack[16];
 static SHAPE *shp_stack[32];
 static s16 shp_sp;
 static s16 s_sp;
-static s16 shp_fp;
+UNUSED static s16 shp_fp;
 static s16 s_fp;
 static S_SCRIPT *s_pc;
 

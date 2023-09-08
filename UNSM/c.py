@@ -1248,10 +1248,10 @@ def g_setcombine(argv):
 def g_settile(argv):
 	w = [(ultra.uw(), ultra.uw()) for _ in range(5)]
 	c = tuple([x[0] >> 24 for x in w])
+	c0_fmt, c0_siz, c0_line, c0_tmem, c0_tile, c0_palette, c0_cmt, \
+		c0_maskt, c0_shiftt, c0_cms, c0_masks, c0_shifts = \
+		ultra.c.gx_settile(w[0][0], w[0][1])
 	if c == (0xF5, 0xE6, 0xF3, 0xF5, 0xF2):
-		c0_fmt, c0_siz, c0_line, c0_tmem, c0_tile, c0_palette, c0_cmt, \
-			c0_maskt, c0_shiftt, c0_cms, c0_masks, c0_shifts = \
-			ultra.c.gx_settile(w[0][0], w[0][1])
 		c2_tile, c2_uls, c2_ult, c2_lrs, c2_dxt = \
 			ultra.c.gx_tile(w[2][0], w[2][1])
 		c3_fmt, c3_siz, c3_line, c3_tmem, c3_tile, c3_palette, c3_cmt, \
@@ -1300,10 +1300,17 @@ def g_settile(argv):
 				cms, cmt,
 				masks, maskt, shifts, shiftt,
 			)
-			if siz == 0:
-				return ("DPLoadTextureBlock_4bN", fmt) + arg
+			if siz == 0: return ("DPLoadTextureBlock_4bN", fmt) + arg
 			siz = ultra.c.g_im_siz(siz)
 			return ("DPLoadTextureBlockN", fmt, siz) + arg
+	ultra.script.c_addr -= 8*4
+	if (
+			c0_fmt, c0_siz, c0_line, c0_tmem, c0_tile, c0_palette,
+			c0_cmt, c0_maskt, c0_shiftt, c0_cms, c0_masks, c0_shifts,
+	) == (
+		0, 0, 7, 0,
+		0, 0, 0, 0, 0, 0,
+	): return ("DPSetLoadTile", fmt, siz)
 	return None
 
 gfx_table = {

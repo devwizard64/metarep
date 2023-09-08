@@ -185,18 +185,26 @@ float *vecf_normalize(VECF vf)
 
 void mtxf_cpy(MTXF dst, MTXF src)
 {
+#ifdef sgi
 	register int i;
 	register int *d = (int *)dst;
 	register int *s = (int *)src;
 	for (i = 0; i < 16; i++) *d++ = *s++;
+#else
+	bcopy(src, dst, sizeof(MTXF));
+#endif
 }
 
 void mtxf_identity(MTXF mf)
 {
+#ifdef sgi
 	register int i;
 	register float *f;
 	for (i = 0, f = &mf[0][1]; i < 14; i++, f++) *f = 0;
 	for (i = 0, f = &mf[0][0]; i < 4; i++, f += 5) *f = 1;
+#else
+	guMtxIdentF(mf);
+#endif
 }
 
 void mtxf_pos(MTXF mf, VECF pos)
@@ -454,6 +462,7 @@ void mtxf_transform(MTXF mf, VECS vs)
 
 void mtxf_to_mtx(Mtx *m, MTXF mf)
 {
+#ifdef sgi
 	int x;
 	register int i;
 	register short *h = (short *)m;
@@ -470,6 +479,9 @@ void mtxf_to_mtx(Mtx *m, MTXF mf)
 		*l++ = x >>  0;
 #endif
 	}
+#else
+	guMtxF2L(mf, m);
+#endif
 }
 
 void mtx_az(Mtx *m, SHORT az)

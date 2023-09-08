@@ -41,7 +41,7 @@ CODE_OBJ := \
 	$(BUILD)/src/snow.o $(BUILD)/src/snow.data.o \
 	$(BUILD)/src/lava.o $(BUILD)/src/lava.data.o \
 	$(BUILD)/src/tag.o \
-	$(BUILD)/src/hud.o $(BUILD)/src/hud.data.o \
+	$(BUILD)/src/hud.o \
 	$(BUILD)/src/object_b.o $(BUILD)/src/object_b.data.o \
 	$(BUILD)/src/object_c.o $(BUILD)/src/object_c.data.o
 
@@ -106,6 +106,7 @@ IDO_C := \
 	$(BUILD)/src/objshape.o \
 	$(BUILD)/src/dprint.o \
 	$(BUILD)/src/tag.o \
+	$(BUILD)/src/hud.o \
 	$(BUILD)/src/math.o \
 	$(BUILD)/src/shape.o \
 	$(BUILD)/src/shplang.o \

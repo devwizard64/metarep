@@ -202,9 +202,9 @@ def g_mtx(argv):
 	m = aw()
 	if not m.startswith("0x"): m = "&" + m
 	p = w0 >> 16 & 0xFF
-	a = "G_MTX_PROJECTION" if p & 0x01 else "G_MTX_MODELVIEW"
-	b = "G_MTX_LOAD"       if p & 0x02 else "G_MTX_MUL"
-	c = "G_MTX_PUSH"       if p & 0x04 else "G_MTX_NOPUSH"
+	a = "G_MTX_PROJECTION" if p & 1 else "G_MTX_MODELVIEW"
+	b = "G_MTX_LOAD"       if p & 2 else "G_MTX_MUL"
+	c = "G_MTX_PUSH"       if p & 4 else "G_MTX_NOPUSH"
 	return ("SPMatrix", m, (a, b, c))
 
 def g_vtx(argv):
@@ -215,8 +215,8 @@ def g_vtx(argv):
 		v = ultra.fmt_addr(w1, addr=True, array=(imm, 0x10))
 	else:
 		v = ultra.fmt_addr(w1)
-	n  = "%d" % (w0 >>  4 & 0x0FFF)
-	v0 = "%d" % (w0 >> 16 & 0x0F)
+	n  = "%d" % (w0 >>  4 & 0xFFF)
+	v0 = "%d" % (w0 >> 16 & 15)
 	return ("SPVertex", v, n, v0)
 
 def g_dl(argv):
@@ -274,8 +274,8 @@ def g_moveword(argv):
 	return None
 
 def g_texture_prc(s, t, w0):
-	level = w0 >> 11 & 0x07
-	tile  = w0 >>  8 & 0x07
+	level = w0 >> 11 & 7
+	tile  = w0 >>  8 & 7
 	on    = ("G_OFF", "G_ON")[w0 & 0xFF]
 	level = g_tx_lod(level)
 	tile  = g_tx_tile(tile)
@@ -368,25 +368,25 @@ def g_perspnorm(argv):
 	return ("SPPerspNormalize", s)
 
 def gx_settimg(w0, w1):
-	return (w0 >> 21 & 0x07, w0 >> 19 & 0x03, (w0 & 0x0FFF) + 1, w1)
+	return (w0 >> 21 & 7, w0 >> 19 & 3, (w0 & 0xFFF) + 1, w1)
 
 def gx_settile(w0, w1):
 	return (
-		w0 >> 21 &  0x07, # fmt
-		w0 >> 19 &  0x03, # siz
-		w0 >> 9  & 0x1FF, # line
+		w0 >> 21 & 7, # fmt
+		w0 >> 19 & 3, # siz
+		w0 >>  9 & 0x1FF, # line
 		w0       & 0x1FF, # tmem
-		w1 >> 24 &  0x07, # tile
-		w1 >> 20 &  0x0F, # palette
-		w1 >> 18 & 0x03, w1 >> 14 & 0x0F, w1 >> 10 & 0x0F, # cmt maskt shiftt
-		w1 >>  8 & 0x03, w1 >>  4 & 0x0F, w1       & 0x0F, # cms masks shifts
+		w1 >> 24 & 7, # tile
+		w1 >> 20 & 15, # palette
+		w1 >> 18 & 3, w1 >> 14 & 15, w1 >> 10 & 15, # cmt maskt shiftt
+		w1 >>  8 & 3, w1 >>  4 & 15, w1       & 15, # cms masks shifts
 	)
 
 def gx_tile(w0, w1):
 	return (
-		w1 >> 24 & 0x07,
-		w0 >> 12 & 0x0FFF, w0 & 0x0FFF,
-		w1 >> 12 & 0x0FFF, w1 & 0x0FFF,
+		w1 >> 24 & 7,
+		w0 >> 12 & 0xFFF, w0 & 0xFFF,
+		w1 >> 12 & 0xFFF, w1 & 0xFFF,
 	)
 
 def timgproc(addr):

@@ -7841,7 +7841,7 @@ sym_E0_t_code = {
 	0x802D7070: table.sym("message_802D7070", table.GLOBL),
 	0x802D7174: table.sym("message_802D7174"),
 	0x802D7280: table.sym("message_802D7280"),
-	0x802D7384: table.sym("message_802D7384", table.GLOBL),
+	0x802D7384: table.sym_fnc("message_802D7384", flag=table.GLOBL),
 	0x802D7480: table.sym("message_802D7480"), # unused
 	0x802D75DC: table.sym("message_802D75DC"),
 	0x802D76C8: table.sym("message_802D76C8"),
@@ -7890,7 +7890,7 @@ sym_E0_t_code = {
 	0x802DAAE4: table.sym("message_802DAAE4", table.GLOBL),
 	0x802DAB58: table.sym_fnc("message_802DAB58", flag=table.GLOBL),
 	0x802DAD54: table.sym("message_802DAD54"),
-	0x802DB08C: table.sym("message_802DB08C", table.GLOBL),
+	0x802DB08C: table.sym_fnc("message_802DB08C", flag=table.GLOBL),
 	0x802DB350: table.sym_fnc("message_802DB350", flag=table.GLOBL),
 	0x802DB368: table.sym("message_802DB368"),
 	0x802DB3B8: table.sym("message_802DB3B8"),
@@ -8022,22 +8022,38 @@ sym_E0_t_code = {
 	0x802E2C5C: table.sym_fnc("L802E2C5C", flag=table.GLOBL|table.LOCAL),
 
 	# src/hud.c
-	0x802E2CF0: table.sym("hud_802E2CF0"),
-	0x802E2E58: table.sym("hud_802E2E58"),
-	0x802E30B4: table.sym("hud_802E30B4"),
-	0x802E3214: table.sym("hud_802E3214"),
-	0x802E33B8: table.sym("hud_802E33B8"),
-	0x802E3430: table.sym("hud_802E3430"),
-	0x802E34E4: table.sym("hud_802E34E4"),
-	0x802E352C: table.sym("hud_802E352C"),
-	0x802E3654: table.sym("hud_802E3654"),
-	0x802E3744: table.sym("hud_802E3744"),
-	0x802E37A8: table.sym("hud_802E37A8"),
-	0x802E380C: table.sym("hud_802E380C"),
-	0x802E38E4: table.sym("hud_802E38E4"),
-	0x802E395C: table.sym("hud_802E395C"),
-	0x802E3B1C: table.sym("hud_802E3B1C", table.GLOBL),
-	0x802E3B3C: table.sym("hud_802E3B3C"),
+	0x802E2CF0: table.sym_fnc("hud_draw_char", arg=(
+		"unsigned int x",
+		"unsigned int y",
+		"u16 *txt",
+	)),
+	0x802E2E58: table.sym_fnc("hud_draw_8x8", arg=(
+		"unsigned int x",
+		"unsigned int y",
+		"u16 *txt",
+	)),
+	0x802E30B4: table.sym_fnc("meter_draw_n", arg=(
+		"int power",
+	)),
+	0x802E3214: table.sym_fnc("meter_draw", arg=(
+		"int power",
+	)),
+	0x802E33B8: table.sym_fnc("meter_alert"),
+	0x802E3430: table.sym_fnc("meter_show"),
+	0x802E34E4: table.sym_fnc("meter_hide"),
+	0x802E352C: table.sym_fnc("meter_update", arg=(
+		"SHORT power",
+	)),
+	0x802E3654: table.sym_fnc("hud_draw_power"),
+	0x802E3744: table.sym_fnc("hud_draw_life"),
+	0x802E37A8: table.sym_fnc("hud_draw_coin"),
+	0x802E380C: table.sym_fnc("hud_draw_star"),
+	0x802E38E4: table.sym_fnc("hud_draw_key"),
+	0x802E395C: table.sym_fnc("hud_draw_time"),
+	0x802E3B1C: table.sym_fnc("hud_set_camera", arg=(
+		"SHORT flag",
+	), flag=table.GLOBL),
+	0x802E3B3C: table.sym_fnc("hud_draw_camera"),
 	0x802E3D2C: table.sym_fnc("hud_draw", flag=table.GLOBL),
 
 	# src/object_b.c
@@ -9564,7 +9580,7 @@ sym_E0_t_code = {
 	0x80332353: table.sym("map_obj_table+0x03"), # shape
 	0x80332354: table.sym("map_obj_table+0x04"), # script
 
-	0x803325F0: table.sym("meter+0x00"), # mode
+	0x803325F0: table.sym("meter+0x00"), # state
 	0x803325F2: table.sym("meter+0x02"), # x
 	0x803325F4: table.sym("meter+0x04"), # y
 
@@ -9648,7 +9664,7 @@ sym_E0_t_code = {
 	0x8033B266: table.sym("hud+0x06"), # power
 	0x8033B268: table.sym("hud+0x08"), # key
 	0x8033B26A: table.sym("hud+0x0A"), # flag
-	0x8033B26C: table.sym("hud+0x0C"), # timer
+	0x8033B26C: table.sym("hud+0x0C"), # time
 
 	0x8033B364: table.sym("sobj_mirror+0x14"), # shape
 	0x8033B368: table.sym("sobj_mirror+0x18"), # scene
@@ -10641,11 +10657,11 @@ sym_E0_d_code = {
 	0x80332350: table.sym_var("map_obj_table", "MAP_OBJ", "[]"),
 
 	# src/hud.c
-	0x803325F0: table.sym_var("meter", "METER", flag=table.GLOBL),
-	0x803325FC: table.sym_var("hud_803325FC", "s32", flag=table.GLOBL|ultra.DALIGN),
-	0x80332600: table.sym_var("hud_80332600", "s16", flag=table.GLOBL|ultra.DALIGN), # unused
-	0x80332604: table.sym_var("hud_80332604", "s16", flag=table.GLOBL|ultra.DALIGN), # unused
-	0x80332608: table.sym_var("hud_80332608", "s16", flag=table.GLOBL|ultra.DALIGN),
+	0x803325F0: table.sym_var("meter", "METER"),
+	0x803325FC: table.sym_var("hud_timer", "int", flag=ultra.DALIGN),
+	0x80332600: table.sym_var("hud_80332600", "s16", flag=ultra.DALIGN), # unused
+	0x80332604: table.sym_var("hud_80332604", "s16", flag=ultra.DALIGN), # unused
+	0x80332608: table.sym_var("hud_camera", "s16", flag=ultra.DALIGN),
 
 	# src/object_b.c
 	0x80332610: table.sym_var("object_b_80332610", "s8", flag=table.GLOBL|ultra.DALIGN),
@@ -12329,7 +12345,7 @@ sym_E0_d_code = {
 	0x8036143C: table.sym_var("lava_8036143C", "s32", flag=table.GLOBL),
 
 	# src/hud.c
-	0x80361440: table.sym_var("hud_80361440", "s16", flag=table.GLOBL),
+	0x80361440: table.sym_var("meter_power", "s16"),
 
 	# src/object_b.c
 	0x80361450: table.sym_var("object_b_80361450", "BGFACE *", flag=table.GLOBL),

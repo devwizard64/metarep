@@ -1,5 +1,8 @@
 #include <sm64.h>
 
+#define BGLIST_MAX              7000
+#define BGFACE_MAX              2300
+
 static int bgload_8038BE90;
 BGROOT statbg_root[16][16];
 BGROOT movebg_root[16][16];

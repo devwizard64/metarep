@@ -500,20 +500,20 @@ static void draw_shadow(S_SHADOW *shp)
 
 static int sobj_isvisible(S_OBJECT *shp, MTXF mf)
 {
-	SHORT d;
-	SHORT y;
+	SHORT dist;
+	SHORT ang;
 	S_CULL *cull;
 	float x;
 	if (shp->s.flag & S_FLAG_OBJHIDE) return FALSE;
 	cull = (S_CULL *)shp->shape;
-	y = (s_persp->fovy/2+1) * 0x8000/180 + 0.5F;
-	x = -mf[3][2] * sin(y)/cos(y);
-	if (cull && cull->s.type == S_TYPE_CULL)    d = (float)cull->dist;
-	else                                        d = 300;
-	if (mf[3][2] >   -100+(float)d) return FALSE;
-	if (mf[3][2] < -20000-(float)d) return FALSE;
-	if (mf[3][0] >      x+(float)d) return FALSE;
-	if (mf[3][0] <     -x-(float)d) return FALSE;
+	ang = (s_persp->fovy/2+1) * 0x8000/180 + 0.5F;
+	x = -mf[3][2] * sin(ang)/cos(ang);
+	if (cull && cull->s.type == S_TYPE_CULL)    dist = (float)cull->dist;
+	else                                        dist = 300;
+	if (mf[3][2] >   -100+(float)dist) return FALSE;
+	if (mf[3][2] < -20000-(float)dist) return FALSE;
+	if (mf[3][0] >      x+(float)dist) return FALSE;
+	if (mf[3][0] <     -x-(float)dist) return FALSE;
 	return TRUE;
 }
 

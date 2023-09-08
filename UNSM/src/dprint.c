@@ -1,5 +1,14 @@
 #include <sm64.h>
 
+typedef struct dprint
+{
+	int x;
+	int y;
+	s16 len;
+	char str[50];
+}
+DPRINT;
+
 static DPRINT *dprint_table[50];
 static s16 dprint_index = 0;
 
@@ -221,9 +230,7 @@ static void dprint_draw_char(int x, int y, int n)
 	ux = sx;
 	uy = sy;
 	gSPTextureRectangle(
-		gfx_ptr++,
-		(ux     ) << 2, (uy     ) << 2,
-		(ux+16-1) << 2, (uy+16-1) << 2,
+		gfx_ptr++, ux << 2, uy << 2, (ux+16-1) << 2, (uy+16-1) << 2,
 		G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
 	);
 }

@@ -795,7 +795,8 @@ def s_anime(self, argv):
 		# val
 		elif t == 1:
 			c.append("\t.short %s\n" % ", ".join([
-				"0x%04X" % ultra.uh()
+				# "0x%04X" % ultra.uh()
+				"%6d" % ultra.sh()
 				for _ in range(min(8, (a_siz-self.c_dst)//2))
 			]))
 			if self.c_addr == a_siz: c.append("\n")
