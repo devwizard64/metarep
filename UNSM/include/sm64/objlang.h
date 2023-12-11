@@ -3,144 +3,145 @@
 
 #include <sm64/defshape.h>
 #include <sm64/defobject.h>
+#include <sm64/defobjlang.h>
 #include <sm64/script_s.h>
 
 #define oInit(type) \
-	_C(0x00, type, 0)
+	_C(O_CMD_INIT, type, 0)
 #define oSleep(time) \
-	_C(0x01, 0, time)
+	_C(O_CMD_SLEEP, 0, time)
 #define oCall(script) \
-	_C(0x02, 0, 0); \
+	_C(O_CMD_CALL, 0, 0); \
 	_P(script)
 #define oReturn() \
-	_C(0x03, 0, 0)
+	_C(O_CMD_RETURN, 0, 0)
 #define oJump(script) \
-	_C(0x04, 0, 0); \
+	_C(O_CMD_JUMP, 0, 0); \
 	_P(script)
 #define oFor(count) \
-	_C(0x05, 0, count)
+	_C(O_CMD_FOR, 0, count)
 #define oFend() \
-	_C(0x06, 0, 0)
+	_C(O_CMD_FEND, 0, 0)
 #define oFcontinue() \
-	_C(0x07, 0, 0)
+	_C(O_CMD_FCONTINUE, 0, 0)
 #define oWhile() \
-	_C(0x08, 0, 0)
+	_C(O_CMD_WHILE, 0, 0)
 #define oWend() \
-	_C(0x09, 0, 0)
+	_C(O_CMD_WEND, 0, 0)
 #define oExit() \
-	_C(0x0A, 0, 0)
+	_C(O_CMD_EXIT, 0, 0)
 #define oEnd() \
-	_C(0x0B, 0, 0)
+	_C(O_CMD_END, 0, 0)
 #define oCallback(callback) \
-	_C(0x0C, 0, 0); \
+	_C(O_CMD_CALLBACK, 0, 0); \
 	_P(callback)
 #define oAddF(mem, val) \
-	_C(0x0D, mem, val)
+	_C(O_CMD_ADDF, mem, val)
 #define oSetF(mem, val) \
-	_C(0x0E, mem, val)
+	_C(O_CMD_SETF, mem, val)
 #define oAddI(mem, val) \
-	_C(0x0F, mem, val)
+	_C(O_CMD_ADDI, mem, val)
 #define oSetI(mem, val) \
-	_C(0x10, mem, val)
+	_C(O_CMD_SETI, mem, val)
 #define oSetFlag(mem, val) \
-	_C(0x11, mem, val)
+	_C(O_CMD_SETFLAG, mem, val)
 #define oClrFlag(mem, val) \
-	_C(0x12, mem, val)
-#define oSetRandA(mem, val, shift) \
-	_C(0x13, mem, val); \
+	_C(O_CMD_CLRFLAG, mem, val)
+#define oSetRandA(mem, add, shift) \
+	_C(O_CMD_SETRANDA, mem, add); \
 	_H(shift, 0)
-#define oSetRandF(mem, val, mul) \
-	_C(0x14, mem, val); \
+#define oSetRandF(mem, add, mul) \
+	_C(O_CMD_SETRANDF, mem, add); \
 	_H(mul, 0)
-#define oSetRandI(mem, val, mul) \
-	_C(0x15, mem, val); \
+#define oSetRandI(mem, add, mul) \
+	_C(O_CMD_SETRANDI, mem, add); \
 	_H(mul, 0)
-#define oAddRandF(mem, val, mul) \
-	_C(0x16, mem, val); \
+#define oAddRandF(mem, add, mul) \
+	_C(O_CMD_ADDRANDF, mem, add); \
 	_H(mul, 0)
-#define oAddRandA(mem, val, shift) \
-	_C(0x17, mem, val); \
+#define oAddRandA(mem, add, shift) \
+	_C(O_CMD_ADDRANDA, mem, add); \
 	_H(shift, 0)
-/* 0x18 */
-/* 0x19 */
-/* 0x1A */
+/* 24 */
+/* 25 */
+/* 26 */
 #define oShape(shape) \
-	_C(0x1B, 0, shape)
-#define oObject(shape, script) \
-	_C(0x1C, 0, 0); \
+	_C(O_CMD_SHAPE, 0, shape)
+#define oMakeObj(shape, script) \
+	_C(O_CMD_MAKEOBJ, 0, 0); \
 	_W(shape); \
 	_P(script)
 #define oDestroy() \
-	_C(0x1D, 0, 0)
+	_C(O_CMD_DESTROY, 0, 0)
 #define oGround() \
-	_C(0x1E, 0, 0)
+	_C(O_CMD_GROUND, 0, 0)
 #define oMemAddF(mem, a, b) \
-	_B(0x1F, mem, a, b)
+	_B(O_CMD_MEMADDF, mem, a, b)
 #define oMemAddI(mem, a, b) \
-	_B(0x20, mem, a, b)
+	_B(O_CMD_MEMADDI, mem, a, b)
 #define oBillboard() \
-	_C(0x21, 0, 0)
+	_C(O_CMD_BILLBOARD, 0, 0)
 #define oShapeHide() \
-	_C(0x22, 0, 0)
-#define oColHit(radius, height) \
-	_C(0x23, 0, 0); \
+	_C(O_CMD_SHAPEHIDE, 0, 0)
+#define oHit(radius, height) \
+	_C(O_CMD_HIT, 0, 0); \
 	_H(radius, height)
-/* 0x24 */
+/* 36 */
 #define oMemSleep(mem) \
-	_C(0x25, mem, 0)
+	_C(O_CMD_MEMSLEEP, mem, 0)
 #define oFor2(count) \
-	_C(0x26, count, 0)
+	_C(O_CMD_FOR2, count, 0)
 #define oPtr(mem, ptr) \
-	_C(0x27, mem, 0); \
+	_C(O_CMD_PTR, mem, 0); \
 	_P(ptr)
 #define oAnime(anime) \
-	_C(0x28, anime, 0)
-#define oObjectArg(shape, script, arg) \
-	_C(0x29, 0, arg); \
+	_C(O_CMD_ANIME, anime, 0)
+#define oMakeObjCode(shape, script, code) \
+	_C(O_CMD_MAKEOBJCODE, 0, code); \
 	_W(shape); \
 	_P(script)
 #define oMap(map) \
-	_C(0x2A, 0, 0); \
+	_C(O_CMD_MAP, 0, 0); \
 	_P(map)
-#define oColOff(radius, height, offset) \
-	_C(0x2B, 0, 0); \
+#define oHitOff(radius, height, offset) \
+	_C(O_CMD_HITOFF, 0, 0); \
 	_H(radius, height); \
 	_H(offset, 0)
-#define oChild(shape, script) \
-	_C(0x2C, 0, 0); \
+#define oMakeChild(shape, script) \
+	_C(O_CMD_MAKECHILD, 0, 0); \
 	_W(shape); \
 	_P(script)
-#define oOrigin() \
-	_C(0x2D, 0, 0)
-#define oColDmg(radius, height) \
-	_C(0x2E, 0, 0); \
+#define oSavePos() \
+	_C(O_CMD_SAVEPOS, 0, 0)
+#define oDmg(radius, height) \
+	_C(O_CMD_DMG, 0, 0); \
 	_H(radius, height)
-#define oColType(type) \
-	_C(0x2F, 0, 0); \
-	_W(type)
-#define oPhysics(wall_r, gravity, bounce, drag, friction, density, g, h) \
-	_C(0x30, 0, 0); \
-	_H(wall_r, gravity); \
+#define oHitCode(code) \
+	_C(O_CMD_HITCODE, 0, 0); \
+	_W(code)
+#define oPhysics(radius, gravity, bounce, drag, friction, density) \
+	_C(O_CMD_PHYSICS, 0, 0); \
+	_H(radius, gravity); \
 	_H(bounce, drag); \
 	_H(friction, density); \
-	_H(g, h)
-#define oColArg(arg) \
-	_C(0x31, 0, 0); \
-	_W(arg)
-#define oScale(scale) \
-	_C(0x32, 0, scale)
-#define oMemClrFlag(mem, flag) \
-	_C(0x33, mem, 0); \
+	_H(0, 0)
+#define oHitFlag(flag) \
+	_C(O_CMD_HITFLAG, 0, 0); \
 	_W(flag)
-#define oInc(mem, time) \
-	_C(0x34, mem, time)
+#define oScale(scale) \
+	_C(O_CMD_SCALE, 0, scale)
+#define oMemClrParentFlag(mem, flag) \
+	_C(O_CMD_MEMCLRPARENTFLAG, mem, 0); \
+	_W(flag)
+#define oInc(mem, period) \
+	_C(O_CMD_INC, mem, period)
 #define oShapeDisable() \
-	_C(0x35, 0, 0)
+	_C(O_CMD_SHAPEDISABLE, 0, 0)
 #define oSetS(mem, val) \
-	_C(0x36, 0, 0); \
+	_C(O_CMD_SETS, 0, 0); \
 	_W(val)
 #define oSplash(splash) \
-	_C(0x37, 0, 0); \
+	_C(O_CMD_SPLASH, 0, 0); \
 	_P(splash)
 
 #endif /* __SM64_OBJLANG_H__ */

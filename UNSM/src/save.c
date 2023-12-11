@@ -12,12 +12,12 @@ static u8 save_mid_port;
 static char save_data_dirty;
 static char save_file_dirty;
 
-u8 save_course  = 0;
-u8 save_level   = 0;
+u8 save_course = 0;
+u8 save_level = 0;
 u8 save_hiscore = FALSE;
 u8 save_myscore = FALSE;
-u8 save_star    = 0;
-u8 save_jump    = FALSE;
+u8 save_star = 0;
+u8 save_jump = FALSE;
 
 s8 course_table[] =
 {
@@ -72,7 +72,7 @@ static int save_rd(void *data, int size)
 	if (eeprom_status != 0)
 	{
 		int n = 4;
-		int address = ((uintptr_t)data-(uintptr_t)&save) / 8;
+		int address = ((unsigned long)data-(unsigned long)&save) / 8;
 		do
 		{
 			n--;
@@ -89,7 +89,7 @@ static int save_wr(void *data, int size)
 	if (eeprom_status != 0)
 	{
 		int n = 4;
-		int address = ((uintptr_t)data-(uintptr_t)&save) / 8;
+		int address = ((unsigned long)data-(unsigned long)&save) / 8;
 		do
 		{
 			n--;
@@ -151,39 +151,39 @@ static void save_data_erase(void)
 	save_data_write();
 }
 
-static int save_time_get(int file, int course)
+static int save_get_time(int file, int course)
 {
 	return save.data[0].time[file] >> (2*course) & 3;
 }
 
-static void save_time_set(int file, int course, int time)
+static void save_set_time(int file, int course, int time)
 {
 	unsigned int mask = 3 << (2*course);
 	save.data[0].time[file] &= ~mask;
 	save.data[0].time[file] |= time << (2*course);
 }
 
-static void save_time_update(int file, int course)
+static void save_update_time(int file, int course)
 {
 	int i;
 	unsigned int t;
-	unsigned int time = save_time_get(file, course);
+	unsigned int time = save_get_time(file, course);
 	if (time > 0)
 	{
 		for (i = 0; i < 4; i++)
 		{
-			t = save_time_get(i, course);
-			if (t < time) save_time_set(i, course, t+1);
+			t = save_get_time(i, course);
+			if (t < time) save_set_time(i, course, t+1);
 		}
-		save_time_set(file, course, 0);
+		save_set_time(file, course, 0);
 		save_data_dirty = TRUE;
 	}
 }
 
-static void save_time_update_all(int file)
+static void save_update_time_all(int file)
 {
 	int i;
-	for (i = 0; i < 15; i++) save_time_update(file, i);
+	for (i = 0; i < 15; i++) save_update_time(file, i);
 }
 
 static void save_file_recover(int file, int src)
@@ -208,7 +208,7 @@ void save_file_write(int file)
 
 void save_file_erase(int file)
 {
-	save_time_update_all(file);
+	save_update_time_all(file);
 	bzero(&save.file[file][0], sizeof(SAVE_FILE));
 	save_file_dirty = TRUE;
 	save_file_write(file);
@@ -217,7 +217,7 @@ void save_file_erase(int file)
 void save_file_copy(int src, int dst)
 {
 	UNUSED int i;
-	save_time_update_all(dst);
+	save_update_time_all(dst);
 	bcopy(&save.file[src][0], &save.file[dst][0], sizeof(SAVE_FILE));
 	save_file_dirty = TRUE;
 	save_file_write(dst);
@@ -256,7 +256,7 @@ void save_init(void)
 void save_reset(void)
 {
 	bcopy(
-		&save.file[save_index-1][1], &save.file[save_index-1][0],
+		&save.file[file_index-1][1], &save.file[file_index-1][0],
 		sizeof(SAVE_FILE)
 	);
 	bcopy(&save.data[1], &save.data[0], sizeof(SAVE_DATA));
@@ -266,24 +266,24 @@ void save_reset(void)
 
 void save_set(SHORT coin, SHORT level)
 {
-	int file = save_index-1;
+	int file = file_index-1;
 	int course = course_index-1;
 	int mask = 1 << level;
-	UNUSED unsigned int flag = save_flag_get();
+	UNUSED unsigned int flag = save_get_flag();
 	save_course = course+1;
 	save_level  = level+1;
 	save_hiscore = FALSE;
 	save_myscore = FALSE;
 	if (course >= 0 && course < 15)
 	{
-		if (coin > (u16)(save_hiscore_get(course) & 0xFFFF))
+		if (coin > save_hiscore_coin(course))
 		{
 			save_hiscore = TRUE;
 		}
-		if (save_file_coin_get(file, course) < coin)
+		if (save_file_get_coin(file, course) < coin)
 		{
 			save.file[file][0].coin[course] = coin;
-			save_time_update(file, course);
+			save_update_time(file, course);
 			save_myscore = TRUE;
 			save_file_dirty = TRUE;
 		}
@@ -291,23 +291,23 @@ void save_set(SHORT coin, SHORT level)
 	switch (stage_index)
 	{
 	case STAGE_BITDWA:
-		if (!(save_flag_get() & (SAVE_000010|SAVE_000040)))
+		if (!(save_get_flag() & (SAVE_KEY1|SAVE_KEYDOOR1)))
 		{
-			save_flag_set(SAVE_000010);
+			save_set_flag(SAVE_KEY1);
 		}
 		break;
 	case STAGE_BITFSA:
-		if (!(save_flag_get() & (SAVE_000020|SAVE_000080)))
+		if (!(save_get_flag() & (SAVE_KEY2|SAVE_KEYDOOR2)))
 		{
-			save_flag_set(SAVE_000020);
+			save_set_flag(SAVE_KEY2);
 		}
 		break;
 	case STAGE_BITSA:
 		break;
 	default:
-		if (!(save_file_star_get(file, course) & mask))
+		if (!(save_file_get_star(file, course) & mask))
 		{
-			save_file_star_set(file, course, mask);
+			save_file_set_star(file, course, mask);
 		}
 		break;
 	}
@@ -318,7 +318,7 @@ int save_file_isactive(int file)
 	return (save.file[file][0].flag & SAVE_ACTIVE) != 0;
 }
 
-int save_hiscore_get(int course)
+u32 save_hiscore_get(int course)
 {
 	int i;
 	int max_coin = -1;
@@ -326,10 +326,10 @@ int save_hiscore_get(int course)
 	int file = 0;
 	for (i = 0; i < 4; i++)
 	{
-		if (save_file_star_get(i, course) != 0)
+		if (save_file_get_star(i, course) != 0)
 		{
-			int coin = save_file_coin_get(i, course);
-			int time = save_time_get(i, course);
+			int coin = save_file_get_coin(i, course);
+			int time = save_get_time(i, course);
 			if (coin > max_coin || (coin == max_coin && time > max_time))
 			{
 				max_coin = coin;
@@ -346,7 +346,7 @@ int save_file_star_count(int file, int course)
 	int i;
 	int n = 0;
 	UCHAR mask = 1;
-	UCHAR star = save_file_star_get(file, course);
+	UCHAR star = save_file_get_star(file, course);
 	for (i = 0; i < 7; i++, mask <<= 1) if (star & mask) n++;
 	return n;
 }
@@ -358,26 +358,26 @@ int save_file_star_range(int file, int min, int max)
 	return n + save_file_star_count(file, -1);
 }
 
-void save_flag_set(unsigned int flag)
+void save_set_flag(unsigned int flag)
 {
-	save.file[save_index-1][0].flag |= SAVE_ACTIVE | flag;
+	save.file[file_index-1][0].flag |= SAVE_ACTIVE | flag;
 	save_file_dirty = TRUE;
 }
 
-void save_flag_clr(unsigned int flag)
+void save_clr_flag(unsigned int flag)
 {
-	save.file[save_index-1][0].flag &= ~flag;
-	save.file[save_index-1][0].flag |= SAVE_ACTIVE;
+	save.file[file_index-1][0].flag &= ~flag;
+	save.file[file_index-1][0].flag |= SAVE_ACTIVE;
 	save_file_dirty = TRUE;
 }
 
-unsigned int save_flag_get(void)
+unsigned int save_get_flag(void)
 {
-	if (staff || demo) return 0;
-	return save.file[save_index-1][0].flag;
+	if (staffp || demop) return 0;
+	return save.file[file_index-1][0].flag;
 }
 
-int save_file_star_get(int file, int course)
+int save_file_get_star(int file, int course)
 {
 	int flag;
 	if (course == -1)   flag = save.file[file][0].flag >> 24 & 0x7F;
@@ -385,7 +385,7 @@ int save_file_star_get(int file, int course)
 	return flag;
 }
 
-void save_file_star_set(int file, int course, int flag)
+void save_file_set_star(int file, int course, int flag)
 {
 	if (course == -1)   save.file[file][0].flag |= flag << 24;
 	else                save.file[file][0].star[course] |= flag;
@@ -393,40 +393,40 @@ void save_file_star_set(int file, int course, int flag)
 	save_file_dirty = TRUE;
 }
 
-int save_file_coin_get(int file, int course)
+int save_file_get_coin(int file, int course)
 {
 	return save.file[file][0].coin[course];
 }
 
-int save_cannon_get(void)
+int save_get_cannon(void)
 {
-	return (save.file[save_index-1][0].star[course_index] & 0x80) != 0;
+	return (save.file[file_index-1][0].star[course_index] & 0x80) != 0;
 }
 
-void save_cannon_set(void)
+void save_set_cannon(void)
 {
-	save.file[save_index-1][0].star[course_index] |= 0x80;
-	save.file[save_index-1][0].flag |= SAVE_ACTIVE;
+	save.file[file_index-1][0].star[course_index] |= 0x80;
+	save.file[file_index-1][0].flag |= SAVE_ACTIVE;
 	save_file_dirty = TRUE;
 }
 
-void save_cap_set(SHORT x, SHORT y, SHORT z)
+void save_set_cap(SHORT x, SHORT y, SHORT z)
 {
-	SAVE_FILE *file = &save.file[save_index-1][0];
+	SAVE_FILE *file = &save.file[file_index-1][0];
 	file->stage = stage_index;
 	file->scene = scene_index;
 	vecs_set(file->pos, x, y, z);
-	save_flag_set(SAVE_010000);
+	save_set_flag(SAVE_LOSTCAP);
 }
 
-int save_cap_get(VECS pos)
+int save_get_cap(VECS pos)
 {
-	SAVE_FILE *file = &save.file[save_index-1][0];
-	unsigned int flag = save_flag_get();
+	SAVE_FILE *file = &save.file[file_index-1][0];
+	unsigned int flag = save_get_flag();
 	if (
 		file->stage == stage_index &&
 		file->scene == scene_index &&
-		(flag & SAVE_010000)
+		(flag & SAVE_LOSTCAP)
 	)
 	{
 		vecs_cpy(pos, file->pos);
@@ -435,63 +435,63 @@ int save_cap_get(VECS pos)
 	return FALSE;
 }
 
-void save_output_set(USHORT output)
+void save_set_sound(USHORT sound)
 {
-	aud_output(output);
-	save.data[0].output = output;
+	aud_sound_mode(sound);
+	save.data[0].sound = sound;
 	save_data_dirty = TRUE;
 	save_data_write();
 }
 
-USHORT save_output_get(void)
+USHORT save_get_sound(void)
 {
-	return save.data[0].output;
+	return save.data[0].sound;
 }
 
-void save_cap_init(void)
+void save_init_cap(void)
 {
-	if (save_flag_get() & SAVE_010000)
+	if (save_get_flag() & SAVE_LOSTCAP)
 	{
-		switch (save.file[save_index-1][0].stage)
+		switch (save.file[file_index-1][0].stage)
 		{
-		case STAGE_SSL: save_flag_set(SAVE_020000); break;
-		case STAGE_SL:  save_flag_set(SAVE_080000); break;
-		case STAGE_TTM: save_flag_set(SAVE_040000); break;
+		case STAGE_SSL: save_set_flag(SAVE_CONDORCAP);  break;
+		case STAGE_SL:  save_set_flag(SAVE_SNOWMANCAP);  break;
+		case STAGE_TTM: save_set_flag(SAVE_MONKEYCAP); break;
 		}
-		save_flag_clr(SAVE_010000);
+		save_clr_flag(SAVE_LOSTCAP);
 	}
 }
 
-void save_mid_clear(void)
+void save_clr_mid(void)
 {
-	save_mid_course = 0;
+	save_mid_course = COURSE_NULL;
 }
 
-void save_mid_set(PORT *port)
+void save_set_mid(PORTINFO *p)
 {
-	if (port->stage & 0x80)
+	if (p->stage & 0x80)
 	{
 		save_mid_level  = level_index;
 		save_mid_course = course_index;
-		save_mid_stage  = port->stage & 0x7F;
-		save_mid_scene  = port->scene;
-		save_mid_port   = port->port;
+		save_mid_stage  = p->stage & 0x7F;
+		save_mid_scene  = p->scene;
+		save_mid_port   = p->port;
 	}
 }
 
-int save_mid_get(PORT *port)
+int save_get_mid(PORTINFO *p)
 {
 	short result = FALSE;
-	SHORT course = stage_to_course(port->stage & 0x7F);
+	SHORT course = stage_to_course(p->stage & 0x7F);
 	if (
-		save_mid_course != 0 &&
-		course_prev == course &&
+		save_mid_course != COURSE_NULL &&
+		prev_course == course &&
 		save_mid_level == level_index
 	)
 	{
-		port->stage = save_mid_stage;
-		port->scene = save_mid_scene;
-		port->port  = save_mid_port;
+		p->stage = save_mid_stage;
+		p->scene = save_mid_scene;
+		p->port  = save_mid_port;
 		result = TRUE;
 	}
 	else

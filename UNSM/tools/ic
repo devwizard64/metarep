@@ -68,27 +68,27 @@ def al_note(x):
 		"F", "Fs", "G", "Ab", "A", "Bb", "B",
 	)[(x+9) % 12] + "%d" % ((x+9) // 12)
 
-Na_freq = (
-	0.105112, 0.111362, 0.117984, 0.125000,
-	0.132433, 0.140308, 0.148651, 0.157490,
-	0.166855, 0.176777, 0.187288, 0.198425,
-	0.210224, 0.222725, 0.235969, 0.250000,
-	0.264866, 0.280616, 0.297302, 0.314980,
-	0.333710, 0.353553, 0.374577, 0.396850,
-	0.420448, 0.445449, 0.471937, 0.500000,
-	0.529732, 0.561231, 0.594604, 0.629961,
-	0.667420, 0.707107, 0.749154, 0.793701,
-	0.840897, 0.890899, 0.943875, 1.000000,
-	1.059463, 1.122462, 1.189207, 1.259921,
-	1.334840, 1.414214, 1.498307, 1.587401,
-	1.681793, 1.781798, 1.887749, 2.000000,
-	2.118926, 2.244924, 2.378414, 2.519842,
-	2.669680, 2.828428, 2.996615, 3.174803,
-	3.363586, 3.563596, 3.775498, 4.000000,
-	4.237853, 4.489849, 4.756829, 5.039685,
-	5.339360, 5.656855, 5.993229, 6.349606,
-	6.727173, 7.127192, 7.550996, 8.000000,
-	8.475705, 8.979697, 9.513658, 10.079370,
+Na_FreqTable = (
+	 0.105112,  0.111362,  0.117984,  0.125000,
+	 0.132433,  0.140308,  0.148651,  0.157490,
+	 0.166855,  0.176777,  0.187288,  0.198425,
+	 0.210224,  0.222725,  0.235969,  0.250000,
+	 0.264866,  0.280616,  0.297302,  0.314980,
+	 0.333710,  0.353553,  0.374577,  0.396850,
+	 0.420448,  0.445449,  0.471937,  0.500000,
+	 0.529732,  0.561231,  0.594604,  0.629961,
+	 0.667420,  0.707107,  0.749154,  0.793701,
+	 0.840897,  0.890899,  0.943875,  1.000000,
+	 1.059463,  1.122462,  1.189207,  1.259921,
+	 1.334840,  1.414214,  1.498307,  1.587401,
+	 1.681793,  1.781798,  1.887749,  2.000000,
+	 2.118926,  2.244924,  2.378414,  2.519842,
+	 2.669680,  2.828428,  2.996615,  3.174803,
+	 3.363586,  3.563596,  3.775498,  4.000000,
+	 4.237853,  4.489849,  4.756829,  5.039685,
+	 5.339360,  5.656855,  5.993229,  6.349606,
+	 6.727173,  7.127192,  7.550996,  8.000000,
+	 8.475705,  8.979697,  9.513658, 10.079370,
 	10.678720, 11.313710, 11.986459, 12.699211,
 	13.454346, 14.254383, 15.101993, 16.000000,
 	16.951410, 17.959394, 19.027315, 20.158740,
@@ -114,11 +114,11 @@ def sound(bank, wave, snd):
 
 def isnd(bank, wave, snd):
 	addr, rate, note = sound(bank, wave, snd)
-	return addr, f32(rate * f32(Na_freq[39-(note-39)]))
+	return addr, f32(rate * f32(Na_FreqTable[39-(note-39)]))
 
 def psnd(bank, wave, snd):
 	addr, rate, note = sound(bank, wave, snd)
-	return addr, f32(rate * f32(Na_freq[note]))
+	return addr, f32(rate * f32(Na_FreqTable[note]))
 
 modenone = {
 	"wave": ("wave", "{"),
@@ -183,11 +183,11 @@ if ctl == None:
 if tbl == None:
 	sys.stderr.write("error: -tbl not specified\n")
 	sys.exit(1)
-wavetbl = []
-banktbl = []
-wavedata = {}
-bankdata = {}
-notedata = {al_note(i): i for i in range(128)}
+wavedata = []
+bankdata = []
+wavetab = {}
+banktab = {}
+notetab = {al_note(i): i for i in range(128)}
 for fn in arg:
 	ln = 1
 	path = os.path.dirname(fn)
@@ -229,23 +229,23 @@ for fn in arg:
 					syntaxerr()
 				code = mode.pop(0)
 				if code == "wave":
-					if tok in wavedata: redefined(tok)
-					wave = wavedata[tok] = {
+					if tok in wavetab: redefined(tok)
+					wave = wavetab[tok] = {
 						"ref": 0,
 						"snd": [], "snddata": {},
 					}
-					wavetbl.append(wavedata[tok])
+					wavedata.append(wavetab[tok])
 					continue
 				if code == "bank":
-					if tok in bankdata: redefined(tok)
-					bank = bankdata[tok] = {
+					if tok in banktab: redefined(tok)
+					bank = banktab[tok] = {
 						"date": [0, 0, 0],
 						"snd":  [], "snddata":  {},
 						"env":  [], "envdata":  {},
 						"inst": [], "instdata": {},
 						"perc": [], "percdata": {},
 					}
-					banktbl.append(bankdata[tok])
+					bankdata.append(banktab[tok])
 					continue
 				if code == "w_snd":
 					if name in wave["snddata"]: redefined(name)
@@ -264,9 +264,9 @@ for fn in arg:
 					bank["date"] = [int(x) for x in lst]
 					code = ";"
 				if code == "b_wave":
-					if tok not in wavedata: undefined(tok)
+					if tok not in wavetab: undefined(tok)
 					bank["wave"] = tok
-					wave = wavedata[bank["wave"]]
+					wave = wavetab[bank["wave"]]
 					wave["ref"] += 1
 					continue
 				if code == "b_env":
@@ -328,25 +328,25 @@ for fn in arg:
 					if (
 						len(lst) != 2 or
 						lst[0] not in wave["snddata"] or
-						lst[1] not in notedata
+						lst[1] not in notetab
 					): syntaxerr()
 					if lst[0] not in bank["snddata"]:
 						bank["snddata"][lst[0]] = {}
 						bank["snd"].append(lst[0])
-					obj[code] = (lst[0], notedata[lst[1]])
+					obj[code] = (lst[0], notetab[lst[1]])
 					code = ";"
 				if code == "sndL" or code == "sndH":
 					if wave == None: missing("wave")
 					if (
 						len(lst) != 3 or
-						lst[0] not in notedata or
+						lst[0] not in notetab or
 						lst[1] not in wave["snddata"] or
-						lst[2] not in notedata
+						lst[2] not in notetab
 					): syntaxerr()
 					if lst[1] not in bank["snddata"]:
 						bank["snddata"][lst[1]] = {}
 						bank["snd"].append(lst[1])
-					obj[code] = (lst[1], notedata[lst[2]], notedata[lst[0]])
+					obj[code] = (lst[1], notetab[lst[2]], notetab[lst[0]])
 					code = ";"
 				if code == "name":
 					name = tok
@@ -368,7 +368,7 @@ for fn in arg:
 				if code in {",", ";", "=", "[", "]", "{", "}"}:
 					if tok != code: expected(code)
 			ln += 1
-for wave in wavetbl:
+for wave in wavedata:
 	for snd in wave["snd"]:
 		fn = snd["path"]
 		with open(fn, "rb") as f:
@@ -419,8 +419,8 @@ for wave in wavetbl:
 ctldata = []
 tbldata = []
 buf = B"\0"*0x10000
-addr = 4 + 8*len(banktbl)
-for wave in wavetbl:
+addr = 4 + 8*len(bankdata)
+for wave in wavedata:
 	addr = (addr+15) & ~15
 	wave["addr"] = addr
 	ptr = 0
@@ -447,11 +447,11 @@ for wave in wavetbl:
 		ptr = (ptr+15) & ~15
 	addr += ptr
 	wave["size"] = addr - wave["addr"]
-addr = 4 + 8*len(banktbl)
-for bank in banktbl:
+addr = 4 + 8*len(bankdata)
+for bank in bankdata:
 	addr = (addr+15) & ~15
 	bank["addr"] = addr
-	wave = wavedata[bank["wave"]]
+	wave = wavetab[bank["wave"]]
 	ctldata.append(".balign 16\n")
 	ninst = 0
 	nperc = 0
@@ -573,17 +573,17 @@ for bank in banktbl:
 	bank["size"] = addr - bank["addr"]
 with open(ctl, "w") as f:
 	f.write(".data\n")
-	f.write(".short 1, %d\n" % len(banktbl))
-	for bank in banktbl:
+	f.write(".short 1, %d\n" % len(bankdata))
+	for bank in bankdata:
 		f.write(".word %d, %d\n" % (bank["addr"], bank["size"]))
 	for x in ctldata: f.write(x)
 	f.write(".byte 0\n")
 	f.write(".balign 64\n")
 with open(tbl, "w") as f:
 	f.write(".data\n")
-	f.write(".short 2, %d\n" % len(banktbl))
-	for bank in banktbl:
-		wave = wavedata[bank["wave"]]
+	f.write(".short 2, %d\n" % len(bankdata))
+	for bank in bankdata:
+		wave = wavetab[bank["wave"]]
 		f.write(".word %d, %d\n" % (wave["addr"], wave["size"]))
 	for x in tbldata: f.write(x)
 	f.write(".byte 0\n")

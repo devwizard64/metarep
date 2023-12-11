@@ -36,29 +36,27 @@ static void makeheader(unsigned char *data, const char *path)
 
 static void makeboot(unsigned char *data, const char *boot, const char *font)
 {
-	size_t n;
 	FILE *fp;
 	if (!(fp = fopen(boot, "rb")))
 	{
 		fprintf(stderr, "error: could not read '%s'\n", boot);
 		exit(1);
 	}
-	n = fread(&data[0x40], 1, 0xFC0, fp);
+	fread(&data[0x40], 1, 0xB70-0x40, fp);
 	fclose(fp);
-	n = (n+15) & ~15;
 	if (!(fp = fopen(font, "rb")))
 	{
 		fprintf(stderr, "error: could not read '%s'\n", font);
 		exit(1);
 	}
-	fread(&data[0x40+n], 1, 0xFC0-n, fp);
+	fread(&data[0xB70], 1, 0x1000-0xB70, fp);
 	fclose(fp);
 }
 
 static void makecrt0(unsigned char *data, ELF *elf)
 {
 	int i;
-	uint32_t *p = (uint32_t *)(data + 0x1000);
+	uint32_t *p = (uint32_t *)data;
 	uint32_t entry = 0;
 	uint32_t stack = 0;
 	uint32_t bssStart = 0;
@@ -78,27 +76,27 @@ static void makecrt0(unsigned char *data, ELF *elf)
 	{
 		uint16_t bssSizeHi = bssSize >> 16;
 		uint16_t bssSizeLo = bssSize;
-		if      (bssStart)  *p++ = htonl(0x3c080000 | HI(bssStart));
-		if      (bssSizeHi) *p++ = htonl(0x3c090000 | bssSizeHi);
+		if      (bssStart)  *p++ = htonl(0x3C080000 | HI(bssStart));
+		if      (bssSizeHi) *p++ = htonl(0x3C090000 | bssSizeHi);
 		if      (bssStart)  *p++ = htonl(0x25080000 | LO(bssStart));
 		if      (bssSizeHi) *p++ = htonl(0x35290000 | bssSizeLo);
 		else if (bssSize > 0x7FFF)  *p++ = htonl(0x34090000 | bssSize);
 		else                        *p++ = htonl(0x24090000 | bssSize);
-		*p++ = htonl(0x2129fff8);
-		*p++ = htonl(0xad000000);
-		*p++ = htonl(0xad000004);
-		*p++ = htonl(0x1520fffc);
+		*p++ = htonl(0x2129FFF8);
+		*p++ = htonl(0xAD000000);
+		*p++ = htonl(0xAD000004);
+		*p++ = htonl(0x1520FFFC);
 		*p++ = htonl(0x21080008);
 	}
-	if      (entry) *p++ = htonl(0x3c0a0000 | HI(entry));
-	if      (stack) *p++ = htonl(0x3c1d0000 | HI(stack));
-	if      (entry) *p++ = htonl(0x254a0000 | LO(entry));
+	if      (entry) *p++ = htonl(0x3C0A0000 | HI(entry));
+	if      (stack) *p++ = htonl(0x3C1D0000 | HI(stack));
+	if      (entry) *p++ = htonl(0x254A0000 | LO(entry));
 	if      (entry) *p++ = htonl(0x01400008);
-	if      (stack) *p++ = htonl(0x27bd0000 | LO(stack));
+	if      (stack) *p++ = htonl(0x27BD0000 | LO(stack));
 	else if (entry) *p++ = htonl(0x00000000);
 }
 
-static void checksum(unsigned char *data, size_t size)
+static void calc3(unsigned char *data, size_t size)
 {
 	size_t i;
 	uint32_t c0;
@@ -152,13 +150,15 @@ int main(int argc, char *argv[])
 	unsigned char *data;
 	size_t size;
 	size_t end;
+	size_t align;
 	ELF elf;
 	const char *opt_rom = "rom";
 	const char *opt_header = "header";
 	const char *opt_boot = "Boot";
 	const char *opt_font = "font";
 	long opt_size = 0;
-	long opt_fill = 0xFF;
+	long opt_fill = 0;
+	long opt_align = 0;
 	while ((c = getopt(argc, argv, "r:h:b:F:s:f:")) != -1)
 	{
 		switch (c)
@@ -178,6 +178,9 @@ int main(int argc, char *argv[])
 		case 's':
 			opt_size = strtol(optarg, NULL, 0);
 			break;
+		case 'a':
+			opt_align = strtol(optarg, NULL, 0);
+			break;
 		case 'f':
 			opt_fill = strtol(optarg, NULL, 0);
 			break;
@@ -196,16 +199,18 @@ int main(int argc, char *argv[])
 	end = 0x1000 + elf_size(&elf);
 	size = 1024*1024/8 * opt_size;
 	if (size < end) size = end;
+	align = (1 << opt_align) - 1;
+	size = (size+align) & ~align;
 	memset(data = malloc(size), 0, 0x1000);
 	makeheader(data, opt_header);
 	makeboot(data, opt_boot, opt_font);
 	elf_load(&elf, data+0x1000);
 	elf_loadsection(&elf);
-	makecrt0(data, &elf);
+	makecrt0(data+0x1000, &elf);
 	*(uint32_t *)(data+8) = elf.eh.entry;
 	elf_close(&elf);
 	memset(data+end, opt_fill, size-end);
-	checksum(data, size);
+	calc3(data, size);
 	if (!(fp = fopen(opt_rom, "wb")))
 	{
 		fprintf(stderr, "error: could not write '%s'\n", opt_rom);

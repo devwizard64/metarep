@@ -1,9 +1,6 @@
 #ifndef __SM64_GBI_EXT_H__
 #define __SM64_GBI_EXT_H__
 
-#undef G_BL_CLR_FOG
-#define G_BL_CLR_FOG 3U
-
 #define G_CC_SHADE_ENV          0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT
 #define G_CC_MODULATERGB_ENVA   TEXEL0, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT
 #define G_CC_MODULATERGBA_ENVA  TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0
@@ -65,7 +62,7 @@
 { \
 	gDPSetTextureImage(pkt, fmt, siz, 1, timg); \
 	gDPTileSync(pkt); \
-	gDPSetTile(pkt, fmt, siz, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0); \
+	gDPSetLoadTile(pkt, fmt, siz); \
 	gDPLoadSync(pkt); \
 	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, (width)*(height)-1, CALC_DXT(width, siz##_BYTES)); \
 }
@@ -114,7 +111,7 @@
 #define gsDPLoadImageBlockT(timg, fmt, siz, width, height) \
 	gsDPSetTextureImage(fmt, siz, 1, timg), \
 	gsDPTileSync(), \
-	gsDPSetTile(fmt, siz, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0), \
+	gsDPSetLoadTile(fmt, siz), \
 	gsDPLoadSync(), \
 	gsDPLoadBlock(G_TX_LOADTILE, 0, 0, (width)*(height)-1, CALC_DXT(width, siz##_BYTES))
 

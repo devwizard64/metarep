@@ -3,9 +3,9 @@
 #define BGLIST_MAX              7000
 #define BGFACE_MAX              2300
 
-static int bgload_8038BE90;
-BGROOT statbg_root[16][16];
-BGROOT movebg_root[16][16];
+int bgload_8038BE90;
+BGROOT statbg_root[BGAREA_N][BGAREA_N];
+BGROOT movebg_root[BGAREA_N][BGAREA_N];
 BGLIST *bglist_data;
 BGFACE *bgface_data;
 #define bglist_max BGLIST_MAX
@@ -29,16 +29,16 @@ static BGFACE *bgface_alloc(void)
 	{
 	}
 	face->code = 0;
-	face->arg = 0;
+	face->attr = 0;
 	face->flag = 0;
 	face->area = 0;
-	face->obj = 0;
+	face->obj = NULL;
 	return face;
 }
 
 static void bgroot_clear(BGROOT *root)
 {
-	register int n = 16*16;
+	register int n = BGAREA_N*BGAREA_N;
 	while (n--)
 	{
 		root->list[BG_GROUND].next = NULL;
@@ -61,12 +61,12 @@ static void bglist_create(SHORT flag, SHORT ix, SHORT iz, BGFACE *face)
 	SHORT list_y;
 	SHORT m;
 	SHORT index;
-	if (face->ny > (DOUBLE)0.01)
+	if (face->ny > 0.01)
 	{
 		index = BG_GROUND;
 		m = 1;
 	}
-	else if (face->ny < (DOUBLE)-0.01)
+	else if (face->ny < -0.01)
 	{
 		index = BG_ROOF;
 		m = -1;
@@ -75,7 +75,7 @@ static void bglist_create(SHORT flag, SHORT ix, SHORT iz, BGFACE *face)
 	{
 		index = BG_WALL;
 		m = 0;
-		if (face->nx < (DOUBLE)-0.707 || face->nx > (DOUBLE)0.707)
+		if (face->nx < -0.707 || face->nx > 0.707)
 		{
 			face->flag |= BG_WALL_Z;
 		}
@@ -111,10 +111,10 @@ static SHORT max3(SHORT x, SHORT y, SHORT z)
 static SHORT bgarea_min(SHORT x)
 {
 	SHORT i;
-	x += 8192;
+	x += MAP_HALF;
 	if (x < 0) x = 0;
-	i = x / 1024;
-	if (x % 1024 < 50) i--;
+	i = x / BGAREA_SIZE;
+	if (x % BGAREA_SIZE < BGAREA_FUZZ) i--;
 	if (i < 0) i = 0;
 	return i;
 }
@@ -122,11 +122,11 @@ static SHORT bgarea_min(SHORT x)
 static SHORT bgarea_max(SHORT x)
 {
 	SHORT i;
-	x += 8192;
+	x += MAP_HALF;
 	if (x < 0) x = 0;
-	i = x / 1024;
-	if (x % 1024 > 1024-50) i++;
-	if (i > 15) i = 15;
+	i = x / BGAREA_SIZE;
+	if (x % BGAREA_SIZE > BGAREA_SIZE-BGAREA_FUZZ) i++;
+	if (i > BGAREA_N-1) i = BGAREA_N-1;
 	return i;
 }
 
@@ -174,9 +174,9 @@ static BGFACE *bgface_create(MAP *vtx, MAP **map)
 	x0 = vtx[v0+0]; y0 = vtx[v0+1]; z0 = vtx[v0+2];
 	x1 = vtx[v1+0]; y1 = vtx[v1+1]; z1 = vtx[v1+2];
 	x2 = vtx[v2+0]; y2 = vtx[v2+1]; z2 = vtx[v2+2];
-	nx = cross3(z0, y0, z1, y1, z2, y2);
-	ny = cross3(x0, z0, x1, z1, x2, z2);
-	nz = cross3(y0, x0, y1, x1, y2, x2);
+	nx = CROSS3(z0, y0, z1, y1, z2, y2);
+	ny = CROSS3(x0, z0, x1, z1, x2, z2);
+	nz = CROSS3(y0, x0, y1, x1, y2, x2);
 	d = sqrtf(nx*nx + ny*ny + nz*nz);
 	yl = y0;
 	if (yl > y1) yl = y1;
@@ -184,8 +184,8 @@ static BGFACE *bgface_create(MAP *vtx, MAP **map)
 	yh = y0;
 	if (yh < y1) yh = y1;
 	if (yh < y2) yh = y2;
-	if (d < (DOUBLE)0.0001) return NULL;
-	d = (DOUBLE)1 / d;
+	if (d < 0.0001) return NULL;
+	d = 1.0 / d;
 	nx *= d;
 	ny *= d;
 	nz *= d;
@@ -202,18 +202,18 @@ static BGFACE *bgface_create(MAP *vtx, MAP **map)
 	return face;
 }
 
-static int bgface_isarg(SHORT code)
+static int bgface_hasattr(SHORT code)
 {
 	int result = FALSE;
 	switch (code)
 	{
-	case 4:
-	case 14:
-	case 36:
-	case 37:
-	case 39:
-	case 44:
-	case 45:
+	case BG_4:
+	case BG_14:
+	case BG_36:
+	case BG_37:
+	case BG_39:
+	case BG_44:
+	case BG_45:
 		result = TRUE;
 		break;
 	default:
@@ -227,10 +227,10 @@ static int bgface_flag(SHORT code)
 	int flag = 0;
 	switch (code)
 	{
-	case 118:
-	case 119:
-	case 120:
-	case 122:
+	case BG_118:
+	case BG_119:
+	case BG_120:
+	case BG_122:
 		flag = BG_0002;
 		break;
 	default:
@@ -245,7 +245,7 @@ static void statbg_face(MAP **map, MAP *vtx, SHORT code, AREA **area)
 	int n;
 	BGFACE *face;
 	AREA a = 0;
-	SHORT isarg = bgface_isarg(code);
+	SHORT hasattr = bgface_hasattr(code);
 	SHORT flag = bgface_flag(code);
 	n = **map; (*map)++;
 	for (i = 0; i < n; i++)
@@ -259,12 +259,12 @@ static void statbg_face(MAP **map, MAP *vtx, SHORT code, AREA **area)
 			face->area = a;
 			face->code = code;
 			face->flag = (CHAR)flag;
-			if (isarg)  face->arg = (*map)[3];
-			else        face->arg = 0;
+			if (hasattr)    face->attr = (*map)[3];
+			else            face->attr = 0;
 			bgface_link(face, 0);
 		}
 		*map += 3;
-		if (isarg) (*map)++;
+		if (hasattr) (*map)++;
 	}
 }
 
@@ -283,7 +283,7 @@ static void statbg_water(MAP **map)
 {
 	int n;
 	int i;
-	object_80361184 = *map;
+	waterp = *map;
 	n = *(*map)++;
 	if (n > 20)
 	{
@@ -298,7 +298,7 @@ static void statbg_water(MAP **map)
 		zl = *(*map)++;
 		zh = *(*map)++;
 		y = *(*map)++;
-		object_80361188[i] = y;
+		water_table[i] = y;
 	}
 }
 
@@ -308,7 +308,7 @@ void map_init(void)
 	bglist_data = mem_alloc(sizeof(BGLIST)*bglist_max, MEM_ALLOC_L);
 	bgface_data = mem_alloc(sizeof(BGFACE)*bgface_max, MEM_ALLOC_L);
 	object_8036125C = 0;
-	message_802DB350();
+	pausemenu_init();
 }
 
 void map_load(SHORT scene, MAP *map, AREA *area, TAG *tag)
@@ -320,7 +320,7 @@ void map_load(SHORT scene, MAP *map, AREA *area, TAG *tag)
 	MAP *vtx = NULL;
 #endif
 	UNUSED int i;
-	object_80361184 = NULL;
+	waterp = NULL;
 	bgload_8038BE90 = 0;
 	bglist_count = 0;
 	bgface_count = 0;
@@ -328,13 +328,13 @@ void map_load(SHORT scene, MAP *map, AREA *area, TAG *tag)
 	for (;;)
 	{
 		code = *map; map++;
-		if      (code < 64) statbg_face(&map, vtx, code, &area);
+		if      (code < MAP_VTX) statbg_face(&map, vtx, code, &area);
 		else if (code == MAP_VTX) vtx = statbg_vtx(&map);
 		else if (code == MAP_OBJECT) map_obj_load(scene, &map);
 		else if (code == MAP_WATER) statbg_water(&map);
 		else if (code == MAP_BGEND) continue;
 		else if (code == MAP_END) break;
-		else if (code > 100) statbg_face(&map, vtx, code, &area);
+		else if (code > MAP_FACE) statbg_face(&map, vtx, code, &area);
 		else
 		{
 		}
@@ -350,7 +350,7 @@ void map_load(SHORT scene, MAP *map, AREA *area, TAG *tag)
 
 void movebg_clear(void)
 {
-	if (!(object_8033D480 & 0x40))
+	if (!(object_flag & OBJECT_FROZEN))
 	{
 		bgface_count = bgface_static;
 		bglist_count = bglist_static;
@@ -373,9 +373,9 @@ static void movebg_vtx(MAP **map, MAP *vtx)
 	m = &object->mf;
 	n = **map; (*map)++;
 	v = *map;
-	if (!object->list.s.mf)
+	if (!object->s.mf)
 	{
-		object->list.s.mf = m;
+		object->s.mf = m;
 		objlib_802A2930(object, O_POS_X, O_SHAPE_ANG_X);
 	}
 	objlib_8029DDA8(object, mf, *m);
@@ -396,12 +396,12 @@ static void movebg_face(MAP **map, MAP *vtx)
 	int code;
 	int i;
 	int n;
-	SHORT isarg;
+	SHORT hasattr;
 	SHORT flag;
 	SHORT area;
 	code = **map; (*map)++;
 	n = **map; (*map)++;
-	isarg = bgface_isarg(code);
+	hasattr = bgface_hasattr(code);
 	flag = bgface_flag(code);
 	flag |= BG_MOVE;
 	if (object->script == segment_to_virtual(o_13001C34)) area = 5;
@@ -413,14 +413,14 @@ static void movebg_face(MAP **map, MAP *vtx)
 		{
 			face->obj = object;
 			face->code = code;
-			if (isarg)  face->arg = (*map)[3];
-			else        face->arg = 0;
+			if (hasattr)    face->attr = (*map)[3];
+			else            face->attr = 0;
 			face->flag |= flag;
 			face->area = (CHAR)area;
 			bgface_link(face, 1);
 		}
-		if (isarg)  *map += 4;
-		else        *map += 3;
+		if (hasattr)    *map += 4;
+		else            *map += 3;
 	}
 }
 
@@ -430,16 +430,20 @@ void object_map_load(void)
 	MAP vtx[3*200];
 	MAP *map = object->map;
 	float pl_dist = object->o_pl_dist;
-	float col_dist = object->o_col_dist;
-	if (object->o_pl_dist == 19000)
+	float check_dist = object->o_check_dist;
+	if (object->o_pl_dist == 19000) /* T:def */
 	{
-		pl_dist = objlib_8029E2F8(object, obj_mario);
+		pl_dist = objlib_8029E2F8(object, mario_obj);
 	}
-	if (object->o_col_dist > 4000)
+	if (object->o_check_dist > 4000)
 	{
-		object->o_shape_dist = object->o_col_dist;
+		object->o_shape_dist = object->o_check_dist;
 	}
-	if (!(object_8033D480 & 0x40) && pl_dist < col_dist && !(object->flag & 8))
+	if (
+		!(object_flag & OBJECT_FROZEN) &&
+		pl_dist < check_dist &&
+		!(object->flag & OBJ_0008)
+	)
 	{
 		map++;
 		movebg_vtx(&map, vtx);
@@ -447,10 +451,10 @@ void object_map_load(void)
 	}
 	if (pl_dist < object->o_shape_dist)
 	{
-		object->list.s.s.flag |= S_FLAG_ACTIVE;
+		object->s.s.flag |= SHP_ACTIVE;
 	}
 	else
 	{
-		object->list.s.s.flag &= ~S_FLAG_ACTIVE;
+		object->s.s.flag &= ~SHP_ACTIVE;
 	}
 }

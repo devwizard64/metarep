@@ -1,13 +1,10 @@
-import table
 import ultra
 
-extern = None
+def aw(self, extern=False, addr=False, cast=None, array=None):
+	return ultra.fmt_addr(self, self.u32(), extern, addr, cast, array)
 
-def aw(extern=False, addr=False, cast=None, array=None):
-	return ultra.fmt_addr(ultra.uw(), extern, addr, cast, array)
-
-def init(self, start, data):
-	ultra.init(self, start, data)
+def init(self, seg, addr):
+	ultra.init(self, seg, addr)
 
 def fmt(self, lst):
 	f = self.file[-1][1]
@@ -15,11 +12,11 @@ def fmt(self, lst):
 		if len(line) == 0: continue
 		if len(extern) > 0: f.append("\n\n")
 		for a, s in sorted(extern, key=lambda x: (x[0], x[1].label)):
-			start = "/* 0x%08X */ " % a if ultra.COMM_EXTERN else ""
+			start = "/* 0x%08X */ " % a if ultra.COMM_EADDR else ""
 			start += "extern "
 			f.append(s.fmt(start, ";") + "\n")
-		start = "/* 0x%08X */ " % addr if ultra.COMM_VAR else ""
-		if sym.flag & ultra.DALIGN: start += "DALIGN "
+		start = "/* 0x%08X */ " % addr if ultra.COMM_VADDR else ""
+		if "DALIGN" in sym.flag: start += "DALIGN "
 		s = sym.fmt(start, " =")
 		if len(line) > 1 or line[0].endswith(",") or line[0].startswith("#"):
 			f.append("\n\n%s\n{\n" % s)
@@ -31,37 +28,35 @@ def fmt(self, lst):
 			if "\n" in line[0]: f.append("\n")
 			f.append("%s %s;\n" % (s, line[0]))
 			if "\n" in line[0]: f.append("\n")
-	f.append("\n")
 
-def d_str_prc(argv):
+def d_str_prc(self, argv):
 	size, s = argv
-	ultra.script.c_addr += size
+	self.addr += size
 	return [s]
 d_str = [False, d_str_prc]
 
-def d_pathfmt_prc(argv):
+def d_pathfmt_prc(self, argv):
 	size, fmt, fn = argv
-	ultra.script.c_addr += size
-	return [fmt % ultra.script.path_join([fn], 1)]
+	self.addr += size
+	return [fmt % self.path_join([fn], 1)]
 d_pathfmt = [False, d_pathfmt_prc]
 
-def d_fnc(fnc, imm="%d"):
-	x = lambda argv: [table.imm_prc(argv[0] if len(argv) > 0 else imm, fnc())]
-	return [False, x]
+def d_fmt(self, argv, x, fmt="%d"):
+	return [self.fmt(argv[0] if len(argv) > 0 else fmt, x)]
 
-d_s8  = d_fnc(ultra.sb)
-d_u8  = d_fnc(ultra.ub)
-d_s16 = d_fnc(ultra.sh)
-d_u16 = d_fnc(ultra.uh)
-d_s32 = d_fnc(ultra.sw)
-d_u32 = d_fnc(ultra.uw)
-d_s64 = d_fnc(ultra.sd)
-d_u64 = d_fnc(ultra.ud)
-d_f32 = d_fnc(ultra.f, ultra.fmt_f32)
-d_f64 = d_fnc(ultra.d, ultra.fmt_f64)
-d_flag8  = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.ub())]]
-d_flag16 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uh())]]
-d_flag32 = [False, lambda argv: [ultra.fmt_flag(argv[0], ultra.uw())]]
+d_s8  = [False, lambda self, argv: d_fmt(self, argv, self.s8())]
+d_u8  = [False, lambda self, argv: d_fmt(self, argv, self.u8())]
+d_s16 = [False, lambda self, argv: d_fmt(self, argv, self.s16())]
+d_u16 = [False, lambda self, argv: d_fmt(self, argv, self.u16())]
+d_s32 = [False, lambda self, argv: d_fmt(self, argv, self.s32())]
+d_u32 = [False, lambda self, argv: d_fmt(self, argv, self.u32())]
+d_s64 = [False, lambda self, argv: d_fmt(self, argv, self.s64())]
+d_u64 = [False, lambda self, argv: d_fmt(self, argv, self.u64())]
+d_f32 = [False, lambda self, argv: d_fmt(self, argv, self.f(), ultra.fmt_f32)]
+d_f64 = [False, lambda self, argv: d_fmt(self, argv, self.d(), ultra.fmt_f64)]
+d_flag8  = [False, lambda self, argv: [self.fmt_flag(argv[0], self.u8())]]
+d_flag16 = [False, lambda self, argv: [self.fmt_flag(argv[0], self.u16())]]
+d_flag32 = [False, lambda self, argv: [self.fmt_flag(argv[0], self.u32())]]
 d_align_s8  = [[0, 1, 1, d_s8],  [0, 1, 3, None]]
 d_align_u8  = [[0, 1, 1, d_u8],  [0, 1, 3, None]]
 d_align_s16 = [[0, 1, 1, d_s16], [0, 1, 2, None]]
@@ -71,8 +66,8 @@ d_bool_u8   = [[0, 1, 1, d_u8,  ultra.fmt_bool], [0, 1, 3, None]]
 d_bool_s16  = [[0, 1, 1, d_s16, ultra.fmt_bool], [0, 1, 2, None]]
 d_bool_u16  = [[0, 1, 1, d_u16, ultra.fmt_bool], [0, 1, 2, None]]
 
-def d_addr_prc(argv):
-	x = ultra.uw()
+def d_addr_prc(self, argv):
+	x = self.u32()
 	extern = False
 	addr   = False
 	cast   = None
@@ -89,7 +84,7 @@ def d_addr_prc(argv):
 	if flag & ultra.A_ARRAY:
 		array = (argv[i+0], argv[i+1])
 		i += 2
-	return [ultra.fmt_addr(x, extern, addr, cast, array)]
+	return [ultra.fmt_addr(self, x, extern, addr, cast, array)]
 d_addr = [False, d_addr_prc]
 
 fmt_Vp = {
@@ -97,54 +92,54 @@ fmt_Vp = {
 	480: "4*(SCREEN_HT/2)",
 	0x1FF: "G_MAXZ/2",
 }
-def d_Vp_prc(argv):
-	w = fmt_Vp[ultra.sh()]
-	h = fmt_Vp[ultra.sh()]
-	d = fmt_Vp[ultra.sh()]
-	ultra.script.c_addr += 2
-	x = fmt_Vp[ultra.sh()]
-	y = fmt_Vp[ultra.sh()]
-	z = fmt_Vp[ultra.sh()]
-	ultra.script.c_addr += 2
+def d_Vp_prc(self, argv):
+	w = fmt_Vp[self.s16()]
+	h = fmt_Vp[self.s16()]
+	d = fmt_Vp[self.s16()]
+	self.addr += 2
+	x = fmt_Vp[self.s16()]
+	y = fmt_Vp[self.s16()]
+	z = fmt_Vp[self.s16()]
+	self.addr += 2
 	return ["{{{%s, %s, %s, 0}, {%s, %s, %s, 0}}}" % (w, h, d, x, y, z)]
 d_Vp = [False, d_Vp_prc]
 
-def d_Lights1_prc(argv):
-	ra = ultra.ub()
-	ga = ultra.ub()
-	ba = ultra.ub()
-	ultra.script.c_addr += 5
-	r0 = ultra.ub()
-	g0 = ultra.ub()
-	b0 = ultra.ub()
-	ultra.script.c_addr += 5
-	x = ultra.sb()
-	y = ultra.sb()
-	z = ultra.sb()
-	ultra.script.c_addr += 5
+def d_Lights1_prc(self, argv):
+	ra = self.u8()
+	ga = self.u8()
+	ba = self.u8()
+	self.addr += 5
+	r0 = self.u8()
+	g0 = self.u8()
+	b0 = self.u8()
+	self.addr += 5
+	x = self.s8()
+	y = self.s8()
+	z = self.s8()
+	self.addr += 5
 	return [(
 		"gdSPDefLights1"
 		"(0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, %d, %d, %d)"
 	) % (ra, ga, ba, r0, g0, b0, x, y, z)]
 d_Lights1 = [False, d_Lights1_prc]
 
-def d_Vtx_prc(argv):
+def d_Vtx_prc(self, argv):
 	n, = argv
-	x = ultra.sh()
-	y = ultra.sh()
-	z = ultra.sh()
-	f = ultra.uh()
-	s = ultra.sh()
-	t = ultra.sh()
+	x = self.s16()
+	y = self.s16()
+	z = self.s16()
+	f = self.u16()
+	s = self.s16()
+	t = self.s16()
 	if n == 0:
-		r = ultra.ub()
-		g = ultra.ub()
-		b = ultra.ub()
+		r = self.u8()
+		g = self.u8()
+		b = self.u8()
 	else:
-		r = ultra.sb()
-		g = ultra.sb()
-		b = ultra.sb()
-	a = ultra.ub()
+		r = self.s8()
+		g = self.s8()
+		b = self.s8()
+	a = self.u8()
 	return [(
 		"{{{%6d, %6d, %6d}, %d, {%6d, %6d}, "
 			"{0x%02X, 0x%02X, 0x%02X, 0x%02X}}}",
@@ -152,6 +147,14 @@ def d_Vtx_prc(argv):
 			"{%4d, %4d, %4d, 0x%02X}}}",
 	)[n] % (x, y, z, f, s, t, r, g, b, a)]
 d_Vtx = [False, d_Vtx_prc]
+
+def g_words(self, w, n):
+	for _ in range(n):
+		w0 = self.u32()
+		w1 = self.u32()
+		if w0 is None or w1 is None: return False
+		w.append((w0, w1))
+	return True
 
 def g_calc_lrs(width, height, siz):
 	return min(0x7FF, ((width*height+(3,1,0,0)[siz]) >> (2,1,0,0)[siz])-1)
@@ -193,13 +196,13 @@ def g_tx_tile(tile):
 	if tile == 7:   return "G_TX_LOADTILE"
 	return "%d" % tile
 
-def g_null(argv):
-	ultra.script.c_addr += 8
+def g_null(self, argv):
+	self.addr += 8
 	return argv
 
-def g_mtx(argv):
-	w0 = ultra.uw()
-	m = aw()
+def g_mtx(self, argv):
+	w0 = self.u32()
+	m = aw(self)
 	if not m.startswith("0x"): m = "&" + m
 	p = w0 >> 16 & 0xFF
 	a = "G_MTX_PROJECTION" if p & 1 else "G_MTX_MODELVIEW"
@@ -207,28 +210,28 @@ def g_mtx(argv):
 	c = "G_MTX_PUSH"       if p & 4 else "G_MTX_NOPUSH"
 	return ("SPMatrix", m, (a, b, c))
 
-def g_vtx(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
-	imm = table.imm_addr(ultra.script, ultra.script.c_dst)
-	if imm != None:
-		v = ultra.fmt_addr(w1, addr=True, array=(imm, 0x10))
+def g_vtx(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
+	imm = self.get_imm(self.save)
+	if imm is not None:
+		v = ultra.fmt_addr(self, w1, addr=True, array=(imm, 0x10))
 	else:
-		v = ultra.fmt_addr(w1)
+		v = ultra.fmt_addr(self, w1)
 	n  = "%d" % (w0 >>  4 & 0xFFF)
 	v0 = "%d" % (w0 >> 16 & 15)
 	return ("SPVertex", v, n, v0)
 
-def g_dl(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_dl(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
 	cmd = ("SPDisplayList", "SPBranchList")[w0 >> 16 & 0xFF]
-	dl  = ultra.sym(w1)
+	dl  = ultra.sym(self, w1, self.save)
 	return (cmd, dl)
 
-def g_tri1(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_tri1(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
 	v0 = "%2d" % ((w1 >> 16 & 0xFF) // 10)
 	v1 = "%2d" % ((w1 >>  8 & 0xFF) // 10)
 	v2 = "%2d" % ((w1 >>  0 & 0xFF) // 10)
@@ -250,19 +253,23 @@ g_geometrymode_table = (
 	(0x00100000, 0x00100000, "G_LOD"),
 )
 
-def g_moveword(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_moveword(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
 	if w0 == 0xBC000002:
 		if w1 == 0x80000040:
-			a_0  = ultra.uw()
-			a_1  = ultra.uw()
-			d0_0 = ultra.uw()
-			d0_1 = ultra.uw()
+			a_0  = self.u32()
+			a_1  = self.u32()
+			d0_0 = self.u32()
+			d0_1 = self.u32()
 			if a_0 == 0x03860010 and d0_0 == 0x03880010 and a_1-d0_1 == 8:
-				light = ultra.sym(d0_1)
+				imm = self.get_imm(self.save)
+				if imm is not None:
+					light = ultra.fmt_addr(self, d0_1, array=(imm, 0x18))
+				else:
+					light = ultra.fmt_addr(self, d0_1)
 				return ("SPSetLights1", light)
-			ultra.script.c_addr -= 16
+			self.addr -= 16
 		return ("SPNumLights", "NUMLIGHTS_%d" % ((w1-0x80000000)//32-1))
 	if w0 == 0xBC000008:
 		fm = w1 >> 16
@@ -281,17 +288,17 @@ def g_texture_prc(s, t, w0):
 	tile  = g_tx_tile(tile)
 	return ("SPTexture", s, t, level, tile, on)
 
-def g_texture(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_texture(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
 	s = "0x%04X" % (w1 >> 16)
 	t = "0x%04X" % (w1 & 0xFFFF)
 	return g_texture_prc(s, t, w0)
 
-def g_geometrymode(argv):
+def g_geometrymode(self, argv):
 	cmd, = argv
-	ultra.script.c_addr += 4
-	w1 = ultra.uw()
+	self.addr += 4
+	w1 = self.u32()
 	if w1 == 0xFFFFFFFF: flag = ["~0"]
 	else: flag = [s for m, i, s in g_geometrymode_table if (w1 & m) == i]
 	return (cmd, flag)
@@ -309,16 +316,40 @@ g_setothermode_h = {
 		1<<19: "G_TP_PERSP",
 	}),
 	# 17 textdetail
-	# 16 textlod
-	# 14 textlut
+	17: ("DPSetTextureDetail", {
+		0<<17: "G_TD_CLAMP",
+		1<<17: "G_TD_SHARPEN",
+		2<<17: "G_TD_DETAIL",
+	}),
+	16: ("DPSetTextureLOD", {
+		0<<16: "G_TL_TILE",
+		1<<16: "G_TL_LOD",
+	}),
+	14: ("DPSetTextureLUT", {
+		0<<14: "G_TT_NONE",
+		2<<14: "G_TT_RGBA16",
+		3<<14: "G_TT_IA16",
+	}),
 	12: ("DPSetTextureFilter", {
 		0<<12: "G_TF_POINT",
 		2<<12: "G_TF_BILERP",
 		3<<12: "G_TF_AVERAGE",
 	}),
-	# 9 textconv
-	# 8 combkey
-	# 6 rgbdither
+	9: ("DPSetTextureConvert", {
+		0<<9: "G_TC_CONV",
+		5<<9: "G_TC_FILTCONV",
+		6<<9: "G_TC_FILT",
+	}),
+	8: ("DPSetCombineKey", {
+		0<<8: "G_CK_NONE",
+		1<<8: "G_CK_KEY",
+	}),
+	6: ("DPSetColorDither", {
+		0<<6: "G_CD_MAGICSQ",
+		1<<6: "G_CD_BAYER",
+		2<<6: "G_CD_NOISE",
+		3<<6: "G_CD_DISABLE",
+	}),
 	# 4 alphadither
 }
 
@@ -328,6 +359,7 @@ g_setothermode_l = {
 		0x00442078: "G_RM_AA_ZB_OPA_SURF, G_RM_NOOP2", # 42
 		0x004049D8: "G_RM_AA_ZB_XLU_SURF, G_RM_NOOP2", # 87
 		0x004049F8: "G_RM_AA_ZB_XLU_SURF|Z_UPD, G_RM_NOOP2",
+		0x00442478: "G_RM_AA_ZB_OPA_INTER, G_RM_NOOP2", # 222
 		0x00553078: "G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2", # 368
 		0x00443078: "G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2", # 402
 		0x00552048: "G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2", # 828
@@ -351,10 +383,10 @@ g_setothermode_l = {
 	}),
 }
 
-def g_setothermode(argv):
+def g_setothermode(self, argv):
 	arg, = argv
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+	w0 = self.u32()
+	w1 = self.u32()
 	shift = w0 >> 8 & 0xFF
 	if shift not in arg: raise RuntimeError("%02X %d" % (w0 >> 24, shift))
 	cmd, table = arg[w0 >> 8 & 0xFF]
@@ -362,9 +394,9 @@ def g_setothermode(argv):
 	flag = table[w1]
 	return (cmd, flag)
 
-def g_perspnorm(argv):
-	ultra.script.c_addr += 6
-	s = "0x%04X" % ultra.uh()
+def g_perspnorm(self, argv):
+	self.addr += 6
+	s = "0x%04X" % self.u16()
 	return ("SPPerspNormalize", s)
 
 def gx_settimg(w0, w1):
@@ -389,80 +421,83 @@ def gx_tile(w0, w1):
 		w1 >> 12 & 0xFFF, w1 & 0xFFF,
 	)
 
-def timgproc(addr):
+def timgproc(self, addr):
 	if addr >> 24 == 0x09:
-		dev = table.dev_addr(ultra.script)
-		if dev == ultra.script.c_dev():
-			print("    0x%08X: ," % ultra.script.c_dst)
+		if self.get_seg(self.save) == self.seg:
+			print("\t0x%08X: \"E0.Texture\"," % self.save)
 
-def g_settimg(argv):
-	w = [(ultra.uw(), ultra.uw()) for _ in range(7)]
-	c0_f, c0_s, c0_w, c0_i = gx_settimg(w[0][0], w[0][1])
-	if tuple([x[0] >> 24 for x in w]) == (
-		0xFD, 0xF5, 0xE6, 0xF3, 0xE7, 0xF5, 0xF2
-	):
-		c1_fmt, c1_siz, c1_line, c1_tmem, c1_tile, c1_palette, c1_cmt, \
-			c1_maskt, c1_shiftt, c1_cms, c1_masks, c1_shifts = \
-			gx_settile(w[1][0], w[1][1])
-		c3_tile, c3_uls, c3_ult, c3_lrs, c3_dxt = gx_tile(w[3][0], w[3][1])
-		c5_fmt, c5_siz, c5_line, c5_tmem, c5_tile, c5_palette, c5_cmt, \
-			c5_maskt, c5_shiftt, c5_cms, c5_masks, c5_shifts = \
-			gx_settile(w[5][0], w[5][1])
-		c6_t, c6_uls, c6_ult, c6_lrs, c6_lrt = gx_tile(w[6][0], w[6][1])
-		timg    = c0_i
-		fmt     = c5_fmt
-		siz     = c5_siz
-		width   = (c6_lrs >> 2) + 1
-		height  = (c6_lrt >> 2) + 1
-		pal     = c5_palette
-		cms     = c5_cms
-		cmt     = c5_cmt
-		masks   = c5_masks
-		maskt   = c5_maskt
-		shifts  = c5_shifts
-		shiftt  = c5_shiftt
-		if (
-			c0_f, c0_s, c0_w, c0_i,
-			c1_fmt, c1_siz, c1_line, c1_tmem, c1_tile, c1_palette,
-			c1_cmt, c1_maskt, c1_shiftt, c1_cms, c1_masks, c1_shifts,
-			c3_tile, c3_uls, c3_ult, c3_lrs, c3_dxt,
-			c5_fmt, c5_siz, c5_line, c5_tmem, c5_tile, c5_palette,
-			c5_cmt, c5_maskt, c5_shiftt, c5_cms, c5_masks, c5_shifts,
-			c6_t, c6_uls, c6_ult, c6_lrs, c6_lrt,
-		) == (
-			fmt, (2,2,2,3)[siz], 1, timg,
-			fmt, (2,2,2,3)[siz], 0, 0, 7, 0,
-			cmt, maskt, shiftt, cms, masks, shifts,
-			7, 0, 0, g_calc_lrs(width, height, siz), g_calc_dxt(width, siz),
-			fmt, siz, g_calc_line(width, siz), 0, 0, pal,
-			cmt, maskt, shiftt, cms, masks, shifts,
-			0, 0, 0, (width-1) << 2, (height-1) << 2,
+def g_settimg(self, argv):
+	w = []
+	if g_words(self, w, 7):
+		c0_f, c0_s, c0_w, c0_i = gx_settimg(w[0][0], w[0][1])
+		if tuple([x[0] >> 24 for x in w]) == (
+			0xFD, 0xF5, 0xE6, 0xF3, 0xE7, 0xF5, 0xF2
 		):
-			timgproc(timg)
-			timg    = ultra.sym(timg)
-			fmt     = g_im_fmt[fmt]
-			width   = "%d" % width
-			height  = "%d" % height
-			pal     = "%d" % pal
-			cms     = g_tx_cm(cms)
-			cmt     = g_tx_cm(cmt)
-			masks   = g_tx_mask(masks)
-			maskt   = g_tx_mask(maskt)
-			shifts  = "%d" % shifts
-			shiftt  = "%d" % shiftt
-			arg = (
-				width, height, pal,
-				cms, cmt, masks, maskt, shifts, shiftt
-			)
-			if siz == 0:
-				return ("DPLoadTextureBlock_4b", timg, fmt) + arg
-			siz = g_im_siz(siz)
-			return ("DPLoadTextureBlock", timg, fmt, siz) + arg
-	ultra.script.c_addr -= 8*6
-	f = g_im_fmt[c0_f]
-	s = "G_IM_SIZ_%db" % (4 << c0_s)
-	w = "%d" % c0_w
-	i = ultra.sym(c0_i)
+			c1_fmt, c1_siz, c1_line, c1_tmem, c1_tile, c1_palette, c1_cmt, \
+				c1_maskt, c1_shiftt, c1_cms, c1_masks, c1_shifts = \
+				gx_settile(w[1][0], w[1][1])
+			c3_tile, c3_uls, c3_ult, c3_lrs, c3_dxt = gx_tile(w[3][0], w[3][1])
+			c5_fmt, c5_siz, c5_line, c5_tmem, c5_tile, c5_palette, c5_cmt, \
+				c5_maskt, c5_shiftt, c5_cms, c5_masks, c5_shifts = \
+				gx_settile(w[5][0], w[5][1])
+			c6_t, c6_uls, c6_ult, c6_lrs, c6_lrt = gx_tile(w[6][0], w[6][1])
+			timg    = c0_i
+			fmt     = c5_fmt
+			siz     = c5_siz
+			width   = (c6_lrs >> 2) + 1
+			height  = (c6_lrt >> 2) + 1
+			pal     = c5_palette
+			cms     = c5_cms
+			cmt     = c5_cmt
+			masks   = c5_masks
+			maskt   = c5_maskt
+			shifts  = c5_shifts
+			shiftt  = c5_shiftt
+			if (
+				c0_f, c0_s, c0_w, c0_i,
+				c1_fmt, c1_siz, c1_line, c1_tmem, c1_tile, c1_palette,
+				c1_cmt, c1_maskt, c1_shiftt, c1_cms, c1_masks, c1_shifts,
+				c3_tile, c3_uls, c3_ult, c3_lrs, c3_dxt,
+				c5_fmt, c5_siz, c5_line, c5_tmem, c5_tile, c5_palette,
+				c5_cmt, c5_maskt, c5_shiftt, c5_cms, c5_masks, c5_shifts,
+				c6_t, c6_uls, c6_ult, c6_lrs, c6_lrt,
+			) == (
+				fmt, (2,2,2,3)[siz], 1, timg,
+				fmt, (2,2,2,3)[siz], 0, 0, 7, 0,
+				cmt, maskt, shiftt, cms, masks, shifts,
+				7, 0, 0, g_calc_lrs(width, height, siz), g_calc_dxt(width, siz),
+				fmt, siz, g_calc_line(width, siz), 0, 0, pal,
+				cmt, maskt, shiftt, cms, masks, shifts,
+				0, 0, 0, (width-1) << 2, (height-1) << 2,
+			):
+				timgproc(self, timg)
+				timg    = ultra.sym(self, timg, self.save)
+				fmt     = g_im_fmt[fmt]
+				width   = "%d" % width
+				height  = "%d" % height
+				pal     = "%d" % pal
+				cms     = g_tx_cm(cms)
+				cmt     = g_tx_cm(cmt)
+				masks   = g_tx_mask(masks)
+				maskt   = g_tx_mask(maskt)
+				shifts  = "%d" % shifts
+				shiftt  = "%d" % shiftt
+				arg = (
+					width, height, pal,
+					cms, cmt, masks, maskt, shifts, shiftt
+				)
+				if siz == 0:
+					return ("DPLoadTextureBlock_4b", timg, fmt) + arg
+				siz = g_im_siz(siz)
+				return ("DPLoadTextureBlock", timg, fmt, siz) + arg
+	self.addr = self.save
+	w0 = self.u32()
+	w1 = self.u32()
+	f, s, w, i = gx_settimg(w0, w1)
+	f = g_im_fmt[f]
+	s = "G_IM_SIZ_%db" % (4 << s)
+	w = "%d" % w
+	i = ultra.sym(self, i, self.save)
 	return ("DPSetTextureImage", f, s, w, i)
 
 g_setcombine_cc_a = {
@@ -613,9 +648,9 @@ g_setcombine_mode = {
 	g_cc_en_co_t0   + g_cc_combined:    "G_CC_HILITERGBPASSA2",
 }
 
-def g_setcombine_prc(mode):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_setcombine_prc(self, mode):
+	w0 = self.u32()
+	w1 = self.u32()
 	c0 = (
 		g_setcombine_cc_a[w0 >> 20 & 15],
 		g_setcombine_cc_b[w1 >> 28 & 15],
@@ -640,21 +675,31 @@ def g_setcombine_prc(mode):
 		return ("DPSetCombineMode", mode[c0], mode[c1])
 	return ("DPSetCombineLERP",) + c0 + (None,) + c1
 
-def g_setcombine(argv):
-	return g_setcombine_prc(g_setcombine_mode)
+def g_setcombine(self, argv):
+	return g_setcombine_prc(self, g_setcombine_mode)
 
-def g_setrgba(argv):
+def g_setrgba(self, argv):
 	cmd, = argv
-	ultra.script.c_addr += 4
-	r = "0x%02X" % ultra.ub()
-	g = "0x%02X" % ultra.ub()
-	b = "0x%02X" % ultra.ub()
-	a = "0x%02X" % ultra.ub()
+	self.addr += 4
+	r = "0x%02X" % self.u8()
+	g = "0x%02X" % self.u8()
+	b = "0x%02X" % self.u8()
+	a = "0x%02X" % self.u8()
 	return (cmd, r, g, b, a)
 
-def g_settile(argv):
-	w0 = ultra.uw()
-	w1 = ultra.uw()
+def g_setprimcolor(self, argv):
+	self.addr += 2
+	m = "%d" % self.u8()
+	l = "%d" % self.u8()
+	r = "0x%02X" % self.u8()
+	g = "0x%02X" % self.u8()
+	b = "0x%02X" % self.u8()
+	a = "0x%02X" % self.u8()
+	return ("DPSetPrimColor", m, l, r, g, b, a)
+
+def g_settile(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
 	fmt, siz, line, tmem, tile, palette, cmt, maskt, shiftt, cms, masks, \
 		shifts = gx_settile(w0, w1)
 	fmt     = g_im_fmt[fmt]
@@ -681,6 +726,11 @@ def g_settile(argv):
 		cms, masks, shifts,
 	)
 
+def g_noop(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
+	return ("DPSetBlendMask", "15")
+
 gfx_table = {
 	0x01: (g_mtx,),
 	0x04: (g_vtx,),
@@ -698,54 +748,87 @@ gfx_table = {
 	0xFD: (g_settimg,),
 	0xFC: (g_setcombine,),
 	0xFB: (g_setrgba, "DPSetEnvColor"),
+	0xFA: (g_setprimcolor,),
 	0xF9: (g_setrgba, "DPSetBlendColor"),
 	0xF8: (g_setrgba, "DPSetFogColor"),
 	0xF5: (g_settile,),
 	0xE7: (g_null, "DPPipeSync"),
+	0xC0: (g_noop,),
 }
 
 def gfx_prc(tab, cmd, argv):
 	lst = []
 	for x in argv:
-		if type(x) == str:
-			lst.append(x)
-		else:
-			lst.append("|".join(x))
+		if type(x) == str:  lst.append(x)
+		else:               lst.append("|".join(x))
 	return "gs%s(%s)," % (cmd, ", ".join(lst))
 
 def d_Gfx_prc(self, line, tab, argv):
 	end, = argv
 	table = [self.meta.c.gfx_table, gfx_table]
-	while self.c_addr < end:
+	while self.addr < end:
 		lst_push(self, line)
-		cmd = ultra.ub()
+		cmd = self.u8()
 		for t in table:
 			if cmd in t:
-				self.c_pull()
+				self.addr = self.save
 				f = t[cmd]
-				c = f[0](f[1:])
-				if c != None:
+				c = f[0](self, f[1:])
+				if c is not None:
 					line[-1][-1].append(gfx_prc(tab, c[0], c[1:]))
 					break
 		else:
-			self.c_pull()
-			w0 = ultra.uw()
-			w1 = ultra.uw()
+			self.addr = self.save
+			w0 = self.u32()
+			w1 = self.u32()
 			line[-1][-1].append(tab + "{{0x%08X, 0x%08X}}," % (w0, w1))
 d_Gfx = [True, d_Gfx_prc]
 
-def d_OSThreadTail_prc(argv):
-	next     = aw()
-	priority = ultra.sw()
+def d_Gfx_cmd_prc(self, argv):
+	w0 = self.u32()
+	w1 = self.u32()
+	if (w0, w1) == (0xB8000000, 0x00000000): return ["gsSPEndDisplayList()"]
+	return ["{{0x%08X, 0x%08X}}" % (w0, w1)]
+d_Gfx_cmd = [False, d_Gfx_cmd_prc]
+
+def d_OSThreadTail_prc(self, argv):
+	next     = aw(self)
+	priority = self.s32()
 	return ["{%s, %d}" % (next, priority)]
 d_OSThreadTail = [False, d_OSThreadTail_prc]
 
+def fmt_vihalf(self, x):
+	hi = x >> 16
+	lo = x & 0xFFFF
+	if hi == 0: return "%d" % lo
+	return "%d << 16 | %d" % (hi, lo)
+
+def fmt_viburst(self, x):
+	return "%d << 20 | %d << 16 | %d << 8 | %d" % (
+		x >> 20 & 0xFF,
+		x >> 16 & 0xF,
+		x >>  8 & 0xFF,
+		x >>  0 & 0xFF,
+	)
+
 d_OSViCommonRegs = [
-	[0, -9, 1, d_u32],
+	[0, -1, 1, d_u32, "0x%X"],
+	[0, -1, 1, d_u32],
+	[0, -1, 1, d_u32, fmt_viburst],
+	[0, -1, 1, d_u32],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32],
 ]
 
 d_OSViFieldRegs = [
-	[0, -5, 1, d_u32],
+	[0, -1, 1, d_u32],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32, fmt_vihalf],
+	[0, -1, 1, d_u32],
 ]
 
 d_OSViMode_fldRegs = [
@@ -761,11 +844,11 @@ d_OSViMode = [
 
 def lst_push(self, line):
 	global extern
-	self.c_push()
-	sym = table.sym_addr(self, self.c_dst, rej=True)
-	if sym != None and not (len(line) > 0 and line[-1][1] == sym):
+	self.save = self.addr
+	sym = self.get_sym(self.save)
+	if sym is not None and not (len(line) > 0 and line[-1][1] == sym):
 		extern = set()
-		line.append((self.c_dst, sym, extern, []))
+		line.append((self.save, sym, extern, []))
 		return True
 	return False
 
@@ -789,53 +872,51 @@ def s_data_lst(self, line, lst, tab):
 			else:
 				n = argv[2]
 				t = argv[3]
-				if t == None:
-					self.c_addr += n
+				if t is None:
+					self.addr += n
 				else:
-					if t == "str":
-						line[-1][-1].append(tab + start + ultra.fmt_str(
-							"".join([
-								(lambda x: chr(x) if x > 0 else "")(ultra.ub())
-								for _ in range(n)
-							])
-						) + end)
+					if type(t) is str:
+						if t == "ascii": x = "".join(self.ascii(n))
+						if t == "asciz": x = "".join(self.asciz(n))
+						line[-1][-1].append(tab + start + self.fmt_str(x) + end)
 					else:
 						r, f = t
 						if r:
 							for _ in range(n): f(self, line, tab, argv[4:])
 						else:
 							line[-1][-1].append(tab + start + ", ".join([
-								("\n\t"+tab).join(f(argv[4:])) for _ in range(n)
+								("\n\t"+tab).join(f(self, argv[4:]))
+								for _ in range(n)
 							]) + end)
 
 def s_data(self, argv):
-	start, end, data, lst = argv
+	seg, start, end, lst = argv
 	if start|end == 0 and len(lst) > 0:
 		raise RuntimeError("bad lst %s" % str(lst))
-	init(self, start, data)
+	init(self, seg, start)
 	line = []
 	s_data_lst(self, line, lst, "")
-	# if self.addr != end: print("warning: bad size %08X:%08X" % (start, end))
+	if self.addr != end:
+		print("warning: bad end %08X:%08X (%08X)" % (start, end, self.addr))
 	fmt(self, line)
 
-def s_declare(self, argv, var, addr, s):
-	start, end, data, src = argv
-	init(self, start, data)
-	if src == None:
-		src = start
+def s_declare(self, argv, var, comm, st):
+	seg, start, end = argv
 	f = self.file[-1][1]
-	for dst, sym in table.sym_range(self, start, end, src):
+	for addr in sorted(self.meta.sym[seg].keys()):
+		if addr < start or addr >= end: continue
+		sym = self.meta.sym[seg][addr]
 		if hasattr(sym, "fmt"):
-			if var or (sym.flag & table.GLOBL and not sym.flag & table.LOCAL):
-				start = "/* 0x%08X */ " % dst + s if addr else s
-				if var and sym.flag & ultra.BALIGN: start += "BALIGN "
-				f.append(sym.fmt(start, ";") + "\n")
+			if var or ("GLOBL" in sym.flag and "LOCAL" not in sym.flag):
+				s = "/* 0x%08X */ " % addr + st if comm else st
+				if var and "BALIGN" in sym.flag: s += "BALIGN "
+				f.append(sym.fmt(s, ";") + "\n")
 
 def s_bss(self, argv):
-	s_declare(self, argv, True, ultra.COMM_VAR, "")
+	s_declare(self, argv, True, ultra.COMM_VADDR, "")
 
 def s_extern(self, argv):
-	s_declare(self, argv, False, ultra.COMM_EXTERN, "extern ")
+	s_declare(self, argv, False, ultra.COMM_EADDR, "extern ")
 
 def s_struct_lst(f, tab, lst):
 	tab += "\t"
@@ -855,7 +936,10 @@ def s_struct_lst(f, tab, lst):
 def s_struct(self, argv):
 	tbl, = argv
 	f = self.file[-1][1]
-	for size, c, name, lst in tbl:
-		f.append("typedef %s %s\n{\n" % (c, name))
+	for size, c, sname, dname, lst in tbl:
+		if dname:   f.append("typedef ")
+		if sname:   f.append("%s %s\n{\n" % (c, sname))
+		else:       f.append("%s\n{\n" % c)
 		s_struct_lst(f, "", lst)
-		f.append("}\n%s;\n\n" % name.upper())
+		if dname:   f.append("}\n%s;\n\n" % dname)
+		else:       f.append("};\n\n")

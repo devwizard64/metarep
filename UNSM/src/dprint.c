@@ -1,5 +1,10 @@
 #include <sm64.h>
 
+extern u16 *txt_glbfont[];
+extern Gfx gfx_print_copy_start[];
+extern Gfx gfx_print_copy_char[];
+extern Gfx gfx_print_copy_end[];
+
 typedef struct dprint
 {
 	int x;
@@ -30,7 +35,7 @@ static void dprintf_write(
 	int i = 0;
 	CHAR c;
 	char minus = FALSE;
-	char pad = zero == TRUE ? '0' : -1;
+	char pad = ISTRUE(zero) ? '0' : -1;
 	if (value != 0)
 	{
 		if (value < 0)
@@ -45,12 +50,12 @@ static void dprintf_write(
 			if (power > (unsigned int)value) break;
 			e++;
 		}
-		if ((int)digit > e)
+		if (digit > e)
 		{
-			for (i = 0; i < (int)digit-e; i++) *(buf+i) = pad;
-			if (minus == TRUE) i--;
+			for (i = 0; i < digit-e; i++) *(buf+i) = pad;
+			if (ISTRUE(minus)) i--;
 		}
-		if (minus == TRUE)
+		if (ISTRUE(minus))
 		{
 			*(buf+i) = 'M';
 			i++;
@@ -67,9 +72,9 @@ static void dprintf_write(
 	else
 	{
 		e = 1;
-		if ((int)digit > e)
+		if (digit > e)
 		{
-			for (i = 0; i < (int)digit-e; i++) *(buf+i) = pad;
+			for (i = 0; i < digit-e; i++) *(buf+i) = pad;
 		}
 		*(buf+i) = '0';
 	}
@@ -110,7 +115,7 @@ void dprintf(int x, int y, const char *fmt, int value)
 	dprint_table[dprint_index]->x = x;
 	dprint_table[dprint_index]->y = y;
 	c = fmt[i];
-	while (c != 0)
+	while (c != '\0')
 	{
 		if (c == '%')
 		{
@@ -146,7 +151,7 @@ void dprint(int x, int y, const char *str)
 	dprint_table[dprint_index]->x = x;
 	dprint_table[dprint_index]->y = y;
 	c = str[i];
-	while (c != 0)
+	while (c != '\0')
 	{
 		dprint_table[dprint_index]->str[n] = c;
 		n++;
@@ -166,7 +171,7 @@ void dprintc(int x, int y, const char *str)
 	int i = 0;
 	if (!(dprint_table[dprint_index] = malloc(sizeof(DPRINT)))) return;
 	c = str[i];
-	while (c != 0)
+	while (c != '\0')
 	{
 		dprint_table[dprint_index]->str[n] = c;
 		n++;
@@ -178,11 +183,6 @@ void dprintc(int x, int y, const char *str)
 	dprint_table[dprint_index]->y = y;
 	dprint_index++;
 }
-
-extern u16 *txt_dprint[];
-extern Gfx gfx_dprint_copy_start[];
-extern Gfx gfx_dprint_copy_char[];
-extern Gfx gfx_dprint_copy_end[];
 
 static CHAR dprint_cvt(CHAR c)
 {
@@ -206,10 +206,10 @@ static CHAR dprint_cvt(CHAR c)
 
 static void dprint_draw_txt(CHAR c)
 {
-	u16 **txt = segment_to_virtual(txt_dprint);
-	gDPPipeSync(gfx_ptr++);
-	gDPSetTextureImage(gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[c]);
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_char);
+	u16 **txt = segment_to_virtual(txt_glbfont);
+	gDPPipeSync(glistp++);
+	gDPSetTextureImage(glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt[c]);
+	gSPDisplayList(glistp++, gfx_print_copy_char);
 }
 
 static void dprint_clamp(int *x, int *y)
@@ -230,7 +230,7 @@ static void dprint_draw_char(int x, int y, int n)
 	ux = sx;
 	uy = sy;
 	gSPTextureRectangle(
-		gfx_ptr++, ux << 2, uy << 2, (ux+16-1) << 2, (uy+16-1) << 2,
+		glistp++, ux << 2, uy << 2, (ux+16-1) << 2, (uy+16-1) << 2,
 		G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
 	);
 }
@@ -248,11 +248,11 @@ void dprint_draw(void)
 		return;
 	}
 	guOrtho(mtx, 0, SCREEN_WD, 0, SCREEN_HT, -10, 10, 1);
-	gSPPerspNormalize(gfx_ptr++, 0xFFFF);
+	gSPPerspNormalize(glistp++, 0xFFFF);
 	gSPMatrix(
-		gfx_ptr++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
+		glistp++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
 	);
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_start);
+	gSPDisplayList(glistp++, gfx_print_copy_start);
 	for (i = 0; i < dprint_index; i++)
 	{
 		for (n = 0; n < dprint_table[i]->len; n++)
@@ -265,6 +265,6 @@ void dprint_draw(void)
 		}
 		free(dprint_table[i]);
 	}
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_end);
+	gSPDisplayList(glistp++, gfx_print_copy_end);
 	dprint_index = 0;
 }

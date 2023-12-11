@@ -1,9 +1,9 @@
 #include <sm64.h>
 
-#include "tag_obj.c"
-#include "map_obj.c"
+#include "tagobj.c"
+#include "mapobj.c"
 
-extern O_SCRIPT o_1300091C[];
+extern O_SCRIPT o_coin[];
 extern O_SCRIPT o_13000C44[];
 extern O_SCRIPT o_13002898[];
 extern O_SCRIPT o_130028CC[];
@@ -21,65 +21,67 @@ static SHORT tag_ang(SHORT x)
 	return y;
 }
 
-static void tag_spawn_arg(
+static void tag_enter_code(
 	int shape, O_SCRIPT *script,
-	SHORT px, SHORT py, SHORT pz, SHORT ay, SHORT arg
+	SHORT posx, SHORT posy, SHORT posz, SHORT angy, SHORT code
 )
 {
 	if (script)
 	{
-		OBJECT *obj = objlib_8029E9AC(
-			&object_dummy, 0, shape, script, px, py, pz, 0, tag_ang(ay), 0
+		OBJECT *obj = obj_make_abs(
+			&object_dummy, 0, shape, script,
+			posx, posy, posz, 0, tag_ang(angy), 0
 		);
-		obj->o_arg = arg << 16;
+		obj->o_actor_info = code << 16;
 	}
 }
 
-static void tag_spawn_code(
+static void tag_enter_arg(
 	int shape, O_SCRIPT *script,
-	SHORT px, SHORT py, SHORT pz, SHORT ay, SHORT code
+	SHORT posx, SHORT posy, SHORT posz, SHORT angy, SHORT arg
 )
 {
 	if (script)
 	{
-		OBJECT *obj = objlib_8029E9AC(
-			&object_dummy, 0, shape, script, px, py, pz, 0, tag_ang(ay), 0
+		OBJECT *obj = obj_make_abs(
+			&object_dummy, 0, shape, script,
+			posx, posy, posz, 0, tag_ang(angy), 0
 		);
-		obj->o_arg = code << 24;
+		obj->o_actor_info = arg << 24;
 	}
 }
 
-static void tag_spawn_xyz(
+static void tag_enter_xyz(
 	int shape, O_SCRIPT *script,
-	SHORT px, SHORT py, SHORT pz,
+	SHORT posx, SHORT posy, SHORT posz,
 	SHORT x, SHORT y, SHORT z
 )
 {
-	OBJECT *obj = objlib_8029E9AC(
-		&object_dummy, 0, shape, script, px, py, pz, 0, 0, 0
+	OBJECT *obj = obj_make_abs(
+		&object_dummy, 0, shape, script, posx, posy, posz, 0, 0, 0
 	);
-	obj->mem[O_V5].f = x;
-	obj->mem[O_V6].f = y;
-	obj->mem[O_V7].f = z;
+	obj->o_f5 = x;
+	obj->o_f6 = y;
+	obj->o_f7 = z;
 }
 
 UNUSED
-static void tag_spawn_old(O_SCRIPT *script, TAG *tag)
+static void tag_enter_old(O_SCRIPT *script, TAG *tag)
 {
 	OBJECT *obj;
-	SHORT shape = script == o_1300091C ? S_COIN : S_NULL;
-	obj = objlib_8029E9AC(
+	SHORT shape = script == o_coin ? S_COIN : S_NULL;
+	obj = obj_make_abs(
 		&object_dummy, 0, shape, script,
 		tag[1], tag[2], tag[3], 0, tag_ang(tag[0]), 0
 	);
-	obj->o_tag_arg = tag[4];
-	obj->o_arg = (tag[4] & 0xFF) >> 16;
+	obj->o_tag_info = tag[4];
+	obj->o_actor_info = (tag[4] & 0xFF) >> 16;
 }
 
 void tag_obj_load(SHORT scene, TAG *tag)
 {
-	object_dummy.list.s.scene = scene;
-	object_dummy.list.s.group = scene;
+	object_dummy.s.scene = scene;
+	object_dummy.s.group = scene;
 	for (;;)
 	{
 		UNUSED int i;
@@ -87,7 +89,7 @@ void tag_obj_load(SHORT scene, TAG *tag)
 		TAG buf[5];
 		OBJECT *obj;
 		s16 shape;
-		s16 arg;
+		s16 code;
 		O_SCRIPT *script;
 		if (*tag == -1) break;
 		n = (*tag & 0x1FF) - TAG_START;
@@ -99,19 +101,19 @@ void tag_obj_load(SHORT scene, TAG *tag)
 		buf[4] = *tag++;
 		shape = tag_obj_table[n].shape;
 		script = tag_obj_table[n].script;
-		arg = tag_obj_table[n].arg;
-		if (arg != 0) buf[4] = (buf[4] & 0xFF00) + (arg & 0xFF);
+		code = tag_obj_table[n].code;
+		if (code != 0) buf[4] = (buf[4] & 0xFF00) + (code & 0xFF);
 		if ((buf[4] >> 8 & 0xFF) != 0xFF)
 		{
-			obj = objlib_8029E9AC(
+			obj = obj_make_abs(
 				&object_dummy, 0, shape, script,
 				buf[1], buf[2], buf[3], 0, tag_ang(buf[0]), 0
 			);
-			obj->o_tag_arg = buf[4];
-			obj->o_arg = ((buf[4] & 0xFF) << 16) + (buf[4] & 0xFF00);
+			obj->o_tag_info = buf[4];
+			obj->o_actor_info = ((buf[4] & 0xFF) << 16) + (buf[4] & 0xFF00);
 			obj->o_code = buf[4] & 0xFF;
-			obj->_1F6 = 2;
-			obj->_25C = tag - 1;
+			obj->actor_type = ACTORTYPE_16;
+			obj->actor_flag = tag - 1;
 			obj->parent = obj;
 		}
 	}
@@ -119,34 +121,49 @@ void tag_obj_load(SHORT scene, TAG *tag)
 
 void tag_load(SHORT scene, TAG *tag)
 {
-	object_dummy.list.s.scene = scene;
-	object_dummy.list.s.group = scene;
+	object_dummy.s.scene = scene;
+	object_dummy.s.group = scene;
 	for (;;)
 	{
 		UNUSED int i;
 		UNUSED OBJECT *obj;
-		short px;
-		short py;
-		short pz;
+		short posx;
+		short posy;
+		short posz;
 		short index;
-		short ay;
+		short angy;
 		UNUSED TAG buf[5];
 		index = *tag++;
 		if (index < 0) break;
-		px = *tag++;
-		py = *tag++;
-		pz = *tag++;
-		ay = *tag++;
+		posx = *tag++;
+		posy = *tag++;
+		posz = *tag++;
+		angy = *tag++;
 		switch (index)
 		{
-		case  0: tag_spawn_arg(S_NULL, o_13002898, px, py, pz, ay, 0); break;
-		case  1: tag_spawn_arg(54, o_130028CC, px, py, pz, ay, 0); break;
-		case  2: tag_spawn_arg(55, o_13000C44, px, py, pz, ay, 0); break;
-		case  3: tag_spawn_arg(57, o_130028FC, px, py, pz, ay, 0); break;
-		case  4: tag_spawn_arg(58, o_1300292C, px, py, pz, ay, 0); break;
-		case 20: tag_spawn_arg(S_COIN, o_1300091C, px, py, pz, ay, 0); break;
-		case 21: tag_spawn_arg(S_COIN, o_1300091C, px, py, pz, ay, 0); break;
-		default: break;
+		case 0:
+			tag_enter_code(S_NULL, o_13002898, posx, posy, posz, angy, 0);
+			break;
+		case 1:
+			tag_enter_code(54, o_130028CC, posx, posy, posz, angy, 0);
+			break;
+		case 2:
+			tag_enter_code(55, o_13000C44, posx, posy, posz, angy, 0);
+			break;
+		case 3:
+			tag_enter_code(57, o_130028FC, posx, posy, posz, angy, 0);
+			break;
+		case 4:
+			tag_enter_code(58, o_1300292C, posx, posy, posz, angy, 0);
+			break;
+		case 20:
+			tag_enter_code(S_COIN, o_coin, posx, posy, posz, angy, 0);
+			break;
+		case 21:
+			tag_enter_code(S_COIN, o_coin, posx, posy, posz, angy, 0);
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -156,24 +173,24 @@ void map_obj_load(SHORT scene, MAP **map)
 	int len;
 	int i;
 	len = **map; (*map)++;
-	object_dummy.list.s.scene = scene;
-	object_dummy.list.s.group = scene;
+	object_dummy.s.scene = scene;
+	object_dummy.s.group = scene;
 	for (i = 0; i < len; i++)
 	{
 		int n;
-		short px;
-		short py;
-		short pz;
+		MAP posx;
+		MAP posy;
+		MAP posz;
 		MAP buf[5];
 		u8 shape;
 		u8 ext;
 		u8 index;
-		u8 code;
+		u8 arg;
 		O_SCRIPT *script;
 		index = **map; (*map)++;
-		px    = **map; (*map)++;
-		py    = **map; (*map)++;
-		pz    = **map; (*map)++;
+		posx  = **map; (*map)++;
+		posy  = **map; (*map)++;
+		posz  = **map; (*map)++;
 		n = 0;
 		for (;;)
 		{
@@ -184,30 +201,32 @@ void map_obj_load(SHORT scene, MAP **map)
 		shape  = map_obj_table[n].shape;
 		script = map_obj_table[n].script;
 		ext    = map_obj_table[n].ext;
-		code   = map_obj_table[n].code;
+		arg    = map_obj_table[n].arg;
 		switch (ext)
 		{
 		case MAP_EXT_NULL:
-			tag_spawn_arg(shape, script, px, py, pz, 0, 0);
+			tag_enter_code(shape, script, posx, posy, posz, 0, 0);
 			break;
-		case MAP_EXT_AY:
+		case MAP_EXT_ANG:
 			buf[0] = **map; (*map)++;
-			tag_spawn_arg(shape, script, px, py, pz, buf[0], 0);
+			tag_enter_code(shape, script, posx, posy, posz, buf[0], 0);
 			break;
-		case MAP_EXT_AY_ARG:
+		case MAP_EXT_ANG_CODE:
 			buf[0] = **map; (*map)++;
 			buf[1] = **map; (*map)++;
-			tag_spawn_arg(shape, script, px, py, pz, buf[0], buf[1]);
+			tag_enter_code(shape, script, posx, posy, posz, buf[0], buf[1]);
 			break;
 		case MAP_EXT_XYZ:
 			buf[0] = **map; (*map)++;
 			buf[1] = **map; (*map)++;
 			buf[2] = **map; (*map)++;
-			tag_spawn_xyz(shape, script, px, py, pz, buf[0], buf[1], buf[2]);
+			tag_enter_xyz(
+				shape, script, posx, posy, posz, buf[0], buf[1], buf[2]
+			);
 			break;
-		case MAP_EXT_AY_CODE:
+		case MAP_EXT_ANG_ARG:
 			buf[0] = **map; (*map)++;
-			tag_spawn_code(shape, script, px, py, pz, buf[0], code);
+			tag_enter_arg(shape, script, posx, posy, posz, buf[0], arg);
 			break;
 		default:
 			break;

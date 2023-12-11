@@ -5,6 +5,6 @@
 #define _H(x, y)    ((u32)(u16)(x) << 16 | (u32)(u16)(y))
 #define _W(x)       ((u32)(x))
 #define _F(x)       ((u32)(int)(0x10000*(x)))
-#define _P(x)       ((uintptr_t)(x))
+#define _P(x)       ((unsigned long)(x))
 
 #endif /* __SM64_SCRIPT_C_H__ */

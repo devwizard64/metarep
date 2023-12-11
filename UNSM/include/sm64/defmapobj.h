@@ -18,11 +18,11 @@
 #define MAP_OBJ_15              15
 #define MAP_OBJ_16              16
 #define MAP_OBJ_17              17
-#define MAP_OBJ_18              18
+#define MAP_OBJ_MR_I            18
 #define MAP_OBJ_BULLY           19
 #define MAP_OBJ_20              20
 #define MAP_OBJ_26              26
-#define MAP_OBJ_27              27
+#define MAP_OBJ_CHEST           27
 #define MAP_OBJ_28              28
 #define MAP_OBJ_29              29
 #define MAP_OBJ_BUTTERFLY       32

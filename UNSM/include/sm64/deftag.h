@@ -30,8 +30,8 @@
 #define TAG_32                  32
 #define TAG_33                  33
 #define TAG_34                  34
-#define TAG_35                  35
-#define TAG_36                  36
+#define TAG_CHUCKYA             35
+#define TAG_CANNON              36
 #define TAG_37                  37
 #define TAG_38                  38
 #define TAG_39                  39
@@ -47,26 +47,26 @@
 #define TAG_49                  49
 #define TAG_50                  50
 #define TAG_51                  51
-#define TAG_53                  53
+#define TAG_BLUECOINSW          53
 #define TAG_54                  54
 #define TAG_55                  55
 #define TAG_56                  56
 #define TAG_57                  57
 #define TAG_58                  58
 #define TAG_59                  59
-#define TAG_60                  60
-#define TAG_61                  61
-#define TAG_62                  62
-#define TAG_63                  63
-#define TAG_64                  64
-#define TAG_65                  65
-#define TAG_66                  66
+#define TAG_ITEMBOX_RED         60
+#define TAG_ITEMBOX_GREEN       61
+#define TAG_ITEMBOX_BLUE        62
+#define TAG_ITEMBOX_SHELL       63
+#define TAG_ITEMBOX_COIN        64
+#define TAG_ITEMBOX_COIN3       65
+#define TAG_ITEMBOX_COIN10      66
 #define TAG_67                  67
-#define TAG_68                  68
-#define TAG_69                  69  /* CORKBOX */
-#define TAG_70                  70  /* CORKBOXCOIN */
-#define TAG_71                  71  /* METALBOX */
-#define TAG_72                  72  /* SMALLBOX */
+#define TAG_ITEMBOX_STAR1       68
+#define TAG_69                  69
+#define TAG_70                  70
+#define TAG_71                  71
+#define TAG_72                  72
 #define TAG_73                  73
 #define TAG_74                  74
 #define TAG_75                  75
@@ -127,13 +127,13 @@
 #define TAG_196                 196
 #define TAG_234                 234
 #define TAG_235                 235
-#define TAG_236                 236
+#define TAG_CHEST               236
 #define TAG_237                 237
 #define TAG_238                 238
 #define TAG_239                 239
 #define TAG_240                 240
 #define TAG_241                 241
-#define TAG_242                 242
+#define TAG_SKEETER             242
 #define TAG_243                 243
 #define TAG_251                 251
 #define TAG_252                 252
@@ -149,7 +149,7 @@
 #define TAG_281                 281
 #define TAG_289                 289
 #define TAG_290                 290
-#define TAG_291                 291
+#define TAG_MR_I                291
 #define TAG_292                 292
 #define TAG_293                 293
 #define TAG_303                 303
@@ -170,11 +170,11 @@
 #define TAG_327                 327
 #define TAG_328                 328
 #define TAG_329                 329
-#define TAG_339                 339
-#define TAG_340                 340
-#define TAG_341                 341
-#define TAG_342                 342
-#define TAG_343                 343
+#define TAG_ITEMBOX_STAR2       339
+#define TAG_ITEMBOX_STAR3       340
+#define TAG_ITEMBOX_STAR4       341
+#define TAG_ITEMBOX_STAR5       342
+#define TAG_ITEMBOX_STAR6       343
 #define TAG_350                 350
 #define TAG_351                 351
 #define TAG_352                 352

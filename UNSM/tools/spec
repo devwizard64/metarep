@@ -157,34 +157,34 @@ with open(output, "w") as f:
 			f.write("\tENTRY(_%sSegmentTextStart)\n" % seg["name"])
 		if "address" in seg: f.write("\t. = %s;\n" % seg["address"])
 		f.write("\t_%sSegmentRomStart = __rom;\n" % seg["name"])
-		f.write("\t.%s.text : AT(__rom) {\n" % seg["name"])
+		f.write("\t.%s.text : AT(__rom) SUBALIGN(16) {\n" % seg["name"])
 		if "BOOT" in seg["flags"]: f.write("\t\t. += 0x50;\n")
 		for path in seg["include"]:
-			f.write("\t\t%s(.text*); . = ALIGN(0x10);\n" % path)
+			f.write("\t\t%s(.text*); . = ALIGN(16);\n" % path)
 		f.write("\t}\n")
 		f.write("\t__rom += SIZEOF(.%s.text);\n" % seg["name"]);
-		f.write("\t.%s.data : AT(__rom) {\n" % seg["name"])
+		f.write("\t.%s.data : AT(__rom) SUBALIGN(16) {\n" % seg["name"])
 		for path in seg["include"]:
-			f.write("\t\t%s(.data); . = ALIGN(0x10);\n" % path)
-			f.write("\t\t%s(.rodata*); . = ALIGN(0x10);\n" % path)
+			f.write("\t\t%s(.data); . = ALIGN(16);\n" % path)
+			f.write("\t\t%s(.rodata*); . = ALIGN(16);\n" % path)
 		f.write("\t}\n")
 		f.write("\t__rom += SIZEOF(.%s.data);\n" % seg["name"]);
-		f.write("\t.%s.sdata : AT(__rom) {\n" % seg["name"])
+		f.write("\t.%s.sdata : AT(__rom) SUBALIGN(16) {\n" % seg["name"])
 		for path in seg["include"]:
-			f.write("\t\tKEEP(%s(.sdata)); . = ALIGN(0x10);\n" % path)
-			f.write("\t\tKEEP(%s(.lit8)); . = ALIGN(0x10);\n" % path)
-			f.write("\t\tKEEP(%s(.lit4)); . = ALIGN(0x10);\n" % path)
+			f.write("\t\tKEEP(%s(.sdata)); . = ALIGN(16);\n" % path)
+			f.write("\t\tKEEP(%s(.lit8)); . = ALIGN(16);\n" % path)
+			f.write("\t\tKEEP(%s(.lit4)); . = ALIGN(16);\n" % path)
 		f.write("\t}\n")
 		f.write("\t__rom += SIZEOF(.%s.sdata);\n" % seg["name"]);
-		f.write("\t.%s.sbss : AT(__rom) {\n" % seg["name"])
+		f.write("\t.%s.sbss : AT(__rom) SUBALIGN(16) {\n" % seg["name"])
 		for path in seg["include"]:
-			f.write("\t\t%s(.sbss); . = ALIGN(0x10);\n" % path)
-			f.write("\t\t%s(.scommon); . = ALIGN(0x10);\n" % path)
+			f.write("\t\t%s(.sbss); . = ALIGN(16);\n" % path)
+			f.write("\t\t%s(.scommon); . = ALIGN(16);\n" % path)
 		f.write("\t}\n")
-		f.write("\t.%s.bss : AT(__rom) {\n" % seg["name"])
+		f.write("\t.%s.bss : AT(__rom) SUBALIGN(16) {\n" % seg["name"])
 		for path in seg["include"]:
-			f.write("\t\t%s(.bss); . = ALIGN(0x10);\n" % path)
-			f.write("\t\t%s(COMMON); . = ALIGN(0x10);\n" % path)
+			f.write("\t\t%s(.bss); . = ALIGN(16);\n" % path)
+			f.write("\t\t%s(COMMON); . = ALIGN(16);\n" % path)
 		f.write("\t}\n")
 		if "BOOT" in seg["flags"]: f.write(
 			"\tASSERT(__rom <= 0x101000, "

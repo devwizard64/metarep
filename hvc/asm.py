@@ -1,10 +1,5 @@
-import table
+import main
 import hvc
-
-A16     = 1 << 16
-A8      = 1 << 17
-I16     = 1 << 18
-I8      = 1 << 19
 
 A_Y     = 0x00  # Y
 A_A     = 0x01  # A
@@ -554,11 +549,11 @@ op_table = None
 fmt_addr = None
 btbl = {}
 
-def init(self, start, data, i):
+def init(self, seg, addr, i):
 	global op_table
 	global fmt_addr
 	global op
-	hvc.init(self, start, data)
+	hvc.init(self, seg, addr)
 	op_table = (op_hvc, op_shvc)[i]
 	fmt_addr = "%%0%dX" % (2*(2+i))
 	op = None
@@ -568,144 +563,138 @@ def fmt(self, line, btbl, code=False):
 	last = None
 	for addr, ln in line:
 		if last != addr:
-			sym = table.sym_addr(self, addr, addr)
-			if sym != None:
+			sym = self.get_sym(addr)
+			if sym is not None:
 				if "-" not in sym.label and "+" not in sym.label:
 					#if code == sym.label.startswith("data_"): print(sym.label)
-					if sym.flag & A16:  f.append(".a16\n")
-					if sym.flag & A8:   f.append(".a8\n")
-					if sym.flag & I16:  f.append(".i16\n")
-					if sym.flag & I8:   f.append(".i8\n")
+					if "A16" in sym.flag: f.append(".a16\n")
+					if "A8"  in sym.flag: f.append(".a8\n")
+					if "I16" in sym.flag: f.append(".i16\n")
+					if "I8"  in sym.flag: f.append(".i8\n")
 					if not sym.label.startswith("_"):
-						if last != None:
-							f.append("\n")
-						f.append("; $%s\n" % (fmt_addr % addr))
-					if sym.flag & table.GLOBL:
-						f.append(".global %s\n" % sym.label)
+						f.append("\n")
+						if hvc.COMM_LABEL:
+							f.append("; $%s\n" % (fmt_addr % addr))
+					if "GLOBL" in sym.flag: f.append(".global %s\n" % sym.label)
 					f.append("%s:\n" % sym.label)
-			elif addr in btbl:
-				f.append("_%s:\n" % (fmt_addr % addr))
+			elif addr in btbl: f.append("_%s:\n" % (fmt_addr % addr))
 			last = addr
-		if 1 and not 0xFFB0 <= addr < 0x10000:
-			f.append("/*%s*/  " % (fmt_addr % addr))
-		else:
-			f.append("\t")
-		f.append("%s\n" % ln)
-	if last == None and self.c_addr in btbl:
-		f.append("_%s:\n" % (fmt_addr % self.c_addr))
-		btbl.remove(self.c_addr)
+		if hvc.COMM_LINE and not 0xFFB0 <= addr < 0x10000:
+			f.append("/*%s*/" % (fmt_addr % addr))
+		f.append("\t%s\n" % ln)
+	if last is None and self.addr in btbl:
+		f.append("_%s:\n" % (fmt_addr % self.addr))
+		btbl.remove(self.addr)
 
 def s_code(self, argv):
 	global op
-	start, end, data, i, p = argv
-	init(self, start, data, i)
-	if data not in btbl:
-		btbl[data] = set()
+	seg, start, end, i, p = argv
+	init(self, seg, start, i)
+	if seg not in btbl: btbl[seg] = set()
 	line = []
-	while self.c_addr < end:
-		self.c_push()
-		sym = table.sym_addr(self, self.c_dst)
-		if sym != None:
-			if sym.flag & A16:  p &= ~0x20
-			if sym.flag & A8:   p |=  0x20
-			if sym.flag & I16:  p &= ~0x10
-			if sym.flag & I8:   p |=  0x10
-		ln = table.macro_prc(self)
-		if ln != None:
-			line += ln
+	while self.addr < end:
+		self.save = self.addr
+		sym = self.get_sym(self.save)
+		if sym is not None:
+			if "A16" in sym.flag: p &= ~0x20
+			if "A8"  in sym.flag: p |=  0x20
+			if "I16" in sym.flag: p &= ~0x10
+			if "I8"  in sym.flag: p |=  0x10
+		ln = self.macro()
+		if ln is not None:
+			line.extend(ln)
 			continue
-		self.c_pull()
-		op = hvc.ub()
+		self.addr = self.save
+		op = self.u8()
 		# rep
 		if op == 0xC2:
-			p &= ~hvc.ub()
-			self.c_addr -= 1
+			p &= ~self.u8()
+			self.addr -= 1
 		# sep
 		if op == 0xE2:
-			p |= hvc.ub()
-			self.c_addr -= 1
+			p |= self.u8()
+			self.addr -= 1
 		argv = op_table[op]
-		if argv != None:
+		if argv is not None:
 			lst = []
-			imm = table.imm_addr(self, self.c_dst)
+			imm = self.get_imm(self.save)
 			for i, arg in enumerate(argv[1:]):
 				if arg == A_IA: arg = A_IB if (p & 0x20) else A_IW
 				if arg == A_IX: arg = A_IB if (p & 0x10) else A_IW
 				if   arg == A_Y:  lst.append("y")
 				elif arg == A_A:  lst.append("a")
 				elif arg == A_X:  lst.append("x")
-				elif arg == A_IB:
-					lst.append(table.imm_prc(
-						imm[i] if imm != None and imm[i] != None else "#$%02X",
-						hvc.ub()
-					))
-				elif arg == A_IW:
-					lst.append(table.imm_prc(
-						imm[i] if imm != None and imm[i] != None else "#$%04X",
-						hvc.uw()
-					))
-				elif arg == A_AB: lst.append(hvc.ab())
-				elif arg == A_AW: lst.append(hvc.aw())
-				elif arg == A_AL: lst.append(hvc.al())
-				elif arg == A_AA: lst.append(hvc.aw(True))
-				elif arg == A_AF: lst.append(hvc.al(True))
+				elif arg == A_IB: lst.append(self.fmt(
+					imm[i] if imm is not None and imm[i] is not None
+					else "#$%02X",
+					self.u8()
+				))
+				elif arg == A_IW: lst.append(self.fmt(
+					imm[i] if imm is not None and imm[i] is not None
+					else "#$%04X",
+					self.u16()
+				))
+				elif arg == A_AB: lst.append(hvc.ab(self))
+				elif arg == A_AW: lst.append(hvc.aw(self))
+				elif arg == A_AL: lst.append(hvc.al(self))
+				elif arg == A_AA: lst.append(hvc.aw(self, True))
+				elif arg == A_AF: lst.append(hvc.al(self, True))
 				elif arg == A_RB:
-					bdst = hvc.sb() + self.c_addr
-					sym = table.sym_addr(self, bdst)
-					if sym != None:
+					bdst = self.s8() + self.addr
+					sym = self.get_sym(bdst)
+					if sym is not None:
 						lst.append(sym.label)
 					else:
-						btbl[data].add(bdst)
+						btbl[seg].add(bdst)
 						lst.append("_%s" % (fmt_addr % bdst))
-				elif arg == A_XB: lst.append("[%s]" % hvc.ab())
-				elif arg == A_XW: lst.append("[%s]" % hvc.aw())
-				elif arg == A_NB: lst.append("(%s)" % hvc.ab())
-				elif arg == A_NW: lst.append("(%s)" % hvc.aw())
+				elif arg == A_XB: lst.append("[%s]" % hvc.ab(self))
+				elif arg == A_XW: lst.append("[%s]" % hvc.aw(self))
+				elif arg == A_NB: lst.append("(%s)" % hvc.ab(self))
+				elif arg == A_NW: lst.append("(%s)" % hvc.aw(self))
 				elif arg == A_NWX:
-					lst.append("(.loword(%s), x)" % hvc.aw())
+					lst.append("(.loword(%s), x)" % hvc.aw(self))
 					if False:
-						self.c_addr-=2
-						if uw() == (self.c_addr&0xffff):
-							print("---> STOP 0x%06X" % self.c_addr)
+						self.addr-=2
+						if self.u16() == (self.addr&0xffff):
+							print("---> STOP 0x%06X" % self.addr)
 				elif arg == A_MV:
-					y = hvc.ub()
-					x = hvc.ub()
+					y = self.u8()
+					x = self.u8()
 					lst.append("#$%02X" % x)
 					lst.append("#$%02X" % y)
 				else:
 					raise RuntimeError("hvc.asm.s_code(): bad arg")
 			ln = argv[0]
-			if len(lst) > 0:
-				ln += " " + ", ".join(lst)
-			line.append((self.c_dst, ln))
-			sym = table.sym_addr(self, self.c_dst)
-			if sym != None:
+			if len(lst) > 0: ln += " " + ", ".join(lst)
+			line.append((self.save, ln))
+			sym = self.get_sym(self.save)
+			if sym is not None:
 				if "-" not in sym.label and "+" not in sym.label:
 					if sym.label.startswith("data_"):
 						raise RuntimeError(sym.label)
 			if False:
-				if 0x01F446 <= self.c_dst < 0x020000:
+				if 0x01F446 <= self.save < 0x020000:
 					print("0x%06X %s" % line[-1])
 			if False:
 				print("0x%04X %s" % line[-1])
 				if line[-1][-1] == "jsr $8E04":
-					print("---> STOP 0x%04X" % self.c_addr)
+					print("---> STOP 0x%04X" % self.addr)
 		else:
 			raise RuntimeError(
 				"hvc.asm.s_code(): illegal opcode 0x%s $%02X (p=$%02X)" % (
-					fmt_addr % self.c_dst, op, p
+					fmt_addr % self.save, op, p
 				)
 			)
-	fmt(self, line, btbl[data], True)
+	fmt(self, line, btbl[seg], True)
 
-d_byte    = [".byte",    lambda: "$%02X" % hvc.ub()]
-d_sbyte   = [".byte",    lambda: "%d"    % hvc.sb()]
-d_ubyte   = [".byte",    lambda: "%d"    % hvc.ub()]
-d_word    = [".word",    lambda: "$%04X" % hvc.uw()]
-d_sword   = [".word",    lambda: "%d"    % hvc.sw()]
-d_uword   = [".word",    lambda: "%d"    % hvc.uw()]
-d_addr    = [".addr",    lambda: hvc.aw()]
-d_faraddr = [".faraddr", lambda: hvc.al()]
+d_byte    = [".byte",    lambda self: "$%02X" % self.u8()]
+d_sbyte   = [".byte",    lambda self: "%d"    % self.s8()]
+d_ubyte   = [".byte",    lambda self: "%d"    % self.u8()]
+d_word    = [".word",    lambda self: "$%04X" % self.u16()]
+d_sword   = [".word",    lambda self: "%d"    % self.s16()]
+d_uword   = [".word",    lambda self: "%d"    % self.u16()]
+d_addr    = [".addr",    lambda self: hvc.aw(self)]
+d_faraddr = [".faraddr", lambda self: hvc.al(self)]
 
 def lst_main(self, line, lst):
 	for argv in lst:
@@ -713,56 +702,57 @@ def lst_main(self, line, lst):
 			if type(argv[1]) == list:
 				lst_main(self, line, argv[1])
 			else:
-				self.c_push()
+				self.save = self.addr
 				n = argv[1]
 				t = argv[2]
 				if t == "ascii":
-					line.append((self.c_dst, ".byte \"%s\"" % "".join([
-						chr(hvc.ub()) for _ in range(n)]
+					line.append((self.save, ".byte \"%s\"" % "".join([
+						chr(self.u8()) for _ in range(n)]
 					)))
 				elif t == "lh":
-					b = [[hvc.ub() for _ in range(n)] for _ in range(2)]
+					b = [[self.u8() for _ in range(n)] for _ in range(2)]
 					s = ", ".join([
-						hvc.sym_lh(lo, hi)
+						hvc.sym_lh(self, lo, hi)
 						for lo, hi in zip(b[0], b[1])
 					])
 					for i, c in enumerate(("lobytes", "hibytes")):
-						line.append((self.c_dst + n*i, ".%s %s" % (c, s)))
+						line.append((self.save + n*i, ".%s %s" % (c, s)))
 				elif t == "lhb":
-					b = [[hvc.ub() for _ in range(n)] for _ in range(3)]
+					b = [[self.u8() for _ in range(n)] for _ in range(3)]
 					s = ", ".join([
-						hvc.sym_lhb(lo, hi, ba)
+						hvc.sym_lhb(self, lo, hi, ba)
 						for lo, hi, ba in zip(b[0], b[1], b[2])
 					])
 					for i, c in enumerate(("lobytes", "hibytes", "bankbytes")):
-						line.append((self.c_dst + n*i, ".%s %s" % (
-							c.ljust(11), s
+						line.append((self.save + n*i, ".%s %s" % (
+							c.ljust(10), s
 						)))
 				else:
-					line.append((self.c_dst, "%s %s" % (
-						t[0], ", ".join([t[1]() for _ in range(n)])
+					line.append((self.save, "%s %s" % (
+						t[0], ", ".join([t[1](self) for _ in range(n)])
 					)))
 
 def s_data(self, argv):
-	start, end, data, i, lst = argv
-	init(self, start, data, i)
+	seg, start, end, i = argv[:4]
+	init(self, seg, start, i)
 	line = []
-	if lst == None:
-		lst = [[end-start, 1, d_byte]]
+	if len(argv) > 4:
+		lst = argv[4]
+		if type(lst) is str:
+			table = {
+				"byte":    (8, 1, d_byte),
+				"word":    (4, 2, d_word),
+				"addr":    (1, 2, d_addr),
+				"faraddr": (1, 3, d_faraddr),
+			}
+			if lst in table:
+				w, s, f = table[lst]
+				t = lst
+				l = (end-start)//s
+				r = l % w
+				lst = [[l//w, w, f]]
+				if r > 0: lst.append([1, r, f])
 	else:
-		table = {
-			"byte":    (8, 1, d_byte),
-			"word":    (4, 2, d_word),
-			"addr":    (1, 2, d_addr),
-			"faraddr": (1, 3, d_faraddr),
-		}
-		if type(lst) == str and lst in table:
-			w, s, f = table[lst]
-			t = lst
-			l = (end-start)//s
-			r = l % w
-			lst = [[l//w, w, f]]
-			if r > 0:
-				lst.append([1, r, f])
+		lst = [[end-start, 1, d_byte]]
 	lst_main(self, line, lst)
 	fmt(self, line, set())

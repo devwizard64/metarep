@@ -1,43 +1,44 @@
-# void slidec(const char *src, char *dst)
 .globl slidec
+.ent slidec
 slidec:
-	lw      $t8, 0x04($a0)
-	lw      $a3, 0x08($a0)
-	lw      $t9, 0x0C($a0)
-	move    $a2, $0
-	add     $t8, $a1
-	add     $a3, $a0
-	add     $t9, $a0
-	add     $a0, 0x10
+	lw      $24, 4($4)
+	lw      $7, 8($4)
+	lw      $25, 12($4)
+	move    $6, $0
+	add     $24, $5
+	add     $7, $4
+	add     $25, $4
+	add     $4, 16
 1:
-	bnez    $a2, 2f
-	lw      $t0, ($a0)
-	li      $a2, 32
-	add     $a0, 4
+	bnez    $6, 2f
+	lw      $8, ($4)
+	li      $6, 32
+	add     $4, 4
 2:
-	slt     $t1, $t0, $0
-	beqz    $t1, 2f
-	lb      $t2, ($t9)
-	add     $t9, 1
-	sb      $t2, ($a1)
-	add     $a1, 1
+	slt     $9, $8, $0
+	beqz    $9, 2f
+	lb      $10, ($25)
+	add     $25, 1
+	sb      $10, ($5)
+	add     $5, 1
 	b       3f
 2:
-	lhu     $t2, ($a3)
-	add     $a3, 2
-	srl     $t3, $t2, 12
-	and     $t2, 0xFFF
-	sub     $t1, $a1, $t2
-	add     $t3, 3
+	lhu     $10, ($7)
+	add     $7, 2
+	srl     $11, $10, 12
+	and     $10, 0xFFF
+	sub     $9, $5, $10
+	add     $11, 3
 2:
-	lb      $t2, -1($t1)
-	sub     $t3, 1
-	add     $t1, 1
-	sb      $t2, ($a1)
-	add     $a1, 1
-	bnez    $t3, 2b
+	lb      $10, -1($9)
+	sub     $11, 1
+	add     $9, 1
+	sb      $10, ($5)
+	add     $5, 1
+	bnez    $11, 2b
 3:
-	sll     $t0, 1
-	sub     $a2, 1
-	bne     $a1, $t8, 1b
-	j       $ra
+	sll     $8, 1
+	sub     $6, 1
+	bne     $5, $24, 1b
+	j       $31
+.end slidec

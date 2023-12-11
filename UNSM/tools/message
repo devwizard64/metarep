@@ -57,8 +57,8 @@ with open(fn, "r") as f:
 			elif cmd == "msg":
 				cstr = []
 				label = "%s_%d" % (name, len(mtbl))
-				ctbl.append([label, cstr])
-				mtbl.append((label, arg[0]))
+				ctbl.append([label+"_str", cstr])
+				mtbl.append((label, arg[0] + ", " + label+"_str"))
 			else:
 				raise RuntimeError("%s:%d: bad cmd '%s'" % (fn, ln, cmd))
 			continue
@@ -79,18 +79,15 @@ for label, lst in stbl:
 		label, fmt_str(list_rstrip(lst, 0xFE))
 	))
 for label, lst in ctbl:
-	print("static unsigned char str_%s[] = {%s};" % (
+	print("static unsigned char %s[] = {%s};" % (
 		label, fmt_str(list_rstrip(lst, 0xFE))
 	))
 if ttbl:
-	print("\nunsigned char *str_%s[] =\n{" % name)
-	for label in ttbl: print("\tstr_%s," % label)
+	print("unsigned char *%s[] =\n{" % name)
+	for label in ttbl: print("\t%s," % label)
 	print("\tNULL,\n};")
 if mtbl:
-	print("")
-	for label, arg in mtbl: print("static MESSAGE msg_%s = {%s, str_%s};" % (
-		label, arg, label
-	))
-	print("\nMESSAGE *msg_%s[] =\n{" % name)
-	for label, arg in mtbl: print("\t&msg_%s," % label)
+	for label, arg in mtbl: print("static MESSAGE %s = {%s};" % (label, arg))
+	print("MESSAGE *%s[] =\n{" % name)
+	for label, arg in mtbl: print("\t&%s," % label)
 	print("\tNULL,\n};")

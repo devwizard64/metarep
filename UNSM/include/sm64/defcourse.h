@@ -28,4 +28,8 @@
 #define COURSE_SA               24
 #define COURSE_ENDING           25
 
+#define COURSE_EXTRA            16
+#define COURSE_CAPSW            20
+#define COURSE_MAX              25
+
 #endif /* __SM64_DEFCOURSE_H__ */

@@ -23,39 +23,39 @@ float *vecf_cpy(VECF dst, VECF src)
 #endif
 }
 
-float *vecf_set(VECF vf, float x, float y, float z)
+float *vecf_set(VECF v, float x, float y, float z)
 {
-	vf[0] = x;
-	vf[1] = y;
-	vf[2] = z;
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
-float *vecf_add(VECF vf, VECF a)
+float *vecf_add(VECF v, VECF a)
 {
-	vf[0] += a[0];
-	vf[1] += a[1];
-	vf[2] += a[2];
+	v[0] += a[0];
+	v[1] += a[1];
+	v[2] += a[2];
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
-float *vecf_addto(VECF vf, VECF a, VECF b)
+float *vecf_addto(VECF v, VECF a, VECF b)
 {
-	vf[0] = a[0] + b[0];
-	vf[1] = a[1] + b[1];
-	vf[2] = a[2] + b[2];
+	v[0] = a[0] + b[0];
+	v[1] = a[1] + b[1];
+	v[2] = a[2] + b[2];
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
@@ -71,51 +71,51 @@ short *vecs_cpy(VECS dst, VECS src)
 #endif
 }
 
-short *vecs_set(VECS vs, SHORT x, SHORT y, SHORT z)
+short *vecs_set(VECS v, SHORT x, SHORT y, SHORT z)
 {
-	vs[0] = x;
-	vs[1] = y;
-	vs[2] = z;
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
 #ifdef sgi
-	return (short *)&vs;
+	return (short *)&v;
 #else
-	return vs;
+	return v;
 #endif
 }
 
-short *vecs_add(VECS vs, VECS a)
+short *vecs_add(VECS v, VECS a)
 {
-	vs[0] += a[0];
-	vs[1] += a[1];
-	vs[2] += a[2];
+	v[0] += a[0];
+	v[1] += a[1];
+	v[2] += a[2];
 #ifdef sgi
-	return (short *)&vs;
+	return (short *)&v;
 #else
-	return vs;
+	return v;
 #endif
 }
 
-short *vecs_addto(VECS vs, VECS a, VECS b)
+short *vecs_addto(VECS v, VECS a, VECS b)
 {
-	vs[0] = a[0] + b[0];
-	vs[1] = a[1] + b[1];
-	vs[2] = a[2] + b[2];
+	v[0] = a[0] + b[0];
+	v[1] = a[1] + b[1];
+	v[2] = a[2] + b[2];
 #ifdef sgi
-	return (short *)&vs;
+	return (short *)&v;
 #else
-	return vs;
+	return v;
 #endif
 }
 
-short *vecs_sub(VECS vs, VECS a)
+short *vecs_sub(VECS v, VECS a)
 {
-	vs[0] -= a[0];
-	vs[1] -= a[1];
-	vs[2] -= a[2];
+	v[0] -= a[0];
+	v[1] -= a[1];
+	v[2] -= a[2];
 #ifdef sgi
-	return (short *)&vs;
+	return (short *)&v;
 #else
-	return vs;
+	return v;
 #endif
 }
 
@@ -143,43 +143,43 @@ short *vecf_to_vecs(VECS dst, VECF src)
 #endif
 }
 
-float *vecf_normal(VECF vf, VECF v0, VECF v1, VECF v2)
+float *vecf_normal(VECF v, VECF v0, VECF v1, VECF v2)
 {
 #define CROSS(x0, y0, x1, y1, x2, y2) \
 	(((y1)-(y0))*((x2)-(x1)) - ((y2)-(y1))*((x1)-(x0)))
-	vf[0] = CROSS(v0[2], v0[1], v1[2], v1[1], v2[2], v2[1]);
-	vf[1] = CROSS(v0[0], v0[2], v1[0], v1[2], v2[0], v2[2]);
-	vf[2] = CROSS(v0[1], v0[0], v1[1], v1[0], v2[1], v2[0]);
+	v[0] = CROSS(v0[2], v0[1], v1[2], v1[1], v2[2], v2[1]);
+	v[1] = CROSS(v0[0], v0[2], v1[0], v1[2], v2[0], v2[2]);
+	v[2] = CROSS(v0[1], v0[0], v1[1], v1[0], v2[1], v2[0]);
 #undef CROSS
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
-float *vecf_cross(VECF vf, VECF a, VECF b)
+float *vecf_cross(VECF v, VECF a, VECF b)
 {
-	vf[0] = a[1]*b[2] - b[1]*a[2];
-	vf[1] = a[2]*b[0] - b[2]*a[0];
-	vf[2] = a[0]*b[1] - b[0]*a[1];
+	v[0] = a[1]*b[2] - b[1]*a[2];
+	v[1] = a[2]*b[0] - b[2]*a[0];
+	v[2] = a[0]*b[1] - b[0]*a[1];
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
-float *vecf_normalize(VECF vf)
+float *vecf_normalize(VECF v)
 {
-	float d = 1 / sqrtf(vf[0]*vf[0] + vf[1]*vf[1] + vf[2]*vf[2]);
-	vf[0] *= d;
-	vf[1] *= d;
-	vf[2] *= d;
+	float d = 1 / sqrtf(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+	v[0] *= d;
+	v[1] *= d;
+	v[2] *= d;
 #ifdef sgi
-	return (float *)&vf;
+	return (float *)&v;
 #else
-	return vf;
+	return v;
 #endif
 }
 
@@ -195,131 +195,131 @@ void mtxf_cpy(MTXF dst, MTXF src)
 #endif
 }
 
-void mtxf_identity(MTXF mf)
+void mtxf_identity(MTXF m)
 {
 #ifdef sgi
 	register int i;
 	register float *f;
-	for (i = 0, f = &mf[0][1]; i < 14; i++, f++) *f = 0;
-	for (i = 0, f = &mf[0][0]; i < 4; i++, f += 5) *f = 1;
+	for (i = 0, f = &m[0][1]; i < 14; i++, f++) *f = 0;
+	for (i = 0, f = &m[0][0]; i < 4; i++, f += 5) *f = 1;
 #else
-	guMtxIdentF(mf);
+	guMtxIdentF(m);
 #endif
 }
 
-void mtxf_pos(MTXF mf, VECF pos)
+void mtxf_pos(MTXF m, VECF pos)
 {
-	mtxf_identity(mf);
-	mf[3][0] = pos[0];
-	mf[3][1] = pos[1];
-	mf[3][2] = pos[2];
+	mtxf_identity(m);
+	m[3][0] = pos[0];
+	m[3][1] = pos[1];
+	m[3][2] = pos[2];
 }
 
-void mtxf_lookat(MTXF mf, VECF eye, VECF look, SHORT az)
+void mtxf_lookat(MTXF m, VECF eye, VECF look, SHORT angz)
 {
 	register float d;
 	float dx, dz, xy, yy, zy, xz, yz, zz, xx, yx, zx;
 	dx = look[0] - eye[0];
 	dz = look[2] - eye[2];
-	d = (DOUBLE)-1 / sqrtf(dx*dx + dz*dz);
+	d = -1.0 / sqrtf(dx*dx + dz*dz);
 	dx *= d;
 	dz *= d;
-	yy = cos(az);
-	xy = sin(az) * dz;
-	zy = -sin(az) * dx;
+	yy = COS(angz);
+	xy = SIN(angz) * dz;
+	zy = -SIN(angz) * dx;
 	xz = look[0] - eye[0];
 	yz = look[1] - eye[1];
 	zz = look[2] - eye[2];
-	d = (DOUBLE)-1 / sqrtf(xz*xz + yz*yz + zz*zz);
+	d = -1.0 / sqrtf(xz*xz + yz*yz + zz*zz);
 	xz *= d;
 	yz *= d;
 	zz *= d;
 	xx = yy*zz - zy*yz;
 	yx = zy*xz - xy*zz;
 	zx = xy*yz - yy*xz;
-	d = (DOUBLE)1 / sqrtf(xx*xx + yx*yx + zx*zx);
+	d = 1.0 / sqrtf(xx*xx + yx*yx + zx*zx);
 	xx *= d;
 	yx *= d;
 	zx *= d;
 	xy = yz*zx - zz*yx;
 	yy = zz*xx - xz*zx;
 	zy = xz*yx - yz*xx;
-	d = (DOUBLE)1 / sqrtf(xy*xy + yy*yy + zy*zy);
+	d = 1.0 / sqrtf(xy*xy + yy*yy + zy*zy);
 	xy *= d;
 	yy *= d;
 	zy *= d;
-	mf[0][0] = xx;
-	mf[1][0] = yx;
-	mf[2][0] = zx;
-	mf[3][0] = -(eye[0]*xx + eye[1]*yx + eye[2]*zx);
-	mf[0][1] = xy;
-	mf[1][1] = yy;
-	mf[2][1] = zy;
-	mf[3][1] = -(eye[0]*xy + eye[1]*yy + eye[2]*zy);
-	mf[0][2] = xz;
-	mf[1][2] = yz;
-	mf[2][2] = zz;
-	mf[3][2] = -(eye[0]*xz + eye[1]*yz + eye[2]*zz);
-	mf[0][3] = 0;
-	mf[1][3] = 0;
-	mf[2][3] = 0;
-	mf[3][3] = 1;
+	m[0][0] = xx;
+	m[1][0] = yx;
+	m[2][0] = zx;
+	m[3][0] = -(eye[0]*xx + eye[1]*yx + eye[2]*zx);
+	m[0][1] = xy;
+	m[1][1] = yy;
+	m[2][1] = zy;
+	m[3][1] = -(eye[0]*xy + eye[1]*yy + eye[2]*zy);
+	m[0][2] = xz;
+	m[1][2] = yz;
+	m[2][2] = zz;
+	m[3][2] = -(eye[0]*xz + eye[1]*yz + eye[2]*zz);
+	m[0][3] = 0;
+	m[1][3] = 0;
+	m[2][3] = 0;
+	m[3][3] = 1;
 }
 
-void mtxf_coord(MTXF mf, VECF pos, VECS ang)
+void mtxf_coord(MTXF m, VECF pos, VECS ang)
 {
-	register float sx = sin(ang[0]);
-	register float cx = cos(ang[0]);
-	register float sy = sin(ang[1]);
-	register float cy = cos(ang[1]);
-	register float sz = sin(ang[2]);
-	register float cz = cos(ang[2]);
-	mf[0][0] =  cy*cz + sx*sy*sz;
-	mf[1][0] = -cy*sz + sx*sy*cz;
-	mf[2][0] = cx*sy;
-	mf[3][0] = pos[0];
-	mf[0][1] = cx*sz;
-	mf[1][1] = cx*cz;
-	mf[2][1] = -sx;
-	mf[3][1] = pos[1];
-	mf[0][2] = -sy*cz + sx*cy*sz;
-	mf[1][2] =  sy*sz + sx*cy*cz;
-	mf[2][2] = cx*cy;
-	mf[3][2] = pos[2];
-	mf[0][3] = mf[1][3] = mf[2][3] = 0;
-	mf[3][3] = 1;
+	register float sx = SIN(ang[0]);
+	register float cx = COS(ang[0]);
+	register float sy = SIN(ang[1]);
+	register float cy = COS(ang[1]);
+	register float sz = SIN(ang[2]);
+	register float cz = COS(ang[2]);
+	m[0][0] =  cy*cz + sx*sy*sz;
+	m[1][0] = -cy*sz + sx*sy*cz;
+	m[2][0] = cx*sy;
+	m[3][0] = pos[0];
+	m[0][1] = cx*sz;
+	m[1][1] = cx*cz;
+	m[2][1] = -sx;
+	m[3][1] = pos[1];
+	m[0][2] = -sy*cz + sx*cy*sz;
+	m[1][2] =  sy*sz + sx*cy*cz;
+	m[2][2] = cx*cy;
+	m[3][2] = pos[2];
+	m[0][3] = m[1][3] = m[2][3] = 0;
+	m[3][3] = 1;
 }
 
-void mtxf_joint(MTXF mf, VECF pos, VECS ang)
+void mtxf_joint(MTXF m, VECF pos, VECS ang)
 {
-	register float sx = sin(ang[0]);
-	register float cx = cos(ang[0]);
-	register float sy = sin(ang[1]);
-	register float cy = cos(ang[1]);
-	register float sz = sin(ang[2]);
-	register float cz = cos(ang[2]);
-	mf[0][0] = cy*cz;
-	mf[0][1] = cy*sz;
-	mf[0][2] = -sy;
-	mf[0][3] = 0;
-	mf[1][0] = sx*sy*cz - cx*sz;
-	mf[1][1] = sx*sy*sz + cx*cz;
-	mf[1][2] = sx*cy;
-	mf[1][3] = 0;
-	mf[2][0] = cx*sy*cz + sx*sz;
-	mf[2][1] = cx*sy*sz - sx*cz;
-	mf[2][2] = cx*cy;
-	mf[2][3] = 0;
-	mf[3][0] = pos[0];
-	mf[3][1] = pos[1];
-	mf[3][2] = pos[2];
-	mf[3][3] = 1;
+	register float sx = SIN(ang[0]);
+	register float cx = COS(ang[0]);
+	register float sy = SIN(ang[1]);
+	register float cy = COS(ang[1]);
+	register float sz = SIN(ang[2]);
+	register float cz = COS(ang[2]);
+	m[0][0] = cy*cz;
+	m[0][1] = cy*sz;
+	m[0][2] = -sy;
+	m[0][3] = 0;
+	m[1][0] = sx*sy*cz - cx*sz;
+	m[1][1] = sx*sy*sz + cx*cz;
+	m[1][2] = sx*cy;
+	m[1][3] = 0;
+	m[2][0] = cx*sy*cz + sx*sz;
+	m[2][1] = cx*sy*sz - sx*cz;
+	m[2][2] = cx*cy;
+	m[2][3] = 0;
+	m[3][0] = pos[0];
+	m[3][1] = pos[1];
+	m[3][2] = pos[2];
+	m[3][3] = 1;
 }
 
-void mtxf_billboard(MTXF dst, MTXF src, VECF pos, SHORT az)
+void mtxf_billboard(MTXF dst, MTXF src, VECF pos, SHORT angz)
 {
-	dst[0][0] = cos(az);
-	dst[0][1] = sin(az);
+	dst[0][0] = COS(angz);
+	dst[0][1] = SIN(angz);
 	dst[0][2] = 0;
 	dst[0][3] = 0;
 	dst[1][0] = -dst[0][1];
@@ -342,45 +342,45 @@ void mtxf_billboard(MTXF dst, MTXF src, VECF pos, SHORT az)
 	dst[3][3] = 1;
 }
 
-void mtxf_stand(MTXF mf, VECF vy, VECF pos, SHORT ay)
+void mtxf_stand(MTXF m, VECF vy, VECF pos, SHORT angy)
 {
 	VECF forward, vx, vz;
-	vecf_set(forward, sin(ay), 0, cos(ay));
+	vecf_set(forward, SIN(angy), 0, COS(angy));
 	vecf_normalize(vy);
 	vecf_cross(vx, vy, forward);
 	vecf_normalize(vx);
 	vecf_cross(vz, vx, vy);
 	vecf_normalize(vz);
-	mf[0][0] = vx[0];
-	mf[0][1] = vx[1];
-	mf[0][2] = vx[2];
-	mf[3][0] = pos[0];
-	mf[1][0] = vy[0];
-	mf[1][1] = vy[1];
-	mf[1][2] = vy[2];
-	mf[3][1] = pos[1];
-	mf[2][0] = vz[0];
-	mf[2][1] = vz[1];
-	mf[2][2] = vz[2];
-	mf[3][2] = pos[2];
-	mf[0][3] = 0;
-	mf[1][3] = 0;
-	mf[2][3] = 0;
-	mf[3][3] = 1;
+	m[0][0] = vx[0];
+	m[0][1] = vx[1];
+	m[0][2] = vx[2];
+	m[3][0] = pos[0];
+	m[1][0] = vy[0];
+	m[1][1] = vy[1];
+	m[1][2] = vy[2];
+	m[3][1] = pos[1];
+	m[2][0] = vz[0];
+	m[2][1] = vz[1];
+	m[2][2] = vz[2];
+	m[3][2] = pos[2];
+	m[0][3] = 0;
+	m[1][3] = 0;
+	m[2][3] = 0;
+	m[3][3] = 1;
 }
 
-void mtxf_ground(MTXF mf, VECF pos, SHORT ay, float radius)
+void mtxf_ground(MTXF m, VECF pos, SHORT angy, float radius)
 {
 	BGFACE *ground;
 	VECF v0, v1, v2, forward, vx, vy, vz;
 	float y;
 	float height = -radius*3;
-	v0[0] = pos[0] + sin(ay+0x2AAA)*radius;
-	v0[2] = pos[2] + cos(ay+0x2AAA)*radius;
-	v1[0] = pos[0] + sin(ay+0x8000)*radius;
-	v1[2] = pos[2] + cos(ay+0x8000)*radius;
-	v2[0] = pos[0] + sin(ay+0xD555)*radius;
-	v2[2] = pos[2] + cos(ay+0xD555)*radius;
+	v0[0] = pos[0] + SIN(angy+0x2AAA)*radius;
+	v0[2] = pos[2] + COS(angy+0x2AAA)*radius;
+	v1[0] = pos[0] + SIN(angy+0x8000)*radius;
+	v1[2] = pos[2] + COS(angy+0x8000)*radius;
+	v2[0] = pos[0] + SIN(angy+0xD555)*radius;
+	v2[2] = pos[2] + COS(angy+0xD555)*radius;
 	v0[1] = bg_check_ground(v0[0], pos[1] + 150, v0[2], &ground);
 	v1[1] = bg_check_ground(v1[0], pos[1] + 150, v1[2], &ground);
 	v2[1] = bg_check_ground(v2[0], pos[1] + 150, v2[2], &ground);
@@ -388,54 +388,54 @@ void mtxf_ground(MTXF mf, VECF pos, SHORT ay, float radius)
 	if (v1[1]-pos[1] < height) v1[1] = pos[1];
 	if (v2[1]-pos[1] < height) v2[1] = pos[1];
 	y = (v0[1]+v1[1]+v2[1]) / 3;
-	vecf_set(forward, sin(ay), 0, cos(ay));
+	vecf_set(forward, SIN(angy), 0, COS(angy));
 	vecf_normal(vy, v0, v1, v2);
 	vecf_normalize(vy);
 	vecf_cross(vx, vy, forward);
 	vecf_normalize(vx);
 	vecf_cross(vz, vx, vy);
 	vecf_normalize(vz);
-	mf[0][0] = vx[0];
-	mf[0][1] = vx[1];
-	mf[0][2] = vx[2];
-	mf[3][0] = pos[0];
-	mf[1][0] = vy[0];
-	mf[1][1] = vy[1];
-	mf[1][2] = vy[2];
-	mf[3][1] = y < pos[1] ? pos[1] : y;
-	mf[2][0] = vz[0];
-	mf[2][1] = vz[1];
-	mf[2][2] = vz[2];
-	mf[3][2] = pos[2];
-	mf[0][3] = 0;
-	mf[1][3] = 0;
-	mf[2][3] = 0;
-	mf[3][3] = 1;
+	m[0][0] = vx[0];
+	m[0][1] = vx[1];
+	m[0][2] = vx[2];
+	m[3][0] = pos[0];
+	m[1][0] = vy[0];
+	m[1][1] = vy[1];
+	m[1][2] = vy[2];
+	m[3][1] = y < pos[1] ? pos[1] : y;
+	m[2][0] = vz[0];
+	m[2][1] = vz[1];
+	m[2][2] = vz[2];
+	m[3][2] = pos[2];
+	m[0][3] = 0;
+	m[1][3] = 0;
+	m[2][3] = 0;
+	m[3][3] = 1;
 }
 
-void mtxf_cat(MTXF mf, MTXF a, MTXF b)
+void mtxf_cat(MTXF m, MTXF a, MTXF b)
 {
-	MTXF m;
+	MTXF tmp;
 	register float x, y, z;
 	x = a[0][0]; y = a[0][1]; z = a[0][2];
-	m[0][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
-	m[0][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
-	m[0][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
+	tmp[0][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
+	tmp[0][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
+	tmp[0][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
 	x = a[1][0]; y = a[1][1]; z = a[1][2];
-	m[1][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
-	m[1][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
-	m[1][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
+	tmp[1][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
+	tmp[1][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
+	tmp[1][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
 	x = a[2][0]; y = a[2][1]; z = a[2][2];
-	m[2][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
-	m[2][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
-	m[2][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
+	tmp[2][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
+	tmp[2][1] = x*b[0][1] + y*b[1][1] + z*b[2][1];
+	tmp[2][2] = x*b[0][2] + y*b[1][2] + z*b[2][2];
 	x = a[3][0]; y = a[3][1]; z = a[3][2];
-	m[3][0] = x*b[0][0] + y*b[1][0] + z*b[2][0] + b[3][0];
-	m[3][1] = x*b[0][1] + y*b[1][1] + z*b[2][1] + b[3][1];
-	m[3][2] = x*b[0][2] + y*b[1][2] + z*b[2][2] + b[3][2];
-	m[0][3] = m[1][3] = m[2][3] = 0;
-	m[3][3] = 1;
-	mtxf_cpy(mf, m);
+	tmp[3][0] = x*b[0][0] + y*b[1][0] + z*b[2][0] + b[3][0];
+	tmp[3][1] = x*b[0][1] + y*b[1][1] + z*b[2][1] + b[3][1];
+	tmp[3][2] = x*b[0][2] + y*b[1][2] + z*b[2][2] + b[3][2];
+	tmp[0][3] = tmp[1][3] = tmp[2][3] = 0;
+	tmp[3][3] = 1;
+	mtxf_cpy(m, tmp);
 }
 
 void mtxf_scale(MTXF dst, MTXF src, VECF scale)
@@ -450,14 +450,14 @@ void mtxf_scale(MTXF dst, MTXF src, VECF scale)
 	}
 }
 
-void mtxf_transform(MTXF mf, VECS vs)
+void mtxf_transform(MTXF m, VECS v)
 {
-	register float x = vs[0];
-	register float y = vs[1];
-	register float z = vs[2];
-	vs[0] = x*mf[0][0] + y*mf[1][0] + z*mf[2][0] + mf[3][0];
-	vs[1] = x*mf[0][1] + y*mf[1][1] + z*mf[2][1] + mf[3][1];
-	vs[2] = x*mf[0][2] + y*mf[1][2] + z*mf[2][2] + mf[3][2];
+	register float x = v[0];
+	register float y = v[1];
+	register float z = v[2];
+	v[0] = x*m[0][0] + y*m[1][0] + z*m[2][0] + m[3][0];
+	v[1] = x*m[0][1] + y*m[1][1] + z*m[2][1] + m[3][1];
+	v[2] = x*m[0][2] + y*m[1][2] + z*m[2][2] + m[3][2];
 }
 
 void mtxf_to_mtx(Mtx *m, MTXF mf)
@@ -484,45 +484,45 @@ void mtxf_to_mtx(Mtx *m, MTXF mf)
 #endif
 }
 
-void mtx_az(Mtx *m, SHORT az)
+void mtx_angz(Mtx *m, SHORT angz)
 {
 	MTXF mf;
 	mtxf_identity(mf);
-	mf[0][0] = cos(az);
-	mf[0][1] = sin(az);
+	mf[0][0] = COS(angz);
+	mf[0][1] = SIN(angz);
 	mf[1][0] = -mf[0][1];
 	mf[1][1] =  mf[0][0];
 	mtxf_to_mtx(m, mf);
 }
 
-void vecf_untransform(VECF vf, MTXF mf, MTXF cam)
+void vecf_scenepos(VECF v, MTXF m, MTXF cam)
 {
 	float x = cam[3][0]*cam[0][0] + cam[3][1]*cam[0][1] + cam[3][2]*cam[0][2];
 	float y = cam[3][0]*cam[1][0] + cam[3][1]*cam[1][1] + cam[3][2]*cam[1][2];
 	float z = cam[3][0]*cam[2][0] + cam[3][1]*cam[2][1] + cam[3][2]*cam[2][2];
-	vf[0] = mf[3][0]*cam[0][0] + mf[3][1]*cam[0][1] + mf[3][2]*cam[0][2] - x;
-	vf[1] = mf[3][0]*cam[1][0] + mf[3][1]*cam[1][1] + mf[3][2]*cam[1][2] - y;
-	vf[2] = mf[3][0]*cam[2][0] + mf[3][1]*cam[2][1] + mf[3][2]*cam[2][2] - z;
+	v[0] = m[3][0]*cam[0][0] + m[3][1]*cam[0][1] + m[3][2]*cam[0][2] - x;
+	v[1] = m[3][0]*cam[1][0] + m[3][1]*cam[1][1] + m[3][2]*cam[1][2] - y;
+	v[2] = m[3][0]*cam[2][0] + m[3][1]*cam[2][1] + m[3][2]*cam[2][2] - z;
 }
 
-void cartesian_to_polar(VECF a, VECF b, float *dist, short *ax, short *ay)
+void cartesian_to_polar(VECF a, VECF b, float *dist, short *angx, short *angy)
 {
 	register float dx = b[0]-a[0];
 	register float dy = b[1]-a[1];
 	register float dz = b[2]-a[2];
 	*dist = sqrtf(dx*dx + dy*dy + dz*dz);
-	*ax = atan2(sqrtf(dx*dx + dz*dz), dy);
-	*ay = atan2(dz, dx);
+	*angx = ATAN2(sqrtf(dx*dx + dz*dz), dy);
+	*angy = ATAN2(dz, dx);
 }
 
-void polar_to_cartesian(VECF a, VECF b, float dist, SHORT ax, SHORT ay)
+void polar_to_cartesian(VECF a, VECF b, float dist, SHORT angx, SHORT angy)
 {
-	b[0] = a[0] + dist*cos(ax)*sin(ay);
-	b[1] = a[1] + dist*sin(ax);
-	b[2] = a[2] + dist*cos(ax)*cos(ay);
+	b[0] = a[0] + dist*COS(angx)*SIN(angy);
+	b[1] = a[1] + dist*SIN(angx);
+	b[2] = a[2] + dist*COS(angx)*COS(angy);
 }
 
-int converge_i(int x, int dst, int inc, int dec)
+int convergei(int x, int dst, int inc, int dec)
 {
 	if (x < dst)
 	{
@@ -535,7 +535,7 @@ int converge_i(int x, int dst, int inc, int dec)
 	return x;
 }
 
-float converge_f(float x, float dst, float inc, float dec)
+float convergef(float x, float dst, float inc, float dec)
 {
 	if (x < dst)
 	{
@@ -556,7 +556,7 @@ static int atan_yx(float y, float x)
 	return ang;
 }
 
-short atan2(float y, float x)
+short ATAN2(float y, float x)
 {
 	short ang;
 	if (x >= 0)
@@ -593,7 +593,7 @@ short atan2(float y, float x)
 
 float atan2f(float y, float x)
 {
-	return (float)atan2(y, x) * (DOUBLE)M_PI/0x8000;
+	return (float)ATAN2(y, x) * M_PI/0x8000;
 }
 
 static BSPLINE *bspline;
@@ -649,7 +649,7 @@ void bspline_init(BSPLINE *b)
 	bspline_mode = 1;
 }
 
-int bspline_update(VECF dst)
+int bspline_proc(VECF dst)
 {
 	float curve[4];
 	int i;

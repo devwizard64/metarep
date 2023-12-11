@@ -1,10 +1,10 @@
 #include <sm64.h>
 
-#define S_UCHAR         ((u8 *)s_pc)
-#define S_SHORT         ((s16 *)s_pc)
-#define S_USHORT        ((u16 *)s_pc)
-#define S_INT           ((s32 *)s_pc)
-#define S_UINT          ((u32 *)s_pc)
+#define S_UCHAR         ((unsigned char *)s_pc)
+#define S_SHORT         ((short *)s_pc)
+#define S_USHORT        ((unsigned short *)s_pc)
+#define S_INT           ((int *)s_pc)
+#define S_UINT          ((unsigned int *)s_pc)
 #define S_PTR           ((void **)s_pc)
 #define S_CALL          ((SHPCALL **)s_pc)
 
@@ -15,7 +15,7 @@ static SHAPE *shp_root;
 UNUSED static SHAPE *shp_8038BCA8;
 static SHAPE **shp_table;
 static u16 shp_count;
-static uintptr_t s_stack[16];
+static unsigned long s_stack[16];
 static SHAPE *shp_stack[32];
 static s16 shp_sp;
 static s16 s_sp;
@@ -58,7 +58,7 @@ static void s_link(SHAPE *shape)
 		{
 			if (!shp_root) shp_root = shape;
 		}
-		else if (shp_stack[shp_sp-1]->type == S_TYPE_LIST)
+		else if (shp_stack[shp_sp-1]->type == ST_LIST)
 		{
 			((S_LIST *)shp_stack[shp_sp-1])->shape = shape;
 		}
@@ -71,7 +71,7 @@ static void s_link(SHAPE *shape)
 
 static void s_cmd_execute(void)
 {
-	s_stack[s_sp++] = (uintptr_t)(s_pc+2);
+	s_stack[s_sp++] = (unsigned long)(s_pc+2);
 	s_stack[s_sp++] = (shp_sp << 16) + s_fp;
 	s_fp = s_sp;
 	s_pc = segment_to_virtual(S_PTR[1]);
@@ -87,7 +87,7 @@ static void s_cmd_exit(void)
 
 static void s_cmd_jump(void)
 {
-	if (S_UCHAR[1] == 1) s_stack[s_sp++] = (uintptr_t)(s_pc+2);
+	if (S_UCHAR[1] == 1) s_stack[s_sp++] = (unsigned long)(s_pc+2);
 	s_pc = segment_to_virtual(S_PTR[1]);
 }
 
@@ -420,7 +420,7 @@ static void s_cmd_load(void)
 	if (index >= 0)
 	{
 		shape = shp_table[index];
-		if (shape->type == S_TYPE_LIST) shape = ((S_LIST *)shape)->shape;
+		if (shape->type == ST_LIST) shape = ((S_LIST *)shape)->shape;
 		else                            shape = NULL;
 	}
 	shp = s_create_list(s_arena, NULL, shape);

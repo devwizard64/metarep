@@ -17,10 +17,10 @@ extern Gfx gfx_titlebg_end[];
 extern u16 *txt_titlebg_mario[];
 extern u16 *txt_titlebg_gameover[];
 
-s32 titlebg_timer;
-s32 titlebg_count;
-s16 titlebg_frame;
-s32 titlebg_alpha;
+static int titlebg_timer;
+static int titlebg_count;
+static s16 titlebg_frame;
+static int titlebg_alpha;
 
 void *s_title_logo(int code, SHAPE *shape, UNUSED void *data)
 {
@@ -30,14 +30,14 @@ void *s_title_logo(int code, SHAPE *shape, UNUSED void *data)
 	Mtx *mtx;
 	float *a = segment_to_virtual(logo_scale_a);
 	float *b = segment_to_virtual(logo_scale_b);
-	if (code != S_CODE_DRAW)
+	if (code != SC_DRAW)
 	{
 		titlebg_frame = 0;
 	}
-	else if (code == S_CODE_DRAW)
+	else if (code == SC_DRAW)
 	{
 		float x, y, z;
-		shape_layer_set(&shp->s, LAYER_OPA_SURF);
+		shape_set_layer(&shp->s, LAYER_OPA_SURF);
 		mtx = gfx_alloc(sizeof(Mtx));
 		g = gfx = gfx_alloc(sizeof(Gfx)*4);
 		if (titlebg_frame >= 0 && titlebg_frame < 0+20)
@@ -79,26 +79,25 @@ void *s_title_symbol(int code, SHAPE *shape, UNUSED void *data)
 	S_CALLBACK *shp = (S_CALLBACK *)shape;
 	Gfx *gfx = NULL;
 	Gfx *g = NULL;
-	if (code != S_CODE_DRAW)
+	if (code != SC_DRAW)
 	{
 		titlebg_alpha = 0;
 	}
-	else if (code == S_CODE_DRAW)
+	else if (code == SC_DRAW)
 	{
 		g = gfx = gfx_alloc(sizeof(Gfx)*5);
 		gSPDisplayList(g++, gfx_wipe_start);
 		gDPSetEnvColor(g++, 0xFF, 0xFF, 0xFF, titlebg_alpha);
-		if (titlebg_alpha == 0xFF)
+		switch (titlebg_alpha)
 		{
-			if (0) {}
-			shape_layer_set(&shp->s, LAYER_OPA_SURF);
+		case 0xFF:
+			shape_set_layer(&shp->s, LAYER_OPA_SURF);
 			gDPSetRenderMode(g++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
-		}
-		else
-		{
-			shape_layer_set(&shp->s, LAYER_XLU_SURF);
+			break;
+		default:
+			shape_set_layer(&shp->s, LAYER_XLU_SURF);
 			gDPSetRenderMode(g++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
-			if (0) {}
+			break;
 		}
 		gSPDisplayList(g++, gfx_symbol);
 		gSPEndDisplayList(g);
@@ -158,10 +157,10 @@ void *s_title_back(int code, SHAPE *shape, UNUSED void *data)
 	Gfx *gfx = NULL;
 	Gfx *g = NULL;
 	int i;
-	if (code == S_CODE_DRAW)
+	if (code == SC_DRAW)
 	{
 		g = gfx = gfx_alloc(sizeof(Gfx)*(2 + 4*3 + 2));
-		shape_layer_set(&shp->s, LAYER_OPA_SURF);
+		shape_set_layer(&shp->s, LAYER_OPA_SURF);
 		gSPDisplayList(g++, gfx_wipe_start);
 		gSPDisplayList(g++, gfx_titlebg_start);
 		for (i = 0; i < 4*3; i++)
@@ -182,7 +181,7 @@ void *s_gameover_back(int code, SHAPE *shape, UNUSED void *data)
 	Gfx *gfx = NULL;
 	Gfx *g = NULL;
 	int i;
-	if (code != S_CODE_DRAW)
+	if (code != SC_DRAW)
 	{
 		int i;
 		titlebg_timer = 0;
@@ -206,7 +205,7 @@ void *s_gameover_back(int code, SHAPE *shape, UNUSED void *data)
 			bg[flip[titlebg_count]] = 0;
 		}
 		if (titlebg_count != 12-1) titlebg_timer++;
-		shape_layer_set(&shp->s, LAYER_OPA_SURF);
+		shape_set_layer(&shp->s, LAYER_OPA_SURF);
 		gSPDisplayList(g++, gfx_wipe_start);
 		gSPDisplayList(g++, gfx_titlebg_start);
 		for (i = 0; i < 4*3; i++)

@@ -24,14 +24,14 @@
 #define NA_SEQ_LULLABY          11
 #define NA_SEQ_DUNGEON          12
 #define NA_SEQ_STARSELECT       13
-#define NA_SEQ_WING             14
+#define NA_SEQ_SPECIAL          14
 #define NA_SEQ_METAL            15
 #define NA_SEQ_BOWSERMSG        16
 #define NA_SEQ_BOWSER           17
-#define NA_SEQ_HI_SCORE         18
+#define NA_SEQ_HISCORE          18
 #define NA_SEQ_MERRYGOROUND     19
 #define NA_SEQ_FANFARE          20
-#define NA_SEQ_STAR             21
+#define NA_SEQ_STARAPPEAR       21
 #define NA_SEQ_BATTLE           22
 #define NA_SEQ_ARENACLEAR       23
 #define NA_SEQ_ENDLESS          24
@@ -49,29 +49,30 @@
 #define NA_BGM_NULL             0
 /* #define NA_BGM_STARCATCH        NA_SEQ_STARCATCH */
 #define NA_BGM_TITLE            NA_SEQ_TITLE
-#define NA_BGM_GAMEOVER         (0x080 | NA_SEQ_TITLE)
+#define NA_BGM_GAMEOVER         (NA_SEQ_TITLE | 0x80)
 #define NA_BGM_FIELD            NA_SEQ_FIELD
 #define NA_BGM_CASTLE           NA_SEQ_CASTLE
 #define NA_BGM_WATER            NA_SEQ_WATER
-#define NA_BGM_AQUARIUM         (0x080 | NA_SEQ_WATER)
+#define NA_BGM_AQUARIUM         (NA_SEQ_WATER | 0x80)
 #define NA_BGM_FIRE             NA_SEQ_FIRE
 #define NA_BGM_ARENA            NA_SEQ_ARENA
 #define NA_BGM_SNOW             NA_SEQ_SNOW
 #define NA_BGM_SLIDER           NA_SEQ_SLIDER
+#define NA_BGM_RACE             (NA_SEQ_SLIDER | 0x400)
 #define NA_BGM_GHOST            NA_SEQ_GHOST
 /* #define NA_BGM_LULLABY          NA_SEQ_LULLABY */
 #define NA_BGM_DUNGEON          NA_SEQ_DUNGEON
 #define NA_BGM_STARSELECT       NA_SEQ_STARSELECT
-/* #define NA_BGM_WING             NA_SEQ_WING */
-#define NA_BGM_SHELL            (0x480 | NA_SEQ_WING)
-/* #define NA_BGM_METAL            NA_SEQ_METAL */
+#define NA_BGM_SPECIAL          (NA_SEQ_SPECIAL | 0x400)
+#define NA_BGM_SHELL            (NA_SEQ_SPECIAL | 0x80 | 0x400)
+#define NA_BGM_METAL            (NA_SEQ_METAL | 0x400)
 /* #define NA_BGM_BOWSERMSG        NA_SEQ_BOWSERMSG */
 #define NA_BGM_BOWSER           NA_SEQ_BOWSER
 /* #define NA_BGM_HISCORE          NA_SEQ_HISCORE */
 /* #define NA_BGM_MERRYGOROUND     NA_SEQ_MERRYGOROUND */
 /* #define NA_BGM_FANFARE          NA_SEQ_FANFARE */
-/* #define NA_BGM_STAR             NA_SEQ_STAR */
-/* #define NA_BGM_BATTLE           NA_SEQ_BATTLE */
+/* #define NA_BGM_STARAPPEAR       NA_SEQ_STARAPPEAR */
+#define NA_BGM_BATTLE           (NA_SEQ_BATTLE | 0x400)
 /* #define NA_BGM_ARENACLEAR       NA_SEQ_ARENACLEAR */
 #define NA_BGM_ENDLESS          NA_SEQ_ENDLESS
 #define NA_BGM_FINAL            NA_SEQ_FINAL
@@ -95,6 +96,7 @@
 #define NA_SE1_19               0x1D192001
 #define NA_SE1_20               0x14200001
 
+#define NA_SE2_10               0x2410C081
 #define NA_SE2_31               0x2431FF81
 #define NA_SE2_32               0x2432FF81
 #define NA_SE2_33               0x2433FFA1
@@ -103,8 +105,16 @@
 #define NA_SE3_05               0x3005C081
 #define NA_SE3_06               0x3006C081
 #define NA_SE3_07               0x3007C081
+#define NA_SE3_11               0x38118081
+#define NA_SE3_12               0x38128081
+#define NA_SE3_16               0x30160091
+#if REVISION <= 199606
+#define NA_SE3_28               0x38280081
+#else
 #define NA_SE3_28               0x39280081
+#endif
 #define NA_SE3_2B               0x302B0081
+#define NA_SE3_58               0x3058FF81
 #define NA_SE3_70               0x30703081
 
 #define NA_SE4_00               0x40000001
@@ -152,6 +162,11 @@
 #define NA_SE6_04_80            0x60048001
 #define NA_SE6_10               0x60104001
 
+#define NA_SE7_00               0x7000F881
+#define NA_SE7_02               0x7002FF81
+#define NA_SE7_03               0x7003FF81
+#define NA_SE7_04               0x70040081
+#define NA_SE7_05               0x70050081
 #define NA_SE7_06               0x70060081
 #define NA_SE7_07               0x70070081
 #define NA_SE7_08               0x70080081
@@ -159,13 +174,26 @@
 #define NA_SE7_0A               0x700A0081
 #define NA_SE7_0B               0x700B0081
 #define NA_SE7_0C               0x700C0081
+#define NA_SE7_0D               0x700D0081
+#define NA_SE7_0E               0x700E0081
+#define NA_SE7_11               0x70110081
+#define NA_SE7_13               0x70130081
 #define NA_SE7_14               0x70140081
+#define NA_SE7_15               0x70150081
+#define NA_SE7_18               0x70188081
+#define NA_SE7_1D               0x701DB081
 #define NA_SE7_1E               0x701EFF81
+#define NA_SE7_1F               0x701FFF81
+#define NA_SE7_22               0x70222081
+#define NA_SE7_23               0x7023FF81
+#define NA_SE7_24               0x7024FF81
 
 #define NA_SE8_50               0x80504001
 
 #define NA_SE9_04               0x90040081
 #define NA_SE9_52               0x90524001
 #define NA_SE9_69               0x90694081
+
+#define NA_TIME(x)              (8*(x)-2)
 
 #endif /* __SM64_DEFAUDIO_H__ */

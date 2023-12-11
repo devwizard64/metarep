@@ -44,14 +44,21 @@ beginseg
 endseg
 
 beginseg
+	name    "timg"
+	flags   OBJECT
+	address ADDRESS_TIMG
+	MAXADDR(ADDRESS_BUFFER)
+	include "$(BUILD)/data/timg.o"
+endseg
+
+beginseg
 	name    "buffer"
 	flags   OBJECT
 	address ADDRESS_BUFFER
 	MAXADDR(ADDRESS_FIFO)
-	include "$(BUILD)/data/timg.o"
 	include "$(BUILD)/src/audio/heap.o"
 	include "$(BUILD)/data/buffer.o"
-	include "$(BUILD)/src/audio/bss.o"
+	include "$(BUILD)/src/audio/work.o"
 endseg
 
 beginseg
@@ -77,294 +84,294 @@ beginseg
 endseg
 
 beginseg
-	name    "Player_gfx"
+	name    "PlayerGfx"
 	flags   OBJECT
 	number  SEG_PLAYER_GFX
 	include "$(BUILD)/shape/player/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Player_data"
+	name    "PlayerShp"
 	flags   OBJECT
-	address ADDRESS_PLAYER_DATA
-	include "$(BUILD)/shape/player/shape.o"
+	address ADDRESS_PLAYER_SHP
+	include "$(BUILD)/shape/player/shp.o"
 endseg
 
 beginseg
-	name    "Shape1A_gfx"
+	name    "Shape1AGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1a/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1A_data"
+	name    "Shape1AShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1a/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1a/shp.o"
 endseg
 
 beginseg
-	name    "Shape1B_gfx"
+	name    "Shape1BGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1b/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1B_data"
+	name    "Shape1BShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1b/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1b/shp.o"
 endseg
 
 beginseg
-	name    "Shape1C_gfx"
+	name    "Shape1CGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1c/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1C_data"
+	name    "Shape1CShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1c/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1c/shp.o"
 endseg
 
 beginseg
-	name    "Shape1D_gfx"
+	name    "Shape1DGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1d/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1D_data"
+	name    "Shape1DShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1d/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1d/shp.o"
 endseg
 
 beginseg
-	name    "Shape1E_gfx"
+	name    "Shape1EGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1e/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1E_data"
+	name    "Shape1EShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1e/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1e/shp.o"
 endseg
 
 beginseg
-	name    "Shape1F_gfx"
+	name    "Shape1FGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1f/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1F_data"
+	name    "Shape1FShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1f/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1f/shp.o"
 endseg
 
 beginseg
-	name    "Shape1G_gfx"
+	name    "Shape1GGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1g/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1G_data"
+	name    "Shape1GShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1g/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1g/shp.o"
 endseg
 
 beginseg
-	name    "Shape1H_gfx"
+	name    "Shape1HGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1h/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1H_data"
+	name    "Shape1HShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1h/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1h/shp.o"
 endseg
 
 beginseg
-	name    "Shape1I_gfx"
+	name    "Shape1IGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1i/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1I_data"
+	name    "Shape1IShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1i/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1i/shp.o"
 endseg
 
 beginseg
-	name    "Shape1J_gfx"
+	name    "Shape1JGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1j/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1J_data"
+	name    "Shape1JShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1j/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1j/shp.o"
 endseg
 
 beginseg
-	name    "Shape1K_gfx"
+	name    "Shape1KGfx"
 	flags   OBJECT
 	number  SEG_SHAPE1_GFX
 	include "$(BUILD)/shape/1k/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape1K_data"
+	name    "Shape1KShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE1_DATA
-	include "$(BUILD)/shape/1k/shape.o"
+	address ADDRESS_SHAPE1_SHP
+	include "$(BUILD)/shape/1k/shp.o"
 endseg
 
 beginseg
-	name    "Shape2A_gfx"
+	name    "Shape2AGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2a/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2A_data"
+	name    "Shape2AShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2a/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2a/shp.o"
 endseg
 
 beginseg
-	name    "Shape2B_gfx"
+	name    "Shape2BGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2b/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2B_data"
+	name    "Shape2BShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2b/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2b/shp.o"
 endseg
 
 beginseg
-	name    "Shape2C_gfx"
+	name    "Shape2CGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2c/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2C_data"
+	name    "Shape2CShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2c/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2c/shp.o"
 endseg
 
 beginseg
-	name    "Shape2D_gfx"
+	name    "Shape2DGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2d/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2D_data"
+	name    "Shape2DShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2d/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2d/shp.o"
 endseg
 
 beginseg
-	name    "Shape2E_gfx"
+	name    "Shape2EGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2e/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2E_data"
+	name    "Shape2EShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2e/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2e/shp.o"
 endseg
 
 beginseg
-	name    "Shape2F_gfx"
+	name    "Shape2FGfx"
 	flags   OBJECT
 	number  SEG_SHAPE2_GFX
 	include "$(BUILD)/shape/2f/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Shape2F_data"
+	name    "Shape2FShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE2_DATA
-	include "$(BUILD)/shape/2f/shape.o"
+	address ADDRESS_SHAPE2_SHP
+	include "$(BUILD)/shape/2f/shp.o"
 endseg
 
 beginseg
-	name    "Common_gfx"
+	name    "CommonGfx"
 	flags   OBJECT
 	number  SEG_SHAPE3_GFX
 	include "$(BUILD)/shape/3common/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Common_data"
+	name    "CommonShp"
 	flags   OBJECT
-	address ADDRESS_SHAPE3_DATA
-	include "$(BUILD)/shape/3common/shape.o"
+	address ADDRESS_SHAPE3_SHP
+	include "$(BUILD)/shape/3common/shp.o"
 endseg
 
 beginseg
-	name    "Global_gfx"
+	name    "GlobalGfx"
 	flags   OBJECT
 	number  SEG_GLOBAL_GFX
 	include "$(BUILD)/shape/global/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Global_data"
+	name    "GlobalShp"
 	flags   OBJECT
-	address ADDRESS_GLOBAL_DATA
-	include "$(BUILD)/shape/global/shape.o"
+	address ADDRESS_GLOBAL_SHP
+	include "$(BUILD)/shape/global/shp.o"
 endseg
 
 beginseg
 	name    "Object"
 	flags   OBJECT
 	address ADDRESS_OBJECT
-	include "$(BUILD)/data/object/object_a.o"
-	include "$(BUILD)/data/object/player.o"
-	include "$(BUILD)/data/object/object_b.o"
-	include "$(BUILD)/data/object/object_c.o"
-	include "$(BUILD)/data/object/camera.o"
+	include "$(BUILD)/src/obj_a.o"
+	include "$(BUILD)/src/obj_player.o"
+	include "$(BUILD)/src/obj_b.o"
+	include "$(BUILD)/src/obj_c.o"
+	include "$(BUILD)/src/obj_camera.o"
 endseg
 
 beginseg
@@ -375,9 +382,7 @@ beginseg
 	include "$(BUILD)/src/title.o"
 	include "$(BUILD)/src/titlebg.o"
 	include "$(BUILD)/src/fileselect.o"
-	include "$(BUILD)/src/fileselect.data.o"
 	include "$(BUILD)/src/starselect.o"
-	include "$(BUILD)/src/starselect.data.o"
 	include "$(BUILD)/face.o"
 endseg
 
@@ -385,8 +390,8 @@ beginseg
 	name    "Title"
 	flags   OBJECT
 	address ADDRESS_MENU_DATA
-	include "$(BUILD)/stage/title/program.o"
-	include "$(BUILD)/stage/title/shape.o"
+	include "$(BUILD)/stage/title/prg.o"
+	include "$(BUILD)/stage/title/shp.o"
 endseg
 
 beginseg
@@ -413,17 +418,17 @@ endseg
 beginseg
 	name    "FaceData"
 	flags   OBJECT
-	address ADDRESS_FACE_DATA
-	MAXADDR(ADDRESS_FACE_DATA+0x70000)
-	include "$(BUILD)/src/face/data.o"
+	address ADDRESS_FACEDATA
+	MAXADDR(ADDRESS_FACEDATA+0x70000)
+	include "$(BUILD)/facedata.o"
 endseg
 
 beginseg
 	name    "Select"
 	flags   OBJECT
 	address ADDRESS_MENU_DATA
-	include "$(BUILD)/stage/select/program.o"
-	include "$(BUILD)/stage/select/shape.o"
+	include "$(BUILD)/stage/select/prg.o"
+	include "$(BUILD)/stage/select/shp.o"
 endseg
 
 beginseg
@@ -602,468 +607,468 @@ beginseg
 endseg
 
 beginseg
-	name    "BBH_gfx"
+	name    "BBHGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bbh/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BBH_data"
+	name    "BBH"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bbh/program.o"
-	include "$(BUILD)/stage/bbh/shape.o"
+	include "$(BUILD)/stage/bbh/prg.o"
+	include "$(BUILD)/stage/bbh/shp.o"
 endseg
 
 beginseg
-	name    "CCM_gfx"
+	name    "CCMGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ccm/gfx.szp.o"
 endseg
 
 beginseg
-	name    "CCM_data"
+	name    "CCM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ccm/program.o"
-	include "$(BUILD)/stage/ccm/shape.o"
+	include "$(BUILD)/stage/ccm/prg.o"
+	include "$(BUILD)/stage/ccm/shp.o"
 endseg
 
 beginseg
-	name    "Inside_gfx"
+	name    "InsideGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/inside/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Inside_data"
+	name    "Inside"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/inside/program.o"
-	include "$(BUILD)/stage/inside/shape.o"
+	include "$(BUILD)/stage/inside/prg.o"
+	include "$(BUILD)/stage/inside/shp.o"
 endseg
 
 beginseg
-	name    "HMC_gfx"
+	name    "HMCGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/hmc/gfx.szp.o"
 endseg
 
 beginseg
-	name    "HMC_data"
+	name    "HMC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/hmc/program.o"
-	include "$(BUILD)/stage/hmc/shape.o"
+	include "$(BUILD)/stage/hmc/prg.o"
+	include "$(BUILD)/stage/hmc/shp.o"
 endseg
 
 beginseg
-	name    "SSL_gfx"
+	name    "SSLGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ssl/gfx.szp.o"
 endseg
 
 beginseg
-	name    "SSL_data"
+	name    "SSL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ssl/program.o"
-	include "$(BUILD)/stage/ssl/shape.o"
+	include "$(BUILD)/stage/ssl/prg.o"
+	include "$(BUILD)/stage/ssl/shp.o"
 endseg
 
 beginseg
-	name    "BoB_gfx"
+	name    "BoBGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bob/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BoB_data"
+	name    "BoB"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bob/program.o"
-	include "$(BUILD)/stage/bob/shape.o"
+	include "$(BUILD)/stage/bob/prg.o"
+	include "$(BUILD)/stage/bob/shp.o"
 endseg
 
 beginseg
-	name    "SL_gfx"
+	name    "SLGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/sl/gfx.szp.o"
 endseg
 
 beginseg
-	name    "SL_data"
+	name    "SL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/sl/program.o"
-	include "$(BUILD)/stage/sl/shape.o"
+	include "$(BUILD)/stage/sl/prg.o"
+	include "$(BUILD)/stage/sl/shp.o"
 endseg
 
 beginseg
-	name    "WDW_gfx"
+	name    "WDWGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/wdw/gfx.szp.o"
 endseg
 
 beginseg
-	name    "WDW_data"
+	name    "WDW"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wdw/program.o"
-	include "$(BUILD)/stage/wdw/shape.o"
+	include "$(BUILD)/stage/wdw/prg.o"
+	include "$(BUILD)/stage/wdw/shp.o"
 endseg
 
 beginseg
-	name    "JRB_gfx"
+	name    "JRBGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/jrb/gfx.szp.o"
 endseg
 
 beginseg
-	name    "JRB_data"
+	name    "JRB"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/jrb/program.o"
-	include "$(BUILD)/stage/jrb/shape.o"
+	include "$(BUILD)/stage/jrb/prg.o"
+	include "$(BUILD)/stage/jrb/shp.o"
 endseg
 
 beginseg
-	name    "THI_gfx"
+	name    "THIGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/thi/gfx.szp.o"
 endseg
 
 beginseg
-	name    "THI_data"
+	name    "THI"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/thi/program.o"
-	include "$(BUILD)/stage/thi/shape.o"
+	include "$(BUILD)/stage/thi/prg.o"
+	include "$(BUILD)/stage/thi/shp.o"
 endseg
 
 beginseg
-	name    "TTC_gfx"
+	name    "TTCGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ttc/gfx.szp.o"
 endseg
 
 beginseg
-	name    "TTC_data"
+	name    "TTC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ttc/program.o"
-	include "$(BUILD)/stage/ttc/shape.o"
+	include "$(BUILD)/stage/ttc/prg.o"
+	include "$(BUILD)/stage/ttc/shp.o"
 endseg
 
 beginseg
-	name    "RR_gfx"
+	name    "RRGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/rr/gfx.szp.o"
 endseg
 
 beginseg
-	name    "RR_data"
+	name    "RR"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/rr/program.o"
-	include "$(BUILD)/stage/rr/shape.o"
+	include "$(BUILD)/stage/rr/prg.o"
+	include "$(BUILD)/stage/rr/shp.o"
 endseg
 
 beginseg
-	name    "Grounds_gfx"
+	name    "GroundsGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/grounds/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Grounds_data"
+	name    "Grounds"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/grounds/program.o"
-	include "$(BUILD)/stage/grounds/shape.o"
+	include "$(BUILD)/stage/grounds/prg.o"
+	include "$(BUILD)/stage/grounds/shp.o"
 endseg
 
 beginseg
-	name    "BitDW_gfx"
+	name    "BitDWGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bitdw/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitDW_data"
+	name    "BitDW"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitdw/program.o"
-	include "$(BUILD)/stage/bitdw/shape.o"
+	include "$(BUILD)/stage/bitdw/prg.o"
+	include "$(BUILD)/stage/bitdw/shp.o"
 endseg
 
 beginseg
-	name    "VCutM_gfx"
+	name    "VCutMGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/vcutm/gfx.szp.o"
 endseg
 
 beginseg
-	name    "VCutM_data"
+	name    "VCutM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/vcutm/program.o"
-	include "$(BUILD)/stage/vcutm/shape.o"
+	include "$(BUILD)/stage/vcutm/prg.o"
+	include "$(BUILD)/stage/vcutm/shp.o"
 endseg
 
 beginseg
-	name    "BitFS_gfx"
+	name    "BitFSGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bitfs/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitFS_data"
+	name    "BitFS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitfs/program.o"
-	include "$(BUILD)/stage/bitfs/shape.o"
+	include "$(BUILD)/stage/bitfs/prg.o"
+	include "$(BUILD)/stage/bitfs/shp.o"
 endseg
 
 beginseg
-	name    "SA_gfx"
+	name    "SAGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/sa/gfx.szp.o"
 endseg
 
 beginseg
-	name    "SA_data"
+	name    "SA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/sa/program.o"
-	include "$(BUILD)/stage/sa/shape.o"
+	include "$(BUILD)/stage/sa/prg.o"
+	include "$(BUILD)/stage/sa/shp.o"
 endseg
 
 beginseg
-	name    "BitS_gfx"
+	name    "BitSGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bits/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitS_data"
+	name    "BitS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bits/program.o"
-	include "$(BUILD)/stage/bits/shape.o"
+	include "$(BUILD)/stage/bits/prg.o"
+	include "$(BUILD)/stage/bits/shp.o"
 endseg
 
 beginseg
-	name    "LLL_gfx"
+	name    "LLLGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/lll/gfx.szp.o"
 endseg
 
 beginseg
-	name    "LLL_data"
+	name    "LLL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/lll/program.o"
-	include "$(BUILD)/stage/lll/shape.o"
+	include "$(BUILD)/stage/lll/prg.o"
+	include "$(BUILD)/stage/lll/shp.o"
 endseg
 
 beginseg
-	name    "DDD_gfx"
+	name    "DDDGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ddd/gfx.szp.o"
 endseg
 
 beginseg
-	name    "DDD_data"
+	name    "DDD"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ddd/program.o"
-	include "$(BUILD)/stage/ddd/shape.o"
+	include "$(BUILD)/stage/ddd/prg.o"
+	include "$(BUILD)/stage/ddd/shp.o"
 endseg
 
 beginseg
-	name    "WF_gfx"
+	name    "WFGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/wf/gfx.szp.o"
 endseg
 
 beginseg
-	name    "WF_data"
+	name    "WF"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wf/program.o"
-	include "$(BUILD)/stage/wf/shape.o"
+	include "$(BUILD)/stage/wf/prg.o"
+	include "$(BUILD)/stage/wf/shp.o"
 endseg
 
 beginseg
-	name    "Ending_gfx"
+	name    "EndingGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ending/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Ending_data"
+	name    "Ending"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ending/program.o"
-	include "$(BUILD)/stage/ending/shape.o"
+	include "$(BUILD)/stage/ending/prg.o"
+	include "$(BUILD)/stage/ending/shp.o"
 endseg
 
 beginseg
-	name    "Courtyard_gfx"
+	name    "CourtyardGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/courtyard/gfx.szp.o"
 endseg
 
 beginseg
-	name    "Courtyard_data"
+	name    "Courtyard"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/courtyard/program.o"
-	include "$(BUILD)/stage/courtyard/shape.o"
+	include "$(BUILD)/stage/courtyard/prg.o"
+	include "$(BUILD)/stage/courtyard/shp.o"
 endseg
 
 beginseg
-	name    "PSS_gfx"
+	name    "PSSGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/pss/gfx.szp.o"
 endseg
 
 beginseg
-	name    "PSS_data"
+	name    "PSS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/pss/program.o"
-	include "$(BUILD)/stage/pss/shape.o"
+	include "$(BUILD)/stage/pss/prg.o"
+	include "$(BUILD)/stage/pss/shp.o"
 endseg
 
 beginseg
-	name    "CotMC_gfx"
+	name    "CotMCGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/cotmc/gfx.szp.o"
 endseg
 
 beginseg
-	name    "CotMC_data"
+	name    "CotMC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/cotmc/program.o"
-	include "$(BUILD)/stage/cotmc/shape.o"
+	include "$(BUILD)/stage/cotmc/prg.o"
+	include "$(BUILD)/stage/cotmc/shp.o"
 endseg
 
 beginseg
-	name    "TotWC_gfx"
+	name    "TotWCGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/totwc/gfx.szp.o"
 endseg
 
 beginseg
-	name    "TotWC_data"
+	name    "TotWC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/totwc/program.o"
-	include "$(BUILD)/stage/totwc/shape.o"
+	include "$(BUILD)/stage/totwc/prg.o"
+	include "$(BUILD)/stage/totwc/shp.o"
 endseg
 
 beginseg
-	name    "BitDWA_gfx"
+	name    "BitDWAGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bitdwa/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitDWA_data"
+	name    "BitDWA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitdwa/program.o"
-	include "$(BUILD)/stage/bitdwa/shape.o"
+	include "$(BUILD)/stage/bitdwa/prg.o"
+	include "$(BUILD)/stage/bitdwa/shp.o"
 endseg
 
 beginseg
-	name    "WMotR_gfx"
+	name    "WMotRGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/wmotr/gfx.szp.o"
 endseg
 
 beginseg
-	name    "WMotR_data"
+	name    "WMotR"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wmotr/program.o"
-	include "$(BUILD)/stage/wmotr/shape.o"
+	include "$(BUILD)/stage/wmotr/prg.o"
+	include "$(BUILD)/stage/wmotr/shp.o"
 endseg
 
 beginseg
-	name    "BitFSA_gfx"
+	name    "BitFSAGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bitfsa/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitFSA_data"
+	name    "BitFSA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitfsa/program.o"
-	include "$(BUILD)/stage/bitfsa/shape.o"
+	include "$(BUILD)/stage/bitfsa/prg.o"
+	include "$(BUILD)/stage/bitfsa/shp.o"
 endseg
 
 beginseg
-	name    "BitSA_gfx"
+	name    "BitSAGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/bitsa/gfx.szp.o"
 endseg
 
 beginseg
-	name    "BitSA_data"
+	name    "BitSA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitsa/program.o"
-	include "$(BUILD)/stage/bitsa/shape.o"
+	include "$(BUILD)/stage/bitsa/prg.o"
+	include "$(BUILD)/stage/bitsa/shp.o"
 endseg
 
 beginseg
-	name    "TTM_gfx"
+	name    "TTMGfx"
 	flags   OBJECT
 	number  SEG_STAGE_GFX
 	include "$(BUILD)/stage/ttm/gfx.szp.o"
 endseg
 
 beginseg
-	name    "TTM_data"
+	name    "TTM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ttm/program.o"
-	include "$(BUILD)/stage/ttm/shape.o"
+	include "$(BUILD)/stage/ttm/prg.o"
+	include "$(BUILD)/stage/ttm/shp.o"
 endseg
 
 beginseg

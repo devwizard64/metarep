@@ -1,6 +1,7 @@
 #include <asm.h>
 #include <regdef.h>
-#include <ultra64.h>
+#include <PR/R4300.h>
+#include <PR/rcp.h>
 
 bulk_rom = 0xA600
 cart_rom = 0xB000

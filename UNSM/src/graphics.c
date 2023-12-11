@@ -9,32 +9,32 @@ static OSMesgQueue gfx_vi_mq;
 static OSMesgQueue gfx_dp_mq;
 static OSMesg gfx_vi_mbox;
 static OSMesg gfx_dp_mbox;
-static SC_CLIENT gfx_client;
+static SCCLIENT gfx_client;
 
-static uintptr_t gfx_cimg[3];
-static uintptr_t gfx_zimg;
-static void *anime_mario_buf;
+static unsigned long gfx_cimg[3];
+static unsigned long gfx_zimg;
+static void *mario_anime_buf;
 static void *demo_buf;
 
 u32 gfx_frame = 0;
 u16 gfx_vi = 0;
 u16 gfx_dp = 0;
-SC_TASK *gfx_task;
-Gfx *gfx_ptr;
+SCTASK *gfx_task;
+Gfx *glistp;
 char *gfx_mem;
-FRAME *frame;
+FRAME *framep;
 void (*gfx_callback)(void) = NULL;
 
-CONTROLLER controller_data[CONTROLLER_LEN+1];
+CONTROLLER controller_data[CONTROLLER_MAX+1];
 CONTROLLER *cont1 = &controller_data[0];
 CONTROLLER *cont2 = &controller_data[1];
-CONTROLLER *controller = &controller_data[2];
-DEMO *demo = NULL;
+CONTROLLER *contp = &controller_data[2];
+DEMO *demop = NULL;
 u16 demo_index = 0;
 u8 cont_bitpattern;
 s8 eeprom_status;
 
-BANK anime_mario_bank;
+BANK mario_anime_bank;
 BANK demo_bank;
 
 #ifdef GATEWAY
@@ -68,7 +68,7 @@ static void WriteGatewayRegister(int active)
 
 static void cont_read(void)
 {
-	osRecvMesg(&si_mq, NULL, OS_MESG_BLOCK);
+	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
 	osContGetReadData(cont_pad);
 	if ((cont1->pad->button & (U_JPAD|D_JPAD)) == (U_JPAD|D_JPAD))
 	{
@@ -98,62 +98,62 @@ static void cont_read(void)
 
 static void gfx_init_dp(void)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPPipelineMode(gfx_ptr++, G_PM_1PRIMITIVE);
-	gDPSetScissor(gfx_ptr++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
-	gDPSetCombineMode(gfx_ptr++, G_CC_SHADE, G_CC_SHADE);
-	gDPSetTextureLOD(gfx_ptr++, G_TL_TILE);
-	gDPSetTextureLUT(gfx_ptr++, G_TT_NONE);
-	gDPSetTextureDetail(gfx_ptr++, G_TD_CLAMP);
-	gDPSetTexturePersp(gfx_ptr++, G_TP_PERSP);
-	gDPSetTextureFilter(gfx_ptr++, G_TF_BILERP);
-	gDPSetTextureConvert(gfx_ptr++, G_TC_FILT);
-	gDPSetCombineKey(gfx_ptr++, G_CK_NONE);
-	gDPSetAlphaCompare(gfx_ptr++, G_AC_NONE);
-	gDPSetRenderMode(gfx_ptr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-	gDPSetColorDither(gfx_ptr++, G_CD_MAGICSQ);
-	gDPSetCycleType(gfx_ptr++, G_CYC_FILL);
-	gDPPipeSync(gfx_ptr++);
+	gDPPipeSync(glistp++);
+	gDPPipelineMode(glistp++, G_PM_1PRIMITIVE);
+	gDPSetScissor(glistp++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
+	gDPSetCombineMode(glistp++, G_CC_SHADE, G_CC_SHADE);
+	gDPSetTextureLOD(glistp++, G_TL_TILE);
+	gDPSetTextureLUT(glistp++, G_TT_NONE);
+	gDPSetTextureDetail(glistp++, G_TD_CLAMP);
+	gDPSetTexturePersp(glistp++, G_TP_PERSP);
+	gDPSetTextureFilter(glistp++, G_TF_BILERP);
+	gDPSetTextureConvert(glistp++, G_TC_FILT);
+	gDPSetCombineKey(glistp++, G_CK_NONE);
+	gDPSetAlphaCompare(glistp++, G_AC_NONE);
+	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+	gDPSetColorDither(glistp++, G_CD_MAGICSQ);
+	gDPSetCycleType(glistp++, G_CYC_FILL);
+	gDPPipeSync(glistp++);
 }
 
 static void gfx_init_sp(void)
 {
 	gSPClearGeometryMode(
-		gfx_ptr++,
+		glistp++,
 		G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING |
 		G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD
 	);
 	gSPSetGeometryMode(
-		gfx_ptr++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING
+		glistp++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING
 	);
-	gSPNumLights(gfx_ptr++, NUMLIGHTS_1);
-	gSPTexture(gfx_ptr++, 0x0000, 0x0000, G_TX_NOLOD, G_TX_RENDERTILE, G_OFF);
+	gSPNumLights(glistp++, NUMLIGHTS_1);
+	gSPTexture(glistp++, 0x0000, 0x0000, G_TX_NOLOD, G_TX_RENDERTILE, G_OFF);
 }
 
 static void gfx_init_zimg(void)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPSetDepthSource(gfx_ptr++, G_ZS_PIXEL);
-	gDPSetDepthImage(gfx_ptr++, gfx_zimg);
+	gDPPipeSync(glistp++);
+	gDPSetDepthSource(glistp++, G_ZS_PIXEL);
+	gDPSetDepthImage(glistp++, gfx_zimg);
 	gDPSetColorImage(
-		gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WD, gfx_zimg
+		glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WD, gfx_zimg
 	);
-	gDPSetFillColor(gfx_ptr++, 0x00010001U*GPACK_ZDZ(G_MAXFBZ, 0));
+	gDPSetFillColor(glistp++, 0x00010001U*GPACK_ZDZ(G_MAXFBZ, 0));
 	gDPFillRectangle(
-		gfx_ptr++, 0, BORDER_HT, SCREEN_WD-1, SCREEN_HT-BORDER_HT-1
+		glistp++, 0, BORDER_HT, SCREEN_WD-1, SCREEN_HT-BORDER_HT-1
 	);
 }
 
 static void gfx_init_cimg(void)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPSetCycleType(gfx_ptr++, G_CYC_1CYCLE);
+	gDPPipeSync(glistp++);
+	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
 	gDPSetColorImage(
-		gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WD, gfx_cimg[gfx_dp]
+		glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WD, gfx_cimg[gfx_dp]
 	);
 #if BORDER_HT > 0
 	gDPSetScissor(
-		gfx_ptr++, G_SC_NON_INTERLACE,
+		glistp++, G_SC_NON_INTERLACE,
 		0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
 	);
 #endif
@@ -161,15 +161,15 @@ static void gfx_init_cimg(void)
 
 void gfx_clear(u32 fill)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPSetRenderMode(gfx_ptr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-	gDPSetCycleType(gfx_ptr++, G_CYC_FILL);
-	gDPSetFillColor(gfx_ptr++, fill);
+	gDPPipeSync(glistp++);
+	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+	gDPSetCycleType(glistp++, G_CYC_FILL);
+	gDPSetFillColor(glistp++, fill);
 	gDPFillRectangle(
-		gfx_ptr++, 0, BORDER_HT, SCREEN_WD-1, SCREEN_HT-BORDER_HT-1
+		glistp++, 0, BORDER_HT, SCREEN_WD-1, SCREEN_HT-BORDER_HT-1
 	);
-	gDPPipeSync(gfx_ptr++);
-	gDPSetCycleType(gfx_ptr++, G_CYC_1CYCLE);
+	gDPPipeSync(glistp++);
+	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
 }
 
 void gfx_vp_clear(Vp *vp, u32 fill)
@@ -178,26 +178,26 @@ void gfx_vp_clear(Vp *vp, u32 fill)
 	SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
 	SHORT lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1 - 1;
 	SHORT lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1 - 1;
-	gDPPipeSync(gfx_ptr++);
-	gDPSetRenderMode(gfx_ptr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-	gDPSetCycleType(gfx_ptr++, G_CYC_FILL);
-	gDPSetFillColor(gfx_ptr++, fill);
-	gDPFillRectangle(gfx_ptr++, ulx, uly, lrx, lry);
-	gDPPipeSync(gfx_ptr++);
-	gDPSetCycleType(gfx_ptr++, G_CYC_1CYCLE);
+	gDPPipeSync(glistp++);
+	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+	gDPSetCycleType(glistp++, G_CYC_FILL);
+	gDPSetFillColor(glistp++, fill);
+	gDPFillRectangle(glistp++, ulx, uly, lrx, lry);
+	gDPPipeSync(glistp++);
+	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
 }
 
 static void gfx_draw_border(void)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPSetScissor(gfx_ptr++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
-	gDPSetRenderMode(gfx_ptr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-	gDPSetCycleType(gfx_ptr++, G_CYC_FILL);
+	gDPPipeSync(glistp++);
+	gDPSetScissor(glistp++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
+	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+	gDPSetCycleType(glistp++, G_CYC_FILL);
 #if BORDER_HT > 0
-	gDPSetFillColor(gfx_ptr++, 0x00000000);
-	gDPFillRectangle(gfx_ptr++, 0, 0, SCREEN_WD-1, BORDER_HT-1);
+	gDPSetFillColor(glistp++, 0x00000000);
+	gDPFillRectangle(glistp++, 0, 0, SCREEN_WD-1, BORDER_HT-1);
 	gDPFillRectangle(
-		gfx_ptr++, 0, SCREEN_HT-BORDER_HT, SCREEN_WD-1, SCREEN_HT-1
+		glistp++, 0, SCREEN_HT-BORDER_HT, SCREEN_WD-1, SCREEN_HT-1
 	);
 #endif
 }
@@ -208,28 +208,28 @@ void gfx_vp_scissor(Vp *vp)
 	SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
 	SHORT lrx = (vp->vp.vtrans[0]+vp->vp.vscale[0])/4 - 1;
 	SHORT lry = (vp->vp.vtrans[1]+vp->vp.vscale[1])/4 - 1;
-	gDPSetScissor(gfx_ptr++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
+	gDPSetScissor(glistp++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
 }
 
 static void gfx_make_task(void)
 {
-	size_t len = gfx_ptr - frame->gfx;
+	int len = glistp - framep->gfx;
 	gfx_task->mq = &gfx_dp_mq;
 	gfx_task->msg = (OSMesg)2;
 	gfx_task->task.t.type = M_GFXTASK;
-	gfx_task->task.t.ucode_boot = rspbootTextStart;
+	gfx_task->task.t.ucode_boot = (void *)rspbootTextStart;
 	gfx_task->task.t.ucode_boot_size =
 		(char *)rspbootTextEnd - (char *)rspbootTextStart;
 	gfx_task->task.t.flags = 0;
-	gfx_task->task.t.ucode = gspFast3D_fifoTextStart;
-	gfx_task->task.t.ucode_data = gspFast3D_fifoDataStart;
+	gfx_task->task.t.ucode = (void *)gspFast3D_fifoTextStart;
+	gfx_task->task.t.ucode_data = (void *)gspFast3D_fifoDataStart;
 	gfx_task->task.t.ucode_size = SP_UCODE_SIZE;
 	gfx_task->task.t.ucode_data_size = SP_UCODE_DATA_SIZE;
 	gfx_task->task.t.dram_stack = gfx_sp_stack;
 	gfx_task->task.t.dram_stack_size = SP_DRAM_STACK_SIZE8;
 	gfx_task->task.t.output_buff = gfx_fifo;
 	gfx_task->task.t.output_buff_size = gfx_fifo + FIFO_LEN;
-	gfx_task->task.t.data_ptr = (u64 *)frame->gfx;
+	gfx_task->task.t.data_ptr = (u64 *)framep->gfx;
 	gfx_task->task.t.data_size = sizeof(Gfx)*len;
 	gfx_task->task.t.yield_data_ptr = gfx_sp_yield;
 	gfx_task->task.t.yield_data_size = OS_YIELD_DATA_SIZE;
@@ -248,8 +248,8 @@ void gfx_end(void)
 {
 	gfx_draw_border();
 	if (debug_time) time_draw();
-	gDPFullSync(gfx_ptr++);
-	gSPEndDisplayList(gfx_ptr++);
+	gDPFullSync(glistp++);
+	gSPEndDisplayList(glistp++);
 	gfx_make_task();
 }
 
@@ -275,26 +275,26 @@ static void gfx_reset(void)
 
 static void frame_init(void)
 {
-	frame = &frame_data[0];
-	segment_set(SEG_FRAME, frame);
-	gfx_task = &frame->task;
-	gfx_ptr = frame->gfx;
-	gfx_mem = (char *)frame->gfx + sizeof(frame->gfx);
+	framep = &frame_data[0];
+	segment_set(SEG_FRAME, framep);
+	gfx_task = &framep->task;
+	glistp = framep->gfx;
+	gfx_mem = (char *)framep->gfx + sizeof(framep->gfx);
 	gfx_start();
 	gfx_clear(0x00000000);
 	gfx_end();
-	sc_queue_gfxtask(&frame->task);
+	sc_queue_gfxtask(&framep->task);
 	gfx_dp++;
 	gfx_frame++;
 }
 
 static void frame_start(void)
 {
-	frame = &frame_data[gfx_frame & 1];
-	segment_set(SEG_FRAME, frame);
-	gfx_task = &frame->task;
-	gfx_ptr = frame->gfx;
-	gfx_mem = (char *)frame->gfx + sizeof(frame->gfx);
+	framep = &frame_data[gfx_frame & 1];
+	segment_set(SEG_FRAME, framep);
+	gfx_task = &framep->task;
+	glistp = framep->gfx;
+	gfx_mem = (char *)framep->gfx + sizeof(framep->gfx);
 }
 
 static void frame_end(void)
@@ -306,7 +306,7 @@ static void frame_end(void)
 		gfx_callback();
 		gfx_callback = NULL;
 	}
-	sc_queue_gfxtask(&frame->task);
+	sc_queue_gfxtask(&framep->task);
 	time_gfxcpu(TIME_GFXCPU_ENDRDP);
 	osRecvMesg(&gfx_vi_mq, &null_msg, OS_MESG_BLOCK);
 	osViSwapBuffer((void *)PHYS_TO_K0(gfx_cimg[gfx_vi]));
@@ -326,10 +326,9 @@ static void demo_record(void)
 	s8 stick_y = cont1->stick_y;
 	if (stick_x > -8 && stick_x < 8) stick_x = 0;
 	if (stick_y > -8 && stick_y < 8) stick_y = 0;
-	if
-	(
-		record.count == 0xFF ||
-		button  != record.button  ||
+	if (
+		record.count == 255 ||
+		button != record.button  ||
 		stick_x != record.stick_x ||
 		stick_y != record.stick_y
 	)
@@ -346,7 +345,7 @@ static void demo_record(void)
 	record.count++;
 }
 
-static void cont_update_stick(CONTROLLER *cont)
+static void cont_proc_stick(CONTROLLER *cont)
 {
 	UNUSED int i;
 	cont->x = 0;
@@ -364,10 +363,10 @@ static void cont_update_stick(CONTROLLER *cont)
 	}
 }
 
-static void demo_update(void)
+static void demo_proc(void)
 {
 	controller_data[0].pad->button &= 0xFF3F;
-	if (demo)
+	if (demop)
 	{
 		if (controller_data[1].pad)
 		{
@@ -375,31 +374,31 @@ static void demo_update(void)
 			controller_data[1].pad->stick_y = 0;
 			controller_data[1].pad->button  = 0;
 		}
-		if (demo->count == 0)
+		if (demop->count == 0)
 		{
 			controller_data[0].pad->stick_x = 0;
 			controller_data[0].pad->stick_y = 0;
-			controller_data[0].pad->button  = 0x0080;
+			controller_data[0].pad->button  = CONT_EXIT;
 		}
 		else
 		{
 			u16 start = controller_data[0].pad->button & START_BUTTON;
-			controller_data[0].pad->stick_x = demo->stick_x;
-			controller_data[0].pad->stick_y = demo->stick_y;
+			controller_data[0].pad->stick_x = demop->stick_x;
+			controller_data[0].pad->stick_y = demop->stick_y;
 			controller_data[0].pad->button =
-				((demo->button & 0xF0) << 8) + (demo->button & 0x0F);
+				((demop->button & 0xF0) << 8) + (demop->button & 0x0F);
 			controller_data[0].pad->button |= start;
-			if (--demo->count == 0) demo++;
+			if (--demop->count == 0) demop++;
 		}
 	}
 }
 
-static void cont_update(void)
+static void cont_proc(void)
 {
 	int i;
-	if (cont_bitpattern != 0) cont_read();
-	demo_update();
-	for (i = 0; i < CONTROLLER_LEN; i++)
+	if (cont_bitpattern) cont_read();
+	demo_proc();
+	for (i = 0; i < CONTROLLER_MAX; i++)
 	{
 		CONTROLLER *cont = &controller_data[i];
 		if (cont->pad)
@@ -408,7 +407,7 @@ static void cont_update(void)
 			cont->stick_y = cont->pad->stick_y;
 			cont->down    = cont->pad->button & (cont->pad->button^cont->held);
 			cont->held    = cont->pad->button;
-			cont_update_stick(cont);
+			cont_proc_stick(cont);
 		}
 		else
 		{
@@ -421,13 +420,13 @@ static void cont_update(void)
 			cont->d       = 0;
 		}
 	}
-	controller->stick_x = cont1->stick_x;
-	controller->stick_y = cont1->stick_y;
-	controller->x       = cont1->x;
-	controller->y       = cont1->y;
-	controller->d       = cont1->d;
-	controller->down    = cont1->down;
-	controller->held    = cont1->held;
+	contp->stick_x = cont1->stick_x;
+	contp->stick_y = cont1->stick_y;
+	contp->x       = cont1->x;
+	contp->y       = cont1->y;
+	contp->d       = cont1->d;
+	contp->down    = cont1->down;
+	contp->held    = cont1->held;
 }
 
 static void cont_init(void)
@@ -438,7 +437,7 @@ static void cont_init(void)
 	controller_data[0].pad    = &cont_pad[0];
 	osContInit(&si_mq, &cont_bitpattern, cont_status);
 	eeprom_status = osEepromProbe(&si_mq);
-	for (c = 0, i = 0; i < MAXCONTROLLERS && c < CONTROLLER_LEN; i++)
+	for (c = 0, i = 0; i < MAXCONTROLLERS && c < CONTROLLER_MAX; i++)
 	{
 		if (cont_bitpattern & (1 << i))
 		{
@@ -465,30 +464,30 @@ static void gfx_init(void)
 	gfx_cimg[0] = K0_TO_PHYS(c_image_a);
 	gfx_cimg[1] = K0_TO_PHYS(c_image_b);
 	gfx_cimg[2] = K0_TO_PHYS(c_image_c);
-	anime_mario_buf = mem_alloc(16384, MEM_ALLOC_L);
-	segment_set(SEG_ANIME_MARIO, anime_mario_buf);
-	bank_init(&anime_mario_bank, _AnimeSegmentRomStart, anime_mario_buf);
+	mario_anime_buf = mem_alloc(16384, MEM_ALLOC_L);
+	segment_set(SEG_MARIO_ANIME, mario_anime_buf);
+	bank_init(&mario_anime_bank, _AnimeSegmentRomStart, mario_anime_buf);
 	demo_buf = mem_alloc(2048, MEM_ALLOC_L);
 	segment_set(SEG_DEMO, demo_buf);
 	bank_init(&demo_bank, _DemoSegmentRomStart, demo_buf);
 	mem_load_data(
 		SEG_MAIN, _MainSegmentRomStart, _MainSegmentRomEnd, MEM_ALLOC_L
 	);
-	mem_load_szp(SEG_GFX, _GfxSegmentRomStart, _GfxSegmentRomEnd);
+	mem_load_pres(SEG_GFX, _GfxSegmentRomStart, _GfxSegmentRomEnd);
 }
 
 extern P_SCRIPT p_main[];
 
-void gfx_main(UNUSED void *arg)
+void gfx_proc(UNUSED void *arg)
 {
 	P_SCRIPT *pc;
 	gfx_init();
 	cont_init();
 	save_init();
-	sc_client_init(2, &gfx_client, &gfx_vi_mq, (OSMesg)1);
+	sc_setclient(SC_GFXCLIENT, &gfx_client, &gfx_vi_mq, (OSMesg)1);
 	pc = segment_to_virtual(p_main);
-	Na_BGM_play(2, NA_SEQ_SE, 0);
-	aud_output(save_output_get());
+	Na_BgmPlay(2, NA_SEQ_SE, 0);
+	aud_sound_mode(save_get_sound());
 	frame_init();
 	for (;;)
 	{
@@ -498,12 +497,12 @@ void gfx_main(UNUSED void *arg)
 			continue;
 		}
 		time_gfxcpu(TIME_GFXCPU_START);
-		if (cont_bitpattern != 0) osContStartReadData(&si_mq);
-		aud_update();
+		if (cont_bitpattern) osContStartReadData(&si_mq);
+		aud_tick();
 		frame_start();
-		cont_update();
+		cont_proc();
 		pc = p_execute(pc);
 		frame_end();
-		if (debug_mem) dprintf(180, 20, "BUF %d", gfx_mem-(char *)gfx_ptr);
+		if (debug_mem) dprintf(180, 20, "BUF %d", gfx_mem-(char *)glistp);
 	}
 }

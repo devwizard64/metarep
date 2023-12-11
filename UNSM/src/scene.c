@@ -1,13 +1,13 @@
 #include <sm64.h>
 
-SPAWN spawn_player[1];
-SHAPE *shape_data[SHAPE_LEN];
-SCENE scene_data[SCENE_LEN];
-SPAWN *spawn_mario = &spawn_player[0];
+ACTOR player_actor[1];
+SHAPE *shape_data[SHAPE_MAX];
+SCENE scene_data[SCENE_MAX];
+ACTOR *mario_actor = &player_actor[0];
 SHAPE **shape_table = shape_data;
 SCENE *scene_table = scene_data;
-SCENE *scene = NULL;
-STAFF *staff = NULL;
+SCENE *scenep = NULL;
+STAFF *staffp = NULL;
 WIPE wipe;
 
 static Vp *scene_viewport = NULL;
@@ -19,20 +19,20 @@ static u8 blank_r = 0;
 static u8 blank_g = 0;
 static u8 blank_b = 0;
 
-s16 save_index = 1;
+s16 file_index = 1;
 s16 course_index;
 s16 level_index;
 s16 stage_index = 1;
 s16 scene_index;
-s16 course_prev;
+s16 prev_course;
 
-s16 msg_code;
-s16 msg_latch;
+s16 msg_status;
+s16 msg_result;
 
 #define RGBA16(r, g, b, a) \
 	(((r) >> 3) << 11 | ((g) >> 3) << 6 | ((b) >> 3) << 1 | ((a) >> 7))
 
-void scene_vp_set(Vp *viewport, Vp *scissor, UCHAR r, UCHAR g, UCHAR b)
+void scene_set_vp(Vp *viewport, Vp *scissor, UCHAR r, UCHAR g, UCHAR b)
 {
 	USHORT fill = RGBA16(r, g, b, 0xFF);
 	scene_fill = fill << 16 | fill;
@@ -40,7 +40,7 @@ void scene_vp_set(Vp *viewport, Vp *scissor, UCHAR r, UCHAR g, UCHAR b)
 	scene_scissor  = scissor;
 }
 
-static void scene_blank_set(UCHAR r, UCHAR g, UCHAR b)
+static void scene_set_blank(UCHAR r, UCHAR g, UCHAR b)
 {
 	USHORT fill = RGBA16(r, g, b, 0xFF);
 	blank_fill = fill << 16 | fill;
@@ -51,9 +51,9 @@ static void scene_blank_set(UCHAR r, UCHAR g, UCHAR b)
 
 void scene_demo(void)
 {
-	if ((gfx_frame & 0x1F) < 20)
+	if ((gfx_frame & 31) < 20)
 	{
-		if (cont_bitpattern == 0)
+		if (!cont_bitpattern)
 		{
 			dprintc(SCREEN_WD/2, 20, "NO CONTROLLER");
 		}
@@ -64,6 +64,8 @@ void scene_demo(void)
 		}
 	}
 }
+
+#define PORT_MAX    20
 
 extern O_SCRIPT o_13000720[];
 extern O_SCRIPT o_1300075C[];
@@ -86,61 +88,61 @@ extern O_SCRIPT o_13002F90[];
 extern O_SCRIPT o_13002F94[];
 extern O_SCRIPT o_13003E3C[];
 
-#define PORT_LEN    20
-
-int obj_port_code(OBJECT *obj)
+static O_SCRIPT *port_script[PORT_MAX] =
 {
-	static O_SCRIPT *port_script[PORT_LEN] =
-	{
-		o_portdoor,
-		o_13003E3C,
-		o_13000720,
-		o_13000780,
-		o_130007A0,
-		o_1300075C,
-		o_13002F60,
-		o_13002F64,
-		o_13002F68,
-		o_13002F6C,
-		o_13002F70,
-		o_13002F74,
-		o_13002F78,
-		o_13002F94,
-		o_13002F7C,
-		o_13002F80,
-		o_13002F88,
-		o_13002F84,
-		o_13002F8C,
-		o_13002F90,
-	};
-	static u8 port_code[PORT_LEN] =
-	{
-		1,
-		2,
-		3,
-		3,
-		3,
-		4,
-		16,
-		18,
-		19,
-		20,
-		21,
-		22,
-		23,
-		17,
-		32,
-		33,
-		34,
-		35,
-		36,
-		37,
-	};
+	o_portdoor,
+	o_13003E3C,
+	o_13000720,
+	o_13000780,
+	o_130007A0,
+	o_1300075C,
+	o_13002F60,
+	o_13002F64,
+	o_13002F68,
+	o_13002F6C,
+	o_13002F70,
+	o_13002F74,
+	o_13002F78,
+	o_13002F94,
+	o_13002F7C,
+	o_13002F80,
+	o_13002F88,
+	o_13002F84,
+	o_13002F8C,
+	o_13002F90,
+};
+
+static u8 port_type[PORT_MAX] =
+{
+	ENTER_DOOR,
+	ENTER_02,
+	ENTER_03,
+	ENTER_03,
+	ENTER_03,
+	ENTER_04,
+	ENTER_10,
+	ENTER_12,
+	ENTER_13,
+	ENTER_14,
+	ENTER_15,
+	ENTER_16,
+	ENTER_17,
+	ENTER_11,
+	ENTER_20,
+	ENTER_21,
+	ENTER_22,
+	ENTER_23,
+	ENTER_24,
+	ENTER_25,
+};
+
+int port_get_type(OBJECT *obj)
+{
 	int i;
 	O_SCRIPT *script = virtual_to_segment(SEG_OBJECT, obj->script);
-	for (i = 0; i < PORT_LEN; i++)
+	for (i = 0; i < PORT_MAX; i++)
 	{
-		if (port_script[i] == script) return port_code[i];
+		if (port_script[i] == script) return port_type[i];
 	}
 	return 0;
 }
@@ -148,16 +150,16 @@ int obj_port_code(OBJECT *obj)
 PORT *port_get(UCHAR index)
 {
 	PORT *port = NULL;
-	for (port = scene->port; port; port = port->next)
+	for (port = scenep->port; port; port = port->next)
 	{
-		if (port->index == index) break;
+		if (port->p.attr == index) break;
 	}
 	return port;
 }
 
-static PORT *obj_port_get(OBJECT *obj)
+static PORT *obj_get_port(OBJECT *obj)
 {
-	UCHAR index = obj_code_get(obj);
+	UCHAR index = obj_get_code(obj);
 	return port_get(index);
 }
 
@@ -168,9 +170,9 @@ static void port_init(void)
 	do
 	{
 		OBJECT *obj = (OBJECT *)shape;
-		if (obj->flag != 0 && obj_port_code(obj) != 0)
+		if (obj->flag && port_get_type(obj) != 0)
 		{
-			if ((port = obj_port_get(obj))) port->obj = obj;
+			if ((port = obj_get_port(obj))) port->obj = obj;
 		}
 	}
 	while ((shape = shape->next) != sobj_list.child);
@@ -179,11 +181,11 @@ static void port_init(void)
 void scene_init(void)
 {
 	int i;
-	scene = NULL;
+	scenep = NULL;
 	wipe.active = FALSE;
 	wipe.blank = FALSE;
-	spawn_mario->scene = -1;
-	for (i = 0; i < SCENE_LEN; i++)
+	mario_actor->scene = -1;
+	for (i = 0; i < SCENE_MAX; i++)
 	{
 		scene_data[i].index     = i;
 		scene_data[i].flag      = 0;
@@ -195,9 +197,9 @@ void scene_init(void)
 		scene_data[i].port      = NULL;
 		scene_data[i].bgport    = NULL;
 		scene_data[i].connect   = NULL;
-		scene_data[i].spawn     = NULL;
+		scene_data[i].actor     = NULL;
 		scene_data[i].cam       = NULL;
-		scene_data[i].wind      = NULL;
+		scene_data[i]._28       = NULL;
 		scene_data[i].jet[0]    = NULL;
 		scene_data[i].jet[1]    = NULL;
 		scene_data[i].msg[0]    = 0xFF;
@@ -210,17 +212,17 @@ void scene_init(void)
 void scene_exit(void)
 {
 	int i;
-	if (scene)
+	if (scenep)
 	{
-		s_scene_notify(scene->shp, S_CODE_CLOSE);
-		scene = NULL;
+		s_scene_notify(scenep->shp, SC_CLOSE);
+		scenep = NULL;
 		wipe.active = FALSE;
 	}
-	for (i = 0; i < SCENE_LEN; i++)
+	for (i = 0; i < SCENE_MAX; i++)
 	{
 		if (scene_data[i].shp)
 		{
-			s_scene_notify(scene_data[i].shp, S_CODE_EXIT);
+			s_scene_notify(scene_data[i].shp, SC_EXIT);
 			scene_data[i].shp = NULL;
 		}
 	}
@@ -228,70 +230,73 @@ void scene_exit(void)
 
 void scene_open(int index)
 {
-	if (!scene && scene_data[index].shp)
+	if (!scenep && scene_data[index].shp)
 	{
-		scene = &scene_data[index];
-		scene_index = scene->index;
-		if (scene->map) map_load(index, scene->map, scene->area, scene->tag);
-		if (scene->spawn) object_8029CFB0(0, scene->spawn);
+		scenep = &scene_data[index];
+		scene_index = scenep->index;
+		if (scenep->map)
+		{
+			map_load(index, scenep->map, scenep->area, scenep->tag);
+		}
+		if (scenep->actor) object_open(0, scenep->actor);
 		port_init();
-		s_scene_notify(scene->shp, S_CODE_OPEN);
+		s_scene_notify(scenep->shp, SC_OPEN);
 	}
 }
 
 void scene_close(void)
 {
-	if (scene)
+	if (scenep)
 	{
-		object_8029CEDC(0, scene->index);
-		s_scene_notify(scene->shp, S_CODE_CLOSE);
-		scene->flag = 0;
-		scene = NULL;
+		object_close(0, scenep->index);
+		s_scene_notify(scenep->shp, SC_CLOSE);
+		scenep->flag = 0;
+		scenep = NULL;
 		wipe.active = FALSE;
 	}
 }
 
 void scene_player_open(void)
 {
-	Na_SE_clear();
-	scene_open(spawn_mario->scene);
-	if (scene->index == spawn_mario->scene)
+	Na_SeClear();
+	scene_open(mario_actor->scene);
+	if (scenep->index == mario_actor->scene)
 	{
-		scene->flag |= SCENE_FLAG_01;
-		object_8029CFB0(0, spawn_mario);
+		scenep->flag |= SN_ACTIVE;
+		object_open(0, mario_actor);
 	}
 }
 
 void scene_player_close(void)
 {
-	if (scene && (scene->flag & SCENE_FLAG_01))
+	if (scenep && (scenep->flag & SN_ACTIVE))
 	{
-		object_8029CEDC(0, spawn_mario->group);
-		scene->flag &= ~SCENE_FLAG_01;
-		if (scene->flag == 0) scene_close();
+		object_close(0, mario_actor->group);
+		scenep->flag &= ~SN_ACTIVE;
+		if (!scenep->flag) scene_close();
 	}
 }
 
 void scene_set(int index)
 {
-	int flag = scene->flag;
+	int flag = scenep->flag;
 	if (scene_index != index)
 	{
 		scene_close();
 		scene_open(index);
-		scene->flag = flag;
-		obj_mario->o_particle = 0;
+		scenep->flag = flag;
+		mario_obj->o_effect = 0;
 	}
-	if (flag & SCENE_FLAG_01)
+	if (flag & SN_ACTIVE)
 	{
-		obj_mario->list.s.scene = index, spawn_mario->scene = index;
+		mario_obj->s.scene = index, mario_actor->scene = index;
 	}
 }
 
-void scene_update(void)
+void scene_proc(void)
 {
 	draw_timer++;
-	object_8029D690(0);
+	object_proc(0);
 }
 
 void scene_wipe(SHORT type, SHORT frame, UCHAR r, UCHAR g, UCHAR b)
@@ -300,33 +305,33 @@ void scene_wipe(SHORT type, SHORT frame, UCHAR r, UCHAR g, UCHAR b)
 	wipe.type   = type;
 	wipe.frame  = frame;
 	wipe.blank  = FALSE;
-	if (type & 1)   scene_blank_set(r, g, b);
-	else            r = blank_r, g = blank_g, b = blank_b;
-	if (type < 8)
+	if (WIPE_ISOUT(type))   scene_set_blank(r, g, b);
+	else                    r = blank_r, g = blank_g, b = blank_b;
+	if (type < WIPE_FADE_MAX)
 	{
-		wipe.arg.fade.r = r;
-		wipe.arg.fade.g = g;
-		wipe.arg.fade.b = b;
+		wipe.data.fade.r = r;
+		wipe.data.fade.g = g;
+		wipe.data.fade.b = b;
 	}
 	else
 	{
-		wipe.arg.window.r = r;
-		wipe.arg.window.g = g;
-		wipe.arg.window.b = b;
-		wipe.arg.window.s_x = SCREEN_WD/2;
-		wipe.arg.window.s_y = SCREEN_HT/2;
-		wipe.arg.window.e_x = SCREEN_WD/2;
-		wipe.arg.window.e_y = SCREEN_HT/2;
-		wipe.arg.window.ang_vel = 0;
-		if (type & 1)
+		wipe.data.window.r = r;
+		wipe.data.window.g = g;
+		wipe.data.window.b = b;
+		wipe.data.window.sx = SCREEN_WD/2;
+		wipe.data.window.sy = SCREEN_HT/2;
+		wipe.data.window.ex = SCREEN_WD/2;
+		wipe.data.window.ey = SCREEN_HT/2;
+		wipe.data.window.ang_vel = 0;
+		if (WIPE_ISOUT(type))
 		{
-			wipe.arg.window.s_size = SCREEN_WD;
-			wipe.arg.window.e_size = type >= 15 ? 16 : 0;
+			wipe.data.window.ssize = SCREEN_WD;
+			wipe.data.window.esize = type >= WIPE_UNKNOWN_OUT ? 16 : 0;
 		}
 		else
 		{
-			wipe.arg.window.s_size = type >= 14 ? 16 : 0;
-			wipe.arg.window.e_size = SCREEN_WD;
+			wipe.data.window.ssize = type >= WIPE_UNKNOWN_IN ? 16 : 0;
+			wipe.data.window.esize = SCREEN_WD;
 		}
 	}
 }
@@ -341,50 +346,47 @@ void scene_wipe_delay(
 
 void scene_draw(void)
 {
-	if (scene && !wipe.blank)
+	if (scenep && !wipe.blank)
 	{
 		static Vp vp =
 		{{
 			{4*(SCREEN_WD/2), 4*(SCREEN_HT/2), G_MAXZ/2, 0},
 			{4*(SCREEN_WD/2), 4*(SCREEN_HT/2), G_MAXZ/2, 0},
 		}};
-		draw_scene(scene->shp, scene_viewport, scene_scissor, scene_fill);
-		gSPViewport(gfx_ptr++, K0_TO_PHYS(&vp));
+		draw_scene(scenep->shp, scene_viewport, scene_scissor, scene_fill);
+		gSPViewport(glistp++, K0_TO_PHYS(&vp));
 		gDPSetScissor(
-			gfx_ptr++, G_SC_NON_INTERLACE,
+			glistp++, G_SC_NON_INTERLACE,
 			0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
 		);
 		hud_draw();
 #if BORDER_HT > 0
-		gDPSetScissor(
-			gfx_ptr++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT
-		);
+		gDPSetScissor(glistp++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
 #endif
 		dprint_draw();
-		message_802DAB58();
-		pl_demo_80256E88();
+		caption_draw();
+		staff_draw();
 #if BORDER_HT > 0
 		gDPSetScissor(
-			gfx_ptr++, G_SC_NON_INTERLACE,
+			glistp++, G_SC_NON_INTERLACE,
 			0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
 		);
 #endif
-		if ((msg_code = message_802DDCA4()) != 0) msg_latch = msg_code;
+		if ((msg_status = message_proc()) != 0) msg_result = msg_status;
 		if (scene_scissor) gfx_vp_scissor(scene_scissor);
 		else gDPSetScissor(
-			gfx_ptr++, G_SC_NON_INTERLACE,
+			glistp++, G_SC_NON_INTERLACE,
 			0, BORDER_HT, SCREEN_WD, SCREEN_HT-BORDER_HT
 		);
 		if (wipe.active)
 		{
 			if (wipe_delay == 0)
 			{
-				wipe.active =
-					!wipe_802CCBE8(0, wipe.type, wipe.frame, &wipe.arg);
+				wipe.active = !wipe_draw(0, wipe.type, wipe.frame, &wipe.data);
 				if (!wipe.active)
 				{
-					if (wipe.type & 1)  wipe.blank = TRUE;
-					else                scene_blank_set(0, 0, 0);
+					if (WIPE_ISOUT(wipe.type))  wipe.blank = TRUE;
+					else                        scene_set_blank(0, 0, 0);
 				}
 			}
 			else

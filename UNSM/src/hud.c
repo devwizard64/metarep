@@ -1,5 +1,15 @@
 #include <sm64.h>
 
+extern u16 *txt_glbfont[];
+extern u16 *txt_camera[];
+extern Gfx gfx_print_copy_start[];
+extern Gfx gfx_print_copy_char[];
+extern Gfx gfx_print_copy_end[];
+extern u16 *txt_meter_n[];
+extern Gfx gfx_meter_0[];
+extern Gfx gfx_meter_n[];
+extern Gfx gfx_meter_end[];
+
 #ifdef sgi
 #define FRAME(x) (30*(x))
 #else
@@ -53,8 +63,8 @@
 typedef struct meter
 {
 	s8 state;
-	s16 x;
-	s16 y;
+	short x;
+	short y;
 	float scale;
 }
 METER;
@@ -63,41 +73,31 @@ static METER meter = {0, METER_X, METER_Y, 1};
 
 static s16 meter_power;
 static int meter_timer = 0;
-UNUSED static s16 hud_80332600 = 0;
-UNUSED static s16 hud_80332604 = 10;
-
-extern Gfx gfx_dprint_copy_start[];
-extern Gfx gfx_dprint_copy_char[];
-extern Gfx gfx_dprint_copy_end[];
-extern u16 *txt_meter_n[];
-extern Gfx gfx_meter_0[];
-extern Gfx gfx_meter_n[];
-extern Gfx gfx_meter_end[];
-extern u16 *txt_dprint[];
-extern u16 *txt_camera[];
+UNUSED static short hud_80332600 = 0;
+UNUSED static short hud_80332604 = 10;
 
 static void hud_draw_char(unsigned int x, unsigned int y, u16 *txt)
 {
-	gDPPipeSync(gfx_ptr++);
-	gDPSetTextureImage(gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt);
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_char);
+	gDPPipeSync(glistp++);
+	gDPSetTextureImage(glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt);
+	gSPDisplayList(glistp++, gfx_print_copy_char);
 	gSPTextureRectangle(
-		gfx_ptr++, x << 2, y << 2, (x+16-1) << 2, (y+16-1) << 2,
+		glistp++, x << 2, y << 2, (x+16-1) << 2, (y+16-1) << 2,
 		G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
 	);
 }
 
 static void hud_draw_8x8(unsigned int x, unsigned int y, u16 *txt)
 {
-	gDPSetLoadTile(gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b);
+	gDPSetLoadTile(glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b);
 	gDPSetImageBlock(
-		gfx_ptr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0,
+		glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0,
 		G_TX_CLAMP, G_TX_CLAMP, 3, 3, 0, 0
 	);
-	gDPPipeSync(gfx_ptr++);
-	gDPLoadImageBlock(gfx_ptr++, txt, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8);
+	gDPPipeSync(glistp++);
+	gDPLoadImageBlock(glistp++, txt, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8);
 	gSPTextureRectangle(
-		gfx_ptr++, x << 2, y << 2, (x+8-1) << 2, (y+8-1) << 2,
+		glistp++, x << 2, y << 2, (x+8-1) << 2, (y+8-1) << 2,
 		G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10
 	);
 }
@@ -105,11 +105,11 @@ static void hud_draw_8x8(unsigned int x, unsigned int y, u16 *txt)
 static void meter_draw_n(SHORT power)
 {
 	u16 **txt = segment_to_virtual(txt_meter_n);
-	gDPPipeSync(gfx_ptr++);
+	gDPPipeSync(glistp++);
 	gDPLoadImageBlock(
-		gfx_ptr++, txt[power-1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32
+		glistp++, txt[power-1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32
 	);
-	gSP2Triangles(gfx_ptr++, 0, 1, 2, 0, 0, 2, 3, 0);
+	gSP2Triangles(glistp++, 0, 1, 2, 0, 0, 2, 3, 0);
 }
 
 static void meter_draw(SHORT power)
@@ -118,22 +118,22 @@ static void meter_draw(SHORT power)
 	if (!(mtx = gfx_alloc(sizeof(Mtx)))) return;
 	guTranslate(mtx, meter.x, meter.y, 0);
 	gSPMatrix(
-		gfx_ptr++, K0_TO_PHYS(mtx++), G_MTX_MODELVIEW|G_MTX_MUL|G_MTX_PUSH
+		glistp++, K0_TO_PHYS(mtx++), G_MTX_MODELVIEW|G_MTX_MUL|G_MTX_PUSH
 	);
-	gSPDisplayList(gfx_ptr++, gfx_meter_0);
+	gSPDisplayList(glistp++, gfx_meter_0);
 	if (power != 0)
 	{
-		gSPDisplayList(gfx_ptr++, gfx_meter_n);
+		gSPDisplayList(glistp++, gfx_meter_n);
 		meter_draw_n(power);
-		gSPDisplayList(gfx_ptr++, gfx_meter_end);
+		gSPDisplayList(glistp++, gfx_meter_end);
 	}
-	gSPPopMatrix(gfx_ptr++, G_MTX_MODELVIEW);
+	gSPPopMatrix(glistp++, G_MTX_MODELVIEW);
 }
 
 static void meter_alert(void)
 {
 	SHORT flag = hud.flag;
-	if (!(flag & HUD_8000))
+	if (!(flag & HUD_ALERT))
 	{
 		if (meter_timer == FRAME(1.5)) meter.state = METER_SHOW;
 	}
@@ -167,7 +167,7 @@ static void meter_hide(void)
 	}
 }
 
-static void meter_update(SHORT power)
+static void meter_proc(SHORT power)
 {
 	if (power < 8 && meter_power == 8 && meter.state == METER_OFF)
 	{
@@ -191,7 +191,7 @@ static void meter_update(SHORT power)
 static void hud_draw_power(void)
 {
 	SHORT power = hud.power;
-	if (meter.state != METER_HIDE) meter_update(power);
+	if (meter.state != METER_HIDE) meter_proc(power);
 	if (meter.state == METER_OFF) return;
 	switch (meter.state)
 	{
@@ -221,10 +221,10 @@ static void hud_draw_coin(void)
 static void hud_draw_star(void)
 {
 	CHAR flag = FALSE;
-	if (message_803316D4 == 1 && (gfx_frame & 8)) return;
+	if (savemenu_code == 1 && (gfx_frame & 8)) return;
 	if (hud.star < 100) flag = TRUE;
 	dprint(STAR_X, STAR_Y, "-");
-	if (flag == TRUE) dprint(STAR_X+16, STAR_Y, "*");
+	if (ISTRUE(flag)) dprint(STAR_X+16, STAR_Y, "*");
 	dprintf(STAR_X+16+14*flag, STAR_Y, "%d", hud.star);
 }
 
@@ -236,7 +236,7 @@ static void hud_draw_key(void)
 
 static void hud_draw_time(void)
 {
-	u16 **txt = segment_to_virtual(txt_dprint);
+	u16 **txt = segment_to_virtual(txt_glbfont);
 	USHORT time = hud.time;
 	USHORT min = time / (30*60);
 	USHORT sec = (time - 30*60*min) / 30;
@@ -245,10 +245,10 @@ static void hud_draw_time(void)
 	dprintf(TIME_MIN_X, TIME_Y, "%0d", min);
 	dprintf(TIME_SEC_X, TIME_Y, "%02d", sec);
 	dprintf(TIME_FRC_X, TIME_Y, "%d", frc);
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_start);
+	gSPDisplayList(glistp++, gfx_print_copy_start);
 	hud_draw_char(TIME_QMS_X, 32, txt[56]);
 	hud_draw_char(TIME_QSF_X, 32, txt[57]);
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_end);
+	gSPDisplayList(glistp++, gfx_print_copy_end);
 }
 
 static s16 hud_camera = 0;
@@ -264,20 +264,20 @@ static void hud_draw_camera(void)
 	int x = CAMERA_X;
 	int y = CAMERA_Y;
 	if (hud_camera == 0) return;
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_start);
+	gSPDisplayList(glistp++, gfx_print_copy_start);
 	hud_draw_char(x, y, txt[0]);
-	switch (hud_camera & 7)
+	switch (hud_camera & 7) /* T:hud_camera */
 	{
 	case 1: hud_draw_char(x+16, y, txt[1]); break;
 	case 2: hud_draw_char(x+16, y, txt[2]); break;
 	case 4: hud_draw_char(x+16, y, txt[3]); break;
 	}
-	switch (hud_camera & 24)
+	switch (hud_camera & 24) /* T:hud_camera */
 	{
 	case  8: hud_draw_8x8(x+4, y+16, txt[5]); break;
 	case 16: hud_draw_8x8(x+4, y- 8, txt[4]); break;
 	}
-	gSPDisplayList(gfx_ptr++, gfx_dprint_copy_end);
+	gSPDisplayList(glistp++, gfx_print_copy_end);
 }
 
 void hud_draw(void)
@@ -291,8 +291,9 @@ void hud_draw(void)
 	}
 	else
 	{
-		message_802D7384();
-		if (scene && scene->cam->mode == 10) message_802DB08C();
+		gfx_screenproj();
+		/* T:enum */
+		if (scenep && scenep->cam->mode == 10) cannon_reticle_draw();
 		if (flag & HUD_LIFE) hud_draw_life();
 		if (flag & HUD_COIN) hud_draw_coin();
 		if (flag & HUD_STAR) hud_draw_star();

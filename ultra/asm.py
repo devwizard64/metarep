@@ -1,4 +1,3 @@
-import table
 import ultra
 
 I_OP    = 0
@@ -240,29 +239,20 @@ element_table = (
 	"[7]",  # 1111
 )
 
-btbl        = None
+btbl = {}
 
-line        = None
-inst_arg    = None
-inst_fmt    = None
-reg_table   = None
-lui_stack   = None
-lui_table   = None
-lui_next    = None
-lui_flag    = None
-imm         = None
-
-def sym(addr, src=None):
-	btbl.add(addr)
-	sym = table.sym_addr(ultra.script, addr, src, True)
-	if sym != None: return sym.label
+def sym(self, addr, src=None):
+	btbl[self.seg].add(addr)
+	sym = self.get_sym(addr)
+	if sym is not None: return sym.label
+	if mode == 0: return "%d$" % ((addr-addr_s) >> 2)
 	return ".L%08X" % addr
 
-def aw(src=None):
-	return sym(ultra.uw(), src)
+def aw(self, src=None):
+	return sym(self, self.u32(), src)
 
-def str_prc(ptr, argv):
-	if imm != None:
+def str_prc(self, ptr, argv):
+	if imm is not None:
 		i = 0
 		for arg in argv:
 			if arg in {
@@ -276,25 +266,22 @@ def str_prc(ptr, argv):
 				I_BDST,
 				I_JDST,
 			}:
-				if imm[i] != None: inst_fmt[arg] = imm[i]
+				if imm[i] is not None: inst_fmt[arg] = imm[i]
 				i += 1
-	lst = tuple([
-		table.imm_prc(inst_fmt[arg], inst_arg[arg])
-		for arg in argv
-	])
+	lst = tuple([self.fmt(inst_fmt[arg], inst_arg[arg]) for arg in argv])
 	if None in lst:
 		raise RuntimeError("ultra.asm.str_prc(): bad arg (\"%s\" %% %s)" % (
 			ptr, str(lst)
 		))
 	return ptr % lst
 
-def lst_prc(ptr, argv):
+def lst_prc(self, ptr, argv):
 	p = ptr[inst_arg[argv[0]]]
-	if p != None:
+	if p is not None:
 		ptr, argv = p
-		if type(ptr) == list:   return lst_prc(ptr, argv)
-		if type(ptr) == str:    return str_prc(ptr, argv)
-		if callable(ptr):       return ptr(argv)
+		if type(ptr) == list:   return lst_prc(self, ptr, argv)
+		if type(ptr) == str:    return str_prc(self, ptr, argv)
+		if callable(ptr):       return ptr(self, argv)
 		raise RuntimeError("ultra.asm.lst_prc(): bad arg (%s)" % str(p))
 	return None
 
@@ -302,7 +289,7 @@ def lui_write(reg, val):
 	if lui_flag & 1: lui_table[reg] = val
 	if lui_flag & 2: lui_next[reg]  = val
 
-def fnc_clear(argv):
+def fnc_clear(self, argv):
 	reg = inst_arg[argv[1]]
 	op   = inst_arg[I_OP]
 	func = inst_arg[I_FUNC]
@@ -310,39 +297,39 @@ def fnc_clear(argv):
 	rt   = inst_arg[I_RT]
 	if not (op == 0x00 and func == 0x21) or (reg != rs and reg != rt):
 		lui_write(reg, None)
-	return str_prc(argv[0], argv[1:])
+	return str_prc(self, argv[0], argv[1:])
 
-def fnc_clearf(argv):
-	return str_prc(argv[0], argv[1:])
+def fnc_clearf(self, argv):
+	return str_prc(self, argv[0], argv[1:])
 
-def fnc_clearv(argv):
-	return str_prc(argv[0], argv[1:])
+def fnc_clearv(self, argv):
+	return str_prc(self, argv[0], argv[1:])
 
-def fnc_or(argv):
+def fnc_or(self, argv):
 	ptr, argv = ["or      %s, %s, %s", [I_RD, I_RS, I_RT]]
 	if mode == 0:
 		if inst_arg[I_RT] == 0:
 			ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
 	lui_write(inst_arg[I_RD], None)
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
-def fnc_j(argv):
+def fnc_j(self, argv):
 	if argv[1][0] == I_JDST:
 		jdst = inst_arg[I_JDST]
-		inst_arg[I_JDST] = ultra.sym(jdst)
+		inst_arg[I_JDST] = ultra.sym(self, jdst, self.save)
 		#if argv[0].startswith("j       "):
-		#    inst_arg[I_JDST] = sym(jdst)
+		#    inst_arg[I_JDST] = sym(self, jdst, self.save)
 		#else:
-		#    inst_arg[I_JDST] = ultra.sym(jdst)
+		#    inst_arg[I_JDST] = ultra.sym(self, jdst, self.save)
 		inst_fmt[I_JDST] = "%s"
-	return str_prc(argv[0], argv[1])
+	return str_prc(self, argv[0], argv[1])
 
-def fnc_b(argv):
+def fnc_b(self, argv):
 	global lui_next
 	global lui_flag
 	bdst = inst_arg[I_BDST]
 	lui_stack[bdst] = lui_next = lui_table[:]
-	inst_arg[I_BDST] = sym(bdst)
+	inst_arg[I_BDST] = sym(self, bdst)
 	inst_fmt[I_BDST] = "%s"
 	cnt, ptr = argv[:2]
 	argv = [I_RS, I_RT]
@@ -385,47 +372,51 @@ def fnc_b(argv):
 			cnt, ptr = [1, "bnezl   "]
 	for i in range(cnt):
 		ptr += "%s, "
-	return str_prc(ptr + "%s", argv[:cnt] + [I_BDST])
+	return str_prc(self, ptr + "%s", argv[:cnt] + [I_BDST])
 
-def fnc_addiu(argv):
+def fnc_addiu(self, argv):
 	ptr, argv = ["addiu   %s, %s, %s", [I_RT, I_RS, I_IMMS]]
 	if mode == 0:
 		# addiu rt, $0, imm -> li rt, imm
 		if inst_arg[I_RS] == 0:
 			ptr, argv = ["li      %s, %s", [I_RT, I_IMMS]]
 		# lui rt, hi(addr) ... addiu rt, rt, lo(addr)
-		elif lui_table[inst_arg[I_RS]] != None:
+		elif lui_table[inst_arg[I_RS]] is not None:
 			ln, immh = lui_table[inst_arg[I_RS]]
-			inst_arg[I_IMMS] = ultra.sym(immh + inst_arg[I_IMMS])
+			inst_arg[I_IMMS] = ultra.sym(
+				self, immh + inst_arg[I_IMMS], self.save
+			)
 			inst_fmt[I_IMMS] = "%s"
 			if inst_arg[I_RT] == inst_arg[I_RS]:
 				if macro:
 					line[ln] = (
-						line[ln][0], str_prc("la.u    %s, %s", [I_RS, I_IMMS])
+						line[ln][0],
+						str_prc(self, "la.u    %s, %s", [I_RS, I_IMMS])
 					)
 					ptr, argv = ["la.l    %s, %s", [I_RT, I_IMMS]]
 				else:
 					line[ln] = (
 						line[ln][0],
-						str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
+						str_prc(self, "lui     %s, %%hi(%s)", [I_RS, I_IMMS])
 					)
 					ptr, argv = ["addiu   %s, %%lo(%s)", [I_RT, I_IMMS]]
 			else:
 				line[ln] = (
-					line[ln][0], str_prc("lui     %s, %%hi(%s)", [I_RS, I_IMMS])
+					line[ln][0],
+					str_prc(self, "lui     %s, %%hi(%s)", [I_RS, I_IMMS])
 				)
 				ptr, argv = ["addiu   %s, %s, %%lo(%s)", [I_RT, I_RS, I_IMMS]]
 	else:
 		# ARMIPS rejects this
 		# if inst_arg[I_RS] == 0:
-		#     inst_arg[I_IMMU] = ultra.sym(inst_arg[I_IMMU])
+		#     inst_arg[I_IMMU] = ultra.sym(self, inst_arg[I_IMMU], self.save)
 		#     inst_fmt[I_IMMU] = "%s"
 		#     ptr, argv = ["la      %s, %s", [I_RT, I_IMMU]]
 		pass
 	lui_write(inst_arg[I_RT], None)
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
-def fnc_ori(argv):
+def fnc_ori(self, argv):
 	ptr, argv = ["ori     %s, %s, %s", [I_RT, I_RS, I_IMMU]]
 	if inst_arg[I_RS] == 0:
 		if mode == 0:
@@ -436,42 +427,55 @@ def fnc_ori(argv):
 			pass
 	# lui rt, imm ... ori rt, rt, imm -> li.u rt, imm ... li.l rt, imm
 	elif inst_arg[I_RT] == inst_arg[I_RS]:
-		if lui_table[inst_arg[I_RT]] != None:
+		if lui_table[inst_arg[I_RT]] is not None:
 			ln, immh = lui_table[inst_arg[I_RT]]
 			inst_arg[I_IMMU] = immh | inst_arg[I_IMMU]
 			inst_fmt[I_IMMU] = "0x%08X"
 			if line[ln][1].startswith("li"):
 				if macro:
 					line[ln] = (
-						line[ln][0], str_prc("li.u    %s, %s", [I_RT, I_IMMU])
+						line[ln][0],
+						str_prc(self, "li.u    %s, %s", [I_RT, I_IMMU])
 					)
 					ptr, argv = ["li.l    %s, %s", [I_RT, I_IMMU]]
 				else:
 					line[ln] = (
 						line[ln][0],
-						str_prc("lui     %s, %s >> 16", [I_RT, I_IMMU])
+						str_prc(self, "lui     %s, %s >> 16", [I_RT, I_IMMU])
 					)
 					ptr, argv = ["ori     %s, %s & 0xFFFF", [I_RT, I_IMMU]]
 	lui_write(inst_arg[I_RT], None)
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
-def fnc_lui(argv):
+def fnc_lui(self, argv):
 	if inst_arg[I_RT] != 0:
 		lui_write(inst_arg[I_RT], (len(line), inst_arg[I_IMMH]))
-	if imm != None:
+	if imm is not None:
 		ptr, argv = "lui     %s, %s", [I_RT, I_IMMU]
 	else:
 		ptr, argv = "li      %s, %s", [I_RT, I_IMMH]
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
-def fnc_ls(argv):
+def rsp_prc(self, i):
+	sym = self.find_sym(0x04000000 | inst_arg[i], self.save)
+	if sym is not None:
+		inst_arg[i] = sym.label
+		inst_fmt[i] = "lo(%s)"
+	# else:
+	# 	print("0x%03X," % inst_arg[i])
+
+def fnc_ls(self, argv):
 	ptr, argv = [argv[0], [argv[1], I_IMMS, I_RS]]
 	if mode == 0:
-		if lui_table[inst_arg[I_RS]] != None:
+		if lui_table[inst_arg[I_RS]] is not None:
 			ln, immh = lui_table[inst_arg[I_RS]]
-			inst_arg[I_IMMS] = ultra.sym(immh + inst_arg[I_IMMS])
+			inst_arg[I_IMMS] = ultra.sym(
+				self, immh + inst_arg[I_IMMS], self.save
+			)
 			inst_fmt[I_IMMS] = "%%hi(%s)"
-			line[ln] = (line[ln][0], str_prc("lui     %s, %s", [I_RS, I_IMMS]))
+			line[ln] = (
+				line[ln][0], str_prc(self, "lui     %s, %s", [I_RS, I_IMMS])
+			)
 			inst_fmt[I_IMMS] = "%%lo(%s)"
 		if ptr in {
 			"lb      ",
@@ -488,19 +492,21 @@ def fnc_ls(argv):
 		elif ptr == "cache   ":
 			lui_write(inst_arg[argv[2]], None)
 	else:
-		pass
+		if inst_arg[I_RS] == 0:
+			rsp_prc(self, I_IMMS)
 	ptr += "%s, %s(%s)"
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
-def fnc_lsv(argv):
+def fnc_lsv(self, argv):
 	inst_arg[I_OFFS] <<= argv[1]
 	ptr, argv = [argv[0], [I_VT, I_E, I_OFFS, I_RS]]
 	if mode == 0:
 		pass
 	else:
-		pass
+		if inst_arg[I_RS] == 0:
+			rsp_prc(self, I_OFFS)
 	ptr += "%s%s, %s(%s)"
-	return str_prc(ptr, argv)
+	return str_prc(self, ptr, argv)
 
 lst_special = [
 	(fnc_clear, ["sll     %s, %s, %s", I_RD, I_RT, I_SA]),
@@ -1082,40 +1088,53 @@ lst_op = [
 	(fnc_ls, ["sd      ", I_RT]),
 ]
 
-def init(self, start, data):
+def init(self, seg, addr):
 	global btbl
-	ultra.init(self, start, data)
-	btbl = set()
+	ultra.init(self, seg, addr)
+	if self.seg not in btbl: btbl[self.seg] = set()
 
-def fmt(self, line, code=False):
+def fmt(self, line):
 	f = self.file[-1][1]
 	last = None
 	for addr, ln in line:
-		if addr != None:
+		if addr is not None:
 			if last != addr:
-				sym = table.sym_addr(self, addr, addr, True)
-				if sym != None:
-					if not sym.flag & table.LOCAL:
-						f.append("\n")
-						if hasattr(sym, "fmt"):
-							if ultra.COMM_LABEL:
+				sym = self.get_sym(addr)
+				if sym is not None:
+					if "LOCAL" not in sym.flag:
+						addr_s = addr
+						if last is not None: f.append("\n")
+						if ultra.COMM_LABEL and hasattr(sym, "fmt"):
+							if ultra.COMM_LADDR:
 								start = "/* 0x%08X   " % addr
 							else:
 								start = "/* "
 							f.append(sym.fmt(start, " */")+"\n")
 						else:
-							if ultra.COMM_LABEL:
+							if ultra.COMM_LADDR:
 								f.append("/* 0x%08X */\n" % addr)
-					if sym.flag & table.GLOBL:
-						f.append(".globl %s\n" % sym.label)
+					if "GLOBL" in sym.flag: f.append(".globl %s\n" % sym.label)
 					f.append("%s:\n" % sym.label)
-				elif addr in btbl:
-					f.append(".L%08X:\n" % addr)
+				elif addr in btbl[self.seg]:
+					if mode == 0:   f.append("%d$:\n" % ((addr-addr_s)//4))
+					else:           f.append(".L%08X:\n" % addr)
 				last = addr
-		if code and ultra.COMM_LINE:
-			f.append("/*0x%08X*/  %s\n" % (addr, ln))
-		else:
-			f.append("\t%s\n" % ln)
+		if ultra.COMM_LINE: f.append("/*%08X*/\t%s\n" % (addr, ln))
+		else:               f.append("\t%s\n" % ln)
+
+def s_code_start(self):
+	global addr_s
+	global reg_table
+	global lui_stack
+	global lui_table
+	global lui_next
+	global lui_flag
+	addr_s = self.addr
+	reg_table = 64*[False]
+	lui_stack = {}
+	lui_table = 32*[None]
+	lui_next  = None
+	lui_flag  = 1
 
 def s_code(self, argv):
 	global mode
@@ -1124,31 +1143,24 @@ def s_code(self, argv):
 	global line
 	global inst_arg
 	global inst_fmt
-	global reg_table
-	global lui_stack
 	global lui_table
-	global lui_next
 	global lui_flag
 	global imm
-	start, end, data, mode, macro, sep = argv
-	init(self, start, data)
+	seg, start, end, mode, macro, sep = argv
+	init(self, seg, start)
 	gpr  = (gpr_cpu,  gpr_rsp)[mode]
 	cop0 = (cop0_cpu, cop0_rsp)[mode]
 	line = []
-	while self.c_addr < end:
-		self.c_push()
-		sym = table.sym_addr(self, self.c_dst, self.c_dst, True)
-		if sym != None and not sym.flag & table.LOCAL:
-			reg_table = 64*[False]
-			lui_stack = {}
-			lui_table = 32*[None]
-			lui_next  = None
-			lui_flag  = 1
-		if self.c_dst in lui_stack: lui_table = lui_stack[self.c_dst][:]
+	s_code_start(self)
+	while self.addr < end:
+		self.save = self.addr
+		sym = self.get_sym(self.save)
+		if sym is not None and "LOCAL" not in sym.flag: s_code_start(self)
+		if self.save in lui_stack: lui_table = lui_stack[self.save][:]
 		flag = lui_flag
-		inst = ultra.uw()
+		inst = self.u32()
 		if inst == 0:
-			line.append((self.c_dst, "nop"))
+			line.append((self.save, "nop"))
 		else:
 			f0 = inst >> 26 & 0x3F
 			f1 = inst >>  0 & 0x3F
@@ -1189,8 +1201,8 @@ def s_code(self, argv):
 				i2, # imms
 				i1, # immu
 				i1 << 16, # immh
-				self.c_addr + (i2 << 2), # bdst
-				(self.c_addr & 0xF0000000) | (i3 << 2), # jdst
+				self.addr + (i2 << 2), # bdst
+				(self.addr & 0xF0000000) | (i3 << 2), # jdst
 			]
 			inst_fmt = [
 				"", # op
@@ -1217,44 +1229,44 @@ def s_code(self, argv):
 				ultra.fmt_s16, # imms
 				"0x%04X", # immu
 				"0x%08X", # immh
-				".L%08X", # bdst
+				"", # bdst
 				"0x%08X", # jdst
 			]
-			imm = table.imm_addr(self, self.c_dst)
-			ln = lst_prc(lst_op, [I_OP])
-			if ln != None:
-				line.append((self.c_dst, ln))
+			imm = self.get_imm(self.save)
+			ln = lst_prc(self, lst_op, [I_OP])
+			if ln is not None:
+				line.append((self.save, ln))
 			else:
 				print("warning: illegal opcode 0x%08X:0x%08X" % (
-					self.c_dst, inst
+					self.save, inst
 				))
-				line.append((self.c_dst, (
+				line.append((self.save, (
 					".word 0x%08X",
 					"nop :: .org .-4 :: .word 0x%08X",
 				)[mode] % inst))
 		if flag != 1: lui_flag = 1
-	fmt(self, line, True)
+	fmt(self, line)
 
-def d_fnc(fnc, imm="%d"):
-	return lambda argv: table.imm_prc(argv[0] if len(argv) > 0 else imm, fnc())
+def d_fmt(self, argv, x, fmt="%d"):
+	return self.fmt(argv[0] if len(argv) > 0 else fmt, x)
 
-d_sbyte = [".byte", d_fnc(ultra.sb)]
-d_ubyte = [".byte", d_fnc(ultra.ub)]
-d_shalf = [".half", d_fnc(ultra.sh)]
-d_uhalf = [".half", d_fnc(ultra.uh)]
-d_sword = [".word", d_fnc(ultra.sw)]
-d_uword = [".word", d_fnc(ultra.uw)]
-d_flagbyte = [".byte", lambda argv: ultra.fmt_flag(argv[0], ultra.ub())]
-d_flaghalf = [".half", lambda argv: ultra.fmt_flag(argv[0], ultra.uh())]
-d_flagword = [".word", lambda argv: ultra.fmt_flag(argv[0], ultra.uw())]
-d_float  = [".float",  lambda argv: ultra.fmt_float(ultra.f(), "", False)]
-d_double = [".double", lambda argv: ultra.fmt_float(ultra.d(), "", False)]
-d_addr   = [".half",   lambda argv: ultra.ah()]
-d_waddr  = [".word",   lambda argv: ultra.aw()]
+d_sbyte = [".byte", lambda self, argv: d_fmt(self, argv, self.s8())]
+d_ubyte = [".byte", lambda self, argv: d_fmt(self, argv, self.u8())]
+d_shalf = [".half", lambda self, argv: d_fmt(self, argv, self.s16())]
+d_uhalf = [".half", lambda self, argv: d_fmt(self, argv, self.u16())]
+d_sword = [".word", lambda self, argv: d_fmt(self, argv, self.s32())]
+d_uword = [".word", lambda self, argv: d_fmt(self, argv, self.u32())]
+d_flagbyte = [".byte", lambda self, argv: self.fmt_flag(argv[0], self.u8())]
+d_flaghalf = [".half", lambda self, argv: self.fmt_flag(argv[0], self.u16())]
+d_flagword = [".word", lambda self, argv: self.fmt_flag(argv[0], self.u32())]
+d_float  = [".float",  lambda self, argv: self.fmt_float(self.f(), "", False)]
+d_double = [".double", lambda self, argv: self.fmt_float(self.d(), "", False)]
+d_haddr  = [".half",   lambda self, argv: ultra.ah(self, self.save)]
+d_waddr  = [".word",   lambda self, argv: ultra.aw(self, self.save)]
 
-def d_align_prc(argv):
+def d_align_prc(self, argv):
 	x, = argv
-	ultra.script.c_addr = (ultra.script.c_addr+x-1) & -x
+	self.addr = (self.addr+x-1) & -x
 	return "%d" % x
 d_align = [".align", d_align_prc]
 
@@ -1264,35 +1276,36 @@ def lst_main(self, line, lst):
 			if type(argv[1]) == list:
 				lst_main(self, line, argv[1])
 			else:
-				self.c_push()
+				self.save = self.addr
 				n = argv[1]
 				t = argv[2]
 				if type(t) == str and t in {"ascii", "asciz"}:
-					line.append((self.c_dst, ".%s \"%s\"" % (
-						t, "".join([chr(ultra.ub()) for _ in range(n)])
+					line.append((self.save, ".%s \"%s\"" % (
+						t, "".join([chr(self.u8()) for _ in range(n)])
 					)))
-					if t == "asciz": ultra.script.c_addr += 1
+					if t == "asciz": self.addr += 1
 				else:
-					line.append((self.c_dst, "%s %s" % (
-						t[0], ", ".join([t[1](argv[3:]) for _ in range(n)])
-					)))
+					line.append((self.save, "%s %s" % (t[0], ", ".join([
+						t[1](self, argv[3:]) for _ in range(n)
+					]))))
 
 def s_data(self, argv):
-	start, end, data, lst = argv
-	init(self, start, data)
+	seg, start, end, lst = argv
+	init(self, seg, start)
 	line = []
 	lst_main(self, line, lst)
 	fmt(self, line)
 
 def s_definelabel(self, argv):
-	c_data, = argv
+	seg, = argv
 	f = self.file[-1][1]
-	for start, end, data, sym, fnc, imm in self.meta.table.tbl:
-		if c_data.startswith(data):
-			for addr in sorted(sym.keys()):
+	mask = tuple(seg.split("."))
+	for i in self.meta.sym:
+		if mask == tuple(seg.split(".")[:len(mask)]):
+			for addr in sorted(self.meta.sym[i].keys()):
 				s = sym[addr]
 				if "-" in s.label or "+" in s.label: continue
-				if not s.flag & table.LOCAL:
+				if "LOCAL" not in s.flag:
 					f.append("%s0x%08X\n" % (
 						(".definelabel %s, " % s.label).ljust(64), addr
 					))
@@ -1322,16 +1335,16 @@ def s_struct(self, argv):
 		f += [
 			("#define %s " % "__".join(x[1:])).ljust(32) + fmt % x[0] + "\n"
 			for x in line
-			if x[0] != None
+			if x[0] is not None
 		]
 		f.append("\n")
 
 def s_header(self, argv):
-	data, = argv
-	ultra.init(self, 0, data)
-	p = ultra.uw()
-	c = ultra.uw()
-	s = ultra.uw()
-	u = ultra.uw()
-	self.c_addr += 0x30
+	seg, = argv
+	ultra.init(self, seg, 0)
+	p = self.u32()
+	c = self.u32()
+	s = self.u32()
+	u = self.u32()
+	self.addr += 0x30
 	self.file[-1][1].append("%08x%08x\n%08x%08x\n" % (p, c, 0, u))

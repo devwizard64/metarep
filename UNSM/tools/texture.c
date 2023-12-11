@@ -29,36 +29,33 @@ static unsigned int texture_pal(
 	return 0;
 }
 
-#define cvt(x, n, s)    ((2*((1 << (s))-1)*(x)+0xFF) / (2*0xFF*(n)))
+#define CVT(x, n, s)    ((2*((1 << (s))-1)*(x)+0xFF) / (2*0xFF*(n)))
 
-#define r0_8    src[0]
-#define g0_8    src[1]
-#define b0_8    src[2]
-#define a0_8    src[3]
-#define a0_4    (src[3] / 0x11)
-#define a0_1    (src[3] / 0x80)
-#define a1_1    (src[7] / 0x80)
-#define r0(s)   cvt(src[0], 1, s)
-#define g0(s)   cvt(src[1], 1, s)
-#define b0(s)   cvt(src[2], 1, s)
-#define a0(s)   cvt(src[3], 1, s)
-#define rgb0(s) cvt(src[0]+src[1]+src[2], 3, s)
-#define rgb1(s) cvt(src[4]+src[5]+src[6], 3, s)
-#define pal0(s) texture_pal(src+0, pal, 1 << (s))
-#define pal1(s) texture_pal(src+4, pal, 1 << (s))
+#define R0_8    src[0]
+#define G0_8    src[1]
+#define B0_8    src[2]
+#define A0_8    src[3]
+#define A0_4    (src[3] / 0x11)
+#define A0_1    (src[3] / 0x80)
+#define A1_1    (src[7] / 0x80)
+#define R0(s)   CVT(src[0], 1, s)
+#define G0(s)   CVT(src[1], 1, s)
+#define B0(s)   CVT(src[2], 1, s)
+#define A0(s)   CVT(src[3], 1, s)
+#define I0(s)   CVT(src[0]+src[1]+src[2], 3, s)
+#define I1(s)   CVT(src[4]+src[5]+src[6], 3, s)
+#define PAL0(s) texture_pal(src+0, pal, 1 << (s))
+#define PAL1(s) texture_pal(src+4, pal, 1 << (s))
 
-#define fmt_rgba16  "0x%04X,",  \
-	r0(5) << 11 | g0(5) << 6 | b0(5) << 1 | a0_1
-#define fmt_rgba32  "0x%08X,",  \
-	r0_8 << 24 | g0_8 << 16 | b0_8 << 8 | a0_8
-#define fmt_ci4     "0x%02X,",  pal0(4) << 4 | pal1(4)
-#define fmt_ci8     "0x%02X,",  pal0(8)
-#define fmt_ia4     "0x%02X,",  \
-	rgb0(3) << 5 | a0_1 << 4 | rgb1(3) << 1 | a1_1
-#define fmt_ia8     "0x%02X,",  rgb0(4) << 4 | a0_4
-#define fmt_ia16    "0x%04X,",  rgb0(8) << 8 | a0_8
-#define fmt_i4      "0x%02X,",  rgb0(4) << 4 | rgb1(4)
-#define fmt_i8      "0x%02X,",  rgb0(8)
+#define fmt_rgba16  "0x%04X,", R0(5) << 11 | G0(5) << 6 | B0(5) << 1 | A0_1
+#define fmt_rgba32  "0x%08X,", R0_8 << 24 | G0_8 << 16 | B0_8 << 8 | A0_8
+#define fmt_ci4     "0x%02X,", PAL0(4) << 4 | PAL1(4)
+#define fmt_ci8     "0x%02X,", PAL0(8)
+#define fmt_ia4     "0x%02X,", I0(3) << 5 | A0_1 << 4 | I1(3) << 1 | A1_1
+#define fmt_ia8     "0x%02X,", I0(4) << 4 | A0_4
+#define fmt_ia16    "0x%04X,", I0(8) << 8 | A0_8
+#define fmt_i4      "0x%02X,", I0(4) << 4 | I1(4)
+#define fmt_i8      "0x%02X,", I0(8)
 
 #define len_rgba16  1
 #define len_rgba32  1
@@ -77,8 +74,7 @@ static void texture_##name( \
 	unsigned w, unsigned h \
 ) \
 { \
-	unsigned y; \
-	unsigned x; \
+	unsigned y, x; \
 	(void)pal; \
 	for (y = 0; y < h; y++) \
 	{ \
@@ -122,8 +118,7 @@ int main(int argc, char *argv[])
 	unsigned error;
 	unsigned char *src = NULL;
 	unsigned char *pal = NULL;
-	unsigned w;
-	unsigned h;
+	unsigned w, h, pal_w, pal_h;
 	if (argc < 2 || argc > 3)
 	{
 		fprintf(stderr, "usage: %s <texture> [palette]\n", argv[0]);
@@ -136,8 +131,6 @@ int main(int argc, char *argv[])
 	}
 	if (argc > 2)
 	{
-		unsigned pal_w;
-		unsigned pal_h;
 		if ((error = lodepng_decode32_file(&pal, &pal_w, &pal_h, argv[2])))
 		{
 			fprintf(stderr, "error %u: %s\n", error, lodepng_error_text(error));
@@ -149,10 +142,18 @@ int main(int argc, char *argv[])
 		const TEXTURE *texture = &texture_table[i];
 		if (strstr(argv[1], texture->fmt))
 		{
-			if ((i == 2 || i == 3) && !pal)
+			if (i == 2 || i == 3)
 			{
-				fprintf(stderr, "error: palette not specified\n");
-				return 1;
+				if (!pal)
+				{
+					fprintf(stderr, "error: palette not specified\n");
+					return 1;
+				}
+				if (pal_w*pal_h < (1U << (4*(i-1))))
+				{
+					fprintf(stderr, "error: palette is too small\n");
+					return 1;
+				}
 			}
 			texture->callback(src, pal, w, h);
 			break;

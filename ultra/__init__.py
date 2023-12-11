@@ -1,23 +1,15 @@
 import struct
 
-import table
-
-DALIGN      = 1 << 16
-BALIGN      = 1 << 17
-
 A_EXTERN    = 1 << 0
 A_ADDR      = 1 << 1
 A_CAST      = 1 << 2
 A_ARRAY     = 1 << 3
 
-COMM_EXTERN = False
-COMM_VAR    = False
+COMM_EADDR  = False
+COMM_VADDR  = False
+COMM_LADDR  = False
 COMM_LABEL  = False
 COMM_LINE   = False
-
-script = None
-
-tag = ""
 
 fmt_bool = ["FALSE", "TRUE"]
 
@@ -137,172 +129,58 @@ flag_OSTask_flags = [
 	(0x0080, 0x0080, "OS_TASK_USR3"),
 ]
 
-fmt_OSTask_flags    = lambda x: fmt_flag(flag_OSTask_flags, x)
-fmt_sp_sr           = lambda x: fmt_flag(flag_sp_sr, x)
-fmt_sp_sw           = lambda x: fmt_flag(flag_sp_sw, x)
-fmt_dpc_sr          = lambda x: fmt_flag(flag_dpc_sr, x)
+fmt_OSTask_flags    = lambda self, x: self.fmt_flag(flag_OSTask_flags, x)
+fmt_sp_sr           = lambda self, x: self.fmt_flag(flag_sp_sr, x)
+fmt_sp_sw           = lambda self, x: self.fmt_flag(flag_sp_sw, x)
+fmt_dpc_sr          = lambda self, x: self.fmt_flag(flag_dpc_sr, x)
 
-def fmt_flag(flag, x):
-	lst = [s for m, i, s in flag if (x & m) == i]
-	return "|".join(lst) if len(lst) > 0 else "0"
-
-def fmt_s16(x):
+def fmt_s16(self, x):
 	return "-0x%04X" % -x if x < 0 else "0x%04X" % x
 
-def fmt_float(x, end="", strip=True):
-	x = str(x)
-	return x[:-2] if strip and x.endswith(".0") else x+end
+def fmt_f32(self, x):
+	return self.fmt_float(x, "F")
 
-def fmt_f32(x):
-	return fmt_float(x, "F")
+def fmt_f64(self, x):
+	return self.fmt_float(x)
 
-def fmt_f64(x):
-	return fmt_float(x)
-
-def fmt_str(x):
-	for old, new in (
-		("\\", "\\\\"),
-		("\"", "\\\""),
-		("\n", "\\n"),
-		("\t", "\\t"),
-	): x = x.replace(old, new)
-	return "\"" + x + "\""
-
-def fmt_addr(x, extern=False, addr=False, cast=None, array=None):
-	s = sym(array[0] if array != None else x, None, "(void *)0x%08X", extern)
+def fmt_addr(self, x, extern=False, addr=False, cast=None, array=None):
+	s = sym(
+		self,
+		array[0] if array is not None else x,
+		None,
+		"(void *)0x%08X",
+		extern
+	)
 	if not s.startswith("(void *)0x") and s != "NULL":
-		if addr:            s = "&" + s
-		if cast != None:    s = "(%s)%s" % (cast, s)
-		if array != None:   s = "%s[%d]" % (s, (x-array[0]) // array[1])
+		if addr:                s = "&" + s
+		if cast is not None:    s = "(%s)%s" % (cast, s)
+		if array is not None:   s = "%s[%d]" % (s, (x-array[0]) // array[1])
 	return s
 
 def fmt_sizefmt(size):
 	return "0x%%0%dX" % max(2, (size.bit_length()+3)//4)
 
-def round_cvt(dec, enc, data):
-	x = dec(data)
-	for i in range(64):
-		r = round(x, i)
-		if enc(r) == data: return r
-	return x
-
-def addr_chk(seg, addr, dev):
-	return False
-	if dev < 0x1000: return False
-	if seg in {0x03, 0x05, 0x06, 0x07, 0x08}: return False
-	if seg >= 0x20: return False
-	return True
-
-def dev_chk(seg, addr, src, dev, sym):
-	return False
-	if seg in {0x05, 0x06, 0x07, 0x09, 0x0A, 0x0C, 0x0D, 0x0E, 0x14}:
-		if table.sym_addr(script, addr, src, True) == None:
-			if table.dev_addr(script, src, True) == None:
-				return True
-	return False
-
-def sym(addr, src=None, fmt="0x%08X", extern=False):
-	sym = table.sym_addr(script, addr, src)
-	# debug
-	seg = addr >> 24
-	dev = script.c_dev(src)
-	#
-	if sym != None:
-		if extern and hasattr(sym, "fmt"):
-			c.extern.add((addr, sym))
-		# debug
-		if dev_chk(seg, addr, src, dev, sym):
-			print("    0x%08X: 0x%08X," % (dev, addr))
-		#
+def sym(self, addr, src=None, fmt="0x%08X", extern=False):
+	if addr == 0: return "NULL"
+	sym = self.find_sym(addr, src)
+	if sym is not None:
+		if extern and hasattr(sym, "fmt"): c.extern.add((addr, sym))
 		return sym.label
-	# debug
-	if addr >= 0x80000010 and addr < 0x80400000:
-		print("    0x%08X: table.sym(\"_%08X\")," % (addr, addr))
-	if addr_chk(seg, addr, dev):
-		global tag
-		sym = table.sym_addr(script, dev)
-		if sym != None:
-			_, _, name = sym.label.partition("_")
-			_, _, name = name.partition("_")
-			name, _, _ = name.rpartition("_")
-			name += "_"
-		else:
-			name = ""
-		va = {
-			"": None,
-			"gfx": ("Gfx", "[]"),
-			"s_script": ("S_SCRIPT", "[]"),
-			"o_script": ("O_SCRIPT", "[]"),
-			"map": ("MAP_DATA", "[]"),
-			"area": ("AREA_DATA", "[]"),
-			"obj": ("OBJ_DATA", "[]"),
-			"anime": ("ANIME *", "[]"),
-			"splash": ("struct obj_splash"),
-		}[tag]
-		a, b = ("_var", ", \"%s\", \"%s\"" % va) if va != None else ("", "")
-		print("    0x%08X: table.sym%s(\"%s_%s%08X\"%s)," % (
-			addr, a, tag if tag != "" else "data", name, addr, b
-		))
-		tag = ""
-	#
 	return fmt % addr
 
-def sb():
-	x, = struct.unpack(">b", script.c_next(1))
-	return x
+def sym_rsp(self, addr, src=None, fmt="0x%03X"):
+	sym = self.find_sym(0x04000000 | addr, src)
+	if sym is not None: return sym.label
+	return fmt % addr
 
-def ub():
-	x, = struct.unpack(">B", script.c_next(1))
-	return x
+def ah(self, src=None):
+	return sym_rsp(self, self.u16(), src)
 
-def sh():
-	x, = struct.unpack(">h", script.c_next(2))
-	return x
+def aw(self, src=None, extern=False):
+	return sym(self, self.u32(), src, extern=extern)
 
-def uh():
-	x, = struct.unpack(">H", script.c_next(2))
-	return x
-
-def sw():
-	x, = struct.unpack(">i", script.c_next(4))
-	return x
-
-def uw():
-	x, = struct.unpack(">I", script.c_next(4))
-	return x
-
-def sd():
-	x, = struct.unpack(">q", script.c_next(8))
-	return x
-
-def ud():
-	x, = struct.unpack(">Q", script.c_next(8))
-	return x
-
-def f():
-	return round_cvt(
-		lambda x: struct.unpack(">f", x)[0],
-		lambda x: struct.pack(">f", x),
-		script.c_next(4)
-	)
-
-def d():
-	return round_cvt(
-		lambda x: struct.unpack(">d", x)[0],
-		lambda x: struct.pack(">d", x),
-		script.c_next(8)
-	)
-
-def ah(src=None, extern=False):
-	return sym(0x04000000 | uh(), src, extern=extern)
-
-def aw(src=None, extern=False):
-	return sym(             uw(), src, extern=extern)
-
-def init(self, start, data):
-	global script
-	script = self
-	script.c_init(start, data)
+def init(self, seg, addr):
+	self.c_init(">", seg, addr)
 
 import ultra.asm
 import ultra.c

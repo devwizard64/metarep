@@ -1,6 +1,6 @@
 #include <sm64.h>
 
-char str_stage[64][16] =
+static char str_stage[64][16] =
 {
 	"",
 	"",
@@ -42,21 +42,21 @@ char str_stage[64][16] =
 	"",
 };
 
-static int title_demo(int code)
+static int title_demo(int result)
 {
 	static u16 timer = 0;
-	demo = NULL;
-	if (code == 0)
+	demop = NULL;
+	if (result == 0)
 	{
 		if (cont1->held == 0 && cont1->d == 0)
 		{
 			if (++timer == 800)
 			{
 				bank_load(&demo_bank, demo_index);
-				if (++demo_index == demo_bank.table->len) demo_index = 0;
-				demo = (DEMO *)(demo_bank.buf+4);
-				code = demo_bank.buf[0];
-				save_index = 1;
+				if (++demo_index == demo_bank.info->len) demo_index = 0;
+				demop = (DEMO *)(demo_bank.buf+4);
+				result = demo_bank.buf[0];
+				file_index = 1;
 				level_index = 1;
 			}
 		}
@@ -65,7 +65,7 @@ static int title_demo(int code)
 			timer = 0;
 		}
 	}
-	return code;
+	return result;
 }
 
 static int title_debug(void)
@@ -77,10 +77,10 @@ static int title_debug(void)
 	if (cont1->down & D_JPAD)   stage_index +=  1, flag = TRUE;
 	if (cont1->down & L_JPAD)   stage_index -= 10, flag = TRUE;
 	if (cont1->down & R_JPAD)   stage_index += 10, flag = TRUE;
-	if (flag) Na_SE_fixed(NA_SE3_2B);
+	if (flag) Na_FixSePlay(NA_SE3_2B);
 	if (stage_index > 38) stage_index =  1;
 	if (stage_index <  1) stage_index = 38;
-	save_index = 4;
+	file_index = 4;
 	level_index = 6;
 	dprintc(SCREEN_WD/2, 80, "SELECT STAGE");
 	dprintc(SCREEN_WD/2, 30, "PRESS START BUTTON");
@@ -93,7 +93,7 @@ static int title_debug(void)
 			debug_stage = FALSE;
 			return -1;
 		}
-		Na_SE_fixed(NA_SE7_1E);
+		Na_FixSePlay(NA_SE7_1E);
 		return stage_index;
 	}
 	return 0;
@@ -102,60 +102,60 @@ static int title_debug(void)
 static int title_face(void)
 {
 	static short flag = TRUE;
-	int code = 0;
-	if (flag == TRUE)
+	int result = 0;
+	if (ISTRUE(flag))
 	{
-		if (gfx_frame <= 128)   Na_SE_fixed(NA_SE2_32);
-		else                    Na_SE_fixed(NA_SE2_33);
+		if (gfx_frame <= 128)   Na_FixSePlay(NA_SE2_32);
+		else                    Na_FixSePlay(NA_SE2_33);
 		flag = FALSE;
 	}
 	scene_demo();
 	if (cont1->down & START_BUTTON)
 	{
-		Na_SE_fixed(NA_SE7_1E);
-		code = 100 + debug_stage;
+		Na_FixSePlay(NA_SE7_1E);
+		result = 100 + debug_stage;
 		flag = TRUE;
 	}
-	return title_demo(code);
+	return title_demo(result);
 }
 
 static int title_gameover(void)
 {
 	static short flag = TRUE;
-	int code = 0;
-	if (flag == TRUE)
+	int result = 0;
+	if (ISTRUE(flag))
 	{
-		Na_SE_fixed(NA_SE2_31);
+		Na_FixSePlay(NA_SE2_31);
 		flag = FALSE;
 	}
 	scene_demo();
 	if (cont1->down & START_BUTTON)
 	{
-		Na_SE_fixed(NA_SE7_1E);
-		code = 100 + debug_stage;
+		Na_FixSePlay(NA_SE7_1E);
+		result = 100 + debug_stage;
 		flag = TRUE;
 	}
-	return title_demo(code);
+	return title_demo(result);
 }
 
 static int title_logo(void)
 {
 	bgm_play(NA_MODE_DEFAULT, NA_BGM_NULL, 0);
-	Na_SE_fixed(NA_SE7_14);
+	Na_FixSePlay(NA_SE7_14);
 	return 1;
 }
 
-int p_title_main(SHORT arg, UNUSED int code)
+long title_proc(SHORT code, UNUSED long status)
 {
-	int result;
-	switch (arg)
+	long result;
+	switch (code)
 	{
 	case 0: result = title_logo();      break;
 	case 1: result = title_face();      break;
 	case 2: result = title_gameover();  break;
 	case 3: result = title_debug();     break;
 #ifdef __GNUC__
-	default: __builtin_unreachable();   break;
+	default: __builtin_unreachable();
 #endif
 	}
 	return result;

@@ -1,11 +1,11 @@
 #include <sm64.h>
 
-#define ALIGN4(x)   (((uintptr_t)(x)+ 3) & ~ 3)
-#define ALIGN8(x)   (((uintptr_t)(x)+ 7) & ~ 7)
-#define ALIGN16(x)  (((uintptr_t)(x)+15) & ~15)
-#define BOUND16(x)  (((uintptr_t)(x)   ) & ~15)
+#define ALIGN4(x)   (((unsigned long)(x)+ 3) & ~ 3)
+#define ALIGN8(x)   (((unsigned long)(x)+ 7) & ~ 7)
+#define ALIGN16(x)  (((unsigned long)(x)+15) & ~15)
+#define BOUND16(x)  (((unsigned long)(x)   ) & ~15)
 
-static uintptr_t segment_table[NUM_SEGMENTS+16];
+static unsigned long segment_table[32];
 static size_t mem_size;
 static char *mem_start;
 static char *mem_end;
@@ -15,34 +15,34 @@ static MEM_FRAME *mem_frame = NULL;
 
 HEAP *mem_heap;
 
-uintptr_t segment_set(int segment, void *addr)
+unsigned long segment_set(int number, void *addr)
 {
-	segment_table[segment] = K0_TO_PHYS(addr);
-	return segment_table[segment];
+	segment_table[number] = K0_TO_PHYS(addr);
+	return segment_table[number];
 }
 
-void *segment_get(int segment)
+void *segment_get(int number)
 {
-	return (void *)PHYS_TO_K0(segment_table[segment]);
+	return (void *)PHYS_TO_K0(segment_table[number]);
 }
 
 void *segment_to_virtual(const void *addr)
 {
-	int segment = (uintptr_t)addr >> 24;
-	intptr_t offset = SEGMENT_OFFSET(addr);
-	return (void *)PHYS_TO_K0(segment_table[segment] + offset);
+	int number = (unsigned int)(addr) >> 24;
+	int offset = SEGMENT_OFFSET(addr);
+	return (void *)PHYS_TO_K0(segment_table[number] + offset);
 }
 
-void *virtual_to_segment(int segment, const void *addr)
+void *virtual_to_segment(int number, const void *addr)
 {
-	intptr_t offset = K0_TO_PHYS(addr) - segment_table[segment];
-	return (void *)SEGMENT_ADDR(segment, offset);
+	int offset = K0_TO_PHYS(addr) - segment_table[number];
+	return (void *)SEGMENT_ADDR(number, offset);
 }
 
 void segment_write(void)
 {
 	int i;
-	for (i = 0; i < 16; i++) gSPSegment(gfx_ptr++, i, segment_table[i]);
+	for (i = 0; i < 16; i++) gSPSegment(glistp++, i, segment_table[i]);
 }
 
 void mem_init(void *start, void *end)
@@ -157,8 +157,7 @@ void mem_dma(char *dst, const char *start, const char *end)
 	{
 		size_t n = size >= 0x1000 ? 0x1000 : size;
 		osPiStartDma(
-			&dma_mb, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t)start, dst, n,
-			&dma_mq
+			&dma_mb, OS_MESG_PRI_NORMAL, OS_READ, (long)start, dst, n, &dma_mq
 		);
 		osRecvMesg(&dma_mq, &null_msg, OS_MESG_BLOCK);
 		dst   += n;
@@ -175,18 +174,18 @@ void *mem_load(const char *start, const char *end, int mode)
 	return ptr;
 }
 
-void *mem_load_data(int segment, const char *start, const char *end, int mode)
+void *mem_load_data(int seg, const char *start, const char *end, int mode)
 {
 	char *ptr;
-	if ((ptr = mem_load(start, end, mode))) segment_set(segment, ptr);
+	if ((ptr = mem_load(start, end, mode))) segment_set(seg, ptr);
 	return ptr;
 }
 
-void *mem_load_code(char *dst, const char *start, const char *end)
+void *mem_load_code(char *addr, const char *start, const char *end)
 {
 	char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
-	size_t dstsize = ALIGN16((char *)mem_blockr - dst);
+	size_t dstsize = ALIGN16((char *)mem_blockr - addr);
 	if (srcsize <= dstsize)
 	{
 		if ((ptr = mem_alloc(dstsize, MEM_ALLOC_R)))
@@ -204,7 +203,7 @@ void *mem_load_code(char *dst, const char *start, const char *end)
 	return ptr;
 }
 
-void *mem_load_szp(int segment, const char *start, const char *end)
+void *mem_load_pres(int seg, const char *start, const char *end)
 {
 	char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
@@ -216,7 +215,7 @@ void *mem_load_szp(int segment, const char *start, const char *end)
 		if ((ptr = mem_alloc(*dstsize, MEM_ALLOC_L)))
 		{
 			slidec(src, ptr);
-			segment_set(segment, ptr);
+			segment_set(seg, ptr);
 			mem_free(src);
 		}
 		else
@@ -229,7 +228,7 @@ void *mem_load_szp(int segment, const char *start, const char *end)
 	return ptr;
 }
 
-void *mem_load_txt(int segment, const char *start, const char *end)
+void *mem_load_text(int seg, const char *start, const char *end)
 {
 	UNUSED char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
@@ -239,7 +238,7 @@ void *mem_load_txt(int segment, const char *start, const char *end)
 	{
 		mem_dma(src, start, end);
 		slidec(src, (char *)t_image);
-		segment_set(segment, t_image);
+		segment_set(seg, t_image);
 		mem_free(src);
 	}
 	else
@@ -263,7 +262,7 @@ void mem_load_ulib(void)
 	osInvalDCache(addr, dstsize);
 }
 
-ARENA *arena_init(size_t size, int mode)
+ARENA *arena_create(size_t size, int mode)
 {
 	void *ptr;
 	ARENA *arena = NULL;
@@ -303,7 +302,7 @@ void *arena_resize(ARENA *arena, size_t size)
 	return ptr;
 }
 
-HEAP *heap_init(size_t size, int mode)
+HEAP *heap_create(size_t size, int mode)
 {
 	void *ptr;
 	HEAP_BLOCK *block;
@@ -406,7 +405,7 @@ void *gfx_alloc(size_t size)
 {
 	void *ptr = NULL;
 	size = ALIGN8(size);
-	if (gfx_mem-size >= (char *)gfx_ptr)
+	if (gfx_mem-size >= (char *)glistp)
 	{
 		gfx_mem -= size;
 		ptr = gfx_mem;
@@ -417,21 +416,21 @@ void *gfx_alloc(size_t size)
 	return ptr;
 }
 
-BANK_TABLE *bank_table_init(const char *src)
+BANKINFO *bank_load_info(const char *src)
 {
-	BANK_TABLE *table = mem_load(src, src+sizeof(table->len), MEM_ALLOC_L);
+	BANKINFO *info = mem_load(src, src+sizeof(info->len), MEM_ALLOC_L);
 	size_t size =
-		sizeof(BANK_TABLE)-sizeof(table->table) +
-		sizeof(table->table[0])*table->len;
-	mem_free(table);
-	table = mem_load(src, src+size, MEM_ALLOC_L);
-	table->src = src;
-	return table;
+		sizeof(BANKINFO)-sizeof(info->table) +
+		sizeof(info->table[0])*info->len;
+	mem_free(info);
+	info = mem_load(src, src+size, MEM_ALLOC_L);
+	info->src = src;
+	return info;
 }
 
 void bank_init(BANK *bank, const char *src, void *buf)
 {
-	if (src) bank->table = bank_table_init(src);
+	if (src) bank->info = bank_load_info(src);
 	bank->src = NULL;
 	bank->buf = buf;
 }
@@ -439,11 +438,11 @@ void bank_init(BANK *bank, const char *src, void *buf)
 int bank_load(BANK *bank, unsigned int index)
 {
 	int result = FALSE;
-	BANK_TABLE *table = bank->table;
-	if (index < table->len)
+	BANKINFO *info = bank->info;
+	if (index < info->len)
 	{
-		const char *src  = table->table[index].start + table->src;
-		size_t      size = table->table[index].size;
+		const char *src  = info->table[index].start + info->src;
+		size_t      size = info->table[index].size;
 		if (bank->src != src)
 		{
 			mem_dma(bank->buf, src, src+size);

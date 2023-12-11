@@ -2,8 +2,8 @@
 
 #define BGM_NULL                ((u16)-1)
 
-static u8 aud_mute = 0;
-static u8 aud_lock = FALSE;
+static u8 aud_mute_flag = 0;
+static u8 aud_lock_flag = FALSE;
 
 static u16 bgm_stage   = BGM_NULL;
 static u16 bgm_shell   = BGM_NULL;
@@ -12,17 +12,18 @@ static u16 bgm_special = BGM_NULL;
 static unsigned char aud_endless = FALSE;
 
 UNUSED static char aud_8032D618 = 0;
-UNUSED static u32 aud_env_se_8033B0A0[36];
+UNUSED static u32 aud_levelse_8033B0A0[36];
 UNUSED static VECF aud_8032D61C = {0};
 static VECF aud_0;
 
 static OSMesgQueue aud_vi_mq;
 static OSMesg aud_vi_mbox;
-static SC_CLIENT aud_client;
+static SCCLIENT aud_client;
 
-static s16 aud_output_table[] = {0, 3, 1};
+static s16 aud_output_table[] =
+	{NA_OUTPUT_WIDE, NA_OUTPUT_MONO, NA_OUTPUT_PHONE};
 
-static NA_SE aud_env_se_data[36] =
+static Na_Se aud_levelse_data[36] =
 {
 	NA_SE1_00 + (0 << 16),
 	NA_SE1_00 + (1 << 16),
@@ -62,73 +63,73 @@ static NA_SE aud_env_se_data[36] =
 	NA_SE4_0D_0,
 };
 
-void aud_mute_reset(void)
+void aud_reset_mute(void)
 {
-	aud_mute = 0;
+	aud_mute_flag = 0;
 }
 
-void aud_mute_start(int flag)
-{
-	switch (flag)
-	{
-	case 1: Na_pause(TRUE);         break;
-	case 2: Na_SEQ_mute(0, 60, 40); break;
-	}
-	aud_mute |= flag;
-}
-
-void aud_mute_end(int flag)
+void aud_set_mute(int flag)
 {
 	switch (flag)
 	{
-	case 1: Na_pause(FALSE);        break;
-	case 2: Na_SEQ_unmute(0, 60);   break;
+	case AUD_PAUSE: Na_Pause(TRUE); break;
+	case AUD_QUIET: Na_SeqMute(NA_HANDLE_BGM, 60, 40); break;
 	}
-	aud_mute &= ~flag;
+	aud_mute_flag |= flag;
 }
 
-void aud_se_lock(void)
+void aud_clr_mute(int flag)
 {
-	if (aud_lock == FALSE)
+	switch (flag)
 	{
-		aud_lock = TRUE;
-		Na_SE_lock();
+	case AUD_PAUSE: Na_Pause(FALSE); break;
+	case AUD_QUIET: Na_SeqUnmute(NA_HANDLE_BGM, 60); break;
 	}
+	aud_mute_flag &= ~flag;
 }
 
-void aud_se_unlock(void)
+void aud_lock(void)
 {
-	if (aud_lock == TRUE)
+	if (ISFALSE(aud_lock_flag))
 	{
-		aud_lock = FALSE;
-		Na_SE_unlock();
+		aud_lock_flag = TRUE;
+		Na_LockSe();
 	}
 }
 
-void aud_output(USHORT type)
+void aud_unlock(void)
 {
-	if (type < 3) Na_output(aud_output_table[type]);
+	if (ISTRUE(aud_lock_flag))
+	{
+		aud_lock_flag = FALSE;
+		Na_UnlockSe();
+	}
 }
 
-void aud_face_sfx(SHORT flag)
+void aud_sound_mode(USHORT mode)
 {
-	if      (flag & (1 << 0)) Na_SE_fixed(NA_SE7_0A);
-	else if (flag & (1 << 1)) Na_SE_fixed(NA_SE7_0B);
-	else if (flag & (1 << 2)) Na_SE_fixed(NA_SE7_0C);
-	else if (flag & (1 << 3)) Na_SE_fixed(NA_SE7_08);
-	else if (flag & (1 << 4)) Na_SE_fixed(NA_SE7_08);
-	else if (flag & (1 << 5)) Na_SE_fixed(NA_SE7_09);
-	else if (flag & (1 << 6)) Na_SE_fixed(NA_SE7_06);
-	else if (flag & (1 << 7)) Na_SE_fixed(NA_SE7_07);
-	if      (flag & (1 << 8)) aud_env_se_play(20, NULL);
+	if (mode < 3) Na_Output(aud_output_table[mode]);
 }
 
-void aud_se_wave(void)
+void aud_face_sound(SHORT flag)
+{
+	if      (flag & (1 << 0)) Na_FixSePlay(NA_SE7_0A);
+	else if (flag & (1 << 1)) Na_FixSePlay(NA_SE7_0B);
+	else if (flag & (1 << 2)) Na_FixSePlay(NA_SE7_0C);
+	else if (flag & (1 << 3)) Na_FixSePlay(NA_SE7_08);
+	else if (flag & (1 << 4)) Na_FixSePlay(NA_SE7_08);
+	else if (flag & (1 << 5)) Na_FixSePlay(NA_SE7_09);
+	else if (flag & (1 << 6)) Na_FixSePlay(NA_SE7_06);
+	else if (flag & (1 << 7)) Na_FixSePlay(NA_SE7_07);
+	if      (flag & (1 << 8)) aud_levelse_play(20, NULL);
+}
+
+void aud_wave_sound(void)
 {
 	static char flag = FALSE;
-	if (wave_80361318 && wave_80361318->_07 == 2)
+	if (wavedatap && wavedatap->_07 == 2) /* T:wavedata_07 */
 	{
-		if (!flag) Na_SE_obj(NA_SE3_28, player_data[0].obj);
+		if (!flag) Na_ObjSePlay(NA_SE3_28, player_data[0].obj);
 		flag = TRUE;
 	}
 	else
@@ -137,7 +138,7 @@ void aud_se_wave(void)
 	}
 }
 
-void bgm_endless(void)
+void aud_endless_music(void)
 {
 	unsigned char flag = FALSE;
 	if (stage_index == STAGE_INSIDE && scene_index == 2)
@@ -153,8 +154,8 @@ void bgm_endless(void)
 	if (aud_endless ^ flag)
 	{
 		aud_endless = flag;
-		if (flag)   Na_BGM_push(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
-		else        Na_BGM_pull(500);
+		if (flag)   Na_SeqPush(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
+		else        Na_SeqPull(500);
 	}
 }
 
@@ -164,11 +165,11 @@ void bgm_play(USHORT mode, USHORT bgm, SHORT fadein)
 	{
 		if (bgm != bgm_stage)
 		{
-			if (staff)  Na_mode(NA_MODE_STAFF);
-			else        Na_mode(mode);
-			if (game_8033B26E == 0 || bgm != NA_BGM_CASTLE)
+			if (staffp) Na_Mode(NA_MODE_STAFF);
+			else        Na_Mode(mode);
+			if (!(first_msg && bgm == NA_BGM_CASTLE))
 			{
-				Na_BGM_play(0, bgm, fadein);
+				Na_BgmPlay(NA_HANDLE_BGM, bgm, fadein);
 				bgm_stage = bgm;
 			}
 		}
@@ -177,7 +178,7 @@ void bgm_play(USHORT mode, USHORT bgm, SHORT fadein)
 
 void aud_fadeout(SHORT fadeout)
 {
-	Na_fadeout(fadeout);
+	Na_Fadeout(fadeout);
 	bgm_stage   = BGM_NULL;
 	bgm_shell   = BGM_NULL;
 	bgm_special = BGM_NULL;
@@ -185,7 +186,7 @@ void aud_fadeout(SHORT fadeout)
 
 void bgm_fadeout(SHORT fadeout)
 {
-	Na_SEQ_fadeout(0, fadeout);
+	Na_SeqFadeout(NA_HANDLE_BGM, fadeout);
 	bgm_stage   = BGM_NULL;
 	bgm_shell   = BGM_NULL;
 	bgm_special = BGM_NULL;
@@ -193,13 +194,13 @@ void bgm_fadeout(SHORT fadeout)
 
 void bgm_stage_play(USHORT bgm)
 {
-	Na_BGM_play(0, bgm, 0);
+	Na_BgmPlay(NA_HANDLE_BGM, bgm, 0);
 	bgm_stage = bgm;
 }
 
 void bgm_shell_play(void)
 {
-	Na_BGM_play(0, NA_BGM_SHELL, 0);
+	Na_BgmPlay(NA_HANDLE_BGM, NA_BGM_SHELL, 0);
 	bgm_shell = NA_BGM_SHELL;
 }
 
@@ -207,17 +208,17 @@ void bgm_shell_stop(void)
 {
 	if (bgm_shell != BGM_NULL)
 	{
-		Na_BGM_stop(bgm_shell);
+		Na_BgmStop(bgm_shell);
 		bgm_shell = BGM_NULL;
 	}
 }
 
 void bgm_special_play(USHORT bgm)
 {
-	Na_BGM_play(0, bgm, 0);
+	Na_BgmPlay(NA_HANDLE_BGM, bgm, 0);
 	if (bgm_special != BGM_NULL && bgm_special != bgm)
 	{
-		Na_BGM_stop(bgm_special);
+		Na_BgmStop(bgm_special);
 	}
 	bgm_special = bgm;
 }
@@ -226,7 +227,7 @@ void bgm_special_fadeout(void)
 {
 	if (bgm_special != BGM_NULL)
 	{
-		Na_BGM_fadeout(bgm_special, 600);
+		Na_BgmFadeout(bgm_special, 600);
 	}
 }
 
@@ -234,37 +235,37 @@ void bgm_special_stop(void)
 {
 	if (bgm_special != BGM_NULL)
 	{
-		Na_BGM_stop(bgm_special);
+		Na_BgmStop(bgm_special);
 		bgm_special = BGM_NULL;
 	}
 }
 
-void aud_env_se_play(int se, VECF pos)
+void aud_levelse_play(int se, VECF pos)
 {
-	Na_SE_play(aud_env_se_data[se], pos);
+	Na_SePlay(aud_levelse_data[se], pos);
 }
 
-void aud_update(void)
+void aud_tick(void)
 {
-	Na_update();
+	Na_Tick();
 }
 
-void aud_main(UNUSED void *arg)
+void aud_proc(UNUSED void *arg)
 {
-	Na_load();
-	Na_init();
+	Na_Load();
+	Na_Init();
 	vecf_cpy(aud_0, vecf_0);
 	osCreateMesgQueue(&aud_vi_mq, &aud_vi_mbox, 1);
-	sc_client_init(1, &aud_client, &aud_vi_mq, (OSMesg)0x200);
+	sc_setclient(SC_AUDCLIENT, &aud_client, &aud_vi_mq, (OSMesg)0x200);
 	for (;;)
 	{
 		OSMesg msg;
 		osRecvMesg(&aud_vi_mq, &msg, OS_MESG_BLOCK);
 		if (reset_timer < 25)
 		{
-			SC_TASK *task;
+			SCTASK *task;
 			time_audcpu();
-			if ((task = Na_main())) sc_queue_audtask(task);
+			if ((task = Na_Main())) sc_queue_audtask(task);
 			time_audcpu();
 		}
 	}
