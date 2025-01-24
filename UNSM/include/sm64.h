@@ -5,7 +5,7 @@
 #include <string.h>
 
 #include <sm64/types.h>
-#include <sm64/gbi_ext.h>
+#include <sm64/gbiext.h>
 #include <sm64/segment.h>
 
 #include <sm64/defaudio.h>
@@ -14,7 +14,8 @@
 #include <sm64/defmap.h>
 #include <sm64/defwipe.h>
 #include <sm64/defshadow.h>
-#include <sm64/defback.h>
+#include <sm64/defbackground.h>
+#include <sm64/defwave.h>
 #include <sm64/defmessage.h>
 #include <sm64/defweather.h>
 #include <sm64/defmapobj.h>
@@ -24,7 +25,7 @@
 #include <sm64/defgame.h>
 #include <sm64/defstage.h>
 #include <sm64/defcourse.h>
-#include <sm64/defsave.h>
+#include <sm64/defbackup.h>
 #include <sm64/defshplang.h>
 #include <sm64/defprglang.h>
 #include <sm64/defobjlang.h>
@@ -129,6 +130,39 @@ extern char __dummy96[];
 extern char __dummy97[];
 extern char __dummy98[];
 extern char __dummy99[];
+
+#include <sm64/math.h>
+#include <sm64/memory.h>
+
+#include <sm64/main.h>
+
+#include <sm64/Na.h>
+
+#include <sm64/graphics.h>
+#include <sm64/audio.h>
+#include <sm64/time.h>
+
+#include <sm64/shape.h>
+#include <sm64/draw.h>
+#include <sm64/script.h>
+#include <sm64/object.h>
+#include <sm64/map.h>
+
+#include <sm64/camera.h>
+
+#include <sm64/objectlib.h>
+#include <sm64/debug.h>
+#include <sm64/wipe.h>
+#include <sm64/shadow.h>
+#include <sm64/background.h>
+#include <sm64/water.h>
+#include <sm64/objshape.h>
+#include <sm64/wave.h>
+#include <sm64/dprint.h>
+#include <sm64/message.h>
+#include <sm64/tag.h>
+#include <sm64/hud.h>
+
 extern char __dummy100[];
 extern char __dummy101[];
 extern char __dummy102[];
@@ -229,6 +263,19 @@ extern char __dummy196[];
 extern char __dummy197[];
 extern char __dummy198[];
 extern char __dummy199[];
+
+#include <sm64/scene.h>
+#include <sm64/player.h>
+#include <sm64/game.h>
+#include <sm64/course.h>
+#include <sm64/backup.h>
+
+#include <sm64/buffer.h>
+
+#include <sm64/object_a.h>
+#include <sm64/object_b.h>
+#include <sm64/object_c.h>
+
 extern char __dummy200[];
 extern char __dummy201[];
 extern char __dummy202[];
@@ -261,264 +308,7 @@ extern char __dummy228[];
 extern char __dummy229[];
 extern char __dummy230[];
 extern char __dummy231[];
-extern char __dummy232[];
-extern char __dummy233[];
-extern char __dummy234[];
-extern char __dummy235[];
-extern char __dummy236[];
-extern char __dummy237[];
-extern char __dummy238[];
-extern char __dummy239[];
-extern char __dummy240[];
-extern char __dummy241[];
-extern char __dummy242[];
-extern char __dummy243[];
-extern char __dummy244[];
-extern char __dummy245[];
-extern char __dummy246[];
-extern char __dummy247[];
-extern char __dummy248[];
-extern char __dummy249[];
-extern char __dummy250[];
-extern char __dummy251[];
-extern char __dummy252[];
-extern char __dummy253[];
-extern char __dummy254[];
-extern char __dummy255[];
-extern char __dummy256[];
-extern char __dummy257[];
-extern char __dummy258[];
-extern char __dummy259[];
-extern char __dummy260[];
-extern char __dummy261[];
-extern char __dummy262[];
-extern char __dummy263[];
-extern char __dummy264[];
-extern char __dummy265[];
-extern char __dummy266[];
-extern char __dummy267[];
-extern char __dummy268[];
-extern char __dummy269[];
-extern char __dummy270[];
-extern char __dummy271[];
-extern char __dummy272[];
-extern char __dummy273[];
-extern char __dummy274[];
-extern char __dummy275[];
-extern char __dummy276[];
-extern char __dummy277[];
-extern char __dummy278[];
-extern char __dummy279[];
-extern char __dummy280[];
-extern char __dummy281[];
-extern char __dummy282[];
-extern char __dummy283[];
-extern char __dummy284[];
-extern char __dummy285[];
-extern char __dummy286[];
-extern char __dummy287[];
-extern char __dummy288[];
-extern char __dummy289[];
-extern char __dummy290[];
-extern char __dummy291[];
-extern char __dummy292[];
-extern char __dummy293[];
-extern char __dummy294[];
-extern char __dummy295[];
-extern char __dummy296[];
-extern char __dummy297[];
-extern char __dummy298[];
-extern char __dummy299[];
-extern char __dummy300[];
-extern char __dummy301[];
-extern char __dummy302[];
-extern char __dummy303[];
-extern char __dummy304[];
-extern char __dummy305[];
-extern char __dummy306[];
-extern char __dummy307[];
-extern char __dummy308[];
-extern char __dummy309[];
-extern char __dummy310[];
-extern char __dummy311[];
-extern char __dummy312[];
-extern char __dummy313[];
-extern char __dummy314[];
-extern char __dummy315[];
-extern char __dummy316[];
-extern char __dummy317[];
-extern char __dummy318[];
-extern char __dummy319[];
 
-#include <sm64/math.h>
-#include <sm64/memory.h>
-
-#include <sm64/main.h>
-
-#include <sm64/Na.h>
-
-#include <sm64/graphics.h>
-#include <sm64/audio.h>
-#include <sm64/time.h>
-
-#include <sm64/shape.h>
-#include <sm64/draw.h>
-#include <sm64/script.h>
-#include <sm64/object.h>
-#include <sm64/map.h>
-
-#include <sm64/camera.h>
-
-#include <sm64/wipe.h>
-#include <sm64/shadow.h>
-#include <sm64/back.h>
-#include <sm64/water.h>
-#include <sm64/objshape.h>
-#include <sm64/wave.h>
-#include <sm64/dprint.h>
-#include <sm64/message.h>
 #include <sm64/weather.h>
-#include <sm64/tag.h>
-#include <sm64/hud.h>
-
-extern char __dummy320[];
-extern char __dummy321[];
-extern char __dummy322[];
-extern char __dummy323[];
-extern char __dummy324[];
-extern char __dummy325[];
-extern char __dummy326[];
-extern char __dummy327[];
-extern char __dummy328[];
-extern char __dummy329[];
-extern char __dummy330[];
-extern char __dummy331[];
-extern char __dummy332[];
-extern char __dummy333[];
-extern char __dummy334[];
-extern char __dummy335[];
-extern char __dummy336[];
-extern char __dummy337[];
-extern char __dummy338[];
-extern char __dummy339[];
-extern char __dummy340[];
-extern char __dummy341[];
-extern char __dummy342[];
-extern char __dummy343[];
-extern char __dummy344[];
-extern char __dummy345[];
-extern char __dummy346[];
-extern char __dummy347[];
-extern char __dummy348[];
-extern char __dummy349[];
-extern char __dummy350[];
-extern char __dummy351[];
-extern char __dummy352[];
-extern char __dummy353[];
-extern char __dummy354[];
-extern char __dummy355[];
-extern char __dummy356[];
-extern char __dummy357[];
-extern char __dummy358[];
-extern char __dummy359[];
-extern char __dummy360[];
-extern char __dummy361[];
-extern char __dummy362[];
-extern char __dummy363[];
-extern char __dummy364[];
-extern char __dummy365[];
-extern char __dummy366[];
-extern char __dummy367[];
-extern char __dummy368[];
-extern char __dummy369[];
-extern char __dummy370[];
-extern char __dummy371[];
-extern char __dummy372[];
-extern char __dummy373[];
-extern char __dummy374[];
-extern char __dummy375[];
-extern char __dummy376[];
-extern char __dummy377[];
-extern char __dummy378[];
-extern char __dummy379[];
-extern char __dummy380[];
-extern char __dummy381[];
-extern char __dummy382[];
-extern char __dummy383[];
-extern char __dummy384[];
-extern char __dummy385[];
-extern char __dummy386[];
-extern char __dummy387[];
-extern char __dummy388[];
-extern char __dummy389[];
-extern char __dummy390[];
-extern char __dummy391[];
-extern char __dummy392[];
-extern char __dummy393[];
-extern char __dummy394[];
-extern char __dummy395[];
-extern char __dummy396[];
-extern char __dummy397[];
-extern char __dummy398[];
-extern char __dummy399[];
-extern char __dummy400[];
-extern char __dummy401[];
-extern char __dummy402[];
-extern char __dummy403[];
-extern char __dummy404[];
-extern char __dummy405[];
-extern char __dummy406[];
-extern char __dummy407[];
-extern char __dummy408[];
-extern char __dummy409[];
-
-#include <sm64/scene.h>
-#include <sm64/player.h>
-#include <sm64/game.h>
-#include <sm64/collision.h>
-#include <sm64/course.h>
-#include <sm64/save.h>
-
-#include <sm64/buffer.h>
-
-#include <sm64/object_a.h>
-#include <sm64/object_b.h>
-#include <sm64/object_c.h>
-
-extern char __dummy410[];
-extern char __dummy411[];
-extern char __dummy412[];
-extern char __dummy413[];
-extern char __dummy414[];
-extern char __dummy415[];
-extern char __dummy416[];
-extern char __dummy417[];
-extern char __dummy418[];
-extern char __dummy419[];
-extern char __dummy420[];
-extern char __dummy421[];
-extern char __dummy422[];
-extern char __dummy423[];
-extern char __dummy424[];
-extern char __dummy425[];
-extern char __dummy426[];
-extern char __dummy427[];
-extern char __dummy428[];
-extern char __dummy429[];
-extern char __dummy430[];
-extern char __dummy431[];
-extern char __dummy432[];
-extern char __dummy433[];
-extern char __dummy434[];
-extern char __dummy435[];
-extern char __dummy436[];
-extern char __dummy437[];
-extern char __dummy438[];
-extern char __dummy439[];
-
-#include <sm64/title.h>
-#include <sm64/titlebg.h>
-#include <sm64/fileselect.h>
-#include <sm64/starselect.h>
 
 #include <sm64/face.h>

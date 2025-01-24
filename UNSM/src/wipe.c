@@ -21,7 +21,7 @@ static u8 *txt_wipe[] =
 	txt_wipe_bowser,
 };
 
-static int wipe_step(CHAR screen, UCHAR frame)
+static int WpStep(CHAR screen, UCHAR frame)
 {
 	int result = FALSE;
 	wipe_timer[screen]++;
@@ -34,7 +34,7 @@ static int wipe_step(CHAR screen, UCHAR frame)
 	return result;
 }
 
-static UCHAR wipe_fade_alpha(CHAR code, CHAR screen, UCHAR frame)
+static UCHAR WpFadeAlpha(CHAR code, CHAR screen, UCHAR frame)
 {
 	UCHAR alpha;
 	switch (code)
@@ -52,18 +52,18 @@ static UCHAR wipe_fade_alpha(CHAR code, CHAR screen, UCHAR frame)
 	return alpha;
 }
 
-static Vtx *wipe_fade_vtx(WIPE_FADE *fade, UCHAR alpha)
+static Vtx *WpFadeVtx(WIPE_FADE *fade, UCHAR alpha)
 {
-	Vtx *vtx = gfx_alloc(sizeof(Vtx)*4);
+	Vtx *vtx = GfxAlloc(sizeof(Vtx)*4);
 	u8 r = fade->r;
 	u8 g = fade->g;
 	u8 b = fade->b;
 	if (vtx)
 	{
-		vtx_set(vtx, 0,         0,         0, -1, 0, 0, r, g, b, alpha);
-		vtx_set(vtx, 1, SCREEN_WD,         0, -1, 0, 0, r, g, b, alpha);
-		vtx_set(vtx, 2, SCREEN_WD, SCREEN_HT, -1, 0, 0, r, g, b, alpha);
-		vtx_set(vtx, 3,         0, SCREEN_HT, -1, 0, 0, r, g, b, alpha);
+		VtxSet(vtx, 0,         0,         0, -1, 0, 0, r, g, b, alpha);
+		VtxSet(vtx, 1, SCREEN_WD,         0, -1, 0, 0, r, g, b, alpha);
+		VtxSet(vtx, 2, SCREEN_WD, SCREEN_HT, -1, 0, 0, r, g, b, alpha);
+		VtxSet(vtx, 3,         0, SCREEN_HT, -1, 0, 0, r, g, b, alpha);
 	}
 	else
 	{
@@ -71,10 +71,10 @@ static Vtx *wipe_fade_vtx(WIPE_FADE *fade, UCHAR alpha)
 	return vtx;
 }
 
-static int wipe_fade_gfx(CHAR screen, UCHAR frame, WIPE_FADE *fade, UCHAR alpha)
+static int WpFadeGfx(CHAR screen, UCHAR frame, WIPE_FADE *fade, UCHAR alpha)
 {
 	Vtx *vtx;
-	if ((vtx = wipe_fade_vtx(fade, alpha)))
+	if ((vtx = WpFadeVtx(fade, alpha)))
 	{
 		gSPDisplayList(glistp++, gfx_wipe_start);
 		gDPSetCombineMode(glistp++, G_CC_SHADE, G_CC_SHADE);
@@ -83,22 +83,22 @@ static int wipe_fade_gfx(CHAR screen, UCHAR frame, WIPE_FADE *fade, UCHAR alpha)
 		gSPDisplayList(glistp++, gfx_quad0);
 		gSPDisplayList(glistp++, gfx_wipe_end);
 	}
-	return wipe_step(screen, frame);
+	return WpStep(screen, frame);
 }
 
-static int wipe_fade_in(CHAR screen, UCHAR frame, WIPE_FADE *fade)
+static int WpFadeIn(CHAR screen, UCHAR frame, WIPE_FADE *fade)
 {
-	UCHAR alpha = wipe_fade_alpha(1, screen, frame);
-	return wipe_fade_gfx(screen, frame, fade, alpha);
+	UCHAR alpha = WpFadeAlpha(1, screen, frame);
+	return WpFadeGfx(screen, frame, fade, alpha);
 }
 
-static int wipe_fade_out(CHAR screen, UCHAR frame, WIPE_FADE *fade)
+static int WpFadeOut(CHAR screen, UCHAR frame, WIPE_FADE *fade)
 {
-	UCHAR alpha = wipe_fade_alpha(0, screen, frame);
-	return wipe_fade_gfx(screen, frame, fade, alpha);
+	UCHAR alpha = WpFadeAlpha(0, screen, frame);
+	return WpFadeGfx(screen, frame, fade, alpha);
 }
 
-static SHORT wipe_win_size(CHAR screen, CHAR frame, WIPE_WINDOW *win)
+static SHORT WpWindowSize(CHAR screen, CHAR frame, WIPE_WINDOW *win)
 {
 	float dsize = win->esize - win->ssize;
 	float ssize = dsize * wipe_timer[screen]/(frame-1);
@@ -106,37 +106,37 @@ static SHORT wipe_win_size(CHAR screen, CHAR frame, WIPE_WINDOW *win)
 	return size + 0.5;
 }
 
-static float wipe_win_dist(CHAR screen, CHAR frame, WIPE_WINDOW *win)
+static float WpWindowDist(CHAR screen, CHAR frame, WIPE_WINDOW *win)
 {
 	float sx = win->sx;
 	float sy = win->sy;
 	float ex = win->ex;
 	float ey = win->ey;
-	float d = sqrtf((sx-ex)*(sx-ex) + (sy-ey)*(sy-ey));
+	float d = DIST2(sx-ex, sy-ey);
 	float dist = d * wipe_timer[screen]/(frame-1);
 	return dist;
 }
 
-static USHORT wipe_win_ang(WIPE_WINDOW *win)
+static USHORT WpWindowAng(WIPE_WINDOW *win)
 {
 	float dx = win->ex - win->sx;
 	float dy = win->ey - win->sy;
 	return ATAN2(dx, dy);
 }
 
-static SHORT wipe_win_x(WIPE_WINDOW *win, float dist, USHORT ang)
+static SHORT WpWindowX(WIPE_WINDOW *win, float dist, USHORT ang)
 {
 	float x = win->sx + dist*COS(ang);
 	return x + 0.5;
 }
 
-static SHORT wipe_win_y(WIPE_WINDOW *win, float dist, USHORT ang)
+static SHORT WpWindowY(WIPE_WINDOW *win, float dist, USHORT ang)
 {
 	float y = win->sy + dist*SIN(ang);
 	return y + 0.5;
 }
 
-static void wipe_win_vtx_set(
+static void WpWindowVtxSet(
 	Vtx *vtx, int i, CHAR screen, WIPE_WINDOW *win,
 	SHORT x, SHORT y, SHORT dx, SHORT dy, SHORT s, SHORT t
 )
@@ -147,12 +147,12 @@ static void wipe_win_vtx_set(
 	u16 ang = wipe_ang[screen];
 	float xf = x + (dx*COS(ang) - dy*SIN(ang));
 	float yf = y + (dx*SIN(ang) + dy*COS(ang));
-	SHORT xs = roundftos(xf);
-	SHORT ys = roundftos(yf);
-	vtx_set(vtx, i, xs, ys, -1, 32*s, 32*t, r, g, b, 0xFF);
+	SHORT xs = RoundFtoS(xf);
+	SHORT ys = RoundFtoS(yf);
+	VtxSet(vtx, i, xs, ys, -1, 32*s, 32*t, r, g, b, 0xFF);
 }
 
-static void wipe_win_vtx(
+static void WpWindowVtx(
 	Vtx *vtx, CHAR screen, WIPE_WINDOW *win,
 	SHORT x, SHORT y, SHORT size, CHAR code
 )
@@ -160,40 +160,40 @@ static void wipe_win_vtx(
 	switch (code)
 	{
 	case 0:
-		wipe_win_vtx_set(vtx, 0, screen, win, x, y, -size, -size, -31, 63);
-		wipe_win_vtx_set(vtx, 1, screen, win, x, y, +size, -size,  31, 63);
-		wipe_win_vtx_set(vtx, 2, screen, win, x, y, +size, +size,  31,  0);
-		wipe_win_vtx_set(vtx, 3, screen, win, x, y, -size, +size, -31,  0);
+		WpWindowVtxSet(vtx, 0, screen, win, x, y, -size, -size, -31, 63);
+		WpWindowVtxSet(vtx, 1, screen, win, x, y, +size, -size,  31, 63);
+		WpWindowVtxSet(vtx, 2, screen, win, x, y, +size, +size,  31,  0);
+		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size, +size, -31,  0);
 		break;
 	case 1:
-		wipe_win_vtx_set(vtx, 0, screen, win, x, y, -size, -size,  0, 63);
-		wipe_win_vtx_set(vtx, 1, screen, win, x, y, +size, -size, 63, 63);
-		wipe_win_vtx_set(vtx, 2, screen, win, x, y, +size, +size, 63,  0);
-		wipe_win_vtx_set(vtx, 3, screen, win, x, y, -size, +size,  0,  0);
+		WpWindowVtxSet(vtx, 0, screen, win, x, y, -size, -size,  0, 63);
+		WpWindowVtxSet(vtx, 1, screen, win, x, y, +size, -size, 63, 63);
+		WpWindowVtxSet(vtx, 2, screen, win, x, y, +size, +size, 63,  0);
+		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size, +size,  0,  0);
 		break;
 #ifdef __GNUC__
 	default: __builtin_unreachable();
 #endif
 	}
-	wipe_win_vtx_set(vtx, 4, screen, win, x, y, -2000, -2000, 0, 0);
-	wipe_win_vtx_set(vtx, 5, screen, win, x, y, +2000, -2000, 0, 0);
-	wipe_win_vtx_set(vtx, 6, screen, win, x, y, +2000, +2000, 0, 0);
-	wipe_win_vtx_set(vtx, 7, screen, win, x, y, -2000, +2000, 0, 0);
+	WpWindowVtxSet(vtx, 4, screen, win, x, y, -2000, -2000, 0, 0);
+	WpWindowVtxSet(vtx, 5, screen, win, x, y, +2000, -2000, 0, 0);
+	WpWindowVtxSet(vtx, 6, screen, win, x, y, +2000, +2000, 0, 0);
+	WpWindowVtxSet(vtx, 7, screen, win, x, y, -2000, +2000, 0, 0);
 }
 
-static int wipe_win(
+static int WpWindow(
 	CHAR screen, CHAR frame, WIPE_WINDOW *win, CHAR txt, CHAR code
 )
 {
-	float dist = wipe_win_dist(screen, frame, win);
-	USHORT ang = wipe_win_ang(win);
-	SHORT x = wipe_win_x(win, dist, ang);
-	SHORT y = wipe_win_y(win, dist, ang);
-	SHORT size = wipe_win_size(screen, frame, win);
-	Vtx *vtx;
-	if ((vtx = gfx_alloc(sizeof(Vtx)*8)))
+	float dist = WpWindowDist(screen, frame, win);
+	USHORT ang = WpWindowAng(win);
+	SHORT x = WpWindowX(win, dist, ang);
+	SHORT y = WpWindowY(win, dist, ang);
+	SHORT size = WpWindowSize(screen, frame, win);
+	Vtx *vtx = GfxAlloc(sizeof(Vtx)*8);
+	if (vtx)
 	{
-		wipe_win_vtx(vtx, screen, win, x, y, size, code);
+		WpWindowVtx(vtx, screen, win, x, y, size, code);
 		gSPDisplayList(glistp++, gfx_wipe_start);
 		gDPSetCombineMode(glistp++, G_CC_SHADE, G_CC_SHADE);
 		gDPSetRenderMode(glistp++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
@@ -226,47 +226,47 @@ static int wipe_win(
 			glistp++, 0xFFFF, 0xFFFF, G_TX_NOLOD, G_TX_RENDERTILE, G_OFF
 		);
 		gSPDisplayList(glistp++, gfx_wipe_end);
-		wipe_ang[screen] += win->ang_vel;
+		wipe_ang[screen] += win->rot;
 	}
 	else
 	{
 	}
-	return wipe_step(screen, frame);
+	return WpStep(screen, frame);
 }
 
-int wipe_draw(CHAR screen, CHAR type, UCHAR frame, WIPE_DATA *data)
+int WipeDraw(CHAR screen, CHAR type, UCHAR frame, WIPE_DATA *data)
 {
 	switch (type)
 	{
 	case WIPE_FADE_IN:
-		return wipe_fade_in(screen, frame, &data->fade);
+		return WpFadeIn(screen, frame, &data->fade);
 		break;
 	case WIPE_FADE_OUT:
-		return wipe_fade_out(screen, frame, &data->fade);
+		return WpFadeOut(screen, frame, &data->fade);
 		break;
 	case WIPE_STAR_IN:
-		return wipe_win(screen, frame, &data->window, 0, 0);
+		return WpWindow(screen, frame, &data->window, 0, 0);
 		break;
 	case WIPE_STAR_OUT:
-		return wipe_win(screen, frame, &data->window, 0, 0);
+		return WpWindow(screen, frame, &data->window, 0, 0);
 		break;
 	case WIPE_CIRCLE_IN:
-		return wipe_win(screen, frame, &data->window, 1, 0);
+		return WpWindow(screen, frame, &data->window, 1, 0);
 		break;
 	case WIPE_CIRCLE_OUT:
-		return wipe_win(screen, frame, &data->window, 1, 0);
+		return WpWindow(screen, frame, &data->window, 1, 0);
 		break;
 	case WIPE_MARIO_IN:
-		return wipe_win(screen, frame, &data->window, 2, 1);
+		return WpWindow(screen, frame, &data->window, 2, 1);
 		break;
 	case WIPE_MARIO_OUT:
-		return wipe_win(screen, frame, &data->window, 2, 1);
+		return WpWindow(screen, frame, &data->window, 2, 1);
 		break;
 	case WIPE_BOWSER_IN:
-		return wipe_win(screen, frame, &data->window, 3, 0);
+		return WpWindow(screen, frame, &data->window, 3, 0);
 		break;
 	case WIPE_BOWSER_OUT:
-		return wipe_win(screen, frame, &data->window, 3, 0);
+		return WpWindow(screen, frame, &data->window, 3, 0);
 		break;
 #ifdef __GNUC__
 	default: __builtin_unreachable();
@@ -274,17 +274,16 @@ int wipe_draw(CHAR screen, CHAR type, UCHAR frame, WIPE_DATA *data)
 	}
 }
 
-static Gfx *cannon_overlay_gfx(void)
+static Gfx *CannonOverlayGfx(void)
 {
-	Vtx *vtx = gfx_alloc(sizeof(Vtx)*4);
-	Gfx *gfx = gfx_alloc(sizeof(Gfx)*(3+7+6));
-	Gfx *g = gfx;
+	Vtx *vtx = GfxAlloc(sizeof(Vtx)*4);
+	Gfx *gfx, *g = gfx = GfxAlloc(sizeof(Gfx)*(3+7+6));
 	if (vtx && gfx)
 	{
-		vtx_set(vtx, 0,         0,         0, -1, 32*-36, 32*57, 0, 0, 0, 0xFF);
-		vtx_set(vtx, 1, SCREEN_WD,         0, -1, 32*+36, 32*57, 0, 0, 0, 0xFF);
-		vtx_set(vtx, 2, SCREEN_WD, SCREEN_HT, -1, 32*+36, 32* 6, 0, 0, 0, 0xFF);
-		vtx_set(vtx, 3,         0, SCREEN_HT, -1, 32*-36, 32* 6, 0, 0, 0, 0xFF);
+		VtxSet(vtx, 0,         0,         0, -1, 32*-36, 32*57, 0, 0, 0, 0xFF);
+		VtxSet(vtx, 1, SCREEN_WD,         0, -1, 32*+36, 32*57, 0, 0, 0, 0xFF);
+		VtxSet(vtx, 2, SCREEN_WD, SCREEN_HT, -1, 32*+36, 32* 6, 0, 0, 0, 0xFF);
+		VtxSet(vtx, 3,         0, SCREEN_HT, -1, 32*-36, 32* 6, 0, 0, 0, 0xFF);
 		gSPDisplayList(g++, gfx_wipe_start);
 		gDPSetCombineMode(g++, G_CC_MODULATERGBDECALA, G_CC_MODULATERGBDECALA);
 		gDPSetTextureFilter(g++, G_TF_BILERP);
@@ -306,16 +305,16 @@ static Gfx *cannon_overlay_gfx(void)
 	return gfx;
 }
 
-void *s_cannon_overlay(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlCannonOverlay(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	Gfx *gfx = NULL;
 	if (code == SC_DRAW)
 	{
 		if (scenep && scenep->cam->mode == 10) /* T:enum */
 		{
-			shape_set_layer(&shp->s, LAYER_XLU_SURF);
-			gfx = cannon_overlay_gfx();
+			ShpSetLayer(&shp->s, LAYER_XLU_SURF);
+			gfx = CannonOverlayGfx();
 		}
 	}
 	return gfx;

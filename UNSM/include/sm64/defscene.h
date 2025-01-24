@@ -1,6 +1,7 @@
 #ifndef __SM64_DEFSCENE_H__
 #define __SM64_DEFSCENE_H__
 
+#define ENV_MASK                7
 #define ENV_GRASS               0
 #define ENV_ROCK                1
 #define ENV_SNOW                2

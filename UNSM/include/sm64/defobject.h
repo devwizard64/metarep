@@ -15,8 +15,10 @@
 #define OBJ_0010            0x0010
 #define OBJ_0020            0x0020
 #define OBJ_0040            0x0040
+#define OBJ_DITHER          0x0080
 #define OBJ_0100            0x0100
 #define OBJ_0200            0x0200
+#define OBJ_0400            0x0400
 
 #define OT_PLAYER           0
 #define OT_ATTACK           2
@@ -36,56 +38,99 @@
 
 #define ACTOR_MARIO         1
 
-#define OF_0001             0x0001
-#define OF_0002             0x0002
-#define OF_0004             0x0004
-#define OF_0008             0x0008
-#define OF_0010             0x0010
-#define OF_0020             0x0020
-#define OF_0040             0x0040
+#define HIT_HANG            0x00000001
+#define HIT_TAKE            0x00000002
+#define HIT_DOOR            0x00000004
+#define HIT_DAMAGE          0x00000008
+#define HIT_COIN            0x00000010
+#define HIT_CAP             0x00000020
+#define HIT_POLE            0x00000040
+#define HIT_KOOPA           0x00000080
+#define HIT_SPINY           0x00000100
+#define HIT_ITEMBOX         0x00000200
+#define HIT_WIND            0x00000400
+#define HIT_PORTDOOR        0x00000800
+#define HIT_STAR            0x00001000
+#define HIT_PIPE            0x00002000
+#define HIT_CANNON          0x00004000
+#define HIT_BOUNCE          0x00008000
+#define HIT_RECOVER         0x00010000
+#define HIT_BUMP            0x00020000
+#define HIT_BURN            0x00040000
+#define HIT_SHELL           0x00080000
+#define HIT_DUMMY           0x00100000  /* unused */
+#define HIT_ENEMY           0x00200000
+#define HIT_FLYENEMY        0x00400000
+#define HIT_MESSAGE         0x00800000
+#define HIT_TORNADO         0x01000000
+#define HIT_WHIRLPOOL       0x02000000
+#define HIT_CLAM            0x04000000
+#define HIT_CAGE            0x08000000
+#define HIT_BULLET          0x10000000
+#define HIT_ELECSHOCK       0x20000000
+#define HIT_IGLOO           0x40000000
+
+#define OF_SETSHAPECOORD    0x0001
+#define OF_MOVEF            0x0002
+#define OF_MOVEY            0x0004
+#define OF_SETSHAPEANGY     0x0008
+#define OF_SETSHAPEANG      0x0010
+#define OF_CALCMTX          0x0020
+#define OF_CALCPLDIST       0x0040
 #define OF_0080             0x0080
 #define OF_0100             0x0100
-#define OF_0200             0x0200
+#define OF_CALCREL          0x0200
 #define OF_0400             0x0400
-#define OF_0800             0x0800
-#define OF_2000             0x2000
+#define OF_SETMTX           0x0800
+#define OF_CALCPLANG        0x2000
 #define OF_4000             0x4000
+#define OF_HITINFO          0x40000000
 
-#define OM_BOUND            0x001
-#define OM_TOUCH            0x002
-#define OM_TAKEOFF          0x004
-#define OM_DIVE             0x008
-#define OM_S_WATER          0x010
-#define OM_U_WATER          0x020
-#define OM_B_WATER          0x040
-#define OM_SKY              0x080
-#define OM_OUT_SCOPE        0x100
+#define OM_BOUND            0x0001
+#define OM_TOUCH            0x0002
+#define OM_TAKEOFF          0x0004
+#define OM_DIVE             0x0008
+#define OM_S_WATER          0x0010
+#define OM_U_WATER          0x0020
+#define OM_B_WATER          0x0040
+#define OM_SKY              0x0080
+#define OM_OUT_SCOPE        0x0100
+#define OM_0200             0x0200
+#define OM_0400             0x0400
+#define OM_0800             0x0800
+#define OM_1000             0x1000
+#define OM_2000             0x2000
+#define OM_4000             0x4000
 
 #define O_VAR               0
 #define O_FLAG              1
 #define O_MSG               2
 #define O_HIT_TIMER         5
-#define O_POS_X             6
-#define O_POS_Y             7
-#define O_POS_Z             8
-#define O_VEL_X             9
-#define O_VEL_Y             10
-#define O_VEL_Z             11
-#define O_VEL_F             12
-#define O_VEL_L             13
-#define O_VEL_U             14
-#define O_ANG_X             15
-#define O_ANG_Y             16
-#define O_ANG_Z             17
-#define O_SHAPE_ANG_X       18
-#define O_SHAPE_ANG_Y       19
-#define O_SHAPE_ANG_Z       20
-#define O_SHAPE_OFFSET      21
+#define O_POS               6
+#define O_POSX              6
+#define O_POSY              7
+#define O_POSZ              8
+#define O_VEL               9
+#define O_VELX              9
+#define O_VELY              10
+#define O_VELZ              11
+#define O_VELF              12
+#define O_VELL              13
+#define O_VELU              14
+#define O_ANG               15
+#define O_ANGX              15
+#define O_ANGY              16
+#define O_ANGZ              17
+#define O_SHAPEANG          18
+#define O_SHAPEANGX         18
+#define O_SHAPEANGY         19
+#define O_SHAPEANGZ         20
+#define O_SHAPEOFF          21
 #define O_EFFECT            22
 #define O_GRAVITY           23
 #define O_GROUND_Y          24
-#define O_MOVE_STATUS       25
-#define O_SHAPE_CODE        26
+#define O_MOVE              25
+#define O_SHAPE             26
 #define O_V0                27
 #define O_V1                28
 #define O_V2                29
@@ -94,136 +139,149 @@
 #define O_V5                32
 #define O_V6                33
 #define O_V7                34
-#define O_ANG_VEL_X         35
-#define O_ANG_VEL_Y         36
-#define O_ANG_VEL_Z         37
-#define O_ANIME             38
-#define O_HOLD              39
+#define O_ROT               35
+#define O_ROTX              35
+#define O_ROTY              36
+#define O_ROTZ              37
+#define O_ANIMEP            38
+#define O_TAKE              39
 #define O_WALL_R            40
 #define O_DRAG              41
-#define O_HIT_CODE          42
+#define O_HIT_TYPE          42
 #define O_HIT_RESULT        43
-#define O_OFF_X             44
-#define O_OFF_Y             45
-#define O_OFF_Z             46
+#define O_REL               44
+#define O_RELX              44
+#define O_RELY              45
+#define O_RELZ              46
 #define O_CODE              47
 #define O_STATE             49
-#define O_MODE              50
+#define O_PHASE             50
 #define O_TIMER             51
-#define O_BOUNCE            52
+#define O_DENSITY           52
 #define O_PL_DIST           53
 #define O_PL_ANG            54
-#define O_SAVE_X            55
-#define O_SAVE_Y            56
-#define O_SAVE_Z            57
+#define O_SAVE              55
+#define O_SAVEX             55
+#define O_SAVEY             56
+#define O_SAVEZ             57
 #define O_FRICTION          58
-#define O_DENSITY           59
-#define O_ANIME_INDEX       60
+#define O_BOUNCE            59
+#define O_ANIME             60
 #define O_ALPHA             61
 #define O_AP                62
 #define O_HP                63
-#define O_ACTOR_INFO        64
+#define O_ACTORINFO         64
 #define O_PREVSTATE         65
 #define O_HIT_FLAG          66
-#define O_CHECK_DIST        67
+#define O_CHECKDIST         67
 #define O_NCOIN             68
-#define O_SHAPE_DIST        69
+#define O_SHAPEDIST         69
 #define O_AREA              70
-#define O_TAG_INFO          72
+#define O_TAGINFO           72
 #define O_V8                73
 #define O_V9                74
-#define O_WALL_ANG          75
-#define O_BG_INFO           76
-#define O_SAVE_ANG          77
+#define O_BG_ANG            75
+#define O_BGINFO            76
+#define O_SAVEANG           77
 #define O_GROUND            78
-#define O_DIE_SE            79
+#define O_SOUND             79
 
 #define /* 0x08C */ o_flag              mem[O_FLAG].i
 #define /* 0x090 */ o_msg_code          mem[O_MSG].s[0]
 #define /* 0x092 */ o_msg_state         mem[O_MSG].s[1]
 #define /* 0x09C */ o_hit_timer         mem[O_HIT_TIMER].i
-#define /* 0x0A0 */ o_pos_x             mem[O_POS_X].f
-#define /* 0x0A4 */ o_pos_y             mem[O_POS_Y].f
-#define /* 0x0A8 */ o_pos_z             mem[O_POS_Z].f
-#define /* 0x0AC */ o_vel_x             mem[O_VEL_X].f
-#define /* 0x0B0 */ o_vel_y             mem[O_VEL_Y].f
-#define /* 0x0B4 */ o_vel_z             mem[O_VEL_Z].f
-#define /* 0x0B8 */ o_vel_f             mem[O_VEL_F].f
-#define /* 0x0BC */ o_vel_l             mem[O_VEL_L].f
-#define /* 0x0C0 */ o_vel_u             mem[O_VEL_U].f
-#define /* 0x0C4 */ o_ang_x             mem[O_ANG_X].i
-#define /* 0x0C8 */ o_ang_y             mem[O_ANG_Y].i
-#define /* 0x0CC */ o_ang_z             mem[O_ANG_Z].i
-#define /* 0x0D0 */ o_shape_ang_x       mem[O_SHAPE_ANG_X].i
-#define /* 0x0D4 */ o_shape_ang_y       mem[O_SHAPE_ANG_Y].i
-#define /* 0x0D8 */ o_shape_ang_z       mem[O_SHAPE_ANG_Z].i
-#define /* 0x0DC */ o_shape_offset      mem[O_SHAPE_OFFSET].f
+#define /* 0x0A0 */ o_posx              mem[O_POSX].f
+#define /* 0x0A4 */ o_posy              mem[O_POSY].f
+#define /* 0x0A8 */ o_posz              mem[O_POSZ].f
+#define /* 0x0AC */ o_velx              mem[O_VELX].f
+#define /* 0x0B0 */ o_vely              mem[O_VELY].f
+#define /* 0x0B4 */ o_velz              mem[O_VELZ].f
+#define /* 0x0B8 */ o_velf              mem[O_VELF].f
+#define /* 0x0BC */ o_vell              mem[O_VELL].f
+#define /* 0x0C0 */ o_velu              mem[O_VELU].f
+#define /* 0x0C4 */ o_angx              mem[O_ANGX].i
+#define /* 0x0C8 */ o_angy              mem[O_ANGY].i
+#define /* 0x0CC */ o_angz              mem[O_ANGZ].i
+#define /* 0x0D0 */ o_shapeangx         mem[O_SHAPEANGX].i
+#define /* 0x0D4 */ o_shapeangy         mem[O_SHAPEANGY].i
+#define /* 0x0D8 */ o_shapeangz         mem[O_SHAPEANGZ].i
+#define /* 0x0DC */ o_shapeoff          mem[O_SHAPEOFF].f
 #define /* 0x0E0 */ o_effect            mem[O_EFFECT].i
 #define /* 0x0E4 */ o_gravity           mem[O_GRAVITY].f
 #define /* 0x0E8 */ o_ground_y          mem[O_GROUND_Y].f
-#define /* 0x0EC */ o_move_status       mem[O_MOVE_STATUS].i
-#define /* 0x0F0 */ o_shape_code        mem[O_SHAPE_CODE].i
+#define /* 0x0EC */ o_move              mem[O_MOVE].i
+#define /* 0x0F0 */ o_shape             mem[O_SHAPE].i
 #define /* 0x0F4 */ o_v0                mem[O_V0].i
 #define /* 0x0F4 */ o_f0                mem[O_V0].f
+#define /* 0x0F4 */ o_p0                mem[O_V0].p
 #define /* 0x0F8 */ o_v1                mem[O_V1].i
 #define /* 0x0F8 */ o_f1                mem[O_V1].f
+#define /* 0x0F8 */ o_p1                mem[O_V1].p
 #define /* 0x0FC */ o_v2                mem[O_V2].i
 #define /* 0x0FC */ o_f2                mem[O_V2].f
+#define /* 0x0FC */ o_p2                mem[O_V2].p
 #define /* 0x100 */ o_v3                mem[O_V3].i
 #define /* 0x100 */ o_f3                mem[O_V3].f
+#define /* 0x100 */ o_p3                mem[O_V3].p
 #define /* 0x104 */ o_v4                mem[O_V4].i
 #define /* 0x104 */ o_f4                mem[O_V4].f
+#define /* 0x104 */ o_p4                mem[O_V4].p
 #define /* 0x108 */ o_v5                mem[O_V5].i
 #define /* 0x108 */ o_f5                mem[O_V5].f
+#define /* 0x108 */ o_p5                mem[O_V5].p
 #define /* 0x10C */ o_v6                mem[O_V6].i
 #define /* 0x10C */ o_f6                mem[O_V6].f
+#define /* 0x10C */ o_p6                mem[O_V6].p
 #define /* 0x110 */ o_v7                mem[O_V7].i
 #define /* 0x110 */ o_f7                mem[O_V7].f
-#define /* 0x114 */ o_ang_vel_x         mem[O_ANG_VEL_X].i
-#define /* 0x118 */ o_ang_vel_y         mem[O_ANG_VEL_Y].i
-#define /* 0x11C */ o_ang_vel_z         mem[O_ANG_VEL_Z].i
-#define /* 0x120 */ o_anime             mem[O_ANIME].p
-#define /* 0x124 */ o_hold              mem[O_HOLD].i
+#define /* 0x110 */ o_p7                mem[O_V7].p
+#define /* 0x114 */ o_rotx              mem[O_ROTX].i
+#define /* 0x118 */ o_roty              mem[O_ROTY].i
+#define /* 0x11C */ o_rotz              mem[O_ROTZ].i
+#define /* 0x120 */ o_animep            mem[O_ANIMEP].p
+#define /* 0x124 */ o_take              mem[O_TAKE].i
 #define /* 0x128 */ o_wall_r            mem[O_WALL_R].f
 #define /* 0x12C */ o_drag              mem[O_DRAG].f
-#define /* 0x130 */ o_hit_code          mem[O_HIT_CODE].i
+#define /* 0x130 */ o_hit_type          mem[O_HIT_TYPE].i
 #define /* 0x134 */ o_hit_result        mem[O_HIT_RESULT].i
-#define /* 0x138 */ o_off_x             mem[O_OFF_X].f
-#define /* 0x13C */ o_off_y             mem[O_OFF_Y].f
-#define /* 0x140 */ o_off_z             mem[O_OFF_Z].f
+#define /* 0x138 */ o_relx              mem[O_RELX].f
+#define /* 0x13C */ o_rely              mem[O_RELY].f
+#define /* 0x140 */ o_relz              mem[O_RELZ].f
 #define /* 0x144 */ o_code              mem[O_CODE].i
 #define /* 0x14C */ o_state             mem[O_STATE].i
-#define /* 0x150 */ o_mode              mem[O_MODE].i
+#define /* 0x150 */ o_phase             mem[O_PHASE].i
 #define /* 0x154 */ o_timer             mem[O_TIMER].i
-#define /* 0x158 */ o_bounce            mem[O_BOUNCE].f
+#define /* 0x158 */ o_density           mem[O_DENSITY].f
 #define /* 0x15C */ o_pl_dist           mem[O_PL_DIST].f
 #define /* 0x160 */ o_pl_ang            mem[O_PL_ANG].i
-#define /* 0x164 */ o_save_x            mem[O_SAVE_X].f
-#define /* 0x168 */ o_save_y            mem[O_SAVE_Y].f
-#define /* 0x16C */ o_save_z            mem[O_SAVE_Z].f
+#define /* 0x164 */ o_savex             mem[O_SAVEX].f
+#define /* 0x168 */ o_savey             mem[O_SAVEY].f
+#define /* 0x16C */ o_savez             mem[O_SAVEZ].f
 #define /* 0x170 */ o_friction          mem[O_FRICTION].f
-#define /* 0x174 */ o_density           mem[O_DENSITY].f
-#define /* 0x178 */ o_anime_index       mem[O_ANIME_INDEX].i
+#define /* 0x174 */ o_bounce            mem[O_BOUNCE].f
+#define /* 0x178 */ o_anime             mem[O_ANIME].i
 #define /* 0x17C */ o_alpha             mem[O_ALPHA].i
 #define /* 0x180 */ o_ap                mem[O_AP].i
 #define /* 0x184 */ o_hp                mem[O_HP].i
-#define /* 0x188 */ o_actor_info        mem[O_ACTOR_INFO].i
+#define /* 0x188 */ o_actorinfo         mem[O_ACTORINFO].i
 #define /* 0x18C */ o_prevstate         mem[O_PREVSTATE].i
 #define /* 0x190 */ o_hit_flag          mem[O_HIT_FLAG].i
-#define /* 0x194 */ o_check_dist        mem[O_CHECK_DIST].f
+#define /* 0x194 */ o_checkdist         mem[O_CHECKDIST].f
 #define /* 0x198 */ o_ncoin             mem[O_NCOIN].i
-#define /* 0x19C */ o_shape_dist        mem[O_SHAPE_DIST].f
+#define /* 0x19C */ o_shapedist         mem[O_SHAPEDIST].f
 #define /* 0x1A0 */ o_area              mem[O_AREA].i
-#define /* 0x1A8 */ o_tag_info          mem[O_TAG_INFO].i
+#define /* 0x1A8 */ o_taginfo           mem[O_TAGINFO].i
 #define /* 0x1AC */ o_v8                mem[O_V8].i
 #define /* 0x1AC */ o_f8                mem[O_V8].f
+#define /* 0x1AC */ o_p8                mem[O_V8].p
 #define /* 0x1B0 */ o_v9                mem[O_V9].i
 #define /* 0x1B0 */ o_f9                mem[O_V9].f
-#define /* 0x1B4 */ o_wall_ang          mem[O_WALL_ANG].i
-#define /* 0x1B8 */ o_bg_code           mem[O_BG_INFO].s[0]
-#define /* 0x1BA */ o_bg_area           mem[O_BG_INFO].s[1]
+#define /* 0x1B0 */ o_p9                mem[O_V9].p
+#define /* 0x1B4 */ o_bg_ang            mem[O_BG_ANG].i
+#define /* 0x1B8 */ o_bgcode            mem[O_BGINFO].s[0]
+#define /* 0x1BA */ o_bgarea            mem[O_BGINFO].s[1]
 #define /* 0x1BC */ o_save_ang          mem[O_SAVE_ANG].i
 #define /* 0x1C0 */ o_ground            mem[O_GROUND].p
-#define /* 0x1C4 */ o_die_se            mem[O_DIE_SE].i
+#define /* 0x1C4 */ o_sound             mem[O_SOUND].i
 
 #endif /* __SM64_DEFOBJECT_H__ */

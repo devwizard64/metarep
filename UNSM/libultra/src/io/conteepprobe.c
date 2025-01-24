@@ -8,8 +8,8 @@ s32 osEepromProbe(OSMesgQueue *mq)
 	OSContStatus sdata;
 	__osSiGetAccess();
 	ret = __osEepStatus(mq, &sdata);
-	if (ret == 0 && (sdata.type & CONT_EEPROM)) ret = 1;
-	else                                        ret = 0;
+	if (!ret && (sdata.type & CONT_EEPROM)) ret = 1;
+	else                                    ret = 0;
 	__osSiRelAccess();
 	return ret;
 }

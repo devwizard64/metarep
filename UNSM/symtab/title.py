@@ -12,10 +12,10 @@ sym_E0_Title = {
 	0x1400025C: main.sym("goto_game"),
 	0x14000284: main.sym("goto_demo"),
 	0x140002A8: main.sym("goto_logo"),
-	0x140002D0: main.sym_var("s_logo", "S_SCRIPT", "[]", flag={"GLOBL"}),
-	0x1400035C: main.sym_var("s_face", "S_SCRIPT", "[]", flag={"GLOBL"}),
-	0x140003B8: main.sym_var("s_gameover", "S_SCRIPT", "[]", flag={"GLOBL"}),
-	0x14000414: main.sym_var("s_debug", "S_SCRIPT", "[]", flag={"GLOBL"}),
+	0x140002D0: main.sym_var("s_logo", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x1400035C: main.sym_var("s_face", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x140003B8: main.sym_var("s_gameover", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x14000414: main.sym_var("s_debug", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 seg_E0_Title = {

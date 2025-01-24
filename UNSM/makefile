@@ -15,7 +15,7 @@ U64_OPT     := -Os
 U64_WARN    := -Wall -Wextra -Werror=implicit-function-declaration
 U64_CPPFLAGS = -Ilibultra/include -Iinclude -I. -I$(BUILD) -D_ULTRA64
 U64_CFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -mno-check-zero-division -fno-builtin -ffast-math -ftrapping-math -fno-associative-math -fsingle-precision-constant -G 0 $(U64_OPT) $(U64_WARN)
-U64_ASFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC
+U64_ASFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -G 0 $(U64_OPT)
 U64_ARMIPSFLAGS = -strequ BUILD $(BUILD)
 
 IDO_CC      := $(IDO)/bin/cc
@@ -30,7 +30,7 @@ LIBULTRA_OPT    :=
 LIBULTRA_WARN   := -fullwarn -prototypes
 LIBULTRA_CPPFLAGS = -Ilibultra/include -Ilibultra/src/include -D_ULTRA64
 LIBULTRA_CFLAGS = $(LIBULTRA_ARCH) -non_shared -Wab,-r4300_mul -G 0 $(LIBULTRA_OPT) $(LIBULTRA_WARN)
-LIBULTRA_ASFLAGS = $(LIBULTRA_ARCH) -non_shared $(LIBULTRA_OPT)
+LIBULTRA_ASFLAGS = $(LIBULTRA_ARCH) -non_shared -G 0 $(LIBULTRA_OPT)
 LIBULTRA_ARMIPSFLAGS = -strequ BUILD $(BUILD)
 
 APP := app
@@ -138,15 +138,15 @@ $(BUILD)/src/face/%.o: IDO_OPT := -g
 $(BUILD)/src/face/%.o: IDO_CFLAGS = -non_shared -Wab,-r4300_mul -signed -Xcpluscomm -G 0 $(IDO_OPT)
 $(BUILD)/src/%.data.o $(BUILD)/src/audio/data.o $(BUILD)/src/audio/work.o $(BUILD)/data/%.o $(BUILD)/shape/%.o $(BUILD)/stage/%.o: U64_CFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder -G 0 $(U64_WARN)
 
-$(BUILD)/libultra/src/libc/bzero.o: LIBULTRA_OPT := -O2
 $(BUILD)/libultra/src/libc/bcopy.o: LIBULTRA_OPT := -O2
+$(BUILD)/libultra/src/libc/bzero.o: LIBULTRA_OPT := -O2
 $(BUILD)/libultra/src/PR/Boot.o: LIBULTRA_OPT := -O2
 
 $(BUILD)/libultra/src/gu/cosf.o: U64_CFLAGS += -fno-strict-aliasing
 $(BUILD)/libultra/src/gu/sinf.o: U64_CFLAGS += -fno-strict-aliasing
-$(BUILD)/libultra/src/rmon/xprintf.o: U64_CFLAGS += -fno-strict-aliasing
-$(BUILD)/libultra/src/rmon/xldtob.o: U64_CFLAGS += -fno-single-precision-constant
 $(BUILD)/libultra/src/os/kdebugserver.o: U64_CFLAGS += -fno-strict-aliasing
+$(BUILD)/libultra/src/rmon/xldtob.o: U64_CFLAGS += -fno-single-precision-constant
+$(BUILD)/libultra/src/rmon/xprintf.o: U64_CFLAGS += -fno-strict-aliasing
 
 $(BUILD)/data/%.o: data/%.bin
 
@@ -158,11 +158,11 @@ $(BUILD)/shape/2%.elf:          ADDRESS := 0x06000000
 $(BUILD)/stage/%.elf:           ADDRESS := 0x07000000
 $(BUILD)/shape/3%.elf:          ADDRESS := 0x08000000
 $(BUILD)/data/texture/%.elf:    ADDRESS := 0x09000000
-$(BUILD)/data/back/%.elf:       ADDRESS := 0x0A000000
+$(BUILD)/data/background/%.elf: ADDRESS := 0x0A000000
 $(BUILD)/data/weather/%.elf:    ADDRESS := 0x0B000000
 
 $(BUILD)/$(APP).bps: $(OUTPUT)
-	flips $(DONOR)/U$(ICODE)0$(VERSION)$(suffix $@) $< $@
+	flips $(DONOR)/U$(ICODE)0$(VERSION)$(suffix $<) $< $@
 
 build/C3/$(APP).z64: $(BUILD)/$(APP).elf $(ROMHEADER) $(BOOT) $(FONT) tools/makerom
 	tools/makerom -r $@ -h $(ROMHEADER) -b $(BOOT) -F $(FONT) -a 14 $<
@@ -174,8 +174,8 @@ $(BUILD)/%.z64: $(BUILD)/%.elf $(ROMHEADER) $(BOOT) $(FONT) tools/makerom tools/
 $(BUILD)/%.ndd: $(BUILD)/%.elf tools/makedisk
 	tools/makedisk -R $@ $<
 
-$(BUILD)/$(APP).elf: $(BUILD)/$(APP).ld $(OBJ) $(MENU_OBJ) $(DATA) $(SZP) $(SHAPE_SZP) $(SHAPE_DATA) $(BACK_SZP) $(TEXTURE_SZP) $(STAGE_SZP) $(STAGE_DATA) $(AUDIO_DATA)
-	$(U64_LD) -Map $(@:.elf=.map) -T$(BUILD)/$(APP).ld -o $@
+$(BUILD)/$(APP).elf: $(BUILD)/$(APP).ld $(OBJ) $(MENU_OBJ) $(DATA) $(SZP) $(SHAPE_SZP) $(SHAPE_DATA) $(BACKGROUND_SZP) $(TEXTURE_SZP) $(STAGE_SZP) $(STAGE_DATA) $(AUDIO_DATA)
+	$(U64_LD) -N -Map $(@:.elf=.map) -T$(BUILD)/$(APP).ld -o $@
 
 $(BUILD)/$(APP).ld: spec tools/spec
 	@mkdir -p $(dir $@)
@@ -319,7 +319,7 @@ print-%:
 
 $(SZP:.szp.o=.o):
 $(SHAPE_SZP:.szp.o=.o):
-$(BACK_SZP:.szp.o=.o):
+$(BACKGROUND_SZP:.szp.o=.o):
 $(TEXTURE_SZP:.szp.o=.o):
 $(STAGE_SZP:.szp.o=.o):
 
@@ -333,7 +333,7 @@ $(STAGE_SZP:.szp.o=.o):
 -include $(SZP:.szp.o=.d)
 -include $(SHAPE_SZP:.szp.o=.d)
 -include $(SHAPE_DATA:.o=.d)
--include $(BACK_SZP:.szp.o=.d)
+-include $(BACKGROUND_SZP:.szp.o=.d)
 -include $(TEXTURE_SZP:.szp.o=.d)
 -include $(STAGE_SZP:.szp.o=.d)
 -include $(STAGE_DATA:.o=.d)

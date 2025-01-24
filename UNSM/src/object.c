@@ -19,7 +19,7 @@ OBJLIST obj_freelist;
 OBJECT *mario_obj;
 OBJECT *luigi_obj;
 OBJECT *object;
-O_SCRIPT *object_pc;
+OBJLANG *object_pc;
 s16 obj_prevcount;
 
 int bglist_count;
@@ -27,8 +27,8 @@ int bgface_count;
 int bglist_static;
 int bgface_static;
 HEAP *object_heap;
-s16 object_80361180;
-s16 object_80361182;
+short object_80361180;
+short object_80361182;
 MAP *waterp;
 int water_table[20];
 AREA area_table[60][2];
@@ -62,21 +62,21 @@ static s8 objproc_table[] =
 
 #include "player/player.c"
 
-static int objlist_exec_normal(OBJECT *root, OBJECT *obj)
+static int ObjListExecNormal(OBJECT *root, OBJECT *obj)
 {
 	int count = 0;
 	while (root != obj)
 	{
 		object = obj;
 		object->s.s.flag |= SHP_ANIME;
-		o_execute();
+		ObjLangExec();
 		obj = obj->next;
 		count++;
 	}
 	return count;
 }
 
-static int objlist_exec_frozen(OBJECT *root, OBJECT *obj)
+static int ObjListExecFrozen(OBJECT *root, OBJECT *obj)
 {
 	int count = 0;
 	while (root != obj)
@@ -91,7 +91,7 @@ static int objlist_exec_frozen(OBJECT *root, OBJECT *obj)
 				!(object_flag & OBJECT_FREEZEPLAYER)
 			) flag = TRUE;
 			if (
-				(object->o_hit_code & (4|0x800)) &&
+				(object->o_hit_type & (HIT_DOOR|HIT_PORTDOOR)) &&
 				!(object_flag & OBJECT_FREEZEPLAYER)
 			) flag = TRUE;
 			if (object->flag & (OBJ_0010|OBJ_0020)) flag = TRUE;
@@ -99,7 +99,7 @@ static int objlist_exec_frozen(OBJECT *root, OBJECT *obj)
 		if (flag)
 		{
 			object->s.s.flag |= SHP_ANIME;
-			o_execute();
+			ObjLangExec();
 		}
 		else
 		{
@@ -111,16 +111,16 @@ static int objlist_exec_frozen(OBJECT *root, OBJECT *obj)
 	return count;
 }
 
-static int objlist_exec(OBJECT *root)
+static int ObjListExec(OBJECT *root)
 {
 	int count;
 	OBJECT *obj = root->next;
-	if (!(object_flag & OBJECT_FROZEN)) count = objlist_exec_normal(root, obj);
-	else                                count = objlist_exec_frozen(root, obj);
+	if (!(object_flag & OBJECT_FROZEN)) count = ObjListExecNormal(root, obj);
+	else                                count = ObjListExecFrozen(root, obj);
 	return count;
 }
 
-static int objlist_cleanup(OBJECT *root)
+static int ObjListCleanup(OBJECT *root)
 {
 	OBJECT *obj = root->next;
 	while (root != obj)
@@ -129,14 +129,14 @@ static int objlist_cleanup(OBJECT *root)
 		obj = obj->next;
 		if ((object->flag & OBJ_0001) != OBJ_0001)
 		{
-			if (!(object->o_flag & OF_4000)) obj_set_actorflag(object, 0xFF);
-			obj_free(object);
+			if (!(object->o_flag & OF_4000)) ObjSetActorFlag(object, 0xFF);
+			ObjFree(object);
 		}
 	}
 	return 0;
 }
 
-void obj_set_actorflag(OBJECT *obj, UCHAR flag)
+void ObjSetActorFlag(OBJECT *obj, UCHAR flag)
 {
 	u32 *w;
 	u16 *h;
@@ -147,11 +147,9 @@ void obj_set_actorflag(OBJECT *obj, UCHAR flag)
 	}
 }
 
-void object_close(UNUSED int screen, int group)
+void ObjectClose(UNUSED int screen, int group)
 {
-	OBJECT *o;
-	OBJECT *obj;
-	OBJECT *root;
+	OBJECT *o, *obj, *root;
 	int i;
 	obj_rootlist = obj_rootdata;
 	for (i = 0; i < OT_MAX; i++)
@@ -162,30 +160,32 @@ void object_close(UNUSED int screen, int group)
 		{
 			o = obj;
 			obj = obj->next;
-			if (o->s.group == group) obj_free(o);
+			if (o->s.group == group) ObjFree(o);
 		}
 	}
 }
 
-void object_open(UNUSED int screen, ACTOR *actor)
+void ObjectOpen(UNUSED int screen, ACTOR *actor)
 {
 	OBJECT *obj;
 	UNUSED int i;
-	O_SCRIPT *script;
+	OBJLANG *script;
 	obj_rootlist = obj_rootdata;
 	object_flag = 0;
 	object_80361262 = 0;
 	object_80361264 = 0;
-	plride_clear();
+#if REVISION > 199606
+	PLRideClear();
+#endif
 	if (scene_index == 2) object_8036125C |= 1;
 	while (actor)
 	{
 		UNUSED SHORT flag = actor->info & 0xFFFF;
-		script = segment_to_virtual(actor->script);
+		script = SegmentToVirtual(actor->script);
 		if ((actor->info & 0xFF00) != 0xFF00)
 		{
-			obj = obj_create(script);
-			obj->o_actor_info = actor->info;
+			obj = ObjCreate(script);
+			obj->o_actorinfo = actor->info;
 			obj->o_code = actor->info >> 16 & 0xFF;
 			obj->script = script;
 			obj->_1C8 = NULL;
@@ -194,18 +194,18 @@ void object_open(UNUSED int screen, ACTOR *actor)
 			if (actor->info & ACTOR_MARIO)
 			{
 				mario_obj = obj;
-				shape_makefirst(&obj->s.s);
+				ShpMakeFirst(&obj->s.s);
 			}
-			sobj_actor(&obj->s, actor);
-			obj->o_pos_x = actor->pos[0];
-			obj->o_pos_y = actor->pos[1];
-			obj->o_pos_z = actor->pos[2];
-			obj->o_shape_ang_x = actor->ang[0];
-			obj->o_shape_ang_y = actor->ang[1];
-			obj->o_shape_ang_z = actor->ang[2];
-			obj->o_ang_x = actor->ang[0];
-			obj->o_ang_y = actor->ang[1];
-			obj->o_ang_z = actor->ang[2];
+			SObjActor(&obj->s, actor);
+			obj->o_posx = actor->pos[0];
+			obj->o_posy = actor->pos[1];
+			obj->o_posz = actor->pos[2];
+			obj->o_shapeangx = actor->ang[0];
+			obj->o_shapeangy = actor->ang[1];
+			obj->o_shapeangz = actor->ang[2];
+			obj->o_angx = actor->ang[0];
+			obj->o_angy = actor->ang[1];
+			obj->o_angz = actor->ang[2];
 		}
 		actor = actor->next;
 	}
@@ -215,7 +215,7 @@ static void object_8029D1D8(void)
 {
 }
 
-void object_init(void)
+void ObjectInit(void)
 {
 	int i;
 	object_80361256 = 0;
@@ -227,48 +227,46 @@ void object_init(void)
 		area_table[i][0] = 0;
 		area_table[i][1] = 0;
 	}
-	debug_init();
-	obj_freelist_init();
-	obj_rootlist_init(obj_rootdata);
-	o_init();
+	DebugInit();
+	ObjFreeListInit();
+	ObjRootListInit(obj_rootdata);
+	ObjLangInit();
 	object_8029D1D8();
 	for (i = 0; i < OBJECT_MAX; i++)
 	{
 		object_data[i].flag = 0;
-		sobj_init(&object_data[i].s);
+		SObjInit(&object_data[i].s);
 	}
-	object_heap = heap_create(2048, MEM_ALLOC_L);
+	object_heap = HeapCreate(2048, MEM_ALLOC_L);
 	obj_rootlist = obj_rootdata;
-	movebg_clear();
+	MoveBGClear();
 }
 
-static void object_exec_1(void)
+static void ObjectExec1(void)
 {
-	obj_count = objlist_exec((OBJECT *)&obj_rootlist[OT_SYSTEM]);
+	obj_count = ObjListExec((OBJECT *)&obj_rootlist[OT_SYSTEM]);
 	/* meant += */
-	obj_count = objlist_exec((OBJECT *)&obj_rootlist[OT_MOVEBG]);
+	obj_count = ObjListExec((OBJECT *)&obj_rootlist[OT_MOVEBG]);
 }
 
-static void object_exec_2(void)
+static void ObjectExec2(void)
 {
 	UNUSED int i;
-	int type;
-	int index = 2;
+	int type, index = 2;
 	while ((type = objproc_table[index]) != -1)
 	{
-		obj_count += objlist_exec((OBJECT *)&obj_rootlist[type]);
+		obj_count += ObjListExec((OBJECT *)&obj_rootlist[type]);
 		index++;
 	}
 }
 
-static void object_cleanup(void)
+static void ObjectCleanup(void)
 {
 	UNUSED int i;
-	int type;
-	int index = 0;
+	int type, index = 0;
 	while ((type = objproc_table[index]) != -1)
 	{
-		objlist_cleanup((OBJECT *)&obj_rootlist[type]);
+		ObjListCleanup((OBJECT *)&obj_rootlist[type]);
 		index++;
 	}
 	object_flag &= ~OBJECT_01;
@@ -291,33 +289,33 @@ static USHORT object_8029D4D0(OSTime *t, int i)
 	return s;
 }
 
-void object_proc(UNUSED int screen)
+void ObjectProc(UNUSED int screen)
 {
 	OSTime t[30];
-	t[0] = db_time_start();
+	t[0] = DbTimeStart();
 	object_flag &= ~OBJECT_20;
 	object_8036125E = 0;
 	object_80361260 = 0;
 	object_80361180 = 0;
-	debug_clear();
-	debug_exec();
+	DebugClear();
+	DebugExec();
 	obj_rootlist = obj_rootdata;
-	t[1] = db_time_count(t[0]);
-	movebg_clear();
-	t[2] = db_time_count(t[0]);
-	object_exec_1();
-	plride_proc();
-	t[3] = db_time_count(t[0]);
-	hit_check();
-	t[4] = db_time_count(t[0]);
-	object_exec_2();
-	t[5] = db_time_count(t[0]);
-	object_cleanup();
-	t[6] = db_time_count(t[0]);
-	plride_find();
-	t[7] = db_time_count(t[0]);
+	t[1] = DbTimeCount(t[0]);
+	MoveBGClear();
+	t[2] = DbTimeCount(t[0]);
+	ObjectExec1();
+	PLRideProc();
+	t[3] = DbTimeCount(t[0]);
+	HitCheck();
+	t[4] = DbTimeCount(t[0]);
+	ObjectExec2();
+	t[5] = DbTimeCount(t[0]);
+	ObjectCleanup();
+	t[6] = DbTimeCount(t[0]);
+	PLRideFind();
+	t[7] = DbTimeCount(t[0]);
 	t[0] = 0;
-	debug_result();
+	DebugResult();
 	if (object_flag & OBJECT_FREEZE)    object_flag |= OBJECT_FROZEN;
 	else                                object_flag &= ~OBJECT_FROZEN;
 	obj_prevcount = obj_count;

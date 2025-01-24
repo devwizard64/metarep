@@ -88,19 +88,42 @@
 
 #define NA_SE_NULL              0x00000000
 
+#define NA_SE0_00               0x04008081
+#define NA_SE0_28               0x04289081
+#define NA_SE0_29               0x04299081
+#define NA_SE0_2B               0x042B9081
+#define NA_SE0_42               0x04428081
+#define NA_SE0_43               0x04438081
+#define NA_SE0_44_B             0x0444B081
+#define NA_SE0_44_C             0x0444C081
+#define NA_SE0_45               0x0445A081
+#define NA_SE0_58               0x0458A081
+#define NA_SE0_59               0x0459B081
+
 #define NA_SE1_00               0x14000001
 #define NA_SE1_10               0x14100001
 #define NA_SE1_11               0x14110001
 #define NA_SE1_12               0x14128001
 #define NA_SE1_14               0x14140001
+#define NA_SE1_18               0x1C180001
 #define NA_SE1_19               0x1D192001
 #define NA_SE1_20               0x14200001
 
+#define NA_SE2_00               0x24008081
+#define NA_SE2_09               0x24098081
+#define NA_SE2_0A               0x240AFF81
+#define NA_SE2_0B               0x240B8081
+#define NA_SE2_0C               0x240C8081
 #define NA_SE2_10               0x2410C081
+#define NA_SE2_14               0x2414A081
+#define NA_SE2_1F               0x241F8081
+#define NA_SE2_2B               0x242B8081
 #define NA_SE2_31               0x2431FF81
 #define NA_SE2_32               0x2432FF81
 #define NA_SE2_33               0x2433FFA1
+#define NA_SE2_34               0x24348081
 
+#define NA_SE3_03               0x30038081
 #define NA_SE3_04               0x3004C081
 #define NA_SE3_05               0x3005C081
 #define NA_SE3_06               0x3006C081
@@ -108,10 +131,10 @@
 #define NA_SE3_11               0x38118081
 #define NA_SE3_12               0x38128081
 #define NA_SE3_16               0x30160091
-#if REVISION <= 199606
-#define NA_SE3_28               0x38280081
-#else
+#if REVISION > 199606
 #define NA_SE3_28               0x39280081
+#else
+#define NA_SE3_28               0x38280081
 #endif
 #define NA_SE3_2B               0x302B0081
 #define NA_SE3_58               0x3058FF81
@@ -130,12 +153,14 @@
 #define NA_SE4_0C               0x400C0001
 #define NA_SE4_0D_0             0x400D0001
 #define NA_SE4_0D_1             0x400D1001
+#define NA_SE4_10               0x40108001
 
 #define NA_SE5_03               0x50030081
 #define NA_SE5_05               0x50050081
 #define NA_SE5_06               0x50060081
 #define NA_SE5_15_50            0x50155081
 #define NA_SE5_15_80            0x50158081
+#define NA_SE5_17               0x50178081
 #define NA_SE5_21               0x50210081
 #define NA_SE5_2D               0x502D0081
 #define NA_SE5_38               0x50388081
@@ -163,7 +188,11 @@
 #define NA_SE6_10               0x60104001
 
 #define NA_SE7_00               0x7000F881
+#if REVISION > 199606
 #define NA_SE7_02               0x7002FF81
+#else
+#define NA_SE7_02               0x7002F081
+#endif
 #define NA_SE7_03               0x7003FF81
 #define NA_SE7_04               0x70040081
 #define NA_SE7_05               0x70050081
@@ -180,7 +209,9 @@
 #define NA_SE7_13               0x70130081
 #define NA_SE7_14               0x70140081
 #define NA_SE7_15               0x70150081
+#define NA_SE7_16               0x7016A081
 #define NA_SE7_18               0x70188081
+#define NA_SE7_19               0x71198081
 #define NA_SE7_1D               0x701DB081
 #define NA_SE7_1E               0x701EFF81
 #define NA_SE7_1F               0x701FFF81

@@ -5,19 +5,28 @@ str_math = """
 #define sqrtf(x) __builtin_sqrtf(x)
 #endif
 
-#define SIN(x)  math_sin[(u16)(x) >> 4]
-#define COS(x)  math_cos[(u16)(x) >> 4]
+#define SIN(x)                  sintable[(u16)(x) >> 4]
+#define COS(x)                  costable[(u16)(x) >> 4]
+
+#define ABS(x)                  ((x) > 0 ? (x) : -(x))
+#define SQUARE(x)               ((x)*(x))
 
 #define CROSS3(x0, y0, x1, y1, x2, y2) \\
 	(((y1)-(y0))*((x2)-(x1)) - ((x1)-(x0))*((y2)-(y1)))
+
+#define DIST2(x, y)     sqrtf((x)*(x) + (y)*(y))
+#define DIST3(x, y, z)  sqrtf((x)*(x) + (y)*(y) + (z)*(z))
+
+#define MDOT3(m, i, x, y, z) ((m)[0][i]*(x) + (m)[1][i]*(y) + (m)[2][i]*(z))
+#define IDOT3(m, i, x, y, z) ((m)[i][0]*(x) + (m)[i][1]*(y) + (m)[i][2]*(z))
 """
 
 str_memory = """
 #define MEM_ALLOC_L 0
 #define MEM_ALLOC_R 1
 
-#define malloc(size)            heap_alloc(mem_heap, size)
-#define free(ptr)               heap_free(mem_heap, ptr)
+#define malloc(size)            HeapAlloc(mem_heap, size)
+#define free(ptr)               HeapFree(mem_heap, ptr)
 """
 
 str_main = """
@@ -43,6 +52,9 @@ str_Na = """
 #define Na_ObjSePlay(se, obj)   Na_SePlay(se, (obj)->s.view)
 #define Na_ObjSeStop(se, obj)   Na_SeStop(se, (obj)->s.view)
 #define Na_ObjSeKill(obj)       Na_SeKill((obj)->s.view)
+
+#define Na_Se2_00()             (NA_SE2_00 + ((Na_Random % 3) << 16))
+#define Na_Se2_2B()             (NA_SE2_2B + ((Na_Random % 5) << 16))
 
 #define Na_LockSe()             Na_PortLock(NA_HANDLE_SE, 0x037A)
 #define Na_UnlockSe()           Na_PortUnlock(NA_HANDLE_SE, 0x037A)
@@ -112,7 +124,7 @@ str_shape = """
 #define ST_SCALE                (28)
 
 #define ST_SHADOW               (40)
-#define ST_LIST                 (41)
+#define ST_BRANCH               (41)
 #define ST_CALLBACK             (42 | SF_CALLBACK)
 #define ST_BACK                 (44 | SF_CALLBACK)
 #define ST_HAND                 (46 | SF_CALLBACK)
@@ -132,22 +144,21 @@ str_shape = """
 #define SC_EXIT                 4
 #define SC_MTX                  5
 
-#define shape_get_layer(shp)  ((shp)->flag >> 8)
-#define shape_set_layer(shp, layer) \\
+#define ShpGetLayer(shp)  ((shp)->flag >> 8)
+#define ShpSetLayer(shp, layer) \\
 	((shp)->flag = (layer) << 8 | ((shp)->flag & 0xFF))
 """
 
 str_object = """
-#define DEBUG_SHOW              1
-#define DEBUG_2                 2
-#define DEBUG_ALL               0xFF
-
 #define OBJECT_MAX              240
 
 #define OBJ_HIT_MAX             4
 #define OBJ_MEM_MAX             80
 
-#define obj_get_code(obj)       (((obj)->o_actor_info & 0x00FF0000) >> 16)
+#define ObjGetArg(obj)          ((obj)->o_actorinfo >> 24)
+#define ObjSetArg(obj, arg)     ((obj)->o_actorinfo = (arg) << 24)
+#define ObjGetCode(obj)         (((obj)->o_actorinfo & 0x00FF0000) >> 16)
+#define ObjSetCode(obj, code)   ((obj)->o_actorinfo = ((code) & 0xFF) << 16)
 """
 
 str_map = """
@@ -169,12 +180,18 @@ str_map = """
 #define BGAREA_FUZZ             50
 """
 
+str_debug = """
+#define DEBUG_SHOW              1
+#define DEBUG_2                 2
+#define DEBUG_ALL               0xFF
+"""
+
 str_wipe = """
 #define WIPE_ISIN(type)         (!((type) & 1))
 #define WIPE_ISOUT(type)        ((type) & 1)
 """
 
-str_back = """
+str_background = """
 #define BACK_TW                 10
 #define BACK_TH                 8
 """
@@ -220,6 +237,8 @@ str_scene = """
 #define SCENE_MAX               8
 #define SHAPE_MAX               256
 
+#define CONNECT_MAX             4
+
 #define SN_ACTIVE               1
 
 #define STAFF_L                 0x00
@@ -230,6 +249,16 @@ str_scene = """
 #define STAFF_TR                (STAFF_T|STAFF_R)
 #define STAFF_BL                (STAFF_B|STAFF_L)
 #define STAFF_BR                (STAFF_B|STAFF_R)
+"""
+
+str_player = """
+#define PL_JUMPVOICE            0
+#define PL_NULLVOICE            ((Na_Se)-1)
+
+#define SLIP_DEFAULT            0
+#define SLIP_19                 19
+#define SLIP_20                 20
+#define SLIP_21                 21
 """
 
 str_game = """
@@ -271,36 +300,34 @@ str_game = """
 #define FADE_STAFF              (FADE_EXIT|8)
 #define FADE_LOGO               (FADE_EXIT|9)
 
-#define time_show()             time_ctrl(0)
-#define time_start()            time_ctrl(1)
-#define time_stop()             time_ctrl(2)
-#define time_hide()             time_ctrl(3)
-#define time_get()              time_ctrl(4)
+#define GmTimeShow()            GmTimeCtrl(0)
+#define GmTimeStart()           GmTimeCtrl(1)
+#define GmTimeStop()            GmTimeCtrl(2)
+#define GmTimeHide()            GmTimeCtrl(3)
+#define GmTimeGet()             GmTimeCtrl(4)
 
 typedef void FREEZECALL(short *);
 """
 
-str_save = """
-#define stage_to_course(stage)  course_table[(stage)-1]
+str_backup = """
+#define StageToCourse(stage)  coursetab[(stage)-1]
 
-#define save_hiscore_coin(course)   ((u16)(save_hiscore_get(course) & 0xFFFF))
-#define save_hiscore_file(course)   ((u16)(save_hiscore_get(course) >> 16))
+#define BuGetHiScoreCoin(course)    ((u16)(BuGetHiScore(course) & 0xFFFF))
+#define BuGetHiScoreFile(course)    ((u16)(BuGetHiScore(course) >> 16))
 
-#define save_file_star_total(file)  save_file_star_range(file, 0, COURSE_MAX-1)
-#define save_file_star_extra(file)  \\
-	save_file_star_range(file, COURSE_EXTRA-1, COURSE_MAX-1)
+#define BuFileStarTotal(file) BuFileStarRange(file, COURSE_MIN-1, COURSE_MAX-1)
+#define BuFileStarExtra(file) BuFileStarRange(file, COURSE_EXT-1, COURSE_MAX-1)
 
-#define save_write()                save_file_write(file_index-1)
-#define save_erase()                save_file_erase(file_index-1)
-#define save_isactive()             save_file_isactive(file_index-1)
-#define save_star_count(course)     save_file_star_count(file_index-1, course)
-#define save_star_range(min, max)   save_file_star_range(file_index-1, min, max)
-#define save_star_extra()           save_file_star_extra(file_index-1)
-#define save_star_total()           save_file_star_total(file_index-1)
-#define save_get_star(course)       save_file_get_star(file_index-1, course)
-#define save_set_star(course, flag) \\
-	save_file_set_star(file_index-1, course, flag)
-#define save_get_coin(course)       save_file_get_coin(file_index-1, course)
+#define BuWrite()                   BuFileWrite(file_index-1)
+#define BuErase()                   BuFileErase(file_index-1)
+#define BuIsActive()                BuFileIsActive(file_index-1)
+#define BuStarCount(course)         BuFileStarCount(file_index-1, course)
+#define BuStarRange(min, max)       BuFileStarRange(file_index-1, min, max)
+#define BuStarExtra()               BuFileStarExtra(file_index-1)
+#define BuStarTotal()               BuFileStarTotal(file_index-1)
+#define BuGetStar(course)           BuFileGetStar(file_index-1, course)
+#define BuSetStar(course, flag)     BuFileSetStar(file_index-1, course, flag)
+#define BuGetCoin(course)           BuFileGetCoin(file_index-1, course)
 """
 
 str_face = """
@@ -420,7 +447,7 @@ extern char __dummy99[];
 struct_math = [
 	[0x08, "struct", "bspline", "BSPLINE", [
 		(0x00, main.sym_var("time", "short")),
-		(0x02, main.sym_var("pos", "VECS")),
+		(0x02, main.sym_var("pos", "SVEC")),
 	]],
 ]
 
@@ -463,7 +490,7 @@ struct_memory = [
 	[0x0C, "struct", "bank", "BANK", [
 		(0x00, main.sym_var("info", "BANKINFO *")),
 		(0x04, main.sym_var("src", "const char *")),
-		(0x08, main.sym_var("buf", "char *")),
+		(0x08, main.sym_var("buf", "void *")),
 	]],
 ]
 
@@ -513,7 +540,7 @@ struct_graphics = [
 		(0x02, main.sym_var("stick_y", "short")),
 		(0x04, main.sym_var("x", "float")),
 		(0x08, main.sym_var("y", "float")),
-		(0x0C, main.sym_var("d", "float")),
+		(0x0C, main.sym_var("dist", "float")),
 		(0x10, main.sym_var("held", "u16")),
 		(0x12, main.sym_var("down", "u16")),
 		(0x14, main.sym_var("status", "OSContStatus *")),
@@ -570,16 +597,16 @@ struct_shape = [
 ]
 
 struct_shp = [
-	[0x1C, "struct", "s_callback", "S_CALLBACK", [
+	[0x1C, "struct", "scallback", "SCALLBACK", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("callback", "SHPCALL *")),
 		(0x18, main.sym_var("arg", "unsigned long")),
 	]],
-	[0x18, "struct", "s_gfx", "S_GFX", [
+	[0x18, "struct", "sgfx", "SGFX", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("gfx", "Gfx *")),
 	]],
-	[0x24, "struct", "s_scene", "S_SCENE", [
+	[0x24, "struct", "sscene", "SSCENE", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("index", "u8")),
 		(0x15, main.sym_var("screen", "u8")),
@@ -587,117 +614,117 @@ struct_shp = [
 		(0x18, main.sym_var("y", "short")),
 		(0x1A, main.sym_var("w", "short")),
 		(0x1C, main.sym_var("h", "short")),
-		(0x1E, main.sym_var("count", "u16")),
-		(0x20, main.sym_var("table", "SHAPE **")),
+		(0x1E, main.sym_var("reflen", "u16")),
+		(0x20, main.sym_var("reftab", "SHAPE **")),
 	]],
-	[0x18, "struct", "s_ortho", "S_ORTHO", [
+	[0x18, "struct", "sortho", "SORTHO", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("scale", "float")),
 	]],
-	[0x24, "struct", "s_persp", "S_PERSP", [
-		(0x00, main.sym_var("s", "S_CALLBACK")),
+	[0x24, "struct", "spersp", "SPERSP", [
+		(0x00, main.sym_var("s", "SCALLBACK")),
 		(0x1C, main.sym_var("fovy", "float")),
 		(0x20, main.sym_var("near", "short")),
 		(0x22, main.sym_var("far", "short")),
 	]],
-	[0x0C, "struct", "layer_list", "LAYER_LIST", [
+	[0x0C, "struct", "layerlist", "LAYERLIST", [
 		(0x00, main.sym_var("mtx", "Mtx *")),
 		(0x04, main.sym_var("gfx", "Gfx *")),
-		(0x08, main.sym_var("next", "struct layer_list *")),
+		(0x08, main.sym_var("next", "struct layerlist *")),
 	]],
-	[0x54, "struct", "s_layer", "S_LAYER", [
+	[0x54, "struct", "slayer", "SLAYER", [
 		(0x00, main.sym_var("s", "SHAPE")),
-		(0x14, main.sym_var("list", "LAYER_LIST *", "[LAYER_MAX]")),
-		(0x34, main.sym_var("next", "LAYER_LIST *", "[LAYER_MAX]")),
+		(0x14, main.sym_var("list", "LAYERLIST *", "[LAYER_MAX]")),
+		(0x34, main.sym_var("next", "LAYERLIST *", "[LAYER_MAX]")),
 	]],
-	[0x18, "struct", "s_lod", "S_LOD", [
+	[0x18, "struct", "slod", "SLOD", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("min", "short")),
 		(0x16, main.sym_var("max", "short")),
 	]],
-	[0x20, "struct", "s_select", "S_SELECT", [
-		(0x00, main.sym_var("s", "S_CALLBACK")),
+	[0x20, "struct", "sselect", "SSELECT", [
+		(0x00, main.sym_var("s", "SCALLBACK")),
 		(0x1C, main.sym_var("code", "s16")),
 		(0x1E, main.sym_var("index", "s16")),
 	]],
-	[0x3C, "struct", "s_camera", "S_CAMERA", [
-		(0x00, main.sym_var("s", "S_CALLBACK")),
-		(0x1C, main.sym_var("eye", "VECF")),
-		(0x28, main.sym_var("look", "VECF")),
-		(0x34, main.sym_var("mf", "MTXF *")),
+	[0x3C, "struct", "scamera", "SCAMERA", [
+		(0x00, main.sym_var("s", "SCALLBACK")),
+		(0x1C, main.sym_var("eye", "FVEC")),
+		(0x28, main.sym_var("look", "FVEC")),
+		(0x34, main.sym_var("m", "FMTX *")),
 		(0x38, main.sym_var("angz_m", "short")),
 		(0x3A, main.sym_var("angz_p", "short")),
 	]],
-	[0x24, "struct", "s_coord", "S_COORD", [
-		(0x00, main.sym_var("s", "S_GFX")),
-		(0x18, main.sym_var("pos", "VECS")),
-		(0x1E, main.sym_var("ang", "VECS")),
+	[0x24, "struct", "scoord", "SCOORD", [
+		(0x00, main.sym_var("s", "SGFX")),
+		(0x18, main.sym_var("pos", "SVEC")),
+		(0x1E, main.sym_var("ang", "SVEC")),
 	]],
-	[0x1E, "struct", "s_pos", "S_POS", [
-		(0x00, main.sym_var("s", "S_GFX")),
-		(0x18, main.sym_var("pos", "VECS")),
+	[0x1E, "struct", "spos", "SPOS", [
+		(0x00, main.sym_var("s", "SGFX")),
+		(0x18, main.sym_var("pos", "SVEC")),
 	]],
-	[0x1E, "struct", "s_ang", "S_ANG", [
-		(0x00, main.sym_var("s", "S_GFX")),
-		(0x18, main.sym_var("ang", "VECS")),
+	[0x1E, "struct", "sang", "SANG", [
+		(0x00, main.sym_var("s", "SGFX")),
+		(0x18, main.sym_var("ang", "SVEC")),
 	]],
-	[0x1C, "struct", "s_scale", "S_SCALE", [
-		(0x00, main.sym_var("s", "S_GFX")),
+	[0x1C, "struct", "sscale", "SSCALE", [
+		(0x00, main.sym_var("s", "SGFX")),
 		(0x18, main.sym_var("scale", "float")),
 	]],
 	[0x20, "struct", "actor", "ACTOR", [
-		(0x00, main.sym_var("pos", "VECS")),
-		(0x06, main.sym_var("ang", "VECS")),
+		(0x00, main.sym_var("pos", "SVEC")),
+		(0x06, main.sym_var("ang", "SVEC")),
 		(0x0C, main.sym_var("scene", "s8")),
 		(0x0D, main.sym_var("group", "s8")),
 		(0x10, main.sym_var("info", "u32")),
-		(0x14, main.sym_var("script", "O_SCRIPT *")),
+		(0x14, main.sym_var("script", "OBJLANG *")),
 		(0x18, main.sym_var("shape", "SHAPE *")),
 		(0x1C, main.sym_var("next", "struct actor *")),
 	]],
-	[0x60, "struct", "s_object", "S_OBJECT", [
+	[0x60, "struct", "sobject", "SOBJECT", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("shape", "SHAPE *")),
 		(0x18, main.sym_var("scene", "s8")),
 		(0x19, main.sym_var("group", "s8")),
-		(0x1A, main.sym_var("ang", "VECS")),
-		(0x20, main.sym_var("pos", "VECF")),
-		(0x2C, main.sym_var("scale", "VECF")),
+		(0x1A, main.sym_var("ang", "SVEC")),
+		(0x20, main.sym_var("pos", "FVEC")),
+		(0x2C, main.sym_var("scale", "FVEC")),
 		(0x38, main.sym_var("skel", "SKELETON")),
 		(0x4C, main.sym_var("actor", "ACTOR *")),
-		(0x50, main.sym_var("mf", "MTXF *")),
-		(0x54, main.sym_var("view", "VECF")),
+		(0x50, main.sym_var("m", "FMTX *")),
+		(0x54, main.sym_var("view", "FVEC")),
 	]],
-	[0x16, "struct", "s_cull", "S_CULL", [
+	[0x16, "struct", "scull", "SCULL", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("dist", "short")),
 	]],
-	[0x1E, "struct", "s_joint", "S_JOINT", [
-		(0x00, main.sym_var("s", "S_GFX")),
-		(0x18, main.sym_var("pos", "VECS")),
+	[0x1E, "struct", "sjoint", "SJOINT", [
+		(0x00, main.sym_var("s", "SGFX")),
+		(0x18, main.sym_var("pos", "SVEC")),
 	]],
-	[0x1E, "struct", "s_billboard", "S_BILLBOARD", [
-		(0x00, main.sym_var("s", "S_GFX")),
-		(0x18, main.sym_var("pos", "VECS")),
+	[0x1E, "struct", "sbillboard", "SBILLBOARD", [
+		(0x00, main.sym_var("s", "SGFX")),
+		(0x18, main.sym_var("pos", "SVEC")),
 	]],
-	[0x18, "struct", "s_shadow", "S_SHADOW", [
+	[0x18, "struct", "sshadow", "SSHADOW", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("size", "short")),
 		(0x16, main.sym_var("alpha", "u8")),
 		(0x17, main.sym_var("type", "u8")),
 	]],
-	[0x18, "struct", "s_list", "S_LIST", [
+	[0x18, "struct", "sbranch", "SBRANCH", [
 		(0x00, main.sym_var("s", "SHAPE")),
 		(0x14, main.sym_var("shape", "SHAPE *")),
 	]],
-	[0x20, "struct", "s_back", "S_BACK", [
-		(0x00, main.sym_var("s", "S_CALLBACK")),
+	[0x20, "struct", "sback", "SBACK", [
+		(0x00, main.sym_var("s", "SCALLBACK")),
 		(0x1C, main.sym_var("code", "u32")),
 	]],
-	[0x26, "struct", "s_hand", "S_HAND", [
-		(0x00, main.sym_var("s", "S_CALLBACK")),
-		(0x1C, main.sym_var("obj", "S_OBJECT *")),
-		(0x20, main.sym_var("pos", "VECS")),
+	[0x26, "struct", "shand", "SHAND", [
+		(0x00, main.sym_var("s", "SCALLBACK")),
+		(0x1C, main.sym_var("obj", "SOBJECT *")),
+		(0x20, main.sym_var("pos", "SVEC")),
 	]],
 ]
 
@@ -707,12 +734,12 @@ struct_object = [
 		(0x04, main.sym_var("prev", "struct list *")),
 	]],
 	[0x68, "struct", "objlist", "OBJLIST", [
-		(0x000, main.sym_var("s", "S_OBJECT")),
+		(0x000, main.sym_var("s", "SOBJECT")),
 		(0x060, main.sym_var("next", "struct object *")),
 		(0x064, main.sym_var("prev", "struct object *")),
 	]],
 	[0x260, "struct", "object", "OBJECT", [
-		(0x000, main.sym_var("s", "S_OBJECT")),
+		(0x000, main.sym_var("s", "SOBJECT")),
 		(0x060, main.sym_var("next", "struct object *")),
 		(0x064, main.sym_var("prev", "struct object *")),
 		(0x068, main.sym_var("parent", "struct object *")),
@@ -722,13 +749,13 @@ struct_object = [
 		(0x076, main.sym_var("hit_count", "s16")),
 		(0x078, main.sym_var("hit", "struct object *", "[OBJ_HIT_MAX]")),
 		[0x088, "union", "mem", [
-			(None, main.sym_var("s", "s16", "[2]")),
-			(None, main.sym_var("i", "s32")),
-			(None, main.sym_var("f", "f32")),
+			(None, main.sym_var("s", "short", "[2]")),
+			(None, main.sym_var("i", "int")),
+			(None, main.sym_var("f", "float")),
 			(None, main.sym_var("p", "void *")),
 		], "[OBJ_MEM_MAX]"],
 		(0x1C8, main.sym_var("_1C8", "void *")),
-		(0x1CC, main.sym_var("pc", "O_SCRIPT *")),
+		(0x1CC, main.sym_var("pc", "OBJLANG *")),
 		(0x1D0, main.sym_var("sp", "unsigned int")),
 		(0x1D4, main.sym_var("stack", "unsigned long", "[8]")),
 		(0x1F4, main.sym_var("sleep", "s16")),
@@ -738,57 +765,68 @@ struct_object = [
 		(0x200, main.sym_var("dmg_r", "float")),
 		(0x204, main.sym_var("dmg_h", "float")),
 		(0x208, main.sym_var("hit_offset", "float")),
-		(0x20C, main.sym_var("script", "O_SCRIPT *")),
+		(0x20C, main.sym_var("script", "OBJLANG *")),
 		(0x210, main.sym_var("_210", "struct object *")),
 		(0x214, main.sym_var("ride", "struct object *")),
 		(0x218, main.sym_var("map", "MAP *")),
-		(0x21C, main.sym_var("mf", "MTXF")),
+		(0x21C, main.sym_var("mtx", "FMTX")),
 		(0x25C, main.sym_var("actor_flag", "void *")),
 	]],
 	# [0x10, "struct", "pl_effect", "PL_EFFECT", [
 	# 	(0x00, main.sym_var("code", "u32")),
 	# 	(0x04, main.sym_var("flag", "u32")),
 	# 	(0x08, main.sym_var("shape", "u8")),
-	# 	(0x0C, main.sym_var("script", "O_SCRIPT *")),
+	# 	(0x0C, main.sym_var("script", "OBJLANG *")),
 	# ]],
 	[0x06, "struct", "bgdebug", "BGDEBUG", [
 		(0x00, main.sym_var("ground", "s16")),
 		(0x02, main.sym_var("roof", "s16")),
 		(0x04, main.sym_var("wall", "s16")),
 	]],
-	[0x24, "struct", "obj_splash", "OBJ_SPLASH", [
+]
+
+struct_objectlib = [
+	[0x24, "struct", "splash", "SPLASH", [
 		(0x00, main.sym_var("flag", "s16")),
 		(0x02, main.sym_var("shape", "s16")),
-		(0x04, main.sym_var("script", "O_SCRIPT *")),
-		(0x08, main.sym_var("ay_mul", "short")),
-		(0x0A, main.sym_var("p_mul", "short")),
-		(0x0C, main.sym_var("vf_add", "float")),
-		(0x10, main.sym_var("vf_mul", "float")),
-		(0x14, main.sym_var("vy_add", "float")),
-		(0x18, main.sym_var("vy_mul", "float")),
-		(0x1C, main.sym_var("s_add", "float")),
-		(0x20, main.sym_var("s_mul", "float")),
+		(0x04, main.sym_var("script", "OBJLANG *")),
+		(0x08, main.sym_var("ang_range", "short")),
+		(0x0A, main.sym_var("pos_range", "short")),
+		(0x0C, main.sym_var("velf_start", "float")),
+		(0x10, main.sym_var("velf_range", "float")),
+		(0x14, main.sym_var("vely_start", "float")),
+		(0x18, main.sym_var("vely_range", "float")),
+		(0x1C, main.sym_var("scale_start", "float")),
+		(0x20, main.sym_var("scale_range", "float")),
 	]],
-	[0x14, "struct", "obj_effect", "OBJ_EFFECT", [
+	[0x14, "struct", "chain", "CHAIN", [
+		(0x00, main.sym_var("posx", "float")),
+		(0x04, main.sym_var("posy", "float")),
+		(0x08, main.sym_var("posz", "float")),
+		(0x0C, main.sym_var("angx", "short")),
+		(0x0E, main.sym_var("angy", "short")),
+		(0x10, main.sym_var("angz", "short")),
+	]],
+	[0x14, "struct", "particle", "PARTICLE", [
 		(0x00, main.sym_var("code", "s8")),
 		(0x01, main.sym_var("count", "s8")),
 		(0x02, main.sym_var("shape", "u8")),
 		(0x03, main.sym_var("offset", "s8")),
-		(0x04, main.sym_var("vf_add", "s8")),
-		(0x05, main.sym_var("vf_mul", "s8")),
-		(0x06, main.sym_var("vy_add", "s8")),
-		(0x07, main.sym_var("vy_mul", "s8")),
+		(0x04, main.sym_var("velf_start", "s8")),
+		(0x05, main.sym_var("velf_range", "s8")),
+		(0x06, main.sym_var("vely_start", "s8")),
+		(0x07, main.sym_var("vely_range", "s8")),
 		(0x08, main.sym_var("gravity", "s8")),
 		(0x09, main.sym_var("drag", "s8")),
-		(0x0C, main.sym_var("s_add", "float")),
-		(0x10, main.sym_var("s_mul", "float")),
+		(0x0C, main.sym_var("scale_start", "float")),
+		(0x10, main.sym_var("scale_range", "float")),
 	]],
-	[0x10, "struct", "obj_hit", "OBJ_HIT", [
-		(0x00, main.sym_var("code", "u32")),
+	[0x10, "struct", "hitinfo", "HITINFO", [
+		(0x00, main.sym_var("type", "u32")),
 		(0x04, main.sym_var("offset", "u8")),
 		(0x05, main.sym_var("ap", "s8")),
 		(0x06, main.sym_var("hp", "s8")),
-		(0x07, main.sym_var("coin", "s8")),
+		(0x07, main.sym_var("ncoin", "s8")),
 		(0x08, main.sym_var("hit_r", "short")),
 		(0x0A, main.sym_var("hit_h", "short")),
 		(0x0C, main.sym_var("dmg_r", "short")),
@@ -799,14 +837,6 @@ struct_object = [
 		(0x02, main.sym_var("l", "s8")),
 		(0x03, main.sym_var("r", "s8")),
 		(0x04, main.sym_var("se", "Na_Se")),
-	]],
-	[0x0C, "struct", "debug", "DEBUG", [
-		(0x00, main.sym_var("flag", "short")),
-		(0x02, main.sym_var("x", "short")),
-		(0x04, main.sym_var("y", "short")),
-		(0x06, main.sym_var("min_y", "short")),
-		(0x08, main.sym_var("max_y", "short")),
-		(0x0A, main.sym_var("height", "short")),
 	]],
 ]
 
@@ -836,9 +866,9 @@ struct_map = [
 		(0x05, main.sym_var("area", "AREA")),
 		(0x06, main.sym_var("yl", "short")),
 		(0x08, main.sym_var("yh", "short")),
-		(0x0A, main.sym_var("v0", "VECS")),
-		(0x10, main.sym_var("v1", "VECS")),
-		(0x16, main.sym_var("v2", "VECS")),
+		(0x0A, main.sym_var("v0", "SVEC")),
+		(0x10, main.sym_var("v1", "SVEC")),
+		(0x16, main.sym_var("v2", "SVEC")),
 		(0x1C, main.sym_var("nx", "float")),
 		(0x20, main.sym_var("ny", "float")),
 		(0x24, main.sym_var("nz", "float")),
@@ -867,33 +897,33 @@ struct_map = [
 struct_camera = [
 	[0x24, "struct", "pl_camera", "PL_CAMERA", [
 		(0x00, main.sym_var("state", "u32")),
-		(0x04, main.sym_var("pos", "VECF")),
-		(0x10, main.sym_var("ang", "VECS")),
-		(0x16, main.sym_var("head_angx", "short")),
-		(0x18, main.sym_var("head_angy", "short")),
+		(0x04, main.sym_var("pos", "FVEC")),
+		(0x10, main.sym_var("ang", "SVEC")),
+		(0x16, main.sym_var("neck_angx", "short")),
+		(0x18, main.sym_var("neck_angy", "short")),
 		(0x1A, main.sym_var("eyes", "s16")),
 		(0x1C, main.sym_var("hand", "s16")),
 		(0x1E, main.sym_var("demo", "s16")),
 		(0x20, main.sym_var("obj", "OBJECT *")),
 	]],
 	[0xC0, "struct", "camdata", "CAMDATA", [
-		(0x00, main.sym_var("_00", "VECF")),
-		(0x0C, main.sym_var("_0C", "VECF")),
-		(0x18, main.sym_var("_18", "VECF")),
-		(0x24, main.sym_var("_24", "VECF")),
-		(0x30, main.sym_var("_30", "VECF")),
+		(0x00, main.sym_var("_00", "FVEC")),
+		(0x0C, main.sym_var("_0C", "FVEC")),
+		(0x18, main.sym_var("_18", "FVEC")),
+		(0x24, main.sym_var("_24", "FVEC")),
+		(0x30, main.sym_var("_30", "FVEC")),
 		(0x3C, main.sym_var("_3C", "u8")),
 		(0x3D, main.sym_var("_3D", "u8")),
 		(0x40, main.sym_var("_40", "f32")),
 		(0x44, main.sym_var("_44", "f32")),
 		(0x48, main.sym_var("_48", "f32")),
-		(0x4C, main.sym_var("_4C", "VECS")),
-		(0x52, main.sym_var("_52", "VECS")),
+		(0x4C, main.sym_var("_4C", "SVEC")),
+		(0x52, main.sym_var("_52", "SVEC")),
 		(0x58, main.sym_var("_58", "s16")),
 		(0x5A, main.sym_var("_5A", "s16")),
 		(0x5C, main.sym_var("_5C", "s16")),
-		(0x60, main.sym_var("_60", "VECF")),
-		(0x6C, main.sym_var("_6C", "VECS")),
+		(0x60, main.sym_var("_60", "FVEC")),
+		(0x6C, main.sym_var("_6C", "SVEC")),
 		(0x72, main.sym_var("_72", "s16")),
 		(0x74, main.sym_var("_74", "s16")),
 		(0x76, main.sym_var("_76", "s16")),
@@ -901,8 +931,8 @@ struct_camera = [
 		(0x7A, main.sym_var("_7A", "s16")),
 		(0x7C, main.sym_var("_7C", "s16")),
 		(0x7E, main.sym_var("_7E", "s16")),
-		(0x80, main.sym_var("look", "VECF")),
-		(0x8C, main.sym_var("eye", "VECF")),
+		(0x80, main.sym_var("look", "FVEC")),
+		(0x8C, main.sym_var("eye", "FVEC")),
 		(0x98, main.sym_var("_98", "s16")),
 		(0x9A, main.sym_var("_9A", "s16")),
 		(0x9C, main.sym_var("_9C", "s16")),
@@ -921,8 +951,8 @@ struct_camera = [
 		(0x00, main.sym_var("mode", "u8")),
 		(0x01, main.sym_var("_01", "u8")),
 		(0x02, main.sym_var("_02", "short")),
-		(0x04, main.sym_var("look", "VECF")),
-		(0x10, main.sym_var("pos", "VECF")),
+		(0x04, main.sym_var("look", "FVEC")),
+		(0x10, main.sym_var("pos", "FVEC")),
 		(0x1C, main.sym_var("_1C", "char", "[12]")),
 		(0x28, main.sym_var("center_x", "float")),
 		(0x2C, main.sym_var("center_z", "float")),
@@ -935,7 +965,7 @@ struct_camera = [
 	]],
 	[0x18, "struct", "campos", "CAMPOS", [
 		(0x00, main.sym_var("code", "s16")),
-		(0x04, main.sym_var("pos", "VECF")),
+		(0x04, main.sym_var("pos", "FVEC")),
 		(0x10, main.sym_var("_10", "f32")),
 		(0x14, main.sym_var("dist", "float")),
 	]],
@@ -944,14 +974,14 @@ struct_camera = [
 		(0x04, main.sym_var_fnc("callback", arg=(
 			"CAMERA *cam",
 		))),
-		(0x08, main.sym_var("pos", "VECS")),
-		(0x0E, main.sym_var("size", "VECS")),
+		(0x08, main.sym_var("pos", "SVEC")),
+		(0x0E, main.sym_var("size", "SVEC")),
 		(0x14, main.sym_var("ang", "short")),
 	]],
 	[0x08, "struct", "campath", "CAMPATH", [
 		(0x00, main.sym_var("code", "s8")),
 		(0x01, main.sym_var("time", "u8")),
-		(0x02, main.sym_var("pos", "VECS")),
+		(0x02, main.sym_var("pos", "SVEC")),
 	]],
 	[0x06, "struct", "camdemo", "CAMDEMO", [
 		(0x00, main.sym_var_fnc("callback", arg=(
@@ -959,6 +989,17 @@ struct_camera = [
 		))),
 		(0x04, main.sym_var("time", "s16")),
 	]],
+]
+
+struct_debug = [
+	# [0x0C, "struct", "dbprint", "DBPRINT", [
+	# 	(0x00, main.sym_var("flag", "short")),
+	# 	(0x02, main.sym_var("x", "short")),
+	# 	(0x04, main.sym_var("y", "short")),
+	# 	(0x06, main.sym_var("min_y", "short")),
+	# 	(0x08, main.sym_var("max_y", "short")),
+	# 	(0x0A, main.sym_var("height", "short")),
+	# ]],
 ]
 
 struct_wipe = [
@@ -977,7 +1018,7 @@ struct_wipe = [
 		(0x0A, main.sym_var("sy", "short")),
 		(0x0C, main.sym_var("ex", "short")),
 		(0x0E, main.sym_var("ey", "short")),
-		(0x10, main.sym_var("ang_vel", "short")),
+		(0x10, main.sym_var("rot", "short")),
 	]],
 	[0x12, "union", "wipe_data", "WIPE_DATA", [
 		(None, main.sym_var("fade", "WIPE_FADE")),
@@ -1014,8 +1055,8 @@ struct_shadow = [
 	# ]],
 ]
 
-struct_back = [
-	[0x00, "struct", "back", "BACK", [
+struct_background = [
+	[0x00, "struct", "background", "BACKGROUND", [
 		(0x00, main.sym_var("txt", "u16 *", "[BACK_TW*BACK_TH]")),
 	]],
 	# [0x10, "struct", "backdata", "BACKDATA", [
@@ -1028,32 +1069,67 @@ struct_back = [
 ]
 
 struct_water = [
-	[0x24, "struct", "water", "WATER", [
-		(0x00, main.sym_var("index", "int")),
-		(0x04, main.sym_var("texture", "int")),
-		(0x08, main.sym_var("len", "int")),
-		(0x0C, main.sym_var("data", "short *")),
-		(0x10, main.sym_var("start", "Gfx *")),
-		(0x14, main.sym_var("end", "Gfx *")),
-		(0x18, main.sym_var("draw", "Gfx *")),
-		(0x1C, main.sym_var("r", "u8")),
-		(0x1D, main.sym_var("g", "u8")),
-		(0x1E, main.sym_var("b", "u8")),
-		(0x1F, main.sym_var("a", "u8")),
-		(0x20, main.sym_var("layer", "int")),
+	[0x08, "struct", "waterinfo", "WATERINFO", [
+		(0x00, main.sym_var("code", "short")),
+		(0x04, main.sym_var("data", "short *")),
 	]],
+	# [0x24, "struct", "fluidinfo", "FLUIDINFO", [
+	# 	(0x00, main.sym_var("code", "unsigned long")),
+	# 	(0x04, main.sym_var("txt", "int")),
+	# 	(0x08, main.sym_var("n", "int")),
+	# 	(0x0C, main.sym_var("data", "short *")),
+	# 	(0x10, main.sym_var("start", "Gfx *")),
+	# 	(0x14, main.sym_var("end", "Gfx *")),
+	# 	(0x18, main.sym_var("draw", "Gfx *")),
+	# 	(0x1C, main.sym_var("r", "u8")),
+	# 	(0x1D, main.sym_var("g", "u8")),
+	# 	(0x1E, main.sym_var("b", "u8")),
+	# 	(0x1F, main.sym_var("alpha", "u8")),
+	# 	(0x20, main.sym_var("layer", "int")),
+	# ]],
 ]
 
 struct_wave = [
-	[0x78, "struct", "wavedata", "WAVEDATA", [
-		(0x00, main.sym_var("_00", "s16")),
-		(0x02, main.sym_var("_02", "s8")),
-		(0x03, main.sym_var("_03", "s8")),
-		(0x04, main.sym_var("_04", "s8")),
-		(0x05, main.sym_var("_05", "s8")),
-		(0x06, main.sym_var("_06", "s8")),
-		(0x07, main.sym_var("_07", "s8")),
-		# ...
+	[0x78, "struct", "wave", "WAVE", [
+		(0x00, main.sym_var("code", "s16")),
+		(0x02, main.sym_var("nmesh", "s8")),
+		(0x03, main.sym_var("type", "s8")),
+		(0x04, main.sym_var("stepprev", "s8")),
+		(0x05, main.sym_var("stepstat", "s8")),
+		(0x06, main.sym_var("steptrig", "s8")),
+		(0x07, main.sym_var("state", "s8")),
+		(0x08, main.sym_var("angx", "float")),
+		(0x0C, main.sym_var("angy", "float")),
+		(0x10, main.sym_var("posx", "float")),
+		(0x14, main.sym_var("posy", "float")),
+		(0x18, main.sym_var("posz", "float")),
+		(0x1C, main.sym_var("depth", "float")),
+		(0x20, main.sym_var("touchdepth", "float")),
+		(0x24, main.sym_var("enterdepth", "float")),
+		(0x28, main.sym_var("decay", "float")),
+		(0x2C, main.sym_var("touchdecay", "float")),
+		(0x30, main.sym_var("enterdecay", "float")),
+		(0x34, main.sym_var("speed", "float")),
+		(0x38, main.sym_var("touchspeed", "float")),
+		(0x3C, main.sym_var("enterspeed", "float")),
+		(0x40, main.sym_var("scale", "float")),
+		(0x44, main.sym_var("touchscale", "float")),
+		(0x48, main.sym_var("enterscale", "float")),
+		(0x4C, main.sym_var("timer", "float")),
+		(0x50, main.sym_var("centerx", "float")),
+		(0x54, main.sym_var("centery", "float")),
+		(0x58, main.sym_var("statgfx", "Gfx *")),
+		(0x5C, main.sym_var("meshlist", "short **")),
+		(0x60, main.sym_var("txtlist", "u16 **")),
+		(0x64, main.sym_var("wd", "short")),
+		(0x66, main.sym_var("ht", "short")),
+		(0x68, main.sym_var("movegfx", "Gfx *")),
+		(0x6C, main.sym_var("mode", "s8")),
+		(0x6D, main.sym_var("alpha", "u8")),
+		(0x6E, main.sym_var("diveprev", "char")),
+		(0x6F, main.sym_var("divestat", "char")),
+		(0x70, main.sym_var("divetrig", "char")),
+		(0x74, main.sym_var("size", "float")),
 	]],
 ]
 
@@ -1077,20 +1153,28 @@ struct_message = [
 ]
 
 struct_weather = [
+	[0x38, "struct", "weather", "WEATHER", [
+		(0x00, main.sym_var("flag", "char")),
+		(0x02, main.sym_var("frame", "s16")),
+		(0x04, main.sym_var("x", "int")),
+		(0x08, main.sym_var("y", "int")),
+		(0x0C, main.sym_var("z", "int")),
+		(0x10, main.sym_var("work", "int", "[10]")),
+	]],
 ]
 
 struct_tag = [
-	[0x08, "struct", "tag_obj", "TAG_OBJ", [
-		(0x00, main.sym_var("script", "O_SCRIPT *")),
+	[0x08, "struct", "tagobj", "TAGOBJ", [
+		(0x00, main.sym_var("script", "OBJLANG *")),
 		(0x04, main.sym_var("shape", "s16")),
 		(0x06, main.sym_var("code", "s16")),
 	]],
-	[0x08, "struct", "map_obj", "MAP_OBJ", [
+	[0x08, "struct", "mapobj", "MAPOBJ", [
 		(0x00, main.sym_var("index", "u8")),
 		(0x01, main.sym_var("ext", "u8")),
 		(0x02, main.sym_var("arg", "u8")),
 		(0x03, main.sym_var("shape", "u8")),
-		(0x04, main.sym_var("script", "O_SCRIPT *")),
+		(0x04, main.sym_var("script", "OBJLANG *")),
 	]],
 ]
 
@@ -1140,7 +1224,7 @@ struct_scene = [
 	[0x08, "struct", "connect", "CONNECT", [
 		(0x00, main.sym_var("flag", "u8")),
 		(0x01, main.sym_var("scene", "u8")),
-		(0x02, main.sym_var("offset", "VECS")),
+		(0x02, main.sym_var("offset", "SVEC")),
 	]],
 	[0x0A, "struct", "scene28", "SCENE28", [
 		(0x00, main.sym_var("_00", "short")),
@@ -1150,14 +1234,14 @@ struct_scene = [
 		(0x08, main.sym_var("_08", "short")),
 	]],
 	[0x08, "struct", "jet", "JET", [
-		(0x00, main.sym_var("pos", "VECS")),
+		(0x00, main.sym_var("pos", "SVEC")),
 		(0x06, main.sym_var("attr", "short")),
 	]],
 	[0x3A, "struct", "scene", "SCENE", [
 		(0x00, main.sym_var("index", "s8")),
 		(0x01, main.sym_var("flag", "s8")),
 		(0x02, main.sym_var("env", "u16")),
-		(0x04, main.sym_var("shp", "S_SCENE *")),
+		(0x04, main.sym_var("shp", "SSCENE *")),
 		(0x08, main.sym_var("map", "MAP *")),
 		(0x0C, main.sym_var("area", "AREA *")),
 		(0x10, main.sym_var("tag", "TAG *")),
@@ -1175,6 +1259,14 @@ struct_scene = [
 ]
 
 struct_player = [
+	[0x18, "struct", "bump", "BUMP", [
+		(0x00, main.sym_var("power", "float")),
+		(0x04, main.sym_var("radius", "float")),
+		(0x08, main.sym_var("posx", "float")),
+		(0x0C, main.sym_var("posz", "float")),
+		(0x10, main.sym_var("velx", "float")),
+		(0x14, main.sym_var("velz", "float")),
+	]],
 	[0x28, "struct", "pl_shape", "PL_SHAPE", [
 		(0x00, main.sym_var("state", "u32")),
 		(0x04, main.sym_var("head", "s8")),
@@ -1182,11 +1274,11 @@ struct_player = [
 		(0x06, main.sym_var("hand", "s8")),
 		(0x07, main.sym_var("wing", "s8")),
 		(0x08, main.sym_var("cap", "s16")),
-		(0x0A, main.sym_var("hold", "s8")),
+		(0x0A, main.sym_var("take", "s8")),
 		(0x0B, main.sym_var("punch", "u8")),
-		(0x0C, main.sym_var("torso_ang", "VECS")),
-		(0x12, main.sym_var("head_ang", "VECS")),
-		(0x18, main.sym_var("hand_pos", "VECF")),
+		(0x0C, main.sym_var("torso_ang", "SVEC")),
+		(0x12, main.sym_var("neck_ang", "SVEC")),
+		(0x18, main.sym_var("hand_pos", "FVEC")),
 		(0x24, main.sym_var("obj", "OBJECT *")),
 	]],
 	[0xC8, "struct", "player", "PLAYER", [
@@ -1196,8 +1288,8 @@ struct_player = [
 		(0x08, main.sym_var("effect", "u32")),
 		(0x0C, main.sym_var("state", "u32")),
 		(0x10, main.sym_var("prevstate", "u32")),
-		(0x14, main.sym_var("ground_se", "u32")),
-		(0x18, main.sym_var("mode", "u16")),
+		(0x14, main.sym_var("surface", "u32")),
+		(0x18, main.sym_var("phase", "u16")),
 		(0x1A, main.sym_var("timer", "u16")),
 		(0x1C, main.sym_var("code", "u32")),
 		(0x20, main.sym_var("stick_dist", "float")),
@@ -1205,14 +1297,14 @@ struct_player = [
 		(0x26, main.sym_var("invincible", "s16")),
 		(0x28, main.sym_var("a_timer", "u8")),
 		(0x29, main.sym_var("b_timer", "u8")),
-		(0x2A, main.sym_var("w_timer", "u8")),
-		(0x2B, main.sym_var("g_timer", "u8")),
-		(0x2C, main.sym_var("ang", "VECS")),
-		(0x32, main.sym_var("ang_vel", "VECS")),
+		(0x2A, main.sym_var("wall_timer", "u8")),
+		(0x2B, main.sym_var("jump_timer", "u8")),
+		(0x2C, main.sym_var("ang", "SVEC")),
+		(0x32, main.sym_var("rot", "SVEC")),
 		(0x38, main.sym_var("slide_ang", "short")),
-		(0x3A, main.sym_var("twirl_ang", "short")),
-		(0x3C, main.sym_var("pos", "VECF")),
-		(0x48, main.sym_var("vel", "VECF")),
+		(0x3A, main.sym_var("spin_ang", "short")),
+		(0x3C, main.sym_var("pos", "FVEC")),
+		(0x48, main.sym_var("vel", "FVEC")),
 		(0x54, main.sym_var("speed", "float")),
 		(0x58, main.sym_var("slide_x", "float")),
 		(0x5C, main.sym_var("slide_z", "float")),
@@ -1224,7 +1316,7 @@ struct_player = [
 		(0x74, main.sym_var("ground_ang", "short")),
 		(0x76, main.sym_var("water", "short")),
 		(0x78, main.sym_var("collide", "OBJECT *")),
-		(0x7C, main.sym_var("hold", "OBJECT *")),
+		(0x7C, main.sym_var("take", "OBJECT *")),
 		(0x80, main.sym_var("attach", "OBJECT *")),
 		(0x84, main.sym_var("ride", "OBJECT *")),
 		(0x88, main.sym_var("obj", "OBJECT *")),
@@ -1234,16 +1326,16 @@ struct_player = [
 		(0x98, main.sym_var("shape", "PL_SHAPE *")),
 		(0x9C, main.sym_var("cont", "CONTROLLER *")),
 		(0xA0, main.sym_var("anime", "BANK *")),
-		(0xA4, main.sym_var("hitresult", "u32")),
+		(0xA4, main.sym_var("hit_status", "u32")),
 		(0xA8, main.sym_var("coin", "s16")),
 		(0xAA, main.sym_var("star", "s16")),
 		(0xAC, main.sym_var("key", "s8")),
 		(0xAD, main.sym_var("life", "s8")),
 		(0xAE, main.sym_var("power", "s16")),
 		(0xB0, main.sym_var("waist", "short")),
-		(0xB2, main.sym_var("hurt", "u8")),
-		(0xB3, main.sym_var("heal", "u8")),
-		(0xB4, main.sym_var("squish", "u8")),
+		(0xB2, main.sym_var("damage", "u8")),
+		(0xB3, main.sym_var("recover", "u8")),
+		(0xB4, main.sym_var("press", "u8")),
 		(0xB5, main.sym_var("alpha", "u8")),
 		(0xB6, main.sym_var("cap_timer", "u16")),
 		(0xB8, main.sym_var("prevstar", "s16")),
@@ -1260,17 +1352,14 @@ struct_player = [
 		(0x10, main.sym_var("state_fall", "u32")),
 		(0x14, main.sym_var("state_slide", "u32")),
 	]],
-]
-
-struct_collision = [
-	[0x08, "struct", "collision", "COLLISION", [
-		(0x00, main.sym_var("type", "u32")),
-		(0x04, main.sym_var_fnc("callback", val="int", arg=(
-			"PLAYER *pl",
-			"u32 flag",
-			"OBJECT *obj",
-		))),
-	]],
+	# [0x08, "struct", "collision", "COLLISION", [
+	# 	(0x00, main.sym_var("type", "u32")),
+	# 	(0x04, main.sym_var_fnc("callback", val="int", arg=(
+	# 		"PLAYER *pl",
+	# 		"u32 flag",
+	# 		"OBJECT *obj",
+	# 	))),
+	# ]],
 ]
 
 struct_game = [
@@ -1283,29 +1372,29 @@ struct_game = [
 	]],
 ]
 
-struct_save = [
-	[0x04, "struct", "save_check", "SAVE_CHECK", [
+struct_backup = [
+	[0x04, "struct", "bucheck", "BUCHECK", [
 		(0x00, main.sym_var("key", "u16")),
 		(0x02, main.sym_var("sum", "u16")),
 	]],
-	[0x20, "struct", "save_data", "SAVE_DATA", [
+	[0x20, "struct", "backupinfo", "BACKUPINFO", [
 		(0x00, main.sym_var("time", "u32", "[4]")),
 		(0x10, main.sym_var("sound", "u16")),
 		(0x12, main.sym_var("pad", "char", "[10]")),
-		(0x1C, main.sym_var("check", "SAVE_CHECK")),
+		(0x1C, main.sym_var("check", "BUCHECK")),
 	]],
-	[0x38, "struct", "save_file", "SAVE_FILE", [
+	[0x38, "struct", "backupfile", "BACKUPFILE", [
 		(0x00, main.sym_var("stage", "u8")),
 		(0x01, main.sym_var("scene", "u8")),
-		(0x02, main.sym_var("pos", "VECS")),
+		(0x02, main.sym_var("pos", "SVEC")),
 		(0x08, main.sym_var("flag", "u32")),
 		(0x0C, main.sym_var("star", "u8", "[25]")),
 		(0x25, main.sym_var("coin", "u8", "[15]")),
-		(0x34, main.sym_var("check", "SAVE_CHECK")),
+		(0x34, main.sym_var("check", "BUCHECK")),
 	]],
-	[0x200, "struct", "save", "SAVE", [
-		(0x000, main.sym_var("file", "SAVE_FILE", "[4][2]")),
-		(0x1C0, main.sym_var("data", "SAVE_DATA", "[2]")),
+	[0x200, "struct", "backup", "BACKUP", [
+		(0x000, main.sym_var("file", "BACKUPFILE", "[4][2]")),
+		(0x1C0, main.sym_var("info", "BACKUPINFO", "[2]")),
 	]],
 ]
 
@@ -1336,7 +1425,7 @@ struct_object_a = [
 	]],
 	[0x14, "struct", "object_a_4", None, [
 		(0x00, main.sym_var("offset", "s32")),
-		(0x04, main.sym_var("scale", "VECF")),
+		(0x04, main.sym_var("scale", "FVEC")),
 		(0x10, main.sym_var("vel", "float")),
 	]],
 	[0x08, "struct", "object_a_5", None, [
@@ -1351,7 +1440,7 @@ struct_object_a = [
 		(0x01, main.sym_var("flag", "u8")),
 		(0x02, main.sym_var("code", "u8")),
 		(0x03, main.sym_var("shape", "u8")),
-		(0x04, main.sym_var("script", "O_SCRIPT *")),
+		(0x04, main.sym_var("script", "OBJLANG *")),
 	]],
 	[0x08, "struct", "object_a_7", None, [
 		(0x00, main.sym_var("offset", "short")),
@@ -1374,7 +1463,7 @@ struct_object_c = [
 		(0x00, main.sym_var("msg_start", "s16")),
 		(0x02, main.sym_var("msg_win", "s16")),
 		(0x04, main.sym_var("path", "PATH *")),
-		(0x08, main.sym_var("star", "VECS")),
+		(0x08, main.sym_var("star", "SVEC")),
 	]],
 	[0x0B, "struct", "object_c_1", None, [
 		(0x00, main.sym_var("scale", "float")),
@@ -1398,7 +1487,7 @@ struct_object_c = [
 	]],
 	[0x0C, "struct", "object_c_5", None, [
 		(0x00, main.sym_var("shape", "int")),
-		(0x04, main.sym_var("script", "O_SCRIPT *")),
+		(0x04, main.sym_var("script", "OBJLANG *")),
 		(0x08, main.sym_var("scale", "float")),
 	]],
 ]

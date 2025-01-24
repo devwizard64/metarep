@@ -21,7 +21,7 @@ import UNSM.symtab.object
 import UNSM.symtab.title
 import UNSM.symtab.select
 import UNSM.symtab.game
-import UNSM.symtab.back
+import UNSM.symtab.background
 import UNSM.symtab.texture
 import UNSM.symtab.weather
 import UNSM.symtab.stage
@@ -56,8 +56,10 @@ sym = {
 	"J0.ulib.data": UNSM.symtab.ulib.sym_J0_E0_ulib_data,
 	"J0.Main": UNSM.symtab.main.sym_J0_Main,
 	"J0.Gfx": UNSM.symtab.gfx.sym_J0_Gfx,
+	"J0.Object": UNSM.symtab.object.sym_J0_Object,
 	"J0.menu.text": UNSM.symtab.menu.sym_J0_menu_text,
 	"J0.menu.data": UNSM.symtab.menu.sym_J0_menu_data,
+	"J0.Weather": UNSM.symtab.weather.sym_J0_Weather,
 
 	"E0.crt0.text": UNSM.symtab.code.sym_E0_crt0_text,
 	"E0.code.text": UNSM.symtab.code.sym_E0_code_text,
@@ -122,16 +124,16 @@ sym = {
 	"E0.Select": UNSM.symtab.select.sym_E0_Select,
 	"E0.Select.Gfx": UNSM.symtab.select.sym_E0_Select,
 	"E0.Game": UNSM.symtab.game.sym_E0_Game,
-	"E0.BackA": UNSM.symtab.back.sym_E0_BackA,
-	"E0.BackB": UNSM.symtab.back.sym_E0_BackB,
-	"E0.BackC": UNSM.symtab.back.sym_E0_BackC,
-	"E0.BackD": UNSM.symtab.back.sym_E0_BackD,
-	"E0.BackE": UNSM.symtab.back.sym_E0_BackE,
-	"E0.BackF": UNSM.symtab.back.sym_E0_BackF,
-	"E0.BackG": UNSM.symtab.back.sym_E0_BackG,
-	"E0.BackH": UNSM.symtab.back.sym_E0_BackH,
-	"E0.BackI": UNSM.symtab.back.sym_E0_BackI,
-	"E0.BackJ": UNSM.symtab.back.sym_E0_BackJ,
+	"E0.BackgroundA": UNSM.symtab.background.sym_E0_BackgroundA,
+	"E0.BackgroundB": UNSM.symtab.background.sym_E0_BackgroundB,
+	"E0.BackgroundC": UNSM.symtab.background.sym_E0_BackgroundC,
+	"E0.BackgroundD": UNSM.symtab.background.sym_E0_BackgroundD,
+	"E0.BackgroundE": UNSM.symtab.background.sym_E0_BackgroundE,
+	"E0.BackgroundF": UNSM.symtab.background.sym_E0_BackgroundF,
+	"E0.BackgroundG": UNSM.symtab.background.sym_E0_BackgroundG,
+	"E0.BackgroundH": UNSM.symtab.background.sym_E0_BackgroundH,
+	"E0.BackgroundI": UNSM.symtab.background.sym_E0_BackgroundI,
+	"E0.BackgroundJ": UNSM.symtab.background.sym_E0_BackgroundJ,
 	"E0.TextureA": UNSM.symtab.texture.sym_E0_TextureA,
 	"E0.TextureB": UNSM.symtab.texture.sym_E0_TextureB,
 	"E0.TextureC": UNSM.symtab.texture.sym_E0_TextureC,
@@ -223,6 +225,16 @@ sym = {
 	"P0.code.data": UNSM.symtab.code.sym_P0_code_data,
 	"P0.ulib.text": UNSM.symtab.ulib.sym_P0_ulib_text,
 	"P0.menu.text": UNSM.symtab.menu.sym_P0_menu_text,
+
+	# "J3.crt0.text": UNSM.symtab.code.sym_J3_crt0_text,
+	# "J3.code.text": UNSM.symtab.code.sym_J3_code_text,
+	# "J3.ulib.text": UNSM.symtab.ulib.sym_J3_ulib_text,
+	# "J3.menu.text": UNSM.symtab.menu.sym_J3_menu_text,
+
+	# "C3.crt0.text": UNSM.symtab.code.sym_C3_crt0_text,
+	# "C3.code.text": UNSM.symtab.code.sym_C3_code_text,
+	# "C3.ulib.text": UNSM.symtab.ulib.sym_C3_ulib_text,
+	# "C3.menu.text": UNSM.symtab.menu.sym_C3_menu_text,
 }
 
 seg = {
@@ -234,6 +246,7 @@ seg = {
 	"E0.Title": UNSM.symtab.title.seg_E0_Title,
 	"E0.Game": UNSM.symtab.game.seg_E0_Game,
 	"E0.BoB.Gfx": UNSM.symtab.stage.seg_E0_BoB,
+	"E0.PSS.Gfx": UNSM.symtab.stage.seg_E0_PSS,
 	"E0.BitDWA": UNSM.symtab.stage.seg_E0_BitDWA,
 }
 
@@ -257,6 +270,7 @@ imm = {
 	"E0.Select.Gfx": UNSM.symtab.select.imm_E0_Select,
 	"E0.BoB.Gfx": UNSM.symtab.stage.imm_E0_BoB,
 	"E0.Ending.Gfx": UNSM.symtab.stage.imm_E0_Ending,
+	"E0.PSS.Gfx": UNSM.symtab.stage.imm_E0_PSS,
 	"E0.Audioctl": UNSM.symtab.audio.imm_E0_Audioctl,
 	"E0.Audiotbl": UNSM.symtab.audio.imm_E0_Audiotbl,
 	"E0.Audioseq": UNSM.symtab.audio.imm_E0_Audioseq,
@@ -567,7 +581,7 @@ def s_object(name, lst):
 def s_shape_p(seg, start, end, name):
 	return [main.s_call, [
 		s_dirfile(os.path.join("shape", name), "prg.sx"),
-			[asm.s_script, seg, start, end, 0],
+			[asm.s_prglang, seg, start, end],
 		s_writepop(),
 	]]
 
@@ -620,7 +634,7 @@ def s_stagebin(seg, gfx_size, prg_size, shp_size, name, p="", s=""):
 				[main.s_str, "\n"],
 				[main.s_str, str_data],
 				[main.s_str, "\n"],
-				[asm.s_script, seg, prg_start, prg_end, 0],
+				[asm.s_prglang, seg, prg_start, prg_end],
 			[main.s_write],
 			[main.s_file, "shp.c"],
 				s_include(["sm64/shplang"]),
@@ -628,7 +642,7 @@ def s_stagebin(seg, gfx_size, prg_size, shp_size, name, p="", s=""):
 				[main.s_str, s],
 				[main.s_str, "\n"],
 				[ultra.c.s_data, seg, shp_start, shp_end, [
-					[0, 1, 1, c.d_s_script, shp_end],
+					[0, 1, 1, c.d_shplang, shp_end],
 				]],
 			[main.s_write],
 		[main.s_pop],
@@ -959,10 +973,10 @@ libultra_src_PR = [
 			[main.s_str, ".endif\n"],
 			[ultra.asm.s_code, "F.gspFast3D_fifo.text", 0x04001254, 0x04001258, 1, False, False],
 			[ultra.asm.s_code, "D.gspFast3D_fifo.text", 0x04001254, 0x04001310, 1, False, False],
-			[main.s_str, ".if REVISION <= 199609\n"],
-			[ultra.asm.s_code, "D.gspFast3D_fifo.text", 0x04001310, 0x04001314, 1, False, False],
-			[main.s_str, ".else\n"],
+			[main.s_str, ".if REVISION > 199609\n"],
 			[ultra.asm.s_code, "F.gspFast3D_fifo.text", 0x04001314, 0x04001318, 1, False, False],
+			[main.s_str, ".else\n"],
+			[ultra.asm.s_code, "D.gspFast3D_fifo.text", 0x04001310, 0x04001314, 1, False, False],
 			[main.s_str, ".endif\n"],
 			[ultra.asm.s_code, "D.gspFast3D_fifo.text", 0x04001314, 0x04001370, 1, False, False],
 			[main.s_str, "\n.if REVISION <= 199610\n"],
@@ -1054,15 +1068,15 @@ libultra_src_PR = [
 				[ 1, 1, ultra.asm.d_ubyte], # DL no
 			]],
 			[main.s_str, ".endif\n\n"],
-			[main.s_str, ".if REVISION <= 199610\n"],
-			[main.s_str, ".align 2\n"],
-			[ultra.asm.s_data, "D.gspFast3D_fifo.data", 0x04000112, 0x04000114, [
-				[ 1, 1, ultra.asm.d_uhalf, "0x%04X"], # perspnorm
-			]],
-			[main.s_str, ".else\n"],
+			[main.s_str, ".if REVISION > 199610\n"],
 			[main.s_str, ".align 4\n"],
 			[ultra.asm.s_data, "F.gspFast3D_fifo.data", 0x04000110, 0x04000114, [
 				[ 2, 1, ultra.asm.d_uhalf, "0x%04X"], # perspnorm
+			]],
+			[main.s_str, ".else\n"],
+			[main.s_str, ".align 2\n"],
+			[ultra.asm.s_data, "D.gspFast3D_fifo.data", 0x04000112, 0x04000114, [
+				[ 1, 1, ultra.asm.d_uhalf, "0x%04X"], # perspnorm
 			]],
 			[main.s_str, ".endif\n"],
 			[main.s_str, "\n.align 4\n"],
@@ -1188,116 +1202,210 @@ include_code = [
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_main],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033A580, 0x8033AF90],
-		[ultra.c.s_extern, "E0.code.data", 0x8032D560, 0x8032D5C4],
+		[ultra.c.s_extern, "E0.code.data", 0x8033A580, 0x8033AF90], # main
+		[ultra.c.s_extern, "E0.code.data", 0x8032D560, 0x8032D5C4], # main
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80246050, 0x80246E68],
+		[ultra.c.s_extern, "E0.code.text", 0x80246050, 0x80246E68], # main
 	]),
 	s_header("graphics", [
 		[main.s_str, header.str_graphics],
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_graphics],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8038F800, 0x80400000],
-		[ultra.c.s_extern, "E0.code.data", 0x80000400, 0x80025C00],
-		[ultra.c.s_extern, "E0.code.data", 0x80227000, 0x80246000],
+		[ultra.c.s_extern, "E0.code.data", 0x8038F800, 0x80400000], # cimg
+		[ultra.c.s_extern, "E0.code.data", 0x80000400, 0x80025C00], # zimg
+		[ultra.c.s_extern, "E0.code.data", 0x80227000, 0x80246000], # buffer
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033AF90, 0x8033B09C],
-		[ultra.c.s_extern, "E0.code.data", 0x8032D5D0, 0x8032D5FC],
+		[ultra.c.s_extern, "E0.code.data", 0x8033AF90, 0x8033B09C], # graphics
+		[ultra.c.s_extern, "E0.code.data", 0x8032D5D0, 0x8032D5FC], # graphics
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80246E70, 0x80248C3C],
+		[ultra.c.s_extern, "E0.code.text", 0x80246E70, 0x80248C3C], # graphics
 	]),
 	s_header("audio", [
 		[main.s_str, header.str_audio],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B0A0, 0x8033B170],
-		[ultra.c.s_extern, "E0.code.data", 0x8032D600, 0x8032D6C1],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B0A0, 0x8033B170], # audio
+		[ultra.c.s_extern, "E0.code.data", 0x8032D600, 0x8032D6C1], # audio
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80248C40, 0x802495DC],
+		[ultra.c.s_extern, "E0.code.text", 0x80248C40, 0x802495DC], # audio
 	]),
 	s_header("game", [
 		[main.s_str, header.str_game],
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_game],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B170, 0x8033B26F],
-		[ultra.c.s_extern, "E0.code.data", 0x8032D6D0, 0x8032D948],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B170, 0x8033B26F], # game
+		[ultra.c.s_extern, "E0.code.data", 0x8032D6D0, 0x8032D948], # game
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x802495E0, 0x8024BFE4],
-	]),
-	s_header("collision", [
-		[ultra.c.s_struct, header.struct_collision],
-		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B270, 0x8033B274],
-		[ultra.c.s_extern, "E0.code.data", 0x8032D950, 0x8032DA9C],
-		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x8024BFF0, 0x8025093C],
+		[ultra.c.s_extern, "E0.code.text", 0x802495E0, 0x8024BFE4], # game
 	]),
 	s_header("player", [
+		[main.s_str, header.str_player],
+		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_player],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B280, 0x8033B400],
-		[ultra.c.s_extern, "E0.code.data", 0x8032DAA0, 0x8032DD6A],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B270, 0x8033B274], # collision
+		[ultra.c.s_extern, "E0.code.data", 0x8032D950, 0x8032DA9C], # collision
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80250940, 0x80277ED4],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B280, 0x8033B284], # player
+		[ultra.c.s_extern, "E0.code.data", 0x8032DAA0, 0x8032DAE8], # player
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B290, 0x8033B294], # physics
+		[ultra.c.s_extern, "E0.code.data", 0x8032DAF0, 0x8032DB28], # physics
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B2A0, 0x8033B2C0], # pldemo
+		[ultra.c.s_extern, "E0.code.data", 0x8032DB30, 0x8032DC50], # pldemo
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B2C0, 0x8033B340], # plmove
+		[ultra.c.s_extern, "E0.code.data", 0x8032DC50, 0x8032DD28], # plmove
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B340, 0x8033B348], # plswim
+		[ultra.c.s_extern, "E0.code.data", 0x8032DD30, 0x8032DD40], # plswim
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8032DD40, 0x8032DD48], # pltake
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B350, 0x8033B400], # callback
+		[ultra.c.s_extern, "E0.code.data", 0x8032DD50, 0x8032DD6A], # callback
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x8024BFF0, 0x8025093C], # collision
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x80250940, 0x8025507C], # player
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x80255080, 0x80256DFC], # physics
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x80256E00, 0x80257198], # pldemo
+		[ultra.c.s_extern, "E0.code.text", 0x80257270, 0x8025DD68], # pldemo
+		[ultra.c.s_extern, "E0.code.text", 0x8025DD70, 0x802608AC], # plspec
+		[ultra.c.s_extern, "E0.code.text", 0x802608B0, 0x80263E5C], # plwait
+		[ultra.c.s_extern, "E0.code.text", 0x80263E60, 0x80269F38], # plmove
+		[ultra.c.s_extern, "E0.code.text", 0x80269F40, 0x80270104], # pljump
+		[ultra.c.s_extern, "E0.code.text", 0x80270110, 0x80274EAC], # plswim
+		[ultra.c.s_extern, "E0.code.text", 0x80274EB0, 0x802761D0], # pltake
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x8027657C, 0x802770A4], # callback
 	]),
 	s_header("memory", [
 		[main.s_str, header.str_memory],
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_memory],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x801C1000, 0x801CE000],
+		[ultra.c.s_extern, "E0.code.data", 0x801C1000, 0x801CE000], # timg
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B400, 0x8033B498],
-		[ultra.c.s_extern, "E0.code.data", 0x8032DD70, 0x8032DD74],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B400, 0x8033B498], # memory
+		[ultra.c.s_extern, "E0.code.data", 0x8032DD70, 0x8032DD74], # memory
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80277EE0, 0x80279158],
-		[ultra.c.s_extern, "E0.code.text", 0x8027F4E0, 0x8027F584],
+		[ultra.c.s_extern, "E0.code.text", 0x80277EE0, 0x80279158], # memory
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x8027F4E0, 0x8027F584], # slidec
 	]),
-	s_header("save", [
-		[main.s_str, header.str_save],
+	s_header("backup", [
+		[main.s_str, header.str_backup],
 		[main.s_str, "\n"],
-		[ultra.c.s_struct, header.struct_save],
+		[ultra.c.s_struct, header.struct_backup],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033B4A0, 0x8033B4A7],
-		[ultra.c.s_extern, "E0.code.data", 0x8032DD80, 0x8032DDBE],
+		[ultra.c.s_extern, "E0.code.data", 0x8033B4A0, 0x8033B4A7], # backup
+		[ultra.c.s_extern, "E0.code.data", 0x8032DD80, 0x8032DDBE], # backup
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80279160, 0x8027A7C4],
+		[ultra.c.s_extern, "E0.code.text", 0x80279160, 0x8027A7C4], # backup
 	]),
 	s_header_code("E0.code.text", 0x8027A7D0, 0x8027B6C0, "E0.code.data", 0x8032DDC0, 0x8032DE70, "E0.code.data", 0x8033B4B0, 0x8033BAE0, "scene", header.struct_scene, header.str_scene),
 	s_header_code("E0.code.text", 0x8027B6C0, 0x8027E3DC, "E0.code.data", 0x8032DE70, 0x8032DF0C, "E0.code.data", 0x8033BAE0, 0x8033C38C, "draw"),
 	s_header_code("E0.code.text", 0x8027E3E0, 0x8027F4D4, "E0.code.data", 0x8032DF10, 0x8032DF1C, "E0.code.data", 0x8033C390, 0x8033C520, "time", header.struct_time, header.str_time),
-	s_header_code("E0.code.text", 0x8027F590, 0x8029C764, "E0.code.data", 0x8032DF20, 0x8032FEB4, "E0.code.data", 0x8033C520, 0x8033CBE0, "camera", header.struct_camera), # end is wrong
+	s_header("camera", [
+		[ultra.c.s_struct, header.struct_camera],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x8033C520, 0x8033CBE0], # camera / end is wrong
+		[ultra.c.s_extern, "E0.code.data", 0x8032DF20, 0x8032FEB4], # camera
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x8027F590, 0x80287D30], # camera
+		[ultra.c.s_extern, "E0.code.text", 0x80287DC0, 0x8029AA3C], # camera
+		[ultra.c.s_extern, "E0.code.text", 0x8029AB94, 0x8029C764], # camera
+	]),
 	s_header("course", [
-		[ultra.c.s_extern, "E0.code.text", 0x8029C770, 0x8029C780],
+		[ultra.c.s_extern, "E0.code.text", 0x8029C770, 0x8029C780], # course
 	]),
 	s_header("object", [
 		[main.s_str, header.str_object],
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_object],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x8033CBE0, 0x80361274],
-		[ultra.c.s_extern, "E0.code.data", 0x80361290, 0x803612AC],
-		[ultra.c.s_extern, "E0.code.data", 0x8032FEC0, 0x80330018],
-		[ultra.c.s_extern, "E0.code.data", 0x80330E20, 0x80330EB2],
+		[ultra.c.s_extern, "E0.code.data", 0x8033CBE0, 0x80361266], # object
+		[ultra.c.s_extern, "E0.code.data", 0x8032FEC0, 0x8032FFFC], # object
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x8029C780, 0x802A5618],
-		[ultra.c.s_extern, "E0.code.text", 0x802C89F0, 0x802CB5B4],
+		[ultra.c.s_extern, "E0.code.text", 0x8029C780, 0x8029D884], # object
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802C97D0, 0x802CA03C], # objlist
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802C8F40, 0x802C97C8], # hitcheck
 	]),
-	s_header_code("E0.code.text", 0x802A5620, 0x802C89F0, "E0.code.data", 0x80330020, 0x80330E1C, "E0.code.data", 0x80361280, 0x80361282, "object_a", header.struct_object_a),
-	s_header_code("E0.code.text", 0x802CB5C0, 0x802CD27C, "E0.code.data", 0x80330EC0, 0x80330ED8, "E0.code.data",          0,          0, "wipe", header.struct_wipe, header.str_wipe),
+	s_header("objectlib", [
+		[ultra.c.s_struct, header.struct_objectlib],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x80361270, 0x80361274], # objectlib
+		[ultra.c.s_extern, "E0.code.data", 0x80330000, 0x80330018], # objectlib
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x8029D890, 0x8029D890], # objectlib
+		[ultra.c.s_extern, "E0.code.text", 0x8029DCD4, 0x802A45E4], # objectlib
+		[ultra.c.s_extern, "E0.code.text", 0x802A46CC, 0x802A5618], # objectlib
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802CA040, 0x802CA370], # objsound
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x80330E20, 0x80330E38], # ride
+		[ultra.c.s_extern, "E0.code.text", 0x802C89F0, 0x802C8F40], # ride
+	]),
+	s_header("debug", [
+		[main.s_str, header.str_debug],
+		[main.s_str, "\n"],
+		[ultra.c.s_struct, header.struct_debug],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x80361290, 0x803612AC], # debug
+		[ultra.c.s_extern, "E0.code.data", 0x80330E40, 0x80330EB2], # debug
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802CA370, 0x802CB5B4], # debug
+	]),
+	s_header("object_a", [
+		[ultra.c.s_struct, header.struct_object_a],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x80361280, 0x80361282], # object_a
+		[ultra.c.s_extern, "E0.code.data", 0x80330020, 0x80330E1C], # object_a
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802A5620, 0x802A719C], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802A7230, 0x802B1BB0], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802B1C54, 0x802B798C], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802B7A20, 0x802B7C64], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802B7E68, 0x802BA2B0], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802BA2F8, 0x802BFBAC], # object_a
+		[ultra.c.s_extern, "E0.code.text", 0x802BFCD8, 0x802C89F0], # object_a
+	]),
+	s_header_code("E0.code.text", 0x802CB5C0, 0x802CD1E8, "E0.code.data", 0x80330EC0, 0x80330ED8, "E0.code.data",          0,          0, "wipe", header.struct_wipe, header.str_wipe),
 	s_header_code("E0.code.text", 0x802CD280, 0x802CF5A4, "E0.code.data", 0x80330EE0, 0x80330EF8, "E0.code.data", 0x803612B0, 0x803612B6, "shadow", header.struct_shadow),
-	s_header_code("E0.code.text", 0x802CF5B0, 0x802D007C, "E0.code.data", 0x80330F00, 0x80330F2E, "E0.code.data", 0x803612C0, 0x803612E0, "back", header.struct_back, header.str_back),
-	s_header_code("E0.code.text", 0x802D0080, 0x802D2208, "E0.code.data", 0x80330F30, 0x803312F0, "E0.code.data", 0x803612E0, 0x803612E2, "water", header.struct_water),
-	s_header_code("E0.code.text", 0x802D2210, 0x802D29BC, "E0.code.data", 0x803312F0, 0x803312FC, "E0.code.data", 0x803612F0, 0x803612F1, "objshape"),
-	s_header_code("E0.code.text", 0x802D29C0, 0x802D5E00, "E0.code.data", 0x80331300, 0x80331360, "E0.code.data", 0x80361300, 0x8036131D, "wave", header.struct_wave),
+	s_header_code("E0.code.text", 0x802CF5B0, 0x802D007C, "E0.code.data", 0x80330F00, 0x80330F2E, "E0.code.data", 0x803612C0, 0x803612E0, "background", header.struct_background, header.str_background),
+	s_header("water", [
+		[ultra.c.s_struct, header.struct_water],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x803612E0, 0x803612E2], # water
+		[ultra.c.s_extern, "E0.code.data", 0x80330F30, 0x803312F0], # water
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802D0254, 0x802D104C], # water
+		[ultra.c.s_extern, "E0.code.text", 0x802D1330, 0x802D1B70], # water
+	]),
+	s_header_code("E0.code.text", 0x802D2210, 0x802D2360, "E0.code.data", 0x803312F0, 0x803312FC, "E0.code.data", 0x803612F0, 0x803612F1, "objshape"),
+	s_header_code("E0.code.text", 0x802D29C0, 0x802D5B98, "E0.code.data", 0x80331300, 0x80331360, "E0.code.data", 0x80361300, 0x8036131D, "wave", header.struct_wave),
 	s_header_code("E0.code.text", 0x802D5E00, 0x802D6F18, "E0.code.data", 0x80331360, 0x80331364, "E0.code.data", 0x80361320, 0x803613F0, "dprint", header.struct_dprint),
 	s_header_code("E0.code.text", 0x802D6F20, 0x802DDDEC, "E0.code.data", 0x80331370, 0x8033174C, "E0.code.data", 0x803613F0, 0x803613FF, "message", header.struct_message, header.str_message),
 	s_header_code("E0.code.text", 0x802DDDF0, 0x802E2094, "E0.code.data", 0x80331750, 0x803317D8, "E0.code.data", 0x80361400, 0x80361440, "weather", header.struct_weather),
 	s_header_code("E0.code.text", 0x802E20A0, 0x802E2CF0, "E0.code.data", 0x803317E0, 0x803325E8, "E0.code.data",          0,          0, "tag", header.struct_tag, header.str_tag),
 	s_header_code("E0.code.text", 0x802E2CF0, 0x802E3E50, "E0.code.data", 0x803325F0, 0x8033260C, "E0.code.data", 0x80361440, 0x80361442, "hud", header.struct_hud, header.str_hud),
 	s_header_code("E0.code.text", 0x802E3E50, 0x802F972C, "E0.code.data", 0x80332610, 0x8033283C, "E0.code.data", 0x80361450, 0x80361454, "object_b", header.struct_object_b),
-	s_header_code("E0.code.text", 0x802F9730, 0x80314A2C, "E0.code.data", 0x80332840, 0x80332E4C, "E0.code.data", 0x80361460, 0x8036148C, "object_c", header.struct_object_c),
+	s_header("object_c", [
+		[ultra.c.s_struct, header.struct_object_c],
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.data", 0x80361460, 0x8036148C], # object_c
+		[ultra.c.s_extern, "E0.code.data", 0x80332840, 0x80332E4C], # object_c
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.code.text", 0x802F9730, 0x8030D93C], # object_c
+		[ultra.c.s_extern, "E0.code.text", 0x8030DA14, 0x80314A2C], # object_c
+	]),
 ]
 
 include_ulib = [
@@ -1306,10 +1414,12 @@ include_ulib = [
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_math],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038BC90, 0x8038BC9C],
-		[ultra.c.s_extern, "E0.ulib.data", 0x80385F90, 0x8038B802],
+		[ultra.c.s_extern, "E0.ulib.data", 0x80386000, 0x8038B802], # mathtbl
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.text", 0x80378800, 0x8037B21C],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038BC90, 0x8038BC9C], # math
+		[ultra.c.s_extern, "E0.ulib.data", 0x80385F90, 0x80385FF8], # math
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.ulib.text", 0x80378800, 0x8037B21C], # math
 	]),
 	s_header("shape", [
 		[main.s_str, header.str_shape],
@@ -1320,54 +1430,38 @@ include_ulib = [
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_shp],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038B810, 0x8038B810],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038B810, 0x8038B810], # shape
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.text", 0x8037B220, 0x8037CB60],
+		[ultra.c.s_extern, "E0.ulib.text", 0x8037B220, 0x8037CB60], # shape
 	]),
 	s_header("map", [
 		[main.s_str, header.str_map],
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_map],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038BE30, 0x8038EED4],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038B9B0, 0x8038B9B0],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038BE30, 0x8038BE90], # bgcheck
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.text", 0x80380690, 0x80383B6C],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038BE90, 0x8038EED4], # bgload
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.ulib.text", 0x80380690, 0x8038248C], # bgcheck
+		[main.s_str, "\n"],
+		[ultra.c.s_extern, "E0.ulib.text", 0x80382490, 0x80383B6C], # bgload
 	]),
 	s_header("script", [
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038BCA0, 0x8038BE2C],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038EEE0, 0x8038EEE2],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038B810, 0x8038B9AC],
-		[ultra.c.s_extern, "E0.ulib.data", 0x8038B9B0, 0x8038BA90],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038BCA0, 0x8038BD9C], # shplang
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038B810, 0x8038B894], # shplang
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.ulib.text", 0x8037CB60, 0x80380684],
-		[ultra.c.s_extern, "E0.ulib.text", 0x80383B70, 0x80385F88],
-	]),
-]
-
-include_menu = [
-	s_header("title", [
-		[ultra.c.s_extern, "E0.menu.data", 0x801A7830, 0x801A7C3C],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038BDA0, 0x8038BE2C], # prglang
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038B8A0, 0x8038B9AC], # prglang
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.menu.text", 0x8016F000, 0x8016F670],
-	]),
-	s_header("titlebg", [
-		[ultra.c.s_extern, "E0.menu.data", 0x801B99E0, 0x801B99F0],
-		[ultra.c.s_extern, "E0.menu.data", 0x801A7C70, 0x801A7D10],
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038EEE0, 0x8038EEE2], # objlang
+		[ultra.c.s_extern, "E0.ulib.data", 0x8038B9B0, 0x8038BA90], # objlang
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.menu.text", 0x8016F670, 0x80170280],
-	]),
-	s_header("fileselect", [
-		[ultra.c.s_extern, "E0.menu.data", 0x801B99F0, 0x801B9A7A],
-		[ultra.c.s_extern, "E0.menu.data", 0x801A7D10, 0x801A7F3E],
+		[ultra.c.s_extern, "E0.ulib.text", 0x8037CB60, 0x8037E19C], # shplang
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.menu.text", 0x80170280, 0x801768E0],
-	]),
-	s_header("starselect", [
-		[ultra.c.s_extern, "E0.menu.data", 0x801B9A80, 0x801B9AA4],
-		[ultra.c.s_extern, "E0.menu.data", 0x801A81A0, 0x801A81B6],
+		[ultra.c.s_extern, "E0.ulib.text", 0x8037E1A0, 0x80380684], # prglang
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.menu.text", 0x801768E0, 0x80177710],
+		[ultra.c.s_extern, "E0.ulib.text", 0x80383B70, 0x80385F88], # objlang
 	]),
 ]
 
@@ -1377,21 +1471,14 @@ include_audio = [
 		[main.s_str, "\n"],
 		[ultra.c.s_struct, header.struct_Na],
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0x801CE000, 0x80200200],
+		[ultra.c.s_extern, "E0.code.data", 0x801CE000, 0x80200200], # buffer
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.data", 0, 0],
-		[ultra.c.s_extern, "E0.code.data", 0x80332E50, 0x80335010],
+		[ultra.c.s_extern, "E0.code.data", 0x80220DA0, 0x80226CD0], # audio/work
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.code.text", 0x80314A30, 0x80322364],
-	]),
-]
-
-include_face = [
-	s_header("face", [
-		[ultra.c.s_extern, "E0.menu.data", 0, 0],
-		[ultra.c.s_extern, "E0.menu.data", 0x801A81E0, 0x801A81E0],
+		[ultra.c.s_extern, "E0.code.data", 0x80361490, 0x80364BA0], # audio/game
+		[ultra.c.s_extern, "E0.code.data", 0x80332E50, 0x80335010], # audio/driver..audio/game
 		[main.s_str, "\n"],
-		[ultra.c.s_extern, "E0.menu.text", 0x80177710, 0x801A7830],
+		[ultra.c.s_extern, "E0.code.text", 0x80314A30, 0x80322364], # audio/driver..audio/game
 	]),
 ]
 
@@ -1400,19 +1487,19 @@ src_code = [
 	# s_code("E0.code.text", 0x80246E70, 0x80248C3C, "graphics"),
 	# s_code("E0.code.text", 0x80248C40, 0x802495DC, "audio"),
 	# s_code("E0.code.text", 0x802495E0, 0x8024BFE4, "game"),
-	s_code("E0.code.text", 0x8024BFF0, 0x8025093C, "collision"),
-	s_code("E0.code.text", 0x80250940, 0x8025507C, "player"),
-	s_code("E0.code.text", 0x80255080, 0x80256DFC, "physics"),
+	# s_code("E0.code.text", 0x8024BFF0, 0x8025093C, "collision"),
+	# s_code("E0.code.text", 0x80250940, 0x8025507C, "player"),
+	# s_code("E0.code.text", 0x80255080, 0x80256DFC, "physics"),
 	s_code("E0.code.text", 0x80256E00, 0x8025DD68, "pldemo"),
-	s_code("E0.code.text", 0x8025DD70, 0x802608AC, "plhang"),
+	s_code("E0.code.text", 0x8025DD70, 0x802608AC, "plspec"),
 	s_code("E0.code.text", 0x802608B0, 0x80263E5C, "plwait"),
 	s_code("E0.code.text", 0x80263E60, 0x80269F38, "plmove", [], str_fp),
 	s_code("E0.code.text", 0x80269F40, 0x80270104, "pljump"),
 	s_code("E0.code.text", 0x80270110, 0x80274EAC, "plswim"),
-	s_code("E0.code.text", 0x80274EB0, 0x802761D0, "plhold"),
+	s_code("E0.code.text", 0x80274EB0, 0x802761D0, "pltake"),
 	# s_code("E0.code.text", 0x802761D0, 0x80277ED4, "callback"),
 	# s_code("E0.code.text", 0x80277EE0, 0x80279158, "memory"),
-	# s_code("E0.code.text", 0x80279160, 0x8027A7C4, "save"),
+	# s_code("E0.code.text", 0x80279160, 0x8027A7C4, "backup"),
 	# s_code("E0.code.text", 0x8027A7D0, 0x8027B6C0, "scene"),
 	# s_code("E0.code.text", 0x8027B6C0, 0x8027E3DC, "draw"),
 	# s_code("E0.code.text", 0x8027E3E0, 0x8027F4D4, "time"),
@@ -1422,7 +1509,7 @@ src_code = [
 
 	# s_code("E0.code.text", 0x8029C770, 0x8029C780, "course"),
 	# s_code("E0.code.text", 0x8029C780, 0x8029D884, "object", [], str_fp),
-	s_code("E0.code.text", 0x8029D890, 0x802A5618, "objlib", [], str_fp),
+	# s_code("E0.code.text", 0x8029D890, 0x802A5618, "objectlib", [], str_fp),
 	s_code("E0.code.text", 0x802A5620, 0x802C89F0, "object_a", [], str_fp),
 	# s_code("E0.code.text", 0x802C89F0, 0x802C8F40, "ride"),
 	# s_code("E0.code.text", 0x802C8F40, 0x802C97C8, "hitcheck"),
@@ -1432,15 +1519,15 @@ src_code = [
 
 	# s_code("E0.code.text", 0x802CB5C0, 0x802CD27C, "wipe", [], str_fp),
 	# s_code("E0.code.text", 0x802CD280, 0x802CF5A4, "shadow", [], str_fp),
-	# s_code("E0.code.text", 0x802CF5B0, 0x802D007C, "back", [], str_fp),
-	s_code("E0.code.text", 0x802D0080, 0x802D2208, "water", [], str_fp),
+	# s_code("E0.code.text", 0x802CF5B0, 0x802D007C, "background", [], str_fp),
+	# s_code("E0.code.text", 0x802D0080, 0x802D2208, "water", [], str_fp),
 	# s_code("E0.code.text", 0x802D2210, 0x802D29BC, "objshape", [], str_fp),
-	s_code("E0.code.text", 0x802D29C0, 0x802D5E00, "wave", [], str_fp),
+	# s_code("E0.code.text", 0x802D29C0, 0x802D5E00, "wave", [], str_fp),
 
 	# s_code("E0.code.text", 0x802D5E00, 0x802D6F18, "dprint"),
 	# s_code("E0.code.text", 0x802D6F20, 0x802DDDEC, "message", [], str_fp),
-	s_code("E0.code.text", 0x802DDDF0, 0x802DFD50, "weather"),
-	s_code("E0.code.text", 0x802DFD50, 0x802E2094, "lava"),
+	# s_code("E0.code.text", 0x802DDDF0, 0x802DFD50, "weather"),
+	# s_code("E0.code.text", 0x802DFD50, 0x802E2094, "lava"),
 	# s_code("E0.code.text", 0x802E20A0, 0x802E2CF0, "tag"),
 	# s_code("E0.code.text", 0x802E2CF0, 0x802E3E50, "hud"),
 	s_code("E0.code.text", 0x802E3E50, 0x802F972C, "object_b", [], str_fp),
@@ -1539,35 +1626,35 @@ src_code = [
 		# ]],
 		# [main.s_str, "#endif\n"],
 	[main.s_write],
-	s_data("E0.code.data", 0x8032D950, 0x8032DA9C, 0x803361B0, 0x8033641C, 0x8033B270, 0x8033B274, "collision.data", ["sm64"], [
-		[0, -31, 1, c.d_collision],
-		[0, -18, 1, ultra.c.d_u32, "0x%08X"],
-		[0, 3, ultra.c.d_bool_u8],
-	], [
-		[0, -152, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0, 3, 1, ultra.c.d_f32],
-	]),
-	s_data("E0.code.data", 0x8032DAA0, 0x8032DAE8, 0x80336420, 0x8033666C, 0x8033B280, 0x8033B284, "player.data", ["sm64"], [
-		[1, -7, 6, ultra.c.d_s8],
-		[0, 1, 2, None],
-		[0, -4, 4, ultra.c.d_u8],
-		[0, 1, 4, None],
-		[0, 1, 1, ultra.c.d_u64, "0x%016X"], # bin
-	], [
-		[0,   3, 4, "asciz"],
-		[0, -90, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0,  13, 1, ultra.c.d_f32],
-		[0, -33, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0,   5, 1, ultra.c.d_f32],
-	]),
-	s_data("E0.code.data", 0x8032DAF0, 0x8032DB28, 0x80336670, 0x803366C4, 0x8033B290, 0x8033B294, "physics.data", ["sm64"], [
-		[1, 1, 3, ultra.c.d_s16], [0, 1, 2, None],
-		[0, 1, c.d_bgface],
-	], [
-		[0,   2, 1, ultra.c.d_f32],
-		[0, -13, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0,   6, 1, ultra.c.d_f32],
-	]),
+	# s_data("E0.code.data", 0x8032D950, 0x8032DA9C, 0x803361B0, 0x8033641C, 0x8033B270, 0x8033B274, "collision.data", ["sm64"], [
+	# 	[0, -31, 1, c.d_collision],
+	# 	[1, -6, 3, ultra.c.d_u32, "0x%08X"],
+	# 	[0, 3, ultra.c.d_bool_u8],
+	# ], [
+	# 	[0, -152, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0, 3, 1, ultra.c.d_f32],
+	# ]),
+	# s_data("E0.code.data", 0x8032DAA0, 0x8032DAE8, 0x80336420, 0x8033666C, 0x8033B280, 0x8033B284, "player.data", ["sm64"], [
+	# 	[1, -7, 6, ultra.c.d_s8],
+	# 	[0, 1, 2, None],
+	# 	[0, -4, 4, ultra.c.d_u8],
+	# 	[0, 1, 4, None],
+	# 	[0, 1, 1, ultra.c.d_u64, "0x%016X"], # bin
+	# ], [
+	# 	[0,   3, 4, "asciz"],
+	# 	[0, -90, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0,  13, 1, ultra.c.d_f32],
+	# 	[0, -33, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0,   5, 1, ultra.c.d_f32],
+	# ]),
+	# s_data("E0.code.data", 0x8032DAF0, 0x8032DB28, 0x80336670, 0x803366C4, 0x8033B290, 0x8033B294, "physics.data", ["sm64"], [
+	# 	[1, 1, 3, ultra.c.d_s16], [0, 1, 2, None],
+	# 	[0, 1, c.d_bgface],
+	# ], [
+	# 	[0,   2, 1, ultra.c.d_f32],
+	# 	[0, -13, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0,   6, 1, ultra.c.d_f32],
+	# ]),
 	s_data("E0.code.data", 0x8032DB30, 0x8032DC50, 0x803366D0, 0x80336940, 0x8033B2A0, 0x8033B2C0, "pldemo.data", ["sm64"], [
 		[0,   1, 1, ultra.c.d_Vp],
 		[0,   1, 1, ultra.c.d_addr, 0],
@@ -1587,7 +1674,7 @@ src_code = [
 		[0,    6, 1, ultra.c.d_f32],
 		[0, -136, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	]),
-	s_data("E0.code.data", 0x8032DC50, 0x8032DC50, 0x80336940, 0x80336964, 0, 0, "plhang.data", ["sm64"], [], [
+	s_data("E0.code.data", 0x8032DC50, 0x8032DC50, 0x80336940, 0x80336964, 0, 0, "plspec.data", ["sm64"], [], [
 		[0,  4, 1, ultra.c.d_f32],
 		[0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	]),
@@ -1619,7 +1706,7 @@ src_code = [
 		[0,   6, 1, ultra.c.d_f32],
 		[0, -28, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	]),
-	s_data("E0.code.data", 0x8032DD40, 0x8032DD48, 0x80336ED0, 0x80336F38, 0, 0, "plhold.data", ["sm64"], [
+	s_data("E0.code.data", 0x8032DD40, 0x8032DD48, 0x80336ED0, 0x80336F38, 0, 0, "pltake.data", ["sm64"], [
 		[1, 1, 8, ultra.c.d_s8],
 	], [
 		[0, -26, 1, ultra.c.d_addr, ultra.A_EXTERN],
@@ -1636,7 +1723,7 @@ src_code = [
 	# s_data("E0.code.data", 0x8032DD70, 0x8032DD74, 0x80336F70, 0x80336F70, 0x8033B400, 0x8033B498, "memory.data", ["sm64"], [
 	# 	[0, 1, 1, ultra.c.d_addr, 0],
 	# ], []),
-	# s_data("E0.code.data", 0x8032DD80, 0x8032DDBE, 0x80336F70, 0x80336F70, 0x8033B4A0, 0x8033B4A7, "save.data", ["sm64"], [
+	# s_data("E0.code.data", 0x8032DD80, 0x8032DDBE, 0x80336F70, 0x80336F70, 0x8033B4A0, 0x8033B4A7, "backup.data", ["sm64"], [
 	# 	[0, 6, ultra.c.d_align_u8],
 	# 	[0, -38, 1, ultra.c.d_u8],
 	# ], []),
@@ -1719,27 +1806,27 @@ src_code = [
 	# ], [
 	# 	[0, 2, 1, ultra.c.d_f64],
 	# ]),
-	s_data("E0.code.data", 0x80330000, 0x80330018, 0x803377B0, 0x80337848, 0x80361270, 0x80361274, "objlib.data", ["sm64"], [
-		[1, 1, 4, ultra.c.d_s8],
-		[1, 1, 8, ultra.c.d_s16, "0x%02X"],
-		[1, 1, 4, ultra.c.d_s8],
-	], [
-		[0,  1, 4, "asciz"],
-		[0,  6, 1, ultra.c.d_f32], [0, 1, 4, None],
-		[0,  3, 1, ultra.c.d_f64],
-		[0,  2, 1, ultra.c.d_f32],
-		[0,  1, 1, ultra.c.d_f64],
-		[0,  1, 1, ultra.c.d_f32], [0, 1, 4, None],
-		[0,  1, 1, ultra.c.d_f64],
-		[0,  9, 1, ultra.c.d_f32],
-		[0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
-	]),
+	# s_data("E0.code.data", 0x80330000, 0x80330018, 0x803377B0, 0x80337848, 0x80361270, 0x80361274, "objectlib.data", ["sm64"], [
+	# 	[1, 1, 4, ultra.c.d_s8],
+	# 	[1, 1, 8, ultra.c.d_s16, "0x%02X"],
+	# 	[1, 1, 4, ultra.c.d_s8],
+	# ], [
+	# 	[0,  1, 4, "asciz"],
+	# 	[0,  6, 1, ultra.c.d_f32], [0, 1, 4, None],
+	# 	[0,  3, 1, ultra.c.d_f64],
+	# 	[0,  2, 1, ultra.c.d_f32],
+	# 	[0,  1, 1, ultra.c.d_f64],
+	# 	[0,  1, 1, ultra.c.d_f32], [0, 1, 4, None],
+	# 	[0,  1, 1, ultra.c.d_f64],
+	# 	[0,  9, 1, ultra.c.d_f32],
+	# 	[0, -5, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# ]),
 	s_data("E0.code.data", 0x80330020, 0x80330E1C, 0x80337850, 0x80337DF0, 0x80361280, 0x80361282, "object_a.data", ["sm64"], [
-		[0,  -3, 1, ultra.c.d_u32, fmt.fmt_save_flag],
+		[0,  -3, 1, ultra.c.d_u32, fmt.fmt_backup_flag],
 		[0,  -8, 4, ultra.c.d_s16, ultra.fmt_s16],
 		[0,  -6, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
-		[0,   1, 1, c.d_obj_effect],
+		[0,   1, 1, c.d_hitinfo],
+		[0,   1, 1, c.d_particle],
 		[0,  -3, 1, ultra.c.d_u8, fmt.fmt_msg], [0, 1, 1, None],
 		[0, -13, 1, ultra.c.d_addr, 0],
 		[0, -12, 1, c.d_stepsound],
@@ -1747,9 +1834,9 @@ src_code = [
 		[0,  -5, 1, c.d_object_a_0],
 		[0,  -4, 1, ultra.c.d_addr, 0],
 		[0,  -2, 1, c.d_object_a_1],
-		[0,   1, 1, c.d_obj_hit],
-		[0,   1, 1, c.d_obj_effect],
-		[0,   2, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
+		[0,   1, 1, c.d_particle],
+		[0,   2, 1, c.d_hitinfo],
 		[1,  -8, 2, ultra.c.d_s16],
 		[0,  -2, 1, ultra.c.d_addr, 0],
 		[1, -13, 2, ultra.c.d_s16],
@@ -1760,19 +1847,19 @@ src_code = [
 		[0,  -4, 1, ultra.c.d_addr, 0],
 		[1,  -7, 3, ultra.c.d_s16], [0, 1, 2, None],
 		[0,  -5, 1, ultra.c.d_addr, 0],
-		[0,   2, 1, c.d_obj_effect],
+		[0,   2, 1, c.d_particle],
 		[1,   1, 4, ultra.c.d_s16],
-		[0,   1, 1, c.d_obj_effect],
+		[0,   1, 1, c.d_particle],
 		[0,  -4, 1, ultra.c.d_addr, 0],
 		[1,   1, 4, ultra.c.d_f32, "%.1f"],
-		[0,   3, 1, c.d_obj_hit],
+		[0,   3, 1, c.d_hitinfo],
 		[1, -10, 2, ultra.c.d_s16],
 		[0,  -4, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -2, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -3, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -8, 1, ultra.c.d_addr, 0],
 		[1,   1, 16, ultra.c.d_s8],
 		[1,   1, 1, ultra.c.d_s16], [0, 1, 2, None],
@@ -1786,7 +1873,7 @@ src_code = [
 		[1,   1, 3, ultra.c.d_s8], [0, 1, 1, None],
 		[0, -11, 1, c.d_object_a_3],
 		[0,  -3, 1, ultra.c.d_addr, 0],
-		[0,   2, 1, c.d_obj_hit],
+		[0,   2, 1, c.d_hitinfo],
 		[1,   1, 3, ultra.c.d_f32],
 		[0,  -2, 1, c.d_object_a_4],
 		[0,   1, 1, c.d_path_data],
@@ -1795,7 +1882,7 @@ src_code = [
 		[0,  -6, 4, ultra.c.d_s16], [0, -1, 1, ultra.c.d_s16], [0, 1, 2, None],
 		[0,  -6, 4, ultra.c.d_s16], [0, -1, 1, ultra.c.d_s16], [0, 1, 2, None],
 		[0,  -6, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -3, 16, ultra.c.d_s8], [0, -1, 4, ultra.c.d_s8],
 		[0,  -2, 16, ultra.c.d_s8], [0, -1, 3, ultra.c.d_s8], [0, 1, 1, None],
 		[0,  -2, 16, ultra.c.d_s8], [0, -1, 4, ultra.c.d_s8],
@@ -1809,20 +1896,20 @@ src_code = [
 		]],
 		[0, -14, 1, c.d_object_a_5],
 		[0, -29, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0, -16, 1, c.d_object_a_6],
 		[0,  -6, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -2, 1, c.d_object_a_7],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -3, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,  -3, 3, ultra.c.d_s16], [0, 1, 2, None],
 		[0, -15, 1, ultra.c.d_addr, 0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0, -10, 1, ultra.c.d_addr, 0],
-		[0,   4, 1, c.d_obj_splash],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   4, 1, c.d_splash],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -7, 1, c.d_object_a_8],
 	], [
 		[0,  12, 4, "asciz"],
@@ -1946,33 +2033,33 @@ src_code = [
 	# 	[0,   3, 1, ultra.c.d_f64],
 	# 	[0, -13, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	# ]),
-	# s_data("E0.code.data", 0x80330F00, 0x80330F2E, 0x80338140, 0x80338160, 0x803612C0, 0x803612E0, "back.data", ["sm64"], [
+	# s_data("E0.code.data", 0x80330F00, 0x80330F2E, 0x80338140, 0x80338160, 0x803612C0, 0x803612E0, "background.data", ["sm64"], [
 	# 	[0, -10, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	# 	[1, -2, 3, ultra.c.d_u8, "0x%02X"],
 	# ], [
 	# 	[0, 4, 1, ultra.c.d_f64],
 	# ]),
-	s_data("E0.code.data", 0x80330F30, 0x803312F0, 0x80338160, 0x80338168, 0x803612E0, 0x803612E2, "water.data", ["sm64"], [
-		[0,   2, ultra.c.d_align_s16],
-		[0,   1, ultra.c.d_align_s8],
-		[0,   1, 1, ultra.c.d_f32],
-		[0,   1, 1, ultra.c.d_s32],
-		[0,  -8, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0, -25, 1, c.d_water],
-		[1,   1, 8, ultra.c.d_s8],
-	], [
-		[0, 1, 1, ultra.c.d_f64],
-	]),
+	# s_data("E0.code.data", 0x80330F30, 0x803312F0, 0x80338160, 0x80338168, 0x803612E0, 0x803612E2, "water.data", ["sm64"], [
+	# 	[0,   2, ultra.c.d_align_s16],
+	# 	[0,   1, ultra.c.d_align_s8],
+	# 	[0,   1, 1, ultra.c.d_f32],
+	# 	[0,   1, 1, ultra.c.d_s32],
+	# 	[0,  -8, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0, -25, 1, c.d_fluid],
+	# 	[1,   1, 8, ultra.c.d_s8],
+	# ], [
+	# 	[0, 1, 1, ultra.c.d_f64],
+	# ]),
 	# s_data("E0.code.data", 0x803312F0, 0x803312FC, 0x80338170, 0x80338170, 0x803612F0, 0x803612F1, "objshape.data", ["sm64"], [
 	# 	[0, 3, ultra.c.d_align_s16],
 	# ], []),
-	s_data("E0.code.data", 0x80331300, 0x80331360, 0x80338170, 0x80338198, 0x80361300, 0x8036131D, "wave.data", ["sm64"], [
-		[0, -19, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0,  -3, 1, ultra.c.d_addr, 0],
-		[0,   2, ultra.c.d_align_s16],
-	], [
-		[0, 5, 1, ultra.c.d_f64],
-	]),
+	# s_data("E0.code.data", 0x80331300, 0x80331360, 0x80338170, 0x80338198, 0x80361300, 0x8036131D, "wave.data", ["sm64"], [
+	# 	[0, -19, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# 	[0,  -3, 1, ultra.c.d_addr, 0],
+	# 	[0,   2, ultra.c.d_align_s16],
+	# ], [
+	# 	[0, 5, 1, ultra.c.d_f64],
+	# ]),
 	# s_data("E0.code.data", 0x80331360, 0x80331364, 0x803381A0, 0x803381A0, 0x80361320, 0x803613F0, "dprint.data", ["sm64"], [
 	# 	[0, 1, ultra.c.d_align_s16],
 	# ], []),
@@ -2052,36 +2139,36 @@ src_code = [
 	# 	[main.s_str, "unsigned char str_80331728[] = {STR_SAVE_AND_QUIT};\n"],
 	# 	[main.s_str, "unsigned char str_80331734[] = {STR_CONTINUE_DONT_SAVE};\n"],
 	# [main.s_write],
-	s_data("E0.code.data", 0x80331750, 0x803317A0, 0x80338280, 0x803382B8, 0x80361400, 0x80361418, "weather.data", ["sm64"], [
-		[0, 1, ultra.c.d_align_s8],
-		[0, 1, 4, None],
-		[0, -3, 1, ultra.c.d_Vtx, False],
-		[0, 3, [
-			[1, 1, 3, ultra.c.d_s16],
-			[0, 1, 2, None],
-		]],
-	], [
-		[0, 7, 1, ultra.c.d_f64],
-	]),
-	s_data("E0.code.data", 0x803317A0, 0x803317D8, 0x803382C0, 0x80338310, 0x80361420, 0x80361440, "lava.data", ["sm64"], [
-		[0, 1, ultra.c.d_align_s8],
-		[0, 1, 4, None],
-		[0, -3, 1, ultra.c.d_Vtx, False],
-	], [
-		[0,   5, 1, ultra.c.d_f32],
-		[0, -15, 1, ultra.c.d_addr, ultra.A_EXTERN],
-	]),
+	# s_data("E0.code.data", 0x80331750, 0x803317A0, 0x80338280, 0x803382B8, 0x80361400, 0x80361418, "weather.data", ["sm64"], [
+	# 	[0, 1, ultra.c.d_align_s8],
+	# 	[0, 1, 4, None],
+	# 	[0, -3, 1, ultra.c.d_Vtx, False],
+	# 	[0, 3, [
+	# 		[1, 1, 3, ultra.c.d_s16],
+	# 		[0, 1, 2, None],
+	# 	]],
+	# ], [
+	# 	[0, 7, 1, ultra.c.d_f64],
+	# ]),
+	# s_data("E0.code.data", 0x803317A0, 0x803317D8, 0x803382C0, 0x80338310, 0x80361420, 0x80361440, "lava.data", ["sm64"], [
+	# 	[0, 1, ultra.c.d_align_s8],
+	# 	[0, 1, 4, None],
+	# 	[0, -3, 1, ultra.c.d_Vtx, False],
+	# ], [
+	# 	[0,   5, 1, ultra.c.d_f32],
+	# 	[0, -15, 1, ultra.c.d_addr, ultra.A_EXTERN],
+	# ]),
 	# s_data("E0.code.data", 0x803317E0, 0x803325E8, 0x80338310, 0x8033837C, 0, 0, "tag.data", ["sm64"], [
-	# 	[0, -366, 1, c.d_tag_obj, 0x803317E0],
-	# 	[0,  -83, 1, c.d_map_obj],
+	# 	[0, -366, 1, c.d_tagobj, 0x803317E0],
+	# 	[0,  -83, 1, c.d_mapobj],
 	# ], [
 	# 	[0, -27, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	# ]),
 	s_data("E0.code.data", 0x803317E0, 0x80332350, 0x80338380, 0x80338380, 0, 0, "tagobj", [], [
-		[0, -366, 1, c.d_tag_obj, 0x803317E0],
+		[0, -366, 1, c.d_tagobj, 0x803317E0],
 	], [], "#define TAGOBJ_NULL {o_coin, S_COIN, 0}\n\n"),
 	s_data("E0.code.data", 0x80332350, 0x803325E8, 0x80338380, 0x80338380, 0, 0, "mapobj", [], [
-		[0,  -83, 1, c.d_map_obj],
+		[0,  -83, 1, c.d_mapobj],
 	], []),
 	# s_data("E0.code.data", 0x803325F0, 0x8033260C, 0x80338380, 0x803383D0, 0x80361440, 0x80361442, "hud.data", ["sm64"], [
 	# 	[0, 1, 1, c.d_meter],
@@ -2095,13 +2182,13 @@ src_code = [
 		[0, 1, ultra.c.d_align_s8],
 		[0, 1, ultra.c.d_align_s16],
 		[0, 3, ultra.c.d_align_s8],
-		[0, 10, 1, c.d_obj_hit],
+		[0, 10, 1, c.d_hitinfo],
 		[0, 2, 1, c.d_path_data],
-		[0, 4, 1, c.d_obj_hit],
+		[0, 4, 1, c.d_hitinfo],
 		[0, 1, ultra.c.d_align_s8],
-		[0, 1, 1, c.d_obj_hit],
+		[0, 1, 1, c.d_hitinfo],
 		[0, 1, 1, c.d_path_data],
-		[0, 3, 1, c.d_obj_hit],
+		[0, 3, 1, c.d_hitinfo],
 		[1, -4, 2, ultra.c.d_s16],
 	], [
 		[0,  21, 1, ultra.c.d_f64],
@@ -2149,32 +2236,32 @@ src_code = [
 		[0, -11, 1, ultra.c.d_addr, ultra.A_EXTERN],
 	]),
 	s_data("E0.code.data", 0x80332840, 0x80332E4C, 0x803389B0, 0x80338D94, 0x80361460, 0x8036148C, "object_c.data", ["sm64"], [
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
 		[0,  -2, 1, c.d_object_c_0],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
-		[0,   2, 1, c.d_obj_hit],
+		[0,   2, 1, c.d_hitinfo],
 		[1,   1, 3, ultra.c.d_s16], [0, 1, 2, None],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -3, 1, c.d_object_c_1],
 		[1,  -2, 6, ultra.c.d_u8], # template
-		[0,   3, 1, c.d_obj_hit],
+		[0,   3, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
 		[1,   1, 4, ultra.c.d_f32],
 		[1,   1, 3, ultra.c.d_s32, fmt.fmt_msg],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_s8], [0, 1, 2, None],
-		[0,   1, 1, c.d_obj_effect],
-		[0,   2, 1, c.d_obj_hit],
-		[0,   1, 1, c.d_obj_effect],
+		[0,   1, 1, c.d_particle],
+		[0,   2, 1, c.d_hitinfo],
+		[0,   1, 1, c.d_particle],
 		[0, -21, 1, ultra.c.d_addr, ultra.A_EXTERN],
 		[0,  -2, 1, c.d_object_c_2],
-		[0,   1, 1, c.d_obj_hit],
-		[0,   2, 1, c.d_obj_effect],
+		[0,   1, 1, c.d_hitinfo],
+		[0,   2, 1, c.d_particle],
 		[0,  -2, 1, ultra.c.d_addr, ultra.A_EXTERN],
 		[1,   1, 4, ultra.c.d_u8],
 		[1,   1, 4, ultra.c.d_f32],
@@ -2190,9 +2277,9 @@ src_code = [
 		[1,   1, 2, ultra.c.d_s16],
 		[1,  -2, 4, ultra.c.d_s16],
 		[1,   1, 4, ultra.c.d_s16],
-		[0,   1, 1, c.d_obj_hit],
-		[0,   1, 1, c.d_obj_effect],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
+		[0,   1, 1, c.d_particle],
+		[0,   1, 1, c.d_hitinfo],
 		[0, -10, 1, ultra.c.d_addr, ultra.A_EXTERN],
 		[1,   1, 4, ultra.c.d_s16],
 		[1,  -3, [
@@ -2200,23 +2287,23 @@ src_code = [
 		]],
 		[1,   1, 3, ultra.c.d_s16], [0, 1, 2, None],
 		[0,  -3, 1, ultra.c.d_addr, ultra.A_EXTERN],
-		[0,   5, 1, c.d_obj_hit],
+		[0,   5, 1, c.d_hitinfo],
 		[1,  -3, 2, ultra.c.d_s16],
-		[0,   2, 1, c.d_obj_hit],
+		[0,   2, 1, c.d_hitinfo],
 		[1,   1, 2, ultra.c.d_f32, "%g"],
-		[0,   4, 1, c.d_obj_hit],
+		[0,   4, 1, c.d_hitinfo],
 		[1,   1, 6, ultra.c.d_s8], [0, 1, 2, None],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[1,  -3, 3, ultra.c.d_f32],
 		[1,   1, 6, ultra.c.d_u8], [0, 1, 2, None], # template
 		[0,  -2, 1, c.d_object_c_4],
 		[1,  -6, 2, ultra.c.d_s16],
-		[0,   2, 1, c.d_obj_hit],
+		[0,   2, 1, c.d_hitinfo],
 		[1,  -4, 2, ultra.c.d_s16],
 		[1, -31, 3, ultra.c.d_s16], [0, 1, 2, None],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 		[0,  -2, 1, c.d_object_c_5],
-		[0,   1, 1, c.d_obj_hit],
+		[0,   1, 1, c.d_hitinfo],
 	], [
 		[0,   2, 1, ultra.c.d_f32],
 		[0,  -9, 1, ultra.c.d_addr, ultra.A_EXTERN],
@@ -2529,7 +2616,7 @@ src_audio = [
 	[main.s_file, "work.c"],
 		s_include(["sm64"]),
 		[main.s_str, "\n"],
-		[ultra.c.s_bss, "E0.code.data", 0x80220DA0, 0x80226CBC],
+		[ultra.c.s_bss, "E0.code.data", 0x80220DA0, 0x80226CD0],
 	[main.s_write],
 	# [main.s_file, "heap.c"],
 	# 	s_include(["sm64"]),
@@ -2542,7 +2629,7 @@ src_face = [
 	[main.s_file, "face.h"],
 		s_ifndef("__FACE_H__"),
 		s_define("__FACE_H__", r=1),
-		s_include(["ultra64", "sm64/gbi_ext", "$dynlist"]),
+		s_include(["ultra64", "sm64/gbiext", "$dynlist"]),
 		[main.s_str, "\n"],
 		[main.s_str, header.str_face],
 		[main.s_str, "\n"],
@@ -2829,31 +2916,31 @@ src_face_data = [
 ]
 
 src_object_a = [
-	[asm.s_script, "E0.Object", 0x13000000, 0x13002EB8, 1],
+	[asm.s_objlang, "E0.Object", 0x13000000, 0x13002EB8],
 ]
 
 src_object_player = [
 	s_dirfile("player", "player.c"),
 		s_script_else(),
-		[asm.s_script, "E0.Object", 0x13002EC0, 0x13002EF8, 1],
+		[asm.s_objlang, "E0.Object", 0x13002EC0, 0x13002EF8],
 		s_script_endif(),
 	s_writepop(),
-	[asm.s_script, "E0.Object", 0x13002EF8, 0x13002F98, 1],
+	[asm.s_objlang, "E0.Object", 0x13002EF8, 0x13002F98],
 ]
 
 src_object_b = [
 	s_dirfile("object_b", "select.c"),
-		[asm.s_script, "E0.Object", 0x13002FA0, 0x13003068, 1],
+		[asm.s_objlang, "E0.Object", 0x13002FA0, 0x13003068],
 	s_writepop(),
-	[asm.s_script, "E0.Object", 0x13003068, 0x13004580, 1],
+	[asm.s_objlang, "E0.Object", 0x13003068, 0x13004580],
 ]
 
 src_object_c = [
-	[asm.s_script, "E0.Object", 0x13004580, 0x13005610, 1],
+	[asm.s_objlang, "E0.Object", 0x13004580, 0x13005610],
 ]
 
 src_object_camera = [
-	[asm.s_script, "E0.Object", 0x13005610, 0x130056BC, 1],
+	[asm.s_objlang, "E0.Object", 0x13005610, 0x130056BC],
 ]
 
 data_gfx = [
@@ -2948,17 +3035,17 @@ data_gfx = [
 	s_writepop(),
 	[main.s_str, "\n"],
 	[main.s_dir, "gfx"],
-		[c.s_message, "E0.Gfx", 0x02007D28, 0x02007D34, "msg", "select.ja_jp",  "select_table", "jp", "%d"],
+		[c.s_message, "E0.Gfx", 0x02007D28, 0x02007D34, "msg", "select.ja_jp",  "selecttab", "jp", "%d"],
 		[main.s_str, "\n"],
 		[main.s_str, "#ifdef JAPANESE\n"],
-		[c.s_message, "J0.Gfx", 0x0200DFE8, 0x0200E294, "msg", "message.ja_jp", "msg_table",    "jp", "%d"],
-		[c.s_message, "J0.Gfx", 0x0200E454, 0x0200E4C0, "tbl", "course.ja_jp",  "course_name",  "jp", fmt.fmt_coursename],
-		[c.s_message, "J0.Gfx", 0x0200EAD0, 0x0200EC58, "tbl", "level.ja_jp",   "level_name",   "jp", fmt.fmt_levelname],
+		[c.s_message, "J0.Gfx", 0x0200DFE8, 0x0200E294, "msg", "message.ja_jp", "messagetab",   "jp", "%d"],
+		[c.s_message, "J0.Gfx", 0x0200E454, 0x0200E4C0, "tbl", "course.ja_jp",  "coursename",   "jp", fmt.fmt_coursename],
+		[c.s_message, "J0.Gfx", 0x0200EAD0, 0x0200EC58, "tbl", "level.ja_jp",   "levelname",    "jp", fmt.fmt_levelname],
 		[main.s_str, "#endif\n"],
 		[main.s_str, "#ifdef ENGLISH\n"],
-		[c.s_message, "E0.Gfx", 0x02010A68, 0x02010D14, "msg", "message.en_us", "msg_table",    "en.m", "%d"],
-		[c.s_message, "E0.Gfx", 0x02010F68, 0x02010FD4, "tbl", "course.en_us",  "course_name",  "en.m", fmt.fmt_coursename],
-		[c.s_message, "E0.Gfx", 0x0201192C, 0x02011AB4, "tbl", "level.en_us",   "level_name",   "en.m", fmt.fmt_levelname],
+		[c.s_message, "E0.Gfx", 0x02010A68, 0x02010D14, "msg", "message.en_us", "messagetab",   "en.m", "%d"],
+		[c.s_message, "E0.Gfx", 0x02010F68, 0x02010FD4, "tbl", "course.en_us",  "coursename",   "en.m", fmt.fmt_coursename],
+		[c.s_message, "E0.Gfx", 0x0201192C, 0x02011AB4, "tbl", "level.en_us",   "levelname",    "en.m", fmt.fmt_levelname],
 		[main.s_str, "#endif\n"],
 	[main.s_pop],
 	[main.s_str, "\n"],
@@ -3019,7 +3106,7 @@ data_gfx = [
 			[0, 1, 1, ultra.c.d_Gfx, 0x02017568],
 		]],
 	s_writepop(),
-	s_dirfile("gfx", "back.c"),
+	s_dirfile("gfx", "background.c"),
 		[ultra.c.s_data, "E0.Gfx", 0x02017568, 0x020175F0, [
 			[0, 1, 1, ultra.c.d_Gfx, 0x020175F0],
 		]],
@@ -3530,7 +3617,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x0401CD20, 0x0401DE60],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000000, 0x17000038, [
-			[0, 1, 1, c.d_s_script, 0x17000038],
+			[0, 1, 1, c.d_shplang, 0x17000038],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3538,7 +3625,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x0401DE60, 0x040217C0],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000038, 0x17000084, [
-			[0, 1, 1, c.d_s_script, 0x17000084],
+			[0, 1, 1, c.d_shplang, 0x17000084],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3546,7 +3633,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x040217C0, 0x040220C8],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000084, 0x1700009C, [
-			[0, 1, 1, c.d_s_script, 0x1700009C],
+			[0, 1, 1, c.d_shplang, 0x1700009C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3554,7 +3641,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x040220C8, 0x04025318],
 		[ultra.c.s_data, "E0.Player.Shp", 0x1700009C, 0x17000124, [
-			[0, 1, 1, c.d_s_script, 0x17000124],
+			[0, 1, 1, c.d_shplang, 0x17000124],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3562,7 +3649,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x04025318, 0x04027450],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000124, 0x170001BC, [
-			[0, 1, 1, c.d_s_script, 0x170001BC],
+			[0, 1, 1, c.d_shplang, 0x170001BC],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3570,7 +3657,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x04027450, 0x0402A588],
 		[ultra.c.s_data, "E0.Player.Shp", 0x170001BC, 0x17000230, [
-			[0, 1, 1, c.d_s_script, 0x17000230],
+			[0, 1, 1, c.d_shplang, 0x17000230],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3578,7 +3665,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x0402A588, 0x04032700],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000230, 0x17000284, [
-			[0, 1, 1, c.d_s_script, 0x17000284],
+			[0, 1, 1, c.d_shplang, 0x17000284],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3589,7 +3676,7 @@ player_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x04032A48, 0x04035378],
 		[ultra.c.s_data, "E0.Player.Shp", 0x17000284, 0x170002E0, [
-			[0, 1, 1, c.d_s_script, 0x170002E0],
+			[0, 1, 1, c.d_shplang, 0x170002E0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3600,7 +3687,7 @@ player_shp = [
 		[ultra.c.s_extern, "E0.code.text", 0x802B1BB0, 0x802B1C54],
 		[ultra.c.s_extern, "E0.Player.Gfx", 0x04000000, 0x0401CD20],
 		[ultra.c.s_data, "E0.Player.Shp", 0x170002E0, 0x17002E30, [
-			[0, 1, 1, c.d_s_script, 0x17002E30],
+			[0, 1, 1, c.d_shplang, 0x17002E30],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3608,7 +3695,7 @@ player_shp = [
 
 shape1a_shp = [
 	[ultra.c.s_data, "E0.Shape1A.Shp", 0x0C000000, 0x0C000410, [
-		[0, 1, 1, c.d_s_script, 0x0C000410],
+		[0, 1, 1, c.d_shplang, 0x0C000410],
 	]],
 ]
 
@@ -3688,29 +3775,29 @@ shape1b_gfx = [
 	s_dirfile("blargg", "shape.c"),
 		s_script_ifndef(),
 		[c.s_gltf, "blargg", [
-			("upper_jaw", (0.25, 0xFF, 0x36, 0x16)),
+			("lower_jaw", (0.25, 0xFF, 0x36, 0x16)),
 			("teeth", (0.25, 0xB2, 0xB2, 0xB2)),
-			("lower_jaw", (0.25, 0xFF, 0x2A, 0x1A)),
+			("upper_jaw", (0.25, 0xFF, 0x2A, 0x1A)),
 			("body", (0.25, 0xFF, 0x2E, 0x1F)),
 		]],
 		[ultra.c.s_data, "E0.Shape1B.Gfx", 0x05004728, 0x050047A0, [
 			[0, -5, 1, c.d_light, 0.25],
 		]],
-		[c.s_gltf_mesh, "upper_jaw", [
-			(True, "teeth"),
-			(True, "upper_jaw"),
-		]],
 		[c.s_gltf_mesh, "lower_jaw", [
 			(True, "teeth"),
 			(True, "lower_jaw"),
+		]],
+		[c.s_gltf_mesh, "upper_jaw", [
+			(True, "teeth"),
+			(True, "upper_jaw"),
 		]],
 		[c.s_gltf_mesh, "body", [
 			(True, "body"),
 		]],
 		[ultra.c.s_data, "E0.Shape1B.Gfx", 0x050058D0, 0x05006174, [
 			[0, 1, 1, c.d_gfx, 0x05005EB8,
-				"upper_jaw", 0, 1,
 				"lower_jaw", 0, 1,
+				"upper_jaw", 0, 1,
 				"body", 0,
 			],
 			[0, 1, 1, c.d_anime, 0x05006070],
@@ -3729,7 +3816,7 @@ shape1b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape1B.Gfx", 0x05000000, 0x05004720],
 		[ultra.c.s_data, "E0.Shape1B.Shp", 0x0C000000, 0x0C000240, [
-			[0, 1, 1, c.d_s_script, 0x0C000240],
+			[0, 1, 1, c.d_shplang, 0x0C000240],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3737,7 +3824,7 @@ shape1b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape1B.Gfx", 0x05004728, 0x05006178],
 		[ultra.c.s_data, "E0.Shape1B.Shp", 0x0C000240, 0x0C0002B0, [
-			[0, 1, 1, c.d_s_script, 0x0C0002B0],
+			[0, 1, 1, c.d_shplang, 0x0C0002B0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -3745,14 +3832,14 @@ shape1b_shp = [
 
 shape1c_shp = [
 	[ultra.c.s_data, "E0.Shape1C.Shp", 0x0C000000, 0x0C000340, [
-		[0, 1, 1, c.d_s_script, 0x0C000340],
+		[0, 1, 1, c.d_shplang, 0x0C000340],
 	]],
 ]
 
 shape1d_shp = [
 	[ultra.c.s_extern, "E0.Global.Gfx", 0x0302A6D8, 0x0302BA88],
 	[ultra.c.s_data, "E0.Shape1D.Shp", 0x0C000000, 0x0C000280, [
-		[0, 1, 1, c.d_s_script, 0x0C000280],
+		[0, 1, 1, c.d_shplang, 0x0C000280],
 	]],
 ]
 
@@ -3761,54 +3848,54 @@ shape1e_shp = [
 	[ultra.c.s_extern, "E0.Global.Gfx", 0x0302A6D8, 0x0302BA88],
 	[ultra.c.s_extern, "E0.Global.Gfx", 0x0302C488, 0x0302C658],
 	[ultra.c.s_data, "E0.Shape1E.Shp", 0x0C000000, 0x0C000660, [
-		[0, 1, 1, c.d_s_script, 0x0C000660],
+		[0, 1, 1, c.d_shplang, 0x0C000660],
 	]],
 ]
 
 shape1f_shp = [
 	[ultra.c.s_extern, "E0.Global.Gfx", 0x03022F48, 0x03022FF8],
 	[ultra.c.s_data, "E0.Shape1F.Shp", 0x0C000000, 0x0C000384, [
-		[0, 1, 1, c.d_s_script, 0x0C000384],
+		[0, 1, 1, c.d_shplang, 0x0C000384],
 	]],
 ]
 
 shape1g_shp = [
 	[ultra.c.s_extern, "E0.Global.Gfx", 0x03022F48, 0x03022FF8],
 	[ultra.c.s_data, "E0.Shape1G.Shp", 0x0C000000, 0x0C000364, [
-		[0, 1, 1, c.d_s_script, 0x0C000364],
+		[0, 1, 1, c.d_shplang, 0x0C000364],
 	]],
 ]
 
 shape1h_shp = [
 	[ultra.c.s_data, "E0.Shape1H.Shp", 0x0C000000, 0x0C000090, [
-		[0, 1, 1, c.d_s_script, 0x0C000090],
+		[0, 1, 1, c.d_shplang, 0x0C000090],
 	]],
 ]
 
 shape1i_shp = [
 	[ultra.c.s_data, "E0.Shape1I.Shp", 0x0C000000, 0x0C0002AC, [
-		[0, 1, 1, c.d_s_script, 0x0C0002AC],
+		[0, 1, 1, c.d_shplang, 0x0C0002AC],
 	]],
 ]
 
 shape1j_shp = [
 	[ultra.c.s_data, "E0.Shape1J.Shp", 0x0C000000, 0x0C000664, [
-		[0, 1, 1, c.d_s_script, 0x0C00045C],
+		[0, 1, 1, c.d_shplang, 0x0C00045C],
 		[0, 1, 4, None],
 		[0, 1, 1, ultra.c.d_s64],
-		[0, 1, 1, c.d_s_script, 0x0C000664],
+		[0, 1, 1, c.d_shplang, 0x0C000664],
 	]],
 ]
 
 shape1k_shp = [
 	[ultra.c.s_data, "E0.Shape1K.Shp", 0x0C000000, 0x0C0004A0, [
-		[0, 1, 1, c.d_s_script, 0x0C0004A0],
+		[0, 1, 1, c.d_shplang, 0x0C0004A0],
 	]],
 ]
 
 shape2a_shp = [
 	[ultra.c.s_data, "E0.Shape2A.Shp", 0x0D000000, 0x0D000C4C, [
-		[0, 1, 1, c.d_s_script, 0x0D000C4C],
+		[0, 1, 1, c.d_shplang, 0x0D000C4C],
 	]],
 ]
 
@@ -4179,7 +4266,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x06000000, 0x06007DF0],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D000000, 0x0D000284, [
-			[0, 1, 1, c.d_s_script, 0x0D000284],
+			[0, 1, 1, c.d_shplang, 0x0D000284],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4187,7 +4274,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x06007DF8, 0x0600A4D8],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D000284, 0x0D0002F4, [
-			[0, 1, 1, c.d_s_script, 0x0D0002F4],
+			[0, 1, 1, c.d_shplang, 0x0D0002F4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4195,7 +4282,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x0600A4E0, 0x0600D458],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D0002F4, 0x0D000324, [
-			[0, 1, 1, c.d_s_script, 0x0D000324],
+			[0, 1, 1, c.d_shplang, 0x0D000324],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4203,7 +4290,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x0600D460, 0x0600E270],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D000324, 0x0D00038C, [
-			[0, 1, 1, c.d_s_script, 0x0D00038C],
+			[0, 1, 1, c.d_shplang, 0x0D00038C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4211,7 +4298,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x0600E278, 0x06012360],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D00038C, 0x0D000414, [
-			[0, 1, 1, c.d_s_script, 0x0D000414],
+			[0, 1, 1, c.d_shplang, 0x0D000414],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4219,7 +4306,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x06012368, 0x06013F88],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D000414, 0x0D000450, [
-			[0, 1, 1, c.d_s_script, 0x0D000450],
+			[0, 1, 1, c.d_shplang, 0x0D000450],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4227,7 +4314,7 @@ shape2b_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2B.Gfx", 0x06013F90, 0x06017958],
 		[ultra.c.s_data, "E0.Shape2B.Shp", 0x0D000450, 0x0D000480, [
-			[0, 1, 1, c.d_s_script, 0x0D000480],
+			[0, 1, 1, c.d_shplang, 0x0D000480],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4235,7 +4322,7 @@ shape2b_shp = [
 
 shape2c_shp = [
 	[ultra.c.s_data, "E0.Shape2C.Shp", 0x0D000000, 0x0D000678, [
-		[0, 1, 1, c.d_s_script, 0x0D000678],
+		[0, 1, 1, c.d_shplang, 0x0D000678],
 	]],
 ]
 
@@ -4563,7 +4650,7 @@ shape2d_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2D.Gfx", 0x06000000, 0x06005900],
 		[ultra.c.s_data, "E0.Shape2D.Shp", 0x0D000000, 0x0D000114, [
-			[0, 1, 1, c.d_s_script, 0x0D000114],
+			[0, 1, 1, c.d_shplang, 0x0D000114],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4571,7 +4658,7 @@ shape2d_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2D.Gfx", 0x06005908, 0x0600FC68],
 		[ultra.c.s_data, "E0.Shape2D.Shp", 0x0D000114, 0x0D00043C, [
-			[0, 1, 1, c.d_s_script, 0x0D00043C],
+			[0, 1, 1, c.d_shplang, 0x0D00043C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4582,7 +4669,7 @@ shape2d_shp = [
 			[0, 1, 1, ultra.c.d_s64],
 		]],
 		[ultra.c.s_data, "E0.Shape2D.Shp", 0x0D000448, 0x0D0005A4, [
-			[0, 1, 1, c.d_s_script, 0x0D0005A4],
+			[0, 1, 1, c.d_shplang, 0x0D0005A4],
 		]],
 		[ultra.c.s_data, "E0.Shape2D.Shp", 0x0D0005A8, 0x0D0005B0, [
 			[0, 1, 1, ultra.c.d_s64],
@@ -4593,7 +4680,7 @@ shape2d_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Shape2D.Gfx", 0x06015748, 0x06017E70],
 		[ultra.c.s_data, "E0.Shape2D.Shp", 0x0D0005B0, 0x0D000600, [
-			[0, 1, 1, c.d_s_script, 0x0D000600],
+			[0, 1, 1, c.d_shplang, 0x0D000600],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -4601,14 +4688,14 @@ shape2d_shp = [
 
 shape2e_shp = [
 	[ultra.c.s_data, "E0.Shape2E.Shp", 0x0D000000, 0x0D000148, [
-		[0, 1, 1, c.d_s_script, 0x0D000140],
+		[0, 1, 1, c.d_shplang, 0x0D000140],
 		[0, 1, 1, ultra.c.d_s64],
 	]],
 ]
 
 shape2f_shp = [
 	[ultra.c.s_data, "E0.Shape2F.Shp", 0x0D000000, 0x0D0006D0, [
-		[0, 1, 1, c.d_s_script, 0x0D0006D0],
+		[0, 1, 1, c.d_shplang, 0x0D0006D0],
 	]],
 ]
 
@@ -5325,7 +5412,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08000000, 0x08000F10],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000000, 0x0F000020, [
-			[0, 1, 1, c.d_s_script, 0x0F000020],
+			[0, 1, 1, c.d_shplang, 0x0F000020],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5334,7 +5421,7 @@ common_shp = [
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08000F18, 0x08004038],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000020, 0x0F0001A8, [
 			[0, 1, 1, ultra.c.d_s64],
-			[0, 1, 1, c.d_s_script, 0x0F00019C],
+			[0, 1, 1, c.d_shplang, 0x0F00019C],
 			[0, 1, 4, None],
 			[0, 1, 1, ultra.c.d_s64],
 		]],
@@ -5347,7 +5434,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08004988, 0x08005870],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0001A8, 0x0F0001C0, [
-			[0, 1, 1, c.d_s_script, 0x0F0001C0],
+			[0, 1, 1, c.d_shplang, 0x0F0001C0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5355,7 +5442,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08005878, 0x080066C8],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0001C0, 0x0F0001D8, [
-			[0, 1, 1, c.d_s_script, 0x0F0001D8],
+			[0, 1, 1, c.d_shplang, 0x0F0001D8],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5363,7 +5450,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x080066D0, 0x0800C088],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0001D8, 0x0F0004CC, [
-			[0, 1, 1, c.d_s_script, 0x0F0004CC],
+			[0, 1, 1, c.d_shplang, 0x0F0004CC],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5371,7 +5458,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x0800C090, 0x0800C820],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0004CC, 0x0F0004E4, [
-			[0, 1, 1, c.d_s_script, 0x0F0004E4],
+			[0, 1, 1, c.d_shplang, 0x0F0004E4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5379,7 +5466,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x0800C828, 0x0800D798],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0004E4, 0x0F0004FC, [
-			[0, 1, 1, c.d_s_script, 0x0F0004FC],
+			[0, 1, 1, c.d_shplang, 0x0F0004FC],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5387,7 +5474,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x0800D7E0, 0x0800E078],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0004FC, 0x0F000518, [
-			[0, 1, 1, c.d_s_script, 0x0F000518],
+			[0, 1, 1, c.d_shplang, 0x0F000518],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5395,7 +5482,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x0800E080, 0x08011A70],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000518, 0x0F0005D0, [
-			[0, 1, 1, c.d_s_script, 0x0F0005D0],
+			[0, 1, 1, c.d_shplang, 0x0F0005D0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5403,7 +5490,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08011A78, 0x08012E00],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0005D0, 0x0F000640, [
-			[0, 1, 1, c.d_s_script, 0x0F000640],
+			[0, 1, 1, c.d_shplang, 0x0F000640],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5411,7 +5498,7 @@ common_shp = [
 		s_script_ifdef(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08022D08, 0x08022D78],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000640, 0x0F000694, [
-			[0, 1, 1, c.d_s_script, 0x0F000694],
+			[0, 1, 1, c.d_shplang, 0x0F000694],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5419,7 +5506,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08012E10, 0x08019498],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000694, 0x0F0006E4, [
-			[0, 1, 1, c.d_s_script, 0x0F0006E4],
+			[0, 1, 1, c.d_shplang, 0x0F0006E4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5427,7 +5514,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x080194A0, 0x0801DA58],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0006E4, 0x0F0007B8, [
-			[0, 1, 1, c.d_s_script, 0x0F0007B8],
+			[0, 1, 1, c.d_shplang, 0x0F0007B8],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5435,7 +5522,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x0801DA60, 0x08023978],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F0007B8, 0x0F000A30, [
-			[0, 1, 1, c.d_s_script, 0x0F000A30],
+			[0, 1, 1, c.d_shplang, 0x0F000A30],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5443,7 +5530,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08023980, 0x08024CB0],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000A30, 0x0F000A58, [
-			[0, 1, 1, c.d_s_script, 0x0F000A58],
+			[0, 1, 1, c.d_shplang, 0x0F000A58],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5451,7 +5538,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08024CB8, 0x08026000],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000A58, 0x0F000AB0, [
-			[0, 1, 1, c.d_s_script, 0x0F000AB0],
+			[0, 1, 1, c.d_shplang, 0x0F000AB0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -5462,7 +5549,7 @@ common_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Common.Gfx", 0x08026388, 0x08028BE8],
 		[ultra.c.s_data, "E0.Common.Shp", 0x0F000AB0, 0x0F000B34, [
-			[0, 1, 1, c.d_s_script, 0x0F000B34],
+			[0, 1, 1, c.d_shplang, 0x0F000B34],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6003,7 +6090,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x03000000, 0x030009C0],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000000, 0x16000040, [
-			[0, 1, 1, c.d_s_script, 0x16000040],
+			[0, 1, 1, c.d_shplang, 0x16000040],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6011,7 +6098,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030009C8, 0x03004340],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000040, 0x160000A8, [
-			[0, 1, 1, c.d_s_script, 0x160000A8],
+			[0, 1, 1, c.d_shplang, 0x160000A8],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6019,7 +6106,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x03004348, 0x030056B8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x160000A8, 0x1600013C, [
-			[0, 1, 1, c.d_s_script, 0x1600013C],
+			[0, 1, 1, c.d_shplang, 0x1600013C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6027,7 +6114,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030056C0, 0x030079E0],
 		[ultra.c.s_data, "E0.Global.Shp", 0x1600013C, 0x16000388, [
-			[0, 1, 1, c.d_s_script, 0x16000388],
+			[0, 1, 1, c.d_shplang, 0x16000388],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6035,7 +6122,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030079E8, 0x03009CD8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000388, 0x160003A8, [
-			[0, 1, 1, c.d_s_script, 0x160003A8],
+			[0, 1, 1, c.d_shplang, 0x160003A8],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6043,7 +6130,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x03009CE0, 0x030156D8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x160003A8, 0x16000A84, [
-			[0, 1, 1, c.d_s_script, 0x16000A84],
+			[0, 1, 1, c.d_shplang, 0x16000A84],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6051,7 +6138,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030156E0, 0x030172D8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000A84, 0x16000B10, [
-			[0, 1, 1, c.d_s_script, 0x16000B10],
+			[0, 1, 1, c.d_shplang, 0x16000B10],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6060,7 +6147,7 @@ global_shp = [
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030172E0, 0x0301B5C0],
 		[ultra.c.s_extern, "E0.Global.Shp", 0x16000B2C, 0x16000B8C],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000B10, 0x16000BEC, [
-			[0, 1, 1, c.d_s_script, 0x16000BEC],
+			[0, 1, 1, c.d_shplang, 0x16000BEC],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6068,7 +6155,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0301B5C8, 0x0301C2B8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000BEC, 0x16000C8C, [
-			[0, 1, 1, c.d_s_script, 0x16000C8C],
+			[0, 1, 1, c.d_shplang, 0x16000C8C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6079,7 +6166,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0301CBA0, 0x0301CE70],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000C8C, 0x16000CA4, [
-			[0, 1, 1, c.d_s_script, 0x16000CA4],
+			[0, 1, 1, c.d_shplang, 0x16000CA4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6090,7 +6177,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0301CF08, 0x030233D0],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000CA4, 0x16000E14, [
-			[0, 1, 1, c.d_s_script, 0x16000E14],
+			[0, 1, 1, c.d_shplang, 0x16000E14],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6101,7 +6188,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Gfx", 0x02011ED8, 0x020120B8],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000E14, 0x16000E84, [
-			[0, 1, 1, c.d_s_script, 0x16000E84],
+			[0, 1, 1, c.d_shplang, 0x16000E84],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6109,7 +6196,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x030295E8, 0x0302A6D0],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000E84, 0x16000EA0, [
-			[0, 1, 1, c.d_s_script, 0x16000EA0],
+			[0, 1, 1, c.d_shplang, 0x16000EA0],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6117,7 +6204,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302A6D8, 0x0302BA88],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000EA0, 0x16000ED4, [
-			[0, 1, 1, c.d_s_script, 0x16000ED4],
+			[0, 1, 1, c.d_shplang, 0x16000ED4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6128,7 +6215,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302BD68, 0x0302C480],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000ED4, 0x16000F6C, [
-			[0, 1, 1, c.d_s_script, 0x16000F6C],
+			[0, 1, 1, c.d_shplang, 0x16000F6C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6136,7 +6223,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302C488, 0x0302C658],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000F6C, 0x16000F98, [
-			[0, 1, 1, c.d_s_script, 0x16000F98],
+			[0, 1, 1, c.d_shplang, 0x16000F98],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6144,7 +6231,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302C660, 0x0302C938],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000F98, 0x16000FB4, [
-			[0, 1, 1, c.d_s_script, 0x16000FB4],
+			[0, 1, 1, c.d_shplang, 0x16000FB4],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6152,7 +6239,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302C940, 0x0302DE08],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000FB4, 0x16000FE8, [
-			[0, 1, 1, c.d_s_script, 0x16000FE8],
+			[0, 1, 1, c.d_shplang, 0x16000FE8],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6160,7 +6247,7 @@ global_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Global.Gfx", 0x0302DE10, 0x03033300],
 		[ultra.c.s_data, "E0.Global.Shp", 0x16000FE8, 0x16001060, [
-			[0, 1, 1, c.d_s_script, 0x16001060],
+			[0, 1, 1, c.d_shplang, 0x16001060],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6292,11 +6379,11 @@ title_shp = [
 	[ultra.c.s_extern, "E0.menu.text", 0x8016F670, 0x80170280],
 	[ultra.c.s_extern, "E0.Title.Logo", 0x07000000, 0x0700C940],
 	[ultra.c.s_data, "E0.Title", 0x140002D0, 0x14000414, [
-		[0, 1, 1, c.d_s_script, 0x14000414],
+		[0, 1, 1, c.d_shplang, 0x14000414],
 	]],
 	[ultra.c.s_extern, "E0.Title.Debug", 0x07000000, 0x070065A8],
 	[ultra.c.s_data, "E0.Title", 0x14000414, 0x140004FC, [
-		[0, 1, 1, c.d_s_script, 0x140004FC],
+		[0, 1, 1, c.d_shplang, 0x140004FC],
 	]],
 ]
 
@@ -6437,7 +6524,7 @@ select_gfx = [
 ]
 
 select_prg = [
-	[asm.s_script, "E0.Select", 0x14000000, 0x140001C4, 0],
+	[asm.s_prglang, "E0.Select", 0x14000000, 0x140001C4],
 ]
 
 select_shp = [
@@ -6445,7 +6532,7 @@ select_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Select.Gfx", 0x07000000, 0x07003450],
 		[ultra.c.s_data, "E0.Select", 0x140001D0, 0x14000290, [
-			[0, 1, 1, c.d_s_script, 0x14000290],
+			[0, 1, 1, c.d_shplang, 0x14000290],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6453,14 +6540,14 @@ select_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.Select.Gfx", 0x07003450, 0x070062E8],
 		[ultra.c.s_data, "E0.Select", 0x14000290, 0x14000380, [
-			[0, 1, 1, c.d_s_script, 0x14000380],
+			[0, 1, 1, c.d_shplang, 0x14000380],
 		]],
 		s_script_endif(),
 	s_writepop(),
 	[ultra.c.s_extern, "E0.menu.text", 0x80176688, 0x801766DC],
 	[ultra.c.s_extern, "E0.menu.text", 0x80177518, 0x80177560],
 	[ultra.c.s_data, "E0.Select", 0x14000380, 0x14000490, [
-		[0, 1, 1, c.d_s_script, 0x14000490],
+		[0, 1, 1, c.d_shplang, 0x14000490],
 	]],
 ]
 
@@ -6667,7 +6754,7 @@ bob_gfx = [
 ]
 
 bob_prg = [
-	[asm.s_script, "E0.BoB", 0x0E000000, 0x0E00043C, 0],
+	[asm.s_prglang, "E0.BoB", 0x0E000000, 0x0E00043C],
 ]
 
 bob_shp = [
@@ -6675,7 +6762,7 @@ bob_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.BoB.Gfx", 0x0700E3E0, 0x0700E510],
 		[ultra.c.s_data, "E0.BoB", 0x0E000440, 0x0E000458, [
-			[0, 1, 1, c.d_s_script, 0x0E000458],
+			[0, 1, 1, c.d_shplang, 0x0E000458],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6683,7 +6770,7 @@ bob_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.BoB.Gfx", 0x0700E510, 0x0700E810],
 		[ultra.c.s_data, "E0.BoB", 0x0E000458, 0x0E000470, [
-			[0, 1, 1, c.d_s_script, 0x0E000470],
+			[0, 1, 1, c.d_shplang, 0x0E000470],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6691,7 +6778,7 @@ bob_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.BoB.Gfx", 0x0700E810, 0x0700E958],
 		[ultra.c.s_data, "E0.BoB", 0x0E000470, 0x0E000488, [
-			[0, 1, 1, c.d_s_script, 0x0E000488],
+			[0, 1, 1, c.d_shplang, 0x0E000488],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6699,7 +6786,7 @@ bob_shp = [
 		s_script_else(),
 		[ultra.c.s_extern, "E0.BoB.Gfx", 0x07002800, 0x0700E3E0],
 		[ultra.c.s_data, "E0.BoB", 0x0E000488, 0x0E00054C, [
-			[0, 1, 1, c.d_s_script, 0x0E00054C],
+			[0, 1, 1, c.d_shplang, 0x0E00054C],
 		]],
 		s_script_endif(),
 	s_writepop(),
@@ -6714,14 +6801,122 @@ ending_gfx = [
 ]
 
 ending_prg = [
-	[asm.s_script, "E0.Ending", 0x0E000000, 0x0E000050, 0],
+	[asm.s_prglang, "E0.Ending", 0x0E000000, 0x0E000050],
 ]
 
 ending_shp = [
 	[ultra.c.s_extern, "E0.code.text", 0x802D28CC, 0x802D29BC],
 	[ultra.c.s_data, "E0.Ending", 0x0E000050, 0x0E0000BC, [
-		[0, 1, 1, c.d_s_script, 0x0E0000BC],
+		[0, 1, 1, c.d_shplang, 0x0E0000BC],
 	]],
+]
+
+pss_gfx = [
+	[main.s_str, "#include \"data/texture/i.szp.h\"\n"],
+	[main.s_str, "\n"],
+	[ultra.c.s_data, "E0.PSS.Gfx", 0x07000000, 0x07001800, [
+		[0, 1, 1, c.d_texture, "rgba16", 32, 32, "0"],
+		[0, 1, 1, c.d_texture, "ia16", 32, 32, "1"],
+		[0, 1, 1, c.d_texture, "rgba16", 32, 32, "2"],
+	]],
+	s_dirfile("minislider", "shape.c"),
+		s_script_ifndef(),
+		[c.s_gltf, "minislider", [
+			("i0", None, ("../../../data/texture/i0.rgba16.png", 32, 32)),
+			("i0_light", (0.25, 0xFF, 0xFF, 0xFF), ("../../../data/texture/i0.rgba16.png", 32, 32)),
+			("i2_light", (0.25, 0xFF, 0xFF, 0xFF), ("../../../data/texture/i2.rgba16.png", 32, 32)),
+			("i10", None, ("../../../data/texture/i10.rgba16.png", 32, 64)),
+			("i10_light", (0.25, 0xFF, 0xFF, 0xFF), ("../../../data/texture/i10.rgba16.png", 32, 64)),
+			("i12", None, ("../../../data/texture/i12.rgba16.png", 32, 32)),
+			("i13", None, ("../../../data/texture/i13.rgba16.png", 32, 32)),
+			("i21", None, ("../../../data/texture/i21.rgba16.png", 32, 32)),
+			("i21_shade", (0.25, 0x8C, 0x8C, 0x8C), ("../../../data/texture/i21.rgba16.png", 32, 32)),
+			("i21_light", (0.25, 0xFF, 0xFF, 0xFF), ("../../../data/texture/i21.rgba16.png", 32, 32)),
+			("0", None, ("../0.rgba16.png", 32, 32)),
+			("0_light", (0.25, 0xFF, 0xFF, 0xFF), ("../0.rgba16.png", 32, 32)),
+			("1", None, ("../1.ia16.png", 32, 32)),
+			("2", (0.25, 0xFF, 0xFF, 0xFF), ("../2.rgba16.png", 32, 32)),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x07001800, 0x07001830, [
+			[0, -2, 1, c.d_light, 0.25],
+		]],
+		[c.s_gltf_mesh, "0", [
+			(True, "i21_shade"),
+			(True, "i21_light"),
+			(True, "0_light"),
+			(True, "i0_light"),
+			(True, "i10_light"),
+			(True, "i2_light"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x070083B0, 0x0700A8B8, [
+			[0, 1, 1, c.d_gfx, 0x0700A8B8, "0", 0, 1, 2, 3, 4, 5],
+		]],
+		[c.s_gltf_mesh, "1", [
+			(False, "i21"),
+			(False, "i0"),
+			(False, "i12"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700ADA8, 0x0700B070, [
+			[0, 1, 1, c.d_gfx, 0x0700B070, "1", 0, 1, 2],
+		]],
+		[c.s_gltf_mesh, "2", [
+			(False, "i13"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700B340, 0x0700B4A8, [
+			[0, 1, 1, c.d_gfx, 0x0700B4A8, "2", 0],
+		]],
+		[c.s_gltf_mesh, "3", [
+			(False, "i12"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700CCA8, 0x0700D3A8, [
+			[0, 1, 1, c.d_gfx, 0x0700D3A8, "3", 0],
+		]],
+		[c.s_gltf_mesh, "4", [
+			(False, "1"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700D928, 0x0700DB48, [
+			[0, 1, 1, c.d_gfx, 0x0700DB48, "4", 0],
+		]],
+		[c.s_gltf_mesh, "5", [
+			(False, "i12"),
+			(False, "0"),
+			(False, "i10"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700E0A8, 0x0700E360, [
+			[0, 1, 1, c.d_gfx, 0x0700E348, "5", 0, 1, 2],
+			[0, -1, 1, c.d_light, 0.25],
+		]],
+		[c.s_gltf_mesh, "6", [
+			(True, "2"),
+		]],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700E3A0, 0x0700E490, [
+			[0, 1, 1, c.d_gfx, 0x0700E490, "6", 0],
+		]],
+		[c.s_gltf_write],
+	s_writepop(),
+	[main.s_dir, "minislider"],
+		[c.s_obj, "minislider"],
+		[ultra.c.s_data, "E0.PSS.Gfx", 0x0700E490, 0x0701109C, [
+			[0, 1, 1, c.d_map, "map"],
+			[0, 1, 1, c.d_tag],
+		]],
+		[c.s_obj_write],
+	[main.s_pop],
+]
+
+pss_prg = [
+	[asm.s_prglang, "E0.PSS", 0x0E000000, 0x0E0000F8],
+]
+
+pss_shp = [
+	s_dirfile("minislider", "shape.c"),
+		s_script_else(),
+		[ultra.c.s_extern, "E0.PSS.Gfx", 0x07001800, 0x0700E490],
+		[ultra.c.s_data, "E0.PSS", 0x0E000100, 0x0E0001B8, [
+			[0, 1, 1, c.d_shplang, 0x0E0001B8],
+		]],
+		s_script_endif(),
+	s_writepop(),
 ]
 
 anime_stbl = [
@@ -7086,7 +7281,7 @@ seqpath = [
 	["music", "lakitumsg.seq"],
 ]
 
-load = [
+J0 = [
 	[main.s_segment, ["donor", "UNSMJ00.z64"], [
 		(0x00000000, 0x00000040, 0x00000000, "D.header"),
 		(0x00000040, 0x00001000, 0xA4000040, "IPL3"),
@@ -7109,6 +7304,9 @@ load = [
 		(0x0021D7D0, 0x00255EC0, 0x8016F000, "J0.menu.text"),
 		(0x00255EC0, 0x00255EC0, 0x801A76F0, "J0.menu.data"),
 	]],
+]
+
+E0 = [
 	[main.s_segment, ["donor", "UNSME00.z64"], [
 		# (0x00000000, 0x00000040, 0x00000000, "D.header"),
 		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
@@ -7179,16 +7377,16 @@ load = [
 		(0x002A6120, 0x002A65B0, 0x14000000, "E0.Select"),
 		(0x002A65B0, 0x002ABCA0, 0x07000000, "E0.Select.Gfx", s_slidec),
 		(0x002ABCA0, 0x002AC6B0, 0x15000000, "E0.Game"),
-		(0x002AC6B0, 0x002B8F10, 0x0A000000, "E0.BackA", s_slidec),
-		(0x002B8F10, 0x002C73D0, 0x0A000000, "E0.BackB", s_slidec),
-		(0x002C73D0, 0x002D0040, 0x0A000000, "E0.BackC", s_slidec),
-		(0x002D0040, 0x002D64F0, 0x0A000000, "E0.BackD", s_slidec),
-		(0x002D64F0, 0x002E7880, 0x0A000000, "E0.BackE", s_slidec),
-		(0x002E7880, 0x002F14E0, 0x0A000000, "E0.BackF", s_slidec),
-		(0x002F14E0, 0x002FB1B0, 0x0A000000, "E0.BackG", s_slidec),
-		(0x002FB1B0, 0x00301CD0, 0x0A000000, "E0.BackH", s_slidec),
-		(0x00301CD0, 0x0030CEC0, 0x0A000000, "E0.BackI", s_slidec),
-		(0x0030CEC0, 0x0031E1D0, 0x0A000000, "E0.BackJ", s_slidec),
+		(0x002AC6B0, 0x002B8F10, 0x0A000000, "E0.BackgroundA", s_slidec),
+		(0x002B8F10, 0x002C73D0, 0x0A000000, "E0.BackgroundB", s_slidec),
+		(0x002C73D0, 0x002D0040, 0x0A000000, "E0.BackgroundC", s_slidec),
+		(0x002D0040, 0x002D64F0, 0x0A000000, "E0.BackgroundD", s_slidec),
+		(0x002D64F0, 0x002E7880, 0x0A000000, "E0.BackgroundE", s_slidec),
+		(0x002E7880, 0x002F14E0, 0x0A000000, "E0.BackgroundF", s_slidec),
+		(0x002F14E0, 0x002FB1B0, 0x0A000000, "E0.BackgroundG", s_slidec),
+		(0x002FB1B0, 0x00301CD0, 0x0A000000, "E0.BackgroundH", s_slidec),
+		(0x00301CD0, 0x0030CEC0, 0x0A000000, "E0.BackgroundI", s_slidec),
+		(0x0030CEC0, 0x0031E1D0, 0x0A000000, "E0.BackgroundJ", s_slidec),
 		(0x0031E1D0, 0x00326E40, 0x09000000, "E0.TextureA", s_slidec),
 		(0x00326E40, 0x0032D070, 0x09000000, "E0.TextureB", s_slidec),
 		(0x0032D070, 0x00334B30, 0x09000000, "E0.TextureC", s_slidec),
@@ -7271,6 +7469,56 @@ load = [
 		(0x007B0860, 0x007CC620, 0x00000000, "E0.Audioseq"),
 		(0x007CC620, 0x007CC6C0, 0x00000000, "E0.Audiobnk"),
 	]],
+]
+
+G0 = [
+	[main.s_segment, ["donor", "UNSMG00.z64"], [
+		# (0x00000000, 0x00000040, 0x00000000, "D.header"),
+		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
+		(0x00001000, 0x00001050, 0x80246000, "G0.crt0.text"),
+		(0x00001050, 0x000BA540, 0x80246050, "G0.code.text"),
+		# (0x000BA540, 0x000BA610, 0x04001000, "D.rspboot.text"),
+		# (0x000BA610, 0x000BB570, 0x04001080, "E.gspFast3D_fifo.text"),
+		# (0x000BB570, 0x000BB5F8, 0x04001000, "D.gspFast3D_fifo.text.main"),
+		# (0x000BB5F8, 0x000BB818, 0x04001768, "D.gspFast3D_fifo.text.clip"),
+		# (0x000BB818, 0x000BB9B0, 0x04001768, "D.gspFast3D_fifo.text.light"),
+		# (0x000BB9B0, 0x000BBA20, 0x04001768, "D.gspFast3D_fifo.text.exit"),
+		# (0x000BBA20, 0x000BC840, 0x04001080, "D.aspMain.text"),
+		(0x000BC840, 0x000C8C30, 0x8032C620, "G0.code.data"),
+		(0x000C8C30, 0x000C9430, 0x04000000, "D.gspFast3D_fifo.data"),
+		(0x000C9430, 0x000C96F0, 0x04000000, "D.aspMain.data"),
+		(0x000C96F0, 0x000D3B70, 0x80378800, "G0.ulib.text"),
+		(0x001F0310, 0x00227370, 0x8016F000, "G0.menu.text"),
+	]],
+]
+
+DD = [
+	[main.s_segment, ["donor", "UDSMJ00.ndd"], [
+		(0x00001000, 0x00001050, 0x80400000, "DD.crt0.text"),
+		(0x00001050, 0x000A6440, 0x80400050, "DD.code.text"),
+		# (0x000A6440, 0x000A6510, 0x04001000, "F.rspboot.text"),
+		# (0x000A6510, 0x000A7460, 0x04001080, "F.gspFast3D_fifo.text"),
+		# (0x000A7460, 0x000A74E8, 0x04001000, "F.gspFast3D_fifo.text.main"),
+		# (0x000A74E8, 0x000A7708, 0x04001768, "F.gspFast3D_fifo.text.clip"),
+		# (0x000A7708, 0x000A78A0, 0x04001768, "F.gspFast3D_fifo.text.light"),
+		# (0x000A78A0, 0x000A7910, 0x04001768, "F.gspFast3D_fifo.text.exit"),
+		(0x000A7910, 0x000A8730, 0x04001080, "G.aspMain.text"),
+		(0x000A8730, 0x000B4280, 0x804A7730, "DD.code.data"),
+		# (0x000B4280, 0x000B4A80, 0x04000000, "F.gspFast3D_fifo.data"),
+		(0x000B4A80, 0x000B4D80, 0x04000000, "G.aspMain.data"),
+		(0x000B4D80, 0x000B6690, 0x804B3D80, "DD.code.audiodata"),
+		(0x000B6690, 0x000E1440, 0x80510000, "DD.ulib.text"),
+		(0x001FE3D0, 0x002051F0, 0x8016F000, "DD.menu.text"),
+		(0x00455380, 0x004E2FA0, 0x00000000, "DD.Anime"),
+		(0x004E2FA0, 0x004E4520, 0x00000000, "DD.Demo"),
+		(0x004E4520, 0x004FC0A0, 0x00000000, "DD.Audioctl"),
+		(0x004FC0A0, 0x0092DCA0, 0x00000000, "DD.Audiotbl"),
+		(0x0092DCA0, 0x00949C60, 0x00000000, "DD.Audioseq"),
+		(0x00949C60, 0x00949D00, 0x00000000, "DD.Audiobnk"),
+	], s_disk],
+]
+
+P0 = [
 	[main.s_segment, ["donor", "UNSMP00.z64"], [
 		(0x00000000, 0x00000040, 0x00000000, "F.header"),
 		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
@@ -7295,21 +7543,38 @@ load = [
 	]],
 ]
 
+J3 = [
+	[main.s_segment, ["donor", "UNSMJ03.z64"], [
+		(0x00000000, 0x00000040, 0x00000000, "H.header"),
+		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
+		(0x00001000, 0x00001050, 0x80249000, "J3.crt0.text"),
+		(0x00001050, 0x000C26D0, 0x80249050, "J3.code.text"),
+		(0x000D4150, 0x000DE5D0, 0x80378800, "J3.ulib.text"),
+		(0x001FA4E0, 0x002321A0, 0x8016F000, "J3.menu.text"),
+	]],
+]
+
+C3 = [
+	[main.s_segment, ["donor", "UNSMC03.z64"], [
+		(0x00000000, 0x00000040, 0x00000000, "L.header"),
+		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
+		(0x00001000, 0x00001050, 0x80249000, "C3.crt0.text"),
+		(0x00001050, 0x000C4C30, 0x80249050, "C3.code.text"),
+		(0x000D71B0, 0x000E1730, 0x80378800, "C3.ulib.text"),
+		(0x0020AAF0, 0x002435F0, 0x8016F000, "C3.menu.text"),
+	]],
+]
+
 lst = [
-	[main.s_call, load],
+	[main.s_call, J0],
+	[main.s_call, E0],
+	[main.s_call, P0],
 	[main.s_copy, ["include"], ["include"]],
 	[main.s_dir, "include"],
 		[main.s_dir, "sm64"],
-		# [main.s_file, "sm64.inc"],
-		# 	[main.s_str, ".ifdef TARGET_E0\n"],
-		# 	[ultra.asm.s_definelabel, "E0"],
-		# 	[main.s_str, ".endif /* TARGET_E0 */\n"],
-		# [main.s_write],
 			[main.s_call, include_code],
 			[main.s_call, include_audio],
 			[main.s_call, include_ulib],
-			[main.s_call, include_menu],
-			[main.s_call, include_face],
 		[main.s_pop],
 	[main.s_pop],
 	[main.s_copy, ["libultra"], ["libultra"]],
@@ -7348,15 +7613,15 @@ lst = [
 			[main.s_str, "\n"],
 			[main.s_str, str_data],
 			[main.s_str, "\n"],
-			[main.s_str, "#define STAGE   0\n\n"],
-			[asm.s_script, "E0.Main", 0x10000000, 0x1000000C, 0],
+			[main.s_str, "#define STAGE   STAGE_NULL\n\n"],
+			[asm.s_prglang, "E0.Main", 0x10000000, 0x1000000C],
 			[main.s_str, "\tpSet(STAGE)\n"],
-			[main.s_str, "#if STAGE == 0\n"],
-			[asm.s_script, "E0.Main", 0x10000010, 0x10000020, 0],
+			[main.s_str, "#if STAGE == STAGE_NULL\n"],
+			[asm.s_prglang, "E0.Main", 0x10000010, 0x10000020],
 			[main.s_str, "#else\n"],
 			[main.s_str, "\tpExecute(SEG_GAME, _GameSegmentRomStart, _GameSegmentRomEnd, p_game)\n"],
 			[main.s_str, "#endif\n"],
-			[asm.s_script, "E0.Main", 0x10000020, 0x10000028, 0],
+			[asm.s_prglang, "E0.Main", 0x10000020, 0x10000028],
 		[main.s_write],
 		[main.s_file, "gfx.c"],
 			s_include(["sm64"]),
@@ -7368,7 +7633,7 @@ lst = [
 			[main.s_str, "\n"],
 			[main.s_str, str_data],
 			[main.s_str, "\n"],
-			[asm.s_script, "E0.Game", 0x15000000, 0x15000660, 0],
+			[asm.s_prglang, "E0.Game", 0x15000000, 0x15000660],
 			[main.s_str, "\n"],
 	[main.s_pop],
 			s_shape_p("E0.Game", 0x15000660, 0x1500071C, "3common"),
@@ -7391,7 +7656,7 @@ lst = [
 			s_shape_p("E0.Game", 0x150009DC, 0x15000A10, "2f"),
 		[main.s_write],
 	[main.s_dir, "data"],
-		[main.s_dir, "back"],
+		[main.s_dir, "background"],
 			[main.s_file, "title.c"],
 				[main.s_dir, "title"],
 				s_include(["sm64"]),
@@ -7410,100 +7675,100 @@ lst = [
 				[main.s_dir, "a"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackA", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundA", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackA", 0x0A020000],
+				[c.s_background, "E0.BackgroundA", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "b.c"],
 				[main.s_dir, "b"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackB", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundB", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackB", 0x0A020000],
+				[c.s_background, "E0.BackgroundB", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "c.c"],
 				[main.s_dir, "c"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackC", 0x0A000000, 0x0A014800, [
+				[ultra.c.s_data, "E0.BackgroundC", 0x0A000000, 0x0A014800, [
 					d_texture_n("rgba16", 32, 32, 41, "%02o"),
 				]],
-				[c.s_back, "E0.BackC", 0x0A014800],
+				[c.s_background, "E0.BackgroundC", 0x0A014800],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "d.c"],
 				[main.s_dir, "d"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackD", 0x0A000000, 0x0A018800, [
+				[ultra.c.s_data, "E0.BackgroundD", 0x0A000000, 0x0A018800, [
 					d_texture_n("rgba16", 32, 32, 49, "%02o"),
 				]],
-				[c.s_back, "E0.BackD", 0x0A018800],
+				[c.s_background, "E0.BackgroundD", 0x0A018800],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "e.c"],
 				[main.s_dir, "e"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackE", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundE", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackE", 0x0A020000],
+				[c.s_background, "E0.BackgroundE", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "f.c"],
 				[main.s_dir, "f"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackF", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundF", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackF", 0x0A020000],
+				[c.s_background, "E0.BackgroundF", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "g.c"],
 				[main.s_dir, "g"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackG", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundG", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackG", 0x0A020000],
+				[c.s_background, "E0.BackgroundG", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "h.c"],
 				[main.s_dir, "h"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackH", 0x0A000000, 0x0A014800, [
+				[ultra.c.s_data, "E0.BackgroundH", 0x0A000000, 0x0A014800, [
 					d_texture_n("rgba16", 32, 32, 41, "%02o"),
 				]],
-				[c.s_back, "E0.BackH", 0x0A014800],
+				[c.s_background, "E0.BackgroundH", 0x0A014800],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "i.c"],
 				[main.s_dir, "i"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackI", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundI", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackI", 0x0A020000],
+				[c.s_background, "E0.BackgroundI", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 			[main.s_file, "j.c"],
 				[main.s_dir, "j"],
 				s_include(["sm64"]),
 				[main.s_str, "\n"],
-				[ultra.c.s_data, "E0.BackJ", 0x0A000000, 0x0A020000, [
+				[ultra.c.s_data, "E0.BackgroundJ", 0x0A000000, 0x0A020000, [
 					d_texture_n("rgba16", 32, 32, 64, "%02o"),
 				]],
-				[c.s_back, "E0.BackJ", 0x0A020000],
+				[c.s_background, "E0.BackgroundJ", 0x0A020000],
 				[main.s_pop],
 			[main.s_write],
 		[main.s_pop],
@@ -7577,7 +7842,7 @@ lst = [
 					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e7"],
 					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e8_j12"],
 					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e9"],
-					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e10_i18"],
+					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e10_i17"],
 					d_texture_n("rgba16", 32, 32, 15, "e%d", 11),
 				]],
 			[main.s_write],
@@ -7636,11 +7901,13 @@ lst = [
 				[ultra.c.s_data, "E0.TextureI", 0x09000000, 0x0900C800, [
 					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "i0"],
 					[0, 1, 1, c.d_texture, "rgba16", 64, 32, "i1"],
-					d_texture_n("rgba16", 32, 32, 16, "i%d", 2),
-					[0, 1, 1, c.d_texture, "rgba16", 64, 32, "i16"],
-					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "i17"],
-					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e10_i18"],
-					d_texture_n("rgba16", 32, 32, 23, "i%d", 19),
+					d_texture_n("rgba16", 32, 32, 10, "i%d", 2),
+					[0, 1, 1, c.d_texture, "rgba16", 32, 64, "i10"],
+					d_texture_n("rgba16", 32, 32, 15, "i%d", 11),
+					[0, 1, 1, c.d_texture, "rgba16", 64, 32, "i15"],
+					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "i16"],
+					[0, 1, 1, c.d_texture, "rgba16", 32, 32, "e10_i17"],
+					d_texture_n("rgba16", 32, 32, 22, "i%d", 18),
 				]],
 			[main.s_write],
 			[main.s_file, "j.c"],
@@ -7751,7 +8018,7 @@ lst = [
 				[main.s_str, "\n"],
 				[main.s_str, str_data],
 				[main.s_str, "\n"],
-				[asm.s_script, "E0.Title", 0x14000000, 0x140002D0, 0],
+				[asm.s_prglang, "E0.Title", 0x14000000, 0x140002D0],
 			[main.s_write],
 			[main.s_file, "shp.c"],
 				s_include(["sm64/shplang"]),
@@ -7760,26 +8027,117 @@ lst = [
 			[main.s_write],
 		[main.s_pop],
 		s_stage("select", select_gfx, select_prg, select_shp),
-		s_stagebin("E0.BBH",        0x26E44, 0x5A8, 0xAE0, "bbh"),
-		s_stagebin("E0.CCM",        0x237A6, 0x3DC, 0x2D0, "ccm"),
+		s_stagebin("E0.BBH",        0x26E44, 0x5A8, 0xAE0, "bbh", """
+
+.globl water_0400; water_0400 = 0x07026E24
+.globl water_0401; water_0401 = 0x07026E34
+
+"""),
+		s_stagebin("E0.CCM",        0x237A6, 0x3DC, 0x2D0, "ccm", """
+
+.globl water_0501; water_0501 = 0x07016708
+
+"""),
 		s_stagebin("E0.Inside",     0x79118, 0xEFC, 0xDF0, "inside", """
 
+.globl wave_inside_07023620; wave_inside_07023620 = 0x07023620
+.globl wave_inside_07023698; wave_inside_07023698 = 0x07023698
+.globl wave_inside_07023710; wave_inside_07023710 = 0x07023710
+.globl wave_inside_07023788; wave_inside_07023788 = 0x07023788
+.globl wave_inside_07023800; wave_inside_07023800 = 0x07023800
+.globl wave_inside_07023878; wave_inside_07023878 = 0x07023878
+.globl wave_inside_070238F0; wave_inside_070238F0 = 0x070238F0
+.globl wave_inside_07023968; wave_inside_07023968 = 0x07023968
+.globl wave_inside_070239E0; wave_inside_070239E0 = 0x070239E0
+.globl wave_inside_07023A58; wave_inside_07023A58 = 0x07023A58
+.globl wave_inside_07023AD0; wave_inside_07023AD0 = 0x07023AD0
+.globl wave_inside_07023B48; wave_inside_07023B48 = 0x07023B48
+.globl wave_inside_07023BC0; wave_inside_07023BC0 = 0x07023BC0
+.globl wave_inside_07023C38; wave_inside_07023C38 = 0x07023C38
 .globl gfx_inside_0702A880; gfx_inside_0702A880 = 0x0702A880
+.globl water_0600; water_0600 = 0x070790F0
+.globl water_0612; water_0612 = 0x07079100
 
 """, """
 
-extern void *s_inside_mirror(int code, SHAPE *shape, void *data);
-extern void *s_objshape_802D2360(int code, SHAPE *shape, void *data);
+extern void *CtrlInsideMirror(int code, SHAPE *shape, void *data);
+extern void *Ctrl_objshape_802D2360(int code, SHAPE *shape, void *data);
 
 """),
-		s_stagebin("E0.HMC",        0x2B968, 0x530, 0x780, "hmc"),
-		s_stagebin("E0.SSL",        0x288B0, 0x5B4, 0x35C, "ssl"),
+		s_stagebin("E0.HMC",        0x2B968, 0x530, 0x780, "hmc", """
+
+.globl wave_hmc_0702551C; wave_hmc_0702551C = 0x0702551C
+.globl water_0701; water_0701 = 0x0702B900
+.globl water_0702; water_0702 = 0x0702B950
+
+"""),
+		s_stagebin("E0.SSL",        0x288B0, 0x5B4, 0x35C, "ssl", """
+
+.globl txt_ssl_07001000; txt_ssl_07001000 = 0x07001000
+.globl txt_ssl_07004018; txt_ssl_07004018 = 0x07004018
+.globl gfx_ssl_07004818; gfx_ssl_07004818 = 0x07004818
+.globl gfx_ssl_07004860; gfx_ssl_07004860 = 0x07004860
+.globl gfx_ssl_07004880; gfx_ssl_07004880 = 0x07004880
+.globl gfx_ssl_070048F8; gfx_ssl_070048F8 = 0x070048F8
+.globl fluid_0801S; fluid_0801S = 0x07004930
+.globl fluid_0802S; fluid_0802S = 0x070049B4
+.globl gfx_ssl_07004A38; gfx_ssl_07004A38 = 0x07004A38
+.globl water_0801; water_0801 = 0x07012778
+.globl water_0851; water_0851 = 0x070127C8
+.globl gfx_ssl_070127E0; gfx_ssl_070127E0 = 0x070127E0
+.globl gfx_ssl_070127E8; gfx_ssl_070127E8 = 0x070127E8
+.globl fluid_0801L; fluid_0801L = 0x070127F0
+.globl gfx_ssl_070128B8; gfx_ssl_070128B8 = 0x070128B8
+.globl fluid_0802L; fluid_0802L = 0x07012900
+.globl gfx_ssl_07012A08; gfx_ssl_07012A08 = 0x07012A08
+.globl fluid_0803L; fluid_0803L = 0x07012A50
+.globl gfx_ssl_07012B48; gfx_ssl_07012B48 = 0x07012B48
+.globl gfx_ssl_070285F0; gfx_ssl_070285F0 = 0x070285F0
+.globl gfx_ssl_07028660; gfx_ssl_07028660 = 0x07028660
+.globl gfx_ssl_070286A0; gfx_ssl_070286A0 = 0x070286A0
+.globl gfx_ssl_07028718; gfx_ssl_07028718 = 0x07028718
+.globl fluid_0801; fluid_0801 = 0x07028760
+.globl gfx_ssl_070287B8; gfx_ssl_070287B8 = 0x070287B8
+.globl fluid_0802; fluid_0802 = 0x070287F0
+.globl fluid_0803; fluid_0803 = 0x07028844
+.globl gfx_ssl_07028888; gfx_ssl_07028888 = 0x07028888
+
+"""),
 		s_stage("bob", bob_gfx, bob_prg, bob_shp),
-		s_stagebin("E0.SL",         0x0FA88, 0x360, 0x1C4, "sl"),
-		s_stagebin("E0.WDW",        0x18788, 0x57C, 0x24C, "wdw"),
-		s_stagebin("E0.JRB",        0x113AC, 0x900, 0x2A4, "jrb"),
-		s_stagebin("E0.THI",        0x0E3BC, 0x5A4, 0x28C, "thi"),
-		s_stagebin("E0.TTC",        0x16A20, 0x240, 0x228, "ttc"),
+		s_stagebin("E0.SL",         0x0FA88, 0x360, 0x1C4, "sl", """
+
+.globl water_1001; water_1001 = 0x0700FA70
+
+"""),
+		s_stagebin("E0.WDW",        0x18788, 0x57C, 0x24C, "wdw", """
+
+.globl water_1101; water_1101 = 0x07018748
+.globl water_1102; water_1102 = 0x07018778
+
+"""),
+		s_stagebin("E0.JRB",        0x113AC, 0x900, 0x2A4, "jrb", """
+
+.globl water_1201; water_1201 = 0x0700D2CC
+.globl water_1205; water_1205 = 0x0700D304
+.globl water_1202; water_1202 = 0x0701139C
+
+"""),
+		s_stagebin("E0.THI",        0x0E3BC, 0x5A4, 0x28C, "thi", """
+
+.globl water_1301; water_1301 = 0x0700E31C
+.globl water_1302; water_1302 = 0x0700E39C
+
+"""),
+		s_stagebin("E0.TTC",        0x16A20, 0x240, 0x228, "ttc", """
+
+.globl txt_ttc_07015F90; txt_ttc_07015F90 = 0x07015F90
+.globl gfx_ttc_07016790; gfx_ttc_07016790 = 0x07016790
+.globl gfx_ttc_07016808; gfx_ttc_07016808 = 0x07016808
+.globl fluid_1400L; fluid_1400L = 0x07016840
+.globl fluid_1401L; fluid_1401L = 0x07016904
+.globl gfx_ttc_070169C8; gfx_ttc_070169C8 = 0x070169C8
+
+"""),
 		s_stagebin("E0.RR",         0x2EE76, 0x658, 0x414, "rr", """
 
 .globl rr_07019080; rr_07019080 = 0x07019080
@@ -7789,34 +8147,87 @@ extern void *s_objshape_802D2360(int code, SHAPE *shape, void *data);
 
 """, """
 
-extern void *s_objshape_802D2470(int code, SHAPE *shape, void *data);
-extern void *s_objshape_802D2520(int code, SHAPE *shape, void *data);
+extern void *Ctrl_objshape_802D2470(int code, SHAPE *shape, void *data);
+extern void *Ctrl_objshape_802D2520(int code, SHAPE *shape, void *data);
 
 """),
 		s_stagebin("E0.Grounds",    0x11878, 0x65C, 0x1C0, "grounds", """
 
 .globl gfx_grounds_0700EA58; gfx_grounds_0700EA58 = 0x0700EA58
 .globl gfx_grounds_0700F2E8; gfx_grounds_0700F2E8 = 0x0700F2E8
+.globl water_1601; water_1601 = 0x07011738
+.globl fluid_1601; fluid_1601 = 0x07011750
+.globl gfx_grounds_070117E8; gfx_grounds_070117E8 = 0x070117E8
 
 """),
 		s_stagebin("E0.BitDW",      0x0FE30, 0x3B4, 0x2E0, "bitdw"),
 		s_stagebin("E0.VCutM",      0x0ACC8, 0x1F0, 0x0B8, "vcutm"),
-		s_stagebin("E0.BitFS",      0x15C08, 0x4A4, 0x398, "bitfs"),
+		s_stagebin("E0.BitFS",      0x15C08, 0x4A4, 0x398, "bitfs", """
+
+.globl fluid_1901; fluid_1901 = 0x07015AF0
+.globl fluid_1902; fluid_1902 = 0x07015B1C
+.globl fluid_1903; fluid_1903 = 0x07015B48
+.globl gfx_bitfs_07015BA8; gfx_bitfs_07015BA8 = 0x07015BA8
+.globl gfx_bitfs_07015BC0; gfx_bitfs_07015BC0 = 0x07015BC0
+
+"""),
 		s_stagebin("E0.SA",         0x03330, 0x168, 0x090, "sa"),
 		s_stagebin("E0.BitS",       0x1B7F4, 0x42C, 0x370, "bits"),
-		s_stagebin("E0.LLL",        0x288D0, 0x9D8, 0x5A0, "lll"),
-		s_stagebin("E0.DDD",        0x0FD10, 0x450, 0x1E0, "ddd"),
-		s_stagebin("E0.WF",         0x11E18, 0x7E0, 0x4DC, "wf"),
+		s_stagebin("E0.LLL",        0x288D0, 0x9D8, 0x5A0, "lll", """
+
+.globl fluid_2201; fluid_2201 = 0x070286BC
+.globl gfx_lll_07028718; gfx_lll_07028718 = 0x07028718
+.globl water_2202; water_2202 = 0x07028780
+.globl fluid_2202; fluid_2202 = 0x07028790
+.globl gfx_lll_07028838; gfx_lll_07028838 = 0x07028838
+
+"""),
+		s_stagebin("E0.DDD",        0x0FD10, 0x450, 0x1E0, "ddd", """
+
+.globl water_2301; water_2301 = 0x0700FCB4
+.globl water_2302; water_2302 = 0x0700FD00
+
+"""),
+		s_stagebin("E0.WF",         0x11E18, 0x7E0, 0x4DC, "wf", """
+
+.globl water_2401; water_2401 = 0x07011E08
+
+"""),
 		s_stage("ending", ending_gfx, ending_prg, ending_shp),
-		s_stagebin("E0.Courtyard",  0x06E7C, 0x1FC, 0x0C0, "courtyard"),
-		s_stagebin("E0.PSS",        0x1109C, 0x0F8, 0x0B8, "pss"),
-		s_stagebin("E0.CotMC",      0x0BFA8, 0x194, 0x0A8, "cotmc"),
+		s_stagebin("E0.Courtyard",  0x06E7C, 0x1FC, 0x0C0, "courtyard", """
+
+.globl water_2601; water_2601 = 0x07006E6C
+
+"""),
+		s_stage("pss", pss_gfx, pss_prg, pss_shp),
+		s_stagebin("E0.CotMC",      0x0BFA8, 0x194, 0x0A8, "cotmc", """
+
+.globl gfx_cotmc_0700BE10; gfx_cotmc_0700BE10 = 0x0700BE10
+.globl gfx_cotmc_0700BE88; gfx_cotmc_0700BE88 = 0x0700BE88
+.globl fluid_2801; fluid_2801 = 0x0700BED0
+.globl gfx_cotmc_0700BF60; gfx_cotmc_0700BF60 = 0x0700BF60
+
+
+"""),
 		s_stagebin("E0.TotWC",      0x089C6, 0x158, 0x0C0, "totwc"),
 		s_stagebin("E0.BitDWA",     0x02AC8, 0x0D0, 0x088, "bitdwa"),
 		s_stagebin("E0.WMotR",      0x137AE, 0x1E4, 0x0AC, "wmotr"),
 		s_stagebin("E0.BitFSA",     0x01BA0, 0x16C, 0x0A0, "bitfsa"),
 		s_stagebin("E0.BitSA",      0x050BC, 0x28C, 0x190, "bitsa"),
-		s_stagebin("E0.TTM",        0x30474, 0x710, 0x6FC, "ttm"),
+		s_stagebin("E0.TTM",        0x30474, 0x710, 0x6FC, "ttm", """
+
+.globl wave_ttm_07012F00; wave_ttm_07012F00 = 0x07012F00
+.globl water_3601; water_3601 = 0x07017124
+.globl fluid_3601; fluid_3601 = 0x07017134
+.globl fluid_3603; fluid_3603 = 0x07017174
+.globl fluid_3602; fluid_3602 = 0x070171A0
+.globl fluid_3604; fluid_3604 = 0x070171E0
+.globl fluid_3605; fluid_3605 = 0x0701720C
+.globl gfx_ttm_07017260; gfx_ttm_07017260 = 0x07017260
+.globl gfx_ttm_07017288; gfx_ttm_07017288 = 0x07017288
+.globl gfx_ttm_070172A0; gfx_ttm_070172A0 = 0x070172A0
+
+"""),
 	[main.s_pop],
 	[main.s_dir, "audio"],
 		[main.s_file, "se.ins"],
@@ -7838,48 +8249,13 @@ extern void *s_objshape_802D2520(int code, SHAPE *shape, void *data);
 ]
 
 test = [
-	[main.s_call, load],
-	[main.s_segment, ["donor", "UNSMG00.z64"], [
-		# (0x00000000, 0x00000040, 0x00000000, "D.header"),
-		# (0x00000040, 0x00001000, 0xA4000040, "IPL3"),
-		(0x00001000, 0x00001050, 0x80246000, "G0.crt0.text"),
-		(0x00001050, 0x000BA540, 0x80246050, "G0.code.text"),
-		# (0x000BA540, 0x000BA610, 0x04001000, "D.rspboot.text"),
-		# (0x000BA610, 0x000BB570, 0x04001080, "E.gspFast3D_fifo.text"),
-		# (0x000BB570, 0x000BB5F8, 0x04001000, "D.gspFast3D_fifo.text.main"),
-		# (0x000BB5F8, 0x000BB818, 0x04001768, "D.gspFast3D_fifo.text.clip"),
-		# (0x000BB818, 0x000BB9B0, 0x04001768, "D.gspFast3D_fifo.text.light"),
-		# (0x000BB9B0, 0x000BBA20, 0x04001768, "D.gspFast3D_fifo.text.exit"),
-		# (0x000BBA20, 0x000BC840, 0x04001080, "D.aspMain.text"),
-		(0x000BC840, 0x000C8C30, 0x8032C620, "G0.code.data"),
-		(0x000C8C30, 0x000C9430, 0x04000000, "D.gspFast3D_fifo.data"),
-		(0x000C9430, 0x000C96F0, 0x04000000, "D.aspMain.data"),
-		(0x000C96F0, 0x000D3B70, 0x80378800, "G0.ulib.text"),
-		(0x001F0310, 0x00227370, 0x8016F000, "G0.menu.text"),
-	]],
-	[main.s_segment, ["donor", "UDSMJ00.ndd"], [
-		(0x00001000, 0x00001050, 0x80400000, "DD.crt0.text"),
-		(0x00001050, 0x000A6440, 0x80400050, "DD.code.text"),
-		# (0x000A6440, 0x000A6510, 0x04001000, "F.rspboot.text"),
-		# (0x000A6510, 0x000A7460, 0x04001080, "F.gspFast3D_fifo.text"),
-		# (0x000A7460, 0x000A74E8, 0x04001000, "F.gspFast3D_fifo.text.main"),
-		# (0x000A74E8, 0x000A7708, 0x04001768, "F.gspFast3D_fifo.text.clip"),
-		# (0x000A7708, 0x000A78A0, 0x04001768, "F.gspFast3D_fifo.text.light"),
-		# (0x000A78A0, 0x000A7910, 0x04001768, "F.gspFast3D_fifo.text.exit"),
-		(0x000A7910, 0x000A8730, 0x04001080, "G.aspMain.text"),
-		(0x000A8730, 0x000B4280, 0x804A7730, "DD.code.data"),
-		# (0x000B4280, 0x000B4A80, 0x04000000, "F.gspFast3D_fifo.data"),
-		(0x000B4A80, 0x000B4D80, 0x04000000, "G.aspMain.data"),
-		(0x000B4D80, 0x000B6690, 0x804B3D80, "DD.code.audiodata"),
-		(0x000B6690, 0x000E1440, 0x80510000, "DD.ulib.text"),
-		(0x001FE3D0, 0x002051F0, 0x8016F000, "DD.menu.text"),
-		(0x00455380, 0x004E2FA0, 0x00000000, "DD.Anime"),
-		(0x004E2FA0, 0x004E4520, 0x00000000, "DD.Demo"),
-		(0x004E4520, 0x004FC0A0, 0x00000000, "DD.Audioctl"),
-		(0x004FC0A0, 0x0092DCA0, 0x00000000, "DD.Audiotbl"),
-		(0x0092DCA0, 0x00949C60, 0x00000000, "DD.Audioseq"),
-		(0x00949C60, 0x00949D00, 0x00000000, "DD.Audiobnk"),
-	], s_disk],
+	[main.s_call, J0],
+	[main.s_call, E0],
+	[main.s_call, G0],
+	[main.s_call, DD],
+	[main.s_call, P0],
+	[main.s_call, J3],
+	[main.s_call, C3],
 	[main.s_dir, "J0"],
 		s_code("J0.code.text", 0x80246050, 0x80246E34, "main"),
 		s_code("J0.code.text", 0x80246E40, 0x80248C0C, "graphics"),
@@ -7888,25 +8264,25 @@ test = [
 		s_code("J0.code.text", 0x8024BE50, 0x80250764, "collision"),
 		s_code("J0.code.text", 0x80250770, 0x80254E18, "player"),
 		s_code("J0.code.text", 0x80254E20, 0x80256C1C, "physics"),
-		s_code("J0.code.text", 0x80256C20, 0x8025D9E8, "pldemo"),
-		s_code("J0.code.text", 0x8025D9F0, 0x802604D4, "plhang"),
-		s_code("J0.code.text", 0x802604E0, 0x80263A50, "plwait"),
-		s_code("J0.code.text", 0x80263A50, 0x80269ACC, "plmove"),
-		s_code("J0.code.text", 0x80269AD0, 0x8026FB98, "pljump"),
-		s_code("J0.code.text", 0x8026FBA0, 0x8027493C, "plswim"),
-		s_code("J0.code.text", 0x80274940, 0x80275C20, "plhold"),
+		# s_code("J0.code.text", 0x80256C20, 0x8025D9E8, "pldemo"),
+		# s_code("J0.code.text", 0x8025D9F0, 0x802604D4, "plspec"),
+		# s_code("J0.code.text", 0x802604E0, 0x80263A50, "plwait"),
+		# s_code("J0.code.text", 0x80263A50, 0x80269ACC, "plmove"),
+		# s_code("J0.code.text", 0x80269AD0, 0x8026FB98, "pljump"),
+		# s_code("J0.code.text", 0x8026FBA0, 0x8027493C, "plswim"),
+		# s_code("J0.code.text", 0x80274940, 0x80275C20, "pltake"),
 		s_code("J0.code.text", 0x80275C20, 0x80277924, "callback"),
 		s_code("J0.code.text", 0x80277930, 0x80278BA8, "memory"),
-		s_code("J0.code.text", 0x80278BB0, 0x8027A214, "save"),
+		s_code("J0.code.text", 0x80278BB0, 0x8027A214, "backup"),
 		s_code("J0.code.text", 0x8027A220, 0x8027B110, "scene"),
 		s_code("J0.code.text", 0x8027B110, 0x8027DE2C, "draw"),
 		s_code("J0.code.text", 0x8027DE30, 0x8027EF24, "time"),
 		s_code("J0.code.text", 0x8027EF30, 0x8027EFD4, "slidec"),
-		s_code("J0.code.text", 0x8027EFE0, 0x8029BFE4, "camera"),
+		# s_code("J0.code.text", 0x8027EFE0, 0x8029BFE4, "camera"),
 		s_code("J0.code.text", 0x8029BFF0, 0x8029C000, "course"),
 		s_code("J0.code.text", 0x8029C000, 0x8029D0FC, "object"),
-		s_code("J0.code.text", 0x8029D100, 0x802A4DB0, "objlib"),
-		s_code("J0.code.text", 0x802A4DB0, 0x802C7F1C, "object_a"),
+		s_code("J0.code.text", 0x8029D100, 0x802A4DB0, "objectlib"),
+		# s_code("J0.code.text", 0x802A4DB0, 0x802C7F1C, "object_a"),
 		s_code("J0.code.text", 0x802C7F20, 0x802C8458, "ride"),
 		s_code("J0.code.text", 0x802C8460, 0x802C8CE8, "hitcheck"),
 		s_code("J0.code.text", 0x802C8CF0, 0x802C955C, "objlist"),
@@ -7914,7 +8290,7 @@ test = [
 		s_code("J0.code.text", 0x802C9890, 0x802CAAD4, "debug"),
 		s_code("J0.code.text", 0x802CAAE0, 0x802CC79C, "wipe"),
 		s_code("J0.code.text", 0x802CC7A0, 0x802CEAC4, "shadow"),
-		s_code("J0.code.text", 0x802CEAD0, 0x802CF59C, "back"),
+		s_code("J0.code.text", 0x802CEAD0, 0x802CF59C, "background"),
 		s_code("J0.code.text", 0x802CF5A0, 0x802D1728, "water"),
 		s_code("J0.code.text", 0x802D1730, 0x802D1EDC, "objshape"),
 		s_code("J0.code.text", 0x802D1EE0, 0x802D5320, "wave"),
@@ -7924,24 +8300,26 @@ test = [
 		s_code("J0.code.text", 0x802DEE40, 0x802E1184, "lava"),
 		s_code("J0.code.text", 0x802E1190, 0x802E1DE0, "tag"),
 		s_code("J0.code.text", 0x802E1DE0, 0x802E2F40, "hud"),
-		s_code("J0.code.text", 0x802E2F40, 0x802F867C, "object_b"),
-		s_code("J0.code.text", 0x802F8680, 0x80313920, "object_c"),
-		[main.s_dir, "audio"],
-			s_code("J0.code.text", 0x80313920, 0x80315E58, "driver"),
-			s_code("J0.code.text", 0x80315E60, 0x80316FA8, "memory"),
-			s_code("J0.code.text", 0x80316FB0, 0x8031886C, "system"),
-			s_code("J0.code.text", 0x80318870, 0x80319E70, "voice"),
-			s_code("J0.code.text", 0x80319E70, 0x8031A804, "effect"),
-			s_code("J0.code.text", 0x8031A810, 0x8031D628, "sequence"),
-			s_code("J0.code.text", 0x8031D630, 0x8032147C, "game"),
-		[main.s_pop],
-		s_code("J0.code.text", 0x80321480, 0x8032A320, "libultra"),
-		[main.s_file, "ulib.s"],
-			[ultra.asm.s_code, "J0.ulib.text", 0x80378800, 0x80385F90, 0, True, True],
-		[main.s_write],
-		[main.s_file, "menu.s"],
-			[ultra.asm.s_code, "J0.menu.text", 0x8016F000, 0x801A76F0, 0, True, True],
-		[main.s_write],
+		# s_code("J0.code.text", 0x802E2F40, 0x802F867C, "object_b"),
+		# s_code("J0.code.text", 0x802F8680, 0x80313920, "object_c"),
+		# [main.s_dir, "audio"],
+		# 	s_code("J0.code.text", 0x80313920, 0x80315E58, "driver"),
+		# 	s_code("J0.code.text", 0x80315E60, 0x80316FA8, "memory"),
+		# 	s_code("J0.code.text", 0x80316FB0, 0x8031886C, "system"),
+		# 	s_code("J0.code.text", 0x80318870, 0x80319E70, "voice"),
+		# 	s_code("J0.code.text", 0x80319E70, 0x8031A804, "effect"),
+		# 	s_code("J0.code.text", 0x8031A810, 0x8031D628, "sequence"),
+		# 	s_code("J0.code.text", 0x8031D630, 0x8032147C, "game"),
+		# [main.s_pop],
+		# s_code("J0.code.text", 0x80321480, 0x8032A320, "libultra"),
+		# [main.s_file, "ulib.s"],
+		# 	[ultra.asm.s_code, "J0.ulib.text", 0x80378800, 0x80385F90, 0, True, True],
+		# [main.s_write],
+		s_code("J0.menu.text", 0x8016F000, 0x8016F5C8, "title"),
+		s_code("J0.menu.text", 0x8016F5D0, 0x801701DC, "titlebg"),
+		s_code("J0.menu.text", 0x801701E0, 0x801767A0, "fileselect"),
+		s_code("J0.menu.text", 0x801767A0, 0x801775D0, "starselect"),
+		# s_code("J0.code.text", 0x801775D0, 0x801A76F0, "face"),
 	[main.s_pop],
 	[main.s_dir, "E0"],
 		s_code("E0.code.text", 0x80246050, 0x80246E68, "main"),
@@ -7951,25 +8329,25 @@ test = [
 		s_code("E0.code.text", 0x8024BFF0, 0x8025093C, "collision"),
 		s_code("E0.code.text", 0x80250940, 0x8025507C, "player"),
 		s_code("E0.code.text", 0x80255080, 0x80256DFC, "physics"),
-		s_code("E0.code.text", 0x80256E00, 0x8025DD68, "pldemo"),
-		s_code("E0.code.text", 0x8025DD70, 0x802608AC, "plhang"),
-		s_code("E0.code.text", 0x802608B0, 0x80263E5C, "plwait"),
-		s_code("E0.code.text", 0x80263E60, 0x80269F38, "plmove"),
-		s_code("E0.code.text", 0x80269F40, 0x80270104, "pljump"),
-		s_code("E0.code.text", 0x80270110, 0x80274EAC, "plswim"),
-		s_code("E0.code.text", 0x80274EB0, 0x802761D0, "plhold"),
+		# s_code("E0.code.text", 0x80256E00, 0x8025DD68, "pldemo"),
+		# s_code("E0.code.text", 0x8025DD70, 0x802608AC, "plspec"),
+		# s_code("E0.code.text", 0x802608B0, 0x80263E5C, "plwait"),
+		# s_code("E0.code.text", 0x80263E60, 0x80269F38, "plmove"),
+		# s_code("E0.code.text", 0x80269F40, 0x80270104, "pljump"),
+		# s_code("E0.code.text", 0x80270110, 0x80274EAC, "plswim"),
+		# s_code("E0.code.text", 0x80274EB0, 0x802761D0, "pltake"),
 		s_code("E0.code.text", 0x802761D0, 0x80277ED4, "callback"),
 		s_code("E0.code.text", 0x80277EE0, 0x80279158, "memory"),
-		s_code("E0.code.text", 0x80279160, 0x8027A7C4, "save"),
+		s_code("E0.code.text", 0x80279160, 0x8027A7C4, "backup"),
 		s_code("E0.code.text", 0x8027A7D0, 0x8027B6C0, "scene"),
 		s_code("E0.code.text", 0x8027B6C0, 0x8027E3DC, "draw"),
 		s_code("E0.code.text", 0x8027E3E0, 0x8027F4D4, "time"),
 		s_code("E0.code.text", 0x8027F4E0, 0x8027F584, "slidec"),
-		s_code("E0.code.text", 0x8027F590, 0x8029C764, "camera"),
+		# s_code("E0.code.text", 0x8027F590, 0x8029C764, "camera"),
 		s_code("E0.code.text", 0x8029C770, 0x8029C780, "course"),
 		s_code("E0.code.text", 0x8029C780, 0x8029D884, "object"),
-		s_code("E0.code.text", 0x8029D890, 0x802A5618, "objlib"),
-		s_code("E0.code.text", 0x802A5620, 0x802C89F0, "object_a"),
+		s_code("E0.code.text", 0x8029D890, 0x802A5618, "objectlib"),
+		# s_code("E0.code.text", 0x802A5620, 0x802C89F0, "object_a"),
 		s_code("E0.code.text", 0x802C89F0, 0x802C8F40, "ride"),
 		s_code("E0.code.text", 0x802C8F40, 0x802C97C8, "hitcheck"),
 		s_code("E0.code.text", 0x802C97D0, 0x802CA03C, "objlist"),
@@ -7977,7 +8355,7 @@ test = [
 		s_code("E0.code.text", 0x802CA370, 0x802CB5B4, "debug"),
 		s_code("E0.code.text", 0x802CB5C0, 0x802CD27C, "wipe"),
 		s_code("E0.code.text", 0x802CD280, 0x802CF5A4, "shadow"),
-		s_code("E0.code.text", 0x802CF5B0, 0x802D007C, "back"),
+		s_code("E0.code.text", 0x802CF5B0, 0x802D007C, "background"),
 		s_code("E0.code.text", 0x802D0080, 0x802D2208, "water"),
 		s_code("E0.code.text", 0x802D2210, 0x802D29BC, "objshape"),
 		s_code("E0.code.text", 0x802D29C0, 0x802D5E00, "wave"),
@@ -7987,58 +8365,83 @@ test = [
 		s_code("E0.code.text", 0x802DFD50, 0x802E2094, "lava"),
 		s_code("E0.code.text", 0x802E20A0, 0x802E2CF0, "tag"),
 		s_code("E0.code.text", 0x802E2CF0, 0x802E3E50, "hud"),
-		s_code("E0.code.text", 0x802E3E50, 0x802F972C, "object_b"),
-		s_code("E0.code.text", 0x802F9730, 0x80314A2C, "object_c"),
-		[main.s_dir, "audio"],
-			s_code("E0.code.text", 0x80314A30, 0x80316E78, "driver"),
-			s_code("E0.code.text", 0x80316E80, 0x80318034, "memory"),
-			s_code("E0.code.text", 0x80318040, 0x80319914, "system"),
-			s_code("E0.code.text", 0x80319920, 0x8031AEDC, "voice"),
-			s_code("E0.code.text", 0x8031AEE0, 0x8031B82C, "effect"),
-			s_code("E0.code.text", 0x8031B830, 0x8031E4E4, "sequence"),
-			s_code("E0.code.text", 0x8031E4F0, 0x80322364, "game"),
-		[main.s_pop],
-		[main.s_file, "ulib.s"],
-			[ultra.asm.s_code, "E0.ulib.text", 0x80378800, 0x80385F90, 0, True, True],
-		[main.s_write],
-		[main.s_file, "menu.s"],
-			[ultra.asm.s_code, "E0.menu.text", 0x8016F000, 0x801A7830, 0, True, True],
-		[main.s_write],
+		# s_code("E0.code.text", 0x802E3E50, 0x802F972C, "object_b"),
+		# s_code("E0.code.text", 0x802F9730, 0x80314A2C, "object_c"),
+		# [main.s_dir, "audio"],
+		# 	s_code("E0.code.text", 0x80314A30, 0x80316E78, "driver"),
+		# 	s_code("E0.code.text", 0x80316E80, 0x80318034, "memory"),
+		# 	s_code("E0.code.text", 0x80318040, 0x80319914, "system"),
+		# 	s_code("E0.code.text", 0x80319920, 0x8031AEDC, "voice"),
+		# 	s_code("E0.code.text", 0x8031AEE0, 0x8031B82C, "effect"),
+		# 	s_code("E0.code.text", 0x8031B830, 0x8031E4E4, "sequence"),
+		# 	s_code("E0.code.text", 0x8031E4F0, 0x80322364, "game"),
+		# [main.s_pop],
+		# [main.s_file, "ulib.s"],
+		# 	[ultra.asm.s_code, "E0.ulib.text", 0x80378800, 0x80385F90, 0, True, True],
+		# [main.s_write],
+		s_code("E0.menu.text", 0x8016F000, 0x8016F670, "title"),
+		s_code("E0.menu.text", 0x8016F670, 0x8017027C, "titlebg"),
+		s_code("E0.menu.text", 0x80170280, 0x801768E0, "fileselect"),
+		s_code("E0.menu.text", 0x801768E0, 0x80177710, "starselect"),
+		# s_code("E0.code.text", 0x80177710, 0x801A7830, "face"),
 	[main.s_pop],
 	[main.s_dir, "G0"],
-		[main.s_file, "code.s"],
-			[ultra.asm.s_code, "G0.code.text", 0x80246050, 0x802FF540, 0, True, True],
-		[main.s_write],
-		[main.s_file, "ulib.s"],
-			[ultra.asm.s_code, "G0.ulib.text", 0x80378800, 0x80382C80, 0, True, True],
-		[main.s_write],
-		[main.s_file, "menu.s"],
-			[ultra.asm.s_code, "G0.menu.text", 0x8016F000, 0x801A6060, 0, True, True],
-		[main.s_write],
+	# 	[main.s_file, "code.s"],
+	# 		[ultra.asm.s_code, "G0.code.text", 0x80246050, 0x802FF540, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "ulib.s"],
+	# 		[ultra.asm.s_code, "G0.ulib.text", 0x80378800, 0x80382C80, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "menu.s"],
+	# 		[ultra.asm.s_code, "G0.menu.text", 0x8016F000, 0x801A6060, 0, True, True],
+	# 	[main.s_write],
 	[main.s_pop],
 	[main.s_dir, "DD"],
-		[main.s_file, "code.s"],
-			[ultra.asm.s_code, "DD.code.text", 0x80400050, 0x804A5440, 0, True, True],
-		[main.s_write],
-		[main.s_file, "ulib.s"],
-			[ultra.asm.s_code, "DD.ulib.text", 0x80510000, 0x8053ADB0, 0, True, True],
-		[main.s_write],
-		[main.s_file, "menu.s"],
-			[ultra.asm.s_code, "DD.menu.text", 0x8016F000, 0x80175E20, 0, True, True],
-		[main.s_write],
+	# 	[main.s_file, "code.s"],
+	# 		[ultra.asm.s_code, "DD.code.text", 0x80400050, 0x804A5440, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "ulib.s"],
+	# 		[ultra.asm.s_code, "DD.ulib.text", 0x80510000, 0x8053ADB0, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "menu.s"],
+	# 		[ultra.asm.s_code, "DD.menu.text", 0x8016F000, 0x80175E20, 0, True, True],
+	# 	[main.s_write],
 	[main.s_pop],
 	[main.s_dir, "P0"],
-		[main.s_file, "code.s"],
-			[ultra.asm.s_code, "P0.code.text", 0x80241850, 0x802F7240, 0, True, True],
-		[main.s_write],
-		[main.s_file, "ulib.s"],
-			[ultra.asm.s_code, "P0.ulib.text", 0x8036FF00, 0x80380C50, 0, True, True],
-		[main.s_write],
-		[main.s_file, "menu.s"],
-			[ultra.asm.s_code, "P0.menu.text", 0x8016F000, 0x801A6870, 0, True, True],
-		[main.s_write],
+	# 	[main.s_file, "code.s"],
+	# 		[ultra.asm.s_code, "P0.code.text", 0x80241850, 0x802F7240, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "ulib.s"],
+	# 		[ultra.asm.s_code, "P0.ulib.text", 0x8036FF00, 0x80380C50, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "menu.s"],
+	# 		[ultra.asm.s_code, "P0.menu.text", 0x8016F000, 0x801A6870, 0, True, True],
+	# 	[main.s_write],
+	[main.s_pop],
+	[main.s_dir, "J3"],
+	# 	[main.s_file, "code.s"],
+	# 		[ultra.asm.s_code, "J3.code.text", 0x80249050, 0x8030A6D0, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "ulib.s"],
+	# 		[ultra.asm.s_code, "J3.ulib.text", 0x80378800, 0x80382C80, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "menu.s"],
+	# 		[ultra.asm.s_code, "J3.menu.text", 0x8016F000, 0x801A6CC0, 0, True, True],
+	# 	[main.s_write],
+	[main.s_pop],
+	[main.s_dir, "C3"],
+	# 	[main.s_file, "code.s"],
+	# 		[ultra.asm.s_code, "C3.code.text", 0x80249050, 0x8030CC30, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "ulib.s"],
+	# 		[ultra.asm.s_code, "C3.ulib.text", 0x80378800, 0x80382D80, 0, True, True],
+	# 	[main.s_write],
+	# 	[main.s_file, "menu.s"],
+	# 		[ultra.asm.s_code, "C3.menu.text", 0x8016F000, 0x801A7B00, 0, True, True],
+	# 	[main.s_write],
 	[main.s_pop],
 ]
 
+ultra.COMM_LABEL = True
 #ultra.COMM_LINE = True
 #lst = test

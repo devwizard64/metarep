@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-	int i;
-	int n;
+	int i, n;
 	FILE *fp;
 	ELFEH eh;
 	if (argc != 2)

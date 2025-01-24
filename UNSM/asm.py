@@ -20,7 +20,7 @@ seg_table = {
 	0x07: "SEG_STAGE_GFX",
 	0x08: "SEG_SHAPE3_GFX",
 	0x09: "SEG_TEXTURE",
-	0x0A: "SEG_BACK",
+	0x0A: "SEG_BACKGROUND",
 	0x0B: "SEG_WEATHER",
 	0x0C: "SEG_SHAPE1_SHP",
 	0x0D: "SEG_SHAPE2_SHP",
@@ -126,14 +126,14 @@ def prg_load(self, argv):
 	return (None, number, start, end)
 
 # 1F
-def prg_scene_start(self, argv):
+def prg_scenestart(self, argv):
 	scene = "%d" % self.u8()
 	self.addr += 1
 	script = ultra.aw(self, self.save)
 	return (None, scene, script)
 
 # 21
-def prg_shape_gfx(self, argv):
+def prg_shapegfx(self, argv):
 	x = self.u16()
 	layer = UNSM.fmt.fmt_layer(self, x >> 12)
 	shape = UNSM.fmt.fmt_shape(self, x & 0x0FFF)
@@ -141,7 +141,7 @@ def prg_shape_gfx(self, argv):
 	return (None, shape, gfx, layer)
 
 # 22
-def prg_shape_script(self, argv):
+def prg_shape(self, argv):
 	shape = UNSM.fmt.fmt_shape(self, self.u16())
 	script = ultra.aw(self, self.save)
 	return (None, shape, script)
@@ -217,7 +217,7 @@ def prg_scene(self, argv):
 	return (None, scene)
 
 # 2B
-def prg_player_open(self, argv):
+def prg_playeropen(self, argv):
 	scene = "%d" % self.u8()
 	self.addr += 1
 	angy = "%d" % self.s16()
@@ -229,7 +229,7 @@ def prg_player_open(self, argv):
 # (2C) (2D)
 
 # 30
-def prg_msg(self, argv):
+def prg_message(self, argv):
 	index = "%d" % self.u8()
 	msg   = UNSM.fmt.fmt_msg(self, self.u8())
 	return (None, index, msg)
@@ -284,12 +284,12 @@ def prg_bgm(self, argv):
 	return (None, mode, bgm)
 
 # 37
-def prg_bgm_play(self, argv):
+def prg_playbgm(self, argv):
 	bgm = UNSM.fmt.fmt_na_bgm[self.u16()]
 	return (None, bgm)
 
 # 38
-def prg_aud_fadeout(self, argv):
+def prg_audfadeout(self, argv):
 	fadeout = "NA_TIME(%d)" % ((self.s16()+2)//8)
 	return (None, fadeout)
 
@@ -320,7 +320,7 @@ def prg_var(self, argv):
 	)[self.u8()]
 	return (cmd, var)
 
-prg_str = [
+prg_name = [
 	"Execute",      # 0x00
 	"Chain",        # 0x01
 	"Exit",         # 0x02
@@ -355,7 +355,7 @@ prg_str = [
 	"SceneStart",   # 0x1F
 	"SceneEnd",     # 0x20
 	"ShapeGfx",     # 0x21
-	"ShapeScript",  # 0x22
+	"Shape",        # 0x22
 	"ShapeScale",   # 0x23
 	"Obj",          # 0x24
 	"Player",       # 0x25
@@ -369,14 +369,14 @@ prg_str = [
 	"SceneProc",    # 0x2D
 	"Map",          # 0x2E
 	"Area",         # 0x2F
-	"Msg",          # 0x30
+	"Message",      # 0x30
 	"Env",          # 0x31
 	None,           # 0x32
 	"Wipe",         # 0x33
 	"ViBlack",      # 0x34
 	"ViGamma",      # 0x35
-	"Bgm",          # 0x36
-	"BgmPlay",      # 0x37
+	"BGM",          # 0x36
+	"PlayBGM",      # 0x37
 	"AudFadeout",   # 0x38
 	"Tag",          # 0x39
 	None,           # 0x3A
@@ -384,7 +384,7 @@ prg_str = [
 	None,           # 0x3C
 ]
 
-prg_fnc = [
+prg_func = [
 	(prg_execute,), # 0x00
 	(prg_execute,), # 0x01
 	(prg_null,), # 0x02
@@ -416,10 +416,10 @@ prg_fnc = [
 	(prg_null,), # 0x1C
 	(prg_null,), # 0x1D
 	(prg_null,), # 0x1E
-	(prg_scene_start,), # 0x1F
+	(prg_scenestart,), # 0x1F
 	(prg_null,), # 0x20
-	(prg_shape_gfx,), # 0x21
-	(prg_shape_script,), # 0x22
+	(prg_shapegfx,), # 0x21
+	(prg_shape,), # 0x22
 	None, # 0x23
 	(prg_object,), # 0x24
 	(prg_player,), # 0x25
@@ -428,20 +428,20 @@ prg_fnc = [
 	(prg_connect,), # 0x28
 	(prg_scene,), # 0x29
 	(prg_scene,), # 0x2A
-	(prg_player_open,), # 0x2B
+	(prg_playeropen,), # 0x2B
 	None, # 0x2C
 	None, # 0x2D
 	(prg_script, True), # 0x2E
 	(prg_script, True), # 0x2F
-	(prg_msg,), # 0x30
+	(prg_message,), # 0x30
 	(prg_env,), # 0x31
 	None, # 0x32
 	(prg_wipe,), # 0x33
 	(prg_bool,), # 0x34
 	None, # 0x35
 	(prg_bgm,), # 0x36
-	(prg_bgm_play,), # 0x37
-	(prg_aud_fadeout,), # 0x38
+	(prg_playbgm,), # 0x37
+	(prg_audfadeout,), # 0x38
 	(prg_script, True), # 0x39
 	None, # 0x3A
 	(prg_jet,), # 0x3B
@@ -483,8 +483,11 @@ def obj_arg(self, argv):
 
 # 0D 0E 0F 10
 def obj_md(self, argv):
-	mem = UNSM.fmt.fmt_o[self.u8()]
-	val = "%d" % self.s16()
+	mem = self.u8()
+	val = self.s16()
+	if mem == 42: val = UNSM.fmt.fmt_hittype(self, val)
+	else: val = "%d" % val
+	mem = UNSM.fmt.fmt_o[mem]
 	return (None, mem, val)
 
 # 11 (12)
@@ -529,7 +532,7 @@ def obj_mmm(self, argv):
 	return (None, mem, a, b)
 
 # 23 2B 2E
-def obj_hit(self, argv):
+def obj_hitbox(self, argv):
 	m, = argv
 	self.addr += 3
 	radius = "%d" % self.s16()
@@ -559,10 +562,10 @@ def obj_anime(self, argv):
 	self.addr += 2
 	return (None, anime)
 
-# 2F (31) (36)
-def obj_w(self, argv):
+# 2F
+def obj_hittype(self, argv):
 	self.addr += 3
-	x = "0x%08X" % self.u32()
+	x = UNSM.fmt.fmt_hittype(self, self.u32())
 	return (None, x)
 
 # 30
@@ -570,12 +573,12 @@ def obj_physics(self, argv):
 	self.addr += 3
 	radius      = "%d" % self.s16()
 	gravity     = "%d" % self.s16()
-	bounce      = "%d" % self.s16()
+	density     = "%d" % self.s16()
 	drag        = "%d" % self.s16()
 	friction    = "%d" % self.s16()
-	density     = "%d" % self.s16()
+	bounce      = "%d" % self.s16()
 	self.addr += 4
-	return (None, radius, gravity, bounce, drag, friction, density)
+	return (None, radius, gravity, density, drag, friction, bounce)
 
 # 33
 def obj_memclrparentflag(self, argv):
@@ -590,7 +593,7 @@ def obj_mt(self, argv):
 	time = UNSM.fmt.fmt_time(self.s16())
 	return (None, mem, time)
 
-obj_str = [
+obj_name = [
 	"Init",         # 0x00
 	"Sleep",        # 0x01
 	"Call",         # 0x02
@@ -625,8 +628,8 @@ obj_str = [
 	"MemAddF",      # 0x1F
 	"MemAddI",      # 0x20
 	"Billboard",    # 0x21
-	"ShapeHide",    # 0x22
-	"Hit",          # 0x23
+	"Hide",         # 0x22
+	"HitBox",       # 0x23
 	None,           # 0x24
 	"MemSleep",     # 0x25
 	"For2",         # 0x26
@@ -634,22 +637,22 @@ obj_str = [
 	"Anime",        # 0x28
 	"MakeObjCode",  # 0x29
 	"Map",          # 0x2A
-	"HitOff",       # 0x2B
+	"HitBoxOff",    # 0x2B
 	"MakeChild",    # 0x2C
 	"SavePos",      # 0x2D
-	"Dmg",          # 0x2E
-	"HitCode",      # 0x2F
+	"DmgBox",       # 0x2E
+	"HitType",      # 0x2F
 	"Physics",      # 0x30
 	"HitFlag",      # 0x31
 	"Scale",        # 0x32
 	"MemClrParentFlag", # 0x33
 	"Inc",          # 0x34
-	"ShapeDisable", # 0x35
+	"ClrActive",    # 0x35
 	"SetS",         # 0x36
 	"Splash",       # 0x37
 ]
 
-obj_fnc = [
+obj_func = [
 	(obj_init,), # 0x00
 	(obj_time,), # 0x01
 	(obj_script, True), # 0x02
@@ -685,7 +688,7 @@ obj_fnc = [
 	None, # 0x20
 	(obj_null,), # 0x21
 	(obj_null,), # 0x22
-	(obj_hit, False), # 0x23
+	(obj_hitbox, False), # 0x23
 	None, # 0x24
 	(obj_m,), # 0x25
 	None, # 0x26
@@ -693,11 +696,11 @@ obj_fnc = [
 	(obj_anime,), # 0x28
 	(obj_makeobj, True), # 0x29
 	(obj_script, True), # 0x2A
-	(obj_hit, True), # 0x2B
+	(obj_hitbox, True), # 0x2B
 	(obj_makeobj, False), # 0x2C
 	(obj_null,), # 0x2D
-	(obj_hit, False), # 0x2E
-	(obj_w,), # 0x2F T:hit_code
+	(obj_hitbox, False), # 0x2E
+	(obj_hittype,), # 0x2F
 	(obj_physics,), # 0x30
 	None, # 0x31
 	(obj_arg,), # 0x32
@@ -711,29 +714,29 @@ obj_fnc = [
 obj_inc = {0x05, 0x08, 0x26}
 obj_dec = {0x06, 0x07, 0x09}
 
-scr_table = [
-	(prg_str, prg_fnc, prg_inc, prg_dec, "p"),
-	(obj_str, obj_fnc, obj_inc, obj_dec, "o"),
-]
-
-def s_script(self, argv):
-	seg, start, end, i = argv
+def lang(self, argv, name, func, inc, dec, prefix):
+	seg, start, end = argv
 	ultra.asm.init(self, seg, start)
-	s_str, s_fnc, s_inc, s_dec, s_t = scr_table[i]
 	line = []
 	tab = 0
 	while self.addr < end:
 		self.save = self.addr
 		c = self.u8()
-		if i == 0: self.addr += 1
-		f = s_fnc[c]
+		if prefix == "p": self.addr += 1
+		f = func[c]
 		argv = f[0](self, f[1:])
-		s = argv[0] if argv[0] is not None else s_str[c]
-		if c in s_dec: tab -= 1
-		ln = "%s%s%s(%s)" % ("\t"*tab, s_t, s, ", ".join(argv[1:]))
-		if c in s_inc: tab += 1
+		s = argv[0] if argv[0] is not None else name[c]
+		if c in dec: tab -= 1
+		ln = "%s%s%s(%s)" % ("\t"*tab, prefix, s, ", ".join(argv[1:]))
+		if c in inc: tab += 1
 		line.append((self.save, ln))
 	ultra.asm.fmt(self, line)
+
+def s_prglang(self, argv):
+	lang(self, argv, prg_name, prg_func, prg_inc, prg_dec, "p")
+
+def s_objlang(self, argv):
+	lang(self, argv, obj_name, obj_func, obj_inc, obj_dec, "o")
 
 def stbl_add(stbl, i, t, s):
 	if i not in stbl: stbl[i] = [t]
@@ -879,7 +882,7 @@ def aifc_pack(rate, wave, book=None, loop=None):
 	return iff_chunk(B"FORM", data)
 
 def al_book(self, ctl, book):
-	if book == 0: return None
+	if not book: return None
 	self.addr = ctl+book
 	order       = self.u32()
 	npredictors = self.u32()
@@ -887,7 +890,7 @@ def al_book(self, ctl, book):
 	return (order, npredictors, book)
 
 def al_loop(self, ctl, loop):
-	if loop == 0: return None
+	if not loop: return None
 	self.addr = ctl+loop
 	start = self.u32()
 	end   = self.u32()
@@ -899,7 +902,7 @@ def al_loop(self, ctl, loop):
 	return (start, end, count)
 
 def al_sound(self, ctlseg, tblseg, bankdata, wavedata, ctl, tbl, snd, key):
-	if snd == 0: return None
+	if not snd: return None
 	self.addr = ctl+snd
 	self.addr += 4
 	wave = self.u32()
@@ -939,7 +942,7 @@ def al_note(x):
 	)[(x+9) % 12] + "%d" % ((x+9) // 12)
 
 def al_instrument(self, ctlseg, tblseg, bankdata, wavedata, ctl, tbl, inst, i):
-	if inst == 0: return
+	if not inst: return
 	self.save = self.addr
 	self.addr = ctl+inst
 	self.addr += 1
@@ -975,7 +978,7 @@ def al_instrument(self, ctlseg, tblseg, bankdata, wavedata, ctl, tbl, inst, i):
 	self.addr = self.save
 
 def al_percussion(self, ctlseg, tblseg, bankdata, wavedata, ctl, tbl, perc, i):
-	if perc == 0: return
+	if not perc: return
 	self.save = self.addr
 	self.addr = ctl+perc
 	rel = self.u8()

@@ -55,7 +55,7 @@ char debug_thread = FALSE;
 char debug_time   = FALSE;
 char debug_mem    = FALSE;
 
-void debug_check(void)
+void DebugCheck(void)
 {
 	static u16 time_seq[] =
 		{U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
@@ -63,7 +63,7 @@ void debug_check(void)
 		{D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
 	static s16 time_idx = 0;
 	static s16 mem_idx = 0;
-	if (contp->down != 0)
+	if (contp->down)
 	{
 		if (time_seq[time_idx++] == contp->down)
 		{
@@ -103,19 +103,19 @@ void dummy(void)
 #endif
 }
 
-static void debug_entry(void)
+static void DebugEntry(void)
 {
 }
 
-static void debug_sched_proc(void)
+static void DebugSchedProc(void)
 {
 }
 
-static void debug_sched_vi(void)
+static void DebugSchedVI(void)
 {
 }
 
-static void sched_init(void)
+static void ScInit(void)
 {
 	osCreateMesgQueue(&dma_mq, &dma_mbox, 1);
 	osCreateMesgQueue(&si_mq, &si_mbox, 1);
@@ -128,15 +128,15 @@ static void sched_init(void)
 	osSetEventMesg(OS_EVENT_PRENMI, &sched_mq, (OSMesg)SC_EVENT_PRENMI);
 }
 
-static void sched_init_mem(void)
+static void ScInitMem(void)
 {
 	void *start = (void *)ADDRESS_MEM_START;
 	void *end   = (void *)ADDRESS_MEM_END;
-	mem_init(start, end);
-	mem_heap = heap_create(16384, MEM_ALLOC_L);
+	MemInit(start, end);
+	mem_heap = HeapCreate(16384, MEM_ALLOC_L);
 }
 
-static void create_thread(
+static void CreateThread(
 	OSThread *t, OSId id, void (*entry)(void *), void *arg, void *sp, OSPri pri
 )
 {
@@ -145,16 +145,16 @@ static void create_thread(
 	osCreateThread(t, id, entry, arg, sp, pri);
 }
 
-static void sc_event_prenmi(void)
+static void ScEventPreNMI(void)
 {
 	reset_timer = 1;
 	reset_frame = 0;
 	Na_SeClear();
 	Na_LockSe();
-	aud_fadeout(90);
+	AudFadeout(90);
 }
 
-static void sc_task_flush(void)
+static void ScTaskFlush(void)
 {
 	SCTASK *task;
 	while (osRecvMesg(&sctask_mq, (OSMesg *)&task, OS_MESG_NOBLOCK) != -1)
@@ -178,7 +178,7 @@ static void sc_task_flush(void)
 	}
 }
 
-static void sc_task_start(int type)
+static void ScTaskStart(int type)
 {
 	UNUSED int i;
 	if (type == M_AUDTASK)  sc_task = sc_audtask;
@@ -187,7 +187,7 @@ static void sc_task_start(int type)
 	sc_task->status = SC_RUNNING;
 }
 
-static void sc_task_yield(void)
+static void ScTaskYield(void)
 {
 	if (sc_task->task.t.type == M_GFXTASK)
 	{
@@ -196,51 +196,51 @@ static void sc_task_yield(void)
 	}
 }
 
-static void sc_event_gfxtask(void)
+static void ScEventGfxTask(void)
 {
 	if (!sc_task)
 	{
 		if (sc_gfxtask && sc_gfxtask->status == SC_WAITING)
 		{
-			time_gfxrcp(TIME_GFXRCP_START);
-			sc_task_start(M_GFXTASK);
+			TimeGfxRCP(TIME_GFXRCP_START);
+			ScTaskStart(M_GFXTASK);
 		}
 	}
 }
 
-static void sc_audtask_skip(void)
+static void ScSkipAudTask(void)
 {
 	sc_task = sc_audtask;
 	sc_task->status = SC_RUNNING;
 	osSendMesg(&sched_mq, (OSMesg)SC_EVENT_SP, OS_MESG_NOBLOCK);
 }
 
-static void sc_event_vi(void)
+static void ScEventVI(void)
 {
 	UNUSED int i;
-	debug_sched_vi();
+	DebugSchedVI();
 	sc_vi++;
 	if (reset_timer > 0) reset_timer++;
-	sc_task_flush();
+	ScTaskFlush();
 	if (sc_audtask)
 	{
 		if (sc_task)
 		{
-			sc_task_yield();
+			ScTaskYield();
 		}
 		else
 		{
-			time_audrcp();
-			if (sc_aud) sc_task_start(M_AUDTASK);
-			else        sc_audtask_skip();
+			TimeAudRCP();
+			if (sc_aud) ScTaskStart(M_AUDTASK);
+			else        ScSkipAudTask();
 		}
 	}
 	else if (!sc_task)
 	{
 		if (sc_gfxtask && sc_gfxtask->status != SC_RSPDONE)
 		{
-			time_gfxrcp(TIME_GFXRCP_START);
-			sc_task_start(M_GFXTASK);
+			TimeGfxRCP(TIME_GFXRCP_START);
+			ScTaskStart(M_GFXTASK);
 		}
 	}
 #ifdef GATEWAY
@@ -257,7 +257,7 @@ static void sc_event_vi(void)
 	}
 }
 
-static void sc_event_sp(void)
+static void ScEventSP(void)
 {
 	SCTASK *task = sc_task;
 	sc_task = NULL;
@@ -266,55 +266,55 @@ static void sc_event_sp(void)
 		if (!osSpTaskYielded(&task->task))
 		{
 			task->status = SC_RSPDONE;
-			time_gfxrcp(TIME_GFXRCP_ENDRSP);
+			TimeGfxRCP(TIME_GFXRCP_ENDRSP);
 		}
-		time_audrcp();
-		if (sc_aud) sc_task_start(M_AUDTASK);
-		else        sc_audtask_skip();
+		TimeAudRCP();
+		if (sc_aud) ScTaskStart(M_AUDTASK);
+		else        ScSkipAudTask();
 	}
 	else
 	{
 		task->status = SC_RSPDONE;
 		if (task->task.t.type == M_AUDTASK)
 		{
-			time_audrcp();
+			TimeAudRCP();
 			if (sc_gfxtask && sc_gfxtask->status != SC_RSPDONE)
 			{
 				if (sc_gfxtask->status != SC_YIELDED)
 				{
-					time_gfxrcp(TIME_GFXRCP_START);
+					TimeGfxRCP(TIME_GFXRCP_START);
 				}
-				sc_task_start(M_GFXTASK);
+				ScTaskStart(M_GFXTASK);
 			}
 			sc_audtask = NULL;
 			if (task->mq) osSendMesg(task->mq, task->msg, OS_MESG_NOBLOCK);
 		}
 		else
 		{
-			time_gfxrcp(TIME_GFXRCP_ENDRSP);
+			TimeGfxRCP(TIME_GFXRCP_ENDRSP);
 		}
 	}
 }
 
-static void sc_event_dp(void)
+static void ScEventDP(void)
 {
 	if (sc_gfxtask->mq)
 	{
 		osSendMesg(sc_gfxtask->mq, sc_gfxtask->msg, OS_MESG_NOBLOCK);
 	}
-	time_gfxrcp(TIME_GFXRCP_ENDRDP);
+	TimeGfxRCP(TIME_GFXRCP_ENDRDP);
 	sc_gfxtask->status = SC_RDPDONE;
 	sc_gfxtask = NULL;
 }
 
-static void sched_proc(UNUSED void *arg)
+static void SchedProc(UNUSED void *arg)
 {
-	sched_init();
-	sched_init_mem();
-	mem_load_ulib();
-	create_thread(&aud_thread, 4, aud_proc, NULL, aud_stack+MAIN_STACK_LEN, 20);
+	ScInit();
+	ScInitMem();
+	MemLoadULib();
+	CreateThread(&aud_thread, 4, AudProc, NULL, aud_stack+MAIN_STACK_LEN, 20);
 	osStartThread(&aud_thread);
-	create_thread(&gfx_thread, 5, gfx_proc, NULL, gfx_stack+MAIN_STACK_LEN, 10);
+	CreateThread(&gfx_thread, 5, GfxProc, NULL, gfx_stack+MAIN_STACK_LEN, 10);
 	osStartThread(&gfx_thread);
 	for (;;)
 	{
@@ -322,17 +322,17 @@ static void sched_proc(UNUSED void *arg)
 		osRecvMesg(&sched_mq, &msg, OS_MESG_BLOCK);
 		switch ((int)msg)
 		{
-		case SC_EVENT_VI:       sc_event_vi();      break;
-		case SC_EVENT_SP:       sc_event_sp();      break;
-		case SC_EVENT_DP:       sc_event_dp();      break;
-		case SC_EVENT_GFXTASK:  sc_event_gfxtask(); break;
-		case SC_EVENT_PRENMI:   sc_event_prenmi();  break;
+		case SC_EVENT_VI:       ScEventVI();        break;
+		case SC_EVENT_SP:       ScEventSP();        break;
+		case SC_EVENT_DP:       ScEventDP();        break;
+		case SC_EVENT_GFXTASK:  ScEventGfxTask();   break;
+		case SC_EVENT_PRENMI:   ScEventPreNMI();    break;
 		}
-		debug_sched_proc();
+		DebugSchedProc();
 	}
 }
 
-void sc_setclient(int i, SCCLIENT *client, OSMesgQueue *mq, OSMesg msg)
+void ScSetClient(int i, SCCLIENT *client, OSMesgQueue *mq, OSMesg msg)
 {
 	client->mq  = mq;
 	client->msg = msg;
@@ -343,13 +343,13 @@ void sc_setclient(int i, SCCLIENT *client, OSMesgQueue *mq, OSMesg msg)
 	}
 }
 
-void sc_queue_task(SCTASK *task)
+void ScQueueTask(SCTASK *task)
 {
 	osWritebackDCacheAll();
 	osSendMesg(&sctask_mq, task, OS_MESG_NOBLOCK);
 }
 
-void sc_queue_audtask(SCTASK *task)
+void ScQueueAudTask(SCTASK *task)
 {
 	if (sc_aud)
 	{
@@ -361,7 +361,7 @@ void sc_queue_audtask(SCTASK *task)
 	}
 }
 
-void sc_queue_gfxtask(SCTASK *task)
+void ScQueueGfxTask(SCTASK *task)
 {
 	if (task)
 	{
@@ -380,18 +380,18 @@ void sc_queue_gfxtask(SCTASK *task)
 	}
 }
 
-void sc_aud_enable(void)
+void ScAudEnable(void)
 {
 	sc_aud = TRUE;
 }
 
-void sc_aud_disable(void)
+void ScAudDisable(void)
 {
 	sc_aud = FALSE;
 	while (sc_audtask);
 }
 
-static void idle_proc(UNUSED void *arg)
+static void IdleProc(UNUSED void *arg)
 {
 #if REVISION > 199606
 	int tv_type = osTvType;
@@ -407,8 +407,8 @@ static void idle_proc(UNUSED void *arg)
 	osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
 	osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
 	osCreatePiManager(OS_PRIORITY_PIMGR, &pi_mq, pi_mbox, 32);
-	create_thread(
-		&sched_thread, 3, sched_proc, NULL, sched_stack+MAIN_STACK_LEN, 100
+	CreateThread(
+		&sched_thread, 3, SchedProc, NULL, sched_stack+MAIN_STACK_LEN, 100
 	);
 	if (!debug_thread) osStartThread(&sched_thread);
 	osSetThreadPri(NULL, OS_PRIORITY_IDLE);
@@ -419,9 +419,9 @@ void entry(void)
 {
 	UNUSED char buf[64];
 	osInitialize();
-	debug_entry();
-	create_thread(
-		&idle_thread, 1, idle_proc, NULL, idle_stack+IDLE_STACK_LEN, 100
+	DebugEntry();
+	CreateThread(
+		&idle_thread, 1, IdleProc, NULL, idle_stack+IDLE_STACK_LEN, 100
 	);
 	osStartThread(&idle_thread);
 }

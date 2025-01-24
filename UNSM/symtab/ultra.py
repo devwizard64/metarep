@@ -114,7 +114,7 @@ imm_D_rspboot_text = {
 
 sym_D_gspFast3D_fifo_text = {
 	0x04001000: main.sym("_04001000"),
-	0x04001058: main.sym("cmd_next_sync"),
+	0x04001058: main.sym("cmd_proc"),
 	0x04001060: main.sym(".cmd_proc", flag={"LOCAL"}),
 	0x0400109C: main.sym(".cmd_nodma", flag={"LOCAL"}),
 	0x040010A8: main.sym("cmd_next"),

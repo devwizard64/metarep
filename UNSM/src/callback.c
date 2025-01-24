@@ -1,18 +1,15 @@
 #include <sm64.h>
 
-static S_OBJECT mario_mirror;
+static SOBJECT mario_mirror;
 PL_SHAPE pl_shape_data[2];
 
-void *s_stage_weather(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlWeather(int code, SHAPE *shape, UNUSED void *data)
 {
-	VECS pos;
-	VECS eye;
-	VECS look;
-	Gfx *g;
-	Gfx *gfx = NULL;
-	if (code == SC_DRAW && s_camera)
+	SVEC pos, eye, look;
+	Gfx *g, *gfx = NULL;
+	if (code == SC_DRAW && draw_camera)
 	{
-		S_CALLBACK *shp = (S_CALLBACK *)shape;
+		SCALLBACK *shp = (SCALLBACK *)shape;
 #ifdef sgi
 		u16 *arg = (u16 *)&shp->arg;
 		if (arg[0] != draw_timer)
@@ -20,26 +17,26 @@ void *s_stage_weather(int code, SHAPE *shape, UNUSED void *data)
 		if (shp->arg >> 16 != draw_timer)
 #endif
 		{
-			UNUSED CAMERA *cam = (CAMERA *)s_camera->s.arg;
+			UNUSED CAMERA *cam = (CAMERA *)draw_camera->s.arg;
 #ifdef sgi
 			int code = arg[1];
 #else
 			int code = shp->arg & 0xFFFF;
 #endif
-			vecf_to_vecs(look, s_camera->look);
-			vecf_to_vecs(eye, s_camera->eye);
-			vecf_to_vecs(pos, pl_camera_data[0].pos);
-			if ((g = weather_draw(code, pos, look, eye)))
+			FVecToSVec(look, draw_camera->look);
+			FVecToSVec(eye, draw_camera->eye);
+			FVecToSVec(pos, pl_camera_data[0].pos);
+			if ((g = WeatherDraw(code, pos, look, eye)))
 			{
-				Mtx *mtx = gfx_alloc(sizeof(Mtx));
-				gfx = gfx_alloc(sizeof(Gfx)*2);
-				mtxf_to_mtx(mtx, data);
+				Mtx *mtx = GfxAlloc(sizeof(Mtx));
+				gfx = GfxAlloc(sizeof(Gfx)*2);
+				FMtxToMtx(mtx, data);
 				gSPMatrix(
 					&gfx[0], K0_TO_PHYS(mtx),
 					G_MTX_MODELVIEW|G_MTX_LOAD|G_MTX_NOPUSH
 				);
 				gSPBranchList(&gfx[1], K0_TO_PHYS(g));
-				shape_set_layer(&shp->s, LAYER_TEX_EDGE);
+				ShpSetLayer(&shp->s, LAYER_TEX_EDGE);
 			}
 #ifdef sgi
 			arg[0] = draw_timer;
@@ -50,27 +47,27 @@ void *s_stage_weather(int code, SHAPE *shape, UNUSED void *data)
 	}
 	else if (code == SC_EXIT)
 	{
-		vecs_cpy(look, vecs_0);
-		vecs_cpy(eye, vecs_0);
-		vecs_cpy(pos, vecs_0);
-		weather_draw(0, pos, look, eye);
+		SVecCpy(look, svec_0);
+		SVecCpy(eye, svec_0);
+		SVecCpy(pos, svec_0);
+		WeatherDraw(WEATHER_NULL, pos, look, eye);
 	}
 	return gfx;
 }
 
-void *s_stage_back(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlBackground(int code, SHAPE *shape, UNUSED void *data)
 {
 	Gfx *gfx = NULL;
-	S_BACK *shp = (S_BACK *)shape;
+	SBACK *shp = (SBACK *)shape;
 	if (code == SC_OPEN)
 	{
 		shp->s.arg = 0;
 	}
 	else if (code == SC_DRAW)
 	{
-		S_CAMERA *cam = (S_CAMERA *)s_scene->table[0];
-		S_PERSP *persp = (S_PERSP *)cam->s.s.parent;
-		gfx = back_draw(
+		SCAMERA *cam = (SCAMERA *)draw_scene->reftab[0];
+		SPERSP *persp = (SPERSP *)cam->s.s.parent;
+		gfx = BackgroundDraw(
 			0, shp->code, persp->fovy,
 			camdata.eye[0], camdata.eye[1], camdata.eye[2],
 			camdata.look[0], camdata.look[1], camdata.look[2]
@@ -79,19 +76,19 @@ void *s_stage_back(int code, SHAPE *shape, UNUSED void *data)
 	return gfx;
 }
 
-void *s_face_proc(int code, SHAPE *shape, void *data)
+void *CtrlFace(int code, SHAPE *shape, void *data)
 {
 	Gfx *gfx = NULL;
 	SHORT sound = 0;
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
-	UNUSED MTXF *mf = data;
+	SCALLBACK *shp = (SCALLBACK *)shape;
+	UNUSED FMTX *m = data;
 	if (code == SC_DRAW)
 	{
 		if (cont1->pad && !wipe.active) face_gfx_8019C930(cont1->pad);
 		gfx = (Gfx *)PHYS_TO_K0(gdm_gettestdl(shp->arg));
 		gfx_callback = face_gfx_8019C874;
 		sound = face_gfx_8019C9C8();
-		aud_face_sound(sound);
+		AudPlayFaceSound(sound);
 	}
 	return gfx;
 }
@@ -122,7 +119,7 @@ static void callback_802765FC(void)
 
 static void callback_802766B4(void)
 {
-	if (objlib_802A4BE4(3, 1, 162, object->o_v5))
+	if (objectlib_802A4BE4(3, 1, 162, object->o_v5))
 	{
 		object->o_v6 = TRUE;
 		object->o_v7 = 3;
@@ -172,9 +169,9 @@ void callback_8027684C(void)
 
 void callback_80276910(void)
 {
-	u32 flag = save_get_flag();
-	int total = save_star_total();
-	int msg = object->o_actor_info >> 24 & 0xFF;
+	u32 flag = BuGetFlag();
+	int total = BuStarTotal();
+	int msg = ObjGetArg(object) & 0xFF;
 	int has_msg = TRUE;
 	switch (msg)
 	{
@@ -200,18 +197,18 @@ void callback_80276910(void)
 	}
 	else
 	{
-		objlib_802A0568(object);
+		ObjKill(object);
 	}
 }
 
-extern O_SCRIPT o_13002AF0[];
+extern OBJLANG o_13002AF0[];
 
 static void callback_80276AA0(SHORT angy)
 {
-	OBJECT *obj = obj_make_here(object, 0, o_13002AF0);
-	obj->o_pos_x += 100 * SIN(0x2800*object->o_v6 + angy);
-	obj->o_pos_z += 100 * COS(0x2800*object->o_v6 + angy);
-	obj->o_pos_y -= object->o_v6 * (float)10;
+	OBJECT *obj = ObjMakeHere(object, 0, o_13002AF0);
+	obj->o_posx += 100 * SIN(0x2800*object->o_v6 + angy);
+	obj->o_posz += 100 * COS(0x2800*object->o_v6 + angy);
+	obj->o_posy -= object->o_v6 * (float)10;
 }
 
 void callback_80276BB8(void)
@@ -219,24 +216,24 @@ void callback_80276BB8(void)
 	object->o_v5 = 0;
 	object->o_v6 = 0;
 	object->o_v7 = 0x1000;
-	object->o_pos_x += 30 * SIN(mario->ang[1]-0x4000);
-	object->o_pos_y += 160;
-	object->o_pos_z += 30 * COS(mario->ang[1]-0x4000);
-	object->o_ang_y = 0x7800;
-	obj_set_scale(object, 0.5F);
+	object->o_posx += 30 * SIN(mario->ang[1]-0x4000);
+	object->o_posy += 160;
+	object->o_posz += 30 * COS(mario->ang[1]-0x4000);
+	object->o_angy = 0x7800;
+	ObjSetScale(object, 0.5F);
 }
 
 void callback_80276CCC(void)
 {
 	UNUSED int i;
-	short ang = object->o_ang_y;
+	short ang = object->o_angy;
 	if (object->o_v7 < 0x2400) object->o_v7 += 0x60;
 	switch (object->o_v5)
 	{
 	case 0:
-		object->o_pos_y += 3.4F;
-		object->o_ang_y += object->o_v7;
-		obj_set_scale(object, 0.5F + (float)object->o_v6/50);
+		object->o_posy += 3.4F;
+		object->o_angy += object->o_v7;
+		ObjSetScale(object, 0.5F + (float)object->o_v6/50);
 		if (++object->o_v6 == 30)
 		{
 			object->o_v6 = 0;
@@ -244,11 +241,11 @@ void callback_80276CCC(void)
 		}
 		break;
 	case 1:
-		object->o_ang_y += object->o_v7;
+		object->o_angy += object->o_v7;
 		if (++object->o_v6 == 30)
 		{
 			Na_ObjSePlay(NA_SE7_1E, object);
-			objlib_8029F6BC();
+			ObjectHide();
 			object->o_v6 = 0;
 			object->o_v5++;
 		}
@@ -265,26 +262,25 @@ void callback_80276CCC(void)
 	case 3:
 		if (object->o_v6++ == 50)
 		{
-			objlib_802A0568(object);
+			ObjKill(object);
 		}
 		break;
 	}
-	if (ang > (short)object->o_ang_y) Na_ObjSePlay(NA_SE3_16, object);
+	if (ang > (short)object->o_angy) Na_ObjSePlay(NA_SE3_16, object);
 }
 
-static Gfx *callback_80276F90(S_CALLBACK *shp, SHORT alpha)
+static Gfx *callback_80276F90(SCALLBACK *shp, SHORT alpha)
 {
-	Gfx *g;
-	Gfx *gfx = NULL;
+	Gfx *g, *gfx = NULL;
 	if (alpha == 0xFF)
 	{
-		shape_set_layer(&shp->s, LAYER_OPA_SURF);
-		g = gfx = gfx_alloc(sizeof(Gfx)*2);
+		ShpSetLayer(&shp->s, LAYER_OPA_SURF);
+		g = gfx = GfxAlloc(sizeof(Gfx)*2);
 	}
 	else
 	{
-		shape_set_layer(&shp->s, LAYER_XLU_SURF);
-		g = gfx = gfx_alloc(sizeof(Gfx)*3);
+		ShpSetLayer(&shp->s, LAYER_XLU_SURF);
+		g = gfx = GfxAlloc(sizeof(Gfx)*3);
 		gDPSetAlphaCompare(g++, G_AC_DITHER);
 	}
 	gDPSetEnvColor(g++, 0xFF, 0xFF, 0xFF, alpha);
@@ -292,11 +288,11 @@ static Gfx *callback_80276F90(S_CALLBACK *shp, SHORT alpha)
 	return gfx;
 }
 
-void *s_player_alpha(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerAlpha(int code, SHAPE *shape, UNUSED void *data)
 {
 	UNUSED int i;
 	Gfx *gfx = NULL;
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->arg];
 	if (code == SC_DRAW)
 	{
@@ -306,9 +302,9 @@ void *s_player_alpha(int code, SHAPE *shape, UNUSED void *data)
 	return gfx;
 }
 
-void *s_player_select_lod(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerLOD(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_SELECT *shp = (S_SELECT *)shape;
+	SSELECT *shp = (SSELECT *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->code];
 	if (code == SC_DRAW)
 	{
@@ -317,17 +313,17 @@ void *s_player_select_lod(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_select_eyes(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerEyes(int code, SHAPE *shape, UNUSED void *data)
 {
-	static s8 table[] = {1, 2, 1, 0, 1, 2, 1, 0};
-	S_SELECT *shp = (S_SELECT *)shape;
+	static char eyestab[] = {1, 2, 1, 0, 1, 2, 1, 0};
+	SSELECT *shp = (SSELECT *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->code];
 	if (code == SC_DRAW)
 	{
 		if (pls->eyes == 0)
 		{
 			SHORT i = (32*shp->code + draw_timer) >> 1 & 31;
-			if (i < 7)  shp->index = table[i];
+			if (i < 7)  shp->index = eyestab[i];
 			else        shp->index = 0;
 		}
 		else
@@ -338,20 +334,20 @@ void *s_player_select_eyes(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_torso(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerTorso(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->arg];
 	u32 state = pls->state;
 	if (code == SC_DRAW)
 	{
-		S_ANG *ang = (S_ANG *)shape->next;
+		SANG *ang = (SANG *)shape->next;
 		if (!(
 			state == PS_MOVE_12 ||
 			state == PS_MOVE_14 ||
 			state == PS_MOVE_00 ||
 			state == PS_MOVE_06
-		)) vecs_cpy(pls->torso_ang, vecs_0);
+		)) SVecCpy(pls->torso_ang, svec_0);
 		ang->ang[0] = pls->torso_ang[1];
 		ang->ang[1] = pls->torso_ang[2];
 		ang->ang[2] = pls->torso_ang[0];
@@ -359,38 +355,38 @@ void *s_player_torso(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_head(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerNeck(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->arg];
 	u32 state = pls->state;
 	if (code == SC_DRAW)
 	{
-		S_ANG *ang = (S_ANG *)shape->next;
-		CAMERA *cam = (CAMERA *)s_camera->s.arg;
+		SANG *ang = (SANG *)shape->next;
+		CAMERA *cam = (CAMERA *)draw_camera->s.arg;
 		if (cam->mode == 6) /* T:enum */
 		{
-			ang->ang[0] = pl_camera_data[0].head_angy;
-			ang->ang[2] = pl_camera_data[0].head_angx;
+			ang->ang[0] = pl_camera_data[0].neck_angy;
+			ang->ang[2] = pl_camera_data[0].neck_angx;
 		}
 		else if (state & PF_HEAD)
 		{
-			ang->ang[0] = pls->head_ang[1];
-			ang->ang[1] = pls->head_ang[2];
-			ang->ang[2] = pls->head_ang[0];
+			ang->ang[0] = pls->neck_ang[1];
+			ang->ang[1] = pls->neck_ang[2];
+			ang->ang[2] = pls->neck_ang[0];
 		}
 		else
 		{
-			vecs_set(pls->head_ang, 0, 0, 0);
-			vecs_set(ang->ang, 0, 0, 0);
+			SVecSet(pls->neck_ang, 0, 0, 0);
+			SVecSet(ang->ang, 0, 0, 0);
 		}
 	}
 	return NULL;
 }
 
-void *s_mario_select_hand(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlMarioHand(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_SELECT *shp = (S_SELECT *)shape;
+	SSELECT *shp = (SSELECT *)shape;
 	PL_SHAPE *pls = &pl_shape_data[0];
 	if (code == SC_DRAW)
 	{
@@ -410,17 +406,17 @@ void *s_mario_select_hand(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_mario_punch(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlMarioPunch(int code, SHAPE *shape, UNUSED void *data)
 {
-	static s8 table[][6] =
+	static char punchtab[][6] =
 	{
 		{10, 12, 16, 24, 10, 10},
 		{10, 14, 20, 30, 10, 10},
 		{10, 16, 20, 26, 26, 20},
 	};
 	static s16 stamp = 0;
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
-	S_SCALE *scale = (S_SCALE *)shape->next;
+	SCALLBACK *shp = (SCALLBACK *)shape;
+	SSCALE *scale = (SSCALE *)shape->next;
 	PL_SHAPE *pls = &pl_shape_data[0];
 	if (code == SC_DRAW)
 	{
@@ -432,15 +428,15 @@ void *s_mario_punch(int code, SHAPE *shape, UNUSED void *data)
 				pls->punch--;
 				stamp = draw_timer;
 			}
-			scale->scale = (float)table[shp->arg][pls->punch & 63]/10;
+			scale->scale = (float)punchtab[shp->arg][pls->punch & 63]/10;
 		}
 	}
 	return NULL;
 }
 
-void *s_player_select_cap(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerCap(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_SELECT *shp = (S_SELECT *)shape;
+	SSELECT *shp = (SSELECT *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->code];
 	if (code == SC_DRAW)
 	{
@@ -449,10 +445,10 @@ void *s_player_select_cap(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_select_head(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerHead(int code, SHAPE *shape, UNUSED void *data)
 {
 	SHAPE *next = shape->next;
-	S_SELECT *shp = (S_SELECT *)shape;
+	SSELECT *shp = (SSELECT *)shape;
 	PL_SHAPE *pls = &pl_shape_data[shp->code];
 	if (code == SC_DRAW)
 	{
@@ -470,13 +466,13 @@ void *s_player_select_head(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_wing(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlPlayerWing(int code, SHAPE *shape, UNUSED void *data)
 {
 	SHORT x;
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	if (code == SC_DRAW)
 	{
-		S_ANG *ang = (S_ANG *)shape->next;
+		SANG *ang = (SANG *)shape->next;
 		if (pl_shape_data[shp->arg >> 1].wing == 0)
 		{
 			x = 0x1000 * (1+COS(0x1000*(draw_timer & 15)));
@@ -491,68 +487,68 @@ void *s_player_wing(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_player_hand(int code, SHAPE *shape, void *data)
+void *CtrlPlayerHand(int code, SHAPE *shape, void *data)
 {
-	S_HAND *shp = (S_HAND *)shape;
-	MTXF *mf = data;
+	SHAND *shp = (SHAND *)shape;
+	FMTX *m = data;
 	PLAYER *pl = &player_data[shp->s.arg];
 	if (code == SC_DRAW)
 	{
 		shp->obj = NULL;
-		if (pl->hold)
+		if (pl->take)
 		{
-			shp->obj = &pl->hold->s;
-			switch (pl->shape->hold)
+			shp->obj = &pl->take->s;
+			switch (pl->shape->take)
 			{
 			case 1:
 				if (pl->state & PF_THRW)
 				{
-					vecs_set(shp->pos, 50, 0, 0);
+					SVecSet(shp->pos, 50, 0, 0);
 				}
 				else
 				{
-					vecs_set(shp->pos, 50, 0, 110);
+					SVecSet(shp->pos, 50, 0, 110);
 				}
 				break;
 			case 2:
-				vecs_set(shp->pos, 145, -173, 180);
+				SVecSet(shp->pos, 145, -173, 180);
 				break;
 			case 3:
-				vecs_set(shp->pos, 80, -270, 1260);
+				SVecSet(shp->pos, 80, -270, 1260);
 				break;
 			}
 		}
 	}
 	else if (code == SC_MTX)
 	{
-		vecf_scenepos(pl->shape->hand_pos, *mf, *s_camera->mf);
+		CalcScenePos(pl->shape->hand_pos, *m, *draw_camera->m);
 	}
 	return NULL;
 }
 
-void *s_inside_mirror(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlInsideMirror(int code, SHAPE *shape, UNUSED void *data)
 {
 	float x;
-	S_OBJECT *shp = &player_data[0].obj->s;
+	SOBJECT *shp = &player_data[0].obj->s;
 	switch (code)
 	{
 	case SC_INIT:
-		s_create_object(NULL, &mario_mirror, NULL, vecf_0, vecs_0, vecf_1);
+		ShpCreateObject(NULL, &mario_mirror, NULL, fvec_0, svec_0, fvec_1);
 		break;
 	case SC_OPEN:
-		shape_link(shape, &mario_mirror.s);
+		ShpLink(shape, &mario_mirror.s);
 		break;
 	case SC_CLOSE:
-		shape_unlink(&mario_mirror.s);
+		ShpUnlink(&mario_mirror.s);
 		break;
 	case SC_DRAW:
 		if (shp->pos[0] > 1700)
 		{
 			mario_mirror.shape = shp->shape;
 			mario_mirror.scene = shp->scene;
-			vecs_cpy(mario_mirror.ang, shp->ang);
-			vecf_cpy(mario_mirror.pos, shp->pos);
-			vecf_cpy(mario_mirror.scale, shp->scale);
+			SVecCpy(mario_mirror.ang, shp->ang);
+			FVecCpy(mario_mirror.pos, shp->pos);
+			FVecCpy(mario_mirror.scale, shp->scale);
 			mario_mirror.skel = shp->skel;
 			x = 4331.53 - mario_mirror.pos[0];
 			mario_mirror.pos[0] = 4331.53 + x;
@@ -569,15 +565,15 @@ void *s_inside_mirror(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-void *s_mario_mirror(int code, SHAPE *shape, UNUSED void *data)
+void *CtrlMarioMirror(int code, SHAPE *shape, UNUSED void *data)
 {
-	S_CALLBACK *shp = (S_CALLBACK *)shape;
+	SCALLBACK *shp = (SCALLBACK *)shape;
 	Gfx *gfx = NULL;
 	if (code == SC_DRAW)
 	{
-		if (s_object == &mario_mirror)
+		if (draw_object == &mario_mirror)
 		{
-			gfx = gfx_alloc(sizeof(Gfx)*3);
+			gfx = GfxAlloc(sizeof(Gfx)*3);
 			if (shp->arg == 0)
 			{
 				gSPClearGeometryMode(&gfx[0], G_CULL_BACK);
@@ -590,7 +586,7 @@ void *s_mario_mirror(int code, SHAPE *shape, UNUSED void *data)
 				gSPSetGeometryMode(&gfx[1], G_CULL_BACK);
 				gSPEndDisplayList(&gfx[2]);
 			}
-			shape_set_layer(&shp->s, LAYER_OPA_SURF);
+			ShpSetLayer(&shp->s, LAYER_OPA_SURF);
 		}
 	}
 	return gfx;

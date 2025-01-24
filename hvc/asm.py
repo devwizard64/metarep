@@ -28,55 +28,55 @@ A_NWX   = 0x2A  # indirect word X
 A_MV    = 0x40  # move
 
 op_hvc = [
-	None, # 0x00
+	("brk",),           # 0x00
 	None, # 0x01
 	None, # 0x02
 	None, # 0x03
 	None, # 0x04
-	None, # 0x05
-	None, # 0x06
+	("ora", A_AB),      # 0x05
+	("asl", A_AB),      # 0x06
 	None, # 0x07
-	None, # 0x08
+	("php",),           # 0x08
 	("ora", A_IB),      # 0x09
-	None, # 0x0A
+	("asl", A_A),       # 0x0A
 	None, # 0x0B
 	None, # 0x0C
-	None, # 0x0D
-	None, # 0x0E
+	("ora", A_AA),      # 0x0D
+	("asl", A_AA),      # 0x0E
 	None, # 0x0F
 	("bpl", A_RB),      # 0x10
-	None, # 0x11
+	("ora", A_NB, A_Y), # 0x11
 	None, # 0x12
 	None, # 0x13
 	None, # 0x14
-	None, # 0x15
-	None, # 0x16
+	("ora", A_AB, A_X), # 0x15
+	("asl", A_AB, A_X), # 0x16
 	None, # 0x17
 	("clc",),           # 0x18
-	None, # 0x19
+	("ora", A_AB, A_Y), # 0x19
 	None, # 0x1A
 	None, # 0x1B
 	None, # 0x1C
-	None, # 0x1D
-	None, # 0x1E
+	("ora", A_AA, A_X), # 0x1D
+	("asl", A_AA, A_X), # 0x1E
 	None, # 0x1F
 	("jsr", A_AW),      # 0x20
 	None, # 0x21
 	None, # 0x22
 	None, # 0x23
-	None, # 0x24
-	None, # 0x25
-	None, # 0x26
+	("bit", A_AB),      # 0x24
+	("and", A_AB),      # 0x25
+	("rol", A_AB),      # 0x26
 	None, # 0x27
 	None, # 0x28
 	("and", A_IB),      # 0x29
-	None, # 0x2A
+	("rol", A_A),       # 0x2A
 	None, # 0x2B
-	None, # 0x2C
-	None, # 0x2D
+	("bit", A_AA),      # 0x2C
+	("and", A_AA),      # 0x2D
 	None, # 0x2E
 	None, # 0x2F
-	None, # 0x30
+	("bmi", A_RB),      # 0x30
 	None, # 0x31
 	None, # 0x32
 	None, # 0x33
@@ -98,7 +98,7 @@ op_hvc = [
 	None, # 0x43
 	None, # 0x44
 	("eor", A_AB),      # 0x45
-	None, # 0x46
+	("lsr", A_AB),      # 0x46
 	None, # 0x47
 	("pha",),           # 0x48
 	("eor", A_IB),      # 0x49
@@ -134,13 +134,13 @@ op_hvc = [
 	None, # 0x67
 	("pla",),           # 0x68
 	("adc", A_IB),      # 0x69
-	None, # 0x6A
+	("ror", A_A),       # 0x6A
 	None, # 0x6B
-	None, # 0x6C
-	None, # 0x6D
-	None, # 0x6E
+	("jmp", A_NW),      # 0x6C
+	("adc", A_AA),      # 0x6D
+	("ror", A_AA),      # 0x6E
 	None, # 0x6F
-	None, # 0x70
+	("bvs", A_RB),      # 0x70
 	None, # 0x71
 	None, # 0x72
 	None, # 0x73
@@ -162,26 +162,26 @@ op_hvc = [
 	None, # 0x83
 	("sty", A_AB),      # 0x84
 	("sta", A_AB),      # 0x85
-	None, # 0x86
+	("stx", A_AB),      # 0x86
 	None, # 0x87
 	("dey",),           # 0x88
 	None, # 0x89
-	None, # 0x8A
+	("txa",),           # 0x8A
 	None, # 0x8B
-	None, # 0x8C
+	("sty", A_AA),      # 0x8C
 	("sta", A_AA),      # 0x8D
-	("stx", A_AA), # 0x8E
+	("stx", A_AA),      # 0x8E
 	None, # 0x8F
 	("bcc", A_RB),      # 0x90
-	None, # 0x91
+	("sta", A_NB, A_Y), # 0x91
 	None, # 0x92
 	None, # 0x93
 	None, # 0x94
-	None, # 0x95
+	("sta", A_AB, A_X), # 0x95
 	None, # 0x96
 	None, # 0x97
-	None, # 0x98
-	None, # 0x99
+	("tya",),           # 0x98
+	("sta", A_AA, A_Y), # 0x99
 	("txs",),           # 0x9A
 	None, # 0x9B
 	None, # 0x9C
@@ -192,48 +192,48 @@ op_hvc = [
 	None, # 0xA1
 	("ldx", A_IB),      # 0xA2
 	None, # 0xA3
-	None, # 0xA4
-	None, # 0xA5
-	None, # 0xA6
+	("ldy", A_AB),      # 0xA4
+	("lda", A_AB),      # 0xA5
+	("ldx", A_AB),      # 0xA6
 	None, # 0xA7
 	("tay",),           # 0xA8
 	("lda", A_IB),      # 0xA9
-	None, # 0xAA
+	("tax",),           # 0xAA
 	None, # 0xAB
 	("ldy", A_AA),      # 0xAC
 	("lda", A_AA),      # 0xAD
 	("ldx", A_AA),      # 0xAE
 	None, # 0xAF
 	("bcs", A_RB),      # 0xB0
-	None, # 0xB1
+	("lda", A_NB, A_Y), # 0xB1
 	None, # 0xB2
 	None, # 0xB3
-	None, # 0xB4
-	None, # 0xB5
-	None, # 0xB6
+	("ldy", A_AB, A_X), # 0xB4
+	("lda", A_AB, A_X), # 0xB5
+	("ldx", A_AB, A_Y), # 0xB6
 	None, # 0xB7
 	None, # 0xB8
 	("lda", A_AA, A_Y), # 0xB9
 	None, # 0xBA
 	None, # 0xBB
-	None, # 0xBC
+	("ldy", A_AA, A_X), # 0xBC
 	("lda", A_AA, A_X), # 0xBD
 	("ldx", A_AA, A_Y), # 0xBE
 	None, # 0xBF
-	None, # 0xC0
+	("cpy", A_IB),      # 0xC0
 	None, # 0xC1
 	None, # 0xC2
 	None, # 0xC3
-	None, # 0xC4
+	("cpy", A_AB),      # 0xC4
 	("cmp", A_AB),      # 0xC5
-	None, # 0xC6
+	("dec", A_AB),      # 0xC6
 	None, # 0xC7
 	("iny",),           # 0xC8
 	("cmp", A_IB),      # 0xC9
 	("dex",),           # 0xCA
 	None, # 0xCB
 	None, # 0xCC
-	None, # 0xCD
+	("cmp", A_AA),      # 0xCD
 	("dec", A_AA),      # 0xCE
 	None, # 0xCF
 	("bne", A_RB),      # 0xD0
@@ -242,14 +242,14 @@ op_hvc = [
 	None, # 0xD3
 	None, # 0xD4
 	None, # 0xD5
-	None, # 0xD6
+	("dec", A_AB, A_X), # 0xD6
 	None, # 0xD7
 	("cld",),           # 0xD8
-	None, # 0xD9
+	("cmp", A_AA, A_Y), # 0xD9
 	None, # 0xDA
 	None, # 0xDB
 	None, # 0xDC
-	None, # 0xDD
+	("cmp", A_AA, A_X), # 0xDD
 	("dec", A_AA, A_X), # 0xDE
 	None, # 0xDF
 	("cpx", A_IB),      # 0xE0
@@ -257,15 +257,15 @@ op_hvc = [
 	None, # 0xE2
 	None, # 0xE3
 	None, # 0xE4
-	None, # 0xE5
+	("sbc", A_AB),      # 0xE5
 	("inc", A_AB),      # 0xE6
 	None, # 0xE7
 	("inx",),           # 0xE8
-	None, # 0xE9
-	None, # 0xEA
+	("sbc", A_IB),      # 0xE9
+	("nop",),           # 0xEA
 	None, # 0xEB
 	None, # 0xEC
-	None, # 0xED
+	("sbc", A_AA),      # 0xED
 	("inc", A_AA),      # 0xEE
 	None, # 0xEF
 	("beq", A_RB),      # 0xF0
@@ -281,8 +281,8 @@ op_hvc = [
 	None, # 0xFA
 	None, # 0xFB
 	None, # 0xFC
-	None, # 0xFD
-	None, # 0xFE
+	("sbc", A_AA, A_X), # 0xFD
+	("inc", A_AA, A_X), # 0xFE
 	None, # 0xFF
 ]
 
@@ -571,7 +571,8 @@ def fmt(self, line, btbl, code=False):
 					if "A8"  in sym.flag: f.append(".a8\n")
 					if "I16" in sym.flag: f.append(".i16\n")
 					if "I8"  in sym.flag: f.append(".i8\n")
-					if not sym.label.startswith("_"):
+					if "LOCAL" not in sym.flag and \
+						not sym.label.startswith("_"):
 						f.append("\n")
 						if hvc.COMM_LABEL:
 							f.append("; $%s\n" % (fmt_addr % addr))
@@ -652,7 +653,7 @@ def s_code(self, argv):
 				elif arg == A_NB: lst.append("(%s)" % hvc.ab(self))
 				elif arg == A_NW: lst.append("(%s)" % hvc.aw(self))
 				elif arg == A_NWX:
-					lst.append("(.loword(%s), x)" % hvc.aw(self))
+					lst.append("(.loword(%s),x)" % hvc.aw(self))
 					if False:
 						self.addr-=2
 						if self.u16() == (self.addr&0xffff):
@@ -665,7 +666,7 @@ def s_code(self, argv):
 				else:
 					raise RuntimeError("hvc.asm.s_code(): bad arg")
 			ln = argv[0]
-			if len(lst) > 0: ln += " " + ", ".join(lst)
+			if len(lst) > 0: ln += " " + ",".join(lst)
 			line.append((self.save, ln))
 			sym = self.get_sym(self.save)
 			if sym is not None:
@@ -711,7 +712,7 @@ def lst_main(self, line, lst):
 					)))
 				elif t == "lh":
 					b = [[self.u8() for _ in range(n)] for _ in range(2)]
-					s = ", ".join([
+					s = ",".join([
 						hvc.sym_lh(self, lo, hi)
 						for lo, hi in zip(b[0], b[1])
 					])
@@ -719,7 +720,7 @@ def lst_main(self, line, lst):
 						line.append((self.save + n*i, ".%s %s" % (c, s)))
 				elif t == "lhb":
 					b = [[self.u8() for _ in range(n)] for _ in range(3)]
-					s = ", ".join([
+					s = ",".join([
 						hvc.sym_lhb(self, lo, hi, ba)
 						for lo, hi, ba in zip(b[0], b[1], b[2])
 					])
@@ -729,7 +730,7 @@ def lst_main(self, line, lst):
 						)))
 				else:
 					line.append((self.save, "%s %s" % (
-						t[0], ", ".join([t[1](self) for _ in range(n)])
+						t[0], ",".join([t[1](self) for _ in range(n)])
 					)))
 
 def s_data(self, argv):

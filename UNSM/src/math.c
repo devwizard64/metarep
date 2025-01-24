@@ -6,12 +6,12 @@ Mtx mtx_1 = gdSPDefMatrix(
 	0, 0, 1, 0,
 	0, 0, 0, 1
 );
-VECF vecf_0 = {0, 0, 0};
-VECS vecs_0 = {0, 0, 0};
-VECF vecf_1 = {1, 1, 1};
-VECS vecs_1 = {1, 1, 1};
+FVEC fvec_0 = {0, 0, 0};
+SVEC svec_0 = {0, 0, 0};
+FVEC fvec_1 = {1, 1, 1};
+SVEC svec_1 = {1, 1, 1};
 
-float *vecf_cpy(VECF dst, VECF src)
+float *FVecCpy(FVEC dst, FVEC src)
 {
 	dst[0] = src[0];
 	dst[1] = src[1];
@@ -23,7 +23,7 @@ float *vecf_cpy(VECF dst, VECF src)
 #endif
 }
 
-float *vecf_set(VECF v, float x, float y, float z)
+float *FVecSet(FVEC v, float x, float y, float z)
 {
 	v[0] = x;
 	v[1] = y;
@@ -35,7 +35,7 @@ float *vecf_set(VECF v, float x, float y, float z)
 #endif
 }
 
-float *vecf_add(VECF v, VECF a)
+float *FVecAdd(FVEC v, FVEC a)
 {
 	v[0] += a[0];
 	v[1] += a[1];
@@ -47,7 +47,7 @@ float *vecf_add(VECF v, VECF a)
 #endif
 }
 
-float *vecf_addto(VECF v, VECF a, VECF b)
+float *FVecAddTo(FVEC v, FVEC a, FVEC b)
 {
 	v[0] = a[0] + b[0];
 	v[1] = a[1] + b[1];
@@ -59,7 +59,7 @@ float *vecf_addto(VECF v, VECF a, VECF b)
 #endif
 }
 
-short *vecs_cpy(VECS dst, VECS src)
+short *SVecCpy(SVEC dst, SVEC src)
 {
 	dst[0] = src[0];
 	dst[1] = src[1];
@@ -71,7 +71,7 @@ short *vecs_cpy(VECS dst, VECS src)
 #endif
 }
 
-short *vecs_set(VECS v, SHORT x, SHORT y, SHORT z)
+short *SVecSet(SVEC v, SHORT x, SHORT y, SHORT z)
 {
 	v[0] = x;
 	v[1] = y;
@@ -83,7 +83,7 @@ short *vecs_set(VECS v, SHORT x, SHORT y, SHORT z)
 #endif
 }
 
-short *vecs_add(VECS v, VECS a)
+short *SVecAdd(SVEC v, SVEC a)
 {
 	v[0] += a[0];
 	v[1] += a[1];
@@ -95,7 +95,7 @@ short *vecs_add(VECS v, VECS a)
 #endif
 }
 
-short *vecs_addto(VECS v, VECS a, VECS b)
+short *SVecAddTo(SVEC v, SVEC a, SVEC b)
 {
 	v[0] = a[0] + b[0];
 	v[1] = a[1] + b[1];
@@ -107,7 +107,7 @@ short *vecs_addto(VECS v, VECS a, VECS b)
 #endif
 }
 
-short *vecs_sub(VECS v, VECS a)
+short *SVecSub(SVEC v, SVEC a)
 {
 	v[0] -= a[0];
 	v[1] -= a[1];
@@ -119,7 +119,7 @@ short *vecs_sub(VECS v, VECS a)
 #endif
 }
 
-float *vecs_to_vecf(VECF dst, VECS src)
+float *SVecToFVec(FVEC dst, SVEC src)
 {
 	dst[0] = src[0];
 	dst[1] = src[1];
@@ -131,7 +131,7 @@ float *vecs_to_vecf(VECF dst, VECS src)
 #endif
 }
 
-short *vecf_to_vecs(VECS dst, VECF src)
+short *FVecToSVec(SVEC dst, FVEC src)
 {
 	dst[0] = src[0] + (src[0] > 0 ? 0.5F : -0.5F);
 	dst[1] = src[1] + (src[1] > 0 ? 0.5F : -0.5F);
@@ -143,7 +143,7 @@ short *vecf_to_vecs(VECS dst, VECF src)
 #endif
 }
 
-float *vecf_normal(VECF v, VECF v0, VECF v1, VECF v2)
+float *CalcNormal(FVEC v, FVEC v0, FVEC v1, FVEC v2)
 {
 #define CROSS(x0, y0, x1, y1, x2, y2) \
 	(((y1)-(y0))*((x2)-(x1)) - ((y2)-(y1))*((x1)-(x0)))
@@ -158,7 +158,7 @@ float *vecf_normal(VECF v, VECF v0, VECF v1, VECF v2)
 #endif
 }
 
-float *vecf_cross(VECF v, VECF a, VECF b)
+float *CrossProduct(FVEC v, FVEC a, FVEC b)
 {
 	v[0] = a[1]*b[2] - b[1]*a[2];
 	v[1] = a[2]*b[0] - b[2]*a[0];
@@ -170,9 +170,9 @@ float *vecf_cross(VECF v, VECF a, VECF b)
 #endif
 }
 
-float *vecf_normalize(VECF v)
+float *Normalize(FVEC v)
 {
-	float d = 1 / sqrtf(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+	float d = 1 / DIST3(v[0], v[1], v[2]);
 	v[0] *= d;
 	v[1] *= d;
 	v[2] *= d;
@@ -183,7 +183,7 @@ float *vecf_normalize(VECF v)
 #endif
 }
 
-void mtxf_cpy(MTXF dst, MTXF src)
+void FMtxCpy(FMTX dst, FMTX src)
 {
 #ifdef sgi
 	register int i;
@@ -191,11 +191,11 @@ void mtxf_cpy(MTXF dst, MTXF src)
 	register int *s = (int *)src;
 	for (i = 0; i < 16; i++) *d++ = *s++;
 #else
-	bcopy(src, dst, sizeof(MTXF));
+	bcopy(src, dst, sizeof(FMTX));
 #endif
 }
 
-void mtxf_identity(MTXF m)
+void FMtxIdent(FMTX m)
 {
 #ifdef sgi
 	register int i;
@@ -207,21 +207,21 @@ void mtxf_identity(MTXF m)
 #endif
 }
 
-void mtxf_pos(MTXF m, VECF pos)
+void FMtxPos(FMTX m, FVEC pos)
 {
-	mtxf_identity(m);
+	FMtxIdent(m);
 	m[3][0] = pos[0];
 	m[3][1] = pos[1];
 	m[3][2] = pos[2];
 }
 
-void mtxf_lookat(MTXF m, VECF eye, VECF look, SHORT angz)
+void FMtxLookAt(FMTX m, FVEC eye, FVEC look, SHORT angz)
 {
 	register float d;
 	float dx, dz, xy, yy, zy, xz, yz, zz, xx, yx, zx;
 	dx = look[0] - eye[0];
 	dz = look[2] - eye[2];
-	d = -1.0 / sqrtf(dx*dx + dz*dz);
+	d = -1.0 / DIST2(dx, dz);
 	dx *= d;
 	dz *= d;
 	yy = COS(angz);
@@ -230,21 +230,21 @@ void mtxf_lookat(MTXF m, VECF eye, VECF look, SHORT angz)
 	xz = look[0] - eye[0];
 	yz = look[1] - eye[1];
 	zz = look[2] - eye[2];
-	d = -1.0 / sqrtf(xz*xz + yz*yz + zz*zz);
+	d = -1.0 / DIST3(xz, yz, zz);
 	xz *= d;
 	yz *= d;
 	zz *= d;
 	xx = yy*zz - zy*yz;
 	yx = zy*xz - xy*zz;
 	zx = xy*yz - yy*xz;
-	d = 1.0 / sqrtf(xx*xx + yx*yx + zx*zx);
+	d = 1.0 / DIST3(xx, yx, zx);
 	xx *= d;
 	yx *= d;
 	zx *= d;
 	xy = yz*zx - zz*yx;
 	yy = zz*xx - xz*zx;
 	zy = xz*yx - yz*xx;
-	d = 1.0 / sqrtf(xy*xy + yy*yy + zy*zy);
+	d = 1.0 / DIST3(xy, yy, zy);
 	xy *= d;
 	yy *= d;
 	zy *= d;
@@ -266,7 +266,7 @@ void mtxf_lookat(MTXF m, VECF eye, VECF look, SHORT angz)
 	m[3][3] = 1;
 }
 
-void mtxf_coord(MTXF m, VECF pos, VECS ang)
+void FMtxCoord(FMTX m, FVEC pos, SVEC ang)
 {
 	register float sx = SIN(ang[0]);
 	register float cx = COS(ang[0]);
@@ -290,7 +290,7 @@ void mtxf_coord(MTXF m, VECF pos, VECS ang)
 	m[3][3] = 1;
 }
 
-void mtxf_joint(MTXF m, VECF pos, VECS ang)
+void FMtxJoint(FMTX m, FVEC pos, SVEC ang)
 {
 	register float sx = SIN(ang[0]);
 	register float cx = COS(ang[0]);
@@ -316,7 +316,7 @@ void mtxf_joint(MTXF m, VECF pos, VECS ang)
 	m[3][3] = 1;
 }
 
-void mtxf_billboard(MTXF dst, MTXF src, VECF pos, SHORT angz)
+void FMtxBillboard(FMTX dst, FMTX src, FVEC pos, SHORT angz)
 {
 	dst[0][0] = COS(angz);
 	dst[0][1] = SIN(angz);
@@ -342,15 +342,15 @@ void mtxf_billboard(MTXF dst, MTXF src, VECF pos, SHORT angz)
 	dst[3][3] = 1;
 }
 
-void mtxf_stand(MTXF m, VECF vy, VECF pos, SHORT angy)
+void FMtxStand(FMTX m, FVEC vy, FVEC pos, SHORT angy)
 {
-	VECF forward, vx, vz;
-	vecf_set(forward, SIN(angy), 0, COS(angy));
-	vecf_normalize(vy);
-	vecf_cross(vx, vy, forward);
-	vecf_normalize(vx);
-	vecf_cross(vz, vx, vy);
-	vecf_normalize(vz);
+	FVEC forward, vx, vz;
+	FVecSet(forward, SIN(angy), 0, COS(angy));
+	Normalize(vy);
+	CrossProduct(vx, vy, forward);
+	Normalize(vx);
+	CrossProduct(vz, vx, vy);
+	Normalize(vz);
 	m[0][0] = vx[0];
 	m[0][1] = vx[1];
 	m[0][2] = vx[2];
@@ -369,10 +369,10 @@ void mtxf_stand(MTXF m, VECF vy, VECF pos, SHORT angy)
 	m[3][3] = 1;
 }
 
-void mtxf_ground(MTXF m, VECF pos, SHORT angy, float radius)
+void FMtxGround(FMTX m, FVEC pos, SHORT angy, float radius)
 {
 	BGFACE *ground;
-	VECF v0, v1, v2, forward, vx, vy, vz;
+	FVEC v0, v1, v2, forward, vx, vy, vz;
 	float y;
 	float height = -radius*3;
 	v0[0] = pos[0] + SIN(angy+0x2AAA)*radius;
@@ -381,20 +381,20 @@ void mtxf_ground(MTXF m, VECF pos, SHORT angy, float radius)
 	v1[2] = pos[2] + COS(angy+0x8000)*radius;
 	v2[0] = pos[0] + SIN(angy+0xD555)*radius;
 	v2[2] = pos[2] + COS(angy+0xD555)*radius;
-	v0[1] = bg_check_ground(v0[0], pos[1] + 150, v0[2], &ground);
-	v1[1] = bg_check_ground(v1[0], pos[1] + 150, v1[2], &ground);
-	v2[1] = bg_check_ground(v2[0], pos[1] + 150, v2[2], &ground);
+	v0[1] = BGCheckGround(v0[0], pos[1] + 150, v0[2], &ground);
+	v1[1] = BGCheckGround(v1[0], pos[1] + 150, v1[2], &ground);
+	v2[1] = BGCheckGround(v2[0], pos[1] + 150, v2[2], &ground);
 	if (v0[1]-pos[1] < height) v0[1] = pos[1];
 	if (v1[1]-pos[1] < height) v1[1] = pos[1];
 	if (v2[1]-pos[1] < height) v2[1] = pos[1];
 	y = (v0[1]+v1[1]+v2[1]) / 3;
-	vecf_set(forward, SIN(angy), 0, COS(angy));
-	vecf_normal(vy, v0, v1, v2);
-	vecf_normalize(vy);
-	vecf_cross(vx, vy, forward);
-	vecf_normalize(vx);
-	vecf_cross(vz, vx, vy);
-	vecf_normalize(vz);
+	FVecSet(forward, SIN(angy), 0, COS(angy));
+	CalcNormal(vy, v0, v1, v2);
+	Normalize(vy);
+	CrossProduct(vx, vy, forward);
+	Normalize(vx);
+	CrossProduct(vz, vx, vy);
+	Normalize(vz);
 	m[0][0] = vx[0];
 	m[0][1] = vx[1];
 	m[0][2] = vx[2];
@@ -413,9 +413,9 @@ void mtxf_ground(MTXF m, VECF pos, SHORT angy, float radius)
 	m[3][3] = 1;
 }
 
-void mtxf_cat(MTXF m, MTXF a, MTXF b)
+void FMtxCatAffine(FMTX m, FMTX a, FMTX b)
 {
-	MTXF tmp;
+	FMTX tmp;
 	register float x, y, z;
 	x = a[0][0]; y = a[0][1]; z = a[0][2];
 	tmp[0][0] = x*b[0][0] + y*b[1][0] + z*b[2][0];
@@ -435,10 +435,10 @@ void mtxf_cat(MTXF m, MTXF a, MTXF b)
 	tmp[3][2] = x*b[0][2] + y*b[1][2] + z*b[2][2] + b[3][2];
 	tmp[0][3] = tmp[1][3] = tmp[2][3] = 0;
 	tmp[3][3] = 1;
-	mtxf_cpy(m, tmp);
+	FMtxCpy(m, tmp);
 }
 
-void mtxf_scale(MTXF dst, MTXF src, VECF scale)
+void FMtxScale(FMTX dst, FMTX src, FVEC scale)
 {
 	register int i;
 	for (i = 0; i < 4; i++)
@@ -450,7 +450,7 @@ void mtxf_scale(MTXF dst, MTXF src, VECF scale)
 	}
 }
 
-void mtxf_transform(MTXF m, VECS v)
+void Transform(FMTX m, SVEC v)
 {
 	register float x = v[0];
 	register float y = v[1];
@@ -460,14 +460,14 @@ void mtxf_transform(MTXF m, VECS v)
 	v[2] = x*m[0][2] + y*m[1][2] + z*m[2][2] + m[3][2];
 }
 
-void mtxf_to_mtx(Mtx *m, MTXF mf)
+void FMtxToMtx(Mtx *m, FMTX fm)
 {
 #ifdef sgi
 	int x;
 	register int i;
 	register short *h = (short *)m;
 	register short *l = (short *)m + 16;
-	register float *f = (float *)mf;
+	register float *f = (float *)fm;
 	for (i = 0; i < 16; i++)
 	{
 		x = *f++ * 0x10000;
@@ -480,22 +480,22 @@ void mtxf_to_mtx(Mtx *m, MTXF mf)
 #endif
 	}
 #else
-	guMtxF2L(mf, m);
+	guMtxF2L(fm, m);
 #endif
 }
 
-void mtx_angz(Mtx *m, SHORT angz)
+void MtxAngZ(Mtx *m, SHORT angz)
 {
-	MTXF mf;
-	mtxf_identity(mf);
-	mf[0][0] = COS(angz);
-	mf[0][1] = SIN(angz);
-	mf[1][0] = -mf[0][1];
-	mf[1][1] =  mf[0][0];
-	mtxf_to_mtx(m, mf);
+	FMTX fm;
+	FMtxIdent(fm);
+	fm[0][0] = COS(angz);
+	fm[0][1] = SIN(angz);
+	fm[1][0] = -fm[0][1];
+	fm[1][1] =  fm[0][0];
+	FMtxToMtx(m, fm);
 }
 
-void vecf_scenepos(VECF v, MTXF m, MTXF cam)
+void CalcScenePos(FVEC v, FMTX m, FMTX cam)
 {
 	float x = cam[3][0]*cam[0][0] + cam[3][1]*cam[0][1] + cam[3][2]*cam[0][2];
 	float y = cam[3][0]*cam[1][0] + cam[3][1]*cam[1][1] + cam[3][2]*cam[1][2];
@@ -505,24 +505,24 @@ void vecf_scenepos(VECF v, MTXF m, MTXF cam)
 	v[2] = m[3][0]*cam[2][0] + m[3][1]*cam[2][1] + m[3][2]*cam[2][2] - z;
 }
 
-void cartesian_to_polar(VECF a, VECF b, float *dist, short *angx, short *angy)
+void CartesianToPolar(FVEC a, FVEC b, float *dist, short *angx, short *angy)
 {
 	register float dx = b[0]-a[0];
 	register float dy = b[1]-a[1];
 	register float dz = b[2]-a[2];
-	*dist = sqrtf(dx*dx + dy*dy + dz*dz);
-	*angx = ATAN2(sqrtf(dx*dx + dz*dz), dy);
+	*dist = DIST3(dx, dy, dz);
+	*angx = ATAN2(DIST2(dx, dz), dy);
 	*angy = ATAN2(dz, dx);
 }
 
-void polar_to_cartesian(VECF a, VECF b, float dist, SHORT angx, SHORT angy)
+void PolarToCartesian(FVEC a, FVEC b, float dist, SHORT angx, SHORT angy)
 {
 	b[0] = a[0] + dist*COS(angx)*SIN(angy);
 	b[1] = a[1] + dist*SIN(angx);
 	b[2] = a[2] + dist*COS(angx)*COS(angy);
 }
 
-int convergei(int x, int dst, int inc, int dec)
+int ConvergeI(int x, int dst, int inc, int dec)
 {
 	if (x < dst)
 	{
@@ -535,7 +535,7 @@ int convergei(int x, int dst, int inc, int dec)
 	return x;
 }
 
-float convergef(float x, float dst, float inc, float dec)
+float ConvergeF(float x, float dst, float inc, float dec)
 {
 	if (x < dst)
 	{
@@ -548,11 +548,11 @@ float convergef(float x, float dst, float inc, float dec)
 	return x;
 }
 
-static int atan_yx(float y, float x)
+static int AtanRef(float y, float x)
 {
 	USHORT ang;
-	if (x == 0) ang = math_atan[0];
-	else        ang = math_atan[(int)(y/x * 1024 + 0.5F)];
+	if (x == 0) ang = atantable[0];
+	else        ang = atantable[(int)(y/x * 1024 + 0.5F)];
 	return ang;
 }
 
@@ -563,14 +563,14 @@ short ATAN2(float y, float x)
 	{
 		if (y >= 0)
 		{
-			if (y >= x) ang = 0x0000 + atan_yx(x, y);
-			else        ang = 0x4000 - atan_yx(y, x);
+			if (y >= x) ang = 0x0000 + AtanRef(x, y);
+			else        ang = 0x4000 - AtanRef(y, x);
 		}
 		else
 		{
 			y = -y;
-			if (y < x)  ang = 0x4000 + atan_yx(y, x);
-			else        ang = 0x8000 - atan_yx(x, y);
+			if (y < x)  ang = 0x4000 + AtanRef(y, x);
+			else        ang = 0x8000 - AtanRef(x, y);
 		}
 	}
 	else
@@ -579,19 +579,19 @@ short ATAN2(float y, float x)
 		if (y < 0)
 		{
 			y = -y;
-			if (y >= x) ang = 0x8000 + atan_yx(x, y);
-			else        ang = 0xC000 - atan_yx(y, x);
+			if (y >= x) ang = 0x8000 + AtanRef(x, y);
+			else        ang = 0xC000 - AtanRef(y, x);
 		}
 		else
 		{
-			if (y < x)  ang = 0xC000 + atan_yx(y, x);
-			else        ang = 0x0000 - atan_yx(x, y);
+			if (y < x)  ang = 0xC000 + AtanRef(y, x);
+			else        ang = 0x0000 - AtanRef(x, y);
 		}
 	}
 	return ang;
 }
 
-float atan2f(float y, float x)
+float ATAN2F(float y, float x)
 {
 	return (float)ATAN2(y, x) * M_PI/0x8000;
 }
@@ -600,7 +600,7 @@ static BSPLINE *bspline;
 static float bspline_phase;
 static int bspline_mode;
 
-void bspline_curve(float curve[4], float p, UNUSED int mode)
+static void BSplineCurve(float curve[4], float p, UNUSED int mode)
 {
 	float n = 1 - p;
 	float nn = n*n;
@@ -642,20 +642,19 @@ void bspline_curve(float curve[4], float p, UNUSED int mode)
 	}
 }
 
-void bspline_init(BSPLINE *b)
+void BSplineInit(BSPLINE *b)
 {
 	bspline = b;
 	bspline_phase = 0;
 	bspline_mode = 1;
 }
 
-int bspline_proc(VECF dst)
+int BSplineProc(FVEC dst)
 {
 	float curve[4];
-	int i;
-	int result = FALSE;
-	vecf_cpy(dst, vecf_0);
-	bspline_curve(curve, bspline_phase, bspline_mode);
+	int i, result = FALSE;
+	FVecCpy(dst, fvec_0);
+	BSplineCurve(curve, bspline_phase, bspline_mode);
 	for (i = 0; i < 4; i++)
 	{
 		dst[0] += curve[i] * bspline[i].pos[0];

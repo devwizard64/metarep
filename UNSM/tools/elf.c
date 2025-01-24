@@ -4,10 +4,8 @@
 
 void elf_open(ELF *elf, const char *path, const char *mode)
 {
-	uint32_t phoff;
-	uint32_t shoff;
-	uint16_t phnum;
-	uint16_t shnum;
+	uint32_t phoff, shoff;
+	uint16_t phnum, shnum;
 	memset(elf, 0, sizeof(ELF));
 	if (!(elf->fp = fopen(path, mode)))
 	{

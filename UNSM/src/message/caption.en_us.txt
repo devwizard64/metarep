@@ -1,4 +1,4 @@
-$name: caption_table
+$name: captiontab
 $lang: en
 
 $tbl:

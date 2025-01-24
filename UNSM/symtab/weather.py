@@ -1,7 +1,6 @@
 import main
 
-sym_E0_Weather = {
-	0x0036F530: main.sym("_WeatherSegmentRomStart"),
+sym_Weather = {
 	0x0B000000: main.sym_var("align_0", "UNUSED static long long"),
 	0x0B000008: main.sym_var("txt_weather_flower_0", "static u16", "[]"),
 	0x0B000808: main.sym_var("txt_weather_flower_1", "static u16", "[]"),
@@ -27,3 +26,14 @@ sym_E0_Weather = {
 	0x0B006D38: main.sym_var("gfx_lava_start", "Gfx", "[]", flag={"GLOBL"}),
 	0x0B006D68: main.sym_var("gfx_lava_txt", "Gfx", "[]", flag={"GLOBL"}),
 }
+
+sym_J0_Weather = {
+	#0x0036F530: main.sym("_WeatherSegmentRomStart"),
+}
+
+sym_E0_Weather = {
+	0x0036F530: main.sym("_WeatherSegmentRomStart"),
+}
+
+sym_J0_Weather.update(sym_Weather)
+sym_E0_Weather.update(sym_Weather)

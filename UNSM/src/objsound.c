@@ -1,8 +1,8 @@
 #include <sm64.h>
 
-void object_stepsound(STEPSOUND *ss)
+void ObjectStepSound(STEPSOUND *ss)
 {
-	int i = object->o_anime_index;
+	int i = object->o_anime;
 	int frame;
 	switch (ss[i].flag)
 	{
@@ -11,36 +11,36 @@ void object_stepsound(STEPSOUND *ss)
 	case 1:
 		if ((frame = ss[i].l) >= 0)
 		{
-			if (objlib_802A0008(frame)) object_playsound(ss[i].se);
+			if (ObjectIsAnimeFrame(frame)) ObjectPlaySound(ss[i].se);
 		}
 		if ((frame = ss[i].r) >= 0)
 		{
-			if (objlib_802A0008(frame)) object_playsound(ss[i].se);
+			if (ObjectIsAnimeFrame(frame)) ObjectPlaySound(ss[i].se);
 		}
 		break;
 	}
 }
 
-extern O_SCRIPT o_1300229C[];
+extern OBJLANG o_1300229C[];
 
-void object_makesound(Na_Se se)
+void ObjectMakeSound(Na_Se se)
 {
-	OBJECT *obj = obj_make_here(object, 0, o_1300229C);
+	OBJECT *obj = ObjMakeHere(object, 0, o_1300229C);
 	obj->o_v0 = se;
 }
 
-void object_levelsound(Na_Se se)
+void ObjectLevelSound(Na_Se se)
 {
 	if (object->s.s.flag & SHP_ACTIVE) Na_ObjSePlay(se, object);
 }
 
-void object_playsound(Na_Se se)
+void ObjectPlaySound(Na_Se se)
 {
 	if (object->s.s.flag & SHP_ACTIVE) Na_ObjSePlay(se, object);
 }
 
 UNUSED static
-int se_calcvol_1(float dist)
+int CalcSeVol1(float dist)
 {
 	int vol;
 	if      (dist <  500)   vol = 127;
@@ -50,7 +50,7 @@ int se_calcvol_1(float dist)
 }
 
 UNUSED static
-int se_calcvol_2(float dist)
+int CalcSeVol2(float dist)
 {
 	int vol;
 	if      (dist < 1300)   vol = 127;

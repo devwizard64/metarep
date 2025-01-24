@@ -74,6 +74,8 @@
 #define CH_BC                   0x56
 #define CH_BZ                   0x57
 #define CH_BR                   0x58
+#define CH_KUTEN                0x6E
+#define CH_TOUTEN               0x6F
 #define CH_COMMA                0x6F
 #define CH_SPACE                0x9E
 #define CH_HYPHEN               0x9F

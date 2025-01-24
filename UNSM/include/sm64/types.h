@@ -30,18 +30,18 @@ typedef int SHORT;
 typedef int USHORT;
 #endif
 
-typedef short VECS[3];
-typedef float VECF[3];
-typedef float MTXF[4][4];
+typedef short SVEC[3];
+typedef float FVEC[3];
+typedef float FMTX[4][4];
 
 typedef short TAG;
 typedef short MAP;
 typedef char AREA;
 typedef short PATH;
 
-typedef unsigned long S_SCRIPT;
-typedef char P_SCRIPT;
-typedef unsigned long O_SCRIPT;
+typedef unsigned long SHPLANG;
+typedef char PRGLANG;
+typedef unsigned long OBJLANG;
 
 typedef long PRGCALL(SHORT code, long status);
 typedef void OBJCALL(void);

@@ -1,25 +1,25 @@
 #include <sm64.h>
 
-#define O_UCHARA(i)     (object_pc[i] >> 24)
-#define O_UCHARB(i)     ((u8)(object_pc[i] >> 16 & 0xFF))
-#define O_UCHARC(i)     ((u8)(object_pc[i] >>  8 & 0xFF))
-#define O_UCHARD(i)     ((u8)(object_pc[i] >>  0 & 0xFF))
-#define O_SHORTH(i)     ((short)(object_pc[i] >> 16))
-#define O_SHORTL(i)     ((short)(object_pc[i] & 0xFFFF))
-#define O_INT(i)        ((int)object_pc[i])
-#define O_PTR(i)        ((void *)object_pc[i])
-#define O_CALL(i)       ((OBJCALL *)object_pc[i])
+#define OBJ_UCHARA(i)   ((u8)(object_pc[i] >> 24 & 0xFF))
+#define OBJ_UCHARB(i)   ((u8)(object_pc[i] >> 16 & 0xFF))
+#define OBJ_UCHARC(i)   ((u8)(object_pc[i] >>  8 & 0xFF))
+#define OBJ_UCHARD(i)   ((u8)(object_pc[i] >>  0 & 0xFF))
+#define OBJ_SHORTH(i)   ((short)(object_pc[i] >> 16))
+#define OBJ_SHORTL(i)   ((short)(object_pc[i] & 0xFFFF))
+#define OBJ_INT(i)      ((int)object_pc[i])
+#define OBJ_PTR(i)      ((void *)object_pc[i])
+#define OBJ_CALL(i)     ((OBJCALL *)object_pc[i])
 
-#define O_CMD           O_UCHARA(0)
+#define OBJ_CMD         (object_pc[0] >> 24)
 
 UNUSED
-static void o_jump(O_SCRIPT *script)
+static void ObjectScriptEntry(OBJLANG *script)
 {
-	object_pc = segment_to_virtual(script);
+	object_pc = SegmentToVirtual(script);
 	object->sp = 0;
 }
 
-u16 rand(void)
+u16 Rand(void)
 {
 	static u16 seed;
 	USHORT a, b;
@@ -29,7 +29,7 @@ u16 rand(void)
 	seed = ((a & 0x00FF) << 8) + ((a & 0xFF00) >> 8);
 	a = ((a & 0xFF) << 1) ^ seed;
 	b = (a >> 1) ^ 0xFF80;
-	if ((a & 1) == 0)
+	if (!(a & 1))
 	{
 		if (b == 0xAA55)    seed = 0;
 		else                seed = b ^ 0x1FF4;
@@ -41,35 +41,35 @@ u16 rand(void)
 	return seed;
 }
 
-float randf(void)
+float RandF(void)
 {
-	float x = rand();
+	float x = Rand();
 	return x / 65536.0;
 }
 
-int randsign(void)
+int RandSign(void)
 {
-	if (rand() >= 0x7FFF)   return 1;
+	if (Rand() >= 0x7FFF)   return 1;
 	else                    return -1;
 }
 
-static void obj_set_shapecoord(OBJECT *obj)
+static void ObjSetShapeCoord(OBJECT *obj)
 {
-	obj->s.pos[0] = obj->o_pos_x;
-	obj->s.pos[1] = obj->o_pos_y + obj->o_shape_offset;
-	obj->s.pos[2] = obj->o_pos_z;
-	obj->s.ang[0] = obj->o_shape_ang_x & 0xFFFF;
-	obj->s.ang[1] = obj->o_shape_ang_y & 0xFFFF;
-	obj->s.ang[2] = obj->o_shape_ang_z & 0xFFFF;
+	obj->s.pos[0] = obj->o_posx;
+	obj->s.pos[1] = obj->o_posy + obj->o_shapeoff;
+	obj->s.pos[2] = obj->o_posz;
+	obj->s.ang[0] = obj->o_shapeangx & 0xFFFF;
+	obj->s.ang[1] = obj->o_shapeangy & 0xFFFF;
+	obj->s.ang[2] = obj->o_shapeangz & 0xFFFF;
 }
 
-static void o_push(unsigned long x)
+static void ObjectPush(unsigned long x)
 {
 	object->stack[object->sp] = x;
 	object->sp++;
 }
 
-static unsigned long o_pull(void)
+static unsigned long ObjectPull(void)
 {
 	unsigned long x;
 	object->sp--;
@@ -78,108 +78,108 @@ static unsigned long o_pull(void)
 }
 
 UNUSED
-static void o_error(void)
+static void ObjectError(void)
 {
 	for (;;);
 }
 
-static int o_cmd_shapehide(void)
+static int ObjCmdHide(void)
 {
-	objlib_8029F6BC();
+	ObjectHide();
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_shapedisable(void)
+static int ObjCmdClrActive(void)
 {
 	object->s.s.flag &= ~SHP_ACTIVE;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_billboard(void)
+static int ObjCmdBillboard(void)
 {
 	object->s.s.flag |= SHP_BILLBOARD;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_shape(void)
+static int ObjCmdShape(void)
 {
-	int index = O_SHORTL(0);
-	object->s.shape = shape_table[index];
+	int shape = OBJ_SHORTL(0);
+	object->s.shape = shape_table[shape];
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_makeobj(void)
+static int ObjCmdMakeObj(void)
 {
-	int shape = O_INT(1);
-	O_SCRIPT *script = O_PTR(2);
-	OBJECT *obj = obj_make(object, 0, shape, script);
-	objlib_8029F0E0(obj, object);
+	int shape = OBJ_INT(1);
+	OBJLANG *script = OBJ_PTR(2);
+	OBJECT *obj = ObjMake(object, 0, shape, script);
+	ObjCopyCoord(obj, object);
 	object_pc += 3;
 	return 0;
 }
 
-static int o_cmd_makechild(void)
+static int ObjCmdMakeChild(void)
 {
-	int shape = O_INT(1);
-	O_SCRIPT *script = O_PTR(2);
-	OBJECT *obj = obj_make(object, 0, shape, script);
-	objlib_8029F0E0(obj, object);
+	int shape = OBJ_INT(1);
+	OBJLANG *script = OBJ_PTR(2);
+	OBJECT *obj = ObjMake(object, 0, shape, script);
+	ObjCopyCoord(obj, object);
 	object->child = obj;
 	object_pc += 3;
 	return 0;
 }
 
-static int o_cmd_makeobjcode(void)
+static int ObjCmdMakeObjCode(void)
 {
-	int code = O_SHORTL(0);
-	int shape = O_INT(1);
-	O_SCRIPT *script = O_PTR(2);
-	OBJECT *obj = obj_make(object, 0, shape, script);
-	objlib_8029F0E0(obj, object);
+	int code = OBJ_SHORTL(0);
+	int shape = OBJ_INT(1);
+	OBJLANG *script = OBJ_PTR(2);
+	OBJECT *obj = ObjMake(object, 0, shape, script);
+	ObjCopyCoord(obj, object);
 	obj->o_code = code;
 	object_pc += 3;
 	return 0;
 }
 
-static int o_cmd_destroy(void)
+static int ObjCmdDestroy(void)
 {
 	object->flag = 0;
 	return 1;
 }
 
-static int o_cmd_exit(void)
+static int ObjCmdExit(void)
 {
 	return 1;
 }
 
-static int o_cmd_end(void)
+static int ObjCmdEnd(void)
 {
 	return 1;
 }
 
-static int o_cmd_call(void)
+static int ObjCmdCall(void)
 {
-	O_SCRIPT *pc;
+	OBJLANG *pc;
 	object_pc += 1;
-	o_push((unsigned long)(object_pc+1));
-	pc = segment_to_virtual(O_PTR(0));
+	ObjectPush((unsigned long)(object_pc+1));
+	pc = SegmentToVirtual(OBJ_PTR(0));
 	object_pc = pc;
 	return 0;
 }
 
-static int o_cmd_return(void)
+static int ObjCmdReturn(void)
 {
-	object_pc = (void *)o_pull();
+	object_pc = (void *)ObjectPull();
 	return 0;
 }
 
-static int o_cmd_sleep(void)
+static int ObjCmdSleep(void)
 {
-	SHORT time = O_SHORTL(0);
+	SHORT time = OBJ_SHORTL(0);
 	if (object->sleep < time-1)
 	{
 		object->sleep++;
@@ -192,9 +192,9 @@ static int o_cmd_sleep(void)
 	return 1;
 }
 
-static int o_cmd_memsleep(void)
+static int ObjCmdMemSleep(void)
 {
-	UCHAR mem = O_UCHARB(0);
+	UCHAR mem = OBJ_UCHARB(0);
 	int time = object->mem[mem].i;
 	if (object->sleep < time-1)
 	{
@@ -208,300 +208,300 @@ static int o_cmd_memsleep(void)
 	return 1;
 }
 
-static int o_cmd_jump(void)
+static int ObjCmdJump(void)
 {
 	object_pc += 1;
-	object_pc = segment_to_virtual(O_PTR(0));
+	object_pc = SegmentToVirtual(OBJ_PTR(0));
 	return 0;
 }
 
-static int o_cmd_for2(void)
+static int ObjCmdFor2(void)
 {
-	unsigned long count = O_UCHARB(0);
-	o_push((unsigned long)(object_pc+1));
-	o_push(count);
-	object_pc += 1;
-	return 0;
-}
-
-static int o_cmd_for(void)
-{
-	unsigned long count = O_SHORTL(0);
-	o_push((unsigned long)(object_pc+1));
-	o_push(count);
+	unsigned long count = OBJ_UCHARB(0);
+	ObjectPush((unsigned long)(object_pc+1));
+	ObjectPush(count);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_fend(void)
+static int ObjCmdFor(void)
 {
-	unsigned long count = o_pull();
+	unsigned long count = OBJ_SHORTL(0);
+	ObjectPush((unsigned long)(object_pc+1));
+	ObjectPush(count);
+	object_pc += 1;
+	return 0;
+}
+
+static int ObjCmdFend(void)
+{
+	unsigned long count = ObjectPull();
 	count--;
 	if (count > 0)
 	{
-		object_pc = (void *)o_pull();
-		o_push((unsigned long)object_pc);
-		o_push(count);
+		object_pc = (void *)ObjectPull();
+		ObjectPush((unsigned long)object_pc);
+		ObjectPush(count);
 	}
 	else
 	{
-		o_pull();
+		ObjectPull();
 		object_pc += 1;
 	}
 	return 1;
 }
 
-static int o_cmd_fcontinue(void)
+static int ObjCmdFcontinue(void)
 {
-	unsigned long count = o_pull();
+	unsigned long count = ObjectPull();
 	count--;
 	if (count > 0)
 	{
-		object_pc = (void *)o_pull();
-		o_push((unsigned long)object_pc);
-		o_push(count);
+		object_pc = (void *)ObjectPull();
+		ObjectPush((unsigned long)object_pc);
+		ObjectPush(count);
 	}
 	else
 	{
-		o_pull();
+		ObjectPull();
 		object_pc += 1;
 	}
 	return 0;
 }
 
-static int o_cmd_while(void)
+static int ObjCmdWhile(void)
 {
-	o_push((unsigned long)(object_pc+1));
+	ObjectPush((unsigned long)(object_pc+1));
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_wend(void)
+static int ObjCmdWend(void)
 {
-	object_pc = (void *)o_pull();
-	o_push((unsigned long)object_pc);
+	object_pc = (void *)ObjectPull();
+	ObjectPush((unsigned long)object_pc);
 	return 1;
 }
 
-static int o_cmd_callback(void)
+static int ObjCmdCallback(void)
 {
-	OBJCALL *callback = O_CALL(1);
+	OBJCALL *callback = OBJ_CALL(1);
 	callback();
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_setf(void)
+static int ObjCmdSetF(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	float x = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	float x = OBJ_SHORTL(0);
 	object->mem[mem].f = x;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_seti(void)
+static int ObjCmdSetI(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	SHORT x = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	SHORT x = OBJ_SHORTL(0);
 	object->mem[mem].i = x;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_sets(void)
+static int ObjCmdSetS(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int x = O_SHORTL(1);
+	UCHAR mem = OBJ_UCHARB(0);
+	int x = OBJ_SHORTL(1);
 	object->mem[mem].i = x;
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_setrandf(void)
+static int ObjCmdSetRandF(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	float add = O_SHORTL(0);
-	float mul = O_SHORTH(1);
-	object->mem[mem].f = add + mul*randf();
+	UCHAR mem = OBJ_UCHARB(0);
+	float add = OBJ_SHORTL(0);
+	float mul = OBJ_SHORTH(1);
+	object->mem[mem].f = add + mul*RandF();
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_setrandi(void)
+static int ObjCmdSetRandI(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int add = O_SHORTL(0);
-	int mul = O_SHORTH(1);
-	object->mem[mem].i = add + (int)(mul*randf());
+	UCHAR mem = OBJ_UCHARB(0);
+	int add = OBJ_SHORTL(0);
+	int mul = OBJ_SHORTH(1);
+	object->mem[mem].i = add + (int)(mul*RandF());
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_setranda(void)
+static int ObjCmdSetRandA(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int add = O_SHORTL(0);
-	int shift = O_SHORTH(1);
-	object->mem[mem].i = add + (rand() >> shift);
+	UCHAR mem = OBJ_UCHARB(0);
+	int add = OBJ_SHORTL(0);
+	int shift = OBJ_SHORTH(1);
+	object->mem[mem].i = add + (Rand() >> shift);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_addrandf(void)
+static int ObjCmdAddRandF(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	float add = O_SHORTL(0);
-	float mul = O_SHORTH(1);
-	object->mem[mem].f = object->mem[mem].f + add + mul*randf();
+	UCHAR mem = OBJ_UCHARB(0);
+	float add = OBJ_SHORTL(0);
+	float mul = OBJ_SHORTH(1);
+	object->mem[mem].f = object->mem[mem].f + add + mul*RandF();
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_addranda(void)
+static int ObjCmdAddRandA(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int add = O_SHORTL(0);
-	int shift = O_SHORTH(1);
-	int x = rand();
+	UCHAR mem = OBJ_UCHARB(0);
+	int add = OBJ_SHORTL(0);
+	int shift = OBJ_SHORTH(1);
+	int x = Rand();
 	object->mem[mem].i = object->mem[mem].i + add + (x >> shift);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_addf(void)
+static int ObjCmdAddF(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	float val = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	float val = OBJ_SHORTL(0);
 	object->mem[mem].f += val;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_addi(void)
+static int ObjCmdAddI(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	SHORT val = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	SHORT val = OBJ_SHORTL(0);
 	object->mem[mem].i += val;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_setflag(void)
+static int ObjCmdSetFlag(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int flag = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	int flag = OBJ_SHORTL(0);
 	flag &= 0xFFFF;
 	object->mem[mem].i |= flag;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_clrflag(void)
+static int ObjCmdClrFlag(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int flag = O_SHORTL(0);
+	UCHAR mem = OBJ_UCHARB(0);
+	int flag = OBJ_SHORTL(0);
 	flag = (flag & 0xFFFF) ^ 0xFFFF;
 	object->mem[mem].i &= flag;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_ptr(void)
+static int ObjCmdPtr(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	object->mem[mem].p = O_PTR(1);
+	UCHAR mem = OBJ_UCHARB(0);
+	object->mem[mem].p = OBJ_PTR(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_anime(void)
+static int ObjCmdAnime(void)
 {
-	int index = O_UCHARB(0);
-	ANIME **anime = object->o_anime;
-	sobj_set_anime(&object->s, &anime[index]);
+	int anime = OBJ_UCHARB(0);
+	ANIME **animetab = object->o_animep;
+	SObjSetAnime(&object->s, &animetab[anime]);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_ground(void)
+static int ObjCmdGround(void)
 {
-	float x = object->o_pos_x;
-	float y = object->o_pos_y;
-	float z = object->o_pos_z;
-	float ground_y = bg_check_ground_y(x, y+200, z);
-	object->o_pos_y = ground_y;
-	object->o_move_status |= OM_TOUCH;
+	float x = object->o_posx;
+	float y = object->o_posy;
+	float z = object->o_posz;
+	float ground_y = BGCheckGroundY(x, y+200, z);
+	object->o_posy = ground_y;
+	object->o_move |= OM_TOUCH;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_24(void)
+static int ObjCmd24(void)
 {
-	UNUSED UCHAR mem = O_UCHARB(0);
+	UNUSED UCHAR mem = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_26(void)
+static int ObjCmd26(void)
 {
-	UNUSED UCHAR mem = O_UCHARB(0);
+	UNUSED UCHAR mem = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_25(void)
+static int ObjCmd25(void)
 {
-	UNUSED UCHAR mem = O_UCHARB(0);
+	UNUSED UCHAR mem = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_memaddf(void)
+static int ObjCmdMemAddF(void)
 {
-	int mem = O_UCHARB(0);
-	int a = O_UCHARC(0);
-	int b = O_UCHARD(0);
+	int mem = OBJ_UCHARB(0);
+	int a = OBJ_UCHARC(0);
+	int b = OBJ_UCHARD(0);
 	object->mem[mem].f = object->mem[a].f + object->mem[b].f;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_memaddi(void)
+static int ObjCmdMemAddI(void)
 {
-	int mem = O_UCHARB(0);
-	int a = O_UCHARC(0);
-	int b = O_UCHARD(0);
+	int mem = OBJ_UCHARB(0);
+	int a = OBJ_UCHARC(0);
+	int b = OBJ_UCHARD(0);
 	object->mem[mem].i = object->mem[a].i + object->mem[b].i;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_hit(void)
+static int ObjCmdHitBox(void)
 {
-	SHORT radius = O_SHORTH(1);
-	SHORT height = O_SHORTL(1);
+	SHORT radius = OBJ_SHORTH(1);
+	SHORT height = OBJ_SHORTL(1);
 	object->hit_r = radius;
 	object->hit_h = height;
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_dmg(void)
+static int ObjCmdDmgBox(void)
 {
-	SHORT radius = O_SHORTH(1);
-	SHORT height = O_SHORTL(1);
+	SHORT radius = OBJ_SHORTH(1);
+	SHORT height = OBJ_SHORTL(1);
 	object->dmg_r = radius;
 	object->dmg_h = height;
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_hitoff(void)
+static int ObjCmdHitBoxOff(void)
 {
-	SHORT radius = O_SHORTH(1);
-	SHORT height = O_SHORTL(1);
-	SHORT offset = O_SHORTH(2);
+	SHORT radius = OBJ_SHORTH(1);
+	SHORT height = OBJ_SHORTL(1);
+	SHORT offset = OBJ_SHORTH(2);
 	object->hit_r = radius;
 	object->hit_h = height;
 	object->hit_offset = offset;
@@ -509,248 +509,248 @@ static int o_cmd_hitoff(void)
 	return 0;
 }
 
-static int o_cmd_36(void)
+static int ObjCmd36(void)
 {
-	UNUSED SHORT mem = O_UCHARB(0);
-	UNUSED SHORT x = O_SHORTL(0);
+	UNUSED SHORT mem = OBJ_UCHARB(0);
+	UNUSED SHORT x = OBJ_SHORTL(0);
 	object_pc += 1;
 	return 0;
 }
 
-extern O_SCRIPT o_signpost[];
-extern O_SCRIPT o_13004FD4[];
-extern O_SCRIPT o_13005024[];
+extern OBJLANG o_signpost[];
+extern OBJLANG o_13004FD4[];
+extern OBJLANG o_13005024[];
 
-static int o_cmd_init(void)
+static int ObjCmdInit(void)
 {
-	if (objlib_802A14FC(o_13004FD4)) objlib_802A4120();
-	if (objlib_802A14FC(o_13005024)) objlib_802A4120();
-	if (objlib_802A14FC(o_signpost)) object->o_check_dist = 150;
+	if (ObjectHasScript(o_13004FD4)) ObjectInitArea();
+	if (ObjectHasScript(o_13005024)) ObjectInitArea();
+	if (ObjectHasScript(o_signpost)) object->o_checkdist = 150;
 	object_pc += 1;
 	return 0;
 }
 
 UNUSED
-static void o_setrandtbl(int len)
+static void ObjLangSetRandTbl(int len)
 {
-	UCHAR mem = O_UCHARB(0);
+	UCHAR mem = OBJ_UCHARB(0);
 	int table[16];
 	int i;
 	for (i = 0; i <= len/2; i += 2)
 	{
-		table[i+0] = O_SHORTH(1+i);
-		table[i+1] = O_SHORTL(1+i);
+		table[i+0] = OBJ_SHORTH(1+i);
+		table[i+1] = OBJ_SHORTL(1+i);
 	}
-	object->mem[mem].i = table[(int)(randf() * len)];
+	object->mem[mem].i = table[(int)(RandF() * len)];
 }
 
-static int o_cmd_map(void)
+static int ObjCmdMap(void)
 {
-	MAP *map = segment_to_virtual(O_PTR(1));
+	MAP *map = SegmentToVirtual(OBJ_PTR(1));
 	object->map = map;
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_savepos(void)
+static int ObjCmdSavePos(void)
 {
-	object->o_save_x = object->o_pos_x;
-	object->o_save_y = object->o_pos_y;
-	object->o_save_z = object->o_pos_z;
+	object->o_savex = object->o_posx;
+	object->o_savey = object->o_posy;
+	object->o_savez = object->o_posz;
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_hitcode(void)
+static int ObjCmdHitType(void)
 {
-	object->o_hit_code = O_INT(1);
+	object->o_hit_type = OBJ_INT(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_hitflag(void)
+static int ObjCmdHitFlag(void)
 {
-	object->o_hit_flag = O_INT(1);
+	object->o_hit_flag = OBJ_INT(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_scale(void)
+static int ObjCmdScale(void)
 {
-	UNUSED UCHAR mem = O_UCHARB(0);
-	SHORT scale = O_SHORTL(0);
-	object_set_scale((float)scale / 100);
+	UNUSED UCHAR mem = OBJ_UCHARB(0);
+	SHORT scale = OBJ_SHORTL(0);
+	ObjectSetScale((float)scale / 100);
 	object_pc += 1;
 	return 0;
 }
 
-static int o_cmd_physics(void)
+static int ObjCmdPhysics(void)
 {
 	UNUSED float g, h;
-	object->o_wall_r    = O_SHORTH(1);
-	object->o_gravity   = O_SHORTL(1) / (float)100;
-	object->o_bounce    = O_SHORTH(2) / (float)100;
-	object->o_drag      = O_SHORTL(2) / (float)100;
-	object->o_friction  = O_SHORTH(3) / (float)100;
-	object->o_density   = O_SHORTL(3) / (float)100;
-	g                   = O_SHORTH(4) / (float)100;
-	h                   = O_SHORTL(4) / (float)100;
+	object->o_wall_r    = OBJ_SHORTH(1);
+	object->o_gravity   = OBJ_SHORTL(1) / (float)100;
+	object->o_density   = OBJ_SHORTH(2) / (float)100;
+	object->o_drag      = OBJ_SHORTL(2) / (float)100;
+	object->o_friction  = OBJ_SHORTH(3) / (float)100;
+	object->o_bounce    = OBJ_SHORTL(3) / (float)100;
+	g                   = OBJ_SHORTH(4) / (float)100;
+	h                   = OBJ_SHORTL(4) / (float)100;
 	object_pc += 5;
 	return 0;
 }
 
-static int o_cmd_memclrparentflag(void)
+static int ObjCmdMemClrParentFlag(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	int flag = O_INT(1);
+	UCHAR mem = OBJ_UCHARB(0);
+	int flag = OBJ_INT(1);
 	flag ^= 0xFFFFFFFF;
 	object->parent->mem[mem].i &= flag;
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_splash(void)
+static int ObjCmdSplash(void)
 {
-	OBJ_SPLASH *splash = O_PTR(1);
-	objlib_8029EB04(object, splash);
+	SPLASH *splash = OBJ_PTR(1);
+	ObjMakeSplash(object, splash);
 	object_pc += 2;
 	return 0;
 }
 
-static int o_cmd_inc(void)
+static int ObjCmdInc(void)
 {
-	UCHAR mem = O_UCHARB(0);
-	SHORT period = O_SHORTL(0);
-	if (gfx_frame % period == 0) object->mem[mem].i++;
+	UCHAR mem = OBJ_UCHARB(0);
+	SHORT period = OBJ_SHORTL(0);
+	if (!(gfx_frame % period)) object->mem[mem].i++;
 	object_pc += 1;
 	return 0;
 }
 
-static int (*o_cmd_table[])(void) =
+static int (*obj_cmdtab[])(void) =
 {
-	o_cmd_init,
-	o_cmd_sleep,
-	o_cmd_call,
-	o_cmd_return,
-	o_cmd_jump,
-	o_cmd_for,
-	o_cmd_fend,
-	o_cmd_fcontinue,
-	o_cmd_while,
-	o_cmd_wend,
-	o_cmd_exit,
-	o_cmd_end,
-	o_cmd_callback,
-	o_cmd_addf,
-	o_cmd_setf,
-	o_cmd_addi,
-	o_cmd_seti,
-	o_cmd_setflag,
-	o_cmd_clrflag,
-	o_cmd_setranda,
-	o_cmd_setrandf,
-	o_cmd_setrandi,
-	o_cmd_addrandf,
-	o_cmd_addranda,
-	o_cmd_24,
-	o_cmd_25,
-	o_cmd_26,
-	o_cmd_shape,
-	o_cmd_makeobj,
-	o_cmd_destroy,
-	o_cmd_ground,
-	o_cmd_memaddf,
-	o_cmd_memaddi,
-	o_cmd_billboard,
-	o_cmd_shapehide,
-	o_cmd_hit,
-	o_cmd_36,
-	o_cmd_memsleep,
-	o_cmd_for2,
-	o_cmd_ptr,
-	o_cmd_anime,
-	o_cmd_makeobjcode,
-	o_cmd_map,
-	o_cmd_hitoff,
-	o_cmd_makechild,
-	o_cmd_savepos,
-	o_cmd_dmg,
-	o_cmd_hitcode,
-	o_cmd_physics,
-	o_cmd_hitflag,
-	o_cmd_scale,
-	o_cmd_memclrparentflag,
-	o_cmd_inc,
-	o_cmd_shapedisable,
-	o_cmd_sets,
-	o_cmd_splash,
+	ObjCmdInit,
+	ObjCmdSleep,
+	ObjCmdCall,
+	ObjCmdReturn,
+	ObjCmdJump,
+	ObjCmdFor,
+	ObjCmdFend,
+	ObjCmdFcontinue,
+	ObjCmdWhile,
+	ObjCmdWend,
+	ObjCmdExit,
+	ObjCmdEnd,
+	ObjCmdCallback,
+	ObjCmdAddF,
+	ObjCmdSetF,
+	ObjCmdAddI,
+	ObjCmdSetI,
+	ObjCmdSetFlag,
+	ObjCmdClrFlag,
+	ObjCmdSetRandA,
+	ObjCmdSetRandF,
+	ObjCmdSetRandI,
+	ObjCmdAddRandF,
+	ObjCmdAddRandA,
+	ObjCmd24,
+	ObjCmd25,
+	ObjCmd26,
+	ObjCmdShape,
+	ObjCmdMakeObj,
+	ObjCmdDestroy,
+	ObjCmdGround,
+	ObjCmdMemAddF,
+	ObjCmdMemAddI,
+	ObjCmdBillboard,
+	ObjCmdHide,
+	ObjCmdHitBox,
+	ObjCmd36,
+	ObjCmdMemSleep,
+	ObjCmdFor2,
+	ObjCmdPtr,
+	ObjCmdAnime,
+	ObjCmdMakeObjCode,
+	ObjCmdMap,
+	ObjCmdHitBoxOff,
+	ObjCmdMakeChild,
+	ObjCmdSavePos,
+	ObjCmdDmgBox,
+	ObjCmdHitType,
+	ObjCmdPhysics,
+	ObjCmdHitFlag,
+	ObjCmdScale,
+	ObjCmdMemClrParentFlag,
+	ObjCmdInc,
+	ObjCmdClrActive,
+	ObjCmdSetS,
+	ObjCmdSplash,
 };
 
-void o_init(void)
+void ObjLangInit(void)
 {
 }
 
-void o_execute(void)
+void ObjLangExec(void)
 {
 	UNUSED int i;
 	SHORT flag = object->o_flag;
 	float dist;
 	int (*cmd)(void);
 	int result;
-	if (flag & OF_0040)
+	if (flag & OF_CALCPLDIST)
 	{
-		object->o_pl_dist = objlib_8029E2F8(object, mario_obj);
+		object->o_pl_dist = ObjCalcDist3D(object, mario_obj);
 		dist = object->o_pl_dist;
 	}
 	else
 	{
 		dist = 0;
 	}
-	if (flag & OF_2000)
+	if (flag & OF_CALCPLANG)
 	{
-		object->o_pl_ang = objlib_8029E694(object, mario_obj);
+		object->o_pl_ang = ObjCalcAngY(object, mario_obj);
 	}
 	if (object->o_state != object->o_prevstate)
 	{
-		object->o_timer = 0, object->o_mode = 0,
+		object->o_timer = 0, object->o_phase = 0,
 		object->o_prevstate = object->o_state;
 	}
 	object_pc = object->pc;
 	do
 	{
-		cmd = o_cmd_table[O_CMD];
+		cmd = obj_cmdtab[OBJ_CMD];
 		result = cmd();
 	}
-	while (result == 0);
+	while (!result);
 	object->pc = object_pc;
 	if (object->o_timer < 0x3FFFFFFF) object->o_timer++;
 	if (object->o_state != object->o_prevstate)
 	{
-		object->o_timer = 0, object->o_mode = 0,
+		object->o_timer = 0, object->o_phase = 0,
 		object->o_prevstate = object->o_state;
 	}
 	flag = object->o_flag;
-	if (flag & OF_0010) objlib_8029F8EC(object);
-	if (flag & OF_0008) object->o_shape_ang_y = object->o_ang_y;
-	if (flag & OF_0002) objlib_802A120C();
-	if (flag & OF_0004) objlib_802A12A4();
-	if (flag & OF_0200) objlib_802A2A84(object);
-	if (flag & OF_0800) objlib_802A2A18(object);
-	if (flag & OF_0001) obj_set_shapecoord(object);
+	if (flag & OF_SETSHAPEANG) ObjSetShapeAng(object);
+	if (flag & OF_SETSHAPEANGY) object->o_shapeangy = object->o_angy;
+	if (flag & OF_MOVEF) ObjectMoveF();
+	if (flag & OF_MOVEY) ObjectMoveY();
+	if (flag & OF_CALCREL) ObjCalcRel(object);
+	if (flag & OF_SETMTX) ObjSetMtx(object);
+	if (flag & OF_SETSHAPECOORD) ObjSetShapeCoord(object);
 	if (object->o_area != -1)
 	{
-		objlib_802A4210();
+		ObjectProcArea();
 	}
-	else if (flag & OF_0040)
+	else if (flag & OF_CALCPLDIST)
 	{
 		if (!(object->map || (flag & OF_0080)))
 		{
-			if (dist > object->o_shape_dist)
+			if (dist > object->o_shapedist)
 			{
 				object->s.s.flag &= ~SHP_ACTIVE;
 				object->flag |= OBJ_0002;
 			}
-			else if (object->o_hold == 0)
+			else if (!object->o_take)
 			{
 				object->s.s.flag |= SHP_ACTIVE;
 				object->flag &= ~OBJ_0002;

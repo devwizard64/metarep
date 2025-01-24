@@ -50,7 +50,7 @@ float fsin(float x)
 		xsq = dx*dx;
 		poly = ((P[4].d*xsq + P[3].d)*xsq + P[2].d)*xsq + P[1].d;
 		result = dx + dx*xsq*poly;
-		if ((n & 1) == 0) return result;
+		if (!(n & 1)) return result;
 		return -(float)result;
 	}
 	if (x != x) return __libm_qnan_f;

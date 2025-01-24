@@ -1,7 +1,7 @@
 #include <sm64.h>
 
 UNUSED static
-void list_init(LIST *root, LIST *free, LIST *data, size_t size, int count)
+void ListInit(LIST *root, LIST *free, LIST *data, size_t size, int count)
 {
 	int i;
 	LIST *item = data;
@@ -18,7 +18,7 @@ void list_init(LIST *root, LIST *free, LIST *data, size_t size, int count)
 }
 
 UNUSED static
-LIST *list_alloc(LIST *root, LIST *free)
+LIST *ListAlloc(LIST *root, LIST *free)
 {
 	LIST *item;
 	if ((item = free->next))
@@ -32,7 +32,7 @@ LIST *list_alloc(LIST *root, LIST *free)
 	return item;
 }
 
-static OBJECT *objlist_alloc(OBJLIST *root, OBJLIST *free)
+static OBJECT *ObjListAlloc(OBJLIST *root, OBJLIST *free)
 {
 	OBJECT *obj;
 	if ((obj = free->next))
@@ -47,13 +47,13 @@ static OBJECT *objlist_alloc(OBJLIST *root, OBJLIST *free)
 	{
 		return NULL;
 	}
-	shape_unlink(&obj->s.s);
-	shape_link(&sobj_list, &obj->s.s);
+	ShpUnlink(&obj->s.s);
+	ShpLink(&sobj_list, &obj->s.s);
 	return obj;
 }
 
 UNUSED static
-void list_free(LIST *free, LIST *item)
+void ListFree(LIST *free, LIST *item)
 {
 	item->next->prev = item->prev;
 	item->prev->next = item->next;
@@ -61,7 +61,7 @@ void list_free(LIST *free, LIST *item)
 	free->next = item;
 }
 
-static void objlist_free(OBJLIST *free, OBJECT *obj)
+static void ObjListFree(OBJLIST *free, OBJECT *obj)
 {
 	obj->next->prev = obj->prev;
 	obj->prev->next = obj->next;
@@ -69,7 +69,7 @@ static void objlist_free(OBJLIST *free, OBJECT *obj)
 	free->next = obj;
 }
 
-void obj_freelist_init(void)
+void ObjFreeListInit(void)
 {
 	int i;
 	int count = OBJECT_MAX;
@@ -83,7 +83,7 @@ void obj_freelist_init(void)
 	obj->next = NULL;
 }
 
-void obj_rootlist_init(OBJLIST *root)
+void ObjRootListInit(OBJLIST *root)
 {
 	int i;
 	for (i = 0; i < OT_MAX; i++)
@@ -100,7 +100,7 @@ void objlist_802C9AD8(SHAPE *shape)
 	SHAPE *next;
 	SHAPE *first = shape;
 	if ((child = shape->child)) objlist_802C9AD8(child);
-	else obj_destroy((OBJECT *)shape);
+	else ObjDestroy((OBJECT *)shape);
 	while ((next = shape->next) == first)
 	{
 		objlist_802C9AD8(next);
@@ -108,34 +108,34 @@ void objlist_802C9AD8(SHAPE *shape)
 	}
 }
 
-void obj_free(OBJECT *obj)
+void ObjFree(OBJECT *obj)
 {
 	obj->flag = 0;
 	obj->child = NULL;
-	obj->s.mf = NULL;
+	obj->s.m = NULL;
 	Na_ObjSeKill(obj);
-	shape_unlink(&obj->s.s);
-	shape_link(&sobj_list, &obj->s.s);
+	ShpUnlink(&obj->s.s);
+	ShpLink(&sobj_list, &obj->s.s);
 	obj->s.s.flag &= ~SHP_BILLBOARD;
 	obj->s.s.flag &= ~SHP_ACTIVE;
-	objlist_free(&obj_freelist, obj);
+	ObjListFree(&obj_freelist, obj);
 }
 
-static OBJECT *obj_alloc(OBJLIST *root)
+static OBJECT *ObjAlloc(OBJLIST *root)
 {
 	int i;
 	OBJECT *obj;
-	if (!(obj = objlist_alloc(root, &obj_freelist)))
+	if (!(obj = ObjListAlloc(root, &obj_freelist)))
 	{
 		OBJECT *o;
-		if (!(o = objlib_8029FB1C()))
+		if (!(o = ObjGetEffect()))
 		{
 			for (;;);
 		}
 		else
 		{
-			obj_free(o);
-			obj = objlist_alloc(root, &obj_freelist);
+			ObjFree(o);
+			obj = ObjListAlloc(root, &obj_freelist);
 			if (object == obj)
 			{
 			}
@@ -161,10 +161,10 @@ static OBJECT *obj_alloc(OBJLIST *root)
 	obj->o_hit_timer = -1;
 	obj->o_ap = 0;
 	obj->o_hp = 2048;
-	obj->o_check_dist = 1000;
-	if (stage_index == STAGE_TTC)   obj->o_shape_dist = 2000;
-	else                            obj->o_shape_dist = 4000;
-	mtxf_identity(obj->mf);
+	obj->o_checkdist = 1000;
+	if (stage_index == STAGE_TTC)   obj->o_shapedist = 2000;
+	else                            obj->o_shapedist = 4000;
+	FMtxIdent(obj->mtx);
 	obj->actor_type = ACTORTYPE_NULL;
 	obj->actor_flag = NULL;
 	obj->o_pl_dist = 19000; /* T:def */
@@ -173,42 +173,42 @@ static OBJECT *obj_alloc(OBJLIST *root)
 	obj->s.pos[0] = -10000;
 	obj->s.pos[1] = -10000;
 	obj->s.pos[2] = -10000;
-	obj->s.mf = NULL;
+	obj->s.m = NULL;
 	return obj;
 }
 
-static void obj_init_ground(OBJECT *obj)
+static void ObjInitGround(OBJECT *obj)
 {
 	BGFACE *ground;
-	obj->o_ground_y = bg_check_ground(
-		obj->o_pos_x, obj->o_pos_y, obj->o_pos_z, &ground
+	obj->o_ground_y = BGCheckGround(
+		obj->o_posx, obj->o_posy, obj->o_posz, &ground
 	);
-	if (obj->o_ground_y+2 > obj->o_pos_y && obj->o_ground_y-10 < obj->o_pos_y)
+	if (obj->o_ground_y+2 > obj->o_posy && obj->o_ground_y-10 < obj->o_posy)
 	{
-		obj->o_pos_y = obj->o_ground_y;
-		obj->o_move_status |= OM_TOUCH;
+		obj->o_posy = obj->o_ground_y;
+		obj->o_move |= OM_TOUCH;
 	}
 }
 
-OBJECT *obj_create(O_SCRIPT *script)
+OBJECT *ObjCreate(OBJLANG *script)
 {
-	int i;
+	int type;
 	OBJECT *obj;
 	OBJLIST *root;
-	O_SCRIPT *s = script;
-	if (script[0] >> 24 == 0)   i = script[0] >> 16 & 0xFFFF; /* T:enum */
-	else                        i = OT_DEFAULT;
-	root = &obj_rootlist[i];
-	obj = obj_alloc(root);
+	OBJLANG *s = script;
+	if (script[0] >> 24 == OBJ_CMD_INIT)    type = script[0] >> 16 & 0xFFFF;
+	else                                    type = OT_DEFAULT;
+	root = &obj_rootlist[type];
+	obj = ObjAlloc(root);
 	obj->pc = script;
 	obj->script = s;
-	if (i == OT_EFFECT) obj->flag |= OBJ_0010;
-	switch (i)
+	if (type == OT_EFFECT) obj->flag |= OBJ_0010;
+	switch (type)
 	{
 	case OT_ENEMYA:
 	case OT_ENEMYB:
 	case OT_ATTACH:
-		obj_init_ground(obj);
+		ObjInitGround(obj);
 		break;
 	default:
 		break;
@@ -216,7 +216,7 @@ OBJECT *obj_create(O_SCRIPT *script)
 	return obj;
 }
 
-void obj_destroy(OBJECT *obj)
+void ObjDestroy(OBJECT *obj)
 {
 	obj->flag = 0;
 }

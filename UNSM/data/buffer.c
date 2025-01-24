@@ -7,6 +7,6 @@ long long aud_stack[MAIN_STACK_LEN];
 long long gfx_stack[MAIN_STACK_LEN];
 
 u64 gfx_sp_yield[OS_YIELD_DATA_SIZE/8];
-SAVE save;
+BACKUP backup;
 u64 gfx_sp_stack[SP_DRAM_STACK_SIZE64];
 FRAME frame_data[2];

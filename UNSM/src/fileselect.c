@@ -70,17 +70,17 @@ extern Gfx gfx_print_1cyc_start[];
 extern Gfx gfx_print_1cyc_end[];
 extern Gfx gfx_lgfont_start[];
 extern Gfx gfx_lgfont_end[];
-extern unsigned char *course_name[];
+extern unsigned char *coursename[];
 
 extern Gfx gfx_smfont_start[];
 extern Gfx gfx_smfont_end[];
 extern Gfx gfx_select_cursor_0[];
 extern Gfx gfx_select_cursor_1[];
 
-static OBJECT *file_obj[32];
-static s8 file_state = F_SELECT;
-static s8 file_mode = 1;
-static u8 file_alpha = 0;
+static OBJECT *fs_obj[32];
+static s8 fs_state = F_SELECT;
+static s8 fs_mode = 1;
+static u8 fs_alpha = 0;
 static float cursor_pos[2] = {0, 0};
 static s16 cursor_flag = 0;
 static short click_pos[2] = {-10000, -10000};
@@ -92,22 +92,22 @@ static s16 click_timer = 0;
 static s8 sound_flag = 0;
 static u8 blink[2];
 static s8 erase_flag = 0;
-static char file_full = FALSE;
-static s8 file_result = 0;
+static char fs_full = FALSE;
+static s8 fs_result = 0;
 static s8 score_flag = 0;
 
-void fileback_init(void)
+void FileBack_Init(void)
 {
-	object->o_shape_ang_y = 0x8000;
+	object->o_shapeangy = 0x8000;
 	object->o_f5 = 9;
 }
 
-void fileback_proc(void)
+void FileBack_Proc(void)
 {
-	object_set_scale(9);
+	ObjectSetScale(9);
 }
 
-static int file_isclick(SHORT x, SHORT y, float z)
+static int FileIsClick(SHORT x, SHORT y, float z)
 {
 	float scale = (float)52.4213;
 	float ortho_x = SCREEN_WD/2.0 * (float)x / (scale     * z);
@@ -123,89 +123,89 @@ static int file_isclick(SHORT x, SHORT y, float z)
 	return FALSE;
 }
 
-static void filetile_open_1(OBJECT *obj)
+static void FileTile_Open1(OBJECT *obj)
 {
-	if (                  obj->o_v1 < 16) obj->o_shape_ang_y += 0x800;
-	if (obj->o_v1 <  8                  ) obj->o_shape_ang_x += 0x800;
-	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shape_ang_x -= 0x800;
-	obj->o_off_x -= obj->o_f2 / 16.0;
-	obj->o_off_y -= obj->o_f3 / 16.0;
-	if (obj->o_pos_z < obj->o_f4+17800.0) obj->o_off_z += 17800.0 / 16.0;
+	if (                  obj->o_v1 < 16) obj->o_shapeangy += 0x800;
+	if (obj->o_v1 <  8                  ) obj->o_shapeangx += 0x800;
+	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shapeangx -= 0x800;
+	obj->o_relx -= obj->o_f2 / 16.0;
+	obj->o_rely -= obj->o_f3 / 16.0;
+	if (obj->o_posz < obj->o_f4+17800.0) obj->o_relz += 17800.0 / 16.0;
 	obj->o_v1++;
 	if (obj->o_v1 == 16)
 	{
-		obj->o_off_x = 0;
-		obj->o_off_y = 0;
+		obj->o_relx = 0;
+		obj->o_rely = 0;
 		obj->o_v0 = TILE_OPENED;
 		obj->o_v1 = 0;
 	}
 }
 
-static void filetile_close_1(OBJECT *obj)
+static void FileTile_Close1(OBJECT *obj)
 {
-	if (                  obj->o_v1 < 16) obj->o_shape_ang_y -= 0x800;
-	if (obj->o_v1 <  8                  ) obj->o_shape_ang_x -= 0x800;
-	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shape_ang_x += 0x800;
-	obj->o_off_x += obj->o_f2 / 16.0;
-	obj->o_off_y += obj->o_f3 / 16.0;
-	if (obj->o_pos_z > obj->o_f4) obj->o_off_z -= 17800.0 / 16.0;
+	if (                  obj->o_v1 < 16) obj->o_shapeangy -= 0x800;
+	if (obj->o_v1 <  8                  ) obj->o_shapeangx -= 0x800;
+	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shapeangx += 0x800;
+	obj->o_relx += obj->o_f2 / 16.0;
+	obj->o_rely += obj->o_f3 / 16.0;
+	if (obj->o_posz > obj->o_f4) obj->o_relz -= 17800.0 / 16.0;
 	obj->o_v1++;
 	if (obj->o_v1 == 16)
 	{
-		obj->o_off_x = obj->o_f2;
-		obj->o_off_y = obj->o_f3;
+		obj->o_relx = obj->o_f2;
+		obj->o_rely = obj->o_f3;
 		obj->o_v0 = TILE_CLOSED;
 		obj->o_v1 = 0;
 	}
 }
 
-static void filetile_open_2(OBJECT *obj)
+static void FileTile_Open2(OBJECT *obj)
 {
-	if (                  obj->o_v1 < 16) obj->o_shape_ang_y += 0x800;
-	if (obj->o_v1 <  8                  ) obj->o_shape_ang_x += 0x800;
-	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shape_ang_x -= 0x800;
-	obj->o_off_x -= obj->o_f2 / 16.0;
-	obj->o_off_y -= obj->o_f3 / 16.0;
-	obj->o_off_z -= 1860.0 / 16.0;
+	if (                  obj->o_v1 < 16) obj->o_shapeangy += 0x800;
+	if (obj->o_v1 <  8                  ) obj->o_shapeangx += 0x800;
+	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shapeangx -= 0x800;
+	obj->o_relx -= obj->o_f2 / 16.0;
+	obj->o_rely -= obj->o_f3 / 16.0;
+	obj->o_relz -= 1860.0 / 16.0;
 	obj->o_v1++;
 	if (obj->o_v1 == 16)
 	{
-		obj->o_off_x = 0;
-		obj->o_off_y = 0;
+		obj->o_relx = 0;
+		obj->o_rely = 0;
 		obj->o_v0 = TILE_OPENED;
 		obj->o_v1 = 0;
 	}
 }
 
-static void filetile_close_2(OBJECT *obj)
+static void FileTile_Close2(OBJECT *obj)
 {
-	if (                  obj->o_v1 < 16) obj->o_shape_ang_y -= 0x800;
-	if (obj->o_v1 <  8                  ) obj->o_shape_ang_x -= 0x800;
-	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shape_ang_x += 0x800;
-	obj->o_off_x += obj->o_f2 / 16.0;
-	obj->o_off_y += obj->o_f3 / 16.0;
-	if (obj->o_pos_z > obj->o_f4) obj->o_off_z += 1860.0 / 16.0;
+	if (                  obj->o_v1 < 16) obj->o_shapeangy -= 0x800;
+	if (obj->o_v1 <  8                  ) obj->o_shapeangx -= 0x800;
+	if (obj->o_v1 >= 8 && obj->o_v1 < 16) obj->o_shapeangx += 0x800;
+	obj->o_relx += obj->o_f2 / 16.0;
+	obj->o_rely += obj->o_f3 / 16.0;
+	if (obj->o_posz > obj->o_f4) obj->o_relz += 1860.0 / 16.0;
 	obj->o_v1++;
 	if (obj->o_v1 == 16)
 	{
-		obj->o_off_x = obj->o_f2;
-		obj->o_off_y = obj->o_f3;
+		obj->o_relx = obj->o_f2;
+		obj->o_rely = obj->o_f3;
 		obj->o_v0 = TILE_CLOSED;
 		obj->o_v1 = 0;
 	}
 }
 
-static void filetile_click(OBJECT *obj)
+static void FileTile_Click(OBJECT *obj)
 {
-	if (file_mode == 1)
+	if (fs_mode == 1)
 	{
-		if (obj->o_v1 <  4) obj->o_off_z -= 20;
-		if (obj->o_v1 >= 4) obj->o_off_z += 20;
+		if (obj->o_v1 <  4) obj->o_relz -= 20;
+		if (obj->o_v1 >= 4) obj->o_relz += 20;
 	}
 	else
 	{
-		if (obj->o_v1 <  4) obj->o_off_z += 20;
-		if (obj->o_v1 >= 4) obj->o_off_z -= 20;
+		if (obj->o_v1 <  4) obj->o_relz += 20;
+		if (obj->o_v1 >= 4) obj->o_relz -= 20;
 	}
 	obj->o_v1++;
 	if (obj->o_v1 == 8)
@@ -215,7 +215,7 @@ static void filetile_click(OBJECT *obj)
 	}
 }
 
-static void filetile_select(OBJECT *obj)
+static void FileTile_Select(OBJECT *obj)
 {
 	obj->o_f5 += 0.0022;
 	obj->o_v1++;
@@ -226,7 +226,7 @@ static void filetile_select(OBJECT *obj)
 	}
 }
 
-static void filetile_deselect(OBJECT *obj)
+static void FileTile_Deselect(OBJECT *obj)
 {
 	obj->o_f5 -= 0.0022;
 	obj->o_v1++;
@@ -237,70 +237,70 @@ static void filetile_deselect(OBJECT *obj)
 	}
 }
 
-void filetile_init(void)
+void FileTile_Init(void)
 {
-	object->o_f2 = object->o_off_x;
-	object->o_f3 = object->o_off_y;
+	object->o_f2 = object->o_relx;
+	object->o_f3 = object->o_rely;
 }
 
-void filetile_proc(void)
+void FileTile_Proc(void)
 {
 	switch (object->o_v0)
 	{
 	case 0:
-		object->o_f4 = object->o_pos_z;
+		object->o_f4 = object->o_posz;
 		break;
 	case 1:
-		if (file_mode == 1) filetile_open_1(object);
-		if (file_mode == 2) filetile_open_2(object);
-		file_alpha = 0;
+		if (fs_mode == 1) FileTile_Open1(object);
+		if (fs_mode == 2) FileTile_Open2(object);
+		fs_alpha = 0;
 		cursor_flag = 4;
 		break;
 	case 2:
 		break;
 	case 3:
-		if (file_mode == 1) filetile_close_1(object);
-		if (file_mode == 2) filetile_close_2(object);
-		file_alpha = 0;
+		if (fs_mode == 1) FileTile_Close1(object);
+		if (fs_mode == 2) FileTile_Close2(object);
+		fs_alpha = 0;
 		cursor_flag = 4;
 		break;
 	case 4:
-		filetile_click(object);
+		FileTile_Click(object);
 		cursor_flag = 4;
 		break;
 	case 5:
-		filetile_select(object);
+		FileTile_Select(object);
 		cursor_flag = 4;
 		break;
 	case 6:
-		filetile_deselect(object);
+		FileTile_Deselect(object);
 		cursor_flag = 4;
 		break;
 	}
-	object_set_scale(object->o_f5);
+	ObjectSetScale(object->o_f5);
 }
 
-extern O_SCRIPT o_filetile[];
+extern OBJLANG o_filetile[];
 
-#define filemenu_maketile(obj, shape, scale, posx, posy, posz, angy) \
-	obj_make_rel( \
+#define FileMenu_MakeTile(obj, shape, scale, posx, posy, posz, angy) \
+	ObjMakeRel( \
 		obj, shape, o_filetile, (posx)/scale, (posy)/scale, posz, 0, angy, 0 \
 	)
-#define filemenu_inittile_sel(tile, shape, x, y) \
+#define FileMenu_InitTileSel(tile, shape, x, y) \
 { \
-	file_obj[tile] = filemenu_maketile(object, shape, 1, x, y, 0, 0); \
-	file_obj[tile]->o_f5 = (float)1/1; \
+	fs_obj[tile] = FileMenu_MakeTile(object, shape, 1, x, y, 0, 0); \
+	fs_obj[tile]->o_f5 = (float)1/1; \
 }
-#define filemenu_inittile_sub(obj, tile, shape, x, y) \
+#define FileMenu_InitTileSub(obj, tile, shape, x, y) \
 { \
-	file_obj[tile] = filemenu_maketile(obj, shape, 9, x, y, -100, -0x8000); \
-	file_obj[tile]->o_f5 = (float)1/9; \
+	fs_obj[tile] = FileMenu_MakeTile(obj, shape, 9, x, y, -100, -0x8000); \
+	fs_obj[tile]->o_f5 = (float)1/9; \
 }
-#define filemenu_initfile_sel(i) \
+#define FileMenu_InitFileSel(i) \
 { \
-	if (ISTRUE(save_file_isactive(i))) \
+	if (ISTRUE(BuFileIsActive(i))) \
 	{ \
-		file_obj[F_FILE+i] = filemenu_maketile( \
+		fs_obj[F_FILE+i] = FileMenu_MakeTile( \
 			object, S_FILE_MARIO_S, 1, \
 			(i & 1) ? +1500 : -6400, \
 			(i & 2) ?     0 : +2800, \
@@ -309,20 +309,20 @@ extern O_SCRIPT o_filetile[];
 	} \
 	else \
 	{ \
-		file_obj[F_FILE+i] = filemenu_maketile( \
+		fs_obj[F_FILE+i] = FileMenu_MakeTile( \
 			object, S_FILE_NEW_S, 1, \
 			(i & 1) ? +1500 : -6400, \
 			(i & 2) ?     0 : +2800, \
 			0, 0 \
 		); \
 	} \
-	file_obj[F_FILE+i]->o_f5 = (float)1/1; \
+	fs_obj[F_FILE+i]->o_f5 = (float)1/1; \
 }
-#define filemenu_initfile_sub(obj, tile, i) \
+#define FileMenu_InitFileSub(obj, tile, i) \
 { \
-	if (ISTRUE(save_file_isactive(i))) \
+	if (ISTRUE(BuFileIsActive(i))) \
 	{ \
-		file_obj[tile+i] = filemenu_maketile( \
+		fs_obj[tile+i] = FileMenu_MakeTile( \
 			obj, S_FILE_MARIO, 9, \
 			(i & 1) ? -1500 : +6400, \
 			(i & 2) ?     0 : +2800, \
@@ -331,17 +331,17 @@ extern O_SCRIPT o_filetile[];
 	} \
 	else \
 	{ \
-		file_obj[tile+i] = filemenu_maketile( \
+		fs_obj[tile+i] = FileMenu_MakeTile( \
 			obj, S_FILE_NEW, 9, \
 			(i & 1) ? -1500 : +6400, \
 			(i & 2) ?     0 : +2800, \
 			-100, -0x8000 \
 		); \
 	} \
-	file_obj[tile+i]->o_f5 = (float)1/9; \
+	fs_obj[tile+i]->o_f5 = (float)1/9; \
 }
 
-static void filemenu_scorefile(OBJECT *obj, CHAR back)
+static void FileMenu_ScoreFile(OBJECT *obj, CHAR back)
 {
 	if (obj->o_v0 == TILE_OPENED)
 	{
@@ -353,51 +353,51 @@ static void filemenu_scorefile(OBJECT *obj, CHAR back)
 	}
 	if (obj->o_v0 == TILE_CLOSED)
 	{
-		file_state = back;
-		if (file_mode == 2) file_mode = 1;
+		fs_state = back;
+		if (fs_mode == 2) fs_mode = 1;
 	}
 }
 
-static void filemenu_scoreinit(OBJECT *obj)
+static void FileMenu_ScoreInit(OBJECT *obj)
 {
-	filemenu_initfile_sub(obj, FS_FILE, 0);
-	filemenu_initfile_sub(obj, FS_FILE, 1);
-	filemenu_initfile_sub(obj, FS_FILE, 2);
-	filemenu_initfile_sub(obj, FS_FILE, 3);
-	filemenu_inittile_sub(obj, FS_SELECT, S_TILE_YELLOW, +6400, -3500);
-	filemenu_inittile_sub(obj, FS_COPY,   S_TILE_BLUE,       0, -3500);
-	filemenu_inittile_sub(obj, FS_ERASE,  S_TILE_RED,    -6400, -3500);
+	FileMenu_InitFileSub(obj, FS_FILE, 0);
+	FileMenu_InitFileSub(obj, FS_FILE, 1);
+	FileMenu_InitFileSub(obj, FS_FILE, 2);
+	FileMenu_InitFileSub(obj, FS_FILE, 3);
+	FileMenu_InitTileSub(obj, FS_SELECT, S_TILE_YELLOW, +6400, -3500);
+	FileMenu_InitTileSub(obj, FS_COPY,   S_TILE_BLUE,       0, -3500);
+	FileMenu_InitTileSub(obj, FS_ERASE,  S_TILE_RED,    -6400, -3500);
 }
 
-static void filemenu_scoreproc(OBJECT *obj)
+static void FileMenu_ScoreProc(OBJECT *obj)
 {
 	int i;
 	if (obj->o_v0 == TILE_OPENED)
 	{
 		for (i = FS_MIN; i < FS_MAX; i++)
 		{
-			SHORT x = file_obj[i]->o_pos_x;
-			SHORT y = file_obj[i]->o_pos_y;
-			if (ISTRUE(file_isclick(x, y, 22)) && click_timer > 30)
+			SHORT x = fs_obj[i]->o_posx;
+			SHORT y = fs_obj[i]->o_posy;
+			if (ISTRUE(FileIsClick(x, y, 22)) && click_timer > 30)
 			{
 				if (i == FS_SELECT || i == FS_COPY || i == FS_ERASE)
 				{
 					Na_FixSePlay(NA_SE7_11);
-					file_obj[i]->o_v0 = TILE_CLICK;
-					file_state = i;
+					fs_obj[i]->o_v0 = TILE_CLICK;
+					fs_state = i;
 				}
 				else if (click_timer > 30)
 				{
-					if (ISTRUE(save_file_isactive(i-FS_FILE)))
+					if (ISTRUE(BuFileIsActive(i-FS_FILE)))
 					{
 						Na_FixSePlay(NA_SE7_06);
-						file_obj[i]->o_v0 = TILE_OPEN;
-						file_state = i;
+						fs_obj[i]->o_v0 = TILE_OPEN;
+						fs_state = i;
 					}
 					else
 					{
 						Na_FixSePlay(NA_SE7_0E);
-						file_obj[i]->o_v0 = TILE_CLICK;
+						fs_obj[i]->o_v0 = TILE_CLICK;
 						if (click_timer > 30)
 						{
 							click_flag = TRUE;
@@ -405,34 +405,34 @@ static void filemenu_scoreproc(OBJECT *obj)
 						}
 					}
 				}
-				file_mode = 2;
+				fs_mode = 2;
 				break;
 			}
 		}
 	}
 }
 
-static void filemenu_copyinit(OBJECT *obj)
+static void FileMenu_CopyInit(OBJECT *obj)
 {
-	filemenu_initfile_sub(obj, FC_FILE, 0);
-	filemenu_initfile_sub(obj, FC_FILE, 1);
-	filemenu_initfile_sub(obj, FC_FILE, 2);
-	filemenu_initfile_sub(obj, FC_FILE, 3);
-	filemenu_inittile_sub(obj, FC_SELECT, S_TILE_YELLOW, +6400, -3500);
-	filemenu_inittile_sub(obj, FC_SCORE,  S_TILE_GREEN,      0, -3500);
-	filemenu_inittile_sub(obj, FC_ERASE,  S_TILE_RED,    -6400, -3500);
+	FileMenu_InitFileSub(obj, FC_FILE, 0);
+	FileMenu_InitFileSub(obj, FC_FILE, 1);
+	FileMenu_InitFileSub(obj, FC_FILE, 2);
+	FileMenu_InitFileSub(obj, FC_FILE, 3);
+	FileMenu_InitTileSub(obj, FC_SELECT, S_TILE_YELLOW, +6400, -3500);
+	FileMenu_InitTileSub(obj, FC_SCORE,  S_TILE_GREEN,      0, -3500);
+	FileMenu_InitTileSub(obj, FC_ERASE,  S_TILE_RED,    -6400, -3500);
 }
 
-static void filemenu_copyfile(OBJECT *obj, int tile)
+static void FileMenu_CopyFile(OBJECT *obj, int tile)
 {
 	switch (obj->o_v6)
 	{
 	case 0:
-		if (ISTRUE(file_full)) return;
-		if (ISTRUE(save_file_isactive(tile-FC_FILE)))
+		if (ISTRUE(fs_full)) return;
+		if (ISTRUE(BuFileIsActive(tile-FC_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_11);
-			file_obj[tile]->o_v0 = TILE_SELECT;
+			fs_obj[tile]->o_v0 = TILE_SELECT;
 			click_file = tile-FC_FILE;
 			obj->o_v6 = 1;
 			click_flag = TRUE;
@@ -441,7 +441,7 @@ static void filemenu_copyfile(OBJECT *obj, int tile)
 		else
 		{
 			Na_FixSePlay(NA_SE7_0E);
-			file_obj[tile]->o_v0 = TILE_CLICK;
+			fs_obj[tile]->o_v0 = TILE_CLICK;
 			if (click_timer > 20)
 			{
 				click_flag = TRUE;
@@ -450,16 +450,16 @@ static void filemenu_copyfile(OBJECT *obj, int tile)
 		}
 		break;
 	case 1:
-		file_obj[tile]->o_v0 = TILE_CLICK;
-		if (ISFALSE(save_file_isactive(tile-FC_FILE)))
+		fs_obj[tile]->o_v0 = TILE_CLICK;
+		if (ISFALSE(BuFileIsActive(tile-FC_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_1E);
 			obj->o_v6 = 2;
 			click_flag = TRUE;
 			click_timer = 0;
-			save_file_copy(click_file, tile-FC_FILE);
-			file_obj[tile]->s.shape = shape_table[S_FILE_MARIO_S];
-			file_obj[F_FILE + tile-FC_FILE]->s.shape =
+			BuFileCopy(click_file, tile-FC_FILE);
+			fs_obj[tile]->s.shape = shape_table[S_FILE_MARIO_S];
+			fs_obj[F_FILE + tile-FC_FILE]->s.shape =
 				shape_table[S_FILE_MARIO_S];
 		}
 		else
@@ -467,7 +467,7 @@ static void filemenu_copyfile(OBJECT *obj, int tile)
 			if (tile == FC_FILE+click_file)
 			{
 				Na_FixSePlay(NA_SE7_0E);
-				file_obj[FC_FILE+click_file]->o_v0 = TILE_DESELECT;
+				fs_obj[FC_FILE+click_file]->o_v0 = TILE_DESELECT;
 				obj->o_v6 = 0;
 				click_flag = TRUE;
 				return;
@@ -482,65 +482,65 @@ static void filemenu_copyfile(OBJECT *obj, int tile)
 	}
 }
 
-static void filemenu_copyproc(OBJECT *obj)
+static void FileMenu_CopyProc(OBJECT *obj)
 {
 	int i;
 	if (obj->o_v0 == TILE_OPENED)
 	{
 		for (i = FC_MIN; i < FC_MAX; i++)
 		{
-			short x = file_obj[i]->o_pos_x;
-			short y = file_obj[i]->o_pos_y;
-			if (ISTRUE(file_isclick(x, y, 22)))
+			SHORT x = fs_obj[i]->o_posx;
+			SHORT y = fs_obj[i]->o_posy;
+			if (ISTRUE(FileIsClick(x, y, 22)))
 			{
 				if (i == FC_SELECT || i == FC_SCORE || i == FC_ERASE)
 				{
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
-						file_obj[i]->o_v0 = TILE_CLICK;
-						file_state = i;
+						fs_obj[i]->o_v0 = TILE_CLICK;
+						fs_state = i;
 					}
 				}
 				else
 				{
-					if (file_obj[i]->o_v0 == TILE_CLOSED && click_timer > 30)
+					if (fs_obj[i]->o_v0 == TILE_CLOSED && click_timer > 30)
 					{
-						filemenu_copyfile(obj, i);
+						FileMenu_CopyFile(obj, i);
 					}
 				}
-				file_mode = 2;
+				fs_mode = 2;
 				break;
 			}
 		}
 		if (obj->o_v6 == 2 && click_timer > 30)
 		{
 			obj->o_v6 = 0;
-			file_obj[FC_FILE+click_file]->o_v0 = TILE_DESELECT;
+			fs_obj[FC_FILE+click_file]->o_v0 = TILE_DESELECT;
 		}
 	}
 }
 
-static void filemenu_eraseinit(OBJECT *obj)
+static void FileMenu_EraseInit(OBJECT *obj)
 {
-	filemenu_initfile_sub(obj, FE_FILE, 0);
-	filemenu_initfile_sub(obj, FE_FILE, 1);
-	filemenu_initfile_sub(obj, FE_FILE, 2);
-	filemenu_initfile_sub(obj, FE_FILE, 3);
-	filemenu_inittile_sub(obj, FE_SELECT, S_TILE_YELLOW, +6400, -3500);
-	filemenu_inittile_sub(obj, FE_SCORE,  S_TILE_GREEN,      0, -3500);
-	filemenu_inittile_sub(obj, FE_COPY,   S_TILE_BLUE,   -6400, -3500);
+	FileMenu_InitFileSub(obj, FE_FILE, 0);
+	FileMenu_InitFileSub(obj, FE_FILE, 1);
+	FileMenu_InitFileSub(obj, FE_FILE, 2);
+	FileMenu_InitFileSub(obj, FE_FILE, 3);
+	FileMenu_InitTileSub(obj, FE_SELECT, S_TILE_YELLOW, +6400, -3500);
+	FileMenu_InitTileSub(obj, FE_SCORE,  S_TILE_GREEN,      0, -3500);
+	FileMenu_InitTileSub(obj, FE_COPY,   S_TILE_BLUE,   -6400, -3500);
 }
 
-static void filemenu_erasefile(OBJECT *obj, int tile)
+static void FileMenu_EraseFile(OBJECT *obj, int tile)
 {
 	switch (obj->o_v6)
 	{
 	case 0:
-		if (ISTRUE(save_file_isactive(tile-FE_FILE)))
+		if (ISTRUE(BuFileIsActive(tile-FE_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_11);
-			file_obj[tile]->o_v0 = TILE_SELECT;
+			fs_obj[tile]->o_v0 = TILE_SELECT;
 			click_file = tile-FE_FILE;
 			obj->o_v6 = 1;
 			click_flag = TRUE;
@@ -549,7 +549,7 @@ static void filemenu_erasefile(OBJECT *obj, int tile)
 		else
 		{
 			Na_FixSePlay(NA_SE7_0E);
-			file_obj[tile]->o_v0 = TILE_CLICK;
+			fs_obj[tile]->o_v0 = TILE_CLICK;
 			if (click_timer > 20)
 			{
 				click_flag = TRUE;
@@ -561,7 +561,7 @@ static void filemenu_erasefile(OBJECT *obj, int tile)
 		if (tile == FE_FILE+click_file)
 		{
 			Na_FixSePlay(NA_SE7_11);
-			file_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
+			fs_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
 			obj->o_v6 = 0;
 			click_flag = TRUE;
 		}
@@ -569,243 +569,243 @@ static void filemenu_erasefile(OBJECT *obj, int tile)
 	}
 }
 
-static void filemenu_eraseproc(OBJECT *obj)
+static void FileMenu_EraseProc(OBJECT *obj)
 {
 	int i;
 	if (obj->o_v0 == TILE_OPENED)
 	{
 		for (i = FE_MIN; i < FE_MAX; i++)
 		{
-			SHORT x = file_obj[i]->o_pos_x;
-			SHORT y = file_obj[i]->o_pos_y;
-			if (ISTRUE(file_isclick(x, y, 22)))
+			SHORT x = fs_obj[i]->o_posx;
+			SHORT y = fs_obj[i]->o_posy;
+			if (ISTRUE(FileIsClick(x, y, 22)))
 			{
 				if (i == FE_SELECT || i == FE_SCORE || i == FE_COPY)
 				{
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
-						file_obj[i]->o_v0 = TILE_CLICK;
-						file_state = i;
+						fs_obj[i]->o_v0 = TILE_CLICK;
+						fs_state = i;
 					}
 				}
 				else
 				{
-					if (click_timer > 30) filemenu_erasefile(obj, i);
+					if (click_timer > 30) FileMenu_EraseFile(obj, i);
 				}
-				file_mode = 2;
+				fs_mode = 2;
 				break;
 			}
 		}
 		if (obj->o_v6 == 2 && click_timer > 30)
 		{
 			obj->o_v6 = 0;
-			file_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
+			fs_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
 		}
 	}
 }
 
-static void filemenu_optioninit(OBJECT *obj)
+static void FileMenu_OptionInit(OBJECT *obj)
 {
-	filemenu_inittile_sub(obj, FO_STEREO, S_TILE_BUTTON, +4800, 0);
-	filemenu_inittile_sub(obj, FO_MONO,   S_TILE_BUTTON,     0, 0);
-	filemenu_inittile_sub(obj, FO_PHONE,  S_TILE_BUTTON, -4800, 0);
-	file_obj[FO_SOUND+sound_flag]->o_v0 = TILE_SELECT;
+	FileMenu_InitTileSub(obj, FO_STEREO, S_TILE_BUTTON, +4800, 0);
+	FileMenu_InitTileSub(obj, FO_MONO,   S_TILE_BUTTON,     0, 0);
+	FileMenu_InitTileSub(obj, FO_PHONE,  S_TILE_BUTTON, -4800, 0);
+	fs_obj[FO_SOUND+sound_flag]->o_v0 = TILE_SELECT;
 }
 
-static void filemenu_optionproc(OBJECT *obj)
+static void FileMenu_OptionProc(OBJECT *obj)
 {
 	int i;
 	if (obj->o_v0 == TILE_OPENED)
 	{
 		for (i = FO_MIN; i < FO_MAX; i++)
 		{
-			SHORT x = file_obj[i]->o_pos_x;
-			SHORT y = file_obj[i]->o_pos_y;
-			if (ISTRUE(file_isclick(x, y, 22)))
+			SHORT x = fs_obj[i]->o_posx;
+			SHORT y = fs_obj[i]->o_posy;
+			if (ISTRUE(FileIsClick(x, y, 22)))
 			{
 				if (i == FO_STEREO || i == FO_MONO || i == FO_PHONE)
 				{
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
-						file_obj[i]->o_v0 = TILE_CLICK;
-						file_state = i;
+						fs_obj[i]->o_v0 = TILE_CLICK;
+						fs_state = i;
 						sound_flag = i-FO_SOUND;
-						save_set_sound(sound_flag);
+						BuSetSound(sound_flag);
 					}
 				}
-				file_mode = 2;
+				fs_mode = 2;
 				break;
 			}
 		}
 	}
 }
 
-static void filemenu_openfile(OBJECT *obj, int file)
+static void FileMenu_OpenFile(OBJECT *obj, int file)
 {
-	if (obj->o_v0 == TILE_OPENED) file_result = file;
+	if (obj->o_v0 == TILE_OPENED) fs_result = file;
 }
 
-static void filemenu_openselect(SHORT tile, OBJECT *obj)
+static void FileMenu_OpenSelect(SHORT tile, OBJECT *obj)
 {
 	int i;
-	if (obj->o_v0 == TILE_CLOSED && file_obj[tile]->o_v0 == TILE_OPENED)
+	if (obj->o_v0 == TILE_CLOSED && fs_obj[tile]->o_v0 == TILE_OPENED)
 	{
 		Na_FixSePlay(NA_SE7_07);
-		file_obj[tile]->o_v0 = TILE_CLOSE;
-		file_mode = 1;
+		fs_obj[tile]->o_v0 = TILE_CLOSE;
+		fs_mode = 1;
 	}
-	if (file_obj[tile]->o_v0 == TILE_CLOSED)
+	if (fs_obj[tile]->o_v0 == TILE_CLOSED)
 	{
-		file_state = -1;
+		fs_state = -1;
 		if (tile == F_SCORE)
 		{
-			for (i = FS_MIN; i < FS_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FS_MIN; i < FS_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_COPY)
 		{
-			for (i = FC_MIN; i < FC_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FC_MIN; i < FC_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_ERASE)
 		{
-			for (i = FE_MIN; i < FE_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FE_MIN; i < FE_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_OPTION)
 		{
-			for (i = FO_MIN; i < FO_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FO_MIN; i < FO_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 	}
 }
 
-static void filemenu_openscore(SHORT tile, OBJECT *obj)
+static void FileMenu_OpenScore(SHORT tile, OBJECT *obj)
 {
 	int i;
-	if (obj->o_v0 == TILE_CLOSED && file_obj[tile]->o_v0 == TILE_OPENED)
+	if (obj->o_v0 == TILE_CLOSED && fs_obj[tile]->o_v0 == TILE_OPENED)
 	{
 		Na_FixSePlay(NA_SE7_07);
-		file_obj[tile]->o_v0 = TILE_CLOSE;
-		file_mode = 1;
+		fs_obj[tile]->o_v0 = TILE_CLOSE;
+		fs_mode = 1;
 	}
-	if (file_obj[tile]->o_v0 == TILE_CLOSED)
+	if (fs_obj[tile]->o_v0 == TILE_CLOSED)
 	{
 		if (tile == F_SCORE)
 		{
-			for (i = FS_MIN; i < FS_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FS_MIN; i < FS_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_COPY)
 		{
-			for (i = FC_MIN; i < FC_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FC_MIN; i < FC_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_ERASE)
 		{
-			for (i = FE_MIN; i < FE_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FE_MIN; i < FE_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
-		file_state = F_SCORE;
+		fs_state = F_SCORE;
 		Na_FixSePlay(NA_SE7_06);
-		file_obj[F_SCORE]->o_v0 = TILE_OPEN;
-		filemenu_scoreinit(file_obj[F_SCORE]);
+		fs_obj[F_SCORE]->o_v0 = TILE_OPEN;
+		FileMenu_ScoreInit(fs_obj[F_SCORE]);
 	}
 }
 
-static void filemenu_opencopy(SHORT tile, OBJECT *obj)
+static void FileMenu_OpenCopy(SHORT tile, OBJECT *obj)
 {
 	int i;
-	if (obj->o_v0 == TILE_CLOSED && file_obj[tile]->o_v0 == TILE_OPENED)
+	if (obj->o_v0 == TILE_CLOSED && fs_obj[tile]->o_v0 == TILE_OPENED)
 	{
 		Na_FixSePlay(NA_SE7_07);
-		file_obj[tile]->o_v0 = TILE_CLOSE;
-		file_mode = 1;
+		fs_obj[tile]->o_v0 = TILE_CLOSE;
+		fs_mode = 1;
 	}
-	if (file_obj[tile]->o_v0 == TILE_CLOSED)
+	if (fs_obj[tile]->o_v0 == TILE_CLOSED)
 	{
 		if (tile == F_SCORE)
 		{
-			for (i = FS_MIN; i < FS_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FS_MIN; i < FS_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_COPY)
 		{
-			for (i = FC_MIN; i < FC_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FC_MIN; i < FC_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_ERASE)
 		{
-			for (i = FE_MIN; i < FE_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FE_MIN; i < FE_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
-		file_state = F_COPY;
+		fs_state = F_COPY;
 		Na_FixSePlay(NA_SE7_06);
-		file_obj[F_COPY]->o_v0 = TILE_OPEN;
-		filemenu_copyinit(file_obj[F_COPY]);
+		fs_obj[F_COPY]->o_v0 = TILE_OPEN;
+		FileMenu_CopyInit(fs_obj[F_COPY]);
 	}
 }
 
-static void filemenu_openerase(SHORT tile, OBJECT *obj)
+static void FileMenu_OpenErase(SHORT tile, OBJECT *obj)
 {
 	int i;
-	if (obj->o_v0 == TILE_CLOSED && file_obj[tile]->o_v0 == TILE_OPENED)
+	if (obj->o_v0 == TILE_CLOSED && fs_obj[tile]->o_v0 == TILE_OPENED)
 	{
 		Na_FixSePlay(NA_SE7_07);
-		file_obj[tile]->o_v0 = TILE_CLOSE;
-		file_mode = 1;
+		fs_obj[tile]->o_v0 = TILE_CLOSE;
+		fs_mode = 1;
 	}
-	if (file_obj[tile]->o_v0 == TILE_CLOSED)
+	if (fs_obj[tile]->o_v0 == TILE_CLOSED)
 	{
 		if (tile == F_SCORE)
 		{
-			for (i = FS_MIN; i < FS_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FS_MIN; i < FS_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_COPY)
 		{
-			for (i = FC_MIN; i < FC_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FC_MIN; i < FC_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
 		if (tile == F_ERASE)
 		{
-			for (i = FE_MIN; i < FE_MAX; i++) obj_destroy(file_obj[i]);
+			for (i = FE_MIN; i < FE_MAX; i++) ObjDestroy(fs_obj[i]);
 		}
-		file_state = F_ERASE;
+		fs_state = F_ERASE;
 		Na_FixSePlay(NA_SE7_06);
-		file_obj[F_ERASE]->o_v0 = TILE_OPEN;
-		filemenu_eraseinit(file_obj[F_ERASE]);
+		fs_obj[F_ERASE]->o_v0 = TILE_OPEN;
+		FileMenu_EraseInit(fs_obj[F_ERASE]);
 	}
 }
 
-void filemenu_init(void)
+void FileMenu_Init(void)
 {
-	filemenu_initfile_sel(0);
-	filemenu_initfile_sel(1);
-	filemenu_initfile_sel(2);
-	filemenu_initfile_sel(3);
-	filemenu_inittile_sel(F_SCORE,  S_TILE_GREEN,  -6400, -3500);
-	filemenu_inittile_sel(F_COPY,   S_TILE_BLUE,   -2134, -3500);
-	filemenu_inittile_sel(F_ERASE,  S_TILE_RED,    +2134, -3500);
-	filemenu_inittile_sel(F_OPTION, S_TILE_PURPLE, +6400, -3500);
-	file_alpha = 0;
+	FileMenu_InitFileSel(0);
+	FileMenu_InitFileSel(1);
+	FileMenu_InitFileSel(2);
+	FileMenu_InitFileSel(3);
+	FileMenu_InitTileSel(F_SCORE,  S_TILE_GREEN,  -6400, -3500);
+	FileMenu_InitTileSel(F_COPY,   S_TILE_BLUE,   -2134, -3500);
+	FileMenu_InitTileSel(F_ERASE,  S_TILE_RED,    +2134, -3500);
+	FileMenu_InitTileSel(F_OPTION, S_TILE_PURPLE, +6400, -3500);
+	fs_alpha = 0;
 }
 
-static void filemenu_select(void)
+static void FileMenu_Select(void)
 {
 	CHAR i;
-	if (ISTRUE(file_isclick(
-		file_obj[F_OPTION]->o_pos_x, file_obj[F_OPTION]->o_pos_y, 200
+	if (ISTRUE(FileIsClick(
+		fs_obj[F_OPTION]->o_posx, fs_obj[F_OPTION]->o_posy, 200
 	)))
 	{
-		file_obj[F_OPTION]->o_v0 = TILE_OPEN;
-		file_state = F_OPTION;
+		fs_obj[F_OPTION]->o_v0 = TILE_OPEN;
+		fs_state = F_OPTION;
 	}
 	else
 	{
 		for (i = F_FILE; i < F_FILE+7; i++)
 		{
-			SHORT x = file_obj[i]->o_pos_x;
-			SHORT y = file_obj[i]->o_pos_y;
-			if (ISTRUE(file_isclick(x, y, 200)))
+			SHORT x = fs_obj[i]->o_posx;
+			SHORT y = fs_obj[i]->o_posy;
+			if (ISTRUE(FileIsClick(x, y, 200)))
 			{
-				file_obj[i]->o_v0 = TILE_OPEN;
-				file_state = i;
+				fs_obj[i]->o_v0 = TILE_OPEN;
+				fs_state = i;
 				break;
 			}
 		}
 	}
-	switch (file_state)
+	switch (fs_state)
 	{
 	case F_FILE_A: Na_FixSePlay(NA_SE7_23); break;
 	case F_FILE_B: Na_FixSePlay(NA_SE7_23); break;
@@ -813,60 +813,60 @@ static void filemenu_select(void)
 	case F_FILE_D: Na_FixSePlay(NA_SE7_23); break;
 	case F_SCORE:
 		Na_FixSePlay(NA_SE7_06);
-		filemenu_scoreinit(file_obj[F_SCORE]);
+		FileMenu_ScoreInit(fs_obj[F_SCORE]);
 		break;
 	case F_COPY:
 		Na_FixSePlay(NA_SE7_06);
-		filemenu_copyinit(file_obj[F_COPY]);
+		FileMenu_CopyInit(fs_obj[F_COPY]);
 		break;
 	case F_ERASE:
 		Na_FixSePlay(NA_SE7_06);
-		filemenu_eraseinit(file_obj[F_ERASE]);
+		FileMenu_EraseInit(fs_obj[F_ERASE]);
 		break;
 	case F_OPTION:
 		Na_FixSePlay(NA_SE7_06);
-		filemenu_optioninit(file_obj[F_OPTION]);
+		FileMenu_OptionInit(fs_obj[F_OPTION]);
 		break;
 	}
 }
 
-void filemenu_proc(void)
+void FileMenu_Proc(void)
 {
-	switch (file_state)
+	switch (fs_state)
 	{
-	case F_SELECT:  filemenu_select(); break;
-	case F_FILE_A:  filemenu_openfile(file_obj[F_FILE_A], 1); break;
-	case F_FILE_B:  filemenu_openfile(file_obj[F_FILE_B], 2); break;
-	case F_FILE_C:  filemenu_openfile(file_obj[F_FILE_C], 3); break;
-	case F_FILE_D:  filemenu_openfile(file_obj[F_FILE_D], 4); break;
-	case F_SCORE:   filemenu_scoreproc(file_obj[F_SCORE]); break;
-	case F_COPY:    filemenu_copyproc (file_obj[F_COPY]);  break;
-	case F_ERASE:   filemenu_eraseproc(file_obj[F_ERASE]); break;
-	case FS_FILE_A: filemenu_scorefile(file_obj[FS_FILE_A], F_SCORE); break;
-	case FS_FILE_B: filemenu_scorefile(file_obj[FS_FILE_B], F_SCORE); break;
-	case FS_FILE_C: filemenu_scorefile(file_obj[FS_FILE_C], F_SCORE); break;
-	case FS_FILE_D: filemenu_scorefile(file_obj[FS_FILE_D], F_SCORE); break;
-	case FS_SELECT: filemenu_openselect(F_SCORE, file_obj[FS_SELECT]); break;
-	case FS_COPY:   filemenu_opencopy  (F_SCORE, file_obj[FS_COPY]);   break;
-	case FS_ERASE:  filemenu_openerase (F_SCORE, file_obj[FS_ERASE]);  break;
+	case F_SELECT:  FileMenu_Select(); break;
+	case F_FILE_A:  FileMenu_OpenFile(fs_obj[F_FILE_A], 1); break;
+	case F_FILE_B:  FileMenu_OpenFile(fs_obj[F_FILE_B], 2); break;
+	case F_FILE_C:  FileMenu_OpenFile(fs_obj[F_FILE_C], 3); break;
+	case F_FILE_D:  FileMenu_OpenFile(fs_obj[F_FILE_D], 4); break;
+	case F_SCORE:   FileMenu_ScoreProc(fs_obj[F_SCORE]); break;
+	case F_COPY:    FileMenu_CopyProc (fs_obj[F_COPY]);  break;
+	case F_ERASE:   FileMenu_EraseProc(fs_obj[F_ERASE]); break;
+	case FS_FILE_A: FileMenu_ScoreFile(fs_obj[FS_FILE_A], F_SCORE); break;
+	case FS_FILE_B: FileMenu_ScoreFile(fs_obj[FS_FILE_B], F_SCORE); break;
+	case FS_FILE_C: FileMenu_ScoreFile(fs_obj[FS_FILE_C], F_SCORE); break;
+	case FS_FILE_D: FileMenu_ScoreFile(fs_obj[FS_FILE_D], F_SCORE); break;
+	case FS_SELECT: FileMenu_OpenSelect(F_SCORE, fs_obj[FS_SELECT]); break;
+	case FS_COPY:   FileMenu_OpenCopy  (F_SCORE, fs_obj[FS_COPY]);   break;
+	case FS_ERASE:  FileMenu_OpenErase (F_SCORE, fs_obj[FS_ERASE]);  break;
 	case FC_FILE_A: break;
 	case FC_FILE_B: break;
 	case FC_FILE_C: break;
 	case FC_FILE_D: break;
-	case FC_SELECT: filemenu_openselect(F_COPY, file_obj[FC_SELECT]); break;
-	case FC_SCORE:  filemenu_openscore (F_COPY, file_obj[FC_SCORE]);  break;
-	case FC_ERASE:  filemenu_openerase (F_COPY, file_obj[FC_ERASE]);  break;
+	case FC_SELECT: FileMenu_OpenSelect(F_COPY, fs_obj[FC_SELECT]); break;
+	case FC_SCORE:  FileMenu_OpenScore (F_COPY, fs_obj[FC_SCORE]);  break;
+	case FC_ERASE:  FileMenu_OpenErase (F_COPY, fs_obj[FC_ERASE]);  break;
 	case FE_FILE_A: break;
 	case FE_FILE_B: break;
 	case FE_FILE_C: break;
 	case FE_FILE_D: break;
-	case FE_SELECT: filemenu_openselect(F_ERASE, file_obj[FE_SELECT]); break;
-	case FE_SCORE:  filemenu_openscore (F_ERASE, file_obj[FE_SCORE]);  break;
-	case FE_COPY:   filemenu_opencopy  (F_ERASE, file_obj[FE_COPY]);   break;
-	case F_OPTION:  filemenu_optionproc(file_obj[F_OPTION]); break;
-	case FO_STEREO: filemenu_openselect(F_OPTION, file_obj[FO_STEREO]); break;
-	case FO_MONO:   filemenu_openselect(F_OPTION, file_obj[FO_MONO]);   break;
-	case FO_PHONE:  filemenu_openselect(F_OPTION, file_obj[FO_PHONE]);  break;
+	case FE_SELECT: FileMenu_OpenSelect(F_ERASE, fs_obj[FE_SELECT]); break;
+	case FE_SCORE:  FileMenu_OpenScore (F_ERASE, fs_obj[FE_SCORE]);  break;
+	case FE_COPY:   FileMenu_OpenCopy  (F_ERASE, fs_obj[FE_COPY]);   break;
+	case F_OPTION:  FileMenu_OptionProc(fs_obj[F_OPTION]); break;
+	case FO_STEREO: FileMenu_OpenSelect(F_OPTION, fs_obj[FO_STEREO]); break;
+	case FO_MONO:   FileMenu_OpenSelect(F_OPTION, fs_obj[FO_MONO]);   break;
+	case FO_PHONE:  FileMenu_OpenSelect(F_OPTION, fs_obj[FO_PHONE]);  break;
 	}
 	click_pos[0] = -10000;
 	click_pos[1] = -10000;
@@ -888,13 +888,13 @@ static unsigned char str_mario_c[] = {STR_MARIO_C};
 static unsigned char str_mario_d[] = {STR_MARIO_D};
 static unsigned char str_new[] = {STR_NEW};
 
-static void file_proc_click(void)
+static void FsProcClick(void)
 {
 	if (
-		file_state == FS_FILE_A ||
-		file_state == FS_FILE_B ||
-		file_state == FS_FILE_C ||
-		file_state == FS_FILE_D
+		fs_state == FS_FILE_A ||
+		fs_state == FS_FILE_B ||
+		fs_state == FS_FILE_C ||
+		fs_state == FS_FILE_D
 	) 
 	{
 		if (contp->down & (B_BUTTON|START_BUTTON))
@@ -920,7 +920,7 @@ static void file_proc_click(void)
 	}
 }
 
-static void file_proc_cursor(void)
+static void FsProcCursor(void)
 {
 	SHORT x = contp->stick_x;
 	SHORT y = contp->stick_y;
@@ -932,44 +932,44 @@ static void file_proc_cursor(void)
 	if (cursor_pos[0] < -132) cursor_pos[0] = -132;
 	if (cursor_pos[1] >  +90) cursor_pos[1] =  +90;
 	if (cursor_pos[1] <  -90) cursor_pos[1] =  -90;
-	if (cursor_flag == 0) file_proc_click();
+	if (!cursor_flag) FsProcClick();
 }
 
-static void file_draw_cursor(void)
+static void FsDrawCursor(void)
 {
-	file_proc_cursor();
+	FsProcCursor();
 #ifdef sgi
-	gfx_translate(GFX_PUSH, cursor_pos[0]+160-5.0, cursor_pos[1]+120-25.0, 0);
+	GfxTranslate(GFX_PUSH, cursor_pos[0]+160-5.0, cursor_pos[1]+120-25.0, 0);
 #else
-	gfx_translate(GFX_PUSH, cursor_pos[0]+160-5, cursor_pos[1]+120-25, 0);
+	GfxTranslate(GFX_PUSH, cursor_pos[0]+160-5, cursor_pos[1]+120-25, 0);
 #endif
-	if (cursor_flag == 0) gSPDisplayList(glistp++, gfx_select_cursor_0);
-	if (cursor_flag != 0) gSPDisplayList(glistp++, gfx_select_cursor_1);
+	if (!cursor_flag) gSPDisplayList(glistp++, gfx_select_cursor_0);
+	if ( cursor_flag) gSPDisplayList(glistp++, gfx_select_cursor_1);
 	gSPPopMatrix(glistp++, G_MTX_MODELVIEW);
-	if (cursor_flag != 0)
+	if (cursor_flag)
 	{
 		cursor_flag++;
 		if (cursor_flag == 5) cursor_flag = 0;
 	}
 }
 
-static void file_print_16(CHAR font, SHORT x, SHORT y, const unsigned char *str)
+static void FsPrint16(CHAR font, SHORT x, SHORT y, const unsigned char *str)
 {
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha-click_alpha);
-	print_16(font, x, y, str);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha-click_alpha);
+	Print16(font, x, y, str);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 }
 
-static void file_print_lg(SHORT x, SHORT y, const unsigned char *str)
+static void FsPrintLg(SHORT x, SHORT y, const unsigned char *str)
 {
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha-click_alpha);
-	print_lg(x, y, str);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha-click_alpha);
+	PrintLg(x, y, str);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 }
 
-static int click_fade(void)
+static int ClickFade(void)
 {
 	if (ISTRUE(click_flag))
 	{
@@ -987,31 +987,31 @@ static int click_fade(void)
 	return FALSE;
 }
 
-static void file_draw_select_file(CHAR file, SHORT x, SHORT y)
+static void FsDrawSelectFile(CHAR file, SHORT x, SHORT y)
 {
 	static unsigned char str_star[] = {CH16_STAR, CH_NUL};
 	static unsigned char str_cross[] = {CH16_CROSS, CH_NUL};
 	unsigned char buf[4];
 	CHAR offset = 0;
-	if (ISTRUE(save_file_isactive(file)))
+	if (ISTRUE(BuFileIsActive(file)))
 	{
-		SHORT total = save_file_star_total(file);
-		print_16(FONT_GLB, x, y, str_star);
+		SHORT total = BuFileStarTotal(file);
+		Print16(FONT_GLB, x, y, str_star);
 		if (total < 100)
 		{
-			print_16(FONT_GLB, x+16, y, str_cross);
+			Print16(FONT_GLB, x+16, y, str_cross);
 			offset = 16;
 		}
 		itostr(total, buf);
-		print_16(FONT_GLB, x+16+offset, y, buf);
+		Print16(FONT_GLB, x+16+offset, y, buf);
 	}
 	else
 	{
-		print_16(FONT_GLB, x, y, str_new);
+		Print16(FONT_GLB, x, y, str_new);
 	}
 }
 
-static void file_draw_select(void)
+static void FsDrawSelect(void)
 {
 	static unsigned char str_select_file[] = {STR_SELECT_FILE};
 	static unsigned char str_score[] = {STR_SCORE};
@@ -1023,74 +1023,74 @@ static void file_draw_select(void)
 	SHORT sound_x;
 #endif
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_16(FONT_GLB, 93, 35, str_select_file);
-	file_draw_select_file(0,  92,  78);
-	file_draw_select_file(1, 209,  78);
-	file_draw_select_file(2,  92, 118);
-	file_draw_select_file(3, 209, 118);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	Print16(FONT_GLB, 93, 35, str_select_file);
+	FsDrawSelectFile(0,  92,  78);
+	FsDrawSelectFile(1, 209,  78);
+	FsDrawSelectFile(2,  92, 118);
+	FsDrawSelectFile(3, 209, 118);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_lg( 52, 39, str_score);
-	print_lg(117, 39, str_copy);
-	print_lg(177, 39, str_erase);
-	sound_x = str_center_x(254, str_sound[sound_flag], 10);
-	print_lg(sound_x, 39, str_sound[sound_flag]);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintLg( 52, 39, str_score);
+	PrintLg(117, 39, str_copy);
+	PrintLg(177, 39, str_erase);
+	sound_x = StrCenterX(254, str_sound[sound_flag], 10);
+	PrintLg(sound_x, 39, str_sound[sound_flag]);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	gSPDisplayList(glistp++, gfx_smfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_sm( 92,  65, str_mario_a);
-	print_sm(207,  65, str_mario_b);
-	print_sm( 92, 105, str_mario_c);
-	print_sm(207, 105, str_mario_d);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintSm( 92,  65, str_mario_a);
+	PrintSm(207,  65, str_mario_b);
+	PrintSm( 92, 105, str_mario_c);
+	PrintSm(207, 105, str_mario_d);
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 
-static void file_draw_score_msg(CHAR msg)
+static void FsDrawScoreMsg(CHAR msg)
 {
 	static unsigned char str_check_file[] = {STR_CHECK_FILE};
 	static unsigned char str_no_saved_data_exists[] =
 		{STR_NO_SAVED_DATA_EXISTS};
 	switch (msg)
 	{
-	case 0: file_print_16(FONT_GLB, 95, 35, str_check_file); break;
-	case 1: file_print_lg(99, 190, str_no_saved_data_exists); break;
+	case 0: FsPrint16(FONT_GLB, 95, 35, str_check_file); break;
+	case 1: FsPrintLg(99, 190, str_no_saved_data_exists); break;
 	}
 }
 
-static void file_draw_score(void)
+static void FsDrawScore(void)
 {
 	if (click_timer == 20) click_flag = TRUE;
-	if (ISTRUE(click_fade()))
+	if (ISTRUE(ClickFade()))
 	{
 		if (click_msg == 0) click_msg = 1;
 		else                click_msg = 0;
 	}
-	file_draw_score_msg(click_msg);
+	FsDrawScoreMsg(click_msg);
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	file_draw_select_file(0,  90,  76);
-	file_draw_select_file(1, 211,  76);
-	file_draw_select_file(2,  90, 119);
-	file_draw_select_file(3, 211, 119);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	FsDrawSelectFile(0,  90,  76);
+	FsDrawSelectFile(1, 211,  76);
+	FsDrawSelectFile(2,  90, 119);
+	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_lg( 44, 35, str_return);
-	print_lg(135, 35, str_copy_file);
-	print_lg(231, 35, str_erase_file);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintLg( 44, 35, str_return);
+	PrintLg(135, 35, str_copy_file);
+	PrintLg(231, 35, str_erase_file);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	gSPDisplayList(glistp++, gfx_smfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_sm( 89,  62, str_mario_a);
-	print_sm(211,  62, str_mario_b);
-	print_sm( 89, 105, str_mario_c);
-	print_sm(211, 105, str_mario_d);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintSm( 89,  62, str_mario_a);
+	PrintSm(211,  62, str_mario_b);
+	PrintSm( 89, 105, str_mario_c);
+	PrintSm(211, 105, str_mario_d);
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 
-static void file_draw_copy_msg(CHAR msg)
+static void FsDrawCopyMsg(CHAR msg)
 {
 	static unsigned char str_copy_file[] = {STR_COPY_FILE};
 	static unsigned char str_copy_it_to_where[] = {STR_COPY_IT_TO_WHERE};
@@ -1102,37 +1102,37 @@ static void file_draw_copy_msg(CHAR msg)
 	switch (msg)
 	{
 	case 0:
-		if (ISTRUE(file_full))
+		if (ISTRUE(fs_full))
 		{
-			file_print_lg(119, 190, str_no_empty_file);
+			FsPrintLg(119, 190, str_no_empty_file);
 		}
 		else
 		{
-			file_print_16(FONT_GLB, 104, 35, str_copy_file);
+			FsPrint16(FONT_GLB, 104, 35, str_copy_file);
 		}
 		break;
 	case 1:
-		file_print_lg(109, 190, str_copy_it_to_where);
+		FsPrintLg(109, 190, str_copy_it_to_where);
 		break;
 	case 2:
-		file_print_lg(101, 190, str_no_saved_data_exists);
+		FsPrintLg(101, 190, str_no_saved_data_exists);
 		break;
 	case 3:
-		file_print_lg(110, 190, str_copying_completed);
+		FsPrintLg(110, 190, str_copying_completed);
 		break;
 	case 4:
-		file_print_lg(110, 190, str_saved_data_exists);
+		FsPrintLg(110, 190, str_saved_data_exists);
 		break;
 	}
 }
 
-static void file_proc_copy(void)
+static void FsProcCopy(void)
 {
-	switch (file_obj[F_COPY]->o_v6)
+	switch (fs_obj[F_COPY]->o_v6)
 	{
 	case 0:
 		if (click_timer == 20) click_flag = TRUE;
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg == 0) click_msg = 2;
 			else                click_msg = 0;
@@ -1140,7 +1140,7 @@ static void file_proc_copy(void)
 		break;
 	case 1:
 		if (click_timer == 20 && click_msg == 4) click_flag = TRUE;
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg != 1) click_msg = 1;
 			else                click_msg = 4;
@@ -1148,7 +1148,7 @@ static void file_proc_copy(void)
 		break;
 	case 2:
 		if (click_timer == 20) click_flag = TRUE;
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg != 3) click_msg = 3;
 			else                click_msg = 0;
@@ -1157,33 +1157,33 @@ static void file_proc_copy(void)
 	}
 }
 
-static void file_draw_copy(void)
+static void FsDrawCopy(void)
 {
-	file_proc_copy();
-	file_draw_copy_msg(click_msg);
+	FsProcCopy();
+	FsDrawCopyMsg(click_msg);
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	file_draw_select_file(0,  90,  76);
-	file_draw_select_file(1, 211,  76);
-	file_draw_select_file(2,  90, 119);
-	file_draw_select_file(3, 211, 119);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	FsDrawSelectFile(0,  90,  76);
+	FsDrawSelectFile(1, 211,  76);
+	FsDrawSelectFile(2,  90, 119);
+	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_lg( 44, 35, str_return);
-	print_lg(128, 35, str_check_score);
-	print_lg(230, 35, str_erase_file);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintLg( 44, 35, str_return);
+	PrintLg(128, 35, str_check_score);
+	PrintLg(230, 35, str_erase_file);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	gSPDisplayList(glistp++, gfx_smfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_sm( 89,  62, str_mario_a);
-	print_sm(211,  62, str_mario_b);
-	print_sm( 89, 105, str_mario_c);
-	print_sm(211, 105, str_mario_d);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintSm( 89,  62, str_mario_a);
+	PrintSm(211,  62, str_mario_b);
+	PrintSm( 89, 105, str_mario_c);
+	PrintSm(211, 105, str_mario_d);
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 
-static void file_draw_erase_prompt(SHORT x, SHORT y)
+static void FsDrawErasePrompt(SHORT x, SHORT y)
 {
 	static unsigned char str_yes[] = {STR_YES};
 	static unsigned char str_no[] = {STR_NO};
@@ -1213,33 +1213,33 @@ static void file_draw_erase_prompt(SHORT x, SHORT y)
 		if (erase_flag == 1)
 		{
 			Na_FixSePlay(NA_SE2_10);
-			file_obj[F_ERASE]->o_v6 = 2;
+			fs_obj[F_ERASE]->o_v6 = 2;
 			click_flag = TRUE;
 			click_timer = 0;
-			save_file_erase(click_file);
-			file_obj[FE_FILE+click_file]->s.shape = shape_table[S_FILE_NEW_S];
-			file_obj[F_FILE+click_file]->s.shape = shape_table[S_FILE_NEW_S];
+			BuFileErase(click_file);
+			fs_obj[FE_FILE+click_file]->s.shape = shape_table[S_FILE_NEW_S];
+			fs_obj[F_FILE+click_file]->s.shape = shape_table[S_FILE_NEW_S];
 			erase_flag = 0;
 		}
 		else if (erase_flag == 2)
 		{
 			Na_FixSePlay(NA_SE7_11);
-			file_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
-			file_obj[F_ERASE]->o_v6 = 0;
+			fs_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
+			fs_obj[F_ERASE]->o_v6 = 0;
 			click_flag = TRUE;
 			click_timer = 0;
 			erase_flag = 0;
 		}
 	}
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, blink[0], blink[0], blink[0], file_alpha);
-	print_lg(x+56, y, str_yes);
-	gDPSetEnvColor(glistp++, blink[1], blink[1], blink[1], file_alpha);
-	print_lg(x+98, y, str_no);
+	gDPSetEnvColor(glistp++, blink[0], blink[0], blink[0], fs_alpha);
+	PrintLg(x+56, y, str_yes);
+	gDPSetEnvColor(glistp++, blink[1], blink[1], blink[1], fs_alpha);
+	PrintLg(x+98, y, str_no);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 }
 
-static void file_draw_erase_msg(CHAR msg)
+static void FsDrawEraseMsg(CHAR msg)
 {
 	STATIC unsigned char str_erase_file[] = {STR_ERASE_FILE};
 	STATIC unsigned char str_sure[] = {STR_SURE};
@@ -1250,39 +1250,39 @@ static void file_draw_erase_msg(CHAR msg)
 	switch (msg)
 	{
 	case 0:
-		file_print_16(FONT_GLB, 98, 35, str_erase_file);
+		FsPrint16(FONT_GLB, 98, 35, str_erase_file);
 		break;
 	case 1:
-		file_print_lg(90, 190, str_sure);
-		file_draw_erase_prompt(90, 190);
+		FsPrintLg(90, 190, str_sure);
+		FsDrawErasePrompt(90, 190);
 		break;
 	case 2:
-		file_print_lg(100, 190, str_no_saved_data_exists);
+		FsPrintLg(100, 190, str_no_saved_data_exists);
 		break;
 	case 3:
 		str_mario_a_just_erased[6] = CH_A + click_file;
-		file_print_lg(100, 190, str_mario_a_just_erased);
+		FsPrintLg(100, 190, str_mario_a_just_erased);
 		break;
 	case 4:
-		file_print_lg(100, 190, str_saved_data_exists);
+		FsPrintLg(100, 190, str_saved_data_exists);
 		break;
 	}
 }
 
-static void file_proc_erase(void)
+static void FsProcErase(void)
 {
-	switch (file_obj[F_ERASE]->o_v6)
+	switch (fs_obj[F_ERASE]->o_v6)
 	{
 	case 0:
 		if (click_timer == 20 && click_msg == 2) click_flag = TRUE;
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg == 0) click_msg = 2;
 			else                click_msg = 0;
 		}
 		break;
 	case 1:
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg != 1) click_msg = 1;
 			cursor_pos[0] = 43;
@@ -1291,7 +1291,7 @@ static void file_proc_erase(void)
 		break;
 	case 2:
 		if (click_timer == 20) click_flag = TRUE;
-		if (ISTRUE(click_fade()))
+		if (ISTRUE(ClickFade()))
 		{
 			if (click_msg != 3) click_msg = 3;
 			else                click_msg = 0;
@@ -1300,72 +1300,72 @@ static void file_proc_erase(void)
 	}
 }
 
-static void file_draw_erase(void)
+static void FsDrawErase(void)
 {
-	file_proc_erase();
-	file_draw_erase_msg(click_msg);
+	FsProcErase();
+	FsDrawEraseMsg(click_msg);
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	file_draw_select_file(0,  90,  76);
-	file_draw_select_file(1, 211,  76);
-	file_draw_select_file(2,  90, 119);
-	file_draw_select_file(3, 211, 119);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	FsDrawSelectFile(0,  90,  76);
+	FsDrawSelectFile(1, 211,  76);
+	FsDrawSelectFile(2,  90, 119);
+	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_lgfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_lg( 44, 35, str_return);
-	print_lg(127, 35, str_check_score);
-	print_lg(233, 35, str_copy_file);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintLg( 44, 35, str_return);
+	PrintLg(127, 35, str_check_score);
+	PrintLg(233, 35, str_copy_file);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	gSPDisplayList(glistp++, gfx_smfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_sm( 89,  62, str_mario_a);
-	print_sm(211,  62, str_mario_b);
-	print_sm( 89, 105, str_mario_c);
-	print_sm(211, 105, str_mario_d);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	PrintSm( 89,  62, str_mario_a);
+	PrintSm(211,  62, str_mario_b);
+	PrintSm( 89, 105, str_mario_c);
+	PrintSm(211, 105, str_mario_d);
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 
-static void file_draw_option(void)
+static void FsDrawOption(void)
 {
 	int i;
 	SHORT x;
 	UNUSED u8 alpha;
 	STATIC unsigned char str_sound_select[] = {STR_SOUND_SELECT};
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_16(FONT_GLB, 88, 35, str_sound_select);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	Print16(FONT_GLB, 88, 35, str_sound_select);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_lgfont_start);
 	for (i = 0; i < 3; i++)
 	{
 		if (i == sound_flag)
 		{
-			gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
+			gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 		}
 		else
 		{
-			gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, file_alpha);
+			gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, fs_alpha);
 		}
-		x = str_center_x(87 + 74*i, str_sound[i], 10);
-		print_lg(x, 87, str_sound[i]);
+		x = StrCenterX(87 + 74*i, str_sound[i], 10);
+		PrintLg(x, 87, str_sound[i]);
 	}
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 }
 
-static void file_draw_extra_star(CHAR file, SHORT x, SHORT y)
+static void FsDrawExtraStar(CHAR file, SHORT x, SHORT y)
 {
 	unsigned char buf[20];
 	static unsigned char str_star_x[] = {CH_STAR, CH_CROSS, CH_NUL};
-	print_sm(x, y, str_star_x);
-	itostr(save_file_star_extra(file), buf);
-	print_sm(x+16, y, buf);
+	PrintSm(x, y, str_star_x);
+	itostr(BuFileStarExtra(file), buf);
+	PrintSm(x+16, y, buf);
 }
 
-static void file_draw_course_score(CHAR file, SHORT course, SHORT x, SHORT y)
+static void FsDrawCourseScore(CHAR file, SHORT course, SHORT x, SHORT y)
 {
 	unsigned char buf[20];
-	UCHAR star = save_file_get_star(file, course);
+	UCHAR star = BuFileGetStar(file, course);
 	STATIC unsigned char str_coin_x[] = {CH_COIN, CH_CROSS, CH_NUL};
 	STATIC unsigned char str_star[] = {CH_STAR, CH_NUL};
 	STATIC unsigned char str_file[][8] =
@@ -1378,119 +1378,119 @@ static void file_draw_course_score(CHAR file, SHORT course, SHORT x, SHORT y)
 	};
 	if (score_flag == 0)
 	{
-		print_sm(x+25, y, str_coin_x);
-		itostr(save_file_get_coin(file, course), buf);
-		print_sm(x+41, y, buf);
-		if (star & 0100) print_sm(x+70, y, str_star);
+		PrintSm(x+25, y, str_coin_x);
+		itostr(BuFileGetCoin(file, course), buf);
+		PrintSm(x+41, y, buf);
+		if (star & 0100) PrintSm(x+70, y, str_star);
 	}
 	else
 	{
-		print_sm(x+18, y, str_coin_x);
-		itostr(save_hiscore_coin(course), buf);
-		print_sm(x+34, y, buf);
-		print_sm(x+60, y, str_file[save_hiscore_file(course)]);
+		PrintSm(x+18, y, str_coin_x);
+		itostr(BuGetHiScoreCoin(course), buf);
+		PrintSm(x+34, y, buf);
+		PrintSm(x+60, y, str_file[BuGetHiScoreFile(course)]);
 	}
 }
 
-static void file_draw_course_star(CHAR file, SHORT course, SHORT x, SHORT y)
+static void FsDrawCourseStar(CHAR file, SHORT course, SHORT x, SHORT y)
 {
 	SHORT i = 0;
 	unsigned char buf[20];
-	UCHAR star = save_file_get_star(file, course);
-	CHAR count = save_file_star_count(file, course);
+	UCHAR star = BuFileGetStar(file, course);
+	CHAR count = BuFileStarCount(file, course);
 	if (star & 0100) count--;
 	for (i = 0; i < count; i++) buf[i] = CH_STAR;
 	buf[i] = CH_NUL;
-	print_sm(x, y, buf);
+	PrintSm(x, y, buf);
 }
 
-#define file_print_course(coursetab, i) \
+#define FsPrintCourse(crstab, i) \
 { \
-	print_sm(23+3*(i<9), 35+12*i, segment_to_virtual(coursetab[i])); \
-	file_draw_course_star(file, i, 171, 35+12*i); \
-	file_draw_course_score(file, i, 213, 35+12*i); \
+	PrintSm(23+3*(i<9), 35+12*i, SegmentToVirtual(crstab[i])); \
+	FsDrawCourseStar(file, i, 171, 35+12*i); \
+	FsDrawCourseScore(file, i, 213, 35+12*i); \
 }
 
-static void file_draw_score_file(CHAR file)
+static void FsDrawScoreFile(CHAR file)
 {
 	STATIC unsigned char str_mario[] = {STR_MARIO};
 	STATIC unsigned char str_hi_score[] = {STR_HI_SCORE};
 	STATIC unsigned char str_my_score[] = {STR_MY_SCORE};
 	unsigned char str_number[] = {0, CH_NUL};
-	unsigned char **coursetab = segment_to_virtual(course_name);
+	unsigned char **crstab = SegmentToVirtual(coursename);
 	str_number[0] = CH_A + file;
 	gSPDisplayList(glistp++, gfx_print_1cyc_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	print_16(FONT_GLB, 25, 15, str_mario);
-	print_16(FONT_GLB, 95, 15, str_number);
-	file_draw_select_file(file, 124, 15);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	Print16(FONT_GLB, 25, 15, str_mario);
+	Print16(FONT_GLB, 95, 15, str_number);
+	FsDrawSelectFile(file, 124, 15);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	gSPDisplayList(glistp++, gfx_smfont_start);
-	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, file_alpha);
-	file_print_course(coursetab, 0);
-	file_print_course(coursetab, 1);
-	file_print_course(coursetab, 2);
-	file_print_course(coursetab, 3);
-	file_print_course(coursetab, 4);
-	file_print_course(coursetab, 5);
-	file_print_course(coursetab, 6);
-	file_print_course(coursetab, 7);
-	file_print_course(coursetab, 8);
-	file_print_course(coursetab, 9);
-	file_print_course(coursetab, 10);
-	file_print_course(coursetab, 11);
-	file_print_course(coursetab, 12);
-	file_print_course(coursetab, 13);
-	file_print_course(coursetab, 14);
-	print_sm(29, 215, segment_to_virtual(coursetab[25]));
-	file_draw_extra_star(file, 171, 215);
-	if (score_flag == 0)    print_sm(238, 24, str_my_score);
-	else                    print_sm(231, 24, str_hi_score);
+	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+	FsPrintCourse(crstab, 0);
+	FsPrintCourse(crstab, 1);
+	FsPrintCourse(crstab, 2);
+	FsPrintCourse(crstab, 3);
+	FsPrintCourse(crstab, 4);
+	FsPrintCourse(crstab, 5);
+	FsPrintCourse(crstab, 6);
+	FsPrintCourse(crstab, 7);
+	FsPrintCourse(crstab, 8);
+	FsPrintCourse(crstab, 9);
+	FsPrintCourse(crstab, 10);
+	FsPrintCourse(crstab, 11);
+	FsPrintCourse(crstab, 12);
+	FsPrintCourse(crstab, 13);
+	FsPrintCourse(crstab, 14);
+	PrintSm(29, 215, SegmentToVirtual(crstab[25]));
+	FsDrawExtraStar(file, 171, 215);
+	if (score_flag == 0)    PrintSm(238, 24, str_my_score);
+	else                    PrintSm(231, 24, str_hi_score);
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 
-static void file_draw(void)
+static void FsDraw(void)
 {
 	UNUSED int i;
-	gfx_screenproj();
-	switch (file_state)
+	GfxScreenProj();
+	switch (fs_state)
 	{
-	case F_SELECT:  file_draw_select(); break;
-	case F_SCORE:   file_draw_score(); score_flag = 0; break;
-	case F_COPY:    file_draw_copy();   break;
-	case F_ERASE:   file_draw_erase();  break;
-	case FS_FILE_A: file_draw_score_file(0);  break;
-	case FS_FILE_B: file_draw_score_file(1);  break;
-	case FS_FILE_C: file_draw_score_file(2);  break;
-	case FS_FILE_D: file_draw_score_file(3);  break;
-	case F_OPTION:  file_draw_option(); break;
+	case F_SELECT:  FsDrawSelect(); break;
+	case F_SCORE:   FsDrawScore(); score_flag = 0; break;
+	case F_COPY:    FsDrawCopy();   break;
+	case F_ERASE:   FsDrawErase();  break;
+	case FS_FILE_A: FsDrawScoreFile(0);  break;
+	case FS_FILE_B: FsDrawScoreFile(1);  break;
+	case FS_FILE_C: FsDrawScoreFile(2);  break;
+	case FS_FILE_D: FsDrawScoreFile(3);  break;
+	case F_OPTION:  FsDrawOption(); break;
 	}
 	if (
-		ISTRUE(save_file_isactive(0)) &&
-		ISTRUE(save_file_isactive(1)) &&
-		ISTRUE(save_file_isactive(2)) &&
-		ISTRUE(save_file_isactive(3))
-	) file_full = TRUE;
-	else file_full = FALSE;
-	if (file_alpha < 250) file_alpha += 10;
+		ISTRUE(BuFileIsActive(0)) &&
+		ISTRUE(BuFileIsActive(1)) &&
+		ISTRUE(BuFileIsActive(2)) &&
+		ISTRUE(BuFileIsActive(3))
+	) fs_full = TRUE;
+	else fs_full = FALSE;
+	if (fs_alpha < 250) fs_alpha += 10;
 	if (click_timer < 1000) click_timer++;
 }
 
-void *fileselect_draw(int code, UNUSED SHAPE *shape, UNUSED void *data)
+void *FileSelectDraw(int code, UNUSED SHAPE *shape, UNUSED void *data)
 {
 	if (code == SC_DRAW)
 	{
-		file_draw();
-		file_draw_cursor();
+		FsDraw();
+		FsDrawCursor();
 	}
 	return NULL;
 }
 
-long fileselect_init(UNUSED SHORT code, UNUSED long status)
+long FileSelectInit(UNUSED SHORT code, UNUSED long status)
 {
-	file_state = -1;
-	file_mode = 1;
-	file_alpha = 0;
+	fs_state = -1;
+	fs_mode = 1;
+	fs_alpha = 0;
 	switch (file_index)
 	{
 	case 1: cursor_pos[0] = -94; cursor_pos[1] =  46; break;
@@ -1501,21 +1501,21 @@ long fileselect_init(UNUSED SHORT code, UNUSED long status)
 	click_pos[0] = -10000;
 	click_pos[1] = -10000;
 	cursor_flag = 0;
-	file_result = 0;
+	fs_result = 0;
 	click_file = -1;
 	click_flag = FALSE;
 	click_msg = 0;
 	click_alpha = 0;
 	click_timer = 0;
 	erase_flag = 0;
-	sound_flag = save_get_sound();
+	sound_flag = BuGetSound();
 #ifndef sgi
 	return 1;
 #endif
 }
 
-long fileselect_proc(UNUSED SHORT code, UNUSED long status)
+long FileSelectProc(UNUSED SHORT code, UNUSED long status)
 {
-	scene_proc();
-	return file_result;
+	SceneProc();
+	return fs_result;
 }

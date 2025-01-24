@@ -13,15 +13,14 @@ static unsigned char aud_endless = FALSE;
 
 UNUSED static char aud_8032D618 = 0;
 UNUSED static u32 aud_levelse_8033B0A0[36];
-UNUSED static VECF aud_8032D61C = {0};
-static VECF aud_0;
+UNUSED static FVEC aud_8032D61C = {0};
+static FVEC aud_0;
 
 static OSMesgQueue aud_vi_mq;
 static OSMesg aud_vi_mbox;
 static SCCLIENT aud_client;
 
-static s16 aud_output_table[] =
-	{NA_OUTPUT_WIDE, NA_OUTPUT_MONO, NA_OUTPUT_PHONE};
+static s16 aud_modetab[] = {NA_OUTPUT_WIDE, NA_OUTPUT_MONO, NA_OUTPUT_PHONE};
 
 static Na_Se aud_levelse_data[36] =
 {
@@ -63,12 +62,12 @@ static Na_Se aud_levelse_data[36] =
 	NA_SE4_0D_0,
 };
 
-void aud_reset_mute(void)
+void AudResetMute(void)
 {
 	aud_mute_flag = 0;
 }
 
-void aud_set_mute(int flag)
+void AudSetMute(int flag)
 {
 	switch (flag)
 	{
@@ -78,7 +77,7 @@ void aud_set_mute(int flag)
 	aud_mute_flag |= flag;
 }
 
-void aud_clr_mute(int flag)
+void AudClrMute(int flag)
 {
 	switch (flag)
 	{
@@ -88,7 +87,7 @@ void aud_clr_mute(int flag)
 	aud_mute_flag &= ~flag;
 }
 
-void aud_lock(void)
+void AudLock(void)
 {
 	if (ISFALSE(aud_lock_flag))
 	{
@@ -97,7 +96,7 @@ void aud_lock(void)
 	}
 }
 
-void aud_unlock(void)
+void AudUnlock(void)
 {
 	if (ISTRUE(aud_lock_flag))
 	{
@@ -106,12 +105,12 @@ void aud_unlock(void)
 	}
 }
 
-void aud_sound_mode(USHORT mode)
+void AudSetMode(USHORT mode)
 {
-	if (mode < 3) Na_Output(aud_output_table[mode]);
+	if (mode < 3) Na_SetOutput(aud_modetab[mode]);
 }
 
-void aud_face_sound(SHORT flag)
+void AudPlayFaceSound(SHORT flag)
 {
 	if      (flag & (1 << 0)) Na_FixSePlay(NA_SE7_0A);
 	else if (flag & (1 << 1)) Na_FixSePlay(NA_SE7_0B);
@@ -121,13 +120,13 @@ void aud_face_sound(SHORT flag)
 	else if (flag & (1 << 5)) Na_FixSePlay(NA_SE7_09);
 	else if (flag & (1 << 6)) Na_FixSePlay(NA_SE7_06);
 	else if (flag & (1 << 7)) Na_FixSePlay(NA_SE7_07);
-	if      (flag & (1 << 8)) aud_levelse_play(20, NULL);
+	if      (flag & (1 << 8)) AudPlayLevelSe(20, NULL);
 }
 
-void aud_wave_sound(void)
+void AudProcWaveSound(void)
 {
 	static char flag = FALSE;
-	if (wavedatap && wavedatap->_07 == 2) /* T:wavedata_07 */
+	if (wavep && wavep->state == WAVE_ENTER)
 	{
 		if (!flag) Na_ObjSePlay(NA_SE3_28, player_data[0].obj);
 		flag = TRUE;
@@ -138,7 +137,7 @@ void aud_wave_sound(void)
 	}
 }
 
-void aud_endless_music(void)
+void AudProcEndlessMusic(void)
 {
 	unsigned char flag = FALSE;
 	if (stage_index == STAGE_INSIDE && scene_index == 2)
@@ -159,14 +158,14 @@ void aud_endless_music(void)
 	}
 }
 
-void bgm_play(USHORT mode, USHORT bgm, SHORT fadein)
+void AudPlayBGM(USHORT mode, USHORT bgm, SHORT fadein)
 {
-	if (reset_timer == 0)
+	if (!reset_timer)
 	{
 		if (bgm != bgm_stage)
 		{
-			if (staffp) Na_Mode(NA_MODE_STAFF);
-			else        Na_Mode(mode);
+			if (staffp) Na_SetMode(NA_MODE_STAFF);
+			else        Na_SetMode(mode);
 			if (!(first_msg && bgm == NA_BGM_CASTLE))
 			{
 				Na_BgmPlay(NA_HANDLE_BGM, bgm, fadein);
@@ -176,7 +175,7 @@ void bgm_play(USHORT mode, USHORT bgm, SHORT fadein)
 	}
 }
 
-void aud_fadeout(SHORT fadeout)
+void AudFadeout(SHORT fadeout)
 {
 	Na_Fadeout(fadeout);
 	bgm_stage   = BGM_NULL;
@@ -184,7 +183,7 @@ void aud_fadeout(SHORT fadeout)
 	bgm_special = BGM_NULL;
 }
 
-void bgm_fadeout(SHORT fadeout)
+void AudFadeoutBGM(SHORT fadeout)
 {
 	Na_SeqFadeout(NA_HANDLE_BGM, fadeout);
 	bgm_stage   = BGM_NULL;
@@ -192,19 +191,19 @@ void bgm_fadeout(SHORT fadeout)
 	bgm_special = BGM_NULL;
 }
 
-void bgm_stage_play(USHORT bgm)
+void AudPlayStageBGM(USHORT bgm)
 {
 	Na_BgmPlay(NA_HANDLE_BGM, bgm, 0);
 	bgm_stage = bgm;
 }
 
-void bgm_shell_play(void)
+void AudPlayShellBGM(void)
 {
 	Na_BgmPlay(NA_HANDLE_BGM, NA_BGM_SHELL, 0);
 	bgm_shell = NA_BGM_SHELL;
 }
 
-void bgm_shell_stop(void)
+void AudStopShellBGM(void)
 {
 	if (bgm_shell != BGM_NULL)
 	{
@@ -213,7 +212,7 @@ void bgm_shell_stop(void)
 	}
 }
 
-void bgm_special_play(USHORT bgm)
+void AudPlaySpecialBGM(USHORT bgm)
 {
 	Na_BgmPlay(NA_HANDLE_BGM, bgm, 0);
 	if (bgm_special != BGM_NULL && bgm_special != bgm)
@@ -223,7 +222,7 @@ void bgm_special_play(USHORT bgm)
 	bgm_special = bgm;
 }
 
-void bgm_special_fadeout(void)
+void AudFadeoutSpecialBGM(void)
 {
 	if (bgm_special != BGM_NULL)
 	{
@@ -231,7 +230,7 @@ void bgm_special_fadeout(void)
 	}
 }
 
-void bgm_special_stop(void)
+void AudStopSpecialBGM(void)
 {
 	if (bgm_special != BGM_NULL)
 	{
@@ -240,23 +239,23 @@ void bgm_special_stop(void)
 	}
 }
 
-void aud_levelse_play(int se, VECF pos)
+void AudPlayLevelSe(int se, FVEC pos)
 {
 	Na_SePlay(aud_levelse_data[se], pos);
 }
 
-void aud_tick(void)
+void AudTick(void)
 {
 	Na_Tick();
 }
 
-void aud_proc(UNUSED void *arg)
+void AudProc(UNUSED void *arg)
 {
 	Na_Load();
 	Na_Init();
-	vecf_cpy(aud_0, vecf_0);
+	FVecCpy(aud_0, fvec_0);
 	osCreateMesgQueue(&aud_vi_mq, &aud_vi_mbox, 1);
-	sc_setclient(SC_AUDCLIENT, &aud_client, &aud_vi_mq, (OSMesg)0x200);
+	ScSetClient(SC_AUDCLIENT, &aud_client, &aud_vi_mq, (OSMesg)0x200);
 	for (;;)
 	{
 		OSMesg msg;
@@ -264,9 +263,9 @@ void aud_proc(UNUSED void *arg)
 		if (reset_timer < 25)
 		{
 			SCTASK *task;
-			time_audcpu();
-			if ((task = Na_Main())) sc_queue_audtask(task);
-			time_audcpu();
+			TimeAudCPU();
+			if ((task = Na_Main())) ScQueueAudTask(task);
+			TimeAudCPU();
 		}
 	}
 }

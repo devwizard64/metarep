@@ -121,8 +121,7 @@ static void usage(const char *path)
 
 int main(int argc, char *argv[])
 {
-	int i;
-	int c;
+	int i, c;
 	FILE *fp;
 	unsigned char *data;
 	size_t size;

@@ -72,7 +72,7 @@ with open(fn, "r") as f:
 					break
 			else:
 				raise RuntimeError("%s:%d:%d: illegal character '%s'" % (
-					fn, ln, i, s[i]
+					fn, ln, i, line[i]
 				))
 for label, lst in stbl:
 	print("#define %s %s" % (

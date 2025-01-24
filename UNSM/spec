@@ -411,8 +411,8 @@ endseg
 beginseg
 	name    "TitleBack"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/title.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/title.szp.o"
 endseg
 
 beginseg
@@ -446,73 +446,73 @@ beginseg
 endseg
 
 beginseg
-	name    "BackA"
+	name    "BackgroundA"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/a.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/a.szp.o"
 endseg
 
 beginseg
-	name    "BackB"
+	name    "BackgroundB"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/b.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/b.szp.o"
 endseg
 
 beginseg
-	name    "BackC"
+	name    "BackgroundC"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/c.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/c.szp.o"
 endseg
 
 beginseg
-	name    "BackD"
+	name    "BackgroundD"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/d.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/d.szp.o"
 endseg
 
 beginseg
-	name    "BackE"
+	name    "BackgroundE"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/e.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/e.szp.o"
 endseg
 
 beginseg
-	name    "BackF"
+	name    "BackgroundF"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/f.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/f.szp.o"
 endseg
 
 beginseg
-	name    "BackG"
+	name    "BackgroundG"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/g.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/g.szp.o"
 endseg
 
 beginseg
-	name    "BackH"
+	name    "BackgroundH"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/h.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/h.szp.o"
 endseg
 
 beginseg
-	name    "BackI"
+	name    "BackgroundI"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/i.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/i.szp.o"
 endseg
 
 beginseg
-	name    "BackJ"
+	name    "BackgroundJ"
 	flags   OBJECT
-	number  SEG_BACK
-	include "$(BUILD)/data/back/j.szp.o"
+	number  SEG_BACKGROUND
+	include "$(BUILD)/data/background/j.szp.o"
 endseg
 
 beginseg

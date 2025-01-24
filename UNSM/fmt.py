@@ -84,30 +84,30 @@ fmt_mem_alloc = [
 	"MEM_ALLOC_R",
 ]
 
-flag_save = [
-	(0x000001, 0x000001, "SAVE_ACTIVE"),
-	(0x000002, 0x000002, "SAVE_REDSW"),
-	(0x000004, 0x000004, "SAVE_GREENSW"),
-	(0x000008, 0x000008, "SAVE_BLUESW"),
-	(0x000010, 0x000010, "SAVE_KEY1"),
-	(0x000020, 0x000020, "SAVE_KEY2"),
-	(0x000040, 0x000040, "SAVE_KEYDOOR1"),
-	(0x000080, 0x000080, "SAVE_KEYDOOR2"),
-	(0x000100, 0x000100, "SAVE_WATERPORT"),
-	(0x000200, 0x000200, "SAVE_DRAIN"),
-	(0x000400, 0x000400, "SAVE_STARDOOR1T"),
-	(0x000800, 0x000800, "SAVE_STARDOOR1B"),
-	(0x001000, 0x001000, "SAVE_STARDOOR3L"),
-	(0x002000, 0x002000, "SAVE_STARDOOR3R"),
-	(0x004000, 0x004000, "SAVE_STARDOOR8"),
-	(0x008000, 0x008000, "SAVE_STARDOOR30"),
-	(0x100000, 0x100000, "SAVE_STARDOOR50"),
-	(0x010000, 0x010000, "SAVE_GROUNDCAP"),
-	(0x020000, 0x020000, "SAVE_CONDORCAP"),
-	(0x040000, 0x040000, "SAVE_MONKEYCAP"),
-	(0x080000, 0x080000, "SAVE_SNOWMANCAP"),
+flag_backup = [
+	(0x000001, 0x000001, "BU_ACTIVE"),
+	(0x000002, 0x000002, "BU_REDSW"),
+	(0x000004, 0x000004, "BU_GREENSW"),
+	(0x000008, 0x000008, "BU_BLUESW"),
+	(0x000010, 0x000010, "BU_KEY1"),
+	(0x000020, 0x000020, "BU_KEY2"),
+	(0x000040, 0x000040, "BU_KEYDOOR1"),
+	(0x000080, 0x000080, "BU_KEYDOOR2"),
+	(0x000100, 0x000100, "BU_WAVEDEMO"),
+	(0x000200, 0x000200, "BU_DRAIN"),
+	(0x000400, 0x000400, "BU_STARDOOR1T"),
+	(0x000800, 0x000800, "BU_STARDOOR1B"),
+	(0x001000, 0x001000, "BU_STARDOOR3L"),
+	(0x002000, 0x002000, "BU_STARDOOR3R"),
+	(0x004000, 0x004000, "BU_STARDOOR8"),
+	(0x008000, 0x008000, "BU_STARDOOR30"),
+	(0x100000, 0x100000, "BU_STARDOOR50"),
+	(0x010000, 0x010000, "BU_GROUNDCAP"),
+	(0x020000, 0x020000, "BU_CONDORCAP"),
+	(0x040000, 0x040000, "BU_MONKEYCAP"),
+	(0x080000, 0x080000, "BU_SNOWMANCAP"),
 ]
-fmt_save_flag = lambda self, x: self.fmt_flag(flag_save, x)
+fmt_backup_flag = lambda self, x: self.fmt_flag(flag_backup, x)
 
 flag_anime = [
 	(0x0001, 0x0000, "ANIME_LOOP"),
@@ -157,21 +157,56 @@ flag_actor = [
 ]
 fmt_actor_flag = lambda self, x: self.fmt_flag(flag_actor, x)
 
+flag_hittype = [
+	(0x00000001, 0x00000001, "HIT_HANG"),
+	(0x00000002, 0x00000002, "HIT_TAKE"),
+	(0x00000004, 0x00000004, "HIT_DOOR"),
+	(0x00000008, 0x00000008, "HIT_DAMAGE"),
+	(0x00000010, 0x00000010, "HIT_COIN"),
+	(0x00000020, 0x00000020, "HIT_CAP"),
+	(0x00000040, 0x00000040, "HIT_POLE"),
+	(0x00000080, 0x00000080, "HIT_KOOPA"),
+	(0x00000100, 0x00000100, "HIT_SPINY"),
+	(0x00000200, 0x00000200, "HIT_ITEMBOX"),
+	(0x00000400, 0x00000400, "HIT_WIND"),
+	(0x00000800, 0x00000800, "HIT_PORTDOOR"),
+	(0x00001000, 0x00001000, "HIT_STAR"),
+	(0x00002000, 0x00002000, "HIT_PIPE"),
+	(0x00004000, 0x00004000, "HIT_CANNON"),
+	(0x00008000, 0x00008000, "HIT_BOUNCE"),
+	(0x00010000, 0x00010000, "HIT_RECOVER"),
+	(0x00020000, 0x00020000, "HIT_BUMP"),
+	(0x00040000, 0x00040000, "HIT_BURN"),
+	(0x00080000, 0x00080000, "HIT_SHELL"),
+	(0x00100000, 0x00100000, "HIT_DUMMY"),
+	(0x00200000, 0x00200000, "HIT_ENEMY"),
+	(0x00400000, 0x00400000, "HIT_FLYENEMY"),
+	(0x00800000, 0x00800000, "HIT_MESSAGE"),
+	(0x01000000, 0x01000000, "HIT_TORNADO"),
+	(0x02000000, 0x02000000, "HIT_WHIRLPOOL"),
+	(0x04000000, 0x04000000, "HIT_CLAM"),
+	(0x08000000, 0x08000000, "HIT_CAGE"),
+	(0x10000000, 0x10000000, "HIT_BULLET"),
+	(0x20000000, 0x20000000, "HIT_ELECSHOCK"),
+	(0x40000000, 0x40000000, "HIT_IGLOO"),
+]
+fmt_hittype = lambda self, x: self.fmt_flag(flag_hittype, x)
+
 flag_oflag = [
-	(0x0001, 0x0001, "OF_0001"),
-	(0x0002, 0x0002, "OF_0002"),
-	(0x0004, 0x0004, "OF_0004"),
-	(0x0008, 0x0008, "OF_0008"),
-	(0x0010, 0x0010, "OF_0010"),
-	(0x0020, 0x0020, "OF_0020"),
-	(0x0040, 0x0040, "OF_0040"),
+	(0x0001, 0x0001, "OF_SETSHAPECOORD"),
+	(0x0002, 0x0002, "OF_MOVEF"),
+	(0x0004, 0x0004, "OF_MOVEY"),
+	(0x0008, 0x0008, "OF_SETSHAPEANGY"),
+	(0x0010, 0x0010, "OF_SETSHAPEANG"),
+	(0x0020, 0x0020, "OF_CALCMTX"),
+	(0x0040, 0x0040, "OF_CALCPLDIST"),
 	(0x0080, 0x0080, "OF_0080"),
 	(0x0100, 0x0100, "OF_0100"),
-	(0x0200, 0x0200, "OF_0200"),
+	(0x0200, 0x0200, "OF_CALCREL"),
 	(0x0400, 0x0400, "OF_0400"),
-	(0x0800, 0x0800, "OF_0800"),
+	(0x0800, 0x0800, "OF_SETMTX"),
 	# (0x1000, 0x1000, "OF_1000"),
-	(0x2000, 0x2000, "OF_2000"),
+	(0x2000, 0x2000, "OF_CALCPLANG"),
 	(0x4000, 0x4000, "OF_4000"),
 	# (0x8000, 0x8000, "OF_8000"),
 ]
@@ -184,27 +219,27 @@ fmt_o = (
 	"3", # 3
 	"4", # 4
 	"O_HIT_TIMER", # 5
-	"O_POS_X", # 6
-	"O_POS_Y", # 7
-	"O_POS_Z", # 8
-	"O_VEL_X", # 9
-	"O_VEL_Y", # 10
-	"O_VEL_Z", # 11
-	"O_VEL_F", # 12
-	"O_VEL_L", # 13
-	"O_VEL_U", # 14
-	"O_ANG_X", # 15
-	"O_ANG_Y", # 16
-	"O_ANG_Z", # 17
-	"O_SHAPE_ANG_X", # 18
-	"O_SHAPE_ANG_Y", # 19
-	"O_SHAPE_ANG_Z", # 20
-	"O_SHAPE_OFFSET", # 21
+	"O_POSX", # 6
+	"O_POSY", # 7
+	"O_POSZ", # 8
+	"O_VELX", # 9
+	"O_VELY", # 10
+	"O_VELZ", # 11
+	"O_VELF", # 12
+	"O_VELL", # 13
+	"O_VELU", # 14
+	"O_ANGX", # 15
+	"O_ANGY", # 16
+	"O_ANGZ", # 17
+	"O_SHAPEANGX", # 18
+	"O_SHAPEANGY", # 19
+	"O_SHAPEANGZ", # 20
+	"O_SHAPEOFF", # 21
 	"O_EFFECT", # 22
 	"O_GRAVITY", # 23
 	"O_GROUND_Y", # 24
-	"O_MOVE_STATUS", # 25
-	"O_SHAPE_CODE", # 26
+	"O_MOVE", # 25
+	"O_SHAPE", # 26
 	"O_V0", # 27
 	"O_V1", # 28
 	"O_V2", # 29
@@ -213,51 +248,51 @@ fmt_o = (
 	"O_V5", # 32
 	"O_V6", # 33
 	"O_V7", # 34
-	"O_ANG_VEL_X", # 35
-	"O_ANG_VEL_Y", # 36
-	"O_ANG_VEL_Z", # 37
-	"O_ANIME", # 38
-	"O_HOLD", # 39
+	"O_ROTX", # 35
+	"O_ROTY", # 36
+	"O_ROTZ", # 37
+	"O_ANIMEP", # 38
+	"O_TAKE", # 39
 	"O_WALL_R", # 40
 	"O_DRAG", # 41
-	"O_HIT_CODE", # 42
+	"O_HIT_TYPE", # 42
 	"O_HIT_RESULT", # 43
-	"O_OFF_X", # 44
-	"O_OFF_Y", # 45
-	"O_OFF_Z", # 46
+	"O_RELX", # 44
+	"O_RELY", # 45
+	"O_RELZ", # 46
 	"O_CODE", # 47
 	"48", # 48
 	"O_STATE", # 49
-	"O_MODE", # 50
+	"O_PHASE", # 50
 	"O_TIMER", # 51
 	"O_BOUNCE", # 52
 	"O_PL_DIST", # 53
 	"O_PL_ANG", # 54
-	"O_SAVE_X", # 55
-	"O_SAVE_Y", # 56
-	"O_SAVE_Z", # 57
+	"O_SAVEX", # 55
+	"O_SAVEY", # 56
+	"O_SAVEZ", # 57
 	"O_FRICTION", # 58
 	"O_DENSITY", # 59
-	"O_ANIME_INDEX", # 60
+	"O_ANIME", # 60
 	"O_ALPHA", # 61
 	"O_AP", # 62
 	"O_HP", # 63
-	"O_ACTOR_INFO", # 64
+	"O_ACTORINFO", # 64
 	"O_PREVSTATE", # 65
 	"O_HIT_FLAG", # 66
-	"O_CHECK_DIST", # 67
+	"O_CHECKDIST", # 67
 	"O_NCOIN", # 68
-	"O_SHAPE_DIST", # 69
+	"O_SHAPEDIST", # 69
 	"O_AREA", # 70
 	"71", # 71
-	"O_TAG_INFO", # 72
+	"O_TAGINFO", # 72
 	"O_V8", # 73
 	"O_V9", # 74
-	"O_WALL_ANG", # 75
-	"O_BG_INFO", # 76
+	"O_BGANG", # 75
+	"O_BGINFO", # 76
 	"O_SAVE_ANG", # 77
 	"O_GROUND", # 78
-	"O_DIE_SE", # 79
+	"O_SOUND", # 79
 )
 
 fmt_msg_x = [
@@ -814,7 +849,7 @@ def fmt_tag(x):
 	if s is not None: return "TAG_" + s
 	return "%d" % x
 
-fmt_map_obj_x = {
+fmt_mapobj_x = {
 	0: "PLAYER",
 	1: "COIN", # unused
 	2: "2", # unused, coin
@@ -891,8 +926,8 @@ fmt_map_obj_x = {
 	135: "PORTDOOR_F", # unused
 }
 
-def fmt_map_obj(x):
-	if x in fmt_map_obj_x: return "MAP_OBJ_" + fmt_map_obj_x[x]
+def fmt_mapobj(x):
+	if x in fmt_mapobj_x: return "MAP_OBJ_" + fmt_mapobj_x[x]
 	if x == 255: return "-1"
 	return "%d" % x
 

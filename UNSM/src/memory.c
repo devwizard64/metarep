@@ -15,37 +15,37 @@ static MEM_FRAME *mem_frame = NULL;
 
 HEAP *mem_heap;
 
-unsigned long segment_set(int number, void *addr)
+unsigned long SegmentSet(int number, void *addr)
 {
 	segment_table[number] = K0_TO_PHYS(addr);
 	return segment_table[number];
 }
 
-void *segment_get(int number)
+void *SegmentGet(int number)
 {
 	return (void *)PHYS_TO_K0(segment_table[number]);
 }
 
-void *segment_to_virtual(const void *addr)
+void *SegmentToVirtual(const void *addr)
 {
 	int number = (unsigned int)(addr) >> 24;
 	int offset = SEGMENT_OFFSET(addr);
 	return (void *)PHYS_TO_K0(segment_table[number] + offset);
 }
 
-void *virtual_to_segment(int number, const void *addr)
+void *VirtualToSegment(int number, const void *addr)
 {
 	int offset = K0_TO_PHYS(addr) - segment_table[number];
 	return (void *)SEGMENT_ADDR(number, offset);
 }
 
-void segment_write(void)
+void SegmentWrite(void)
 {
 	int i;
 	for (i = 0; i < 16; i++) gSPSegment(glistp++, i, segment_table[i]);
 }
 
-void mem_init(void *start, void *end)
+void MemInit(void *start, void *end)
 {
 	mem_start  = (char *)((MEM_BLOCK *)ALIGN16(start) + 1);
 	mem_end    = (char *)((MEM_BLOCK *)BOUND16(end)   - 1);
@@ -58,7 +58,7 @@ void mem_init(void *start, void *end)
 	mem_blockr->next = NULL;
 }
 
-void *mem_alloc(size_t size, int mode)
+void *MemAlloc(size_t size, int mode)
 {
 	MEM_BLOCK *block;
 	void *ptr = NULL;
@@ -88,7 +88,7 @@ void *mem_alloc(size_t size, int mode)
 	return ptr;
 }
 
-size_t mem_free(void *ptr)
+size_t MemFree(void *ptr)
 {
 	MEM_BLOCK *old = (MEM_BLOCK *)ptr - 1;
 	MEM_BLOCK *new = (MEM_BLOCK *)ptr - 1;
@@ -109,30 +109,30 @@ size_t mem_free(void *ptr)
 	return mem_size;
 }
 
-void *mem_realloc(void *ptr, size_t size)
+void *MemRealloc(void *ptr, size_t size)
 {
 	void *new = NULL;
 	MEM_BLOCK *block = (MEM_BLOCK *)ptr - 1;
 	if (block->next == mem_blockl)
 	{
-		mem_free(ptr);
-		new = mem_alloc(size, MEM_ALLOC_L);
+		MemFree(ptr);
+		new = MemAlloc(size, MEM_ALLOC_L);
 	}
 	return new;
 }
 
-size_t mem_available(void)
+size_t MemAvailable(void)
 {
 	return mem_size - sizeof(MEM_BLOCK);
 }
 
-size_t mem_push(void)
+size_t MemPush(void)
 {
 	MEM_FRAME *frame  = mem_frame;
 	size_t     size   = mem_size;
 	MEM_BLOCK *blockl = mem_blockl;
 	MEM_BLOCK *blockr = mem_blockr;
-	mem_frame = mem_alloc(sizeof(MEM_FRAME), MEM_ALLOC_L);
+	mem_frame = MemAlloc(sizeof(MEM_FRAME), MEM_ALLOC_L);
 	mem_frame->size   = size;
 	mem_frame->blockl = blockl;
 	mem_frame->blockr = blockr;
@@ -140,7 +140,7 @@ size_t mem_push(void)
 	return mem_size;
 }
 
-size_t mem_pull(void)
+size_t MemPull(void)
 {
 	mem_size   = mem_frame->size;
 	mem_blockl = mem_frame->blockl;
@@ -149,7 +149,7 @@ size_t mem_pull(void)
 	return mem_size;
 }
 
-void mem_dma(char *dst, const char *start, const char *end)
+void MemRead(char *dst, const char *start, const char *end)
 {
 	size_t size = ALIGN16(end-start);
 	osInvalDCache(dst, size);
@@ -166,33 +166,33 @@ void mem_dma(char *dst, const char *start, const char *end)
 	}
 }
 
-void *mem_load(const char *start, const char *end, int mode)
+void *MemLoad(const char *start, const char *end, int mode)
 {
 	char *ptr;
 	size_t size = ALIGN16(end-start);
-	if ((ptr = mem_alloc(size, mode))) mem_dma(ptr, start, end);
+	if ((ptr = MemAlloc(size, mode))) MemRead(ptr, start, end);
 	return ptr;
 }
 
-void *mem_load_data(int seg, const char *start, const char *end, int mode)
+void *MemLoadData(int seg, const char *start, const char *end, int mode)
 {
 	char *ptr;
-	if ((ptr = mem_load(start, end, mode))) segment_set(seg, ptr);
+	if ((ptr = MemLoad(start, end, mode))) SegmentSet(seg, ptr);
 	return ptr;
 }
 
-void *mem_load_code(char *addr, const char *start, const char *end)
+void *MemLoadCode(char *addr, const char *start, const char *end)
 {
 	char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
 	size_t dstsize = ALIGN16((char *)mem_blockr - addr);
 	if (srcsize <= dstsize)
 	{
-		if ((ptr = mem_alloc(dstsize, MEM_ALLOC_R)))
+		if ((ptr = MemAlloc(dstsize, MEM_ALLOC_R)))
 		{
 			bzero(ptr, dstsize);
 			osWritebackDCacheAll();
-			mem_dma(ptr, start, end);
+			MemRead(ptr, start, end);
 			osInvalICache(ptr, dstsize);
 			osInvalDCache(ptr, dstsize);
 		}
@@ -203,20 +203,20 @@ void *mem_load_code(char *addr, const char *start, const char *end)
 	return ptr;
 }
 
-void *mem_load_pres(int seg, const char *start, const char *end)
+void *MemLoadPres(int seg, const char *start, const char *end)
 {
 	char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
-	char *src = mem_alloc(srcsize, MEM_ALLOC_R);
+	char *src = MemAlloc(srcsize, MEM_ALLOC_R);
 	u32 *dstsize = (u32 *)(src + 4);
 	if (src)
 	{
-		mem_dma(src, start, end);
-		if ((ptr = mem_alloc(*dstsize, MEM_ALLOC_L)))
+		MemRead(src, start, end);
+		if ((ptr = MemAlloc(*dstsize, MEM_ALLOC_L)))
 		{
 			slidec(src, ptr);
-			segment_set(seg, ptr);
-			mem_free(src);
+			SegmentSet(seg, ptr);
+			MemFree(src);
 		}
 		else
 		{
@@ -228,18 +228,18 @@ void *mem_load_pres(int seg, const char *start, const char *end)
 	return ptr;
 }
 
-void *mem_load_text(int seg, const char *start, const char *end)
+void *MemLoadText(int seg, const char *start, const char *end)
 {
 	UNUSED char *ptr = NULL;
 	size_t srcsize = ALIGN16(end-start);
-	char *src = mem_alloc(srcsize, MEM_ALLOC_R);
+	char *src = MemAlloc(srcsize, MEM_ALLOC_R);
 	UNUSED u32 *dstsize = (u32 *)(src + 4);
 	if (src)
 	{
-		mem_dma(src, start, end);
+		MemRead(src, start, end);
 		slidec(src, (char *)t_image);
-		segment_set(seg, t_image);
-		mem_free(src);
+		SegmentSet(seg, t_image);
+		MemFree(src);
 	}
 	else
 	{
@@ -250,24 +250,24 @@ void *mem_load_text(int seg, const char *start, const char *end)
 extern const char _ulibSegmentRomStart[];
 extern const char _ulibSegmentRomEnd[];
 
-void mem_load_ulib(void)
+void MemLoadULib(void)
 {
 	char *addr = (char *)ADDRESS_ULIB;
 	size_t dstsize = ADDRESS_CIMG-ADDRESS_ULIB;
 	UNUSED size_t srcsize = ALIGN16(_ulibSegmentRomEnd-_ulibSegmentRomStart);
 	bzero(addr, dstsize);
 	osWritebackDCacheAll();
-	mem_dma(addr, _ulibSegmentRomStart, _ulibSegmentRomEnd);
+	MemRead(addr, _ulibSegmentRomStart, _ulibSegmentRomEnd);
 	osInvalICache(addr, dstsize);
 	osInvalDCache(addr, dstsize);
 }
 
-ARENA *arena_create(size_t size, int mode)
+ARENA *ArenaCreate(size_t size, int mode)
 {
 	void *ptr;
 	ARENA *arena = NULL;
 	size = ALIGN4(size);
-	if ((ptr = mem_alloc(size+sizeof(ARENA), mode)))
+	if ((ptr = MemAlloc(size+sizeof(ARENA), mode)))
 	{
 		arena = ptr;
 		arena->size  = size;
@@ -278,7 +278,7 @@ ARENA *arena_create(size_t size, int mode)
 	return arena;
 }
 
-void *arena_alloc(ARENA *arena, long size)
+void *ArenaAlloc(ARENA *arena, long size)
 {
 	void *ptr = NULL;
 	size = ALIGN4(size);
@@ -291,24 +291,24 @@ void *arena_alloc(ARENA *arena, long size)
 	return ptr;
 }
 
-void *arena_resize(ARENA *arena, size_t size)
+void *ArenaResize(ARENA *arena, size_t size)
 {
 	void *ptr;
 	size = ALIGN4(size);
-	if ((ptr = mem_realloc(arena, size+sizeof(ARENA))))
+	if ((ptr = MemRealloc(arena, size+sizeof(ARENA))))
 	{
 		arena->size = size;
 	}
 	return ptr;
 }
 
-HEAP *heap_create(size_t size, int mode)
+HEAP *HeapCreate(size_t size, int mode)
 {
 	void *ptr;
 	HEAP_BLOCK *block;
 	HEAP *heap = NULL;
 	size = ALIGN4(size);
-	if ((ptr = mem_alloc(size+sizeof(HEAP), mode)))
+	if ((ptr = MemAlloc(size+sizeof(HEAP), mode)))
 	{
 		heap = ptr;
 		heap->size  = size;
@@ -321,7 +321,7 @@ HEAP *heap_create(size_t size, int mode)
 	return heap;
 }
 
-void *heap_alloc(HEAP *heap, size_t size)
+void *HeapAlloc(HEAP *heap, size_t size)
 {
 	HEAP_BLOCK **free = &heap->free;
 	void *ptr = NULL;
@@ -350,7 +350,7 @@ void *heap_alloc(HEAP *heap, size_t size)
 	return ptr;
 }
 
-void heap_free(HEAP *heap, void *addr)
+void HeapFree(HEAP *heap, void *addr)
 {
 	HEAP_BLOCK *block = (HEAP_BLOCK *)addr - 1;
 	HEAP_BLOCK *free = heap->free;
@@ -401,7 +401,7 @@ void heap_free(HEAP *heap, void *addr)
 	}
 }
 
-void *gfx_alloc(size_t size)
+void *GfxAlloc(size_t size)
 {
 	void *ptr = NULL;
 	size = ALIGN8(size);
@@ -416,26 +416,26 @@ void *gfx_alloc(size_t size)
 	return ptr;
 }
 
-BANKINFO *bank_load_info(const char *src)
+BANKINFO *BankLoadInfo(const char *src)
 {
-	BANKINFO *info = mem_load(src, src+sizeof(info->len), MEM_ALLOC_L);
+	BANKINFO *info = MemLoad(src, src+sizeof(info->len), MEM_ALLOC_L);
 	size_t size =
 		sizeof(BANKINFO)-sizeof(info->table) +
 		sizeof(info->table[0])*info->len;
-	mem_free(info);
-	info = mem_load(src, src+size, MEM_ALLOC_L);
+	MemFree(info);
+	info = MemLoad(src, src+size, MEM_ALLOC_L);
 	info->src = src;
 	return info;
 }
 
-void bank_init(BANK *bank, const char *src, void *buf)
+void BankInit(BANK *bank, const char *src, void *buf)
 {
-	if (src) bank->info = bank_load_info(src);
+	if (src) bank->info = BankLoadInfo(src);
 	bank->src = NULL;
 	bank->buf = buf;
 }
 
-int bank_load(BANK *bank, unsigned int index)
+int BankLoad(BANK *bank, unsigned int index)
 {
 	int result = FALSE;
 	BANKINFO *info = bank->info;
@@ -445,7 +445,7 @@ int bank_load(BANK *bank, unsigned int index)
 		size_t      size = info->table[index].size;
 		if (bank->src != src)
 		{
-			mem_dma(bank->buf, src, src+size);
+			MemRead(bank->buf, src, src+size);
 			bank->src = src;
 			result = TRUE;
 		}

@@ -1285,7 +1285,7 @@ def lst_main(self, line, lst):
 					)))
 					if t == "asciz": self.addr += 1
 				else:
-					line.append((self.save, "%s %s" % (t[0], ", ".join([
+					line.append((self.save, "%s %s" % (t[0], ",".join([
 						t[1](self, argv[3:]) for _ in range(n)
 					]))))
 

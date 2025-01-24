@@ -30,7 +30,7 @@
 #define ADDRESS_STAGE_GFX       0x07000000
 #define ADDRESS_SHAPE3_GFX      0x08000000
 #define ADDRESS_TEXTURE         0x09000000
-#define ADDRESS_BACK            0x0A000000
+#define ADDRESS_BACKGROUND      0x0A000000
 #define ADDRESS_WEATHER         0x0B000000
 #define ADDRESS_SHAPE1_SHP      0x0C000000
 #define ADDRESS_SHAPE2_SHP      0x0D000000
@@ -55,7 +55,7 @@
 #define SEG_STAGE_GFX           0x07
 #define SEG_SHAPE3_GFX          0x08
 #define SEG_TEXTURE             0x09
-#define SEG_BACK                0x0A
+#define SEG_BACKGROUND          0x0A
 #define SEG_WEATHER             0x0B
 #define SEG_SHAPE1_SHP          0x0C
 #define SEG_SHAPE2_SHP          0x0D

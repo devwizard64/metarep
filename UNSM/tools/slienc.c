@@ -32,7 +32,7 @@
 
 static int sliblk(const char *data, size_t size, size_t i, int *of, int *sz)
 {
-	int flag = 0;
+	int result = 0;
 	size_t o = i < BLK_OH ? 0 : i-BLK_OH;
 	int c = size-i < BLK_SH ? size-i : BLK_SH;
 	while (o < i && *sz < c)
@@ -49,11 +49,11 @@ static int sliblk(const char *data, size_t size, size_t i, int *of, int *sz)
 		{
 			*of = o;
 			*sz = s;
-			flag = 1;
+			result = 1;
 		}
 		o++;
 	}
-	return flag;
+	return result;
 }
 
 static size_t slielf(ELF *elf, const char *data, size_t size)
@@ -84,18 +84,9 @@ int main(int argc, char *argv[])
 {
 	FILE *fp;
 	char *data;
-	size_t size;
-	size_t i;
-	size_t cnt;
-	char *stm;
-	char *s;
-	char *pkt;
-	char *p;
-	size_t poff;
-	char *cpy;
-	char *c;
-	size_t coff;
-	char *t;
+	size_t size, i, cnt;
+	char *stm, *pkt, *cpy, *s, *p, *c, *t;
+	size_t poff, coff;
 	if (argc != 3)
 	{
 		fprintf(stderr, "usage: %s <input> <szp>\n", argv[0]);
@@ -130,13 +121,9 @@ int main(int argc, char *argv[])
 	cnt = 0;
 	while (i < size)
 	{
-		int of;
-		int sz;
+		int x, of, sz, ofn, szn;
 		if (sz = BLK_SL-1, sliblk(data, size, i, &of, &sz))
 		{
-			int x;
-			int ofn;
-			int szn;
 			if (szn = sz+1, sliblk(data, size, i+1, &ofn, &szn))
 			{
 				if (cnt == 0) slitbl();

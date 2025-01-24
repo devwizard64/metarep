@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,7 +16,7 @@ typedef struct texture
 }
 TEXTURE;
 
-static unsigned int texture_pal(
+static unsigned int palette(
 	const unsigned char *src, const unsigned char *pal, unsigned int len
 )
 {
@@ -44,8 +43,8 @@ static unsigned int texture_pal(
 #define A0(s)   CVT(src[3], 1, s)
 #define I0(s)   CVT(src[0]+src[1]+src[2], 3, s)
 #define I1(s)   CVT(src[4]+src[5]+src[6], 3, s)
-#define PAL0(s) texture_pal(src+0, pal, 1 << (s))
-#define PAL1(s) texture_pal(src+4, pal, 1 << (s))
+#define PAL0(s) palette(src+0, pal, 1 << (s))
+#define PAL1(s) palette(src+4, pal, 1 << (s))
 
 #define fmt_rgba16  "0x%04X,", R0(5) << 11 | G0(5) << 6 | B0(5) << 1 | A0_1
 #define fmt_rgba32  "0x%08X,", R0_8 << 24 | G0_8 << 16 | B0_8 << 8 | A0_8
@@ -115,10 +114,9 @@ static const TEXTURE texture_table[] =
 int main(int argc, char *argv[])
 {
 	int i;
-	unsigned error;
 	unsigned char *src = NULL;
 	unsigned char *pal = NULL;
-	unsigned w, h, pal_w, pal_h;
+	unsigned error, w, h, pal_w, pal_h;
 	if (argc < 2 || argc > 3)
 	{
 		fprintf(stderr, "usage: %s <texture> [palette]\n", argv[0]);

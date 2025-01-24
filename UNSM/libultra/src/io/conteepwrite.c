@@ -15,7 +15,7 @@ s32 osEepromWrite(OSMesgQueue *mq, u8 address, u8 *buffer)
 	if (address > EEPROM_MAXBLOCKS) return -1;
 	__osSiGetAccess();
 	ret = __osEepStatus(mq, &sdata);
-	if (ret != 0 || sdata.type != CONT_EEPROM) return CONT_NO_RESPONSE_ERROR;
+	if (ret || sdata.type != CONT_EEPROM) return CONT_NO_RESPONSE_ERROR;
 	while (sdata.status & CONT_EEPROM_BUSY) __osEepStatus(mq, &sdata);
 	__osPackEepWriteData(address, buffer);
 	ret = __osSiRawStartDma(OS_WRITE, &__osEepPifRam);

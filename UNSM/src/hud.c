@@ -20,26 +20,38 @@ extern Gfx gfx_meter_end[];
 #define EDGE_Y          7
 
 #define HUD_XL          EDGE_X
-#define HUD_YL          EDGE_Y
+#define HUD_YL          (BORDER_HT+EDGE_Y)
 #define HUD_XM          (SCREEN_WD/2)
 #define HUD_YM          (SCREEN_HT/2)
 #define HUD_XH          (SCREEN_WD-EDGE_X)
 #define HUD_YH          (SCREEN_HT-BORDER_HT-EDGE_Y)
 
+#if REVISION > 199606
+#define HUD_TOP         (HUD_YH-16)
+#else
+#define HUD_TOP         (HUD_YH-15)
+#endif
+
 #define LIFE_X          HUD_XL
-#define LIFE_Y          (HUD_YH-16)
+#define LIFE_Y          HUD_TOP
 
 #define COIN_X          (HUD_XM+8)
-#define COIN_Y          (HUD_YH-16)
+#define COIN_Y          HUD_TOP
 
+/* JAPANESE ? */
+#if REVISION > 199606
 #define STAR_X          (HUD_XH-16-16-24)
-#define STAR_Y          (HUD_YH-16)
+#else
+#define STAR_X          (HUD_XH-16-16-19)
+#endif
+#define STAR_Y          HUD_TOP
 
 #define KEY_X           (HUD_XH-78)
 #define KEY_Y           (HUD_YM+22)
 
 #define TIME_X          (HUD_XH-128)
 #define TIME_Y          (HUD_YH-40)
+#define TIME_QY         (HUD_YL+17)
 #define TIME_MIN_X      (TIME_X+59)
 #define TIME_QMS_X      (TIME_MIN_X+10)
 #define TIME_SEC_X      (TIME_QMS_X+10)
@@ -76,7 +88,7 @@ static int meter_timer = 0;
 UNUSED static short hud_80332600 = 0;
 UNUSED static short hud_80332604 = 10;
 
-static void hud_draw_char(unsigned int x, unsigned int y, u16 *txt)
+static void HUD_DrawChar(unsigned int x, unsigned int y, u16 *txt)
 {
 	gDPPipeSync(glistp++);
 	gDPSetTextureImage(glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, txt);
@@ -87,7 +99,7 @@ static void hud_draw_char(unsigned int x, unsigned int y, u16 *txt)
 	);
 }
 
-static void hud_draw_8x8(unsigned int x, unsigned int y, u16 *txt)
+static void HUD_Draw8x8(unsigned int x, unsigned int y, u16 *txt)
 {
 	gDPSetLoadTile(glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b);
 	gDPSetImageBlock(
@@ -102,9 +114,9 @@ static void hud_draw_8x8(unsigned int x, unsigned int y, u16 *txt)
 	);
 }
 
-static void meter_draw_n(SHORT power)
+static void MeterDrawN(SHORT power)
 {
-	u16 **txt = segment_to_virtual(txt_meter_n);
+	u16 **txt = SegmentToVirtual(txt_meter_n);
 	gDPPipeSync(glistp++);
 	gDPLoadImageBlock(
 		glistp++, txt[power-1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32
@@ -112,25 +124,25 @@ static void meter_draw_n(SHORT power)
 	gSP2Triangles(glistp++, 0, 1, 2, 0, 0, 2, 3, 0);
 }
 
-static void meter_draw(SHORT power)
+static void MeterDraw(SHORT power)
 {
-	Mtx *mtx;
-	if (!(mtx = gfx_alloc(sizeof(Mtx)))) return;
+	Mtx *mtx = GfxAlloc(sizeof(Mtx));
+	if (!mtx) return;
 	guTranslate(mtx, meter.x, meter.y, 0);
 	gSPMatrix(
 		glistp++, K0_TO_PHYS(mtx++), G_MTX_MODELVIEW|G_MTX_MUL|G_MTX_PUSH
 	);
 	gSPDisplayList(glistp++, gfx_meter_0);
-	if (power != 0)
+	if (power)
 	{
 		gSPDisplayList(glistp++, gfx_meter_n);
-		meter_draw_n(power);
+		MeterDrawN(power);
 		gSPDisplayList(glistp++, gfx_meter_end);
 	}
 	gSPPopMatrix(glistp++, G_MTX_MODELVIEW);
 }
 
-static void meter_alert(void)
+static void MeterAlert(void)
 {
 	SHORT flag = hud.flag;
 	if (!(flag & HUD_ALERT))
@@ -143,7 +155,7 @@ static void meter_alert(void)
 	}
 }
 
-static void meter_show(void)
+static void MeterShow(void)
 {
 	SHORT vy = 5;
 	if (meter.y > METER_TOP-20) vy = 3;
@@ -157,7 +169,7 @@ static void meter_show(void)
 	}
 }
 
-static void meter_hide(void)
+static void MeterHide(void)
 {
 	meter.y += 20;
 	if (meter.y > METER_OUT)
@@ -167,7 +179,7 @@ static void meter_hide(void)
 	}
 }
 
-static void meter_proc(SHORT power)
+static void MeterProc(SHORT power)
 {
 	if (power < 8 && meter_power == 8 && meter.state == METER_OFF)
 	{
@@ -177,7 +189,7 @@ static void meter_proc(SHORT power)
 	if (power == 8 && meter_power == 7) meter_timer = 0;
 	if (power == 8 && meter_timer > FRAME(1.5)) meter.state = METER_HIDE;
 	meter_power = power;
-	if (pl_camera_data[0].state & 0x2000)
+	if (pl_camera_data[0].state & PF_SWIM)
 	{
 		if (meter.state == METER_OFF || meter.state == METER_ALERT)
 		{
@@ -188,37 +200,37 @@ static void meter_proc(SHORT power)
 	}
 }
 
-static void hud_draw_power(void)
+static void HUD_DrawPower(void)
 {
 	SHORT power = hud.power;
-	if (meter.state != METER_HIDE) meter_proc(power);
+	if (meter.state != METER_HIDE) MeterProc(power);
 	if (meter.state == METER_OFF) return;
 	switch (meter.state)
 	{
-	case 1: meter_alert(); break;
-	case 2: meter_show(); break;
-	case 3: meter_hide(); break;
+	case 1: MeterAlert(); break;
+	case 2: MeterShow(); break;
+	case 3: MeterHide(); break;
 	default: break;
 	}
-	meter_draw(power);
+	MeterDraw(power);
 	meter_timer++;
 }
 
-static void hud_draw_life(void)
+static void HUD_DrawLife(void)
 {
 	dprint(LIFE_X, LIFE_Y, ",");
 	dprint(LIFE_X+16, LIFE_Y, "*");
 	dprintf(LIFE_X+16+16, LIFE_Y, "%d", hud.life);
 }
 
-static void hud_draw_coin(void)
+static void HUD_DrawCoin(void)
 {
 	dprint(COIN_X, COIN_Y, "+");
 	dprint(COIN_X+16, COIN_Y, "*");
 	dprintf(COIN_X+16+14, COIN_Y, "%d", hud.coin);
 }
 
-static void hud_draw_star(void)
+static void HUD_DrawStar(void)
 {
 	CHAR flag = FALSE;
 	if (savemenu_code == 1 && (gfx_frame & 8)) return;
@@ -228,15 +240,15 @@ static void hud_draw_star(void)
 	dprintf(STAR_X+16+14*flag, STAR_Y, "%d", hud.star);
 }
 
-static void hud_draw_key(void)
+static void HUD_DrawKey(void)
 {
 	SHORT i;
 	for (i = 0; i < hud.key; i++) dprint(KEY_X+16*i, KEY_Y, "/");
 }
 
-static void hud_draw_time(void)
+static void HUD_DrawTime(void)
 {
-	u16 **txt = segment_to_virtual(txt_glbfont);
+	u16 **txt = SegmentToVirtual(txt_glbfont);
 	USHORT time = hud.time;
 	USHORT min = time / (30*60);
 	USHORT sec = (time - 30*60*min) / 30;
@@ -246,44 +258,44 @@ static void hud_draw_time(void)
 	dprintf(TIME_SEC_X, TIME_Y, "%02d", sec);
 	dprintf(TIME_FRC_X, TIME_Y, "%d", frc);
 	gSPDisplayList(glistp++, gfx_print_copy_start);
-	hud_draw_char(TIME_QMS_X, 32, txt[56]);
-	hud_draw_char(TIME_QSF_X, 32, txt[57]);
+	HUD_DrawChar(TIME_QMS_X, TIME_QY, txt[56]);
+	HUD_DrawChar(TIME_QSF_X, TIME_QY, txt[57]);
 	gSPDisplayList(glistp++, gfx_print_copy_end);
 }
 
 static s16 hud_camera = 0;
 
-void hud_set_camera(SHORT flag)
+void HUD_SetCamera(SHORT flag)
 {
 	hud_camera = flag;
 }
 
-static void hud_draw_camera(void)
+static void HUD_DrawCamera(void)
 {
-	u16 **txt = segment_to_virtual(txt_camera);
+	u16 **txt = SegmentToVirtual(txt_camera);
 	int x = CAMERA_X;
 	int y = CAMERA_Y;
-	if (hud_camera == 0) return;
+	if (!hud_camera) return;
 	gSPDisplayList(glistp++, gfx_print_copy_start);
-	hud_draw_char(x, y, txt[0]);
+	HUD_DrawChar(x, y, txt[0]);
 	switch (hud_camera & 7) /* T:hud_camera */
 	{
-	case 1: hud_draw_char(x+16, y, txt[1]); break;
-	case 2: hud_draw_char(x+16, y, txt[2]); break;
-	case 4: hud_draw_char(x+16, y, txt[3]); break;
+	case 1: HUD_DrawChar(x+16, y, txt[1]); break;
+	case 2: HUD_DrawChar(x+16, y, txt[2]); break;
+	case 4: HUD_DrawChar(x+16, y, txt[3]); break;
 	}
 	switch (hud_camera & 24) /* T:hud_camera */
 	{
-	case  8: hud_draw_8x8(x+4, y+16, txt[5]); break;
-	case 16: hud_draw_8x8(x+4, y- 8, txt[4]); break;
+	case  8: HUD_Draw8x8(x+4, y+16, txt[5]); break;
+	case 16: HUD_Draw8x8(x+4, y- 8, txt[4]); break;
 	}
 	gSPDisplayList(glistp++, gfx_print_copy_end);
 }
 
-void hud_draw(void)
+void HUD_Draw(void)
 {
 	SHORT flag = hud.flag;
-	if (flag == 0)
+	if (!flag)
 	{
 		meter.state = METER_OFF;
 		meter_power = 8;
@@ -291,18 +303,18 @@ void hud_draw(void)
 	}
 	else
 	{
-		gfx_screenproj();
+		GfxScreenProj();
 		/* T:enum */
-		if (scenep && scenep->cam->mode == 10) cannon_reticle_draw();
-		if (flag & HUD_LIFE) hud_draw_life();
-		if (flag & HUD_COIN) hud_draw_coin();
-		if (flag & HUD_STAR) hud_draw_star();
-		if (flag & HUD_KEY) hud_draw_key();
+		if (scenep && scenep->cam->mode == 10) DrawCannonReticle();
+		if (flag & HUD_LIFE) HUD_DrawLife();
+		if (flag & HUD_COIN) HUD_DrawCoin();
+		if (flag & HUD_STAR) HUD_DrawStar();
+		if (flag & HUD_KEY) HUD_DrawKey();
 		if (flag & HUD_METER)
 		{
-			hud_draw_power();
-			hud_draw_camera();
+			HUD_DrawPower();
+			HUD_DrawCamera();
 		}
-		if (flag & HUD_TIME) hud_draw_time();
+		if (flag & HUD_TIME) HUD_DrawTime();
 	}
 }

@@ -1,6 +1,6 @@
 #include <sm64.h>
 
-static void shape_init(SHAPE *shape, int type)
+static void ShpInit(SHAPE *shape, int type)
 {
 	shape->type = type;
 	shape->flag = SHP_ACTIVE;
@@ -10,46 +10,46 @@ static void shape_init(SHAPE *shape, int type)
 	shape->child = NULL;
 }
 
-S_SCENE *s_create_scene(
-	ARENA *arena, S_SCENE *shp, SHORT index, SHORT x, SHORT y, SHORT w, SHORT h
+SSCENE *ShpCreateScene(
+	ARENA *arena, SSCENE *shp, SHORT index, SHORT x, SHORT y, SHORT w, SHORT h
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_SCENE));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SSCENE));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_SCENE);
+		ShpInit(&shp->s, ST_SCENE);
 		shp->index = index;
 		shp->screen = 0;
 		shp->x = x;
 		shp->y = y;
 		shp->w = w;
 		shp->h = h;
-		shp->table = NULL;
-		shp->count = 0;
+		shp->reftab = NULL;
+		shp->reflen = 0;
 	}
 	return shp;
 }
 
-S_ORTHO *s_create_ortho(ARENA *arena, S_ORTHO *shp, float scale)
+SORTHO *ShpCreateOrtho(ARENA *arena, SORTHO *shp, float scale)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_ORTHO));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SORTHO));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_ORTHO);
+		ShpInit(&shp->s, ST_ORTHO);
 		shp->scale = scale;
 	}
 	return shp;
 }
 
-S_PERSP *s_create_persp(
-	ARENA *arena, S_PERSP *shp, float fovy, SHORT near, SHORT far,
+SPERSP *ShpCreatePersp(
+	ARENA *arena, SPERSP *shp, float fovy, SHORT near, SHORT far,
 	SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_PERSP));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SPERSP));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_PERSP);
+		ShpInit(&shp->s.s, ST_PERSP);
 		shp->fovy = fovy;
 		shp->near = near;
 		shp->far = far;
@@ -60,48 +60,48 @@ S_PERSP *s_create_persp(
 	return shp;
 }
 
-SHAPE *s_create_empty(ARENA *arena, SHAPE *shp)
+SHAPE *ShpCreateEmpty(ARENA *arena, SHAPE *shp)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(SHAPE));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SHAPE));
 	if (shp)
 	{
-		shape_init(shp, ST_EMPTY);
+		ShpInit(shp, ST_EMPTY);
 	}
 	return shp;
 }
 
-S_LAYER *s_create_layer(ARENA *arena, S_LAYER *shp, SHORT zb)
+SLAYER *ShpCreateLayer(ARENA *arena, SLAYER *shp, SHORT zb)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_LAYER));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SLAYER));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_LAYER);
+		ShpInit(&shp->s, ST_LAYER);
 		if (zb) shp->s.flag |= SHP_ZBUFFER;
 	}
 	return shp;
 }
 
-S_LOD *s_create_lod(ARENA *arena, S_LOD *shp, SHORT min, SHORT max)
+SLOD *ShpCreateLOD(ARENA *arena, SLOD *shp, SHORT min, SHORT max)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_LOD));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SLOD));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_LOD);
+		ShpInit(&shp->s, ST_LOD);
 		shp->min = min;
 		shp->max = max;
 	}
 	return shp;
 }
 
-S_SELECT *s_create_select(
-	ARENA *arena, S_SELECT *shp, SHORT code, SHORT index,
+SSELECT *ShpCreateSelect(
+	ARENA *arena, SSELECT *shp, SHORT code, SHORT index,
 	SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_SELECT));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SSELECT));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_SELECT);
+		ShpInit(&shp->s.s, ST_SELECT);
 		shp->code = code;
 		shp->index = index;
 		shp->s.callback = callback;
@@ -111,17 +111,17 @@ S_SELECT *s_create_select(
 	return shp;
 }
 
-S_CAMERA *s_create_camera(
-	ARENA *arena, S_CAMERA *shp, VECF eye, VECF look,
+SCAMERA *ShpCreateCamera(
+	ARENA *arena, SCAMERA *shp, FVEC eye, FVEC look,
 	SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_CAMERA));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SCAMERA));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_CAMERA);
-		vecf_cpy(shp->eye, eye);
-		vecf_cpy(shp->look, look);
+		ShpInit(&shp->s.s, ST_CAMERA);
+		FVecCpy(shp->eye, eye);
+		FVecCpy(shp->look, look);
 		shp->s.callback = callback;
 		shp->s.arg = arg;
 		shp->angz_m = 0;
@@ -131,76 +131,76 @@ S_CAMERA *s_create_camera(
 	return shp;
 }
 
-S_COORD *s_create_coord(
-	ARENA *arena, S_COORD *shp, int layer, Gfx *gfx, VECS pos, VECS ang
+SCOORD *ShpCreateCoord(
+	ARENA *arena, SCOORD *shp, int layer, Gfx *gfx, SVEC pos, SVEC ang
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_COORD));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SCOORD));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_COORD);
-		vecs_cpy(shp->pos, pos);
-		vecs_cpy(shp->ang, ang);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_COORD);
+		SVecCpy(shp->pos, pos);
+		SVecCpy(shp->ang, ang);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_POS *s_create_pos(ARENA *arena, S_POS *shp, int layer, Gfx *gfx, VECS pos)
+SPOS *ShpCreatePos(ARENA *arena, SPOS *shp, int layer, Gfx *gfx, SVEC pos)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_POS));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SPOS));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_POS);
-		vecs_cpy(shp->pos, pos);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_POS);
+		SVecCpy(shp->pos, pos);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_ANG *s_create_ang(ARENA *arena, S_ANG *shp, int layer, Gfx *gfx, VECS ang)
+SANG *ShpCreateAng(ARENA *arena, SANG *shp, int layer, Gfx *gfx, SVEC ang)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_ANG));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SANG));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_ANG);
-		vecs_cpy(shp->ang, ang);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_ANG);
+		SVecCpy(shp->ang, ang);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_SCALE *s_create_scale(
-	ARENA *arena, S_SCALE *shp, int layer, Gfx *gfx, float scale
+SSCALE *ShpCreateScale(
+	ARENA *arena, SSCALE *shp, int layer, Gfx *gfx, float scale
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_SCALE));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SSCALE));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_SCALE);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_SCALE);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->scale = scale;
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_OBJECT *s_create_object(
-	ARENA *arena, S_OBJECT *shp, SHAPE *shape, VECF pos, VECS ang, VECF scale
+SOBJECT *ShpCreateObject(
+	ARENA *arena, SOBJECT *shp, SHAPE *shape, FVEC pos, SVEC ang, FVEC scale
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_OBJECT));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SOBJECT));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_OBJECT);
-		vecf_cpy(shp->pos, pos);
-		vecf_cpy(shp->scale, scale);
-		vecs_cpy(shp->ang, ang);
+		ShpInit(&shp->s, ST_OBJECT);
+		FVecCpy(shp->pos, pos);
+		FVecCpy(shp->scale, scale);
+		SVecCpy(shp->ang, ang);
 		shp->shape = shape;
-		shp->mf = NULL;
+		shp->m = NULL;
 		shp->skel.index = 0;
 		shp->skel.anime = NULL;
 		shp->skel.frame = 0;
@@ -212,67 +212,67 @@ S_OBJECT *s_create_object(
 	return shp;
 }
 
-S_CULL *s_create_cull(ARENA *arena, S_CULL *shp, SHORT dist)
+SCULL *ShpCreateCull(ARENA *arena, SCULL *shp, SHORT dist)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_CULL));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SCULL));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_CULL);
+		ShpInit(&shp->s, ST_CULL);
 		shp->dist = dist;
 	}
 	return shp;
 }
 
-S_JOINT *s_create_joint(
-	ARENA *arena, S_JOINT *shp, int layer, Gfx *gfx, VECS pos
+SJOINT *ShpCreateJoint(
+	ARENA *arena, SJOINT *shp, int layer, Gfx *gfx, SVEC pos
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_JOINT));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SJOINT));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_JOINT);
-		vecs_cpy(shp->pos, pos);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_JOINT);
+		SVecCpy(shp->pos, pos);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_BILLBOARD *s_create_billboard(
-	ARENA *arena, S_BILLBOARD *shp, int layer, Gfx *gfx, VECS pos
+SBILLBOARD *ShpCreateBillboard(
+	ARENA *arena, SBILLBOARD *shp, int layer, Gfx *gfx, SVEC pos
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_BILLBOARD));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SBILLBOARD));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_BILLBOARD);
-		vecs_cpy(shp->pos, pos);
-		shape_set_layer(&shp->s.s, layer);
+		ShpInit(&shp->s.s, ST_BILLBOARD);
+		SVecCpy(shp->pos, pos);
+		ShpSetLayer(&shp->s.s, layer);
 		shp->s.gfx = gfx;
 	}
 	return shp;
 }
 
-S_GFX *s_create_gfx(ARENA *arena, S_GFX *shp, int layer, Gfx *gfx)
+SGFX *ShpCreateGfx(ARENA *arena, SGFX *shp, int layer, Gfx *gfx)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_GFX));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SGFX));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_GFX);
-		shape_set_layer(&shp->s, layer);
+		ShpInit(&shp->s, ST_GFX);
+		ShpSetLayer(&shp->s, layer);
 		shp->gfx = gfx;
 	}
 	return shp;
 }
 
-S_SHADOW *s_create_shadow(
-	ARENA *arena, S_SHADOW *shp, SHORT size, UCHAR alpha, UCHAR type
+SSHADOW *ShpCreateShadow(
+	ARENA *arena, SSHADOW *shp, SHORT size, UCHAR alpha, UCHAR type
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_SHADOW));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SSHADOW));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_SHADOW);
+		ShpInit(&shp->s, ST_SHADOW);
 		shp->size = size;
 		shp->alpha = alpha;
 		shp->type = type;
@@ -280,25 +280,25 @@ S_SHADOW *s_create_shadow(
 	return shp;
 }
 
-S_LIST *s_create_list(ARENA *arena, S_LIST *shp, SHAPE *shape)
+SBRANCH *ShpCreateBranch(ARENA *arena, SBRANCH *shp, SHAPE *shape)
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_LIST));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SBRANCH));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_LIST);
+		ShpInit(&shp->s, ST_BRANCH);
 		shp->shape = shape;
 	}
 	return shp;
 }
 
-S_CALLBACK *s_create_callback(
-	ARENA *arena, S_CALLBACK *shp, SHPCALL *callback, unsigned long arg
+SCALLBACK *ShpCreateCallback(
+	ARENA *arena, SCALLBACK *shp, SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_CALLBACK));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SCALLBACK));
 	if (shp)
 	{
-		shape_init(&shp->s, ST_CALLBACK);
+		ShpInit(&shp->s, ST_CALLBACK);
 		shp->callback = callback;
 		shp->arg = arg;
 		if (callback) callback(SC_INIT, &shp->s, arena);
@@ -306,14 +306,14 @@ S_CALLBACK *s_create_callback(
 	return shp;
 }
 
-S_BACK *s_create_back(
-	ARENA *arena, S_BACK *shp, USHORT code, SHPCALL *callback, unsigned long arg
+SBACK *ShpCreateBack(
+	ARENA *arena, SBACK *shp, USHORT code, SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_BACK));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SBACK));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_BACK);
+		ShpInit(&shp->s.s, ST_BACK);
 		shp->code = code << 16 | (u16)code;
 		shp->s.callback = callback;
 		shp->s.arg = arg;
@@ -322,16 +322,16 @@ S_BACK *s_create_back(
 	return shp;
 }
 
-S_HAND *s_create_hand(
-	ARENA *arena, S_HAND *shp, S_OBJECT *obj, VECS pos,
+SHAND *ShpCreateHand(
+	ARENA *arena, SHAND *shp, SOBJECT *obj, SVEC pos,
 	SHPCALL *callback, unsigned long arg
 )
 {
-	if (arena) shp = arena_alloc(arena, sizeof(S_HAND));
+	if (arena) shp = ArenaAlloc(arena, sizeof(SHAND));
 	if (shp)
 	{
-		shape_init(&shp->s.s, ST_HAND);
-		vecs_cpy(shp->pos, pos);
+		ShpInit(&shp->s.s, ST_HAND);
+		SVecCpy(shp->pos, pos);
 		shp->obj = obj;
 		shp->s.callback = callback;
 		shp->s.arg = arg;
@@ -340,7 +340,7 @@ S_HAND *s_create_hand(
 	return shp;
 }
 
-SHAPE *shape_link(SHAPE *parent, SHAPE *shape)
+SHAPE *ShpLink(SHAPE *parent, SHAPE *shape)
 {
 	if (shape)
 	{
@@ -364,7 +364,7 @@ SHAPE *shape_link(SHAPE *parent, SHAPE *shape)
 	return shape;
 }
 
-SHAPE *shape_unlink(SHAPE *shape)
+SHAPE *ShpUnlink(SHAPE *shape)
 {
 	SHAPE *parent = shape->parent;
 	SHAPE **child = &parent->child;
@@ -378,7 +378,7 @@ SHAPE *shape_unlink(SHAPE *shape)
 	return parent;
 }
 
-SHAPE *shape_makefirst(SHAPE *shape)
+SHAPE *ShpMakeFirst(SHAPE *shape)
 {
 	SHAPE *prev;
 	SHAPE *parent = shape->parent;
@@ -400,13 +400,13 @@ SHAPE *shape_makefirst(SHAPE *shape)
 	return parent;
 }
 
-static void shape_notify(SHAPE *shape, int code)
+static void ShpNotify(SHAPE *shape, int code)
 {
 	SHAPE **sptr;
 	SHAPE *shp = shape;
 	do
 	{
-		S_CALLBACK *cb = (S_CALLBACK *)shp;
+		SCALLBACK *cb = (SCALLBACK *)shp;
 		if (shp->type & SF_CALLBACK)
 		{
 			if (cb->callback) cb->callback(code, shp, NULL);
@@ -415,45 +415,45 @@ static void shape_notify(SHAPE *shape, int code)
 		{
 			switch (shp->type)
 			{
-			case ST_LAYER:  sptr = (SHAPE **)&s_layer;  break;
-			case ST_PERSP:  sptr = (SHAPE **)&s_persp;  break;
-			case ST_CAMERA: sptr = (SHAPE **)&s_camera; break;
-			case ST_OBJECT: sptr = (SHAPE **)&s_object; break;
-			default:        sptr = NULL;                break;
+			case ST_LAYER:  sptr = (SHAPE **)&draw_layer;   break;
+			case ST_PERSP:  sptr = (SHAPE **)&draw_persp;   break;
+			case ST_CAMERA: sptr = (SHAPE **)&draw_camera;  break;
+			case ST_OBJECT: sptr = (SHAPE **)&draw_object;  break;
+			default:        sptr = NULL;                    break;
 			}
 			if (sptr) *sptr = shp;
-			shape_notify(shp->child, code);
+			ShpNotify(shp->child, code);
 			if (sptr) *sptr = NULL;
 		}
 	}
 	while ((shp = shp->next) != shape);
 }
 
-void s_scene_notify(S_SCENE *shp, int code)
+void SSceneNotify(SSCENE *shp, int code)
 {
 	if (shp->s.flag & SHP_ACTIVE)
 	{
-		s_scene = shp;
-		if (shp->s.child) shape_notify(shp->s.child, code);
-		s_scene = 0;
+		draw_scene = shp;
+		if (shp->s.child) ShpNotify(shp->s.child, code);
+		draw_scene = 0;
 	}
 }
 
-void sobj_init(S_OBJECT *shp)
+void SObjInit(SOBJECT *shp)
 {
-	s_create_object(NULL, shp, NULL, vecf_0, vecs_0, vecf_1);
-	shape_link(&sobj_list, &shp->s);
+	ShpCreateObject(NULL, shp, NULL, fvec_0, svec_0, fvec_1);
+	ShpLink(&sobj_list, &shp->s);
 	shp->s.flag &= ~SHP_ACTIVE;
 }
 
-void sobj_enter(S_OBJECT *shp, SHAPE *shape, VECF pos, VECS ang)
+void SObjEnter(SOBJECT *shp, SHAPE *shape, FVEC pos, SVEC ang)
 {
-	vecf_set(shp->scale, 1, 1, 1);
-	vecf_cpy(shp->pos, pos);
-	vecs_cpy(shp->ang, ang);
+	FVecSet(shp->scale, 1, 1, 1);
+	FVecCpy(shp->pos, pos);
+	SVecCpy(shp->ang, ang);
 	shp->shape = shape;
 	shp->actor = NULL;
-	shp->mf = NULL;
+	shp->m = NULL;
 	shp->skel.anime = NULL;
 	shp->s.flag |= SHP_ACTIVE;
 	shp->s.flag &= ~SHP_OBJHIDE;
@@ -461,10 +461,10 @@ void sobj_enter(S_OBJECT *shp, SHAPE *shape, VECF pos, VECS ang)
 	shp->s.flag &= ~SHP_BILLBOARD;
 }
 
-void sobj_actor(S_OBJECT *shp, ACTOR *actor)
+void SObjActor(SOBJECT *shp, ACTOR *actor)
 {
-	vecf_set(shp->scale, 1, 1, 1);
-	vecs_cpy(shp->ang, actor->ang);
+	FVecSet(shp->scale, 1, 1, 1);
+	SVecCpy(shp->ang, actor->ang);
 	shp->pos[0] = actor->pos[0];
 	shp->pos[1] = actor->pos[1];
 	shp->pos[2] = actor->pos[2];
@@ -472,7 +472,7 @@ void sobj_actor(S_OBJECT *shp, ACTOR *actor)
 	shp->group = actor->group;
 	shp->shape = actor->shape;
 	shp->actor = actor;
-	shp->mf = NULL;
+	shp->m = NULL;
 	shp->skel.anime = NULL;
 	shp->s.flag |= SHP_ACTIVE;
 	shp->s.flag &= ~SHP_OBJHIDE;
@@ -480,10 +480,10 @@ void sobj_actor(S_OBJECT *shp, ACTOR *actor)
 	shp->s.flag &= ~SHP_BILLBOARD;
 }
 
-void sobj_set_anime(S_OBJECT *shp, ANIME **animep)
+void SObjSetAnime(SOBJECT *shp, ANIME **animep)
 {
-	ANIME **ap = segment_to_virtual(animep);
-	ANIME *anime = segment_to_virtual(*ap);
+	ANIME **ap = SegmentToVirtual(animep);
+	ANIME *anime = SegmentToVirtual(*ap);
 	if (shp->skel.anime != anime)
 	{
 		shp->skel.anime = anime;
@@ -494,10 +494,10 @@ void sobj_set_anime(S_OBJECT *shp, ANIME **animep)
 	}
 }
 
-void sobj_set_animev(S_OBJECT *shp, ANIME **animep, int speed)
+void SObjSetAnimeV(SOBJECT *shp, ANIME **animep, int speed)
 {
-	ANIME **ap = segment_to_virtual(animep);
-	ANIME *anime = segment_to_virtual(*ap);
+	ANIME **ap = SegmentToVirtual(animep);
+	ANIME *anime = SegmentToVirtual(*ap);
 	if (shp->skel.anime != anime)
 	{
 		shp->skel.anime = anime;
@@ -510,7 +510,7 @@ void sobj_set_animev(S_OBJECT *shp, ANIME **animep, int speed)
 	shp->skel.vspeed = speed;
 }
 
-int anime_index(int frame, u16 **tbl)
+int AnimeIndex(int frame, u16 **tbl)
 {
 	int index;
 	if (frame < (*tbl)[0])  index = (*tbl)[1] + frame;
@@ -526,7 +526,7 @@ int anime_index(int frame, u16 **tbl)
 #define GETFRAME()  (frame >> 16)
 #define SETFRAME(x) (frame = (frame & 0xFFFF) | (x) << 16)
 #endif
-int skel_step(SKELETON *skel, s32 *vframe)
+int SkelStep(SKELETON *skel, s32 *vframe)
 {
 	s32 frame;
 	ANIME *anime = skel->anime;
@@ -537,8 +537,8 @@ int skel_step(SKELETON *skel, s32 *vframe)
 	}
 	if (anime->flag & ANIME_REVERSE)
 	{
-		if (skel->vspeed != 0)  frame = skel->vframe - skel->vspeed;
-		else                    frame = (skel->frame-1) << 16;
+		if (skel->vspeed)   frame = skel->vframe - skel->vspeed;
+		else                frame = (skel->frame-1) << 16;
 		if (GETFRAME() < anime->loop)
 		{
 			if (anime->flag & ANIME_NOLOOP) SETFRAME(anime->loop);
@@ -547,8 +547,8 @@ int skel_step(SKELETON *skel, s32 *vframe)
 	}
 	else
 	{
-		if (skel->vspeed != 0)  frame = skel->vframe + skel->vspeed;
-		else                    frame = (skel->frame+1) << 16;
+		if (skel->vspeed)   frame = skel->vframe + skel->vspeed;
+		else                frame = (skel->frame+1) << 16;
 		if (GETFRAME() >= anime->frame)
 		{
 			if (anime->flag & ANIME_NOLOOP) SETFRAME(anime->frame-1);
@@ -562,30 +562,30 @@ int skel_step(SKELETON *skel, s32 *vframe)
 #undef SETFRAME
 
 UNUSED static
-void sobj_get_animepos(S_OBJECT *shp, VECF pos)
+void SObjGetAnimePos(SOBJECT *shp, FVEC pos)
 {
 	ANIME *anime = shp->skel.anime;
 	if (anime)
 	{
-		u16 *tbl = segment_to_virtual(anime->tbl);
-		short *val = segment_to_virtual(anime->val);
+		u16 *tbl = SegmentToVirtual(anime->tbl);
+		short *val = SegmentToVirtual(anime->val);
 		SHORT frame = shp->skel.frame;
 		if (frame < 0) frame = 0;
-		pos[0] = val[anime_index(frame, &tbl)];
-		pos[1] = val[anime_index(frame, &tbl)];
-		pos[2] = val[anime_index(frame, &tbl)];
+		pos[0] = val[AnimeIndex(frame, &tbl)];
+		pos[1] = val[AnimeIndex(frame, &tbl)];
+		pos[2] = val[AnimeIndex(frame, &tbl)];
 	}
 	else
 	{
-		vecf_set(pos, 0, 0, 0);
+		FVecSet(pos, 0, 0, 0);
 	}
 }
 
 UNUSED static
-S_SCENE *shape_get_scene(SHAPE *shape)
+SSCENE *ShpGetScene(SHAPE *shape)
 {
-	S_SCENE *shp = NULL;
+	SSCENE *shp = NULL;
 	while (shape->parent) shape = shape->parent;
-	if (shape->type == ST_SCENE) shp = (S_SCENE *)shape;
+	if (shape->type == ST_SCENE) shp = (SSCENE *)shape;
 	return shp;
 }

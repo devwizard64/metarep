@@ -9,7 +9,7 @@ int osSetTimer(
 	t->next = NULL;
 	t->prev = NULL;
 	t->interval = interval;
-	t->value = value != 0 ? value : interval;
+	t->value = value ? value : interval;
 	t->mq = mq;
 	t->msg = msg;
 	tim = __osInsertTimer(t);

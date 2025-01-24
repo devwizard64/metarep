@@ -1,5 +1,5 @@
-COMM_LABEL = True
-COMM_LINE = True
+COMM_LABEL = False
+COMM_LINE = False
 
 def sym(self, x, n, w=False):
 	if n == 2:

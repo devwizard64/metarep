@@ -136,16 +136,16 @@ $str: STR_FILE_NULL
 ----
 
 $str: STR_FILE_A
-[M]A
+{M}A
 
 $str: STR_FILE_B
-[M]B
+{M}B
 
 $str: STR_FILE_C
-[M]C
+{M}C
 
 $str: STR_FILE_D
-[M]D
+{M}D
 
 $str: STR_MARIO
 MARIO

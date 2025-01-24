@@ -1,5 +1,5 @@
-#ifndef __SM64_GBI_EXT_H__
-#define __SM64_GBI_EXT_H__
+#ifndef __SM64_GBIEXT_H__
+#define __SM64_GBIEXT_H__
 
 #define G_CC_SHADE_ENV          0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT
 #define G_CC_MODULATERGB_ENVA   TEXEL0, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT
@@ -125,4 +125,4 @@
 	gsDPSetTile(fmt, siz, ((((width) * siz##_LINE_BYTES)+7)>>3), 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks, shifts), \
 	gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC, ((height)-1) << G_TEXTURE_IMAGE_FRAC)
 
-#endif /* __SM64_GBI_EXT_H__ */
+#endif /* __SM64_GBIEXT_H__ */

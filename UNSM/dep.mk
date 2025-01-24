@@ -3,19 +3,19 @@ CODE_OBJ := \
 	$(BUILD)/src/graphics.o \
 	$(BUILD)/src/audio.o \
 	$(BUILD)/src/game.o \
-	$(BUILD)/src/collision.o $(BUILD)/src/collision.data.o \
-	$(BUILD)/src/player.o $(BUILD)/src/player.data.o \
-	$(BUILD)/src/physics.o $(BUILD)/src/physics.data.o \
+	$(BUILD)/src/collision.o \
+	$(BUILD)/src/player.o \
+	$(BUILD)/src/physics.o \
 	$(BUILD)/src/pldemo.o $(BUILD)/src/pldemo.data.o \
-	$(BUILD)/src/plhang.o $(BUILD)/src/plhang.data.o \
+	$(BUILD)/src/plspec.o $(BUILD)/src/plspec.data.o \
 	$(BUILD)/src/plwait.o $(BUILD)/src/plwait.data.o \
 	$(BUILD)/src/plmove.o $(BUILD)/src/plmove.data.o \
 	$(BUILD)/src/pljump.o $(BUILD)/src/pljump.data.o \
 	$(BUILD)/src/plswim.o $(BUILD)/src/plswim.data.o \
-	$(BUILD)/src/plhold.o $(BUILD)/src/plhold.data.o \
+	$(BUILD)/src/pltake.o $(BUILD)/src/pltake.data.o \
 	$(BUILD)/src/callback.o \
 	$(BUILD)/src/memory.o \
-	$(BUILD)/src/save.o \
+	$(BUILD)/src/backup.o \
 	$(BUILD)/src/scene.o \
 	$(BUILD)/src/draw.o \
 	$(BUILD)/src/time.o \
@@ -23,7 +23,7 @@ CODE_OBJ := \
 	$(BUILD)/src/camera.o $(BUILD)/src/camera.data.o \
 	$(BUILD)/src/course.o \
 	$(BUILD)/src/object.o \
-	$(BUILD)/src/objlib.o $(BUILD)/src/objlib.data.o \
+	$(BUILD)/src/objectlib.o \
 	$(BUILD)/src/object_a.o $(BUILD)/src/object_a.data.o \
 	$(BUILD)/src/ride.o \
 	$(BUILD)/src/hitcheck.o \
@@ -32,14 +32,14 @@ CODE_OBJ := \
 	$(BUILD)/src/debug.o \
 	$(BUILD)/src/wipe.o \
 	$(BUILD)/src/shadow.o \
-	$(BUILD)/src/back.o \
-	$(BUILD)/src/water.o $(BUILD)/src/water.data.o \
+	$(BUILD)/src/background.o \
+	$(BUILD)/src/water.o \
 	$(BUILD)/src/objshape.o \
-	$(BUILD)/src/wave.o $(BUILD)/src/wave.data.o \
+	$(BUILD)/src/wave.o \
 	$(BUILD)/src/dprint.o \
 	$(BUILD)/src/message.o \
-	$(BUILD)/src/weather.o $(BUILD)/src/weather.data.o \
-	$(BUILD)/src/lava.o $(BUILD)/src/lava.data.o \
+	$(BUILD)/src/weather.o \
+	$(BUILD)/src/lava.o \
 	$(BUILD)/src/tag.o \
 	$(BUILD)/src/hud.o \
 	$(BUILD)/src/object_b.o $(BUILD)/src/object_b.data.o \
@@ -99,14 +99,18 @@ IDO_C := \
 	$(BUILD)/src/graphics.o \
 	$(BUILD)/src/audio.o \
 	$(BUILD)/src/game.o \
+	$(BUILD)/src/collision.o \
+	$(BUILD)/src/player.o \
+	$(BUILD)/src/physics.o \
 	$(BUILD)/src/callback.o \
 	$(BUILD)/src/memory.o \
-	$(BUILD)/src/save.o \
+	$(BUILD)/src/backup.o \
 	$(BUILD)/src/scene.o \
 	$(BUILD)/src/draw.o \
 	$(BUILD)/src/time.o \
 	$(BUILD)/src/course.o \
 	$(BUILD)/src/object.o \
+	$(BUILD)/src/objectlib.o \
 	$(BUILD)/src/ride.o \
 	$(BUILD)/src/hitcheck.o \
 	$(BUILD)/src/objlist.o \
@@ -114,10 +118,14 @@ IDO_C := \
 	$(BUILD)/src/debug.o \
 	$(BUILD)/src/wipe.o \
 	$(BUILD)/src/shadow.o \
-	$(BUILD)/src/back.o \
+	$(BUILD)/src/background.o \
+	$(BUILD)/src/water.o \
 	$(BUILD)/src/objshape.o \
+	$(BUILD)/src/wave.o \
 	$(BUILD)/src/dprint.o \
 	$(BUILD)/src/message.o \
+	$(BUILD)/src/weather.o \
+	$(BUILD)/src/lava.o \
 	$(BUILD)/src/tag.o \
 	$(BUILD)/src/hud.o \
 	$(BUILD)/src/math.o \
@@ -217,18 +225,18 @@ SHAPE_DATA := \
 	$(BUILD)/shape/3common/shp.o \
 	$(BUILD)/shape/global/shp.o
 
-BACK_SZP := \
-	$(BUILD)/data/back/title.szp.o \
-	$(BUILD)/data/back/a.szp.o \
-	$(BUILD)/data/back/b.szp.o \
-	$(BUILD)/data/back/c.szp.o \
-	$(BUILD)/data/back/d.szp.o \
-	$(BUILD)/data/back/e.szp.o \
-	$(BUILD)/data/back/f.szp.o \
-	$(BUILD)/data/back/g.szp.o \
-	$(BUILD)/data/back/h.szp.o \
-	$(BUILD)/data/back/i.szp.o \
-	$(BUILD)/data/back/j.szp.o
+BACKGROUND_SZP := \
+	$(BUILD)/data/background/title.szp.o \
+	$(BUILD)/data/background/a.szp.o \
+	$(BUILD)/data/background/b.szp.o \
+	$(BUILD)/data/background/c.szp.o \
+	$(BUILD)/data/background/d.szp.o \
+	$(BUILD)/data/background/e.szp.o \
+	$(BUILD)/data/background/f.szp.o \
+	$(BUILD)/data/background/g.szp.o \
+	$(BUILD)/data/background/h.szp.o \
+	$(BUILD)/data/background/i.szp.o \
+	$(BUILD)/data/background/j.szp.o
 
 TEXTURE_SZP := \
 	$(BUILD)/data/texture/a.szp.o \
@@ -695,12 +703,12 @@ BULLY_DEP := \
 	shape/1b/bully/eyes.eye.h
 
 BLARGG_DEP := \
-	shape/1b/blargg/upper_jaw.h \
-	shape/1b/blargg/upper_jaw.teeth.h \
-	shape/1b/blargg/upper_jaw.upper_jaw.h \
 	shape/1b/blargg/lower_jaw.h \
 	shape/1b/blargg/lower_jaw.teeth.h \
 	shape/1b/blargg/lower_jaw.lower_jaw.h \
+	shape/1b/blargg/upper_jaw.h \
+	shape/1b/blargg/upper_jaw.teeth.h \
+	shape/1b/blargg/upper_jaw.upper_jaw.h \
 	shape/1b/blargg/body.h \
 	shape/1b/blargg/body.body.h
 
@@ -1243,6 +1251,34 @@ BOB_56_DEP := \
 	stage/bob/56/56.c16.h
 
 ################################################################################
+# PSS
+
+MINISLIDER_DEP := \
+	stage/pss/minislider/0.h \
+	stage/pss/minislider/0.i21_shade.h \
+	stage/pss/minislider/0.i21_light.h \
+	stage/pss/minislider/0.0_light.h \
+	stage/pss/minislider/0.i0_light.h \
+	stage/pss/minislider/0.i10_light.h \
+	stage/pss/minislider/0.i2_light.h \
+	stage/pss/minislider/1.h \
+	stage/pss/minislider/1.i21.h \
+	stage/pss/minislider/1.i0.h \
+	stage/pss/minislider/1.i12.h \
+	stage/pss/minislider/2.h \
+	stage/pss/minislider/2.i13.h \
+	stage/pss/minislider/3.h \
+	stage/pss/minislider/3.i12.h \
+	stage/pss/minislider/4.h \
+	stage/pss/minislider/4.1.h \
+	stage/pss/minislider/5.h \
+	stage/pss/minislider/5.i12.h \
+	stage/pss/minislider/5.0.h \
+	stage/pss/minislider/5.i10.h \
+	stage/pss/minislider/6.h \
+	stage/pss/minislider/6.2.h
+
+################################################################################
 
 GFX_DEP := \
 	data/gfx/glbfont/0.rgba16.h \
@@ -1729,14 +1765,14 @@ TITLE_DEBUG_DEP := \
 	$(DEBUG_DEP)
 
 TITLE_BACK_DEP := \
-	data/back/title/mario.0.rgba16.h \
-	data/back/title/mario.1.rgba16.h \
-	data/back/title/mario.2.rgba16.h \
-	data/back/title/mario.3.rgba16.h \
-	data/back/title/gameover.0.rgba16.h \
-	data/back/title/gameover.1.rgba16.h \
-	data/back/title/gameover.2.rgba16.h \
-	data/back/title/gameover.3.rgba16.h
+	data/background/title/mario.0.rgba16.h \
+	data/background/title/mario.1.rgba16.h \
+	data/background/title/mario.2.rgba16.h \
+	data/background/title/mario.3.rgba16.h \
+	data/background/title/gameover.0.rgba16.h \
+	data/background/title/gameover.1.rgba16.h \
+	data/background/title/gameover.2.rgba16.h \
+	data/background/title/gameover.3.rgba16.h
 
 SELECT_DEP := \
 	stage/select/file/light.rgba16.h \
@@ -1832,604 +1868,604 @@ SELECT_DEP := \
 	stage/select/course/l.rgba16.h \
 	stage/select/map.h
 
-BACK_A_DEP := \
-	data/back/a/00.rgba16.h \
-	data/back/a/01.rgba16.h \
-	data/back/a/02.rgba16.h \
-	data/back/a/03.rgba16.h \
-	data/back/a/04.rgba16.h \
-	data/back/a/05.rgba16.h \
-	data/back/a/06.rgba16.h \
-	data/back/a/07.rgba16.h \
-	data/back/a/10.rgba16.h \
-	data/back/a/11.rgba16.h \
-	data/back/a/12.rgba16.h \
-	data/back/a/13.rgba16.h \
-	data/back/a/14.rgba16.h \
-	data/back/a/15.rgba16.h \
-	data/back/a/16.rgba16.h \
-	data/back/a/17.rgba16.h \
-	data/back/a/20.rgba16.h \
-	data/back/a/21.rgba16.h \
-	data/back/a/22.rgba16.h \
-	data/back/a/23.rgba16.h \
-	data/back/a/24.rgba16.h \
-	data/back/a/25.rgba16.h \
-	data/back/a/26.rgba16.h \
-	data/back/a/27.rgba16.h \
-	data/back/a/30.rgba16.h \
-	data/back/a/31.rgba16.h \
-	data/back/a/32.rgba16.h \
-	data/back/a/33.rgba16.h \
-	data/back/a/34.rgba16.h \
-	data/back/a/35.rgba16.h \
-	data/back/a/36.rgba16.h \
-	data/back/a/37.rgba16.h \
-	data/back/a/40.rgba16.h \
-	data/back/a/41.rgba16.h \
-	data/back/a/42.rgba16.h \
-	data/back/a/43.rgba16.h \
-	data/back/a/44.rgba16.h \
-	data/back/a/45.rgba16.h \
-	data/back/a/46.rgba16.h \
-	data/back/a/47.rgba16.h \
-	data/back/a/50.rgba16.h \
-	data/back/a/51.rgba16.h \
-	data/back/a/52.rgba16.h \
-	data/back/a/53.rgba16.h \
-	data/back/a/54.rgba16.h \
-	data/back/a/55.rgba16.h \
-	data/back/a/56.rgba16.h \
-	data/back/a/57.rgba16.h \
-	data/back/a/60.rgba16.h \
-	data/back/a/61.rgba16.h \
-	data/back/a/62.rgba16.h \
-	data/back/a/63.rgba16.h \
-	data/back/a/64.rgba16.h \
-	data/back/a/65.rgba16.h \
-	data/back/a/66.rgba16.h \
-	data/back/a/67.rgba16.h \
-	data/back/a/70.rgba16.h \
-	data/back/a/71.rgba16.h \
-	data/back/a/72.rgba16.h \
-	data/back/a/73.rgba16.h \
-	data/back/a/74.rgba16.h \
-	data/back/a/75.rgba16.h \
-	data/back/a/76.rgba16.h \
-	data/back/a/77.rgba16.h
+BACKGROUND_A_DEP := \
+	data/background/a/00.rgba16.h \
+	data/background/a/01.rgba16.h \
+	data/background/a/02.rgba16.h \
+	data/background/a/03.rgba16.h \
+	data/background/a/04.rgba16.h \
+	data/background/a/05.rgba16.h \
+	data/background/a/06.rgba16.h \
+	data/background/a/07.rgba16.h \
+	data/background/a/10.rgba16.h \
+	data/background/a/11.rgba16.h \
+	data/background/a/12.rgba16.h \
+	data/background/a/13.rgba16.h \
+	data/background/a/14.rgba16.h \
+	data/background/a/15.rgba16.h \
+	data/background/a/16.rgba16.h \
+	data/background/a/17.rgba16.h \
+	data/background/a/20.rgba16.h \
+	data/background/a/21.rgba16.h \
+	data/background/a/22.rgba16.h \
+	data/background/a/23.rgba16.h \
+	data/background/a/24.rgba16.h \
+	data/background/a/25.rgba16.h \
+	data/background/a/26.rgba16.h \
+	data/background/a/27.rgba16.h \
+	data/background/a/30.rgba16.h \
+	data/background/a/31.rgba16.h \
+	data/background/a/32.rgba16.h \
+	data/background/a/33.rgba16.h \
+	data/background/a/34.rgba16.h \
+	data/background/a/35.rgba16.h \
+	data/background/a/36.rgba16.h \
+	data/background/a/37.rgba16.h \
+	data/background/a/40.rgba16.h \
+	data/background/a/41.rgba16.h \
+	data/background/a/42.rgba16.h \
+	data/background/a/43.rgba16.h \
+	data/background/a/44.rgba16.h \
+	data/background/a/45.rgba16.h \
+	data/background/a/46.rgba16.h \
+	data/background/a/47.rgba16.h \
+	data/background/a/50.rgba16.h \
+	data/background/a/51.rgba16.h \
+	data/background/a/52.rgba16.h \
+	data/background/a/53.rgba16.h \
+	data/background/a/54.rgba16.h \
+	data/background/a/55.rgba16.h \
+	data/background/a/56.rgba16.h \
+	data/background/a/57.rgba16.h \
+	data/background/a/60.rgba16.h \
+	data/background/a/61.rgba16.h \
+	data/background/a/62.rgba16.h \
+	data/background/a/63.rgba16.h \
+	data/background/a/64.rgba16.h \
+	data/background/a/65.rgba16.h \
+	data/background/a/66.rgba16.h \
+	data/background/a/67.rgba16.h \
+	data/background/a/70.rgba16.h \
+	data/background/a/71.rgba16.h \
+	data/background/a/72.rgba16.h \
+	data/background/a/73.rgba16.h \
+	data/background/a/74.rgba16.h \
+	data/background/a/75.rgba16.h \
+	data/background/a/76.rgba16.h \
+	data/background/a/77.rgba16.h
 
-BACK_B_DEP := \
-	data/back/b/00.rgba16.h \
-	data/back/b/01.rgba16.h \
-	data/back/b/02.rgba16.h \
-	data/back/b/03.rgba16.h \
-	data/back/b/04.rgba16.h \
-	data/back/b/05.rgba16.h \
-	data/back/b/06.rgba16.h \
-	data/back/b/07.rgba16.h \
-	data/back/b/10.rgba16.h \
-	data/back/b/11.rgba16.h \
-	data/back/b/12.rgba16.h \
-	data/back/b/13.rgba16.h \
-	data/back/b/14.rgba16.h \
-	data/back/b/15.rgba16.h \
-	data/back/b/16.rgba16.h \
-	data/back/b/17.rgba16.h \
-	data/back/b/20.rgba16.h \
-	data/back/b/21.rgba16.h \
-	data/back/b/22.rgba16.h \
-	data/back/b/23.rgba16.h \
-	data/back/b/24.rgba16.h \
-	data/back/b/25.rgba16.h \
-	data/back/b/26.rgba16.h \
-	data/back/b/27.rgba16.h \
-	data/back/b/30.rgba16.h \
-	data/back/b/31.rgba16.h \
-	data/back/b/32.rgba16.h \
-	data/back/b/33.rgba16.h \
-	data/back/b/34.rgba16.h \
-	data/back/b/35.rgba16.h \
-	data/back/b/36.rgba16.h \
-	data/back/b/37.rgba16.h \
-	data/back/b/40.rgba16.h \
-	data/back/b/41.rgba16.h \
-	data/back/b/42.rgba16.h \
-	data/back/b/43.rgba16.h \
-	data/back/b/44.rgba16.h \
-	data/back/b/45.rgba16.h \
-	data/back/b/46.rgba16.h \
-	data/back/b/47.rgba16.h \
-	data/back/b/50.rgba16.h \
-	data/back/b/51.rgba16.h \
-	data/back/b/52.rgba16.h \
-	data/back/b/53.rgba16.h \
-	data/back/b/54.rgba16.h \
-	data/back/b/55.rgba16.h \
-	data/back/b/56.rgba16.h \
-	data/back/b/57.rgba16.h \
-	data/back/b/60.rgba16.h \
-	data/back/b/61.rgba16.h \
-	data/back/b/62.rgba16.h \
-	data/back/b/63.rgba16.h \
-	data/back/b/64.rgba16.h \
-	data/back/b/65.rgba16.h \
-	data/back/b/66.rgba16.h \
-	data/back/b/67.rgba16.h \
-	data/back/b/70.rgba16.h \
-	data/back/b/71.rgba16.h \
-	data/back/b/72.rgba16.h \
-	data/back/b/73.rgba16.h \
-	data/back/b/74.rgba16.h \
-	data/back/b/75.rgba16.h \
-	data/back/b/76.rgba16.h \
-	data/back/b/77.rgba16.h
+BACKGROUND_B_DEP := \
+	data/background/b/00.rgba16.h \
+	data/background/b/01.rgba16.h \
+	data/background/b/02.rgba16.h \
+	data/background/b/03.rgba16.h \
+	data/background/b/04.rgba16.h \
+	data/background/b/05.rgba16.h \
+	data/background/b/06.rgba16.h \
+	data/background/b/07.rgba16.h \
+	data/background/b/10.rgba16.h \
+	data/background/b/11.rgba16.h \
+	data/background/b/12.rgba16.h \
+	data/background/b/13.rgba16.h \
+	data/background/b/14.rgba16.h \
+	data/background/b/15.rgba16.h \
+	data/background/b/16.rgba16.h \
+	data/background/b/17.rgba16.h \
+	data/background/b/20.rgba16.h \
+	data/background/b/21.rgba16.h \
+	data/background/b/22.rgba16.h \
+	data/background/b/23.rgba16.h \
+	data/background/b/24.rgba16.h \
+	data/background/b/25.rgba16.h \
+	data/background/b/26.rgba16.h \
+	data/background/b/27.rgba16.h \
+	data/background/b/30.rgba16.h \
+	data/background/b/31.rgba16.h \
+	data/background/b/32.rgba16.h \
+	data/background/b/33.rgba16.h \
+	data/background/b/34.rgba16.h \
+	data/background/b/35.rgba16.h \
+	data/background/b/36.rgba16.h \
+	data/background/b/37.rgba16.h \
+	data/background/b/40.rgba16.h \
+	data/background/b/41.rgba16.h \
+	data/background/b/42.rgba16.h \
+	data/background/b/43.rgba16.h \
+	data/background/b/44.rgba16.h \
+	data/background/b/45.rgba16.h \
+	data/background/b/46.rgba16.h \
+	data/background/b/47.rgba16.h \
+	data/background/b/50.rgba16.h \
+	data/background/b/51.rgba16.h \
+	data/background/b/52.rgba16.h \
+	data/background/b/53.rgba16.h \
+	data/background/b/54.rgba16.h \
+	data/background/b/55.rgba16.h \
+	data/background/b/56.rgba16.h \
+	data/background/b/57.rgba16.h \
+	data/background/b/60.rgba16.h \
+	data/background/b/61.rgba16.h \
+	data/background/b/62.rgba16.h \
+	data/background/b/63.rgba16.h \
+	data/background/b/64.rgba16.h \
+	data/background/b/65.rgba16.h \
+	data/background/b/66.rgba16.h \
+	data/background/b/67.rgba16.h \
+	data/background/b/70.rgba16.h \
+	data/background/b/71.rgba16.h \
+	data/background/b/72.rgba16.h \
+	data/background/b/73.rgba16.h \
+	data/background/b/74.rgba16.h \
+	data/background/b/75.rgba16.h \
+	data/background/b/76.rgba16.h \
+	data/background/b/77.rgba16.h
 
-BACK_C_DEP := \
-	data/back/c/00.rgba16.h \
-	data/back/c/01.rgba16.h \
-	data/back/c/02.rgba16.h \
-	data/back/c/03.rgba16.h \
-	data/back/c/04.rgba16.h \
-	data/back/c/05.rgba16.h \
-	data/back/c/06.rgba16.h \
-	data/back/c/07.rgba16.h \
-	data/back/c/10.rgba16.h \
-	data/back/c/11.rgba16.h \
-	data/back/c/12.rgba16.h \
-	data/back/c/13.rgba16.h \
-	data/back/c/14.rgba16.h \
-	data/back/c/15.rgba16.h \
-	data/back/c/16.rgba16.h \
-	data/back/c/17.rgba16.h \
-	data/back/c/20.rgba16.h \
-	data/back/c/21.rgba16.h \
-	data/back/c/22.rgba16.h \
-	data/back/c/23.rgba16.h \
-	data/back/c/24.rgba16.h \
-	data/back/c/25.rgba16.h \
-	data/back/c/26.rgba16.h \
-	data/back/c/27.rgba16.h \
-	data/back/c/30.rgba16.h \
-	data/back/c/31.rgba16.h \
-	data/back/c/32.rgba16.h \
-	data/back/c/33.rgba16.h \
-	data/back/c/34.rgba16.h \
-	data/back/c/35.rgba16.h \
-	data/back/c/36.rgba16.h \
-	data/back/c/37.rgba16.h \
-	data/back/c/40.rgba16.h \
-	data/back/c/41.rgba16.h \
-	data/back/c/42.rgba16.h \
-	data/back/c/43.rgba16.h \
-	data/back/c/44.rgba16.h \
-	data/back/c/45.rgba16.h \
-	data/back/c/46.rgba16.h \
-	data/back/c/47.rgba16.h \
-	data/back/c/50.rgba16.h
+BACKGROUND_C_DEP := \
+	data/background/c/00.rgba16.h \
+	data/background/c/01.rgba16.h \
+	data/background/c/02.rgba16.h \
+	data/background/c/03.rgba16.h \
+	data/background/c/04.rgba16.h \
+	data/background/c/05.rgba16.h \
+	data/background/c/06.rgba16.h \
+	data/background/c/07.rgba16.h \
+	data/background/c/10.rgba16.h \
+	data/background/c/11.rgba16.h \
+	data/background/c/12.rgba16.h \
+	data/background/c/13.rgba16.h \
+	data/background/c/14.rgba16.h \
+	data/background/c/15.rgba16.h \
+	data/background/c/16.rgba16.h \
+	data/background/c/17.rgba16.h \
+	data/background/c/20.rgba16.h \
+	data/background/c/21.rgba16.h \
+	data/background/c/22.rgba16.h \
+	data/background/c/23.rgba16.h \
+	data/background/c/24.rgba16.h \
+	data/background/c/25.rgba16.h \
+	data/background/c/26.rgba16.h \
+	data/background/c/27.rgba16.h \
+	data/background/c/30.rgba16.h \
+	data/background/c/31.rgba16.h \
+	data/background/c/32.rgba16.h \
+	data/background/c/33.rgba16.h \
+	data/background/c/34.rgba16.h \
+	data/background/c/35.rgba16.h \
+	data/background/c/36.rgba16.h \
+	data/background/c/37.rgba16.h \
+	data/background/c/40.rgba16.h \
+	data/background/c/41.rgba16.h \
+	data/background/c/42.rgba16.h \
+	data/background/c/43.rgba16.h \
+	data/background/c/44.rgba16.h \
+	data/background/c/45.rgba16.h \
+	data/background/c/46.rgba16.h \
+	data/background/c/47.rgba16.h \
+	data/background/c/50.rgba16.h
 
-BACK_D_DEP := \
-	data/back/d/00.rgba16.h \
-	data/back/d/01.rgba16.h \
-	data/back/d/02.rgba16.h \
-	data/back/d/03.rgba16.h \
-	data/back/d/04.rgba16.h \
-	data/back/d/05.rgba16.h \
-	data/back/d/06.rgba16.h \
-	data/back/d/07.rgba16.h \
-	data/back/d/10.rgba16.h \
-	data/back/d/11.rgba16.h \
-	data/back/d/12.rgba16.h \
-	data/back/d/13.rgba16.h \
-	data/back/d/14.rgba16.h \
-	data/back/d/15.rgba16.h \
-	data/back/d/16.rgba16.h \
-	data/back/d/17.rgba16.h \
-	data/back/d/20.rgba16.h \
-	data/back/d/21.rgba16.h \
-	data/back/d/22.rgba16.h \
-	data/back/d/23.rgba16.h \
-	data/back/d/24.rgba16.h \
-	data/back/d/25.rgba16.h \
-	data/back/d/26.rgba16.h \
-	data/back/d/27.rgba16.h \
-	data/back/d/30.rgba16.h \
-	data/back/d/31.rgba16.h \
-	data/back/d/32.rgba16.h \
-	data/back/d/33.rgba16.h \
-	data/back/d/34.rgba16.h \
-	data/back/d/35.rgba16.h \
-	data/back/d/36.rgba16.h \
-	data/back/d/37.rgba16.h \
-	data/back/d/40.rgba16.h \
-	data/back/d/41.rgba16.h \
-	data/back/d/42.rgba16.h \
-	data/back/d/43.rgba16.h \
-	data/back/d/44.rgba16.h \
-	data/back/d/45.rgba16.h \
-	data/back/d/46.rgba16.h \
-	data/back/d/47.rgba16.h \
-	data/back/d/50.rgba16.h \
-	data/back/d/51.rgba16.h \
-	data/back/d/52.rgba16.h \
-	data/back/d/53.rgba16.h \
-	data/back/d/54.rgba16.h \
-	data/back/d/55.rgba16.h \
-	data/back/d/56.rgba16.h \
-	data/back/d/57.rgba16.h \
-	data/back/d/60.rgba16.h
+BACKGROUND_D_DEP := \
+	data/background/d/00.rgba16.h \
+	data/background/d/01.rgba16.h \
+	data/background/d/02.rgba16.h \
+	data/background/d/03.rgba16.h \
+	data/background/d/04.rgba16.h \
+	data/background/d/05.rgba16.h \
+	data/background/d/06.rgba16.h \
+	data/background/d/07.rgba16.h \
+	data/background/d/10.rgba16.h \
+	data/background/d/11.rgba16.h \
+	data/background/d/12.rgba16.h \
+	data/background/d/13.rgba16.h \
+	data/background/d/14.rgba16.h \
+	data/background/d/15.rgba16.h \
+	data/background/d/16.rgba16.h \
+	data/background/d/17.rgba16.h \
+	data/background/d/20.rgba16.h \
+	data/background/d/21.rgba16.h \
+	data/background/d/22.rgba16.h \
+	data/background/d/23.rgba16.h \
+	data/background/d/24.rgba16.h \
+	data/background/d/25.rgba16.h \
+	data/background/d/26.rgba16.h \
+	data/background/d/27.rgba16.h \
+	data/background/d/30.rgba16.h \
+	data/background/d/31.rgba16.h \
+	data/background/d/32.rgba16.h \
+	data/background/d/33.rgba16.h \
+	data/background/d/34.rgba16.h \
+	data/background/d/35.rgba16.h \
+	data/background/d/36.rgba16.h \
+	data/background/d/37.rgba16.h \
+	data/background/d/40.rgba16.h \
+	data/background/d/41.rgba16.h \
+	data/background/d/42.rgba16.h \
+	data/background/d/43.rgba16.h \
+	data/background/d/44.rgba16.h \
+	data/background/d/45.rgba16.h \
+	data/background/d/46.rgba16.h \
+	data/background/d/47.rgba16.h \
+	data/background/d/50.rgba16.h \
+	data/background/d/51.rgba16.h \
+	data/background/d/52.rgba16.h \
+	data/background/d/53.rgba16.h \
+	data/background/d/54.rgba16.h \
+	data/background/d/55.rgba16.h \
+	data/background/d/56.rgba16.h \
+	data/background/d/57.rgba16.h \
+	data/background/d/60.rgba16.h
 
-BACK_E_DEP := \
-	data/back/e/00.rgba16.h \
-	data/back/e/01.rgba16.h \
-	data/back/e/02.rgba16.h \
-	data/back/e/03.rgba16.h \
-	data/back/e/04.rgba16.h \
-	data/back/e/05.rgba16.h \
-	data/back/e/06.rgba16.h \
-	data/back/e/07.rgba16.h \
-	data/back/e/10.rgba16.h \
-	data/back/e/11.rgba16.h \
-	data/back/e/12.rgba16.h \
-	data/back/e/13.rgba16.h \
-	data/back/e/14.rgba16.h \
-	data/back/e/15.rgba16.h \
-	data/back/e/16.rgba16.h \
-	data/back/e/17.rgba16.h \
-	data/back/e/20.rgba16.h \
-	data/back/e/21.rgba16.h \
-	data/back/e/22.rgba16.h \
-	data/back/e/23.rgba16.h \
-	data/back/e/24.rgba16.h \
-	data/back/e/25.rgba16.h \
-	data/back/e/26.rgba16.h \
-	data/back/e/27.rgba16.h \
-	data/back/e/30.rgba16.h \
-	data/back/e/31.rgba16.h \
-	data/back/e/32.rgba16.h \
-	data/back/e/33.rgba16.h \
-	data/back/e/34.rgba16.h \
-	data/back/e/35.rgba16.h \
-	data/back/e/36.rgba16.h \
-	data/back/e/37.rgba16.h \
-	data/back/e/40.rgba16.h \
-	data/back/e/41.rgba16.h \
-	data/back/e/42.rgba16.h \
-	data/back/e/43.rgba16.h \
-	data/back/e/44.rgba16.h \
-	data/back/e/45.rgba16.h \
-	data/back/e/46.rgba16.h \
-	data/back/e/47.rgba16.h \
-	data/back/e/50.rgba16.h \
-	data/back/e/51.rgba16.h \
-	data/back/e/52.rgba16.h \
-	data/back/e/53.rgba16.h \
-	data/back/e/54.rgba16.h \
-	data/back/e/55.rgba16.h \
-	data/back/e/56.rgba16.h \
-	data/back/e/57.rgba16.h \
-	data/back/e/60.rgba16.h \
-	data/back/e/61.rgba16.h \
-	data/back/e/62.rgba16.h \
-	data/back/e/63.rgba16.h \
-	data/back/e/64.rgba16.h \
-	data/back/e/65.rgba16.h \
-	data/back/e/66.rgba16.h \
-	data/back/e/67.rgba16.h \
-	data/back/e/70.rgba16.h \
-	data/back/e/71.rgba16.h \
-	data/back/e/72.rgba16.h \
-	data/back/e/73.rgba16.h \
-	data/back/e/74.rgba16.h \
-	data/back/e/75.rgba16.h \
-	data/back/e/76.rgba16.h \
-	data/back/e/77.rgba16.h
+BACKGROUND_E_DEP := \
+	data/background/e/00.rgba16.h \
+	data/background/e/01.rgba16.h \
+	data/background/e/02.rgba16.h \
+	data/background/e/03.rgba16.h \
+	data/background/e/04.rgba16.h \
+	data/background/e/05.rgba16.h \
+	data/background/e/06.rgba16.h \
+	data/background/e/07.rgba16.h \
+	data/background/e/10.rgba16.h \
+	data/background/e/11.rgba16.h \
+	data/background/e/12.rgba16.h \
+	data/background/e/13.rgba16.h \
+	data/background/e/14.rgba16.h \
+	data/background/e/15.rgba16.h \
+	data/background/e/16.rgba16.h \
+	data/background/e/17.rgba16.h \
+	data/background/e/20.rgba16.h \
+	data/background/e/21.rgba16.h \
+	data/background/e/22.rgba16.h \
+	data/background/e/23.rgba16.h \
+	data/background/e/24.rgba16.h \
+	data/background/e/25.rgba16.h \
+	data/background/e/26.rgba16.h \
+	data/background/e/27.rgba16.h \
+	data/background/e/30.rgba16.h \
+	data/background/e/31.rgba16.h \
+	data/background/e/32.rgba16.h \
+	data/background/e/33.rgba16.h \
+	data/background/e/34.rgba16.h \
+	data/background/e/35.rgba16.h \
+	data/background/e/36.rgba16.h \
+	data/background/e/37.rgba16.h \
+	data/background/e/40.rgba16.h \
+	data/background/e/41.rgba16.h \
+	data/background/e/42.rgba16.h \
+	data/background/e/43.rgba16.h \
+	data/background/e/44.rgba16.h \
+	data/background/e/45.rgba16.h \
+	data/background/e/46.rgba16.h \
+	data/background/e/47.rgba16.h \
+	data/background/e/50.rgba16.h \
+	data/background/e/51.rgba16.h \
+	data/background/e/52.rgba16.h \
+	data/background/e/53.rgba16.h \
+	data/background/e/54.rgba16.h \
+	data/background/e/55.rgba16.h \
+	data/background/e/56.rgba16.h \
+	data/background/e/57.rgba16.h \
+	data/background/e/60.rgba16.h \
+	data/background/e/61.rgba16.h \
+	data/background/e/62.rgba16.h \
+	data/background/e/63.rgba16.h \
+	data/background/e/64.rgba16.h \
+	data/background/e/65.rgba16.h \
+	data/background/e/66.rgba16.h \
+	data/background/e/67.rgba16.h \
+	data/background/e/70.rgba16.h \
+	data/background/e/71.rgba16.h \
+	data/background/e/72.rgba16.h \
+	data/background/e/73.rgba16.h \
+	data/background/e/74.rgba16.h \
+	data/background/e/75.rgba16.h \
+	data/background/e/76.rgba16.h \
+	data/background/e/77.rgba16.h
 
-BACK_F_DEP := \
-	data/back/f/00.rgba16.h \
-	data/back/f/01.rgba16.h \
-	data/back/f/02.rgba16.h \
-	data/back/f/03.rgba16.h \
-	data/back/f/04.rgba16.h \
-	data/back/f/05.rgba16.h \
-	data/back/f/06.rgba16.h \
-	data/back/f/07.rgba16.h \
-	data/back/f/10.rgba16.h \
-	data/back/f/11.rgba16.h \
-	data/back/f/12.rgba16.h \
-	data/back/f/13.rgba16.h \
-	data/back/f/14.rgba16.h \
-	data/back/f/15.rgba16.h \
-	data/back/f/16.rgba16.h \
-	data/back/f/17.rgba16.h \
-	data/back/f/20.rgba16.h \
-	data/back/f/21.rgba16.h \
-	data/back/f/22.rgba16.h \
-	data/back/f/23.rgba16.h \
-	data/back/f/24.rgba16.h \
-	data/back/f/25.rgba16.h \
-	data/back/f/26.rgba16.h \
-	data/back/f/27.rgba16.h \
-	data/back/f/30.rgba16.h \
-	data/back/f/31.rgba16.h \
-	data/back/f/32.rgba16.h \
-	data/back/f/33.rgba16.h \
-	data/back/f/34.rgba16.h \
-	data/back/f/35.rgba16.h \
-	data/back/f/36.rgba16.h \
-	data/back/f/37.rgba16.h \
-	data/back/f/40.rgba16.h \
-	data/back/f/41.rgba16.h \
-	data/back/f/42.rgba16.h \
-	data/back/f/43.rgba16.h \
-	data/back/f/44.rgba16.h \
-	data/back/f/45.rgba16.h \
-	data/back/f/46.rgba16.h \
-	data/back/f/47.rgba16.h \
-	data/back/f/50.rgba16.h \
-	data/back/f/51.rgba16.h \
-	data/back/f/52.rgba16.h \
-	data/back/f/53.rgba16.h \
-	data/back/f/54.rgba16.h \
-	data/back/f/55.rgba16.h \
-	data/back/f/56.rgba16.h \
-	data/back/f/57.rgba16.h \
-	data/back/f/60.rgba16.h \
-	data/back/f/61.rgba16.h \
-	data/back/f/62.rgba16.h \
-	data/back/f/63.rgba16.h \
-	data/back/f/64.rgba16.h \
-	data/back/f/65.rgba16.h \
-	data/back/f/66.rgba16.h \
-	data/back/f/67.rgba16.h \
-	data/back/f/70.rgba16.h \
-	data/back/f/71.rgba16.h \
-	data/back/f/72.rgba16.h \
-	data/back/f/73.rgba16.h \
-	data/back/f/74.rgba16.h \
-	data/back/f/75.rgba16.h \
-	data/back/f/76.rgba16.h \
-	data/back/f/77.rgba16.h
+BACKGROUND_F_DEP := \
+	data/background/f/00.rgba16.h \
+	data/background/f/01.rgba16.h \
+	data/background/f/02.rgba16.h \
+	data/background/f/03.rgba16.h \
+	data/background/f/04.rgba16.h \
+	data/background/f/05.rgba16.h \
+	data/background/f/06.rgba16.h \
+	data/background/f/07.rgba16.h \
+	data/background/f/10.rgba16.h \
+	data/background/f/11.rgba16.h \
+	data/background/f/12.rgba16.h \
+	data/background/f/13.rgba16.h \
+	data/background/f/14.rgba16.h \
+	data/background/f/15.rgba16.h \
+	data/background/f/16.rgba16.h \
+	data/background/f/17.rgba16.h \
+	data/background/f/20.rgba16.h \
+	data/background/f/21.rgba16.h \
+	data/background/f/22.rgba16.h \
+	data/background/f/23.rgba16.h \
+	data/background/f/24.rgba16.h \
+	data/background/f/25.rgba16.h \
+	data/background/f/26.rgba16.h \
+	data/background/f/27.rgba16.h \
+	data/background/f/30.rgba16.h \
+	data/background/f/31.rgba16.h \
+	data/background/f/32.rgba16.h \
+	data/background/f/33.rgba16.h \
+	data/background/f/34.rgba16.h \
+	data/background/f/35.rgba16.h \
+	data/background/f/36.rgba16.h \
+	data/background/f/37.rgba16.h \
+	data/background/f/40.rgba16.h \
+	data/background/f/41.rgba16.h \
+	data/background/f/42.rgba16.h \
+	data/background/f/43.rgba16.h \
+	data/background/f/44.rgba16.h \
+	data/background/f/45.rgba16.h \
+	data/background/f/46.rgba16.h \
+	data/background/f/47.rgba16.h \
+	data/background/f/50.rgba16.h \
+	data/background/f/51.rgba16.h \
+	data/background/f/52.rgba16.h \
+	data/background/f/53.rgba16.h \
+	data/background/f/54.rgba16.h \
+	data/background/f/55.rgba16.h \
+	data/background/f/56.rgba16.h \
+	data/background/f/57.rgba16.h \
+	data/background/f/60.rgba16.h \
+	data/background/f/61.rgba16.h \
+	data/background/f/62.rgba16.h \
+	data/background/f/63.rgba16.h \
+	data/background/f/64.rgba16.h \
+	data/background/f/65.rgba16.h \
+	data/background/f/66.rgba16.h \
+	data/background/f/67.rgba16.h \
+	data/background/f/70.rgba16.h \
+	data/background/f/71.rgba16.h \
+	data/background/f/72.rgba16.h \
+	data/background/f/73.rgba16.h \
+	data/background/f/74.rgba16.h \
+	data/background/f/75.rgba16.h \
+	data/background/f/76.rgba16.h \
+	data/background/f/77.rgba16.h
 
-BACK_G_DEP := \
-	data/back/g/00.rgba16.h \
-	data/back/g/01.rgba16.h \
-	data/back/g/02.rgba16.h \
-	data/back/g/03.rgba16.h \
-	data/back/g/04.rgba16.h \
-	data/back/g/05.rgba16.h \
-	data/back/g/06.rgba16.h \
-	data/back/g/07.rgba16.h \
-	data/back/g/10.rgba16.h \
-	data/back/g/11.rgba16.h \
-	data/back/g/12.rgba16.h \
-	data/back/g/13.rgba16.h \
-	data/back/g/14.rgba16.h \
-	data/back/g/15.rgba16.h \
-	data/back/g/16.rgba16.h \
-	data/back/g/17.rgba16.h \
-	data/back/g/20.rgba16.h \
-	data/back/g/21.rgba16.h \
-	data/back/g/22.rgba16.h \
-	data/back/g/23.rgba16.h \
-	data/back/g/24.rgba16.h \
-	data/back/g/25.rgba16.h \
-	data/back/g/26.rgba16.h \
-	data/back/g/27.rgba16.h \
-	data/back/g/30.rgba16.h \
-	data/back/g/31.rgba16.h \
-	data/back/g/32.rgba16.h \
-	data/back/g/33.rgba16.h \
-	data/back/g/34.rgba16.h \
-	data/back/g/35.rgba16.h \
-	data/back/g/36.rgba16.h \
-	data/back/g/37.rgba16.h \
-	data/back/g/40.rgba16.h \
-	data/back/g/41.rgba16.h \
-	data/back/g/42.rgba16.h \
-	data/back/g/43.rgba16.h \
-	data/back/g/44.rgba16.h \
-	data/back/g/45.rgba16.h \
-	data/back/g/46.rgba16.h \
-	data/back/g/47.rgba16.h \
-	data/back/g/50.rgba16.h \
-	data/back/g/51.rgba16.h \
-	data/back/g/52.rgba16.h \
-	data/back/g/53.rgba16.h \
-	data/back/g/54.rgba16.h \
-	data/back/g/55.rgba16.h \
-	data/back/g/56.rgba16.h \
-	data/back/g/57.rgba16.h \
-	data/back/g/60.rgba16.h \
-	data/back/g/61.rgba16.h \
-	data/back/g/62.rgba16.h \
-	data/back/g/63.rgba16.h \
-	data/back/g/64.rgba16.h \
-	data/back/g/65.rgba16.h \
-	data/back/g/66.rgba16.h \
-	data/back/g/67.rgba16.h \
-	data/back/g/70.rgba16.h \
-	data/back/g/71.rgba16.h \
-	data/back/g/72.rgba16.h \
-	data/back/g/73.rgba16.h \
-	data/back/g/74.rgba16.h \
-	data/back/g/75.rgba16.h \
-	data/back/g/76.rgba16.h \
-	data/back/g/77.rgba16.h
+BACKGROUND_G_DEP := \
+	data/background/g/00.rgba16.h \
+	data/background/g/01.rgba16.h \
+	data/background/g/02.rgba16.h \
+	data/background/g/03.rgba16.h \
+	data/background/g/04.rgba16.h \
+	data/background/g/05.rgba16.h \
+	data/background/g/06.rgba16.h \
+	data/background/g/07.rgba16.h \
+	data/background/g/10.rgba16.h \
+	data/background/g/11.rgba16.h \
+	data/background/g/12.rgba16.h \
+	data/background/g/13.rgba16.h \
+	data/background/g/14.rgba16.h \
+	data/background/g/15.rgba16.h \
+	data/background/g/16.rgba16.h \
+	data/background/g/17.rgba16.h \
+	data/background/g/20.rgba16.h \
+	data/background/g/21.rgba16.h \
+	data/background/g/22.rgba16.h \
+	data/background/g/23.rgba16.h \
+	data/background/g/24.rgba16.h \
+	data/background/g/25.rgba16.h \
+	data/background/g/26.rgba16.h \
+	data/background/g/27.rgba16.h \
+	data/background/g/30.rgba16.h \
+	data/background/g/31.rgba16.h \
+	data/background/g/32.rgba16.h \
+	data/background/g/33.rgba16.h \
+	data/background/g/34.rgba16.h \
+	data/background/g/35.rgba16.h \
+	data/background/g/36.rgba16.h \
+	data/background/g/37.rgba16.h \
+	data/background/g/40.rgba16.h \
+	data/background/g/41.rgba16.h \
+	data/background/g/42.rgba16.h \
+	data/background/g/43.rgba16.h \
+	data/background/g/44.rgba16.h \
+	data/background/g/45.rgba16.h \
+	data/background/g/46.rgba16.h \
+	data/background/g/47.rgba16.h \
+	data/background/g/50.rgba16.h \
+	data/background/g/51.rgba16.h \
+	data/background/g/52.rgba16.h \
+	data/background/g/53.rgba16.h \
+	data/background/g/54.rgba16.h \
+	data/background/g/55.rgba16.h \
+	data/background/g/56.rgba16.h \
+	data/background/g/57.rgba16.h \
+	data/background/g/60.rgba16.h \
+	data/background/g/61.rgba16.h \
+	data/background/g/62.rgba16.h \
+	data/background/g/63.rgba16.h \
+	data/background/g/64.rgba16.h \
+	data/background/g/65.rgba16.h \
+	data/background/g/66.rgba16.h \
+	data/background/g/67.rgba16.h \
+	data/background/g/70.rgba16.h \
+	data/background/g/71.rgba16.h \
+	data/background/g/72.rgba16.h \
+	data/background/g/73.rgba16.h \
+	data/background/g/74.rgba16.h \
+	data/background/g/75.rgba16.h \
+	data/background/g/76.rgba16.h \
+	data/background/g/77.rgba16.h
 
-BACK_H_DEP := \
-	data/back/h/00.rgba16.h \
-	data/back/h/01.rgba16.h \
-	data/back/h/02.rgba16.h \
-	data/back/h/03.rgba16.h \
-	data/back/h/04.rgba16.h \
-	data/back/h/05.rgba16.h \
-	data/back/h/06.rgba16.h \
-	data/back/h/07.rgba16.h \
-	data/back/h/10.rgba16.h \
-	data/back/h/11.rgba16.h \
-	data/back/h/12.rgba16.h \
-	data/back/h/13.rgba16.h \
-	data/back/h/14.rgba16.h \
-	data/back/h/15.rgba16.h \
-	data/back/h/16.rgba16.h \
-	data/back/h/17.rgba16.h \
-	data/back/h/20.rgba16.h \
-	data/back/h/21.rgba16.h \
-	data/back/h/22.rgba16.h \
-	data/back/h/23.rgba16.h \
-	data/back/h/24.rgba16.h \
-	data/back/h/25.rgba16.h \
-	data/back/h/26.rgba16.h \
-	data/back/h/27.rgba16.h \
-	data/back/h/30.rgba16.h \
-	data/back/h/31.rgba16.h \
-	data/back/h/32.rgba16.h \
-	data/back/h/33.rgba16.h \
-	data/back/h/34.rgba16.h \
-	data/back/h/35.rgba16.h \
-	data/back/h/36.rgba16.h \
-	data/back/h/37.rgba16.h \
-	data/back/h/40.rgba16.h \
-	data/back/h/41.rgba16.h \
-	data/back/h/42.rgba16.h \
-	data/back/h/43.rgba16.h \
-	data/back/h/44.rgba16.h \
-	data/back/h/45.rgba16.h \
-	data/back/h/46.rgba16.h \
-	data/back/h/47.rgba16.h \
-	data/back/h/50.rgba16.h
+BACKGROUND_H_DEP := \
+	data/background/h/00.rgba16.h \
+	data/background/h/01.rgba16.h \
+	data/background/h/02.rgba16.h \
+	data/background/h/03.rgba16.h \
+	data/background/h/04.rgba16.h \
+	data/background/h/05.rgba16.h \
+	data/background/h/06.rgba16.h \
+	data/background/h/07.rgba16.h \
+	data/background/h/10.rgba16.h \
+	data/background/h/11.rgba16.h \
+	data/background/h/12.rgba16.h \
+	data/background/h/13.rgba16.h \
+	data/background/h/14.rgba16.h \
+	data/background/h/15.rgba16.h \
+	data/background/h/16.rgba16.h \
+	data/background/h/17.rgba16.h \
+	data/background/h/20.rgba16.h \
+	data/background/h/21.rgba16.h \
+	data/background/h/22.rgba16.h \
+	data/background/h/23.rgba16.h \
+	data/background/h/24.rgba16.h \
+	data/background/h/25.rgba16.h \
+	data/background/h/26.rgba16.h \
+	data/background/h/27.rgba16.h \
+	data/background/h/30.rgba16.h \
+	data/background/h/31.rgba16.h \
+	data/background/h/32.rgba16.h \
+	data/background/h/33.rgba16.h \
+	data/background/h/34.rgba16.h \
+	data/background/h/35.rgba16.h \
+	data/background/h/36.rgba16.h \
+	data/background/h/37.rgba16.h \
+	data/background/h/40.rgba16.h \
+	data/background/h/41.rgba16.h \
+	data/background/h/42.rgba16.h \
+	data/background/h/43.rgba16.h \
+	data/background/h/44.rgba16.h \
+	data/background/h/45.rgba16.h \
+	data/background/h/46.rgba16.h \
+	data/background/h/47.rgba16.h \
+	data/background/h/50.rgba16.h
 
-BACK_I_DEP := \
-	data/back/i/00.rgba16.h \
-	data/back/i/01.rgba16.h \
-	data/back/i/02.rgba16.h \
-	data/back/i/03.rgba16.h \
-	data/back/i/04.rgba16.h \
-	data/back/i/05.rgba16.h \
-	data/back/i/06.rgba16.h \
-	data/back/i/07.rgba16.h \
-	data/back/i/10.rgba16.h \
-	data/back/i/11.rgba16.h \
-	data/back/i/12.rgba16.h \
-	data/back/i/13.rgba16.h \
-	data/back/i/14.rgba16.h \
-	data/back/i/15.rgba16.h \
-	data/back/i/16.rgba16.h \
-	data/back/i/17.rgba16.h \
-	data/back/i/20.rgba16.h \
-	data/back/i/21.rgba16.h \
-	data/back/i/22.rgba16.h \
-	data/back/i/23.rgba16.h \
-	data/back/i/24.rgba16.h \
-	data/back/i/25.rgba16.h \
-	data/back/i/26.rgba16.h \
-	data/back/i/27.rgba16.h \
-	data/back/i/30.rgba16.h \
-	data/back/i/31.rgba16.h \
-	data/back/i/32.rgba16.h \
-	data/back/i/33.rgba16.h \
-	data/back/i/34.rgba16.h \
-	data/back/i/35.rgba16.h \
-	data/back/i/36.rgba16.h \
-	data/back/i/37.rgba16.h \
-	data/back/i/40.rgba16.h \
-	data/back/i/41.rgba16.h \
-	data/back/i/42.rgba16.h \
-	data/back/i/43.rgba16.h \
-	data/back/i/44.rgba16.h \
-	data/back/i/45.rgba16.h \
-	data/back/i/46.rgba16.h \
-	data/back/i/47.rgba16.h \
-	data/back/i/50.rgba16.h \
-	data/back/i/51.rgba16.h \
-	data/back/i/52.rgba16.h \
-	data/back/i/53.rgba16.h \
-	data/back/i/54.rgba16.h \
-	data/back/i/55.rgba16.h \
-	data/back/i/56.rgba16.h \
-	data/back/i/57.rgba16.h \
-	data/back/i/60.rgba16.h \
-	data/back/i/61.rgba16.h \
-	data/back/i/62.rgba16.h \
-	data/back/i/63.rgba16.h \
-	data/back/i/64.rgba16.h \
-	data/back/i/65.rgba16.h \
-	data/back/i/66.rgba16.h \
-	data/back/i/67.rgba16.h \
-	data/back/i/70.rgba16.h \
-	data/back/i/71.rgba16.h \
-	data/back/i/72.rgba16.h \
-	data/back/i/73.rgba16.h \
-	data/back/i/74.rgba16.h \
-	data/back/i/75.rgba16.h \
-	data/back/i/76.rgba16.h \
-	data/back/i/77.rgba16.h
+BACKGROUND_I_DEP := \
+	data/background/i/00.rgba16.h \
+	data/background/i/01.rgba16.h \
+	data/background/i/02.rgba16.h \
+	data/background/i/03.rgba16.h \
+	data/background/i/04.rgba16.h \
+	data/background/i/05.rgba16.h \
+	data/background/i/06.rgba16.h \
+	data/background/i/07.rgba16.h \
+	data/background/i/10.rgba16.h \
+	data/background/i/11.rgba16.h \
+	data/background/i/12.rgba16.h \
+	data/background/i/13.rgba16.h \
+	data/background/i/14.rgba16.h \
+	data/background/i/15.rgba16.h \
+	data/background/i/16.rgba16.h \
+	data/background/i/17.rgba16.h \
+	data/background/i/20.rgba16.h \
+	data/background/i/21.rgba16.h \
+	data/background/i/22.rgba16.h \
+	data/background/i/23.rgba16.h \
+	data/background/i/24.rgba16.h \
+	data/background/i/25.rgba16.h \
+	data/background/i/26.rgba16.h \
+	data/background/i/27.rgba16.h \
+	data/background/i/30.rgba16.h \
+	data/background/i/31.rgba16.h \
+	data/background/i/32.rgba16.h \
+	data/background/i/33.rgba16.h \
+	data/background/i/34.rgba16.h \
+	data/background/i/35.rgba16.h \
+	data/background/i/36.rgba16.h \
+	data/background/i/37.rgba16.h \
+	data/background/i/40.rgba16.h \
+	data/background/i/41.rgba16.h \
+	data/background/i/42.rgba16.h \
+	data/background/i/43.rgba16.h \
+	data/background/i/44.rgba16.h \
+	data/background/i/45.rgba16.h \
+	data/background/i/46.rgba16.h \
+	data/background/i/47.rgba16.h \
+	data/background/i/50.rgba16.h \
+	data/background/i/51.rgba16.h \
+	data/background/i/52.rgba16.h \
+	data/background/i/53.rgba16.h \
+	data/background/i/54.rgba16.h \
+	data/background/i/55.rgba16.h \
+	data/background/i/56.rgba16.h \
+	data/background/i/57.rgba16.h \
+	data/background/i/60.rgba16.h \
+	data/background/i/61.rgba16.h \
+	data/background/i/62.rgba16.h \
+	data/background/i/63.rgba16.h \
+	data/background/i/64.rgba16.h \
+	data/background/i/65.rgba16.h \
+	data/background/i/66.rgba16.h \
+	data/background/i/67.rgba16.h \
+	data/background/i/70.rgba16.h \
+	data/background/i/71.rgba16.h \
+	data/background/i/72.rgba16.h \
+	data/background/i/73.rgba16.h \
+	data/background/i/74.rgba16.h \
+	data/background/i/75.rgba16.h \
+	data/background/i/76.rgba16.h \
+	data/background/i/77.rgba16.h
 
-BACK_J_DEP := \
-	data/back/j/00.rgba16.h \
-	data/back/j/01.rgba16.h \
-	data/back/j/02.rgba16.h \
-	data/back/j/03.rgba16.h \
-	data/back/j/04.rgba16.h \
-	data/back/j/05.rgba16.h \
-	data/back/j/06.rgba16.h \
-	data/back/j/07.rgba16.h \
-	data/back/j/10.rgba16.h \
-	data/back/j/11.rgba16.h \
-	data/back/j/12.rgba16.h \
-	data/back/j/13.rgba16.h \
-	data/back/j/14.rgba16.h \
-	data/back/j/15.rgba16.h \
-	data/back/j/16.rgba16.h \
-	data/back/j/17.rgba16.h \
-	data/back/j/20.rgba16.h \
-	data/back/j/21.rgba16.h \
-	data/back/j/22.rgba16.h \
-	data/back/j/23.rgba16.h \
-	data/back/j/24.rgba16.h \
-	data/back/j/25.rgba16.h \
-	data/back/j/26.rgba16.h \
-	data/back/j/27.rgba16.h \
-	data/back/j/30.rgba16.h \
-	data/back/j/31.rgba16.h \
-	data/back/j/32.rgba16.h \
-	data/back/j/33.rgba16.h \
-	data/back/j/34.rgba16.h \
-	data/back/j/35.rgba16.h \
-	data/back/j/36.rgba16.h \
-	data/back/j/37.rgba16.h \
-	data/back/j/40.rgba16.h \
-	data/back/j/41.rgba16.h \
-	data/back/j/42.rgba16.h \
-	data/back/j/43.rgba16.h \
-	data/back/j/44.rgba16.h \
-	data/back/j/45.rgba16.h \
-	data/back/j/46.rgba16.h \
-	data/back/j/47.rgba16.h \
-	data/back/j/50.rgba16.h \
-	data/back/j/51.rgba16.h \
-	data/back/j/52.rgba16.h \
-	data/back/j/53.rgba16.h \
-	data/back/j/54.rgba16.h \
-	data/back/j/55.rgba16.h \
-	data/back/j/56.rgba16.h \
-	data/back/j/57.rgba16.h \
-	data/back/j/60.rgba16.h \
-	data/back/j/61.rgba16.h \
-	data/back/j/62.rgba16.h \
-	data/back/j/63.rgba16.h \
-	data/back/j/64.rgba16.h \
-	data/back/j/65.rgba16.h \
-	data/back/j/66.rgba16.h \
-	data/back/j/67.rgba16.h \
-	data/back/j/70.rgba16.h \
-	data/back/j/71.rgba16.h \
-	data/back/j/72.rgba16.h \
-	data/back/j/73.rgba16.h \
-	data/back/j/74.rgba16.h \
-	data/back/j/75.rgba16.h \
-	data/back/j/76.rgba16.h \
-	data/back/j/77.rgba16.h
+BACKGROUND_J_DEP := \
+	data/background/j/00.rgba16.h \
+	data/background/j/01.rgba16.h \
+	data/background/j/02.rgba16.h \
+	data/background/j/03.rgba16.h \
+	data/background/j/04.rgba16.h \
+	data/background/j/05.rgba16.h \
+	data/background/j/06.rgba16.h \
+	data/background/j/07.rgba16.h \
+	data/background/j/10.rgba16.h \
+	data/background/j/11.rgba16.h \
+	data/background/j/12.rgba16.h \
+	data/background/j/13.rgba16.h \
+	data/background/j/14.rgba16.h \
+	data/background/j/15.rgba16.h \
+	data/background/j/16.rgba16.h \
+	data/background/j/17.rgba16.h \
+	data/background/j/20.rgba16.h \
+	data/background/j/21.rgba16.h \
+	data/background/j/22.rgba16.h \
+	data/background/j/23.rgba16.h \
+	data/background/j/24.rgba16.h \
+	data/background/j/25.rgba16.h \
+	data/background/j/26.rgba16.h \
+	data/background/j/27.rgba16.h \
+	data/background/j/30.rgba16.h \
+	data/background/j/31.rgba16.h \
+	data/background/j/32.rgba16.h \
+	data/background/j/33.rgba16.h \
+	data/background/j/34.rgba16.h \
+	data/background/j/35.rgba16.h \
+	data/background/j/36.rgba16.h \
+	data/background/j/37.rgba16.h \
+	data/background/j/40.rgba16.h \
+	data/background/j/41.rgba16.h \
+	data/background/j/42.rgba16.h \
+	data/background/j/43.rgba16.h \
+	data/background/j/44.rgba16.h \
+	data/background/j/45.rgba16.h \
+	data/background/j/46.rgba16.h \
+	data/background/j/47.rgba16.h \
+	data/background/j/50.rgba16.h \
+	data/background/j/51.rgba16.h \
+	data/background/j/52.rgba16.h \
+	data/background/j/53.rgba16.h \
+	data/background/j/54.rgba16.h \
+	data/background/j/55.rgba16.h \
+	data/background/j/56.rgba16.h \
+	data/background/j/57.rgba16.h \
+	data/background/j/60.rgba16.h \
+	data/background/j/61.rgba16.h \
+	data/background/j/62.rgba16.h \
+	data/background/j/63.rgba16.h \
+	data/background/j/64.rgba16.h \
+	data/background/j/65.rgba16.h \
+	data/background/j/66.rgba16.h \
+	data/background/j/67.rgba16.h \
+	data/background/j/70.rgba16.h \
+	data/background/j/71.rgba16.h \
+	data/background/j/72.rgba16.h \
+	data/background/j/73.rgba16.h \
+	data/background/j/74.rgba16.h \
+	data/background/j/75.rgba16.h \
+	data/background/j/76.rgba16.h \
+	data/background/j/77.rgba16.h
 
 TEXTURE_A_DEP := \
 	data/texture/a0.rgba16.h \
@@ -2529,7 +2565,7 @@ TEXTURE_E_DEP := \
 	data/texture/e7.rgba16.h \
 	data/texture/e8_j12.rgba16.h \
 	data/texture/e9.rgba16.h \
-	data/texture/e10_i18.rgba16.h \
+	data/texture/e10_i17.rgba16.h \
 	data/texture/e11.rgba16.h \
 	data/texture/e12.rgba16.h \
 	data/texture/e13.rgba16.h \
@@ -2612,12 +2648,11 @@ TEXTURE_I_DEP := \
 	data/texture/i14.rgba16.h \
 	data/texture/i15.rgba16.h \
 	data/texture/i16.rgba16.h \
-	data/texture/i17.rgba16.h \
-	data/texture/e10_i18.rgba16.h \
+	data/texture/e10_i17.rgba16.h \
+	data/texture/i18.rgba16.h \
 	data/texture/i19.rgba16.h \
 	data/texture/i20.rgba16.h \
-	data/texture/i21.rgba16.h \
-	data/texture/i22.rgba16.h
+	data/texture/i21.rgba16.h
 
 TEXTURE_J_DEP := \
 	data/texture/j0.rgba16.h \
@@ -2795,7 +2830,14 @@ ENDING_DEP := \
 	stage/ending/47.rgba16.h
 
 COURTYARD_DEP :=
-PSS_DEP :=
+
+PSS_DEP := \
+	stage/pss/0.rgba16.h \
+	stage/pss/1.ia16.h \
+	stage/pss/2.rgba16.h \
+	$(MINISLIDER_DEP) \
+	stage/pss/minislider/map.h
+
 COTMC_DEP :=
 TOTWC_DEP :=
 BITDWA_DEP :=
@@ -2805,8 +2847,10 @@ BITSA_DEP :=
 TTM_DEP :=
 
 DEP := \
+	src/ja_jp.h \
 	src/en_us.h \
-	src/caption.en_us.h \
+	src/message/caption.ja_jp.h \
+	src/message/caption.en_us.h \
 	$(FACE_DEP) \
 	$(GFX_DEP) \
 	$(PLAYER_DEP) \
@@ -2833,16 +2877,16 @@ DEP := \
 	$(TITLE_DEBUG_DEP) \
 	$(TITLE_BACK_DEP) \
 	$(SELECT_DEP) \
-	$(BACK_A_DEP) \
-	$(BACK_B_DEP) \
-	$(BACK_C_DEP) \
-	$(BACK_D_DEP) \
-	$(BACK_E_DEP) \
-	$(BACK_F_DEP) \
-	$(BACK_G_DEP) \
-	$(BACK_H_DEP) \
-	$(BACK_I_DEP) \
-	$(BACK_J_DEP) \
+	$(BACKGROUND_A_DEP) \
+	$(BACKGROUND_B_DEP) \
+	$(BACKGROUND_C_DEP) \
+	$(BACKGROUND_D_DEP) \
+	$(BACKGROUND_E_DEP) \
+	$(BACKGROUND_F_DEP) \
+	$(BACKGROUND_G_DEP) \
+	$(BACKGROUND_H_DEP) \
+	$(BACKGROUND_I_DEP) \
+	$(BACKGROUND_J_DEP) \
 	$(TEXTURE_A_DEP) \
 	$(TEXTURE_B_DEP) \
 	$(TEXTURE_C_DEP) \
@@ -2888,9 +2932,9 @@ DEP := \
 	$(BITSA_DEP) \
 	$(TTM_DEP)
 
-src/message.c: src/en_us.h src/caption.en_us.h
-src/fileselect.c: src/en_us.h
-src/starselect.c: src/en_us.h
+src/message.c: src/ja_jp.h src/en_us.h src/message/caption.ja_jp.h src/message/caption.en_us.h
+src/fileselect.c: src/ja_jp.h src/en_us.h
+src/starselect.c: src/ja_jp.h src/en_us.h
 src/face/gfx.data.c: $(FACE_DEP)
 data/gfx.c: $(GFX_DEP)
 shape/player/gfx.c: $(PLAYER_DEP)
@@ -2915,18 +2959,18 @@ shape/3common/gfx.c: $(COMMON_DEP)
 shape/global/gfx.c: $(GLOBAL_DEP)
 stage/title/logo.c: $(TITLE_LOGO_DEP)
 stage/title/debug.c: $(TITLE_DEBUG_DEP)
-data/back/title.c: $(TITLE_BACK_DEP)
+data/background/title.c: $(TITLE_BACK_DEP)
 stage/select/gfx.c: $(SELECT_DEP)
-data/back/a.c: $(BACK_A_DEP)
-data/back/b.c: $(BACK_B_DEP)
-data/back/c.c: $(BACK_C_DEP)
-data/back/d.c: $(BACK_D_DEP)
-data/back/e.c: $(BACK_E_DEP)
-data/back/f.c: $(BACK_F_DEP)
-data/back/g.c: $(BACK_G_DEP)
-data/back/h.c: $(BACK_H_DEP)
-data/back/i.c: $(BACK_I_DEP)
-data/back/j.c: $(BACK_J_DEP)
+data/background/a.c: $(BACKGROUND_A_DEP)
+data/background/b.c: $(BACKGROUND_B_DEP)
+data/background/c.c: $(BACKGROUND_C_DEP)
+data/background/d.c: $(BACKGROUND_D_DEP)
+data/background/e.c: $(BACKGROUND_E_DEP)
+data/background/f.c: $(BACKGROUND_F_DEP)
+data/background/g.c: $(BACKGROUND_G_DEP)
+data/background/h.c: $(BACKGROUND_H_DEP)
+data/background/i.c: $(BACKGROUND_I_DEP)
+data/background/j.c: $(BACKGROUND_J_DEP)
 data/texture/a.c: $(TEXTURE_A_DEP)
 data/texture/b.c: $(TEXTURE_B_DEP)
 data/texture/c.c: $(TEXTURE_C_DEP)
@@ -2963,7 +3007,7 @@ stage/ddd/gfx.c: $(DDD_DEP)
 stage/wf/gfx.c: $(WF_DEP)
 stage/ending/gfx.c: $(ENDING_DEP)
 stage/courtyard/gfx.c: $(COURTYARD_DEP)
-stage/pss/gfx.c: $(PSS_DEP)
+stage/pss/gfx.c: $(PSS_DEP) $(BUILD)/data/texture/i.szp.h
 stage/cotmc/gfx.c: $(COTMC_DEP)
 stage/totwc/gfx.c: $(TOTWC_DEP)
 stage/bitdwa/gfx.c: $(BITDWA_DEP)
@@ -3032,6 +3076,8 @@ $(BATTLEFIELD_DEP)&: stage/bob/battlefield/battlefield.glb tools/gltf; tools/glt
 $(BOB_54_DEP)&: stage/bob/54/54.glb tools/gltf; tools/gltf $<
 $(BOB_55_DEP)&: stage/bob/55/55.glb tools/gltf; tools/gltf $<
 $(BOB_56_DEP)&: stage/bob/56/56.glb tools/gltf; tools/gltf $<
+# PSS
+$(MINISLIDER_DEP)&: stage/pss/minislider/minislider.glb tools/gltf; tools/gltf $<
 
 # Common
 shape/3common/bluecoinsw/map.h: shape/3common/bluecoinsw/bluecoinsw.obj tools/obj; tools/obj $< $@
@@ -3054,3 +3100,5 @@ stage/bob/battlefield/map.h: stage/bob/battlefield/battlefield.obj tools/obj; to
 stage/bob/54/map.h: stage/bob/54/54.obj tools/obj; tools/obj $< $@
 stage/bob/55/map.h: stage/bob/55/55.obj tools/obj; tools/obj $< $@
 stage/bob/56/map.h: stage/bob/56/56.obj tools/obj; tools/obj $< $@
+# PSS
+stage/pss/minislider/map.h: stage/pss/minislider/minislider.obj tools/obj; tools/obj $< $@

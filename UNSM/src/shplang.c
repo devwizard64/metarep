@@ -1,31 +1,31 @@
 #include <sm64.h>
 
-#define S_UCHAR         ((unsigned char *)s_pc)
-#define S_SHORT         ((short *)s_pc)
-#define S_USHORT        ((unsigned short *)s_pc)
-#define S_INT           ((int *)s_pc)
-#define S_UINT          ((unsigned int *)s_pc)
-#define S_PTR           ((void **)s_pc)
-#define S_CALL          ((SHPCALL **)s_pc)
+#define SHP_UCHAR       ((unsigned char *)shp_pc)
+#define SHP_SHORT       ((short *)shp_pc)
+#define SHP_USHORT      ((unsigned short *)shp_pc)
+#define SHP_INT         ((int *)shp_pc)
+#define SHP_UINT        ((unsigned int *)shp_pc)
+#define SHP_PTR         ((void **)shp_pc)
+#define SHP_CALL        ((SHPCALL **)shp_pc)
 
-#define S_CMD           S_UCHAR[0]
+#define SHP_CMD         SHP_UCHAR[0]
 
-static ARENA *s_arena;
-static SHAPE *shp_root;
-UNUSED static SHAPE *shp_8038BCA8;
-static SHAPE **shp_table;
-static u16 shp_count;
-static unsigned long s_stack[16];
-static SHAPE *shp_stack[32];
+static ARENA *shp_arena;
+static SHAPE *shape_root;
+UNUSED static SHAPE *shape_8038BCA8;
+static SHAPE **shape_reftab;
+static u16 shape_reflen;
+static unsigned long shp_stack[16];
+static SHAPE *shape_stack[32];
+static s16 shape_sp;
 static s16 shp_sp;
-static s16 s_sp;
-UNUSED static s16 shp_fp;
-static s16 s_fp;
-static S_SCRIPT *s_pc;
+UNUSED static s16 shape_fp;
+static s16 shp_fp;
+static SHPLANG *shp_pc;
 
 SHAPE sobj_list;
 
-static short *s_read_vecf(VECF dst, short *src)
+static short *ShpGetFVec(FVEC dst, short *src)
 {
 	dst[0] = *src++;
 	dst[1] = *src++;
@@ -33,7 +33,7 @@ static short *s_read_vecf(VECF dst, short *src)
 	return src;
 }
 
-static short *s_read_vecs(VECS dst, short *src)
+static short *ShpGetSVec(SVEC dst, short *src)
 {
 	dst[0] = *src++;
 	dst[1] = *src++;
@@ -41,7 +41,7 @@ static short *s_read_vecs(VECS dst, short *src)
 	return src;
 }
 
-static short *s_read_ang(VECS dst, short *src)
+static short *ShpGetAng(SVEC dst, short *src)
 {
 	dst[0] = *src++ * 0x8000/180;
 	dst[1] = *src++ * 0x8000/180;
@@ -49,452 +49,452 @@ static short *s_read_ang(VECS dst, short *src)
 	return src;
 }
 
-static void s_link(SHAPE *shape)
+static void ShapeLink(SHAPE *shape)
 {
 	if (shape)
 	{
-		shp_stack[shp_sp] = shape;
-		if (shp_sp == 0)
+		shape_stack[shape_sp] = shape;
+		if (shape_sp == 0)
 		{
-			if (!shp_root) shp_root = shape;
+			if (!shape_root) shape_root = shape;
 		}
-		else if (shp_stack[shp_sp-1]->type == ST_LIST)
+		else if (shape_stack[shape_sp-1]->type == ST_BRANCH)
 		{
-			((S_LIST *)shp_stack[shp_sp-1])->shape = shape;
+			((SBRANCH *)shape_stack[shape_sp-1])->shape = shape;
 		}
 		else
 		{
-			shape_link(shp_stack[shp_sp-1], shape);
+			ShpLink(shape_stack[shape_sp-1], shape);
 		}
 	}
 }
 
-static void s_cmd_execute(void)
+static void ShpCmdExecute(void)
 {
-	s_stack[s_sp++] = (unsigned long)(s_pc+2);
-	s_stack[s_sp++] = (shp_sp << 16) + s_fp;
-	s_fp = s_sp;
-	s_pc = segment_to_virtual(S_PTR[1]);
+	shp_stack[shp_sp++] = (unsigned long)(shp_pc+2);
+	shp_stack[shp_sp++] = (shape_sp << 16) + shp_fp;
+	shp_fp = shp_sp;
+	shp_pc = SegmentToVirtual(SHP_PTR[1]);
 }
 
-static void s_cmd_exit(void)
+static void ShpCmdExit(void)
 {
-	s_sp = s_fp;
-	s_fp = s_stack[--s_sp] & 0xFFFF;
-	shp_sp = s_stack[s_sp] >> 16;
-	s_pc = (void *)s_stack[--s_sp];
+	shp_sp = shp_fp;
+	shp_fp = shp_stack[--shp_sp] & 0xFFFF;
+	shape_sp = shp_stack[shp_sp] >> 16;
+	shp_pc = (void *)shp_stack[--shp_sp];
 }
 
-static void s_cmd_jump(void)
+static void ShpCmdJump(void)
 {
-	if (S_UCHAR[1] == 1) s_stack[s_sp++] = (unsigned long)(s_pc+2);
-	s_pc = segment_to_virtual(S_PTR[1]);
+	if (SHP_UCHAR[1] == 1) shp_stack[shp_sp++] = (unsigned long)(shp_pc+2);
+	shp_pc = SegmentToVirtual(SHP_PTR[1]);
 }
 
-static void s_cmd_return(void)
+static void ShpCmdReturn(void)
 {
-	s_pc = (void *)s_stack[--s_sp];
+	shp_pc = (void *)shp_stack[--shp_sp];
 }
 
-static void s_cmd_start(void)
+static void ShpCmdStart(void)
 {
-	shp_stack[shp_sp+1] = shp_stack[shp_sp];
-	shp_sp++;
-	s_pc += 1;
+	shape_stack[shape_sp+1] = shape_stack[shape_sp];
+	shape_sp++;
+	shp_pc += 1;
 }
 
-static void s_cmd_end(void)
+static void ShpCmdEnd(void)
 {
-	shp_sp--;
-	s_pc += 1;
+	shape_sp--;
+	shp_pc += 1;
 }
 
-static void s_cmd_store(void)
+static void ShpCmdStore(void)
 {
-	USHORT index = S_SHORT[1];
-	if (index < shp_count) shp_table[index] = shp_stack[shp_sp];
-	s_pc += 1;
+	USHORT index = SHP_SHORT[1];
+	if (index < shape_reflen) shape_reftab[index] = shape_stack[shape_sp];
+	shp_pc += 1;
 }
 
-static void s_cmd_flag(void)
+static void ShpCmdFlag(void)
 {
-	USHORT mode = S_UCHAR[1];
-	u16 flag = S_SHORT[1];
+	USHORT mode = SHP_UCHAR[1];
+	u16 flag = SHP_SHORT[1];
 	switch (mode)
 	{
-	case 0: shp_stack[shp_sp]->flag = flag; break;
-	case 1: shp_stack[shp_sp]->flag |= flag; break;
-	case 2: shp_stack[shp_sp]->flag &= ~flag; break;
+	case 0: shape_stack[shape_sp]->flag = flag; break;
+	case 1: shape_stack[shape_sp]->flag |= flag; break;
+	case 2: shape_stack[shape_sp]->flag &= ~flag; break;
 	}
-	s_pc += 1;
+	shp_pc += 1;
 }
 
-static void s_cmd_scene(void)
+static void ShpCmdScene(void)
 {
 	int i;
-	S_SCENE *shp;
-	SHORT x = S_SHORT[2];
-	SHORT y = S_SHORT[3];
-	SHORT w = S_SHORT[4];
-	SHORT h = S_SHORT[5];
-	shp_count = S_SHORT[1] + 2;
-	shp = s_create_scene(s_arena, NULL, 0, x, y, w, h);
-	shp_table = arena_alloc(s_arena, sizeof(SHAPE *)*shp_count);
-	shp->table = shp_table;
-	shp->count = shp_count;
-	for (i = 0; i < shp_count; i++) shp_table[i] = NULL;;
-	s_link(&shp->s);
-	s_pc += 3;
+	SSCENE *shp;
+	SHORT x = SHP_SHORT[2];
+	SHORT y = SHP_SHORT[3];
+	SHORT w = SHP_SHORT[4];
+	SHORT h = SHP_SHORT[5];
+	shape_reflen = SHP_SHORT[1] + 2;
+	shp = ShpCreateScene(shp_arena, NULL, 0, x, y, w, h);
+	shape_reftab = ArenaAlloc(shp_arena, sizeof(SHAPE *)*shape_reflen);
+	shp->reftab = shape_reftab;
+	shp->reflen = shape_reflen;
+	for (i = 0; i < shape_reflen; i++) shape_reftab[i] = NULL;;
+	ShapeLink(&shp->s);
+	shp_pc += 3;
 }
 
-static void s_cmd_ortho(void)
+static void ShpCmdOrtho(void)
 {
-	S_ORTHO *shp;
-	float scale = (float)S_SHORT[1] / 100;
-	shp = s_create_ortho(s_arena, NULL, scale);
-	s_link(&shp->s);
-	s_pc += 1;
+	SORTHO *shp;
+	float scale = (float)SHP_SHORT[1] / 100;
+	shp = ShpCreateOrtho(shp_arena, NULL, scale);
+	ShapeLink(&shp->s);
+	shp_pc += 1;
 }
 
-static void s_cmd_persp(void)
+static void ShpCmdPersp(void)
 {
-	S_PERSP *shp;
+	SPERSP *shp;
 	SHPCALL *callback = NULL;
-	SHORT fovy = S_SHORT[1];
-	SHORT near = S_SHORT[2];
-	SHORT far = S_SHORT[3];
-	if (S_UCHAR[1])
+	SHORT fovy = SHP_SHORT[1];
+	SHORT near = SHP_SHORT[2];
+	SHORT far = SHP_SHORT[3];
+	if (SHP_UCHAR[1])
 	{
-		callback = S_CALL[2];
-		s_pc += 1;
+		callback = SHP_CALL[2];
+		shp_pc += 1;
 	}
-	shp = s_create_persp(s_arena, NULL, fovy, near, far, callback, 0);
-	s_link(&shp->s.s);
-	s_pc += 2;
+	shp = ShpCreatePersp(shp_arena, NULL, fovy, near, far, callback, 0);
+	ShapeLink(&shp->s.s);
+	shp_pc += 2;
 }
 
-static void s_cmd_empty(void)
+static void ShpCmdEmpty(void)
 {
 	SHAPE *shape;
-	shape = s_create_empty(s_arena, NULL);
-	s_link(shape);
-	s_pc += 1;
+	shape = ShpCreateEmpty(shp_arena, NULL);
+	ShapeLink(shape);
+	shp_pc += 1;
 }
 
-static void s_cmd_31(void)
+static void ShpCmd31(void)
 {
-	s_pc += 4;
+	shp_pc += 4;
 }
 
-static void s_cmd_layer(void)
+static void ShpCmdLayer(void)
 {
-	S_LAYER *shp;
-	shp = s_create_layer(s_arena, NULL, S_UCHAR[1]);
-	s_link(&shp->s);
-	s_pc += 1;
+	SLAYER *shp;
+	shp = ShpCreateLayer(shp_arena, NULL, SHP_UCHAR[1]);
+	ShapeLink(&shp->s);
+	shp_pc += 1;
 }
 
-static void s_cmd_lod(void)
+static void ShpCmdLOD(void)
 {
-	S_LOD *shp;
-	SHORT min = S_SHORT[2];
-	SHORT max = S_SHORT[3];
-	shp = s_create_lod(s_arena, NULL, min, max);
-	s_link(&shp->s);
-	s_pc += 2;
+	SLOD *shp;
+	SHORT min = SHP_SHORT[2];
+	SHORT max = SHP_SHORT[3];
+	shp = ShpCreateLOD(shp_arena, NULL, min, max);
+	ShapeLink(&shp->s);
+	shp_pc += 2;
 }
 
-static void s_cmd_select(void)
+static void ShpCmdSelect(void)
 {
-	S_SELECT *shp;
-	shp = s_create_select(s_arena, NULL, S_SHORT[1], 0, S_CALL[1], 0);
-	s_link(&shp->s.s);
-	s_pc += 2;
+	SSELECT *shp;
+	shp = ShpCreateSelect(shp_arena, NULL, SHP_SHORT[1], 0, SHP_CALL[1], 0);
+	ShapeLink(&shp->s.s);
+	shp_pc += 2;
 }
 
-static void s_cmd_camera(void)
+static void ShpCmdCamera(void)
 {
-	S_CAMERA *shp;
-	void *pc = S_SHORT+2;
-	VECF eye;
-	VECF look;
-	pc = s_read_vecf(eye, pc);
-	pc = s_read_vecf(look, pc);
-	shp = s_create_camera(s_arena, NULL, eye, look, S_CALL[4], S_SHORT[1]);
-	s_link(&shp->s.s);
-	shp_table[0] = &shp->s.s;
-	s_pc += 5;
+	SCAMERA *shp;
+	void *pc = SHP_SHORT+2;
+	FVEC eye, look;
+	pc = ShpGetFVec(eye, pc);
+	pc = ShpGetFVec(look, pc);
+	shp = ShpCreateCamera(
+		shp_arena, NULL, eye, look, SHP_CALL[4], SHP_SHORT[1]
+	);
+	ShapeLink(&shp->s.s);
+	shape_reftab[0] = &shp->s.s;
+	shp_pc += 5;
 }
 
-static void s_cmd_coord(void)
+static void ShpCmdCoord(void)
 {
-	S_COORD *shp;
-	VECS pos;
-	VECS ang;
+	SCOORD *shp;
+	SVEC pos, ang;
 	Gfx *gfx = NULL;
 	SHORT layer = 0;
-	SHORT flag = S_UCHAR[1];
-	void *pc = s_pc;
+	SHORT flag = SHP_UCHAR[1];
+	void *pc = shp_pc;
 	switch ((flag & 0x70) >> 4)
 	{
 	case 0:
-		pc = s_read_vecs(pos, (short *)pc+2);
-		pc = s_read_ang(ang, pc);
+		pc = ShpGetSVec(pos, (short *)pc+2);
+		pc = ShpGetAng(ang, pc);
 		break;
 	case 1:
-		pc = s_read_vecs(pos, (short *)pc+1);
-		vecs_cpy(ang, vecs_0);
+		pc = ShpGetSVec(pos, (short *)pc+1);
+		SVecCpy(ang, svec_0);
 		break;
 	case 2:
-		pc = s_read_ang(ang, (short *)pc+1);
-		vecs_cpy(pos, vecs_0);
+		pc = ShpGetAng(ang, (short *)pc+1);
+		SVecCpy(pos, svec_0);
 		break;
 	case 3:
-		vecs_cpy(pos, vecs_0);
-		vecs_set(ang, 0, ((short *)pc)[1] * 0x8000/180, 0);
-		pc = (S_SCRIPT *)pc + 1;
+		SVecCpy(pos, svec_0);
+		SVecSet(ang, 0, ((short *)pc)[1] * 0x8000/180, 0);
+		pc = (SHPLANG *)pc + 1;
 		break;
 	}
 	if (flag & 0x80)
 	{
 		gfx = *(void **)pc;
 		layer = flag & 15;
-		pc = (S_SCRIPT *)pc + 1;
+		pc = (SHPLANG *)pc + 1;
 	}
-	shp = s_create_coord(s_arena, NULL, layer, gfx, pos, ang);
-	s_link(&shp->s.s);
-	s_pc = pc;
+	shp = ShpCreateCoord(shp_arena, NULL, layer, gfx, pos, ang);
+	ShapeLink(&shp->s.s);
+	shp_pc = pc;
 }
 
-static void s_cmd_pos(void)
+static void ShpCmdPos(void)
 {
-	S_POS *shp;
-	VECS pos;
+	SPOS *shp;
+	SVEC pos;
 	SHORT layer = 0;
-	SHORT flag = S_UCHAR[1];
-	void *pc = s_pc;
+	SHORT flag = SHP_UCHAR[1];
+	void *pc = shp_pc;
 	Gfx *gfx = NULL;
-	pc = s_read_vecs(pos, (short *)pc+1);
+	pc = ShpGetSVec(pos, (short *)pc+1);
 	if (flag & 0x80)
 	{
 		gfx = *(void **)pc;
 		layer = flag & 15;
-		pc = (S_SCRIPT *)pc + 1;
+		pc = (SHPLANG *)pc + 1;
 	}
-	shp = s_create_pos(s_arena, NULL, layer, gfx, pos);
-	s_link(&shp->s.s);
-	s_pc = pc;
+	shp = ShpCreatePos(shp_arena, NULL, layer, gfx, pos);
+	ShapeLink(&shp->s.s);
+	shp_pc = pc;
 }
 
-static void s_cmd_ang(void)
+static void ShpCmdAng(void)
 {
-	S_ANG *shp;
-	VECS ang;
+	SANG *shp;
+	SVEC ang;
 	SHORT layer = 0;
-	SHORT flag = S_UCHAR[1];
-	void *pc = s_pc;
+	SHORT flag = SHP_UCHAR[1];
+	void *pc = shp_pc;
 	Gfx *gfx = NULL;
-	pc = s_read_ang(ang, (short *)pc+1);
+	pc = ShpGetAng(ang, (short *)pc+1);
 	if (flag & 0x80)
 	{
 		gfx = *(void **)pc;
 		layer = flag & 15;
-		pc = (S_SCRIPT *)pc + 1;
+		pc = (SHPLANG *)pc + 1;
 	}
-	shp = s_create_ang(s_arena, NULL, layer, gfx, ang);
-	s_link(&shp->s.s);
-	s_pc = pc;
+	shp = ShpCreateAng(shp_arena, NULL, layer, gfx, ang);
+	ShapeLink(&shp->s.s);
+	shp_pc = pc;
 }
 
-static void s_cmd_scale(void)
+static void ShpCmdScale(void)
 {
-	S_SCALE *shp;
+	SSCALE *shp;
 	SHORT layer = 0;
-	SHORT flag = S_UCHAR[1];
-	float scale = (float)S_UINT[1] / 0x10000;
+	SHORT flag = SHP_UCHAR[1];
+	float scale = (float)SHP_UINT[1] / 0x10000;
 	Gfx *gfx = NULL;
 	if (flag & 0x80)
 	{
-		gfx = S_PTR[2];
+		gfx = SHP_PTR[2];
 		layer = flag & 15;
-		s_pc += 1;
+		shp_pc += 1;
 	}
-	shp = s_create_scale(s_arena, NULL, layer, gfx, scale);
-	s_link(&shp->s.s);
-	s_pc += 2;
+	shp = ShpCreateScale(shp_arena, NULL, layer, gfx, scale);
+	ShapeLink(&shp->s.s);
+	shp_pc += 2;
 }
 
-static void s_cmd_30(void)
+static void ShpCmd30(void)
 {
-	s_pc += 2;
+	shp_pc += 2;
 }
 
-static void s_cmd_joint(void)
+static void ShpCmdJoint(void)
 {
-	S_JOINT *shp;
-	VECS pos;
-	int layer = S_UCHAR[1];
-	Gfx *gfx = S_PTR[2];
-	void *pc = s_pc;
-	s_read_vecs(pos, (short *)pc+1);
-	shp = s_create_joint(s_arena, NULL, layer, gfx, pos);
-	s_link(&shp->s.s);
-	s_pc += 3;
+	SJOINT *shp;
+	SVEC pos;
+	int layer = SHP_UCHAR[1];
+	Gfx *gfx = SHP_PTR[2];
+	void *pc = shp_pc;
+	ShpGetSVec(pos, (short *)pc+1);
+	shp = ShpCreateJoint(shp_arena, NULL, layer, gfx, pos);
+	ShapeLink(&shp->s.s);
+	shp_pc += 3;
 }
 
-static void s_cmd_billboard(void)
+static void ShpCmdBillboard(void)
 {
-	S_BILLBOARD *shp;
-	VECS pos;
+	SBILLBOARD *shp;
+	SVEC pos;
 	SHORT layer = 0;
-	SHORT flag = S_UCHAR[1];
-	void *pc = s_pc;
+	SHORT flag = SHP_UCHAR[1];
+	void *pc = shp_pc;
 	Gfx *gfx = NULL;
-	pc = s_read_vecs(pos, (short *)pc+1);
+	pc = ShpGetSVec(pos, (short *)pc+1);
 	if (flag & 0x80)
 	{
 		gfx = *(void **)pc;
 		layer = flag & 15;
-		pc = (S_SCRIPT *)pc + 1;
+		pc = (SHPLANG *)pc + 1;
 	}
-	shp = s_create_billboard(s_arena, NULL, layer, gfx, pos);
-	s_link(&shp->s.s);
-	s_pc = pc;
+	shp = ShpCreateBillboard(shp_arena, NULL, layer, gfx, pos);
+	ShapeLink(&shp->s.s);
+	shp_pc = pc;
 }
 
-static void s_cmd_gfx(void)
+static void ShpCmdGfx(void)
 {
-	S_GFX *shp;
-	int layer = S_UCHAR[1];
-	Gfx *gfx = S_PTR[1];
-	shp = s_create_gfx(s_arena, NULL, layer, gfx);
-	s_link(&shp->s);
-	s_pc += 2;
+	SGFX *shp;
+	int layer = SHP_UCHAR[1];
+	Gfx *gfx = SHP_PTR[1];
+	shp = ShpCreateGfx(shp_arena, NULL, layer, gfx);
+	ShapeLink(&shp->s);
+	shp_pc += 2;
 }
 
-static void s_cmd_shadow(void)
+static void ShpCmdShadow(void)
 {
-	S_SHADOW *shp;
-	UCHAR type = S_SHORT[1];
-	UCHAR alpha = S_SHORT[2];
-	SHORT size = S_SHORT[3];
-	shp = s_create_shadow(s_arena, NULL, size, alpha, type);
-	s_link(&shp->s);
-	s_pc += 2;
+	SSHADOW *shp;
+	UCHAR type = SHP_SHORT[1];
+	UCHAR alpha = SHP_SHORT[2];
+	SHORT size = SHP_SHORT[3];
+	shp = ShpCreateShadow(shp_arena, NULL, size, alpha, type);
+	ShapeLink(&shp->s);
+	shp_pc += 2;
 }
 
-static void s_cmd_object(void)
+static void ShpCmdObject(void)
 {
-	S_LIST *shp;
-	shp = s_create_list(s_arena, NULL, &sobj_list);
-	s_link(&shp->s);
-	s_pc += 1;
+	SBRANCH *shp;
+	shp = ShpCreateBranch(shp_arena, NULL, &sobj_list);
+	ShapeLink(&shp->s);
+	shp_pc += 1;
 }
 
-static void s_cmd_callback(void)
+static void ShpCmdCallback(void)
 {
-	S_CALLBACK *shp;
-	shp = s_create_callback(s_arena, NULL, S_CALL[1], S_SHORT[1]);
-	s_link(&shp->s);
-	s_pc += 2;
+	SCALLBACK *shp;
+	shp = ShpCreateCallback(shp_arena, NULL, SHP_CALL[1], SHP_SHORT[1]);
+	ShapeLink(&shp->s);
+	shp_pc += 2;
 }
 
-static void s_cmd_back(void)
+static void ShpCmdBack(void)
 {
-	S_BACK *shp;
-	shp = s_create_back(s_arena, NULL, S_SHORT[1], S_CALL[1], 0);
-	s_link(&shp->s.s);
-	s_pc += 2;
+	SBACK *shp;
+	shp = ShpCreateBack(shp_arena, NULL, SHP_SHORT[1], SHP_CALL[1], 0);
+	ShapeLink(&shp->s.s);
+	shp_pc += 2;
 }
 
-static void s_cmd_26(void)
+static void ShpCmd26(void)
 {
-	s_pc += 2;
+	shp_pc += 2;
 }
 
-static void s_cmd_load(void)
+static void ShpCmdBranch(void)
 {
-	S_LIST *shp;
+	SBRANCH *shp;
 	SHAPE *shape = NULL;
-	SHORT index = S_SHORT[1];
+	SHORT index = SHP_SHORT[1];
 	if (index >= 0)
 	{
-		shape = shp_table[index];
-		if (shape->type == ST_LIST) shape = ((S_LIST *)shape)->shape;
+		shape = shape_reftab[index];
+		if (shape->type == ST_BRANCH)   shape = ((SBRANCH *)shape)->shape;
 		else                            shape = NULL;
 	}
-	shp = s_create_list(s_arena, NULL, shape);
-	s_link(&shp->s);
-	s_pc += 1;
+	shp = ShpCreateBranch(shp_arena, NULL, shape);
+	ShapeLink(&shp->s);
+	shp_pc += 1;
 }
 
-static void s_cmd_hand(void)
+static void ShpCmdHand(void)
 {
-	S_HAND *shp;
-	VECS pos;
-	s_read_vecs(pos, S_SHORT+1);
-	shp = s_create_hand(s_arena, NULL, NULL, pos, S_CALL[2], S_UCHAR[1]);
-	s_link(&shp->s.s);
-	s_pc += 3;
+	SHAND *shp;
+	SVEC pos;
+	ShpGetSVec(pos, SHP_SHORT+1);
+	shp = ShpCreateHand(shp_arena, NULL, NULL, pos, SHP_CALL[2], SHP_UCHAR[1]);
+	ShapeLink(&shp->s.s);
+	shp_pc += 3;
 }
 
-static void s_cmd_cull(void)
+static void ShpCmdCull(void)
 {
-	S_CULL *shp;
-	shp = s_create_cull(s_arena, NULL, S_SHORT[1]);
-	s_link(&shp->s);
-	s_pc += 1;
+	SCULL *shp;
+	shp = ShpCreateCull(shp_arena, NULL, SHP_SHORT[1]);
+	ShapeLink(&shp->s);
+	shp_pc += 1;
 }
 
-static void (*s_cmd_table[])(void) =
+static void (*shp_cmdtab[])(void) =
 {
-	s_cmd_execute,
-	s_cmd_exit,
-	s_cmd_jump,
-	s_cmd_return,
-	s_cmd_start,
-	s_cmd_end,
-	s_cmd_store,
-	s_cmd_flag,
-	s_cmd_scene,
-	s_cmd_ortho,
-	s_cmd_persp,
-	s_cmd_empty,
-	s_cmd_layer,
-	s_cmd_lod,
-	s_cmd_select,
-	s_cmd_camera,
-	s_cmd_coord,
-	s_cmd_pos,
-	s_cmd_ang,
-	s_cmd_joint,
-	s_cmd_billboard,
-	s_cmd_gfx,
-	s_cmd_shadow,
-	s_cmd_object,
-	s_cmd_callback,
-	s_cmd_back,
-	s_cmd_26,
-	s_cmd_load,
-	s_cmd_hand,
-	s_cmd_scale,
-	s_cmd_30,
-	s_cmd_31,
-	s_cmd_cull,
+	ShpCmdExecute,
+	ShpCmdExit,
+	ShpCmdJump,
+	ShpCmdReturn,
+	ShpCmdStart,
+	ShpCmdEnd,
+	ShpCmdStore,
+	ShpCmdFlag,
+	ShpCmdScene,
+	ShpCmdOrtho,
+	ShpCmdPersp,
+	ShpCmdEmpty,
+	ShpCmdLayer,
+	ShpCmdLOD,
+	ShpCmdSelect,
+	ShpCmdCamera,
+	ShpCmdCoord,
+	ShpCmdPos,
+	ShpCmdAng,
+	ShpCmdJoint,
+	ShpCmdBillboard,
+	ShpCmdGfx,
+	ShpCmdShadow,
+	ShpCmdObject,
+	ShpCmdCallback,
+	ShpCmdBack,
+	ShpCmd26,
+	ShpCmdBranch,
+	ShpCmdHand,
+	ShpCmdScale,
+	ShpCmd30,
+	ShpCmd31,
+	ShpCmdCull,
 };
 
-SHAPE *s_process(ARENA *arena, S_SCRIPT *script)
+SHAPE *ShpLangCompile(ARENA *arena, SHPLANG *script)
 {
-	shp_root = NULL;
-	shp_count = 0;
-	shp_stack[0] = NULL;
-	shp_sp = 0;
-	s_sp = 2;
-	s_fp = 2;
-	s_pc = segment_to_virtual(script);
-	s_arena = arena;
-	s_stack[0] = 0;
-	s_stack[1] = 0;
-	while (s_pc) s_cmd_table[S_CMD]();
-	return shp_root;
+	shape_root = NULL;
+	shape_reflen = 0;
+	shape_stack[0] = NULL;
+	shape_sp = 0;
+	shp_sp = 2;
+	shp_fp = 2;
+	shp_pc = SegmentToVirtual(script);
+	shp_arena = arena;
+	shp_stack[0] = 0;
+	shp_stack[1] = 0;
+	while (shp_pc) shp_cmdtab[SHP_CMD]();
+	return shape_root;
 }

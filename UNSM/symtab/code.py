@@ -47,96 +47,96 @@ sym_J0_code_text = {
 	# ==========================================================================
 
 	# src/main.c
-	0x80246050: main.sym("debug_check", flag={"GLOBL"}),
+	0x80246050: main.sym("DebugCheck", flag={"GLOBL"}),
 	0x80246170: main.sym("dummy"),
-	0x802461CC: main.sym("debug_entry"),
-	0x802461DC: main.sym("debug_sched_proc"),
-	0x802461EC: main.sym("debug_sched_vi"),
-	0x802461FC: main.sym("sched_init"),
-	0x802462E0: main.sym("sched_init_mem"),
-	0x80246338: main.sym("thread_create"),
-	0x8024639C: main.sym("sc_event_prenmi"),
-	0x802463EC: main.sym("sc_task_flush"),
-	0x8024651C: main.sym("sc_task_start"),
-	0x8024659C: main.sym("sc_task_yield"),
-	0x802465EC: main.sym("sc_event_gfxtask"),
-	0x80246648: main.sym("sc_audtask_skip"),
-	0x8024669C: main.sym("sc_event_vi"),
-	0x802467FC: main.sym("sc_event_sp"),
-	0x8024694C: main.sym("sc_event_dp"),
-	0x802469B8: main.sym("sched_proc"),
+	0x802461CC: main.sym("DebugEntry"),
+	0x802461DC: main.sym("DebugSchedProc"),
+	0x802461EC: main.sym("DebugSchedVI"),
+	0x802461FC: main.sym("ScInit"),
+	0x802462E0: main.sym("ScInitMem"),
+	0x80246338: main.sym("CreateThread"),
+	0x8024639C: main.sym("ScEventPreNMI"),
+	0x802463EC: main.sym("ScTaskFlush"),
+	0x8024651C: main.sym("ScTaskStart"),
+	0x8024659C: main.sym("ScTaskYield"),
+	0x802465EC: main.sym("ScEventGfxTask"),
+	0x80246648: main.sym("ScSkipAudTask"),
+	0x8024669C: main.sym("ScEventVI"),
+	0x802467FC: main.sym("ScEventSP"),
+	0x8024694C: main.sym("ScEventDP"),
+	0x802469B8: main.sym("SchedProc"),
 	0x80246A9C: main.sym("L80246A9C", flag={"GLOBL","LOCAL"}),
 	0x80246AAC: main.sym("L80246AAC", flag={"GLOBL","LOCAL"}),
 	0x80246ABC: main.sym("L80246ABC", flag={"GLOBL","LOCAL"}),
 	0x80246ACC: main.sym("L80246ACC", flag={"GLOBL","LOCAL"}),
 	0x80246ADC: main.sym("L80246ADC", flag={"GLOBL","LOCAL"}),
-	0x80246B14: main.sym("sc_setclient", flag={"GLOBL"}),
-	0x80246B74: main.sym("sc_queue_task", flag={"GLOBL"}),
-	0x80246BB4: main.sym("sc_queue_audtask", flag={"GLOBL"}),
-	0x80246C10: main.sym("sc_queue_gfxtask", flag={"GLOBL"}),
-	0x80246C9C: main.sym("sc_aud_enable", flag={"GLOBL"}),
-	0x80246CB8: main.sym("sc_aud_disable", flag={"GLOBL"}),
-	0x80246CF0: main.sym("idle_proc"),
+	0x80246B14: main.sym("ScSetClient", flag={"GLOBL"}),
+	0x80246B74: main.sym("ScQueueTask", flag={"GLOBL"}),
+	0x80246BB4: main.sym("ScQueueAudTask", flag={"GLOBL"}),
+	0x80246C10: main.sym("ScQueueGfxTask", flag={"GLOBL"}),
+	0x80246C9C: main.sym("ScAudEnable", flag={"GLOBL"}),
+	0x80246CB8: main.sym("ScAudDisable", flag={"GLOBL"}),
+	0x80246CF0: main.sym("IdleProc"),
 	0x80246DC4: main.sym("entry", flag={"GLOBL"}),
 
 	# src/graphics.c
-	0x80246E40: main.sym("gfx_init_dp"),
-	0x80247174: main.sym("gfx_init_sp"),
-	0x80247254: main.sym("gfx_init_zimg"),
-	0x80247398: main.sym("gfx_init_cimg"),
-	0x80247488: main.sym("gfx_clear", flag={"GLOBL"}),
-	0x802475F0: main.sym("gfx_vp_clear", flag={"GLOBL"}),
-	0x8024781C: main.sym("gfx_draw_border"),
-	0x8024798C: main.sym("gfx_vp_scissor", flag={"GLOBL"}),
-	0x80247B0C: main.sym("gfx_make_task"),
-	0x80247C9C: main.sym("gfx_start", flag={"GLOBL"}),
-	0x80247CE4: main.sym("gfx_end", flag={"GLOBL"}),
-	0x80247D84: main.sym("gfx_reset"),
-	0x80247ED8: main.sym("frame_init"),
-	0x80247FAC: main.sym("frame_start"),
-	0x80248060: main.sym("frame_end"),
-	0x802481B0: main.sym("demo_record"),
-	0x802482D4: main.sym("cont_proc_stick"),
-	0x80248468: main.sym("demo_proc"),
-	0x80248608: main.sym("cont_proc"),
-	0x802487F4: main.sym("cont_init"),
-	0x80248934: main.sym("gfx_init"),
-	0x80248AC0: main.sym("gfx_proc", flag={"GLOBL"}),
+	0x80246E40: main.sym("GfxInitDP"),
+	0x80247174: main.sym("GfxInitSP"),
+	0x80247254: main.sym("GfxInitZB"),
+	0x80247398: main.sym("GfxInitCB"),
+	0x80247488: main.sym("GfxClear", flag={"GLOBL"}),
+	0x802475F0: main.sym("GfxVpClear", flag={"GLOBL"}),
+	0x8024781C: main.sym("GfxDrawBorder"),
+	0x8024798C: main.sym("GfxVpScissor", flag={"GLOBL"}),
+	0x80247B0C: main.sym("GfxMakeTask"),
+	0x80247C9C: main.sym("GfxStart", flag={"GLOBL"}),
+	0x80247CE4: main.sym("GfxEnd", flag={"GLOBL"}),
+	0x80247D84: main.sym("GfxReset"),
+	0x80247ED8: main.sym("FrameInit"),
+	0x80247FAC: main.sym("FrameStart"),
+	0x80248060: main.sym("FrameEnd"),
+	0x802481B0: main.sym("DemoRecord"),
+	0x802482D4: main.sym("ContProcStick"),
+	0x80248468: main.sym("DemoProc"),
+	0x80248608: main.sym("ContProc"),
+	0x802487F4: main.sym("ContInit"),
+	0x80248934: main.sym("GfxInit"),
+	0x80248AC0: main.sym("GfxProc", flag={"GLOBL"}),
 
 	# src/audio.c
-	0x80248C10: main.sym("aud_reset_mute", flag={"GLOBL"}),
-	0x80248C28: main.sym("aud_set_mute", flag={"GLOBL"}),
-	0x80248CB8: main.sym("aud_clr_mute", flag={"GLOBL"}),
-	0x80248D48: main.sym("aud_lock", flag={"GLOBL"}),
-	0x80248D90: main.sym("aud_unlock", flag={"GLOBL"}),
-	0x80248DD8: main.sym("aud_sound_mode", flag={"GLOBL"}),
-	0x80248E24: main.sym("aud_face_sound", flag={"GLOBL"}),
-	0x80248FBC: main.sym("aud_wave_sound", flag={"GLOBL"}),
-	0x80249040: main.sym("aud_endless_music", flag={"GLOBL"}),
-	0x80249148: main.sym("bgm_play", flag={"GLOBL"}),
-	0x802491FC: main.sym("aud_fadeout", flag={"GLOBL"}),
-	0x8024924C: main.sym("bgm_fadeout", flag={"GLOBL"}),
-	0x802492A0: main.sym("bgm_stage_play", flag={"GLOBL"}),
-	0x802492E0: main.sym("bgm_shell_play", flag={"GLOBL"}),
-	0x8024931C: main.sym("bgm_shell_stop", flag={"GLOBL"}),
-	0x80249368: main.sym("bgm_special_play", flag={"GLOBL"}),
-	0x802493D4: main.sym("bgm_special_fadeout", flag={"GLOBL"}),
-	0x80249418: main.sym("bgm_special_stop", flag={"GLOBL"}),
-	0x80249464: main.sym("aud_levelse_play", flag={"GLOBL"}),
-	0x802494A8: main.sym("aud_tick", flag={"GLOBL"}),
-	0x802494D0: main.sym("aud_proc", flag={"GLOBL"}),
+	0x80248C10: main.sym("AudResetMute", flag={"GLOBL"}),
+	0x80248C28: main.sym("AudSetMute", flag={"GLOBL"}),
+	0x80248CB8: main.sym("AudClrMute", flag={"GLOBL"}),
+	0x80248D48: main.sym("AudLock", flag={"GLOBL"}),
+	0x80248D90: main.sym("AudUnlock", flag={"GLOBL"}),
+	0x80248DD8: main.sym("AudSetMode", flag={"GLOBL"}),
+	0x80248E24: main.sym("AudPlayFaceSound", flag={"GLOBL"}),
+	0x80248FBC: main.sym("AudProcWaveSound", flag={"GLOBL"}),
+	0x80249040: main.sym("AudProcEndlessMusic", flag={"GLOBL"}),
+	0x80249148: main.sym("AudPlayBGM", flag={"GLOBL"}),
+	0x802491FC: main.sym("AudFadeout", flag={"GLOBL"}),
+	0x8024924C: main.sym("AudFadeoutBGM", flag={"GLOBL"}),
+	0x802492A0: main.sym("AudPlayStageBGM", flag={"GLOBL"}),
+	0x802492E0: main.sym("AudPlayShellBGM", flag={"GLOBL"}),
+	0x8024931C: main.sym("AudStopShellBGM", flag={"GLOBL"}),
+	0x80249368: main.sym("AudPlaySpecialBGM", flag={"GLOBL"}),
+	0x802493D4: main.sym("AudFadeoutSpecialBGM", flag={"GLOBL"}),
+	0x80249418: main.sym("AudStopSpecialBGM", flag={"GLOBL"}),
+	0x80249464: main.sym("AudPlayLevelSe", flag={"GLOBL"}),
+	0x802494A8: main.sym("AudTick", flag={"GLOBL"}),
+	0x802494D0: main.sym("AudProc", flag={"GLOBL"}),
 
 	# src/game.c
-	0x802495B0: main.sym("time_ctrl", flag={"GLOBL"}),
-	0x80249688: main.sym("game_checkpause"),
-	0x80249734: main.sym("game_set_state"),
-	0x8024975C: main.sym("game_exit"),
-	0x80249788: main.sym("game_fadeout", flag={"GLOBL"}),
+	0x802495B0: main.sym("GmTimeCtrl", flag={"GLOBL"}),
+	0x80249688: main.sym("GmCheckPause"),
+	0x80249734: main.sym("GmSetState"),
+	0x8024975C: main.sym("GmExit"),
+	0x80249788: main.sym("GmFadeout", flag={"GLOBL"}),
 	0x802497FC: main.sym("game_8024982C"),
-	0x8024980C: main.sym("game_init_msg", flag={"GLOBL"}),
-	0x8024992C: main.sym("pl_init_door"),
-	0x802499E0: main.sym("pl_init_cap"),
-	0x80249A84: main.sym("pl_init_state"),
+	0x8024980C: main.sym("GmInitMessage", flag={"GLOBL"}),
+	0x8024992C: main.sym("PL_InitDoor"),
+	0x802499E0: main.sym("PL_InitCap"),
+	0x80249A84: main.sym("PL_InitState"),
 	0x80249AC4: main.sym("L80249AF4", flag={"GLOBL","LOCAL"}),
 	0x80249ADC: main.sym("L80249B0C", flag={"GLOBL","LOCAL"}),
 	0x80249AF8: main.sym("L80249B28", flag={"GLOBL","LOCAL"}),
@@ -156,7 +156,7 @@ sym_J0_code_text = {
 	0x80249C58: main.sym("L80249C88", flag={"GLOBL","LOCAL"}),
 	0x80249C70: main.sym("L80249CA0", flag={"GLOBL","LOCAL"}),
 	0x80249C88: main.sym("L80249CB8", flag={"GLOBL","LOCAL"}),
-	0x80249CA8: main.sym("game_init_port"),
+	0x80249CA8: main.sym("GmInitPort"),
 	0x80249E74: main.sym("L80249EA4", flag={"GLOBL","LOCAL"}),
 	0x80249E94: main.sym("L80249EC4", flag={"GLOBL","LOCAL"}),
 	0x80249EB4: main.sym("L80249EE4", flag={"GLOBL","LOCAL"}),
@@ -164,15 +164,15 @@ sym_J0_code_text = {
 	0x80249EFC: main.sym("L80249F2C", flag={"GLOBL","LOCAL"}),
 	0x80249F1C: main.sym("L80249F4C", flag={"GLOBL","LOCAL"}),
 	0x80249F3C: main.sym("L80249F6C", flag={"GLOBL","LOCAL"}),
-	0x8024A02C: main.sym("game_proc_entry"),
-	0x8024A094: main.sym("game_init_stage"),
-	0x8024A0E0: main.sym("game_init_staff"),
-	0x8024A27C: main.sym("game_proc_connect"),
-	0x8024A48C: main.sym("game_is_same_bgm"),
-	0x8024A594: main.sym("game_set_entry"),
-	0x8024A648: main.sym("bgport_get"),
-	0x8024A6F0: main.sym("game_proc_bgport"),
-	0x8024A860: main.sym("pl_fade", flag={"GLOBL"}),
+	0x8024A02C: main.sym("GmProcEntry"),
+	0x8024A094: main.sym("GmInitStage"),
+	0x8024A0E0: main.sym("GmInitStaff"),
+	0x8024A27C: main.sym("GmProcConnect"),
+	0x8024A48C: main.sym("GmIsSameBGM"),
+	0x8024A594: main.sym("GmSetEntry"),
+	0x8024A648: main.sym("GmGetBGPort"),
+	0x8024A6F0: main.sym("GmProcBGPort"),
+	0x8024A860: main.sym("PL_Fade", flag={"GLOBL"}),
 	0x8024A8D8: main.sym("L8024AA44", flag={"GLOBL","LOCAL"}),
 	0x8024A91C: main.sym("L8024AA88", flag={"GLOBL","LOCAL"}),
 	0x8024A960: main.sym("L8024AACC", flag={"GLOBL","LOCAL"}),
@@ -186,82 +186,82 @@ sym_J0_code_text = {
 	0x8024AC40: main.sym("L8024ADC0", flag={"GLOBL","LOCAL"}),
 	0x8024AC6C: main.sym("L8024ADEC", flag={"GLOBL","LOCAL"}),
 	0x8024ACE0: main.sym("L8024AE60", flag={"GLOBL","LOCAL"}),
-	0x8024AD5C: main.sym("game_proc_fade"),
+	0x8024AD5C: main.sym("GmProcFade"),
 	0x8024AE44: main.sym("L8024AFC4", flag={"GLOBL","LOCAL"}),
 	0x8024AE5C: main.sym("L8024AFDC", flag={"GLOBL","LOCAL"}),
 	0x8024AE78: main.sym("L8024AFF8", flag={"GLOBL","LOCAL"}),
 	0x8024AE88: main.sym("L8024B008", flag={"GLOBL","LOCAL"}),
 	0x8024AEBC: main.sym("L8024B03C", flag={"GLOBL","LOCAL"}),
-	0x8024AFBC: main.sym("game_proc_hud"),
-	0x8024B1F0: main.sym("game_sceneproc"),
-	0x8024B244: main.sym("game_proc_normal"),
-	0x8024B434: main.sym("game_proc_pause"),
-	0x8024B52C: main.sym("game_proc_frameadv"),
-	0x8024B5F8: main.sym("game_freeze", flag={"GLOBL"}),
-	0x8024B620: main.sym("game_proc_freeze"),
-	0x8024B6E0: main.sym("game_proc_exit"),
-	0x8024B7A0: main.sym("game_proc_exit_old"),
-	0x8024B818: main.sym("game_proc"),
+	0x8024AFBC: main.sym("GmProcHUD"),
+	0x8024B1F0: main.sym("GmSceneProc"),
+	0x8024B244: main.sym("GmProcNormal"),
+	0x8024B434: main.sym("GmProcPause"),
+	0x8024B52C: main.sym("GmProcFrameAdv"),
+	0x8024B5F8: main.sym("GmFreeze", flag={"GLOBL"}),
+	0x8024B620: main.sym("GmProcFreeze"),
+	0x8024B6E0: main.sym("GmProcExit"),
+	0x8024B7A0: main.sym("GmProcExitOLD"),
+	0x8024B818: main.sym("GmProc"),
 	0x8024B84C: main.sym("L8024B9EC", flag={"GLOBL","LOCAL"}),
 	0x8024B860: main.sym("L8024BA00", flag={"GLOBL","LOCAL"}),
 	0x8024B874: main.sym("L8024BA14", flag={"GLOBL","LOCAL"}),
 	0x8024B888: main.sym("L8024BA28", flag={"GLOBL","LOCAL"}),
 	0x8024B89C: main.sym("L8024BA3C", flag={"GLOBL","LOCAL"}),
 	0x8024B8B0: main.sym("L8024BA50", flag={"GLOBL","LOCAL"}),
-	0x8024B8EC: main.sym("game_init"),
-	0x8024BB38: main.sym("game_process", flag={"GLOBL"}),
-	0x8024BBBC: main.sym("game_initialize", flag={"GLOBL"}),
-	0x8024BC74: main.sym("game_checkselect", flag={"GLOBL"}),
-	0x8024BE00: main.sym("ending_sound", flag={"GLOBL"}),
+	0x8024B8EC: main.sym("GmInit"),
+	0x8024BB38: main.sym("GameProc", flag={"GLOBL"}),
+	0x8024BBBC: main.sym("GameInit", flag={"GLOBL"}),
+	0x8024BC74: main.sym("GameCheckSelect", flag={"GLOBL"}),
+	0x8024BE00: main.sym("EndingSound", flag={"GLOBL"}),
 
 	# src/collision.c
-	0x8024BE50: main.sym("collision_8024BFF0"),
-	0x8024BF18: main.sym("collision_8024C0B8"),
-	0x8024BFCC: main.sym("collision_8024C16C", flag={"GLOBL"}),
-	0x8024C038: main.sym("collision_8024C1D8"),
-	0x8024C37C: main.sym("collision_8024C51C"),
+	0x8024BE50: main.sym("ObjGetCapFlag"),
+	0x8024BF18: main.sym("PL_IsFacingObj"),
+	0x8024BFCC: main.sym("PL_GetAngToObj", flag={"GLOBL"}),
+	0x8024C038: main.sym("PL_CheckAttack"),
+	0x8024C37C: main.sym("ObjAttack"),
 	0x8024C3F0: main.sym("L8024C590", flag={"GLOBL","LOCAL"}),
 	0x8024C400: main.sym("L8024C5A0", flag={"GLOBL","LOCAL"}),
 	0x8024C410: main.sym("L8024C5B0", flag={"GLOBL","LOCAL"}),
 	0x8024C420: main.sym("L8024C5C0", flag={"GLOBL","LOCAL"}),
 	0x8024C450: main.sym("L8024C5F0", flag={"GLOBL","LOCAL"}),
-	0x8024C478: main.sym("collision_8024C618", flag={"GLOBL"}),
-	0x8024C4CC: main.sym("collision_8024C66C", flag={"GLOBL"}),
-	0x8024C520: main.sym("collision_8024C6C0", flag={"GLOBL"}),
-	0x8024C5E0: main.sym("collision_8024C780", flag={"GLOBL"}),
-	0x8024C6F4: main.sym("collision_8024C894", flag={"GLOBL"}),
-	0x8024C75C: main.sym("collision_8024C8FC", flag={"GLOBL"}),
-	0x8024C788: main.sym("collision_8024C928", flag={"GLOBL"}),
-	0x8024C8C8: main.sym("collision_8024CA68", flag={"GLOBL"}),
-	0x8024C958: main.sym("collision_8024CAF8", flag={"GLOBL"}),
-	0x8024C9B8: main.sym("collision_8024CB58"),
-	0x8024CA5C: main.sym("collision_8024CBFC", flag={"GLOBL"}),
-	0x8024CADC: main.sym("collision_8024CC7C", flag={"GLOBL"}),
-	0x8024CC68: main.sym("collision_8024CE08"),
-	0x8024CF14: main.sym("collision_8024D0B4"),
-	0x8024CF90: main.sym("collision_8024D130"),
-	0x8024CFCC: main.sym("collision_8024D16C"),
-	0x8024D11C: main.sym("collision_8024D2BC"),
-	0x8024D3D8: main.sym("collision_8024D578"),
-	0x8024D58C: main.sym("collision_8024D72C"),
-	0x8024D664: main.sym("collision_8024D804"),
-	0x8024D710: main.sym("collision_8024D8B0"),
-	0x8024D7F8: main.sym("collision_8024D998"),
+	0x8024C478: main.sym("PL_StopRide", flag={"GLOBL"}),
+	0x8024C4CC: main.sym("PL_TakeObject", flag={"GLOBL"}),
+	0x8024C520: main.sym("PL_DropObject", flag={"GLOBL"}),
+	0x8024C5E0: main.sym("PL_ThrowObject", flag={"GLOBL"}),
+	0x8024C6F4: main.sym("PL_DropAll", flag={"GLOBL"}),
+	0x8024C75C: main.sym("PL_IsWearingDefCap", flag={"GLOBL"}),
+	0x8024C788: main.sym("PL_BlowCap", flag={"GLOBL"}),
+	0x8024C8C8: main.sym("MarioStealCap", flag={"GLOBL"}),
+	0x8024C958: main.sym("MarioReturnCap", flag={"GLOBL"}),
+	0x8024C9B8: main.sym("PL_IsTaking"),
+	0x8024CA5C: main.sym("PL_GetHitObj", flag={"GLOBL"}),
+	0x8024CADC: main.sym("PL_CheckTaking", flag={"GLOBL"}),
+	0x8024CC68: main.sym("PL_BumpObject"),
+	0x8024CF14: main.sym("PL_Stomp"),
+	0x8024CF90: main.sym("PL_HeadAttack"),
+	0x8024CFCC: main.sym("PL_GetBlowState"),
+	0x8024D11C: main.sym("PL_GetDamageState"),
+	0x8024D3D8: main.sym("PL_RepelFromObj"),
+	0x8024D58C: main.sym("PL_PunchKickRecoil"),
+	0x8024D664: main.sym("PL_GetDoorCode"),
+	0x8024D710: main.sym("PL_TakeDamage"),
+	0x8024D7F8: main.sym("PL_CheckDamage"),
 	0x8024D90C: main.sym("collision_8024DAAC"),
-	0x8024D98C: main.sym("collision_8024DB2C", flag={"GLOBL"}),
-	0x8024DA50: main.sym("collision_8024DBF0", flag={"GLOBL"}),
-	0x8024DA88: main.sym("collision_8024DC28", flag={"GLOBL"}),
-	0x8024DCA4: main.sym("collision_8024DE4C", flag={"GLOBL"}),
-	0x8024DD68: main.sym("collision_8024DF10", flag={"GLOBL"}),
-	0x8024DF1C: main.sym("collision_8024E0C4", flag={"GLOBL"}),
-	0x8024E154: main.sym("collision_8024E2FC", flag={"GLOBL"}),
+	0x8024D98C: main.sym("PL_CollideCoin"),
+	0x8024DA50: main.sym("PL_CollideRecover"),
+	0x8024DA88: main.sym("PL_CollideStar"),
+	0x8024DCA4: main.sym("PL_CollideCage"),
+	0x8024DD68: main.sym("PL_CollidePipe"),
+	0x8024DF1C: main.sym("PL_CollidePortDoor"),
+	0x8024E154: main.sym("PL_GetStarDoorFlag", flag={"GLOBL"}),
 	0x8024E1E0: main.sym("L8024E388", flag={"GLOBL","LOCAL"}),
 	0x8024E208: main.sym("L8024E3B0", flag={"GLOBL","LOCAL"}),
 	0x8024E230: main.sym("L8024E3D8", flag={"GLOBL","LOCAL"}),
 	0x8024E240: main.sym("L8024E3E8", flag={"GLOBL","LOCAL"}),
 	0x8024E250: main.sym("L8024E3F8", flag={"GLOBL","LOCAL"}),
 	0x8024E260: main.sym("L8024E408", flag={"GLOBL","LOCAL"}),
-	0x8024E278: main.sym("collision_8024E420", flag={"GLOBL"}),
+	0x8024E278: main.sym("PL_CollideDoor"),
 	0x8024E3FC: main.sym("L8024E5A4", flag={"GLOBL","LOCAL"}),
 	0x8024E40C: main.sym("L8024E5B4", flag={"GLOBL","LOCAL"}),
 	0x8024E41C: main.sym("L8024E5C4", flag={"GLOBL","LOCAL"}),
@@ -269,86 +269,86 @@ sym_J0_code_text = {
 	0x8024E43C: main.sym("L8024E5E4", flag={"GLOBL","LOCAL"}),
 	0x8024E44C: main.sym("L8024E5F4", flag={"GLOBL","LOCAL"}),
 	0x8024E45C: main.sym("L8024E604", flag={"GLOBL","LOCAL"}),
-	0x8024E544: main.sym("collision_8024E6EC", flag={"GLOBL"}),
-	0x8024E5D0: main.sym("collision_8024E778", flag={"GLOBL"}),
-	0x8024E62C: main.sym("collision_8024E7D4", flag={"GLOBL"}),
-	0x8024E748: main.sym("collision_8024E8F0", flag={"GLOBL"}),
-	0x8024E828: main.sym("collision_8024E9D0", flag={"GLOBL"}),
-	0x8024E930: main.sym("collision_8024EAD8", flag={"GLOBL"}),
-	0x8024EAAC: main.sym("collision_8024EC54", flag={"GLOBL"}),
-	0x8024EBDC: main.sym("collision_8024ED84", flag={"GLOBL"}),
-	0x8024EC9C: main.sym("collision_8024EE44", flag={"GLOBL"}),
-	0x8024EE50: main.sym("collision_8024EFF8", flag={"GLOBL"}),
-	0x8024EF8C: main.sym("collision_8024F134"),
-	0x8024EFC8: main.sym("collision_8024F170", flag={"GLOBL"}),
-	0x8024F038: main.sym("collision_8024F1E0", flag={"GLOBL"}),
-	0x8024F194: main.sym("collision_8024F354", flag={"GLOBL"}),
-	0x8024F2D4: main.sym("collision_8024F4AC", flag={"GLOBL"}),
-	0x8024F384: main.sym("collision_8024F55C", flag={"GLOBL"}),
-	0x8024F3F4: main.sym("collision_8024F5CC", flag={"GLOBL"}),
-	0x8024F4CC: main.sym("collision_8024F6A4", flag={"GLOBL"}),
-	0x8024F5D0: main.sym("collision_8024F7A8"),
-	0x8024F6E4: main.sym("collision_8024F8BC", flag={"GLOBL"}),
-	0x8024F888: main.sym("collision_8024FA60", flag={"GLOBL"}),
-	0x8024F958: main.sym("collision_8024FB30", flag={"GLOBL"}),
-	0x8024FB54: main.sym("collision_8024FD2C", flag={"GLOBL"}),
-	0x8024FC94: main.sym("collision_8024FE6C"),
-	0x8024FD2C: main.sym("collision_8024FF04"),
-	0x8024FEC0: main.sym("collision_80250098"),
-	0x8024FFC0: main.sym("collision_80250198", flag={"GLOBL"}),
-	0x80250058: main.sym("collision_80250230"),
-	0x80250218: main.sym("collision_802503F0", flag={"GLOBL"}),
-	0x802503F0: main.sym("collision_802505C8"),
-	0x80250484: main.sym("collision_8025065C"),
-	0x8025054C: main.sym("collision_80250724"),
-	0x802505A0: main.sym("collision_80250778"),
-	0x80250624: main.sym("collision_802507FC", flag={"GLOBL"}),
+	0x8024E544: main.sym("PL_CollideCannon"),
+	0x8024E5D0: main.sym("PL_CollideIgloo"),
+	0x8024E62C: main.sym("PL_CollideTornado"),
+	0x8024E748: main.sym("PL_CollideWhirlpool"),
+	0x8024E828: main.sym("PL_CollideWind"),
+	0x8024E930: main.sym("PL_CollideBurn"),
+	0x8024EAAC: main.sym("PL_CollideBullet"),
+	0x8024EBDC: main.sym("PL_CollideClam"),
+	0x8024EC9C: main.sym("PL_CollideBump"),
+	0x8024EE50: main.sym("PL_CollideElecShock"),
+	0x8024EF8C: main.sym("PL_CollideDummy"),
+	0x8024EFC8: main.sym("PL_CollideEnemy"),
+	0x8024F038: main.sym("PL_CollideFlyEnemy"),
+	0x8024F194: main.sym("PL_CollideBounce"),
+	0x8024F2D4: main.sym("PL_CollideSpiny"),
+	0x8024F384: main.sym("PL_CollideDamage"),
+	0x8024F3F4: main.sym("PL_CollideItemBox"),
+	0x8024F4CC: main.sym("PL_CollideShell"),
+	0x8024F5D0: main.sym("PL_CheckTaken"),
+	0x8024F6E4: main.sym("PL_CollidePole"),
+	0x8024F888: main.sym("PL_CollideHang"),
+	0x8024F958: main.sym("PL_CollideCap"),
+	0x8024FB54: main.sym("PL_CollideTake"),
+	0x8024FC94: main.sym("PL_CanOpenMessage"),
+	0x8024FD2C: main.sym("PL_CheckReading"),
+	0x8024FEC0: main.sym("PL_CheckTalking"),
+	0x8024FFC0: main.sym("PL_CollideMessage"),
+	0x80250058: main.sym("PL_CheckPunchKickWall"),
+	0x80250218: main.sym("PL_CheckCollision", flag={"GLOBL"}),
+	0x802503F0: main.sym("PL_CheckFall"),
+	0x80250484: main.sym("PL_GroundBurn"),
+	0x8025054C: main.sym("PL_StartTimer"),
+	0x802505A0: main.sym("PL_StopTimer"),
+	0x80250624: main.sym("PL_CheckGroundCollision", flag={"GLOBL"}),
 
 	# src/player.c
-	0x80250770: main.sym("player_80250940", flag={"GLOBL"}),
-	0x802507AC: main.sym("player_8025097C", flag={"GLOBL"}),
-	0x802507E8: main.sym("pl_set_anime", flag={"GLOBL"}),
-	0x80250934: main.sym("player_80250B04", flag={"GLOBL"}),
-	0x80250AAC: main.sym("player_80250C7C", flag={"GLOBL"}),
-	0x80250B68: main.sym("player_80250D38", flag={"GLOBL"}),
-	0x80250C84: main.sym("player_80250E54", flag={"GLOBL"}),
-	0x80250E50: main.sym("player_80251020", flag={"GLOBL"}),
-	0x80250F0C: main.sym("player_802510DC", flag={"GLOBL"}),
-	0x80250F50: main.sym("player_80251120", flag={"GLOBL"}),
-	0x80250FBC: main.sym("player_8025118C", flag={"GLOBL"}),
-	0x80251048: main.sym("player_80251274", flag={"GLOBL"}),
-	0x802510E4: main.sym("player_80251310", flag={"GLOBL"}),
-	0x80251218: main.sym("player_80251444", flag={"GLOBL"}),
-	0x80251280: main.sym("player_802514AC", flag={"GLOBL"}),
-	0x802512E4: main.sym("player_80251510", flag={"GLOBL"}),
-	0x80251348: main.sym("player_80251574", flag={"GLOBL"}),
-	0x802513AC: main.sym("player_802515D8", flag={"GLOBL"}),
-	0x80251410: main.sym("player_8025163C", flag={"GLOBL"}),
-	0x802514DC: main.sym("player_80251708", flag={"GLOBL"}),
-	0x80251550: main.sym("player_8025177C", flag={"GLOBL"}),
+	0x80250770: main.sym("PL_IsAnimeLast1F", flag={"GLOBL"}),
+	0x802507AC: main.sym("PL_IsAnimeLast2F", flag={"GLOBL"}),
+	0x802507E8: main.sym("PL_SetAnime", flag={"GLOBL"}),
+	0x80250934: main.sym("PL_SetAnimeV", flag={"GLOBL"}),
+	0x80250AAC: main.sym("PL_SetAnimeFrame", flag={"GLOBL"}),
+	0x80250B68: main.sym("PL_IsAnimeAtFrame", flag={"GLOBL"}),
+	0x80250C84: main.sym("PL_GetAnimePos", flag={"GLOBL"}),
+	0x80250E50: main.sym("PL_UseAnimePos", flag={"GLOBL"}),
+	0x80250F0C: main.sym("PL_GetAnimeY", flag={"GLOBL"}),
+	0x80250F50: main.sym("PL_TrigSound", flag={"GLOBL"}),
+	0x80250FBC: main.sym("PL_TrigJumpVoice", flag={"GLOBL"}),
+	0x80251048: main.sym("PL_SetSpeedEffect", flag={"GLOBL"}),
+	0x802510E4: main.sym("PL_PlayEffect", flag={"GLOBL"}),
+	0x80251218: main.sym("PL_TrigEffect", flag={"GLOBL"}),
+	0x80251280: main.sym("PL_PlayLandEffect", flag={"GLOBL"}),
+	0x802512E4: main.sym("PL_TrigLandEffect", flag={"GLOBL"}),
+	0x80251348: main.sym("PL_PlayFallEffect", flag={"GLOBL"}),
+	0x802513AC: main.sym("PL_TrigFallEffect", flag={"GLOBL"}),
+	0x80251410: main.sym("PL_TrigJumpEffect", flag={"GLOBL"}),
+	0x802514DC: main.sym("PL_SetSpeed", flag={"GLOBL"}),
+	0x80251550: main.sym("PL_GetSlip", flag={"GLOBL"}),
 	0x802515EC: main.sym("L80251818", flag={"GLOBL","LOCAL"}),
 	0x802515FC: main.sym("L80251828", flag={"GLOBL","LOCAL"}),
 	0x8025160C: main.sym("L80251838", flag={"GLOBL","LOCAL"}),
 	0x8025161C: main.sym("L80251848", flag={"GLOBL","LOCAL"}),
-	0x8025167C: main.sym("player_802518A8", flag={"GLOBL"}),
+	0x8025167C: main.sym("PL_GetSurface", flag={"GLOBL"}),
 	0x8025177C: main.sym("L802519A8", flag={"GLOBL","LOCAL"}),
 	0x80251788: main.sym("L802519B4", flag={"GLOBL","LOCAL"}),
 	0x80251798: main.sym("L802519C4", flag={"GLOBL","LOCAL"}),
 	0x802517A8: main.sym("L802519D4", flag={"GLOBL","LOCAL"}),
 	0x802517B8: main.sym("L802519E4", flag={"GLOBL","LOCAL"}),
 	0x802517C8: main.sym("L802519F4", flag={"GLOBL","LOCAL"}),
-	0x8025181C: main.sym("player_80251A48", flag={"GLOBL"}),
-	0x802518D0: main.sym("player_80251AFC", flag={"GLOBL"}),
-	0x80251928: main.sym("player_80251B54", flag={"GLOBL"}),
-	0x802519A8: main.sym("player_80251BD4", flag={"GLOBL"}),
-	0x80251AD0: main.sym("player_80251CFC", flag={"GLOBL"}),
-	0x80251BF8: main.sym("player_80251E24"),
-	0x80251CF8: main.sym("player_80251F24", flag={"GLOBL"}),
-	0x80251DD4: main.sym("player_80252000", flag={"GLOBL"}),
+	0x8025181C: main.sym("PL_CheckWall", flag={"GLOBL"}),
+	0x802518D0: main.sym("PL_CheckRoof", flag={"GLOBL"}),
+	0x80251928: main.sym("PL_IsFaceDownSlope", flag={"GLOBL"}),
+	0x802519A8: main.sym("PL_IsSlipMin", flag={"GLOBL"}),
+	0x80251AD0: main.sym("PL_IsSlipMax", flag={"GLOBL"}),
+	0x80251BF8: main.sym("PL_IsSlipJump"),
+	0x80251CF8: main.sym("PL_CheckGroundYNear", flag={"GLOBL"}),
+	0x80251DD4: main.sym("PL_GetGroundAngX", flag={"GLOBL"}),
 	0x80251F74: main.sym("player_802521A0", flag={"GLOBL"}),
-	0x80252070: main.sym("player_8025229C"),
-	0x8025219C: main.sym("player_802523C8"),
-	0x80252234: main.sym("player_80252460"),
+	0x80252070: main.sym("PL_SetSlipJump"),
+	0x8025219C: main.sym("PL_SetJumpSpeed"),
+	0x80252234: main.sym("PL_SetJump"),
 	0x802523E0: main.sym("L8025260C", flag={"GLOBL","LOCAL"}),
 	0x80252478: main.sym("L802526A4", flag={"GLOBL","LOCAL"}),
 	0x802524F4: main.sym("L80252720", flag={"GLOBL","LOCAL"}),
@@ -356,142 +356,142 @@ sym_J0_code_text = {
 	0x802525B8: main.sym("L802527E4", flag={"GLOBL","LOCAL"}),
 	0x8025266C: main.sym("L80252898", flag={"GLOBL","LOCAL"}),
 	0x80252778: main.sym("L802529A4", flag={"GLOBL","LOCAL"}),
-	0x802527B8: main.sym("player_802529E4"),
-	0x802529A8: main.sym("player_80252BD4"),
-	0x802529EC: main.sym("player_80252C18"),
-	0x80252AC8: main.sym("pl_set_state", flag={"GLOBL"}),
-	0x80252C30: main.sym("player_80252E5C", flag={"GLOBL"}),
-	0x80252E74: main.sym("player_802530A0", flag={"GLOBL"}),
-	0x80252F4C: main.sym("player_80253178", flag={"GLOBL"}),
-	0x80252F98: main.sym("player_802531C4", flag={"GLOBL"}),
-	0x80252FEC: main.sym("player_80253218", flag={"GLOBL"}),
-	0x802530D4: main.sym("player_80253300", flag={"GLOBL"}),
-	0x802531B8: main.sym("player_802533E4", flag={"GLOBL"}),
-	0x8025325C: main.sym("player_80253488", flag={"GLOBL"}),
-	0x8025335C: main.sym("player_80253588"),
-	0x802534F4: main.sym("player_80253720"),
-	0x8025360C: main.sym("player_80253838"),
-	0x80253730: main.sym("player_8025395C"),
-	0x80253834: main.sym("player_80253A60"),
-	0x80253B2C: main.sym("player_80253D58"),
-	0x80253C94: main.sym("player_80253EC0"),
-	0x80253E34: main.sym("player_80254060"),
-	0x80254088: main.sym("player_802542B4"),
-	0x8025410C: main.sym("player_80254338"),
-	0x80254164: main.sym("player_80254390"),
-	0x802541BC: main.sym("player_802543E8"),
-	0x8025435C: main.sym("player_80254588"),
-	0x8025453C: main.sym("player_80254768"),
-	0x80254604: main.sym("mario_exec", flag={"GLOBL"}),
-	0x802548BC: main.sym("player_80254B20", flag={"GLOBL"}),
-	0x80254CE0: main.sym("player_80254F44", flag={"GLOBL"}),
+	0x802527B8: main.sym("PL_SetMove"),
+	0x802529A8: main.sym("PL_SetSwim"),
+	0x802529EC: main.sym("PL_SetDemo"),
+	0x80252AC8: main.sym("PL_SetState", flag={"GLOBL"}),
+	0x80252C30: main.sym("PL_SetTripJump", flag={"GLOBL"}),
+	0x80252E74: main.sym("PL_SetStateJump", flag={"GLOBL"}),
+	0x80252F4C: main.sym("PL_SetStateDrop", flag={"GLOBL"}),
+	0x80252F98: main.sym("PL_SetStateDamage", flag={"GLOBL"}),
+	0x80252FEC: main.sym("PL_CheckMotion", flag={"GLOBL"}),
+	0x802530D4: main.sym("PL_CheckMotionTake", flag={"GLOBL"}),
+	0x802531B8: main.sym("PL_EnterField", flag={"GLOBL"}),
+	0x8025325C: main.sym("PL_EnterWater", flag={"GLOBL"}),
+	0x8025335C: main.sym("PL_ProcPress"),
+	0x802534F4: main.sym("PL_ProcDebug"),
+	0x8025360C: main.sym("PL_ProcButton"),
+	0x80253730: main.sym("PL_ProcStick"),
+	0x80253834: main.sym("PL_ProcBG"),
+	0x80253B2C: main.sym("PL_ProcStatus"),
+	0x80253C94: main.sym("PL_ProcSwimCamera"),
+	0x80253E34: main.sym("PL_ProcPower"),
+	0x80254088: main.sym("PL_ProcInfo"),
+	0x8025410C: main.sym("PL_InitShape"),
+	0x80254164: main.sym("PL_ProcSink"),
+	0x802541BC: main.sym("PL_ProcCap"),
+	0x8025435C: main.sym("PL_ProcShape"),
+	0x8025453C: main.sym("DebugCap"),
+	0x80254604: main.sym("MarioExec", flag={"GLOBL"}),
+	0x802548BC: main.sym("MarioEnter", flag={"GLOBL"}),
+	0x80254CE0: main.sym("MarioInit", flag={"GLOBL"}),
 
 	# src/physics.c
-	0x80254E20: main.sym("physics_80255080", flag={"GLOBL"}),
-	0x80254E3C: main.sym("physics_8025509C", flag={"GLOBL"}),
-	0x80254E50: main.sym("physics_802550B0", flag={"GLOBL"}),
-	0x80254E60: main.sym("physics_802550C0", flag={"GLOBL"}),
-	0x80254FD8: main.sym("physics_80255238", flag={"GLOBL"}),
-	0x8025509C: main.sym("physics_802552FC", flag={"GLOBL"}),
-	0x802551B4: main.sym("physics_80255414", flag={"GLOBL"}),
+	0x80254E20: main.sym("PL_GetTrampolinePower", flag={"GLOBL"}),
+	0x80254E3C: main.sym("PL_ProcTrampoline", flag={"GLOBL"}),
+	0x80254E50: main.sym("TrampolineProc", flag={"GLOBL"}),
+	0x80254E60: main.sym("BumpCollision", flag={"GLOBL"}),
+	0x80254FD8: main.sym("BumpInit", flag={"GLOBL"}),
+	0x8025509C: main.sym("PL_Reflect", flag={"GLOBL"}),
+	0x802551B4: main.sym("PL_Sink", flag={"GLOBL"}),
 	0x80255250: main.sym("L802554B0", flag={"GLOBL","LOCAL"}),
 	0x8025529C: main.sym("L802554FC", flag={"GLOBL","LOCAL"}),
 	0x802552E8: main.sym("L80255548", flag={"GLOBL","LOCAL"}),
 	0x80255334: main.sym("L80255594", flag={"GLOBL","LOCAL"}),
 	0x80255394: main.sym("L802555F4", flag={"GLOBL","LOCAL"}),
 	0x802553C0: main.sym("L80255620", flag={"GLOBL","LOCAL"}),
-	0x802553F4: main.sym("physics_80255654", flag={"GLOBL"}),
-	0x802554AC: main.sym("physics_8025570C", flag={"GLOBL"}),
-	0x802555AC: main.sym("physics_8025580C", flag={"GLOBL"}),
-	0x80255788: main.sym("physics_802559B0", flag={"GLOBL"}),
-	0x8025580C: main.sym("physics_80255A34", flag={"GLOBL"}),
-	0x802558DC: main.sym("physics_80255B04"),
-	0x80255B60: main.sym("physics_80255D88", flag={"GLOBL"}),
-	0x80255C9C: main.sym("physics_80255EC4"),
-	0x80255E84: main.sym("physics_802560AC"),
-	0x802562B8: main.sym("physics_802564E0"),
-	0x8025635C: main.sym("physics_80256584"),
-	0x802563F4: main.sym("physics_8025661C"),
-	0x802567D0: main.sym("physics_802569F8"),
-	0x80256940: main.sym("physics_80256B24", flag={"GLOBL"}),
-	0x80256AF4: main.sym("physics_80256CD8"),
-	0x80256BA8: main.sym("physics_80256D8C"),
+	0x802553F4: main.sym("PL_SteepFall", flag={"GLOBL"}),
+	0x802554AC: main.sym("PL_ProcQuicksand", flag={"GLOBL"}),
+	0x802555AC: main.sym("PL_ProcWind", flag={"GLOBL"}),
+	0x80255788: main.sym("PL_Stop", flag={"GLOBL"}),
+	0x8025580C: main.sym("PL_ProcWait", flag={"GLOBL"}),
+	0x802558DC: main.sym("PL_CheckWalk"),
+	0x80255B60: main.sym("PL_ProcWalk", flag={"GLOBL"}),
+	0x80255C9C: main.sym("PL_CheckLedge"),
+	0x80255E84: main.sym("PL_CheckJump"),
+	0x802562B8: main.sym("PL_ProcSpinGravity"),
+	0x8025635C: main.sym("PL_IsJumpCancel"),
+	0x802563F4: main.sym("PL_ProcGravity"),
+	0x802567D0: main.sym("PL_ProcUpWind"),
+	0x80256940: main.sym("PL_ProcJump", flag={"GLOBL"}),
+	0x80256AF4: main.sym("PL_SetSpeed3D"),
+	0x80256BA8: main.sym("PL_SetSpeed2D"),
 
 	# src/pldemo.c
-	0x80256C20: main.sym("pl_demo_80256E00"),
-	0x80256CA8: main.sym("staff_draw", flag={"GLOBL"}),
-	0x80256DE8: main.sym("pl_demo_80257060", flag={"GLOBL"}),
-	0x80256E64: main.sym("pl_demo_802570DC", flag={"GLOBL"}),
-	0x80256F20: main.sym("s_pl_demo_80257198", flag={"GLOBL"}),
-	0x80256FF8: main.sym("pl_demo_80257270"),
-	0x80257038: main.sym("pl_demo_802572B0"),
-	0x802570C4: main.sym("pl_demo_8025733C"),
-	0x802571D8: main.sym("pl_demo_80257450"),
-	0x80257270: main.sym("pl_demo_802574E8"),
-	0x802572D0: main.sym("pl_demo_80257548"),
-	0x80257330: main.sym("pl_demo_802575A8", flag={"GLOBL"}),
-	0x802573C8: main.sym("pl_demo_80257640", flag={"GLOBL"}),
-	0x802574D0: main.sym("pl_demo_80257748"),
-	0x80257708: main.sym("pl_demo_80257980"),
-	0x80257794: main.sym("pl_demo_80257A0C"),
-	0x80257838: main.sym("pl_demo_80257AB0"),
-	0x80257A6C: main.sym("pl_demo_80257CE4"),
-	0x80257C34: main.sym("pl_demo_80257EAC"),
-	0x80257F0C: main.sym("pl_demo_80258184"),
-	0x802581A8: main.sym("pl_demo_80258420"),
-	0x80258264: main.sym("pl_demo_802584DC"),
-	0x80258348: main.sym("pl_demo_802585C0"),
-	0x80258454: main.sym("pl_demo_802586CC"),
-	0x802584CC: main.sym("pl_demo_80258744"),
-	0x80258574: main.sym("pl_demo_802587EC"),
-	0x802585C4: main.sym("pl_demo_8025883C"),
-	0x80258614: main.sym("pl_demo_8025888C"),
-	0x80258680: main.sym("pl_demo_802588F8"),
-	0x802586EC: main.sym("pl_demo_80258964"),
-	0x80258804: main.sym("pl_demo_80258A7C"),
-	0x802588AC: main.sym("pl_demo_80258B24"),
-	0x80258930: main.sym("pl_demo_80258BA8"),
-	0x80258B34: main.sym("pl_demo_80258DAC"),
-	0x80258D1C: main.sym("pl_demo_80258F94"),
-	0x80258FEC: main.sym("pl_demo_80259264"),
-	0x80259154: main.sym("pl_demo_802593CC"),
-	0x8025925C: main.sym("pl_demo_802594D4"),
-	0x80259390: main.sym("pl_demo_80259608"),
-	0x802594C8: main.sym("pl_demo_80259740"),
-	0x80259534: main.sym("pl_demo_802597AC"),
-	0x802595DC: main.sym("pl_demo_80259854"),
-	0x80259658: main.sym("pl_demo_802598D0"),
-	0x802599B8: main.sym("pl_demo_80259C30"),
-	0x80259A70: main.sym("pl_demo_80259CE8"),
-	0x80259AFC: main.sym("pl_demo_80259D74"),
-	0x80259B88: main.sym("pl_demo_80259E00"),
-	0x80259C80: main.sym("pl_demo_80259EF8"),
-	0x80259D54: main.sym("pl_demo_80259FCC"),
-	0x80259DC8: main.sym("pl_demo_8025A040"),
-	0x80259E44: main.sym("pl_demo_8025A0BC"),
+	0x80256C20: main.sym("pldemo_80256E00"),
+	0x80256CA8: main.sym("StaffDraw", flag={"GLOBL"}),
+	0x80256DE8: main.sym("pldemo_80257060", flag={"GLOBL"}),
+	0x80256E64: main.sym("pldemo_802570DC", flag={"GLOBL"}),
+	0x80256F20: main.sym("Ctrl_pldemo_80257198", flag={"GLOBL"}),
+	0x80256FF8: main.sym("pldemo_80257270"),
+	0x80257038: main.sym("pldemo_802572B0"),
+	0x802570C4: main.sym("pldemo_8025733C"),
+	0x802571D8: main.sym("pldemo_80257450"),
+	0x80257270: main.sym("pldemo_802574E8"),
+	0x802572D0: main.sym("pldemo_80257548"),
+	0x80257330: main.sym("pldemo_802575A8", flag={"GLOBL"}),
+	0x802573C8: main.sym("pldemo_80257640", flag={"GLOBL"}),
+	0x802574D0: main.sym("pldemo_80257748"),
+	0x80257708: main.sym("pldemo_80257980"),
+	0x80257794: main.sym("pldemo_80257A0C"),
+	0x80257838: main.sym("pldemo_80257AB0"),
+	0x80257A6C: main.sym("pldemo_80257CE4"),
+	0x80257C34: main.sym("pldemo_80257EAC"),
+	0x80257F0C: main.sym("pldemo_80258184"),
+	0x802581A8: main.sym("pldemo_80258420"),
+	0x80258264: main.sym("pldemo_802584DC"),
+	0x80258348: main.sym("pldemo_802585C0"),
+	0x80258454: main.sym("pldemo_802586CC"),
+	0x802584CC: main.sym("pldemo_80258744"),
+	0x80258574: main.sym("pldemo_802587EC"),
+	0x802585C4: main.sym("pldemo_8025883C"),
+	0x80258614: main.sym("pldemo_8025888C"),
+	0x80258680: main.sym("pldemo_802588F8"),
+	0x802586EC: main.sym("pldemo_80258964"),
+	0x80258804: main.sym("pldemo_80258A7C"),
+	0x802588AC: main.sym("pldemo_80258B24"),
+	0x80258930: main.sym("pldemo_80258BA8"),
+	0x80258B34: main.sym("pldemo_80258DAC"),
+	0x80258D1C: main.sym("pldemo_80258F94"),
+	0x80258FEC: main.sym("pldemo_80259264"),
+	0x80259154: main.sym("pldemo_802593CC"),
+	0x8025925C: main.sym("pldemo_802594D4"),
+	0x80259390: main.sym("pldemo_80259608"),
+	0x802594C8: main.sym("pldemo_80259740"),
+	0x80259534: main.sym("pldemo_802597AC"),
+	0x802595DC: main.sym("pldemo_80259854"),
+	0x80259658: main.sym("pldemo_802598D0"),
+	0x802599B8: main.sym("pldemo_80259C30"),
+	0x80259A70: main.sym("pldemo_80259CE8"),
+	0x80259AFC: main.sym("pldemo_80259D74"),
+	0x80259B88: main.sym("pldemo_80259E00"),
+	0x80259C80: main.sym("pldemo_80259EF8"),
+	0x80259D54: main.sym("pldemo_80259FCC"),
+	0x80259DC8: main.sym("pldemo_8025A040"),
+	0x80259E44: main.sym("pldemo_8025A0BC"),
 	0x80259F34: main.sym("L8025A1AC", flag={"GLOBL","LOCAL"}),
 	0x80259FCC: main.sym("L8025A244", flag={"GLOBL","LOCAL"}),
 	0x8025A068: main.sym("L8025A2E0", flag={"GLOBL","LOCAL"}),
 	0x8025A1D8: main.sym("L8025A450", flag={"GLOBL","LOCAL"}),
-	0x8025A21C: main.sym("pl_demo_8025A494"),
-	0x8025A398: main.sym("pl_demo_8025A610"),
-	0x8025A484: main.sym("pl_demo_8025A6FC"),
-	0x8025A5E0: main.sym("pl_demo_8025A858"),
-	0x8025A734: main.sym("pl_demo_8025A9AC"),
-	0x8025AB94: main.sym("pl_demo_8025AE0C"),
-	0x8025AC30: main.sym("pl_demo_8025AEA8"),
-	0x8025AD84: main.sym("pl_demo_8025AFFC"),
-	0x8025ADD8: main.sym("pl_demo_8025B050"),
-	0x8025AE2C: main.sym("pl_demo_8025B0A4"),
-	0x8025AE80: main.sym("pl_demo_8025B0F8"),
-	0x8025AEA4: main.sym("pl_demo_8025B11C"),
-	0x8025AF00: main.sym("pl_demo_8025B178"),
-	0x8025AFBC: main.sym("pl_demo_8025B234"),
-	0x8025B074: main.sym("pl_demo_8025B2EC"),
-	0x8025B160: main.sym("pl_demo_8025B404"),
-	0x8025B1B0: main.sym("pl_demo_8025B454"),
-	0x8025B27C: main.sym("pl_demo_8025B520"),
-	0x8025B2E8: main.sym("pl_demo_8025B58C"),
+	0x8025A21C: main.sym("pldemo_8025A494"),
+	0x8025A398: main.sym("pldemo_8025A610"),
+	0x8025A484: main.sym("pldemo_8025A6FC"),
+	0x8025A5E0: main.sym("pldemo_8025A858"),
+	0x8025A734: main.sym("pldemo_8025A9AC"),
+	0x8025AB94: main.sym("pldemo_8025AE0C"),
+	0x8025AC30: main.sym("pldemo_8025AEA8"),
+	0x8025AD84: main.sym("pldemo_8025AFFC"),
+	0x8025ADD8: main.sym("pldemo_8025B050"),
+	0x8025AE2C: main.sym("pldemo_8025B0A4"),
+	0x8025AE80: main.sym("pldemo_8025B0F8"),
+	0x8025AEA4: main.sym("pldemo_8025B11C"),
+	0x8025AF00: main.sym("pldemo_8025B178"),
+	0x8025AFBC: main.sym("pldemo_8025B234"),
+	0x8025B074: main.sym("pldemo_8025B2EC"),
+	0x8025B160: main.sym("pldemo_8025B404"),
+	0x8025B1B0: main.sym("pldemo_8025B454"),
+	0x8025B27C: main.sym("pldemo_8025B520"),
+	0x8025B2E8: main.sym("pldemo_8025B58C"),
 	0x8025B320: main.sym("L8025B5C4", flag={"GLOBL","LOCAL"}),
 	0x8025B330: main.sym("L8025B5D4", flag={"GLOBL","LOCAL"}),
 	0x8025B340: main.sym("L8025B5E4", flag={"GLOBL","LOCAL"}),
@@ -499,26 +499,26 @@ sym_J0_code_text = {
 	0x8025B360: main.sym("L8025B604", flag={"GLOBL","LOCAL"}),
 	0x8025B370: main.sym("L8025B614", flag={"GLOBL","LOCAL"}),
 	0x8025B380: main.sym("L8025B624", flag={"GLOBL","LOCAL"}),
-	0x8025B3B0: main.sym("pl_demo_8025B654"),
-	0x8025B4BC: main.sym("pl_demo_8025B760"),
-	0x8025B704: main.sym("pl_demo_8025B9A8"),
-	0x8025B948: main.sym("pl_demo_8025BBEC"),
-	0x8025B9DC: main.sym("pl_demo_8025BC80"),
-	0x8025BC14: main.sym("pl_demo_8025BEB8"),
-	0x8025BCC0: main.sym("pl_demo_8025BF64"),
-	0x8025BD70: main.sym("pl_demo_8025C014"),
-	0x8025BE20: main.sym("pl_demo_8025C0C4"),
-	0x8025BF1C: main.sym("pl_demo_8025C1C0"),
-	0x8025C1F4: main.sym("pl_demo_8025C498"),
-	0x8025C35C: main.sym("pl_demo_8025C600"),
-	0x8025C454: main.sym("pl_demo_8025C6F8"),
-	0x8025C620: main.sym("pl_demo_8025C904"),
-	0x8025C71C: main.sym("pl_demo_8025CA48"),
-	0x8025C8B0: main.sym("pl_demo_8025CBDC"),
-	0x8025CA34: main.sym("pl_demo_8025CD6C"),
-	0x8025CB88: main.sym("pl_demo_8025CEF0"),
-	0x8025CC64: main.sym("pl_demo_8025CFE4"),
-	0x8025CCC0: main.sym("pl_demo_8025D040"),
+	0x8025B3B0: main.sym("pldemo_8025B654"),
+	0x8025B4BC: main.sym("pldemo_8025B760"),
+	0x8025B704: main.sym("pldemo_8025B9A8"),
+	0x8025B948: main.sym("pldemo_8025BBEC"),
+	0x8025B9DC: main.sym("pldemo_8025BC80"),
+	0x8025BC14: main.sym("pldemo_8025BEB8"),
+	0x8025BCC0: main.sym("pldemo_8025BF64"),
+	0x8025BD70: main.sym("pldemo_8025C014"),
+	0x8025BE20: main.sym("pldemo_8025C0C4"),
+	0x8025BF1C: main.sym("pldemo_8025C1C0"),
+	0x8025C1F4: main.sym("pldemo_8025C498"),
+	0x8025C35C: main.sym("pldemo_8025C600"),
+	0x8025C454: main.sym("pldemo_8025C6F8"),
+	0x8025C620: main.sym("pldemo_8025C904"),
+	0x8025C71C: main.sym("pldemo_8025CA48"),
+	0x8025C8B0: main.sym("pldemo_8025CBDC"),
+	0x8025CA34: main.sym("pldemo_8025CD6C"),
+	0x8025CB88: main.sym("pldemo_8025CEF0"),
+	0x8025CC64: main.sym("pldemo_8025CFE4"),
+	0x8025CCC0: main.sym("pldemo_8025D040"),
 	0x8025CCF8: main.sym("L8025D078", flag={"GLOBL","LOCAL"}),
 	0x8025CD08: main.sym("L8025D088", flag={"GLOBL","LOCAL"}),
 	0x8025CD18: main.sym("L8025D098", flag={"GLOBL","LOCAL"}),
@@ -532,10 +532,10 @@ sym_J0_code_text = {
 	0x8025CD98: main.sym("L8025D118", flag={"GLOBL","LOCAL"}),
 	0x8025CDA8: main.sym("L8025D128", flag={"GLOBL","LOCAL"}),
 	0x8025CDB8: main.sym("L8025D138", flag={"GLOBL","LOCAL"}),
-	0x8025CE54: main.sym("pl_demo_8025D1D4"),
-	0x8025D170: main.sym("pl_demo_8025D4F0"),
-	0x8025D38C: main.sym("pl_demo_8025D70C"),
-	0x8025D418: main.sym("pl_demo_exec", flag={"GLOBL"}),
+	0x8025CE54: main.sym("pldemo_8025D1D4"),
+	0x8025D170: main.sym("pldemo_8025D4F0"),
+	0x8025D38C: main.sym("pldemo_8025D70C"),
+	0x8025D418: main.sym("PL_ExecDemo", flag={"GLOBL"}),
 	0x8025D5AC: main.sym("L8025D92C", flag={"GLOBL","LOCAL"}),
 	0x8025D5D4: main.sym("L8025D954", flag={"GLOBL","LOCAL"}),
 	0x8025D5E8: main.sym("L8025D968", flag={"GLOBL","LOCAL"}),
@@ -584,35 +584,35 @@ sym_J0_code_text = {
 	0x8025D980: main.sym("L8025DD00", flag={"GLOBL","LOCAL"}),
 	0x8025D994: main.sym("L8025DD14", flag={"GLOBL","LOCAL"}),
 
-	# src/plhang.c
-	0x8025D9F0: main.sym("pl_hang_8025DD70"),
-	0x8025DA9C: main.sym("pl_hang_8025DE1C"),
-	0x8025DB84: main.sym("pl_hang_8025DF04"),
-	0x8025DE9C: main.sym("pl_hang_8025E21C"),
-	0x8025E218: main.sym("pl_hang_8025E5A8"),
-	0x8025E3CC: main.sym("pl_hang_8025E7A4"),
-	0x8025E458: main.sym("pl_hang_8025E830"),
-	0x8025E558: main.sym("pl_hang_8025E930"),
-	0x8025E658: main.sym("pl_hang_8025EA30"),
-	0x8025E778: main.sym("pl_hang_8025EB50"),
-	0x8025E924: main.sym("pl_hang_8025ECFC"),
-	0x8025EAF8: main.sym("pl_hang_8025EED0"),
-	0x8025EB80: main.sym("pl_hang_8025EF58"),
-	0x8025ECDC: main.sym("pl_hang_8025F0B4"),
-	0x8025EE0C: main.sym("pl_hang_8025F1E4"),
-	0x8025EFAC: main.sym("pl_hang_8025F384"),
-	0x8025F0DC: main.sym("pl_hang_8025F4B4"),
-	0x8025F188: main.sym("pl_hang_8025F560"),
-	0x8025F26C: main.sym("pl_hang_8025F644"),
-	0x8025F2E8: main.sym("pl_hang_8025F6C0"),
-	0x8025F598: main.sym("pl_hang_8025F970"),
-	0x8025F68C: main.sym("pl_hang_8025FA64"),
-	0x8025F710: main.sym("pl_hang_8025FAE8"),
-	0x8025F7B8: main.sym("pl_hang_8025FB90"),
-	0x8025F894: main.sym("pl_hang_8025FC6C"),
-	0x8025FD7C: main.sym("pl_hang_80260154"),
-	0x80260190: main.sym("pl_hang_80260568"),
-	0x802601F8: main.sym("pl_hang_exec", flag={"GLOBL"}),
+	# src/plspec.c
+	0x8025D9F0: main.sym("plspec_8025DD70"),
+	0x8025DA9C: main.sym("plspec_8025DE1C"),
+	0x8025DB84: main.sym("plspec_8025DF04"),
+	0x8025DE9C: main.sym("plspec_8025E21C"),
+	0x8025E218: main.sym("plspec_8025E5A8"),
+	0x8025E3CC: main.sym("plspec_8025E7A4"),
+	0x8025E458: main.sym("plspec_8025E830"),
+	0x8025E558: main.sym("plspec_8025E930"),
+	0x8025E658: main.sym("plspec_8025EA30"),
+	0x8025E778: main.sym("plspec_8025EB50"),
+	0x8025E924: main.sym("plspec_8025ECFC"),
+	0x8025EAF8: main.sym("plspec_8025EED0"),
+	0x8025EB80: main.sym("plspec_8025EF58"),
+	0x8025ECDC: main.sym("plspec_8025F0B4"),
+	0x8025EE0C: main.sym("plspec_8025F1E4"),
+	0x8025EFAC: main.sym("plspec_8025F384"),
+	0x8025F0DC: main.sym("plspec_8025F4B4"),
+	0x8025F188: main.sym("plspec_8025F560"),
+	0x8025F26C: main.sym("plspec_8025F644"),
+	0x8025F2E8: main.sym("plspec_8025F6C0"),
+	0x8025F598: main.sym("plspec_8025F970"),
+	0x8025F68C: main.sym("plspec_8025FA64"),
+	0x8025F710: main.sym("plspec_8025FAE8"),
+	0x8025F7B8: main.sym("plspec_8025FB90"),
+	0x8025F894: main.sym("plspec_8025FC6C"),
+	0x8025FD7C: main.sym("plspec_80260154"),
+	0x80260190: main.sym("plspec_80260568"),
+	0x802601F8: main.sym("PL_ExecSpec", flag={"GLOBL"}),
 	0x80260370: main.sym("L80260748", flag={"GLOBL","LOCAL"}),
 	0x80260384: main.sym("L8026075C", flag={"GLOBL","LOCAL"}),
 	0x80260398: main.sym("L80260770", flag={"GLOBL","LOCAL"}),
@@ -620,50 +620,50 @@ sym_J0_code_text = {
 	0x802603C0: main.sym("L80260798", flag={"GLOBL","LOCAL"}),
 
 	# src/plwait.c
-	0x802604E0: main.sym("pl_wait_802608B0"),
-	0x802606DC: main.sym("pl_wait_80260AAC"),
-	0x802608E4: main.sym("pl_wait_80260CB4"),
-	0x80260BC4: main.sym("pl_wait_80260F94"),
-	0x80260C30: main.sym("pl_wait_80261000"),
-	0x80260E38: main.sym("pl_wait_80261268"),
-	0x80261108: main.sym("pl_wait_802614FC"),
-	0x80261280: main.sym("pl_wait_8026168C"),
-	0x802614CC: main.sym("pl_wait_802618D8"),
-	0x802615C4: main.sym("pl_wait_802619D0"),
-	0x802616C4: main.sym("pl_wait_80261AD0"),
-	0x802617EC: main.sym("pl_wait_80261BF8"),
-	0x802618E0: main.sym("pl_wait_80261CEC"),
-	0x802619A8: main.sym("pl_wait_80261DB4"),
-	0x80261B64: main.sym("pl_wait_80261F70"),
-	0x80261C74: main.sym("pl_wait_80262080"),
-	0x80261D70: main.sym("pl_wait_8026217C"),
-	0x80261DD0: main.sym("pl_wait_802621DC"),
-	0x80261ED0: main.sym("pl_wait_802622DC"),
-	0x80261F8C: main.sym("pl_wait_80262398"),
-	0x80262084: main.sym("pl_wait_80262490"),
-	0x80262124: main.sym("pl_wait_80262530"),
-	0x80262244: main.sym("pl_wait_80262650"),
-	0x80262364: main.sym("pl_wait_80262770"),
-	0x80262484: main.sym("pl_wait_80262890"),
-	0x80262574: main.sym("pl_wait_80262980"),
-	0x802627B8: main.sym("pl_wait_80262BC4"),
-	0x80262828: main.sym("pl_wait_80262C34"),
-	0x8026295C: main.sym("pl_wait_80262D68"),
-	0x802629B8: main.sym("pl_wait_80262DC4"),
-	0x80262A14: main.sym("pl_wait_80262E20"),
-	0x80262A88: main.sym("pl_wait_80262E94"),
-	0x80262AE4: main.sym("pl_wait_80262EF0"),
-	0x80262B44: main.sym("pl_wait_80262F50"),
-	0x80262BE0: main.sym("pl_wait_80262FEC"),
-	0x80262C50: main.sym("pl_wait_8026305C"),
-	0x80262CEC: main.sym("pl_wait_802630F8"),
-	0x80262DE4: main.sym("pl_wait_802631F0"),
-	0x80262EDC: main.sym("pl_wait_802632E8"),
-	0x80262FA8: main.sym("pl_wait_802633B4"),
-	0x80263100: main.sym("pl_wait_8026350C"),
-	0x802631DC: main.sym("pl_wait_802635E8"),
-	0x80263378: main.sym("pl_wait_80263784"),
-	0x8026348C: main.sym("pl_wait_exec", flag={"GLOBL"}),
+	0x802604E0: main.sym("plwait_802608B0"),
+	0x802606DC: main.sym("plwait_80260AAC"),
+	0x802608E4: main.sym("plwait_80260CB4"),
+	0x80260BC4: main.sym("plwait_80260F94"),
+	0x80260C30: main.sym("plwait_80261000"),
+	0x80260E38: main.sym("plwait_80261268"),
+	0x80261108: main.sym("plwait_802614FC"),
+	0x80261280: main.sym("plwait_8026168C"),
+	0x802614CC: main.sym("plwait_802618D8"),
+	0x802615C4: main.sym("plwait_802619D0"),
+	0x802616C4: main.sym("plwait_80261AD0"),
+	0x802617EC: main.sym("plwait_80261BF8"),
+	0x802618E0: main.sym("plwait_80261CEC"),
+	0x802619A8: main.sym("plwait_80261DB4"),
+	0x80261B64: main.sym("plwait_80261F70"),
+	0x80261C74: main.sym("plwait_80262080"),
+	0x80261D70: main.sym("plwait_8026217C"),
+	0x80261DD0: main.sym("plwait_802621DC"),
+	0x80261ED0: main.sym("plwait_802622DC"),
+	0x80261F8C: main.sym("plwait_80262398"),
+	0x80262084: main.sym("plwait_80262490"),
+	0x80262124: main.sym("plwait_80262530"),
+	0x80262244: main.sym("plwait_80262650"),
+	0x80262364: main.sym("plwait_80262770"),
+	0x80262484: main.sym("plwait_80262890"),
+	0x80262574: main.sym("plwait_80262980"),
+	0x802627B8: main.sym("plwait_80262BC4"),
+	0x80262828: main.sym("plwait_80262C34"),
+	0x8026295C: main.sym("plwait_80262D68"),
+	0x802629B8: main.sym("plwait_80262DC4"),
+	0x80262A14: main.sym("plwait_80262E20"),
+	0x80262A88: main.sym("plwait_80262E94"),
+	0x80262AE4: main.sym("plwait_80262EF0"),
+	0x80262B44: main.sym("plwait_80262F50"),
+	0x80262BE0: main.sym("plwait_80262FEC"),
+	0x80262C50: main.sym("plwait_8026305C"),
+	0x80262CEC: main.sym("plwait_802630F8"),
+	0x80262DE4: main.sym("plwait_802631F0"),
+	0x80262EDC: main.sym("plwait_802632E8"),
+	0x80262FA8: main.sym("plwait_802633B4"),
+	0x80263100: main.sym("plwait_8026350C"),
+	0x802631DC: main.sym("plwait_802635E8"),
+	0x80263378: main.sym("plwait_80263784"),
+	0x8026348C: main.sym("PL_ExecWait", flag={"GLOBL"}),
 	0x8026372C: main.sym("L80263B38", flag={"GLOBL","LOCAL"}),
 	0x80263740: main.sym("L80263B4C", flag={"GLOBL","LOCAL"}),
 	0x8026377C: main.sym("L80263B88", flag={"GLOBL","LOCAL"}),
@@ -692,79 +692,79 @@ sym_J0_code_text = {
 	0x802639FC: main.sym("L80263E08", flag={"GLOBL","LOCAL"}),
 
 	# src/plmove.c
-	0x80263A50: main.sym("pl_move_80263E60"),
-	0x80263AD4: main.sym("pl_move_80263EE4", flag={"GLOBL"}),
-	0x80263C14: main.sym("pl_move_80264024"),
-	0x80263C8C: main.sym("pl_move_8026409C"),
-	0x80263CEC: main.sym("pl_move_802640FC"),
-	0x80263EA4: main.sym("pl_move_802642B4"),
-	0x80263F30: main.sym("pl_move_80264340"),
-	0x80263FFC: main.sym("pl_move_8026440C"),
-	0x80264330: main.sym("pl_move_80264740"),
-	0x80264744: main.sym("pl_move_80264B54"),
-	0x80264970: main.sym("pl_move_80264D80"),
-	0x80264A08: main.sym("pl_move_80264E18"),
-	0x80264C70: main.sym("pl_move_80265080"),
-	0x80264DA0: main.sym("pl_move_802651B0"),
-	0x80264E34: main.sym("pl_move_80265244"),
-	0x80265048: main.sym("pl_move_80265458"),
-	0x80265104: main.sym("pl_move_80265514"),
-	0x80265148: main.sym("pl_move_80265558"),
-	0x80265210: main.sym("pl_move_80265620"),
-	0x802652F0: main.sym("pl_move_80265700"),
-	0x8026570C: main.sym("pl_move_80265B1C"),
-	0x80265980: main.sym("pl_move_80265D90"),
-	0x802659E8: main.sym("pl_move_80265DF8"),
-	0x80265C28: main.sym("pl_move_80266038"),
-	0x80265DBC: main.sym("pl_move_802661CC"),
-	0x80265F44: main.sym("pl_move_80266354"),
-	0x802661A4: main.sym("pl_move_802665B4"),
-	0x80266324: main.sym("pl_move_80266734"),
-	0x8026658C: main.sym("pl_move_8026699C"),
-	0x802666E8: main.sym("pl_move_80266AF8"),
-	0x8026693C: main.sym("pl_move_80266D4C"),
-	0x80266A38: main.sym("pl_move_80266E48"),
-	0x80266BB8: main.sym("pl_move_80266FC8"),
-	0x80266E30: main.sym("pl_move_80267240"),
-	0x802670F4: main.sym("pl_move_80267504"),
-	0x80267318: main.sym("pl_move_80267728"),
-	0x8026754C: main.sym("pl_move_8026795C"),
-	0x80267814: main.sym("pl_move_80267C24"),
-	0x802678D4: main.sym("pl_move_80267CE4"),
-	0x80267B74: main.sym("pl_move_80267FA4"),
-	0x80267C44: main.sym("pl_move_80268074"),
-	0x80267CA4: main.sym("pl_move_802680D4"),
-	0x80267D38: main.sym("pl_move_80268168"),
-	0x80267F08: main.sym("pl_move_80268338"),
-	0x8026807C: main.sym("pl_move_802684AC"),
-	0x80268190: main.sym("pl_move_802685C0"),
-	0x802681D8: main.sym("pl_move_80268608"),
-	0x80268254: main.sym("pl_move_80268684"),
-	0x80268388: main.sym("pl_move_802687B8"),
-	0x802685C8: main.sym("pl_move_802689F8"),
-	0x80268670: main.sym("pl_move_80268ADC"),
-	0x802686F8: main.sym("pl_move_80268B64"),
-	0x80268744: main.sym("pl_move_80268BB0"),
-	0x80268790: main.sym("pl_move_80268BFC"),
-	0x802687DC: main.sym("pl_move_80268C48"),
-	0x80268828: main.sym("pl_move_80268C94"),
-	0x80268898: main.sym("pl_move_80268D04"),
-	0x80268960: main.sym("pl_move_80268DCC"),
-	0x80268B0C: main.sym("pl_move_80268F78"),
-	0x80268C9C: main.sym("pl_move_80269108"),
-	0x80268D04: main.sym("pl_move_80269170"),
-	0x80268D6C: main.sym("pl_move_802691D8"),
-	0x80268DF8: main.sym("pl_move_80269264"),
-	0x80268E94: main.sym("pl_move_80269300"),
-	0x80268F30: main.sym("pl_move_8026939C"),
-	0x80269010: main.sym("pl_move_8026947C"),
-	0x80269078: main.sym("pl_move_802694E4"),
-	0x8026911C: main.sym("pl_move_80269588"),
-	0x802691D4: main.sym("pl_move_80269640"),
-	0x8026931C: main.sym("pl_move_80269788"),
-	0x80269370: main.sym("pl_move_802697DC"),
-	0x802693C4: main.sym("pl_move_80269830"),
-	0x802694E8: main.sym("pl_move_exec", flag={"GLOBL"}),
+	0x80263A50: main.sym("plmove_80263E60"),
+	0x80263AD4: main.sym("plmove_80263EE4", flag={"GLOBL"}),
+	0x80263C14: main.sym("plmove_80264024"),
+	0x80263C8C: main.sym("plmove_8026409C"),
+	0x80263CEC: main.sym("plmove_802640FC"),
+	0x80263EA4: main.sym("plmove_802642B4"),
+	0x80263F30: main.sym("plmove_80264340"),
+	0x80263FFC: main.sym("plmove_8026440C"),
+	0x80264330: main.sym("plmove_80264740"),
+	0x80264744: main.sym("plmove_80264B54"),
+	0x80264970: main.sym("plmove_80264D80"),
+	0x80264A08: main.sym("plmove_80264E18"),
+	0x80264C70: main.sym("plmove_80265080"),
+	0x80264DA0: main.sym("plmove_802651B0"),
+	0x80264E34: main.sym("plmove_80265244"),
+	0x80265048: main.sym("plmove_80265458"),
+	0x80265104: main.sym("plmove_80265514"),
+	0x80265148: main.sym("plmove_80265558"),
+	0x80265210: main.sym("plmove_80265620"),
+	0x802652F0: main.sym("plmove_80265700"),
+	0x8026570C: main.sym("plmove_80265B1C"),
+	0x80265980: main.sym("plmove_80265D90"),
+	0x802659E8: main.sym("plmove_80265DF8"),
+	0x80265C28: main.sym("plmove_80266038"),
+	0x80265DBC: main.sym("plmove_802661CC"),
+	0x80265F44: main.sym("plmove_80266354"),
+	0x802661A4: main.sym("plmove_802665B4"),
+	0x80266324: main.sym("plmove_80266734"),
+	0x8026658C: main.sym("plmove_8026699C"),
+	0x802666E8: main.sym("plmove_80266AF8"),
+	0x8026693C: main.sym("plmove_80266D4C"),
+	0x80266A38: main.sym("plmove_80266E48"),
+	0x80266BB8: main.sym("plmove_80266FC8"),
+	0x80266E30: main.sym("plmove_80267240"),
+	0x802670F4: main.sym("plmove_80267504"),
+	0x80267318: main.sym("plmove_80267728"),
+	0x8026754C: main.sym("plmove_8026795C"),
+	0x80267814: main.sym("plmove_80267C24"),
+	0x802678D4: main.sym("plmove_80267CE4"),
+	0x80267B74: main.sym("plmove_80267FA4"),
+	0x80267C44: main.sym("plmove_80268074"),
+	0x80267CA4: main.sym("plmove_802680D4"),
+	0x80267D38: main.sym("plmove_80268168"),
+	0x80267F08: main.sym("plmove_80268338"),
+	0x8026807C: main.sym("plmove_802684AC"),
+	0x80268190: main.sym("plmove_802685C0"),
+	0x802681D8: main.sym("plmove_80268608"),
+	0x80268254: main.sym("plmove_80268684"),
+	0x80268388: main.sym("plmove_802687B8"),
+	0x802685C8: main.sym("plmove_802689F8"),
+	0x80268670: main.sym("plmove_80268ADC"),
+	0x802686F8: main.sym("plmove_80268B64"),
+	0x80268744: main.sym("plmove_80268BB0"),
+	0x80268790: main.sym("plmove_80268BFC"),
+	0x802687DC: main.sym("plmove_80268C48"),
+	0x80268828: main.sym("plmove_80268C94"),
+	0x80268898: main.sym("plmove_80268D04"),
+	0x80268960: main.sym("plmove_80268DCC"),
+	0x80268B0C: main.sym("plmove_80268F78"),
+	0x80268C9C: main.sym("plmove_80269108"),
+	0x80268D04: main.sym("plmove_80269170"),
+	0x80268D6C: main.sym("plmove_802691D8"),
+	0x80268DF8: main.sym("plmove_80269264"),
+	0x80268E94: main.sym("plmove_80269300"),
+	0x80268F30: main.sym("plmove_8026939C"),
+	0x80269010: main.sym("plmove_8026947C"),
+	0x80269078: main.sym("plmove_802694E4"),
+	0x8026911C: main.sym("plmove_80269588"),
+	0x802691D4: main.sym("plmove_80269640"),
+	0x8026931C: main.sym("plmove_80269788"),
+	0x80269370: main.sym("plmove_802697DC"),
+	0x802693C4: main.sym("plmove_80269830"),
+	0x802694E8: main.sym("PL_ExecMove", flag={"GLOBL"}),
 	0x80269780: main.sym("L80269BEC", flag={"GLOBL","LOCAL"}),
 	0x80269794: main.sym("L80269C00", flag={"GLOBL","LOCAL"}),
 	0x802697A8: main.sym("L80269C14", flag={"GLOBL","LOCAL"}),
@@ -793,21 +793,21 @@ sym_J0_code_text = {
 	0x80269A64: main.sym("L80269ED0", flag={"GLOBL","LOCAL"}),
 
 	# src/pljump.c
-	0x80269AD0: main.sym("pl_jump_80269F40"),
-	0x80269B50: main.sym("pl_jump_80269FC0"),
-	0x80269C20: main.sym("pl_jump_8026A12C"),
-	0x80269D18: main.sym("pl_jump_8026A224"),
-	0x80269EF4: main.sym("pl_jump_8026A400"),
-	0x80269F88: main.sym("pl_jump_8026A494"),
-	0x8026A08C: main.sym("pl_jump_8026A598"),
-	0x8026A120: main.sym("pl_jump_8026A62C"),
-	0x8026A324: main.sym("pl_jump_8026A818"),
-	0x8026A554: main.sym("pl_jump_8026AA48"),
-	0x8026A7E4: main.sym("pl_jump_8026ACD8"),
-	0x8026A968: main.sym("pl_jump_8026AE5C"),
-	0x8026AB10: main.sym("pl_jump_8026B004"),
-	0x8026AC88: main.sym("pl_jump_8026B17C"),
-	0x8026AF50: main.sym("pl_jump_8026B444"),
+	0x80269AD0: main.sym("pljump_80269F40"),
+	0x80269B50: main.sym("pljump_80269FC0"),
+	0x80269C20: main.sym("pljump_8026A12C"),
+	0x80269D18: main.sym("pljump_8026A224"),
+	0x80269EF4: main.sym("pljump_8026A400"),
+	0x80269F88: main.sym("pljump_8026A494"),
+	0x8026A08C: main.sym("pljump_8026A598"),
+	0x8026A120: main.sym("pljump_8026A62C"),
+	0x8026A324: main.sym("pljump_8026A818"),
+	0x8026A554: main.sym("pljump_8026AA48"),
+	0x8026A7E4: main.sym("pljump_8026ACD8"),
+	0x8026A968: main.sym("pljump_8026AE5C"),
+	0x8026AB10: main.sym("pljump_8026B004"),
+	0x8026AC88: main.sym("pljump_8026B17C"),
+	0x8026AF50: main.sym("pljump_8026B444"),
 	0x8026AFA8: main.sym("L8026B49C", flag={"GLOBL","LOCAL"}),
 	0x8026AFBC: main.sym("L8026B4B0", flag={"GLOBL","LOCAL"}),
 	0x8026AFEC: main.sym("L8026B4E0", flag={"GLOBL","LOCAL"}),
@@ -815,54 +815,54 @@ sym_J0_code_text = {
 	0x8026B160: main.sym("L8026B654", flag={"GLOBL","LOCAL"}),
 	0x8026B17C: main.sym("L8026B670", flag={"GLOBL","LOCAL"}),
 	0x8026B18C: main.sym("L8026B680", flag={"GLOBL","LOCAL"}),
-	0x8026B1AC: main.sym("pl_jump_8026B6A0"),
-	0x8026B24C: main.sym("pl_jump_8026B740"),
-	0x8026B320: main.sym("pl_jump_8026B814"),
-	0x8026B41C: main.sym("pl_jump_8026B90C"),
-	0x8026B4BC: main.sym("pl_jump_8026B9AC"),
-	0x8026B5C8: main.sym("pl_jump_8026BAB8"),
-	0x8026B6C4: main.sym("pl_jump_8026BBB4"),
-	0x8026B7D0: main.sym("pl_jump_8026BCC0"),
-	0x8026B8DC: main.sym("pl_jump_8026BDCC"),
-	0x8026B988: main.sym("pl_jump_8026BE78"),
-	0x8026BA50: main.sym("pl_jump_8026BF40"),
-	0x8026BB44: main.sym("pl_jump_8026C034"),
-	0x8026BCF0: main.sym("pl_jump_8026C1E0"),
-	0x8026BFC8: main.sym("pl_jump_8026C4B8"),
-	0x8026C0E0: main.sym("pl_jump_8026C5D0"),
-	0x8026C23C: main.sym("pl_jump_8026C738"),
-	0x8026C384: main.sym("pl_jump_8026C880"),
-	0x8026C500: main.sym("pl_jump_8026C9FC"),
-	0x8026C810: main.sym("pl_jump_8026CD0C"),
-	0x8026C954: main.sym("pl_jump_8026CE50"),
-	0x8026CA2C: main.sym("pl_jump_8026CF28"),
-	0x8026CCB4: main.sym("pl_jump_8026D1B0"),
-	0x8026CDFC: main.sym("pl_jump_8026D33C"),
-	0x8026CE88: main.sym("pl_jump_8026D3C8"),
-	0x8026CF08: main.sym("pl_jump_8026D43C"),
-	0x8026CF88: main.sym("pl_jump_8026D4B0"),
-	0x8026CFEC: main.sym("pl_jump_8026D508"),
-	0x8026D050: main.sym("pl_jump_8026D560"),
-	0x8026D0F8: main.sym("pl_jump_8026D608"),
-	0x8026D1EC: main.sym("pl_jump_8026D6FC"),
-	0x8026D26C: main.sym("pl_jump_8026D770"),
-	0x8026D498: main.sym("pl_jump_8026D988"),
-	0x8026D664: main.sym("pl_jump_8026DB54"),
-	0x8026D804: main.sym("pl_jump_8026DCF4"),
-	0x8026D9A8: main.sym("pl_jump_8026DE98"),
-	0x8026DB98: main.sym("pl_jump_8026E088"),
-	0x8026DDC4: main.sym("pl_jump_8026E2B4"),
-	0x8026E0AC: main.sym("pl_jump_8026E59C"),
-	0x8026E320: main.sym("pl_jump_8026E810"),
-	0x8026E478: main.sym("pl_jump_8026E968"),
-	0x8026E710: main.sym("pl_jump_8026EC00"),
-	0x8026EC2C: main.sym("pl_jump_8026F158"),
-	0x8026EDC0: main.sym("pl_jump_8026F2EC"),
-	0x8026F0A8: main.sym("pl_jump_8026F614"),
-	0x8026F0F4: main.sym("pl_jump_8026F660"),
-	0x8026F2D4: main.sym("pl_jump_8026F840"),
-	0x8026F4AC: main.sym("pl_jump_8026FA18"),
-	0x8026F598: main.sym("pl_jump_exec", flag={"GLOBL"}),
+	0x8026B1AC: main.sym("pljump_8026B6A0"),
+	0x8026B24C: main.sym("pljump_8026B740"),
+	0x8026B320: main.sym("pljump_8026B814"),
+	0x8026B41C: main.sym("pljump_8026B90C"),
+	0x8026B4BC: main.sym("pljump_8026B9AC"),
+	0x8026B5C8: main.sym("pljump_8026BAB8"),
+	0x8026B6C4: main.sym("pljump_8026BBB4"),
+	0x8026B7D0: main.sym("pljump_8026BCC0"),
+	0x8026B8DC: main.sym("pljump_8026BDCC"),
+	0x8026B988: main.sym("pljump_8026BE78"),
+	0x8026BA50: main.sym("pljump_8026BF40"),
+	0x8026BB44: main.sym("pljump_8026C034"),
+	0x8026BCF0: main.sym("pljump_8026C1E0"),
+	0x8026BFC8: main.sym("pljump_8026C4B8"),
+	0x8026C0E0: main.sym("pljump_8026C5D0"),
+	0x8026C23C: main.sym("pljump_8026C738"),
+	0x8026C384: main.sym("pljump_8026C880"),
+	0x8026C500: main.sym("pljump_8026C9FC"),
+	0x8026C810: main.sym("pljump_8026CD0C"),
+	0x8026C954: main.sym("pljump_8026CE50"),
+	0x8026CA2C: main.sym("pljump_8026CF28"),
+	0x8026CCB4: main.sym("pljump_8026D1B0"),
+	0x8026CDFC: main.sym("pljump_8026D33C"),
+	0x8026CE88: main.sym("pljump_8026D3C8"),
+	0x8026CF08: main.sym("pljump_8026D43C"),
+	0x8026CF88: main.sym("pljump_8026D4B0"),
+	0x8026CFEC: main.sym("pljump_8026D508"),
+	0x8026D050: main.sym("pljump_8026D560"),
+	0x8026D0F8: main.sym("pljump_8026D608"),
+	0x8026D1EC: main.sym("pljump_8026D6FC"),
+	0x8026D26C: main.sym("pljump_8026D770"),
+	0x8026D498: main.sym("pljump_8026D988"),
+	0x8026D664: main.sym("pljump_8026DB54"),
+	0x8026D804: main.sym("pljump_8026DCF4"),
+	0x8026D9A8: main.sym("pljump_8026DE98"),
+	0x8026DB98: main.sym("pljump_8026E088"),
+	0x8026DDC4: main.sym("pljump_8026E2B4"),
+	0x8026E0AC: main.sym("pljump_8026E59C"),
+	0x8026E320: main.sym("pljump_8026E810"),
+	0x8026E478: main.sym("pljump_8026E968"),
+	0x8026E710: main.sym("pljump_8026EC00"),
+	0x8026EC2C: main.sym("pljump_8026F158"),
+	0x8026EDC0: main.sym("pljump_8026F2EC"),
+	0x8026F0A8: main.sym("pljump_8026F614"),
+	0x8026F0F4: main.sym("pljump_8026F660"),
+	0x8026F2D4: main.sym("pljump_8026F840"),
+	0x8026F4AC: main.sym("pljump_8026FA18"),
+	0x8026F598: main.sym("PL_ExecJump", flag={"GLOBL"}),
 	0x8026F804: main.sym("L8026FD70", flag={"GLOBL","LOCAL"}),
 	0x8026F818: main.sym("L8026FD84", flag={"GLOBL","LOCAL"}),
 	0x8026F82C: main.sym("L8026FD98", flag={"GLOBL","LOCAL"}),
@@ -897,44 +897,44 @@ sym_J0_code_text = {
 	0x8026FB74: main.sym("L802700E0", flag={"GLOBL","LOCAL"}),
 
 	# src/plswim.c
-	0x8026FBA0: main.sym("pl_swim_80270110"),
-	0x8026FC5C: main.sym("pl_swim_802701CC"),
-	0x8026FCC4: main.sym("pl_swim_80270234"),
-	0x8026FD94: main.sym("pl_swim_80270304"),
-	0x8026FF90: main.sym("pl_swim_80270500"),
-	0x802703A8: main.sym("pl_swim_80270918"),
-	0x80270504: main.sym("pl_swim_80270A74"),
-	0x802705DC: main.sym("pl_swim_80270B4C"),
-	0x80270724: main.sym("pl_swim_80270C94"),
-	0x802708D0: main.sym("pl_swim_80270E40"),
-	0x80270A68: main.sym("pl_swim_80270FD8"),
-	0x80270B54: main.sym("pl_swim_802710C4"),
-	0x80270C64: main.sym("pl_swim_802711D4"),
-	0x80270D50: main.sym("pl_swim_802712C0"),
-	0x80270E4C: main.sym("pl_swim_802713BC"),
-	0x80270F38: main.sym("pl_swim_802714A8"),
-	0x8027107C: main.sym("pl_swim_802715EC"),
-	0x802710CC: main.sym("pl_swim_8027163C"),
-	0x80271194: main.sym("pl_swim_80271704"),
-	0x802713A8: main.sym("pl_swim_80271918"),
-	0x8027140C: main.sym("pl_swim_8027197C"),
-	0x80271530: main.sym("pl_swim_80271AA0"),
-	0x80271794: main.sym("pl_swim_80271D04"),
-	0x80271944: main.sym("pl_swim_80271EB4"),
-	0x80271ABC: main.sym("pl_swim_8027202C"),
-	0x80271CFC: main.sym("pl_swim_8027226C"),
-	0x80271E80: main.sym("pl_swim_802723F0"),
-	0x80271FD8: main.sym("pl_swim_80272548"),
-	0x8027210C: main.sym("pl_swim_8027267C"),
-	0x80272208: main.sym("pl_swim_80272778"),
-	0x80272300: main.sym("pl_swim_80272870"),
-	0x802724F0: main.sym("pl_swim_80272A60"),
-	0x802725AC: main.sym("pl_swim_80272B1C"),
-	0x802725F4: main.sym("pl_swim_80272B64"),
-	0x8027263C: main.sym("pl_swim_80272BAC"),
-	0x8027274C: main.sym("pl_swim_80272CBC"),
-	0x80272850: main.sym("pl_swim_80272DC0"),
-	0x802728CC: main.sym("pl_swim_80272E3C"),
+	0x8026FBA0: main.sym("plswim_80270110"),
+	0x8026FC5C: main.sym("plswim_802701CC"),
+	0x8026FCC4: main.sym("plswim_80270234"),
+	0x8026FD94: main.sym("plswim_80270304"),
+	0x8026FF90: main.sym("plswim_80270500"),
+	0x802703A8: main.sym("plswim_80270918"),
+	0x80270504: main.sym("plswim_80270A74"),
+	0x802705DC: main.sym("plswim_80270B4C"),
+	0x80270724: main.sym("plswim_80270C94"),
+	0x802708D0: main.sym("plswim_80270E40"),
+	0x80270A68: main.sym("plswim_80270FD8"),
+	0x80270B54: main.sym("plswim_802710C4"),
+	0x80270C64: main.sym("plswim_802711D4"),
+	0x80270D50: main.sym("plswim_802712C0"),
+	0x80270E4C: main.sym("plswim_802713BC"),
+	0x80270F38: main.sym("plswim_802714A8"),
+	0x8027107C: main.sym("plswim_802715EC"),
+	0x802710CC: main.sym("plswim_8027163C"),
+	0x80271194: main.sym("plswim_80271704"),
+	0x802713A8: main.sym("plswim_80271918"),
+	0x8027140C: main.sym("plswim_8027197C"),
+	0x80271530: main.sym("plswim_80271AA0"),
+	0x80271794: main.sym("plswim_80271D04"),
+	0x80271944: main.sym("plswim_80271EB4"),
+	0x80271ABC: main.sym("plswim_8027202C"),
+	0x80271CFC: main.sym("plswim_8027226C"),
+	0x80271E80: main.sym("plswim_802723F0"),
+	0x80271FD8: main.sym("plswim_80272548"),
+	0x8027210C: main.sym("plswim_8027267C"),
+	0x80272208: main.sym("plswim_80272778"),
+	0x80272300: main.sym("plswim_80272870"),
+	0x802724F0: main.sym("plswim_80272A60"),
+	0x802725AC: main.sym("plswim_80272B1C"),
+	0x802725F4: main.sym("plswim_80272B64"),
+	0x8027263C: main.sym("plswim_80272BAC"),
+	0x8027274C: main.sym("plswim_80272CBC"),
+	0x80272850: main.sym("plswim_80272DC0"),
+	0x802728CC: main.sym("plswim_80272E3C"),
 	0x80272A78: main.sym("L80272FE8", flag={"GLOBL","LOCAL"}),
 	0x80272A94: main.sym("L80273004", flag={"GLOBL","LOCAL"}),
 	0x80272AB0: main.sym("L80273020", flag={"GLOBL","LOCAL"}),
@@ -947,25 +947,25 @@ sym_J0_code_text = {
 	0x80272B84: main.sym("L802730F4", flag={"GLOBL","LOCAL"}),
 	0x80272B98: main.sym("L80273108", flag={"GLOBL","LOCAL"}),
 	0x80272BAC: main.sym("L8027311C", flag={"GLOBL","LOCAL"}),
-	0x80272BF0: main.sym("pl_swim_80273160"),
-	0x80272FA8: main.sym("pl_swim_80273518"),
-	0x80273034: main.sym("pl_swim_802735A4"),
-	0x802730A8: main.sym("pl_swim_80273618"),
-	0x80273284: main.sym("pl_swim_802737F4"),
-	0x802734BC: main.sym("pl_swim_80273A2C"),
-	0x80273664: main.sym("pl_swim_80273BD4"),
-	0x80273760: main.sym("pl_swim_80273CD0"),
-	0x80273904: main.sym("pl_swim_80273E74"),
-	0x80273AC0: main.sym("pl_swim_80274030"),
-	0x80273BC4: main.sym("pl_swim_80274134"),
-	0x80273CF8: main.sym("pl_swim_80274268"),
-	0x80273E14: main.sym("pl_swim_80274384"),
-	0x80273F3C: main.sym("pl_swim_802744AC"),
-	0x80274010: main.sym("pl_swim_80274580"),
-	0x80274118: main.sym("pl_swim_80274688"),
-	0x802741EC: main.sym("pl_swim_8027475C"),
-	0x802742F4: main.sym("pl_swim_80274864"),
-	0x8027442C: main.sym("pl_swim_exec", flag={"GLOBL"}),
+	0x80272BF0: main.sym("plswim_80273160"),
+	0x80272FA8: main.sym("plswim_80273518"),
+	0x80273034: main.sym("plswim_802735A4"),
+	0x802730A8: main.sym("plswim_80273618"),
+	0x80273284: main.sym("plswim_802737F4"),
+	0x802734BC: main.sym("plswim_80273A2C"),
+	0x80273664: main.sym("plswim_80273BD4"),
+	0x80273760: main.sym("plswim_80273CD0"),
+	0x80273904: main.sym("plswim_80273E74"),
+	0x80273AC0: main.sym("plswim_80274030"),
+	0x80273BC4: main.sym("plswim_80274134"),
+	0x80273CF8: main.sym("plswim_80274268"),
+	0x80273E14: main.sym("plswim_80274384"),
+	0x80273F3C: main.sym("plswim_802744AC"),
+	0x80274010: main.sym("plswim_80274580"),
+	0x80274118: main.sym("plswim_80274688"),
+	0x802741EC: main.sym("plswim_8027475C"),
+	0x802742F4: main.sym("plswim_80274864"),
+	0x8027442C: main.sym("PL_ExecSwim", flag={"GLOBL"}),
 	0x8027474C: main.sym("L80274CBC", flag={"GLOBL","LOCAL"}),
 	0x80274760: main.sym("L80274CD0", flag={"GLOBL","LOCAL"}),
 	0x80274774: main.sym("L80274CE4", flag={"GLOBL","LOCAL"}),
@@ -983,9 +983,9 @@ sym_J0_code_text = {
 	0x80274904: main.sym("L80274E74", flag={"GLOBL","LOCAL"}),
 	0x80274918: main.sym("L80274E88", flag={"GLOBL","LOCAL"}),
 
-	# src/plhold.c
-	0x80274940: main.sym("pl_hold_80274EB0"),
-	0x802749A0: main.sym("pl_hold_80274F10", flag={"GLOBL"}),
+	# src/pltake.c
+	0x80274940: main.sym("pltake_80274EB0"),
+	0x802749A0: main.sym("pltake_80274F10", flag={"GLOBL"}),
 	0x80274A20: main.sym("L80274F90", flag={"GLOBL","LOCAL"}),
 	0x80274A38: main.sym("L80274FA8", flag={"GLOBL","LOCAL"}),
 	0x80274AE0: main.sym("L80275050", flag={"GLOBL","LOCAL"}),
@@ -995,18 +995,18 @@ sym_J0_code_text = {
 	0x80274C7C: main.sym("L802751EC", flag={"GLOBL","LOCAL"}),
 	0x80274D10: main.sym("L80275280", flag={"GLOBL","LOCAL"}),
 	0x80274D98: main.sym("L80275308", flag={"GLOBL","LOCAL"}),
-	0x80274DB8: main.sym("pl_hold_80275328"),
-	0x80274EFC: main.sym("pl_hold_8027546C"),
-	0x8027508C: main.sym("pl_hold_802755FC"),
-	0x80275158: main.sym("pl_hold_802756C8"),
-	0x80275224: main.sym("pl_hold_80275794"),
-	0x80275350: main.sym("pl_hold_802758C0"),
-	0x80275444: main.sym("pl_hold_802759B4"),
-	0x80275510: main.sym("pl_hold_80275A80"),
-	0x802755C4: main.sym("pl_hold_80275B34"),
-	0x802758C8: main.sym("pl_hold_80275E78"),
-	0x8027595C: main.sym("pl_hold_80275F0C"),
-	0x80275A30: main.sym("pl_hold_exec", flag={"GLOBL"}),
+	0x80274DB8: main.sym("pltake_80275328"),
+	0x80274EFC: main.sym("pltake_8027546C"),
+	0x8027508C: main.sym("pltake_802755FC"),
+	0x80275158: main.sym("pltake_802756C8"),
+	0x80275224: main.sym("pltake_80275794"),
+	0x80275350: main.sym("pltake_802758C0"),
+	0x80275444: main.sym("pltake_802759B4"),
+	0x80275510: main.sym("pltake_80275A80"),
+	0x802755C4: main.sym("pltake_80275B34"),
+	0x802758C8: main.sym("pltake_80275E78"),
+	0x8027595C: main.sym("pltake_80275F0C"),
+	0x80275A30: main.sym("PL_ExecTake", flag={"GLOBL"}),
 	0x80275B18: main.sym("L802760C8", flag={"GLOBL","LOCAL"}),
 	0x80275B2C: main.sym("L802760DC", flag={"GLOBL","LOCAL"}),
 	0x80275B40: main.sym("L802760F0", flag={"GLOBL","LOCAL"}),
@@ -1017,9 +1017,9 @@ sym_J0_code_text = {
 	0x80275BCC: main.sym("L8027617C", flag={"GLOBL","LOCAL"}),
 
 	# src/callback.c
-	0x80275C20: main.sym("s_stage_weather", flag={"GLOBL"}),
-	0x80275E24: main.sym("s_stage_back", flag={"GLOBL"}),
-	0x80275F00: main.sym("s_face_proc", flag={"GLOBL"}),
+	0x80275C20: main.sym("CtrlWeather", flag={"GLOBL"}),
+	0x80275E24: main.sym("CtrlBackground", flag={"GLOBL"}),
+	0x80275F00: main.sym("CtrlFace", flag={"GLOBL"}),
 	0x80275FCC: main.sym("callback_8027657C"),
 	0x8027604C: main.sym("callback_802765FC"),
 	0x80276104: main.sym("callback_802766B4"),
@@ -1036,139 +1036,139 @@ sym_J0_code_text = {
 	0x80276608: main.sym("callback_80276BB8", flag={"GLOBL"}),
 	0x8027671C: main.sym("callback_80276CCC", flag={"GLOBL"}),
 	0x802769E0: main.sym("callback_80276F90"),
-	0x80276AF4: main.sym("s_player_alpha", flag={"GLOBL"}),
-	0x80276BA0: main.sym("s_player_select_lod", flag={"GLOBL"}),
-	0x80276C0C: main.sym("s_player_select_eyes", flag={"GLOBL"}),
-	0x80276CE4: main.sym("s_player_torso", flag={"GLOBL"}),
-	0x80276DF4: main.sym("s_player_head", flag={"GLOBL"}),
-	0x80276F44: main.sym("s_mario_select_hand", flag={"GLOBL"}),
-	0x8027701C: main.sym("s_mario_punch", flag={"GLOBL"}),
-	0x80277128: main.sym("s_player_select_cap", flag={"GLOBL"}),
-	0x80277190: main.sym("s_player_select_head", flag={"GLOBL"}),
-	0x80277274: main.sym("s_player_wing", flag={"GLOBL"}),
-	0x802773AC: main.sym("s_player_hand", flag={"GLOBL"}),
-	0x80277564: main.sym("s_inside_mirror", flag={"GLOBL"}),
-	0x802777BC: main.sym("s_mario_mirror", flag={"GLOBL"}),
+	0x80276AF4: main.sym("CtrlPlayerAlpha", flag={"GLOBL"}),
+	0x80276BA0: main.sym("CtrlPlayerLOD", flag={"GLOBL"}),
+	0x80276C0C: main.sym("CtrlPlayerEyes", flag={"GLOBL"}),
+	0x80276CE4: main.sym("CtrlPlayerTorso", flag={"GLOBL"}),
+	0x80276DF4: main.sym("CtrlPlayerNeck", flag={"GLOBL"}),
+	0x80276F44: main.sym("CtrlMarioHand", flag={"GLOBL"}),
+	0x8027701C: main.sym("CtrlMarioPunch", flag={"GLOBL"}),
+	0x80277128: main.sym("CtrlPlayerCap", flag={"GLOBL"}),
+	0x80277190: main.sym("CtrlPlayerHead", flag={"GLOBL"}),
+	0x80277274: main.sym("CtrlPlayerWing", flag={"GLOBL"}),
+	0x802773AC: main.sym("CtrlPlayerHand", flag={"GLOBL"}),
+	0x80277564: main.sym("CtrlInsideMirror", flag={"GLOBL"}),
+	0x802777BC: main.sym("CtrlMarioMirror", flag={"GLOBL"}),
 
 	# src/memory.c
-	0x80277930: main.sym("segment_set", flag={"GLOBL"}),
-	0x80277970: main.sym("segment_get", flag={"GLOBL"}),
-	0x802779A0: main.sym("segment_to_virtual", flag={"GLOBL"}),
-	0x802779F8: main.sym("virtual_to_segment", flag={"GLOBL"}),
-	0x80277A40: main.sym("segment_write", flag={"GLOBL"}),
-	0x80277AC4: main.sym("mem_init", flag={"GLOBL"}),
-	0x80277B70: main.sym("mem_alloc", flag={"GLOBL"}),
-	0x80277C88: main.sym("mem_free", flag={"GLOBL"}),
-	0x80277DA8: main.sym("mem_realloc", flag={"GLOBL"}),
-	0x80277E18: main.sym("mem_available", flag={"GLOBL"}),
-	0x80277E38: main.sym("mem_push", flag={"GLOBL"}),
-	0x80277EE8: main.sym("mem_pull", flag={"GLOBL"}),
-	0x80277F54: main.sym("mem_dma", flag={"GLOBL"}),
-	0x80278060: main.sym("mem_load", flag={"GLOBL"}),
-	0x802780DC: main.sym("mem_load_data", flag={"GLOBL"}),
-	0x80278140: main.sym("mem_load_code", flag={"GLOBL"}),
-	0x80278228: main.sym("mem_load_pres", flag={"GLOBL"}),
-	0x80278304: main.sym("mem_load_text", flag={"GLOBL"}),
-	0x802783C4: main.sym("mem_load_ulib", flag={"GLOBL"}),
-	0x80278464: main.sym("arena_create", flag={"GLOBL"}),
-	0x80278508: main.sym("arena_alloc", flag={"GLOBL"}),
-	0x80278578: main.sym("arena_resize", flag={"GLOBL"}),
-	0x802785E8: main.sym("heap_create", flag={"GLOBL"}),
-	0x802786A8: main.sym("heap_alloc", flag={"GLOBL"}),
-	0x802787C4: main.sym("heap_free", flag={"GLOBL"}),
-	0x8027897C: main.sym("gfx_alloc", flag={"GLOBL"}),
-	0x802789F0: main.sym("bank_load_info"),
-	0x80278A78: main.sym("bank_init", flag={"GLOBL"}),
-	0x80278AD4: main.sym("bank_load", flag={"GLOBL"}),
+	0x80277930: main.sym("SegmentSet", flag={"GLOBL"}),
+	0x80277970: main.sym("SegmentGet", flag={"GLOBL"}),
+	0x802779A0: main.sym("SegmentToVirtual", flag={"GLOBL"}),
+	0x802779F8: main.sym("VirtualToSegment", flag={"GLOBL"}),
+	0x80277A40: main.sym("SegmentWrite", flag={"GLOBL"}),
+	0x80277AC4: main.sym("MemInit", flag={"GLOBL"}),
+	0x80277B70: main.sym("MemAlloc", flag={"GLOBL"}),
+	0x80277C88: main.sym("MemFree", flag={"GLOBL"}),
+	0x80277DA8: main.sym("MemRealloc", flag={"GLOBL"}),
+	0x80277E18: main.sym("MemAvailable", flag={"GLOBL"}),
+	0x80277E38: main.sym("MemPush", flag={"GLOBL"}),
+	0x80277EE8: main.sym("MemPull", flag={"GLOBL"}),
+	0x80277F54: main.sym("MemRead", flag={"GLOBL"}),
+	0x80278060: main.sym("MemLoad", flag={"GLOBL"}),
+	0x802780DC: main.sym("MemLoadData", flag={"GLOBL"}),
+	0x80278140: main.sym("MemLoadCode", flag={"GLOBL"}),
+	0x80278228: main.sym("MemLoadPres", flag={"GLOBL"}),
+	0x80278304: main.sym("MemLoadText", flag={"GLOBL"}),
+	0x802783C4: main.sym("MemLoadULib", flag={"GLOBL"}),
+	0x80278464: main.sym("ArenaCreate", flag={"GLOBL"}),
+	0x80278508: main.sym("ArenaAlloc", flag={"GLOBL"}),
+	0x80278578: main.sym("ArenaResize", flag={"GLOBL"}),
+	0x802785E8: main.sym("HeapCreate", flag={"GLOBL"}),
+	0x802786A8: main.sym("HeapAlloc", flag={"GLOBL"}),
+	0x802787C4: main.sym("HeapFree", flag={"GLOBL"}),
+	0x8027897C: main.sym("GfxAlloc", flag={"GLOBL"}),
+	0x802789F0: main.sym("BankLoadInfo"),
+	0x80278A78: main.sym("BankInit", flag={"GLOBL"}),
+	0x80278AD4: main.sym("BankLoad", flag={"GLOBL"}),
 
-	# src/save.c
-	0x80278BB0: main.sym("save_init_debug"),
-	0x80278BC4: main.sym("save_rd"),
-	0x80278C68: main.sym("save_wr"),
-	0x80278D10: main.sym("save_check_sum"),
-	0x80278D64: main.sym("save_check"),
-	0x80278DEC: main.sym("save_check_set"),
-	0x80278E4C: main.sym("save_data_recover"),
-	0x80278EF0: main.sym("save_data_write"),
-	0x80278F6C: main.sym("save_data_erase"),
-	0x80278FF0: main.sym("save_get_time"),
-	0x80279024: main.sym("save_set_time"),
-	0x802790A0: main.sym("save_update_time"),
-	0x80279150: main.sym("save_update_time_all"),
-	0x80279198: main.sym("save_file_recover"),
-	0x80279290: main.sym("save_file_write", flag={"GLOBL"}),
-	0x8027934C: main.sym("save_file_erase", flag={"GLOBL"}),
-	0x802793B0: main.sym("save_file_copy", flag={"GLOBL"}),
-	0x8027942C: main.sym("save_init", flag={"GLOBL"}),
-	0x80279618: main.sym("save_reset", flag={"GLOBL"}),
-	0x80279694: main.sym("save_set", flag={"GLOBL"}),
-	0x80279894: main.sym("save_file_isactive", flag={"GLOBL"}),
-	0x802798D0: main.sym("save_hiscore_get", flag={"GLOBL"}),
-	0x802799D0: main.sym("save_file_star_count", flag={"GLOBL"}),
-	0x80279A60: main.sym("save_file_star_range", flag={"GLOBL"}),
-	0x80279AF8: main.sym("save_set_flag", flag={"GLOBL"}),
-	0x80279B44: main.sym("save_clr_flag", flag={"GLOBL"}),
-	0x80279BBC: main.sym("save_get_flag", flag={"GLOBL"}),
-	0x80279C18: main.sym("save_file_get_star", flag={"GLOBL"}),
-	0x80279C8C: main.sym("save_file_set_star", flag={"GLOBL"}),
-	0x80279D60: main.sym("save_file_get_coin", flag={"GLOBL"}),
-	0x80279D90: main.sym("save_get_cannon", flag={"GLOBL"}),
-	0x80279DE0: main.sym("save_set_cannon", flag={"GLOBL"}),
-	0x80279E68: main.sym("save_set_cap", flag={"GLOBL"}),
-	0x80279EFC: main.sym("save_get_cap", flag={"GLOBL"}),
-	0x80279FB4: main.sym("save_set_sound", flag={"GLOBL"}),
-	0x8027A004: main.sym("save_get_sound", flag={"GLOBL"}),
-	0x8027A024: main.sym("save_init_cap", flag={"GLOBL"}),
-	0x8027A0E8: main.sym("save_clr_mid", flag={"GLOBL"}),
-	0x8027A100: main.sym("save_set_mid", flag={"GLOBL"}),
-	0x8027A168: main.sym("save_get_mid", flag={"GLOBL"}),
+	# src/backup.c
+	0x80278BB0: main.sym("BuInitDebug"),
+	0x80278BC4: main.sym("BackupRead"),
+	0x80278C68: main.sym("BackupWrite"),
+	0x80278D10: main.sym("BuCheckSum"),
+	0x80278D64: main.sym("BuCheck"),
+	0x80278DEC: main.sym("BuCheckSet"),
+	0x80278E4C: main.sym("BuInfoRecover"),
+	0x80278EF0: main.sym("BuInfoWrite"),
+	0x80278F6C: main.sym("BuInfoErase"),
+	0x80278FF0: main.sym("BuGetTime"),
+	0x80279024: main.sym("BuSetTime"),
+	0x802790A0: main.sym("BuUpdateTime"),
+	0x80279150: main.sym("BuUpdateTimeAll"),
+	0x80279198: main.sym("BuFileRecover"),
+	0x80279290: main.sym("BuFileWrite", flag={"GLOBL"}),
+	0x8027934C: main.sym("BuFileErase", flag={"GLOBL"}),
+	0x802793B0: main.sym("BuFileCopy", flag={"GLOBL"}),
+	0x8027942C: main.sym("BackupInit", flag={"GLOBL"}),
+	0x80279618: main.sym("BuReset", flag={"GLOBL"}),
+	0x80279694: main.sym("BuSet", flag={"GLOBL"}),
+	0x80279894: main.sym("BuFileIsActive", flag={"GLOBL"}),
+	0x802798D0: main.sym("BuGetHiScore", flag={"GLOBL"}),
+	0x802799D0: main.sym("BuFileStarCount", flag={"GLOBL"}),
+	0x80279A60: main.sym("BuFileStarRange", flag={"GLOBL"}),
+	0x80279AF8: main.sym("BuSetFlag", flag={"GLOBL"}),
+	0x80279B44: main.sym("BuClrFlag", flag={"GLOBL"}),
+	0x80279BBC: main.sym("BuGetFlag", flag={"GLOBL"}),
+	0x80279C18: main.sym("BuFileGetStar", flag={"GLOBL"}),
+	0x80279C8C: main.sym("BuFileSetStar", flag={"GLOBL"}),
+	0x80279D60: main.sym("BuFileGetCoin", flag={"GLOBL"}),
+	0x80279D90: main.sym("BuGetCannon", flag={"GLOBL"}),
+	0x80279DE0: main.sym("BuSetCannon", flag={"GLOBL"}),
+	0x80279E68: main.sym("BuSetCap", flag={"GLOBL"}),
+	0x80279EFC: main.sym("BuGetCap", flag={"GLOBL"}),
+	0x80279FB4: main.sym("BuSetSound", flag={"GLOBL"}),
+	0x8027A004: main.sym("BuGetSound", flag={"GLOBL"}),
+	0x8027A024: main.sym("BuInitCap", flag={"GLOBL"}),
+	0x8027A0E8: main.sym("BuClrMid", flag={"GLOBL"}),
+	0x8027A100: main.sym("BuSetMid", flag={"GLOBL"}),
+	0x8027A168: main.sym("BuGetMid", flag={"GLOBL"}),
 
 	# src/scene.c
-	0x8027A220: main.sym("scene_set_vp", flag={"GLOBL"}),
-	0x8027A28C: main.sym("scene_set_blank"),
-	0x8027A300: main.sym("scene_demo", flag={"GLOBL"}),
-	0x8027A38C: main.sym("port_get_type", flag={"GLOBL"}),
-	0x8027A418: main.sym("port_get", flag={"GLOBL"}),
-	0x8027A478: main.sym("obj_get_port"),
-	0x8027A4C4: main.sym("port_init"),
-	0x8027A554: main.sym("scene_init", flag={"GLOBL"}),
-	0x8027A7C4: main.sym("scene_exit", flag={"GLOBL"}),
-	0x8027A894: main.sym("scene_open", flag={"GLOBL"}),
-	0x8027A998: main.sym("scene_close", flag={"GLOBL"}),
-	0x8027AA0C: main.sym("scene_player_open", flag={"GLOBL"}),
-	0x8027AA88: main.sym("scene_player_close", flag={"GLOBL"}),
-	0x8027AB10: main.sym("scene_set", flag={"GLOBL"}),
-	0x8027ABB4: main.sym("scene_proc", flag={"GLOBL"}),
-	0x8027ABF0: main.sym("scene_wipe", flag={"GLOBL"}),
-	0x8027ADAC: main.sym("scene_wipe_delay", flag={"GLOBL"}),
-	0x8027AE04: main.sym("scene_draw", flag={"GLOBL"}),
+	0x8027A220: main.sym("SnSetVp", flag={"GLOBL"}),
+	0x8027A28C: main.sym("SnSetBlank"),
+	0x8027A300: main.sym("SceneDemo", flag={"GLOBL"}),
+	0x8027A38C: main.sym("SnGetPortType", flag={"GLOBL"}),
+	0x8027A418: main.sym("SnGetPort", flag={"GLOBL"}),
+	0x8027A478: main.sym("ObjGetPort"),
+	0x8027A4C4: main.sym("SnInitPort"),
+	0x8027A554: main.sym("SceneInit", flag={"GLOBL"}),
+	0x8027A7C4: main.sym("SceneExit", flag={"GLOBL"}),
+	0x8027A894: main.sym("SceneOpen", flag={"GLOBL"}),
+	0x8027A998: main.sym("SceneClose", flag={"GLOBL"}),
+	0x8027AA0C: main.sym("SnOpenPlayer", flag={"GLOBL"}),
+	0x8027AA88: main.sym("SnClosePlayer", flag={"GLOBL"}),
+	0x8027AB10: main.sym("SceneSet", flag={"GLOBL"}),
+	0x8027ABB4: main.sym("SceneProc", flag={"GLOBL"}),
+	0x8027ABF0: main.sym("SnWipe", flag={"GLOBL"}),
+	0x8027ADAC: main.sym("SnWipeDelay", flag={"GLOBL"}),
+	0x8027AE04: main.sym("SceneDraw", flag={"GLOBL"}),
 
 	# src/draw.c
-	0x8027B110: main.sym("draw_layer_list"),
-	0x8027B354: main.sym("draw_layer_gfx"),
-	0x8027B450: main.sym("draw_layer"),
-	0x8027B4E8: main.sym("draw_ortho"),
-	0x8027B6C4: main.sym("draw_persp"),
-	0x8027B840: main.sym("draw_lod"),
-	0x8027B8D4: main.sym("draw_select"),
-	0x8027B9A8: main.sym("draw_camera"),
-	0x8027BB64: main.sym("draw_coord"),
-	0x8027BC88: main.sym("draw_pos"),
-	0x8027BDAC: main.sym("draw_ang"),
-	0x8027BEC4: main.sym("draw_scale"),
-	0x8027BFE4: main.sym("draw_billboard"),
-	0x8027C18C: main.sym("draw_gfx"),
-	0x8027C1F4: main.sym("draw_callback"),
-	0x8027C2A8: main.sym("draw_back"),
-	0x8027C4C0: main.sym("draw_joint"),
-	0x8027C988: main.sym("draw_skeleton"),
-	0x8027CB08: main.sym("draw_shadow"),
-	0x8027CF68: main.sym("sobj_isvisible"),
-	0x8027D14C: main.sym("draw_object"),
-	0x8027D460: main.sym("draw_list"),
-	0x8027D4D4: main.sym("draw_hand"),
-	0x8027D8B8: main.sym("draw_child"),
-	0x8027D8F8: main.sym("draw_shape"),
+	0x8027B110: main.sym("DrawLayerList"),
+	0x8027B354: main.sym("DrawLayerGfx"),
+	0x8027B450: main.sym("DrawLayer"),
+	0x8027B4E8: main.sym("DrawOrtho"),
+	0x8027B6C4: main.sym("DrawPersp"),
+	0x8027B840: main.sym("DrawLOD"),
+	0x8027B8D4: main.sym("DrawSelect"),
+	0x8027B9A8: main.sym("DrawCamera"),
+	0x8027BB64: main.sym("DrawCoord"),
+	0x8027BC88: main.sym("DrawPos"),
+	0x8027BDAC: main.sym("DrawAng"),
+	0x8027BEC4: main.sym("DrawScale"),
+	0x8027BFE4: main.sym("DrawBillboard"),
+	0x8027C18C: main.sym("DrawGfx"),
+	0x8027C1F4: main.sym("DrawCallback"),
+	0x8027C2A8: main.sym("DrawBack"),
+	0x8027C4C0: main.sym("DrawJoint"),
+	0x8027C988: main.sym("DrawSkeleton"),
+	0x8027CB08: main.sym("DrawShadow"),
+	0x8027CF68: main.sym("SObjIsVisible"),
+	0x8027D14C: main.sym("DrawObject"),
+	0x8027D460: main.sym("DrawBranch"),
+	0x8027D4D4: main.sym("DrawHand"),
+	0x8027D8B8: main.sym("DrawChild"),
+	0x8027D8F8: main.sym("DrawShape"),
 	0x8027D9E0: main.sym("L8027DF90", flag={"GLOBL","LOCAL"}),
 	0x8027D9F0: main.sym("L8027DFA0", flag={"GLOBL","LOCAL"}),
 	0x8027DA00: main.sym("L8027DFB0", flag={"GLOBL","LOCAL"}),
@@ -1189,18 +1189,18 @@ sym_J0_code_text = {
 	0x8027DAF0: main.sym("L8027E0A0", flag={"GLOBL","LOCAL"}),
 	0x8027DB00: main.sym("L8027E0B0", flag={"GLOBL","LOCAL"}),
 	0x8027DB10: main.sym("L8027E0C0", flag={"GLOBL","LOCAL"}),
-	0x8027DB80: main.sym("draw_scene", flag={"GLOBL"}),
+	0x8027DB80: main.sym("DrawScene", flag={"GLOBL"}),
 
 	# src/time.c
-	0x8027DE30: main.sym("time_gfxcpu", flag={"GLOBL"}),
-	0x8027DEE0: main.sym("time_audcpu", flag={"GLOBL"}),
-	0x8027DF70: main.sym("time_gfxrcp", flag={"GLOBL"}),
-	0x8027E01C: main.sym("time_audrcp", flag={"GLOBL"}),
-	0x8027E0AC: main.sym("time_draw_d"),
-	0x8027E3A8: main.sym("time_draw_scale"),
-	0x8027E61C: main.sym("time_draw_abs"),
-	0x8027E8FC: main.sym("time_draw_rel"),
-	0x8027EEB0: main.sym("time_draw", flag={"GLOBL"}),
+	0x8027DE30: main.sym("TimeGfxCPU", flag={"GLOBL"}),
+	0x8027DEE0: main.sym("TimeAudCPU", flag={"GLOBL"}),
+	0x8027DF70: main.sym("TimeGfxRCP", flag={"GLOBL"}),
+	0x8027E01C: main.sym("TimeAudRCP", flag={"GLOBL"}),
+	0x8027E0AC: main.sym("TimeDrawD"),
+	0x8027E3A8: main.sym("TimeDrawScale"),
+	0x8027E61C: main.sym("TimeDrawAbs"),
+	0x8027E8FC: main.sym("TimeDrawRel"),
+	0x8027EEB0: main.sym("TimeDraw", flag={"GLOBL"}),
 
 	# src/slidec.s
 	0x8027EF30: main.sym("slidec", flag={"GLOBL"}),
@@ -1315,7 +1315,7 @@ sym_J0_code_text = {
 	0x802875DC: main.sym("camera_80287BC4", flag={"GLOBL"}),
 	0x802875F8: main.sym("camera_80287BE0"),
 	0x802876D0: main.sym("camera_80287CB8"),
-	#0x80287D30: main.sym("s_stage_camera", flag={"GLOBL"}),
+	#0x80287D30: main.sym("CtrlCamera", flag={"GLOBL"}),
 	0x802877D8: main.sym("camera_80287DC0"),
 	0x802877EC: main.sym("camera_80287DD4"),
 	0x80287800: main.sym("camera_80287DE8"),
@@ -1846,7 +1846,7 @@ sym_J0_code_text = {
 	0x8029A1B4: main.sym("camera_8029A8D0"),
 	0x8029A24C: main.sym("camera_8029A968"),
 	0x8029A288: main.sym("camera_8029A9A4"),
-	#0x8029AA3C: main.sym("s_stage_perspective", flag={"GLOBL"}),
+	#0x8029AA3C: main.sym("CtrlPerspective", flag={"GLOBL"}),
 	0x8029A390: main.sym("L8029AAAC", flag={"GLOBL","LOCAL"}),
 	0x8029A3A0: main.sym("L8029AABC", flag={"GLOBL","LOCAL"}),
 	0x8029A3B0: main.sym("L8029AACC", flag={"GLOBL","LOCAL"}),
@@ -1882,261 +1882,261 @@ sym_J0_code_text = {
 	0x8029BE6C: main.sym("L8029C5EC", flag={"GLOBL","LOCAL"}),
 
 	# src/course.c
-	0x8029BFF0: main.sym("course_init", flag={"GLOBL"}),
+	0x8029BFF0: main.sym("CourseInit", flag={"GLOBL"}),
 
 	# src/object.c
-	0x8029C000: main.sym("player_copyinfo"),
-	0x8029C24C: main.sym("player_seteffect"),
-	0x8029C2D8: main.sym("mario_proc", flag={"GLOBL"}),
-	0x8029C3B4: main.sym("objlist_exec_normal"),
-	0x8029C448: main.sym("objlist_exec_frozen"),
-	0x8029C5A8: main.sym("objlist_exec"),
-	0x8029C618: main.sym("objlist_cleanup"),
-	0x8029C6D8: main.sym("obj_set_actorflag", flag={"GLOBL"}),
-	0x8029C75C: main.sym("object_close", flag={"GLOBL"}),
-	0x8029C830: main.sym("object_open", flag={"GLOBL"}),
+	0x8029C000: main.sym("Player_CopyInfo"),
+	0x8029C24C: main.sym("Player_SetEffect"),
+	0x8029C2D8: main.sym("Mario_Proc", flag={"GLOBL"}),
+	0x8029C3B4: main.sym("ObjListExecNormal"),
+	0x8029C448: main.sym("ObjListExecFrozen"),
+	0x8029C5A8: main.sym("ObjListExec"),
+	0x8029C618: main.sym("ObjListCleanup"),
+	0x8029C6D8: main.sym("ObjSetActorFlag", flag={"GLOBL"}),
+	0x8029C75C: main.sym("ObjectClose", flag={"GLOBL"}),
+	0x8029C830: main.sym("ObjectOpen", flag={"GLOBL"}),
 	0x8029CA50: main.sym("object_8029D1D8"),
-	0x8029CA60: main.sym("object_init", flag={"GLOBL"}),
-	0x8029CB9C: main.sym("object_exec_1"),
-	0x8029CBEC: main.sym("object_exec_2"),
-	0x8029CCA0: main.sym("object_cleanup"),
+	0x8029CA60: main.sym("ObjectInit", flag={"GLOBL"}),
+	0x8029CB9C: main.sym("ObjectExec1"),
+	0x8029CBEC: main.sym("ObjectExec2"),
+	0x8029CCA0: main.sym("ObjectCleanup"),
 	0x8029CD48: main.sym("object_8029D4D0"),
-	0x8029CF08: main.sym("object_proc", flag={"GLOBL"}),
+	0x8029CF08: main.sym("ObjectProc", flag={"GLOBL"}),
 
-	# src/objlib.c
-	0x8029D100: main.sym("s_objlib_8029D890", flag={"GLOBL"}),
-	#0x8029D924: main.sym("s_objlib_8029D924", flag={"GLOBL"}),
-	#0x8029DB48: main.sym("s_objlib_8029DB48", flag={"GLOBL"}),
-	#0x8029DBD4: main.sym("s_objlib_8029DBD4", flag={"GLOBL"}),
-	0x8029D558: main.sym("objlib_8029DCD4", flag={"GLOBL"}),
-	0x8029D62C: main.sym("objlib_8029DDA8", flag={"GLOBL"}),
-	0x8029D704: main.sym("objlib_8029DE80", flag={"GLOBL"}),
-	0x8029DA34: main.sym("objlib_8029E1B0", flag={"GLOBL"}),
-	0x8029DB00: main.sym("objlib_8029E27C", flag={"GLOBL"}),
-	0x8029DB7C: main.sym("objlib_8029E2F8", flag={"GLOBL"}),
-	0x8029DC1C: main.sym("objlib_8029E398", flag={"GLOBL"}),
-	0x8029DC6C: main.sym("objlib_8029E3E8", flag={"GLOBL"}),
-	0x8029DD18: main.sym("objlib_8029E494", flag={"GLOBL"}),
-	0x8029DDB4: main.sym("objlib_8029E530", flag={"GLOBL"}),
-	0x8029DE70: main.sym("objlib_8029E5EC", flag={"GLOBL"}),
-	0x8029DF18: main.sym("objlib_8029E694", flag={"GLOBL"}),
-	0x8029DF98: main.sym("objlib_8029E714", flag={"GLOBL"}),
-	0x8029E140: main.sym("objlib_8029E8BC", flag={"GLOBL"}),
-	0x8029E198: main.sym("objlib_8029E914", flag={"GLOBL"}),
-	0x8029E1F0: main.sym("objlib_8029E96C", flag={"GLOBL"}),
-	0x8029E230: main.sym("obj_make_abs", flag={"GLOBL"}),
-	0x8029E2A8: main.sym("obj_make_rel", flag={"GLOBL"}),
-	#0x8029EAAC: main.sym("objlib_8029EAAC"),
-	0x8029E388: main.sym("objlib_8029EB04", flag={"GLOBL"}),
-	0x8029E5A4: main.sym("obj_make", flag={"GLOBL"}),
-	0x8029E650: main.sym("obj_make_here", flag={"GLOBL"}),
-	0x8029E6A8: main.sym("objlib_8029EE24", flag={"GLOBL"}),
-	0x8029E73C: main.sym("objlib_8029EEB8", flag={"GLOBL"}),
-	0x8029E7A4: main.sym("objlib_8029EF20"),
-	0x8029E7E8: main.sym("obj_make_off", flag={"GLOBL"}),
-	0x8029E880: main.sym("objlib_8029EFFC", flag={"GLOBL"}),
-	#0x8029F070: main.sym("objlib_8029F070"),
-	0x8029E94C: main.sym("objlib_8029F0C8", flag={"GLOBL"}),
-	0x8029E964: main.sym("objlib_8029F0E0", flag={"GLOBL"}),
-	0x8029E9A4: main.sym("objlib_8029F120", flag={"GLOBL"}),
-	0x8029E9CC: main.sym("objlib_8029F148"),
-	0x8029EA0C: main.sym("objlib_8029F188", flag={"GLOBL"}),
-	#0x8029F1B0: main.sym("objlib_8029F1B0"),
-	0x8029EA84: main.sym("objlib_8029F200", flag={"GLOBL"}),
-	0x8029EAF8: main.sym("objlib_8029F274", flag={"GLOBL"}),
-	0x8029EB70: main.sym("objlib_8029F2EC"),
-	0x8029EC2C: main.sym("objlib_8029F3A8", flag={"GLOBL"}),
-	0x8029EC54: main.sym("objlib_8029F3D0", flag={"GLOBL"}),
-	0x8029EC88: main.sym("obj_set_scale", flag={"GLOBL"}),
-	0x8029ECB4: main.sym("object_set_scale", flag={"GLOBL"}),
-	0x8029ECE8: main.sym("objlib_8029F464", flag={"GLOBL"}),
-	0x8029ED38: main.sym("objlib_8029F4B4", flag={"GLOBL"}),
-	0x8029ED98: main.sym("objlib_8029F514", flag={"GLOBL"}),
-	0x8029EE20: main.sym("objlib_8029F59C", flag={"GLOBL"}),
-	#0x8029F600: main.sym("objlib_8029F600"),
-	0x8029EEA4: main.sym("objlib_8029F620", flag={"GLOBL"}),
-	#0x8029F644: main.sym("objlib_8029F644"),
-	0x8029EEF0: main.sym("objlib_8029F66C", flag={"GLOBL"}),
-	0x8029EF18: main.sym("objlib_8029F694", flag={"GLOBL"}),
-	0x8029EF40: main.sym("objlib_8029F6BC", flag={"GLOBL"}),
-	0x8029EF64: main.sym("objlib_8029F6E0", flag={"GLOBL"}),
-	0x8029F05C: main.sym("objlib_8029F7D8"),
-	0x8029F0A4: main.sym("objlib_8029F820", flag={"GLOBL"}),
-	#0x8029F848: main.sym("objlib_8029F848"),
-	0x8029F170: main.sym("objlib_8029F8EC", flag={"GLOBL"}),
-	0x8029F198: main.sym("objlib_8029F914", flag={"GLOBL"}),
-	0x8029F1E0: main.sym("objlib_8029F95C", flag={"GLOBL"}),
-	0x8029F21C: main.sym("objlib_8029F998", flag={"GLOBL"}),
-	0x8029F270: main.sym("objlib_8029F9EC", flag={"GLOBL"}),
-	0x8029F3A0: main.sym("objlib_8029FB1C", flag={"GLOBL"}),
-	#0x8029FB68: main.sym("objlib_8029FB68"),
-	0x8029F460: main.sym("objlib_8029FBDC", flag={"GLOBL"}),
-	0x8029F520: main.sym("objlib_8029FC9C", flag={"GLOBL"}),
-	0x8029F610: main.sym("objlib_8029FD8C"),
-	0x8029F638: main.sym("objlib_8029FDB4", flag={"GLOBL"}),
-	0x8029F684: main.sym("objlib_8029FE00", flag={"GLOBL"}),
-	0x8029F6F0: main.sym("objlib_8029FE6C", flag={"GLOBL"}),
-	0x8029F728: main.sym("objlib_8029FEA4", flag={"GLOBL"}),
-	0x8029F788: main.sym("objlib_8029FF04", flag={"GLOBL"}),
-	0x8029F828: main.sym("objlib_8029FFA4", flag={"GLOBL"}),
-	0x8029F88C: main.sym("objlib_802A0008", flag={"GLOBL"}),
-	0x8029F8D4: main.sym("objlib_802A0050", flag={"GLOBL"}),
-	#0x802A00AC: main.sym("objlib_802A00AC"),
-	0x8029F998: main.sym("objlib_802A0114", flag={"GLOBL"}),
-	0x8029F9D8: main.sym("objlib_802A0154", flag={"GLOBL"}),
-	0x8029FA1C: main.sym("objlib_802A0198", flag={"GLOBL"}),
-	0x8029FA5C: main.sym("objlib_802A01D8", flag={"GLOBL"}),
-	0x8029FAB8: main.sym("objlib_802A0234"),
-	0x8029FC04: main.sym("objlib_802A0380", flag={"GLOBL"}),
-	0x8029FCF8: main.sym("objlib_802A0474", flag={"GLOBL"}),
-	0x8029FD44: main.sym("objlib_802A04C0", flag={"GLOBL"}),
-	#0x802A04F0: main.sym("objlib_802A04F0"),
-	0x8029FD98: main.sym("objlib_802A0514", flag={"GLOBL"}),
-	0x8029FDEC: main.sym("objlib_802A0568", flag={"GLOBL"}),
-	0x8029FE00: main.sym("objlib_802A057C", flag={"GLOBL"}),
-	0x8029FE38: main.sym("objlib_802A05B4", flag={"GLOBL"}),
-	0x8029FE58: main.sym("objlib_802A05D4", flag={"GLOBL"}),
-	0x8029FE74: main.sym("objlib_802A05F0", flag={"GLOBL"}),
-	0x8029FE88: main.sym("objlib_802A0604", flag={"GLOBL"}),
-	0x8029FED0: main.sym("objlib_802A064C", flag={"GLOBL"}),
-	0x8029FF20: main.sym("objlib_802A069C"),
-	0x802A0020: main.sym("objlib_802A079C", flag={"GLOBL"}),
-	0x802A006C: main.sym("objlib_802A07E8"),
-	0x802A0334: main.sym("objlib_802A0AB0"),
-	0x802A0460: main.sym("objlib_802A0BDC"),
-	0x802A0608: main.sym("objlib_802A0D84"),
-	0x802A06EC: main.sym("objlib_802A0E68", flag={"GLOBL"}),
-	#0x802A10E0: main.sym("objlib_802A10E0"),
-	0x802A0974: main.sym("objlib_802A10F0"),
-	#0x802A113C: main.sym("objlib_802A113C"),
-	0x802A0A2C: main.sym("objlib_802A11A8", flag={"GLOBL"}),
-	0x802A0A90: main.sym("objlib_802A120C", flag={"GLOBL"}),
-	0x802A0B28: main.sym("objlib_802A12A4", flag={"GLOBL"}),
-	0x802A0B8C: main.sym("objlib_802A1308", flag={"GLOBL"}),
-	0x802A0BF4: main.sym("objlib_802A1370", flag={"GLOBL"}),
-	0x802A0CA8: main.sym("objlib_802A1424", flag={"GLOBL"}),
-	0x802A0D10: main.sym("objlib_802A148C", flag={"GLOBL"}),
-	0x802A0D48: main.sym("objlib_802A14C4", flag={"GLOBL"}),
-	0x802A0D80: main.sym("objlib_802A14FC", flag={"GLOBL"}),
-	0x802A0DD8: main.sym("objlib_802A1554", flag={"GLOBL"}),
-	0x802A0E30: main.sym("objlib_802A15AC", flag={"GLOBL"}),
-	0x802A0EB8: main.sym("objlib_802A1634", flag={"GLOBL"}),
-	#0x802A16AC: main.sym("objlib_802A16AC"),
-	#0x802A1774: main.sym("objlib_802A1774"),
-	0x802A10D0: main.sym("objlib_802A184C", flag={"GLOBL"}),
-	0x802A1110: main.sym("objlib_802A188C", flag={"GLOBL"}),
-	0x802A1160: main.sym("objlib_802A18DC", flag={"GLOBL"}),
-	0x802A11B4: main.sym("objlib_802A1930", flag={"GLOBL"}),
-	#0x802A1960: main.sym("objlib_802A1960"),
-	0x802A1230: main.sym("objlib_802A19AC", flag={"GLOBL"}),
-	0x802A124C: main.sym("objlib_802A19C8", flag={"GLOBL"}),
-	0x802A1274: main.sym("objlib_802A19F0", flag={"GLOBL"}),
-	0x802A129C: main.sym("objlib_802A1A18"),
-	0x802A13B8: main.sym("objlib_802A1B34"),
-	0x802A1410: main.sym("objlib_802A1B8C", flag={"GLOBL"}),
-	0x802A1460: main.sym("objlib_802A1BDC", flag={"GLOBL"}),
-	#0x802A1C68: main.sym("objlib_802A1C68"),
-	#0x802A1CC4: main.sym("objlib_802A1CC4"),
-	0x802A1600: main.sym("objlib_802A1D7C"),
-	0x802A17C0: main.sym("objlib_802A1F3C", flag={"GLOBL"}),
-	0x802A1978: main.sym("objlib_802A20F4"),
-	0x802A1A2C: main.sym("objlib_802A21D4"),
-	0x802A1B78: main.sym("objlib_802A2320", flag={"GLOBL"}),
-	0x802A1BA0: main.sym("objlib_802A2348", flag={"GLOBL"}),
-	0x802A1D28: main.sym("objlib_802A24D0"),
-	0x802A1E0C: main.sym("objlib_802A25B4", flag={"GLOBL"}),
-	0x802A1E9C: main.sym("objlib_802A2644", flag={"GLOBL"}),
-	#0x802A2674: main.sym("objlib_802A2674"),
-	0x802A1FA0: main.sym("objlib_802A2748", flag={"GLOBL"}),
-	0x802A2008: main.sym("objlib_802A27B0", flag={"GLOBL"}),
-	0x802A205C: main.sym("objlib_802A2804", flag={"GLOBL"}),
-	0x802A2188: main.sym("objlib_802A2930", flag={"GLOBL"}),
-	0x802A2270: main.sym("objlib_802A2A18", flag={"GLOBL"}),
-	0x802A22DC: main.sym("objlib_802A2A84", flag={"GLOBL"}),
-	#0x802A2B28: main.sym("objlib_802A2B28"),
-	#0x802A2B6C: main.sym("objlib_802A2B6C"),
-	0x802A241C: main.sym("objlib_802A2BC4", flag={"GLOBL"}),
-	#0x802A2C1C: main.sym("objlib_802A2C1C"),
-	0x802A24B4: main.sym("objlib_802A2C5C", flag={"GLOBL"}),
-	0x802A272C: main.sym("objlib_802A2ED4", flag={"GLOBL"}),
-	0x802A276C: main.sym("objlib_802A2F14", flag={"GLOBL"}),
-	0x802A27B4: main.sym("objlib_802A2F5C", flag={"GLOBL"}),
-	0x802A2818: main.sym("objlib_802A2FC0", flag={"GLOBL"}),
-	0x802A28E4: main.sym("objlib_802A308C", flag={"GLOBL"}),
-	0x802A297C: main.sym("objlib_802A3124"),
-	0x802A2A38: main.sym("objlib_802A31E0", flag={"GLOBL"}),
-	0x802A2AC0: main.sym("objlib_802A3268", flag={"GLOBL"}),
-	0x802A2B04: main.sym("objlib_802A32AC", flag={"GLOBL"}),
-	0x802A2CFC: main.sym("objlib_802A34A4", flag={"GLOBL"}),
-	0x802A2E5C: main.sym("objlib_802A3604", flag={"GLOBL"}),
-	0x802A2E8C: main.sym("objlib_802A3634", flag={"GLOBL"}),
-	0x802A2ECC: main.sym("objlib_802A3674", flag={"GLOBL"}),
-	0x802A2EFC: main.sym("objlib_802A36A4", flag={"GLOBL"}),
-	0x802A2FAC: main.sym("objlib_802A3754", flag={"GLOBL"}),
-	0x802A3004: main.sym("objlib_802A37AC", flag={"GLOBL"}),
-	0x802A3034: main.sym("objlib_802A37DC", flag={"GLOBL"}),
-	0x802A3070: main.sym("objlib_802A3818", flag={"GLOBL"}),
-	0x802A3164: main.sym("objlib_802A390C", flag={"GLOBL"}),
-	#0x802A399C: main.sym("objlib_802A399C", flag={"GLOBL"}),
-	#0x802A3A3C: main.sym("objlib_802A3A3C"),
-	0x802A32A4: main.sym("objlib_802A3A4C", flag={"GLOBL"}),
-	0x802A32E0: main.sym("objlib_802A3A88", flag={"GLOBL"}),
-	#0x802A3B28: main.sym("objlib_802A3B28"),
-	0x802A3398: main.sym("objlib_802A3B40", flag={"GLOBL"}),
-	0x802A3470: main.sym("objlib_802A3C18", flag={"GLOBL"}),
-	#0x802A3CEC: main.sym("objlib_802A3CEC"),
-	0x802A3554: main.sym("objlib_802A3CFC", flag={"GLOBL"}),
-	#0x802A3D40: main.sym("objlib_802A3D40"),
-	0x802A362C: main.sym("objlib_802A3DD4", flag={"GLOBL"}),
-	0x802A3688: main.sym("objlib_802A3E30", flag={"GLOBL"}),
-	0x802A36D8: main.sym("objlib_802A3E80"),
-	#0x802A3EF8: main.sym("objlib_802A3EF8"),
-	0x802A377C: main.sym("objlib_802A3F24", flag={"GLOBL"}),
-	0x802A37A0: main.sym("objlib_802A3F48", flag={"GLOBL"}),
-	0x802A38A4: main.sym("objlib_802A404C", flag={"GLOBL"}),
-	0x802A3910: main.sym("objlib_802A40B8", flag={"GLOBL"}),
-	#0x802A4110: main.sym("objlib_802A4110"),
-	0x802A3978: main.sym("objlib_802A4120", flag={"GLOBL"}),
-	0x802A3A68: main.sym("objlib_802A4210", flag={"GLOBL"}),
-	0x802A3BB8: main.sym("objlib_802A4360", flag={"GLOBL"}),
-	0x802A3C98: main.sym("objlib_802A4440", flag={"GLOBL"}),
-	0x802A3D4C: main.sym("objlib_802A44F4", flag={"GLOBL"}),
-	0x802A3D84: main.sym("objlib_802A452C", flag={"GLOBL"}),
-	0x802A3DBC: main.sym("objlib_802A4564", flag={"GLOBL"}),
-	#0x802A45E4: main.sym("s_objlib_802A45E4", flag={"GLOBL"}),
-	#0x802A462C: main.sym("objlib_802A462C"),
-	0x802A3F24: main.sym("objlib_802A46CC", flag={"GLOBL"}),
-	0x802A3F5C: main.sym("objlib_802A4704", flag={"GLOBL"}),
-	0x802A3F80: main.sym("objlib_802A4728", flag={"GLOBL"}),
-	0x802A3FA8: main.sym("objlib_802A4750", flag={"GLOBL"}),
-	0x802A3FCC: main.sym("objlib_802A4774", flag={"GLOBL"}),
-	0x802A3FF8: main.sym("objlib_802A47A0", flag={"GLOBL"}),
-	0x802A4114: main.sym("objlib_802A48BC", flag={"GLOBL"}),
-	0x802A4154: main.sym("objlib_802A48FC"),
-	0x802A41B8: main.sym("objlib_802A4960", flag={"GLOBL"}),
+	# src/objectlib.c
+	0x8029D100: main.sym("CtrlObjectHand", flag={"GLOBL"}),
+	#0x8029D924: main.sym("CtrlObjectAlpha", flag={"GLOBL"}),
+	#0x8029DB48: main.sym("CtrlObjectShape", flag={"GLOBL"}),
+	#0x8029DBD4: main.sym("CtrlArea", flag={"GLOBL"}),
+	0x8029D558: main.sym("ObjSetPosRelXFM", flag={"GLOBL"}),
+	0x8029D62C: main.sym("ObjFMtxScaleCopy", flag={"GLOBL"}),
+	0x8029D704: main.sym("FMtxInvCatAffine", flag={"GLOBL"}),
+	0x8029DA34: main.sym("ObjectSetTake", flag={"GLOBL"}),
+	0x8029DB00: main.sym("ObjCalcDist2D", flag={"GLOBL"}),
+	0x8029DB7C: main.sym("ObjCalcDist3D", flag={"GLOBL"}),
+	0x8029DC1C: main.sym("ObjectAccelerate", flag={"GLOBL"}),
+	0x8029DC6C: main.sym("Accelerate", flag={"GLOBL"}),
+	0x8029DD18: main.sym("ApproachPos", flag={"GLOBL"}),
+	0x8029DDB4: main.sym("ApproachAng", flag={"GLOBL"}),
+	0x8029DE70: main.sym("ObjectTurn", flag={"GLOBL"}),
+	0x8029DF18: main.sym("ObjCalcAngY", flag={"GLOBL"}),
+	0x8029DF98: main.sym("ObjectTurnTo", flag={"GLOBL"}),
+	0x8029E140: main.sym("ObjSetRel", flag={"GLOBL"}),
+	0x8029E198: main.sym("ObjSetPos", flag={"GLOBL"}),
+	0x8029E1F0: main.sym("ObjSetAng", flag={"GLOBL"}),
+	0x8029E230: main.sym("ObjMakeAt", flag={"GLOBL"}),
+	0x8029E2A8: main.sym("ObjMakeRel", flag={"GLOBL"}),
+	#0x8029EAAC: main.sym("ObjMakeHereMtx"),
+	0x8029E388: main.sym("ObjMakeSplash", flag={"GLOBL"}),
+	0x8029E5A4: main.sym("ObjMake", flag={"GLOBL"}),
+	0x8029E650: main.sym("ObjMakeHere", flag={"GLOBL"}),
+	0x8029E6A8: main.sym("ObjMakeEffect", flag={"GLOBL"}),
+	0x8029E73C: main.sym("ObjMakeHereScale", flag={"GLOBL"}),
+	0x8029E7A4: main.sym("ObjAddRelPos"),
+	0x8029E7E8: main.sym("ObjMakeRelHere", flag={"GLOBL"}),
+	0x8029E880: main.sym("ObjMakeRelHereScale", flag={"GLOBL"}),
+	#0x8029F070: main.sym("ObjectMove3D"),
+	0x8029E94C: main.sym("ObjCopyShapeOff", flag={"GLOBL"}),
+	0x8029E964: main.sym("ObjCopyCoord", flag={"GLOBL"}),
+	0x8029E9A4: main.sym("ObjCopyPos", flag={"GLOBL"}),
+	0x8029E9CC: main.sym("ObjCopyAng"),
+	0x8029EA0C: main.sym("ObjSetShapePos", flag={"GLOBL"}),
+	#0x8029F1B0: main.sym("ObjStartAnime"),
+	0x8029EA84: main.sym("MtxTransform3", flag={"GLOBL"}),
+	0x8029EAF8: main.sym("InvTransform3", flag={"GLOBL"}),
+	0x8029EB70: main.sym("ObjScaleMtx"),
+	0x8029EC2C: main.sym("ObjCopyScale", flag={"GLOBL"}),
+	0x8029EC54: main.sym("ObjSetScaleXYZ", flag={"GLOBL"}),
+	0x8029EC88: main.sym("ObjSetScale", flag={"GLOBL"}),
+	0x8029ECB4: main.sym("ObjectSetScale", flag={"GLOBL"}),
+	0x8029ECE8: main.sym("ObjectStartAnime", flag={"GLOBL"}),
+	0x8029ED38: main.sym("ObjectSetAnime", flag={"GLOBL"}),
+	0x8029ED98: main.sym("ObjectSetAnimeV", flag={"GLOBL"}),
+	0x8029EE20: main.sym("ObjInitAnime", flag={"GLOBL"}),
+	#0x8029F600: main.sym("ObjActivate"),
+	0x8029EEA4: main.sym("ObjectSetActive", flag={"GLOBL"}),
+	#0x8029F644: main.sym("ObjDeactivate"),
+	0x8029EEF0: main.sym("ObjectClrActive", flag={"GLOBL"}),
+	0x8029EF18: main.sym("ObjectShow", flag={"GLOBL"}),
+	0x8029EF40: main.sym("ObjectHide", flag={"GLOBL"}),
+	0x8029EF64: main.sym("ObjectSetPosOff", flag={"GLOBL"}),
+	0x8029F05C: main.sym("ObjectSetPosOffParent"),
+	0x8029F0A4: main.sym("objectlib_8029F820", flag={"GLOBL"}),
+	#0x8029F848: main.sym("objectlib_8029F848"),
+	0x8029F170: main.sym("ObjSetShapeAng", flag={"GLOBL"}),
+	0x8029F198: main.sym("ObjGetScriptType", flag={"GLOBL"}),
+	0x8029F1E0: main.sym("ObjectFindObj", flag={"GLOBL"}),
+	0x8029F21C: main.sym("ObjectFindDist", flag={"GLOBL"}),
+	0x8029F270: main.sym("ObjectFind", flag={"GLOBL"}),
+	0x8029F3A0: main.sym("ObjGetEffect", flag={"GLOBL"}),
+	#0x8029FB68: main.sym("ObjCountEffect"),
+	0x8029F460: main.sym("ObjCount", flag={"GLOBL"}),
+	0x8029F520: main.sym("ObjectFindTake", flag={"GLOBL"}),
+	0x8029F610: main.sym("ObjectResetState"),
+	0x8029F638: main.sym("ObjectInitState", flag={"GLOBL"}),
+	0x8029F684: main.sym("ObjectMatchP1Speed", flag={"GLOBL"}),
+	0x8029F6F0: main.sym("ObjectAnimeHold", flag={"GLOBL"}),
+	0x8029F728: main.sym("ObjectAnimeHoldEnd", flag={"GLOBL"}),
+	0x8029F788: main.sym("objectlib_8029FF04", flag={"GLOBL"}),
+	0x8029F828: main.sym("objectlib_8029FFA4", flag={"GLOBL"}),
+	0x8029F88C: main.sym("ObjectIsAnimeFrame", flag={"GLOBL"}),
+	0x8029F8D4: main.sym("ObjectIsAnimeFrameRange", flag={"GLOBL"}),
+	#0x802A00AC: main.sym("ObjectIsAnimeFrameTable"),
+	0x8029F998: main.sym("Player1IsJump", flag={"GLOBL"}),
+	0x8029F9D8: main.sym("objectlib_802A0154", flag={"GLOBL"}),
+	0x8029FA1C: main.sym("ObjectSetAnimeJump", flag={"GLOBL"}),
+	0x8029FA5C: main.sym("objectlib_802A01D8", flag={"GLOBL"}),
+	0x8029FAB8: main.sym("objectlib_802A0234"),
+	0x8029FC04: main.sym("objectlib_802A0380", flag={"GLOBL"}),
+	0x8029FCF8: main.sym("objectlib_802A0474", flag={"GLOBL"}),
+	0x8029FD44: main.sym("ObjectSetShape", flag={"GLOBL"}),
+	#0x802A04F0: main.sym("Player1SetFlag"),
+	0x8029FD98: main.sym("ObjectCheckHitResult", flag={"GLOBL"}),
+	0x8029FDEC: main.sym("ObjKill", flag={"GLOBL"}),
+	0x8029FE00: main.sym("objectlib_802A057C", flag={"GLOBL"}),
+	0x8029FE38: main.sym("ObjectHitOFF", flag={"GLOBL"}),
+	0x8029FE58: main.sym("ObjectHitON", flag={"GLOBL"}),
+	0x8029FE74: main.sym("ObjHitON", flag={"GLOBL"}),
+	0x8029FE88: main.sym("ObjectCheckGroundY", flag={"GLOBL"}),
+	0x8029FED0: main.sym("ObjectCheckGround", flag={"GLOBL"}),
+	0x8029FF20: main.sym("CalcDrag"),
+	0x802A0020: main.sym("ObjectCalcDrag", flag={"GLOBL"}),
+	0x802A006C: main.sym("objectlib_802A07E8"),
+	0x802A0334: main.sym("objectlib_802A0AB0"),
+	0x802A0460: main.sym("objectlib_802A0BDC"),
+	0x802A0608: main.sym("objectlib_802A0D84"),
+	0x802A06EC: main.sym("objectlib_802A0E68", flag={"GLOBL"}),
+	#0x802A10E0: main.sym("objectlib_802A10E0"),
+	0x802A0974: main.sym("CheckFlag"),
+	#0x802A113C: main.sym("ObjectHitWall"),
+	0x802A0A2C: main.sym("DeltaAng", flag={"GLOBL"}),
+	0x802A0A90: main.sym("ObjectMoveF", flag={"GLOBL"}),
+	0x802A0B28: main.sym("ObjectMoveY", flag={"GLOBL"}),
+	0x802A0B8C: main.sym("ObjectCalcVelF", flag={"GLOBL"}),
+	0x802A0BF4: main.sym("objectlib_802A1370", flag={"GLOBL"}),
+	0x802A0CA8: main.sym("ObjIsObjHit", flag={"GLOBL"}),
+	0x802A0D10: main.sym("ObjectSetScript", flag={"GLOBL"}),
+	0x802A0D48: main.sym("ObjSetScript", flag={"GLOBL"}),
+	0x802A0D80: main.sym("ObjectHasScript", flag={"GLOBL"}),
+	0x802A0DD8: main.sym("ObjHasScript", flag={"GLOBL"}),
+	0x802A0E30: main.sym("ObjectDistMarioToSave", flag={"GLOBL"}),
+	0x802A0EB8: main.sym("ObjectDistToSave", flag={"GLOBL"}),
+	#0x802A16AC: main.sym("ObjectInSaveSquare"),
+	#0x802A1774: main.sym("ObjectInSaveRect"),
+	0x802A10D0: main.sym("ObjectSavePos", flag={"GLOBL"}),
+	0x802A1110: main.sym("ObjectSavePosStop", flag={"GLOBL"}),
+	0x802A1160: main.sym("ObjectShake", flag={"GLOBL"}),
+	0x802A11B4: main.sym("objectlib_802A1930", flag={"GLOBL"}),
+	#0x802A1960: main.sym("objectlib_802A1960"),
+	0x802A1230: main.sym("ObjSetBillboard", flag={"GLOBL"}),
+	0x802A124C: main.sym("ObjectSetHitBox", flag={"GLOBL"}),
+	0x802A1274: main.sym("ObjectSetDmgBox", flag={"GLOBL"}),
+	0x802A129C: main.sym("ObjectMakeCoinCommon"),
+	0x802A13B8: main.sym("objectlib_802A1B34"),
+	0x802A1410: main.sym("ObjectMakeCoin", flag={"GLOBL"}),
+	0x802A1460: main.sym("objectlib_802A1BDC", flag={"GLOBL"}),
+	#0x802A1C68: main.sym("ObjectDistToSaveY"),
+	#0x802A1CC4: main.sym("objectlib_802A1CC4"),
+	0x802A1600: main.sym("objectlib_802A1D7C"),
+	0x802A17C0: main.sym("ObjectCheckWall", flag={"GLOBL"}),
+	0x802A1978: main.sym("objectlib_802A20F4"),
+	0x802A1A2C: main.sym("objectlib_802A21D4"),
+	0x802A1B78: main.sym("objectlib_802A2320", flag={"GLOBL"}),
+	0x802A1BA0: main.sym("objectlib_802A2348", flag={"GLOBL"}),
+	0x802A1D28: main.sym("objectlib_802A24D0"),
+	0x802A1E0C: main.sym("ObjectProcMove", flag={"GLOBL"}),
+	0x802A1E9C: main.sym("ObjectProcMoveF", flag={"GLOBL"}),
+	#0x802A2674: main.sym("ObjCopyCoordOff"),
+	0x802A1FA0: main.sym("ObjectAngToSave", flag={"GLOBL"}),
+	0x802A2008: main.sym("ObjCopyCoordToShape", flag={"GLOBL"}),
+	0x802A205C: main.sym("ObjAddTransform", flag={"GLOBL"}),
+	0x802A2188: main.sym("ObjCalcMtx", flag={"GLOBL"}),
+	0x802A2270: main.sym("ObjSetMtx", flag={"GLOBL"}),
+	0x802A22DC: main.sym("ObjCalcRel", flag={"GLOBL"}),
+	#0x802A2B28: main.sym("ObjClrRel"),
+	#0x802A2B6C: main.sym("ObjectRotate"),
+	0x802A241C: main.sym("ObjectRotateShape", flag={"GLOBL"}),
+	#0x802A2C1C: main.sym("ObjectSyncAng"),
+	0x802A24B4: main.sym("ObjectProcPath", flag={"GLOBL"}),
+	0x802A272C: main.sym("ChainInit", flag={"GLOBL"}),
+	0x802A276C: main.sym("RandRange", flag={"GLOBL"}),
+	0x802A27B4: main.sym("ObjRandScale", flag={"GLOBL"}),
+	0x802A2818: main.sym("ObjRandOff3D", flag={"GLOBL"}),
+	0x802A28E4: main.sym("ObjRandOff2D", flag={"GLOBL"}),
+	0x802A297C: main.sym("ObjCalcVelULF"),
+	0x802A2A38: main.sym("ObjectMoveULF", flag={"GLOBL"}),
+	0x802A2AC0: main.sym("objectlib_802A3268", flag={"GLOBL"}),
+	0x802A2B04: main.sym("ObjectMakeParticle", flag={"GLOBL"}),
+	0x802A2CFC: main.sym("ObjSetHitInfo", flag={"GLOBL"}),
+	0x802A2E5C: main.sym("GetSign", flag={"GLOBL"}),
+	0x802A2E8C: main.sym("fabsf", flag={"GLOBL"}),
+	0x802A2ECC: main.sym("abs", flag={"GLOBL"}),
+	0x802A2EFC: main.sym("ObjectFlash", flag={"GLOBL"}),
+	0x802A2FAC: main.sym("objectlib_802A3754", flag={"GLOBL"}),
+	0x802A3004: main.sym("objectlib_802A37AC", flag={"GLOBL"}),
+	0x802A3034: main.sym("objectlib_802A37DC", flag={"GLOBL"}),
+	0x802A3070: main.sym("ObjectRepelMario2D", flag={"GLOBL"}),
+	0x802A3164: main.sym("ObjectRepelMario3D", flag={"GLOBL"}),
+	#0x802A399C: main.sym("objectlib_802A399C", flag={"GLOBL"}),
+	#0x802A3A3C: main.sym("objectlib_802A3A3C"),
+	0x802A32A4: main.sym("objectlib_802A3A4C", flag={"GLOBL"}),
+	0x802A32E0: main.sym("objectlib_802A3A88", flag={"GLOBL"}),
+	#0x802A3B28: main.sym("objectlib_802A3B28"),
+	0x802A3398: main.sym("ObjectScaleTime", flag={"GLOBL"}),
+	0x802A3470: main.sym("ObjectDebugPos", flag={"GLOBL"}),
+	#0x802A3CEC: main.sym("objectlib_802A3CEC"),
+	0x802A3554: main.sym("ObjectIsMarioRide", flag={"GLOBL"}),
+	#0x802A3D40: main.sym("objectlib_802A3D40"),
+	0x802A362C: main.sym("objectlib_802A3DD4", flag={"GLOBL"}),
+	0x802A3688: main.sym("ObjectCallState", flag={"GLOBL"}),
+	0x802A36D8: main.sym("objectlib_802A3E80"),
+	#0x802A3EF8: main.sym("objectlib_802A3EF8"),
+	0x802A377C: main.sym("GetBit", flag={"GLOBL"}),
+	0x802A37A0: main.sym("objectlib_802A3F48", flag={"GLOBL"}),
+	0x802A38A4: main.sym("objectlib_802A404C", flag={"GLOBL"}),
+	0x802A3910: main.sym("InTable", flag={"GLOBL"}),
+	#0x802A4110: main.sym("objectlib_802A4110"),
+	0x802A3978: main.sym("ObjectAreaInit", flag={"GLOBL"}),
+	0x802A3A68: main.sym("ObjectAreaProc", flag={"GLOBL"}),
+	0x802A3BB8: main.sym("objectlib_802A4360", flag={"GLOBL"}),
+	0x802A3C98: main.sym("objectlib_802A4440", flag={"GLOBL"}),
+	0x802A3D4C: main.sym("ObjSetMap", flag={"GLOBL"}),
+	0x802A3D84: main.sym("objectlib_802A452C", flag={"GLOBL"}),
+	0x802A3DBC: main.sym("objectlib_802A4564", flag={"GLOBL"}),
+	#0x802A45E4: main.sym("Ctrl_objectlib_802A45E4", flag={"GLOBL"}),
+	#0x802A462C: main.sym("Ctrl_objectlib_802A462C"),
+	0x802A3F24: main.sym("ObjIsHide", flag={"GLOBL"}),
+	0x802A3F5C: main.sym("objectlib_802A4704", flag={"GLOBL"}),
+	0x802A3F80: main.sym("objectlib_802A4728", flag={"GLOBL"}),
+	0x802A3FA8: main.sym("objectlib_802A4750", flag={"GLOBL"}),
+	0x802A3FCC: main.sym("objectlib_802A4774", flag={"GLOBL"}),
+	0x802A3FF8: main.sym("objectlib_802A47A0", flag={"GLOBL"}),
+	0x802A4114: main.sym("objectlib_802A48BC", flag={"GLOBL"}),
+	0x802A4154: main.sym("objectlib_802A48FC"),
+	0x802A41B8: main.sym("objectlib_802A4960", flag={"GLOBL"}),
 	0x802A420C: main.sym("L802A49B4", flag={"GLOBL","LOCAL"}),
 	0x802A4268: main.sym("L802A4A28", flag={"GLOBL","LOCAL"}),
 	0x802A4298: main.sym("L802A4A58", flag={"GLOBL","LOCAL"}),
 	0x802A42EC: main.sym("L802A4AAC", flag={"GLOBL","LOCAL"}),
 	0x802A4370: main.sym("L802A4B30", flag={"GLOBL","LOCAL"}),
-	0x802A4424: main.sym("objlib_802A4BE4", flag={"GLOBL"}),
-	0x802A472C: main.sym("objlib_802A4F04", flag={"GLOBL"}),
-	0x802A4780: main.sym("objlib_802A4F58", flag={"GLOBL"}),
-	#0x802A5034: main.sym("objlib_802A5034"),
-	0x802A4924: main.sym("objlib_802A50FC", flag={"GLOBL"}),
-	0x802A4964: main.sym("objlib_802A513C", flag={"GLOBL"}),
-	0x802A49D4: main.sym("objlib_802A51AC", flag={"GLOBL"}),
-	0x802A4A50: main.sym("objlib_802A5228", flag={"GLOBL"}),
-	0x802A4A70: main.sym("objlib_802A5248", flag={"GLOBL"}),
-	0x802A4AB0: main.sym("objlib_802A5288", flag={"GLOBL"}),
-	0x802A4AEC: main.sym("objlib_802A52C4", flag={"GLOBL"}),
-	0x802A4B20: main.sym("objlib_802A52F8", flag={"GLOBL"}),
-	0x802A4B80: main.sym("objlib_802A5358", flag={"GLOBL"}),
-	#0x802A540C: main.sym("objlib_802A540C"),
-	#0x802A5460: main.sym("objlib_802A5460"),
-	0x802A4CC0: main.sym("objlib_802A5498", flag={"GLOBL"}),
-	0x802A4D00: main.sym("objlib_802A54D8", flag={"GLOBL"}),
-	0x802A4D4C: main.sym("objlib_802A5524", flag={"GLOBL"}),
+	0x802A4424: main.sym("objectlib_802A4BE4", flag={"GLOBL"}),
+	0x802A472C: main.sym("ObjectHasShapeID", flag={"GLOBL"}),
+	0x802A4780: main.sym("ObjectStand", flag={"GLOBL"}),
+	#0x802A5034: main.sym("MarioInRect"),
+	0x802A4924: main.sym("objectlib_802A50FC", flag={"GLOBL"}),
+	0x802A4964: main.sym("objectlib_802A513C", flag={"GLOBL"}),
+	0x802A49D4: main.sym("objectlib_802A51AC", flag={"GLOBL"}),
+	0x802A4A50: main.sym("ObjCopyActorInfo", flag={"GLOBL"}),
+	0x802A4A70: main.sym("ObjectSetAnimeFrame", flag={"GLOBL"}),
+	0x802A4AB0: main.sym("objectlib_802A5288", flag={"GLOBL"}),
+	0x802A4AEC: main.sym("ObjectSetAnimeHoldEnd", flag={"GLOBL"}),
+	0x802A4B20: main.sym("objectlib_802A52F8", flag={"GLOBL"}),
+	0x802A4B80: main.sym("objectlib_802A5358", flag={"GLOBL"}),
+	#0x802A540C: main.sym("objectlib_802A540C"),
+	#0x802A5460: main.sym("objectlib_802A5460"),
+	0x802A4CC0: main.sym("objectlib_802A5498", flag={"GLOBL"}),
+	0x802A4D00: main.sym("objectlib_802A54D8", flag={"GLOBL"}),
+	0x802A4D4C: main.sym("objectlib_802A5524", flag={"GLOBL"}),
 
 	# src/object_a.c
 	0x802A4DB0: main.sym("object_a_802A5620"),
@@ -2166,7 +2166,7 @@ sym_J0_code_text = {
 	0x802A6828: main.sym("object_a_802A708C", flag={"GLOBL"}),
 	0x802A68FC: main.sym("object_a_802A7160", flag={"GLOBL"}),
 	#0x802A7170: main.sym("object_a_802A7170", flag={"GLOBL"}),
-	#0x802A719C: main.sym("s_object_a_802A719C", flag={"GLOBL"}),
+	#0x802A719C: main.sym("Ctrl_object_a_802A719C", flag={"GLOBL"}),
 	#0x802A7230: main.sym("object_a_802A7230", flag={"GLOBL"}),
 	0x802A6A00: main.sym("object_a_802A7264", flag={"GLOBL"}),
 	0x802A6AF8: main.sym("object_a_802A7384"),
@@ -2368,7 +2368,7 @@ sym_J0_code_text = {
 	0x802B1138: main.sym("object_a_802B19D8"),
 	#0x802B1AE0: main.sym("object_a_802B1AE0", flag={"GLOBL"}),
 	#0x802B1B2C: main.sym("object_a_802B1B2C", flag={"GLOBL"}),
-	#0x802B1BB0: main.sym("s_mario_copyparentpos", flag={"GLOBL"}),
+	#0x802B1BB0: main.sym("CtrlMarioCopyParentPos", flag={"GLOBL"}),
 	#0x802B1C54: main.sym("object_a_802B1C54", flag={"GLOBL"}),
 	0x802B14DC: main.sym("object_a_802B1D7C", flag={"GLOBL"}),
 	0x802B15CC: main.sym("object_a_802B1E6C", flag={"GLOBL"}),
@@ -2476,7 +2476,7 @@ sym_J0_code_text = {
 	0x802B6AC0: main.sym("object_a_802B7418"),
 	#0x802B75A4: main.sym("object_a_802B75A4", flag={"GLOBL"}),
 	#0x802B7878: main.sym("object_a_802B7878", flag={"GLOBL"}),
-	#0x802B798C: main.sym("s_object_a_802B798C", flag={"GLOBL"}),
+	#0x802B798C: main.sym("Ctrl_object_a_802B798C", flag={"GLOBL"}),
 	0x802B70C8: main.sym("object_a_802B7A20"),
 	0x802B7120: main.sym("L802B7A78", flag={"GLOBL","LOCAL"}),
 	0x802B7190: main.sym("L802B7AE8", flag={"GLOBL","LOCAL"}),
@@ -2487,8 +2487,8 @@ sym_J0_code_text = {
 	0x802B7268: main.sym("L802B7BC0", flag={"GLOBL","LOCAL"}),
 	0x802B72A8: main.sym("L802B7C00", flag={"GLOBL","LOCAL"}),
 	0x802B72CC: main.sym("L802B7C24", flag={"GLOBL","LOCAL"}),
-	#0x802B7C64: main.sym("s_object_a_802B7C64", flag={"GLOBL"}),
-	#0x802B7D44: main.sym("s_object_a_802B7D44", flag={"GLOBL"}),
+	#0x802B7C64: main.sym("Ctrl_object_a_802B7C64", flag={"GLOBL"}),
+	#0x802B7D44: main.sym("Ctrl_object_a_802B7D44", flag={"GLOBL"}),
 	0x802B7510: main.sym("object_a_802B7E68", flag={"GLOBL"}),
 	0x802B7598: main.sym("object_a_802B7EF0", flag={"GLOBL"}),
 	0x802B76CC: main.sym("object_a_802B8024", flag={"GLOBL"}),
@@ -2533,7 +2533,7 @@ sym_J0_code_text = {
 	#0x802BA19C: main.sym("object_a_802BA19C", flag={"GLOBL"}),
 	#0x802BA1E0: main.sym("object_a_802BA1E0", flag={"GLOBL"}),
 	#0x802BA25C: main.sym("object_a_802BA25C", flag={"GLOBL"}),
-	#0x802BA2B0: main.sym("s_object_a_802BA2B0", flag={"GLOBL"}),
+	#0x802BA2B0: main.sym("Ctrl_object_a_802BA2B0", flag={"GLOBL"}),
 	#0x802BA2F8: main.sym("object_a_802BA2F8", flag={"GLOBL"}),
 	#0x802BA458: main.sym("object_a_802BA458", flag={"GLOBL"}),
 	#0x802BA5BC: main.sym("object_a_802BA5BC", flag={"GLOBL"}),
@@ -2655,7 +2655,7 @@ sym_J0_code_text = {
 	0x802BEF40: main.sym("object_a_802BF90C", flag={"GLOBL"}),
 	0x802BF048: main.sym("object_a_802BFA14"),
 	#0x802BFA88: main.sym("object_a_802BFA88", flag={"GLOBL"}),
-	#0x802BFBAC: main.sym("s_object_a_802BFBAC", flag={"GLOBL"}),
+	#0x802BFBAC: main.sym("Ctrl_object_a_802BFBAC", flag={"GLOBL"}),
 	0x802BF30C: main.sym("object_a_802BFCD8", flag={"GLOBL"}),
 	0x802BF4EC: main.sym("object_a_802BFEB8", flag={"GLOBL"}),
 	0x802BF554: main.sym("object_a_802BFF20", flag={"GLOBL"}),
@@ -2810,45 +2810,45 @@ sym_J0_code_text = {
 	#0x802C863C: main.sym("object_a_802C863C", flag={"GLOBL"}),
 
 	# src/ride.c
-	0x802C7F20: main.sym("plride_find", flag={"GLOBL"}),
-	0x802C807C: main.sym("mario_get_pos", flag={"GLOBL"}),
-	0x802C80BC: main.sym("mario_set_pos", flag={"GLOBL"}),
-	0x802C80F8: main.sym("ride_proc", flag={"GLOBL"}),
-	0x802C83F0: main.sym("plride_proc", flag={"GLOBL"}),
+	0x802C7F20: main.sym("PLRideFind", flag={"GLOBL"}),
+	0x802C807C: main.sym("MarioGetPos", flag={"GLOBL"}),
+	0x802C80BC: main.sym("MarioSetPos", flag={"GLOBL"}),
+	0x802C80F8: main.sym("RideProc", flag={"GLOBL"}),
+	0x802C83F0: main.sym("PLRideProc", flag={"GLOBL"}),
 
 	# src/hitcheck.c
-	0x802C8460: main.sym("hitcheck_802C8F40"),
-	0x802C8504: main.sym("obj_check_hit"),
-	0x802C870C: main.sym("obj_check_dmg"),
-	0x802C88A8: main.sym("hit_clear"),
-	0x802C8918: main.sym("hit_check_list"),
-	0x802C89CC: main.sym("hit_check_player"),
-	0x802C8AD4: main.sym("hit_check_enemyb"),
-	0x802C8B50: main.sym("hit_check_attack"),
-	0x802C8C44: main.sym("hit_check", flag={"GLOBL"}),
+	0x802C8460: main.sym("ObjDebugHit"),
+	0x802C8504: main.sym("ObjCheckHit"),
+	0x802C870C: main.sym("ObjCheckDmg"),
+	0x802C88A8: main.sym("HitClear"),
+	0x802C8918: main.sym("HitCheckList"),
+	0x802C89CC: main.sym("HitCheckPlayer"),
+	0x802C8AD4: main.sym("HitCheckEnemyB"),
+	0x802C8B50: main.sym("HitCheckAttack"),
+	0x802C8C44: main.sym("HitCheck", flag={"GLOBL"}),
 
 	# src/objlist.c
-	0x802C8CF0: main.sym("list_init"),
-	0x802C8D60: main.sym("list_alloc"),
-	0x802C8DC4: main.sym("objlist_alloc"),
-	0x802C8E70: main.sym("list_free"),
-	0x802C8EA4: main.sym("objlist_free"),
-	0x802C8ED8: main.sym("obj_freelist_init", flag={"GLOBL"}),
-	0x802C8F5C: main.sym("obj_rootlist_init", flag={"GLOBL"}),
+	0x802C8CF0: main.sym("ListInit"),
+	0x802C8D60: main.sym("ListAlloc"),
+	0x802C8DC4: main.sym("ObjListAlloc"),
+	0x802C8E70: main.sym("ListFree"),
+	0x802C8EA4: main.sym("ObjListFree"),
+	0x802C8ED8: main.sym("ObjFreeListInit", flag={"GLOBL"}),
+	0x802C8F5C: main.sym("ObjRootListInit", flag={"GLOBL"}),
 	0x802C8FF8: main.sym("objlist_802C9AD8"),
-	0x802C9088: main.sym("obj_free", flag={"GLOBL"}),
-	0x802C9120: main.sym("obj_alloc"),
-	0x802C937C: main.sym("obj_init_ground"),
-	0x802C9424: main.sym("obj_create", flag={"GLOBL"}),
-	0x802C9548: main.sym("obj_destroy", flag={"GLOBL"}),
+	0x802C9088: main.sym("ObjFree", flag={"GLOBL"}),
+	0x802C9120: main.sym("ObjAlloc"),
+	0x802C937C: main.sym("ObjInitGround"),
+	0x802C9424: main.sym("ObjCreate", flag={"GLOBL"}),
+	0x802C9548: main.sym("ObjDestroy", flag={"GLOBL"}),
 
 	# src/objsound.c
-	0x802C9560: main.sym("object_stepsound", flag={"GLOBL"}),
-	0x802C9664: main.sym("object_makesound", flag={"GLOBL"}),
-	0x802C96B0: main.sym("object_levelsound", flag={"GLOBL"}),
-	0x802C9700: main.sym("object_playsound", flag={"GLOBL"}),
-	0x802C9750: main.sym("se_calcvol_1"),
-	0x802C97F4: main.sym("se_calcvol_2"),
+	0x802C9560: main.sym("ObjectStepSound", flag={"GLOBL"}),
+	0x802C9664: main.sym("ObjectMakeSound", flag={"GLOBL"}),
+	0x802C96B0: main.sym("ObjectLevelSound", flag={"GLOBL"}),
+	0x802C9700: main.sym("ObjectPlaySound", flag={"GLOBL"}),
+	0x802C9750: main.sym("SeCalcVol1"),
+	0x802C97F4: main.sym("SeCalcVol2"),
 
 	0x802C9890: main.sym("_802CA370"),
 	0x802C98A0: main.sym("_802CA380"),
@@ -2856,51 +2856,51 @@ sym_J0_code_text = {
 	0x802C98C0: main.sym("_802CA3A0"),
 
 	# src/debug.c
-	0x802C98D0: main.sym("db_time_start", flag={"GLOBL"}),
-	0x802C9900: main.sym("db_time_count", flag={"GLOBL"}),
-	0x802C9938: main.sym("db_init"),
-	0x802C9980: main.sym("db_print"),
-	0x802C9A3C: main.sym("db_offset", flag={"GLOBL"}),
-	0x802C9A88: main.sym("db_put_err", flag={"GLOBL"}),
-	0x802C9AD8: main.sym("db_put", flag={"GLOBL"}),
-	0x802C9B38: main.sym("db_put_info", flag={"GLOBL"}),
-	0x802C9BA0: main.sym("db_put_title", flag={"GLOBL"}),
-	0x802C9BF0: main.sym("db_player_mapinfo"),
-	0x802C9E08: main.sym("db_player_checkinfo"),
-	0x802C9E38: main.sym("db_result_checkinfo"),
-	0x802C9E6C: main.sym("db_player_stageinfo"),
-	0x802C9EB0: main.sym("db_put_edit"),
-	0x802C9F8C: main.sym("db_result_effectinfo"),
-	0x802C9FC8: main.sym("db_result_enemyinfo"),
-	0x802CA004: main.sym("db_proc_button"),
-	0x802CA0CC: main.sym("debug_init", flag={"GLOBL"}),
-	0x802CA140: main.sym("debug_clear", flag={"GLOBL"}),
-	0x802CA1E8: main.sym("debug_proc_seq"),
-	0x802CA2E8: main.sym("debug_proc_page"),
-	0x802CA3BC: main.sym("debug_proc_edit"),
-	0x802CA5D0: main.sym("debug_exec", flag={"GLOBL"}),
-	0x802CA5E0: main.sym("debug_result", flag={"GLOBL"}),
-	0x802CA6E0: main.sym("debug_player", flag={"GLOBL"}),
-	0x802CA784: main.sym("debug_proc", flag={"GLOBL"}),
-	0x802CA8B4: main.sym("debug_putmovestat"),
-	0x802CAA84: main.sym("debug_sethit"),
+	0x802C98D0: main.sym("DbTimeStart", flag={"GLOBL"}),
+	0x802C9900: main.sym("DbTimeCount", flag={"GLOBL"}),
+	0x802C9938: main.sym("DbPrintInit"),
+	0x802C9980: main.sym("DbPrintEntry"),
+	0x802C9A3C: main.sym("DbPrintOffset", flag={"GLOBL"}),
+	0x802C9A88: main.sym("DbPrintErr", flag={"GLOBL"}),
+	0x802C9AD8: main.sym("DbPrint", flag={"GLOBL"}),
+	0x802C9B38: main.sym("DbPrintInfo", flag={"GLOBL"}),
+	0x802C9BA0: main.sym("DbPrintTitle", flag={"GLOBL"}),
+	0x802C9BF0: main.sym("DbPlayerMapInfo"),
+	0x802C9E08: main.sym("DbPlayerCheckInfo"),
+	0x802C9E38: main.sym("DbResultCheckInfo"),
+	0x802C9E6C: main.sym("DbPlayerStageInfo"),
+	0x802C9EB0: main.sym("DbPrintEdit"),
+	0x802C9F8C: main.sym("DbResultEffectInfo"),
+	0x802C9FC8: main.sym("DbResultEnemyInfo"),
+	0x802CA004: main.sym("DbProcButton"),
+	0x802CA0CC: main.sym("DebugInit", flag={"GLOBL"}),
+	0x802CA140: main.sym("DebugClear", flag={"GLOBL"}),
+	0x802CA1E8: main.sym("DebugProcSeq"),
+	0x802CA2E8: main.sym("DebugProcPage"),
+	0x802CA3BC: main.sym("DebugProcEdit"),
+	0x802CA5D0: main.sym("DebugExec", flag={"GLOBL"}),
+	0x802CA5E0: main.sym("DebugResult", flag={"GLOBL"}),
+	0x802CA6E0: main.sym("DebugPlayer", flag={"GLOBL"}),
+	0x802CA784: main.sym("DebugProc", flag={"GLOBL"}),
+	0x802CA8B4: main.sym("DebugPrintMoveStatus"),
+	0x802CAA84: main.sym("DebugSetHit"),
 
 	# src/wipe.c
-	0x802CAAE0: main.sym("wipe_step"),
-	0x802CAB60: main.sym("wipe_fade_alpha"),
-	0x802CADB4: main.sym("wipe_fade_vtx"),
-	0x802CAF38: main.sym("wipe_fade_gfx"),
-	0x802CB0E4: main.sym("wipe_fade_in"),
-	0x802CB140: main.sym("wipe_fade_out"),
-	0x802CB19C: main.sym("wipe_win_size"),
-	0x802CB274: main.sym("wipe_win_dist"),
-	0x802CB384: main.sym("wipe_win_ang"),
-	0x802CB400: main.sym("wipe_win_x"),
-	0x802CB484: main.sym("wipe_win_y"),
-	0x802CB508: main.sym("wipe_win_vtx_set"),
-	0x802CB6A0: main.sym("wipe_win_vtx"),
-	0x802CB9F8: main.sym("wipe_win"),
-	0x802CC108: main.sym("wipe_draw", flag={"GLOBL"}),
+	0x802CAAE0: main.sym("WpStep"),
+	0x802CAB60: main.sym("WpFadeAlpha"),
+	0x802CADB4: main.sym("WpFadeVtx"),
+	0x802CAF38: main.sym("WpFadeGfx"),
+	0x802CB0E4: main.sym("WpFadeIn"),
+	0x802CB140: main.sym("WpFadeOut"),
+	0x802CB19C: main.sym("WpWindowSize"),
+	0x802CB274: main.sym("WpWindowDist"),
+	0x802CB384: main.sym("WpWindowAng"),
+	0x802CB400: main.sym("WpWindowX"),
+	0x802CB484: main.sym("WpWindowY"),
+	0x802CB508: main.sym("WpWindowVtxSet"),
+	0x802CB6A0: main.sym("WpWindowVtx"),
+	0x802CB9F8: main.sym("WpWindow"),
+	0x802CC108: main.sym("WipeDraw", flag={"GLOBL"}),
 	0x802CC148: main.sym("L802CCC28", flag={"GLOBL","LOCAL"}),
 	0x802CC168: main.sym("L802CCC48", flag={"GLOBL","LOCAL"}),
 	0x802CC188: main.sym("L802CCC68", flag={"GLOBL","LOCAL"}),
@@ -2912,39 +2912,39 @@ sym_J0_code_text = {
 	0x802CC280: main.sym("L802CCD60", flag={"GLOBL","LOCAL"}),
 	0x802CC2A8: main.sym("L802CCD88", flag={"GLOBL","LOCAL"}),
 	0x802CC2D0: main.sym("L802CCDB0", flag={"GLOBL","LOCAL"}),
-	0x802CC2E8: main.sym("cannon_overlay_gfx"),
-	0x802CC708: main.sym("s_cannon_overlay", flag={"GLOBL"}),
+	0x802CC2E8: main.sym("CannonOverlayGfx"),
+	0x802CC708: main.sym("CtrlCannonOverlay", flag={"GLOBL"}),
 
 	# src/shadow.c
-	0x802CC7A0: main.sym("shadow_rotate"),
-	0x802CC848: main.sym("shadow_atan2"),
-	0x802CC8A8: main.sym("shadow_scale_size"),
-	0x802CC964: main.sym("shadow_cut_size"),
-	0x802CC9AC: main.sym("shadow_scale_alpha"),
-	0x802CCB34: main.sym("shadow_check_water"),
-	0x802CCBE4: main.sym("shadow_init"),
-	0x802CCE58: main.sym("shadow_vtx_st9"),
-	0x802CCEA8: main.sym("shadow_vtx_st4"),
-	0x802CCF0C: main.sym("shadow_vtx_set"),
-	0x802CD040: main.sym("shadow_project"),
-	0x802CD094: main.sym("shadow_vtx_calc_off"),
-	0x802CD160: main.sym("shadow_vtx_calc_pos"),
-	0x802CD3B4: main.sym("shadow_planecalc"),
-	0x802CD45C: main.sym("shadow_vtx_calc"),
-	0x802CD648: main.sym("shadow_gfx"),
-	0x802CD7DC: main.sym("shadow_fadein"),
-	0x802CD90C: main.sym("shadow_fadeout"),
-	0x802CDA44: main.sym("shadow_fade_player"),
-	0x802CDBB0: main.sym("shadow_check_player"),
-	0x802CDCBC: main.sym("shadow_draw_player"),
-	0x802CDEF0: main.sym("shadow_draw_circle9"),
-	0x802CE008: main.sym("shadow_draw_circle4"),
-	0x802CE124: main.sym("shadow_draw_circle4flat"),
-	0x802CE2E0: main.sym("shadow_gfx_square"),
-	0x802CE48C: main.sym("shadow_init_square"),
-	0x802CE5A0: main.sym("shadow_draw_square"),
-	0x802CE710: main.sym("shadow_draw_rect"),
-	0x802CE86C: main.sym("shadow_draw", flag={"GLOBL"}),
+	0x802CC7A0: main.sym("ShRotate"),
+	0x802CC848: main.sym("ShAtan2"),
+	0x802CC8A8: main.sym("ShScaleSize"),
+	0x802CC964: main.sym("ShCutSize"),
+	0x802CC9AC: main.sym("ShScaleAlpha"),
+	0x802CCB34: main.sym("ShCheckWater"),
+	0x802CCBE4: main.sym("ShInit"),
+	0x802CCE58: main.sym("ShVtxST9"),
+	0x802CCEA8: main.sym("ShVtxST4"),
+	0x802CCF0C: main.sym("ShSetVtx"),
+	0x802CD040: main.sym("ShProject"),
+	0x802CD094: main.sym("ShCalcVtxOff"),
+	0x802CD160: main.sym("ShCalcVtxPos"),
+	0x802CD3B4: main.sym("ShPlaneCalc"),
+	0x802CD45C: main.sym("ShCalcVtx"),
+	0x802CD648: main.sym("ShGfx"),
+	0x802CD7DC: main.sym("ShFadeIn"),
+	0x802CD90C: main.sym("ShFadeOut"),
+	0x802CDA44: main.sym("ShFadePlayer"),
+	0x802CDBB0: main.sym("ShCheckPlayer"),
+	0x802CDCBC: main.sym("ShDrawPlayer"),
+	0x802CDEF0: main.sym("ShDrawCircle9"),
+	0x802CE008: main.sym("ShDrawCircle4"),
+	0x802CE124: main.sym("ShDrawCircle4Flat"),
+	0x802CE2E0: main.sym("ShGfxSquare"),
+	0x802CE48C: main.sym("ShInitSquare"),
+	0x802CE5A0: main.sym("ShDrawSquare"),
+	0x802CE710: main.sym("ShDrawRect"),
+	0x802CE86C: main.sym("ShadowDraw", flag={"GLOBL"}),
 	0x802CE93C: main.sym("L802CF41C", flag={"GLOBL","LOCAL"}),
 	0x802CE964: main.sym("L802CF444", flag={"GLOBL","LOCAL"}),
 	0x802CE98C: main.sym("L802CF46C", flag={"GLOBL","LOCAL"}),
@@ -2953,218 +2953,221 @@ sym_J0_code_text = {
 	0x802CEA14: main.sym("L802CF4F4", flag={"GLOBL","LOCAL"}),
 	0x802CEA70: main.sym("L802CF550", flag={"GLOBL","LOCAL"}),
 
-	# src/back.c
-	0x802CEAD0: main.sym("back_posx"),
-	0x802CEBBC: main.sym("back_posy"),
-	0x802CEC9C: main.sym("back_index"),
-	0x802CED24: main.sym("back_vtx"),
-	0x802CEF4C: main.sym("back_tile"),
-	0x802CF188: main.sym("back_mtx"),
-	0x802CF2A8: main.sym("back_gfx"),
-	0x802CF414: main.sym("back_draw", flag={"GLOBL"}),
+	# src/background.c
+	0x802CEAD0: main.sym("BackPosX"),
+	0x802CEBBC: main.sym("BackPosY"),
+	0x802CEC9C: main.sym("BackIndex"),
+	0x802CED24: main.sym("BackVtx"),
+	0x802CEF4C: main.sym("BackTile"),
+	0x802CF188: main.sym("BackMtx"),
+	0x802CF2A8: main.sym("BackGfx"),
+	0x802CF414: main.sym("BackgroundDraw", flag={"GLOBL"}),
 
 	# src/water.c
-	0x802CF5A0: main.sym("s_water_802D0080", flag={"GLOBL"}),
-	0x802CF700: main.sym("s_water_802D01E0", flag={"GLOBL"}),
-	0x802CF774: main.sym("water_802D0254"),
-	0x802CF9A4: main.sym("water_802D0484"),
-	0x802CFFA4: main.sym("water_802D0A84"),
-	0x802D00D0: main.sym("water_802D0BB0"),
-	0x802D01A4: main.sym("water_802D0C84"),
-	0x802D0448: main.sym("water_802D0F28"),
-	0x802D056C: main.sym("s_water_802D104C", flag={"GLOBL"}),
-	0x802D0850: main.sym("water_802D1330"),
-	0x802D08EC: main.sym("water_802D13CC"),
-	0x802D0A94: main.sym("water_802D1574"),
-	0x802D0DD4: main.sym("water_802D18B4"),
-	0x802D1090: main.sym("s_water_802D1B70", flag={"GLOBL"}),
-	0x802D11FC: main.sym("s_water_802D1CDC", flag={"GLOBL"}),
-	0x802D1368: main.sym("s_water_802D1E48", flag={"GLOBL"}),
-	0x802D14C8: main.sym("s_water_802D1FA8", flag={"GLOBL"}),
-	0x802D1628: main.sym("s_water_802D2108", flag={"GLOBL"}),
+	0x802CF5A0: main.sym("CtrlPoolLevel", flag={"GLOBL"}),
+	0x802CF700: main.sym("CtrlWaterProc", flag={"GLOBL"}),
+	0x802CF774: main.sym("WaterSetVtx"),
+	0x802CF9A4: main.sym("WaterDrawPlane"),
+	0x802CFFA4: main.sym("WaterDraw"),
+	0x802D00D0: main.sym("WaterGfx"),
+	0x802D01A4: main.sym("WaterGetInfo"),
+	0x802D0448: main.sym("WaterGfxStart"),
+	0x802D056C: main.sym("CtrlWaterDraw", flag={"GLOBL"}),
+	0x802D0850: main.sym("FluidProc"),
+	0x802D08EC: main.sym("FluidSetVtx0"),
+	0x802D0A94: main.sym("FluidSetVtxN"),
+	0x802D0DD4: main.sym("FluidGfx"),
+	0x802D1090: main.sym("CtrlFluid", flag={"GLOBL"}),
+	0x802D11FC: main.sym("CtrlFluidL", flag={"GLOBL"}),
+	0x802D1368: main.sym("CtrlFluidDrawL", flag={"GLOBL"}),
+	0x802D14C8: main.sym("CtrlFluidDrawS", flag={"GLOBL"}),
+	0x802D1628: main.sym("CtrlFluidProc", flag={"GLOBL"}),
 
 	# src/objshape.c
-	0x802D1730: main.sym("vtx_set", flag={"GLOBL"}),
-	0x802D17E4: main.sym("roundftos", flag={"GLOBL"}),
-	0x802D1880: main.sym("s_objshape_802D2360", flag={"GLOBL"}),
-	0x802D1990: main.sym("s_objshape_802D2470", flag={"GLOBL"}),
-	0x802D1A40: main.sym("s_objshape_802D2520", flag={"GLOBL"}),
-	0x802D1DEC: main.sym("ending_draw", flag={"GLOBL"}),
+	0x802D1730: main.sym("VtxSet", flag={"GLOBL"}),
+	0x802D17E4: main.sym("RoundFtoS", flag={"GLOBL"}),
+	0x802D1880: main.sym("Ctrl_objshape_802D2360", flag={"GLOBL"}),
+	0x802D1990: main.sym("Ctrl_objshape_802D2470", flag={"GLOBL"}),
+	0x802D1A40: main.sym("Ctrl_objshape_802D2520", flag={"GLOBL"}),
+	0x802D1DEC: main.sym("EndingDraw", flag={"GLOBL"}),
 
 	# src/wave.c
-	0x802D1EE0: main.sym("wave_802D29C0"),
-	0x802D1F94: main.sym("wave_802D2A74"),
-	0x802D2028: main.sym("wave_802D2B08"),
-	0x802D20A4: main.sym("wave_802D2B84"),
-	0x802D2160: main.sym("wave_802D2C40"),
-	0x802D22A0: main.sym("wave_802D2D80"),
-	0x802D231C: main.sym("wave_802D2DFC"),
-	0x802D23D8: main.sym("wave_802D2EB8"),
-	0x802D251C: main.sym("wave_802D2FFC"),
-	0x802D26BC: main.sym("wave_802D319C"),
-	0x802D279C: main.sym("wave_802D327C"),
-	0x802D293C: main.sym("wave_802D341C"),
-	0x802D2A1C: main.sym("wave_802D34FC"),
-	0x802D2BCC: main.sym("wave_802D36AC"),
-	0x802D2CBC: main.sym("wave_802D379C"),
-	0x802D2E5C: main.sym("wave_802D393C"),
-	0x802D2F4C: main.sym("wave_802D3A2C"),
-	0x802D310C: main.sym("wave_802D3BEC"),
-	0x802D320C: main.sym("wave_802D3CEC"),
-	0x802D338C: main.sym("wave_802D3E6C"),
-	0x802D3404: main.sym("wave_802D3EE4"),
-	0x802D356C: main.sym("wave_802D404C"),
-	0x802D3918: main.sym("wave_802D43F8"),
-	0x802D39DC: main.sym("wave_802D44BC"),
-	0x802D3CF0: main.sym("wave_802D47D0"),
-	0x802D43FC: main.sym("wave_802D4EDC"),
-	0x802D45FC: main.sym("wave_802D50DC"),
-	0x802D4874: main.sym("wave_802D5354"),
-	0x802D4A8C: main.sym("wave_802D556C"),
-	0x802D4BAC: main.sym("wave_802D568C"),
-	0x802D4C98: main.sym("wave_802D5778"),
-	0x802D4CC8: main.sym("wave_802D57A8"),
-	0x802D4E04: main.sym("wave_802D58E4"),
-	0x802D4E5C: main.sym("wave_802D593C"),
-	0x802D4EC8: main.sym("wave_802D59A8"),
-	0x802D4FC0: main.sym("wave_802D5AA0"),
-	0x802D50B8: main.sym("s_wave_802D5B98", flag={"GLOBL"}),
-	0x802D522C: main.sym("s_wave_802D5D0C", flag={"GLOBL"}),
+	0x802D1EE0: main.sym("WaveStopAll"),
+	0x802D1F94: main.sym("WaveYPosY"),
+	0x802D2028: main.sym("WaveYPosZ"),
+	0x802D20A4: main.sym("WaveGetCenterY"),
+	0x802D2160: main.sym("WaveXStep"),
+	0x802D22A0: main.sym("WaveXPosX"),
+	0x802D231C: main.sym("WaveGetCenterX"),
+	0x802D23D8: main.sym("WaveStart"),
+	0x802D251C: main.sym("WaveProcV10Still"),
+	0x802D26BC: main.sym("WaveProcV10Touch"),
+	0x802D279C: main.sym("WaveProcV20Still"),
+	0x802D293C: main.sym("WaveProcV20Touch"),
+	0x802D2A1C: main.sym("WaveProcH10Still"),
+	0x802D2BCC: main.sym("WaveProcH10Touch"),
+	0x802D2CBC: main.sym("WaveProcH20Still"),
+	0x802D2E5C: main.sym("WaveProcH20Touch"),
+	0x802D2F4C: main.sym("WaveProcFlag"),
+	0x802D310C: main.sym("WaveProcMove"),
+	0x802D320C: main.sym("WaveCalcZ"),
+	0x802D338C: main.sym("WaveGetZ"),
+	0x802D3404: main.sym("WaveMakeVtx"),
+	0x802D356C: main.sym("WaveMakeTri"),
+	0x802D3918: main.sym("WaveScaleNormal"),
+	0x802D39DC: main.sym("WaveCalcNormal"),
+	0x802D3CF0: main.sym("WaveDrawMesh"),
+	0x802D43FC: main.sym("WaveTransform"),
+	0x802D45FC: main.sym("WaveGfxShade"),
+	0x802D4874: main.sym("WaveGfxEnvMap"),
+	0x802D4A8C: main.sym("WaveGfxMove"),
+	0x802D4BAC: main.sym("WaveGfxStat"),
+	0x802D4C98: main.sym("WaveExit"),
+	0x802D4CC8: main.sym("WaveMoveDemo"),
+	0x802D4E04: main.sym("WaveSetLayer"),
+	0x802D4E5C: main.sym("WaveGfx"),
+	0x802D4EC8: main.sym("WaveProcV"),
+	0x802D4FC0: main.sym("WaveProcH"),
+	0x802D50B8: main.sym("CtrlWaveDraw", flag={"GLOBL"}),
+	0x802D522C: main.sym("CtrlWaveProc", flag={"GLOBL"}),
 
 	# src/dprint.c
-	0x802D5320: main.sym("dprint_powi"),
-	0x802D5374: main.sym("dprintf_write"),
-	0x802D5664: main.sym("dprintf_read"),
+	0x802D5320: main.sym("Powi"),
+	0x802D5374: main.sym("dprintFormat"),
+	0x802D5664: main.sym("dprintGetFmt"),
 	0x802D57F8: main.sym("dprintf", flag={"GLOBL"}),
 	0x802D5A74: main.sym("dprint", flag={"GLOBL"}),
 	0x802D5BE0: main.sym("dprintc", flag={"GLOBL"}),
-	0x802D5D78: main.sym("dprint_cvt"),
-	0x802D5F18: main.sym("dprint_draw_txt"),
-	0x802D5FEC: main.sym("dprint_clamp"),
-	0x802D605C: main.sym("dprint_draw_char"),
-	0x802D61A8: main.sym("dprint_draw", flag={"GLOBL"}),
+	0x802D5D78: main.sym("dprintCvt"),
+	0x802D5F18: main.sym("dprintDrawTxt"),
+	0x802D5FEC: main.sym("dprintClamp"),
+	0x802D605C: main.sym("dprintDrawChar"),
+	0x802D61A8: main.sym("dprintDraw", flag={"GLOBL"}),
 
 	# src/message.c
-	0x802D6440: main.sym("gfx_loadident"),
-	0x802D6590: main.sym("gfx_translate", flag={"GLOBL"}),
-	0x802D6694: main.sym("gfx_rotate", flag={"GLOBL"}),
-	0x802D67A0: main.sym("gfx_scale", flag={"GLOBL"}),
-	0x802D68A4: main.sym("gfx_screenproj", flag={"GLOBL"}),
-	0x802D69A0: main.sym("unpack_i1"),
-	0x802D6AFC: main.sym("print_lg_char"),
-	0x802D6BFC: main.sym("print_lg", flag={"GLOBL"}),
-	0x802D6ED0: main.sym("print_16", flag={"GLOBL"}),
-	0x802D719C: main.sym("print_sm", flag={"GLOBL"}),
-	0x802D75CC: main.sym("print_8", flag={"GLOBL"}),
-	0x802D7924: main.sym("cursor_proc", flag={"GLOBL"}),
-	0x802D7B3C: main.sym("str_center_x", flag={"GLOBL"}),
-	0x802D7CC0: main.sym("print_coin", flag={"GLOBL"}),
-	0x802D7D88: main.sym("print_star", flag={"GLOBL"}),
+	0x802D6440: main.sym("GfxLoadIdent"),
+	0x802D6590: main.sym("GfxTranslate", flag={"GLOBL"}),
+	0x802D6694: main.sym("GfxRotate", flag={"GLOBL"}),
+	0x802D67A0: main.sym("GfxScale", flag={"GLOBL"}),
+	0x802D68A4: main.sym("GfxScreenProj", flag={"GLOBL"}),
+	0x802D69A0: main.sym("UnpackI1"),
+	0x802D6AFC: main.sym("PrintLgChar"),
+	0x802D6BFC: main.sym("PrintLg", flag={"GLOBL"}),
+	0x802D6ED0: main.sym("Print16", flag={"GLOBL"}),
+	0x802D719C: main.sym("PrintSm", flag={"GLOBL"}),
+	0x802D75CC: main.sym("Print8", flag={"GLOBL"}),
+	0x802D7924: main.sym("CursorProc", flag={"GLOBL"}),
+	0x802D7B3C: main.sym("StrCenterX", flag={"GLOBL"}),
+	0x802D7CC0: main.sym("PrintCoin", flag={"GLOBL"}),
+	0x802D7D88: main.sym("PrintStar", flag={"GLOBL"}),
 	0x802D7E3C: main.sym("itostr", flag={"GLOBL"}),
-	0x802D7F74: main.sym("msg_get", flag={"GLOBL"}),
-	0x802D7F90: main.sym("msg_open", flag={"GLOBL"}),
-	0x802D7FCC: main.sym("msg_open_int", flag={"GLOBL"}),
-	0x802D8010: main.sym("msg_open_signpost", flag={"GLOBL"}),
-	0x802D8050: main.sym("msg_open_prompt", flag={"GLOBL"}),
-	0x802D8098: main.sym("msg_close", flag={"GLOBL"}),
-	0x802D8134: main.sym("msg_draw_back"),
-	0x802D8450: main.sym("msg_set_color"),
-	0x802D8690: main.sym("msg_newline"),
-	0x802D875C: main.sym("msg_mark"), # JAPANESE
-	0x802D8830: main.sym("msg_fmtint"),
-	0x802D8954: main.sym("msg_clamp"),
-	0x802D8980: main.sym("msg_draw"),
+	0x802D7F74: main.sym("MsgGet", flag={"GLOBL"}),
+	0x802D7F90: main.sym("MsgOpen", flag={"GLOBL"}),
+	0x802D7FCC: main.sym("MsgOpenInt", flag={"GLOBL"}),
+	0x802D8010: main.sym("MsgOpenSignpost", flag={"GLOBL"}),
+	0x802D8050: main.sym("MsgOpenPrompt", flag={"GLOBL"}),
+	0x802D8098: main.sym("MsgClose", flag={"GLOBL"}),
+	0x802D8134: main.sym("MsgDrawBack"),
+	0x802D8450: main.sym("MsgSetColor"),
+	0x802D8690: main.sym("MsgNewline"),
+	0x802D875C: main.sym_fnc("MsgKuten", arg=(
+		"char *space",
+		"short *count",
+	)), # JAPANESE
+	0x802D8830: main.sym("MsgFmtInt"),
+	0x802D8954: main.sym("MsgClamp"),
+	0x802D8980: main.sym("MsgDraw"),
 	0x802D8B38: main.sym("L802D99D4", flag={"GLOBL","LOCAL"}),
 	0x802D8B74: main.sym("L802D9A10", flag={"GLOBL","LOCAL"}),
 	0x802D8BA4: main.sym("L802D9A40", flag={"GLOBL","LOCAL"}),
 	0x802D8BB4: main.sym("L802D9A50", flag={"GLOBL","LOCAL"}),
 	0x802D8C04: main.sym("L802D9B08", flag={"GLOBL","LOCAL"}),
 	0x802D8C18: main.sym("L802D9B1C", flag={"GLOBL","LOCAL"}),
-	0x802D8ED4: main.sym("msg_draw_cursor"),
-	0x802D9030: main.sym("msg_draw_nextpage"),
-	0x802D91C0: main.sym("msg_proc_endsound"),
-	0x802D93E0: main.sym("msg_proc"),
-	0x802D9A14: main.sym("menu_open", flag={"GLOBL"}),
-	0x802D9A48: main.sym("staff_clear", flag={"GLOBL"}),
-	0x802D9A60: main.sym("staff_draw_start", flag={"GLOBL"}),
-	0x802D9AE8: main.sym("staff_draw_end", flag={"GLOBL"}),
-	0x802D9B68: main.sym("staff_cvt"),
-	0x802D9C38: main.sym("staff_print", flag={"GLOBL"}),
-	0x802D9CE8: main.sym("caption_open", flag={"GLOBL"}),
-	0x802D9D5C: main.sym("caption_draw", flag={"GLOBL"}),
-	0x802D9F58: main.sym("opening_draw"),
-	0x802DA218: main.sym("cannon_reticle_draw", flag={"GLOBL"}),
-	0x802DA4DC: main.sym("pausemenu_init", flag={"GLOBL"}),
-	0x802DA4F4: main.sym("pausemenu_init_course"),
-	0x802DA544: main.sym("menu_draw_back"),
-	0x802DA624: main.sym("pausemenu_put_redcoin"),
-	0x802DA874: main.sym("pausemenu_draw_redcoin"),
-	0x802DA8EC: main.sym("pausemenu_draw_course"),
-	0x802DAC7C: main.sym("pausemenu_proc_camera"),
-	0x802DAF9C: main.sym("pausemenu_proc_course"),
-	0x802DB284: main.sym("pausemenu_draw_scorebox"),
-	0x802DB540: main.sym("pausemenu_init_select"),
-	0x802DB5A0: main.sym("pausemenu_draw_select"),
-	0x802DB698: main.sym("pausemenu_draw_star"),
-	0x802DB840: main.sym("pausemenu_proc_score"),
-	0x802DBBB0: main.sym("pausemenu_proc"),
-	0x802DBE2C: main.sym("savemenu_draw_banner"),
-	0x802DC050: main.sym("savemenu_proc_demo"),
-	0x802DC2B4: main.sym("savemenu_proc_star"),
-	0x802DC330: main.sym("savemenu_draw"),
-	0x802DC938: main.sym("savemenu_proc_save"),
-	0x802DCBD4: main.sym("savemenu_proc"),
-	0x802DCD98: main.sym("message_proc", flag={"GLOBL"}),
+	0x802D8ED4: main.sym("MsgDrawCursor"),
+	0x802D9030: main.sym("MsgDrawNextPage"),
+	0x802D91C0: main.sym("MsgProcEndSound"),
+	0x802D93E0: main.sym("MsgProc"),
+	0x802D9A14: main.sym("MenuOpen", flag={"GLOBL"}),
+	0x802D9A48: main.sym("StaffClear", flag={"GLOBL"}),
+	0x802D9A60: main.sym("StaffDrawStart", flag={"GLOBL"}),
+	0x802D9AE8: main.sym("StaffDrawEnd", flag={"GLOBL"}),
+	0x802D9B68: main.sym("StaffCvt"),
+	0x802D9C38: main.sym("StaffPrint", flag={"GLOBL"}),
+	0x802D9CE8: main.sym("CaptionOpen", flag={"GLOBL"}),
+	0x802D9D5C: main.sym("CaptionDraw", flag={"GLOBL"}),
+	0x802D9F58: main.sym("OpeningDraw"),
+	0x802DA218: main.sym("DrawCannonReticle", flag={"GLOBL"}),
+	0x802DA4DC: main.sym("PauseMenu_Init", flag={"GLOBL"}),
+	0x802DA4F4: main.sym("PauseMenu_InitCourse"),
+	0x802DA544: main.sym("MenuDrawBack"),
+	0x802DA624: main.sym("PauseMenu_PutRedCoin"),
+	0x802DA874: main.sym("PauseMenu_DrawRedCoin"),
+	0x802DA8EC: main.sym("PauseMenu_DrawCourse"),
+	0x802DAC7C: main.sym("PauseMenu_ProcCamera"),
+	0x802DAF9C: main.sym("PauseMenu_ProcCourse"),
+	0x802DB284: main.sym("PauseMenu_DrawScoreBox"),
+	0x802DB540: main.sym("PauseMenu_InitSelect"),
+	0x802DB5A0: main.sym("PauseMenu_DrawSelect"),
+	0x802DB698: main.sym("PauseMenu_DrawStar"),
+	0x802DB840: main.sym("PauseMenu_ProcScore"),
+	0x802DBBB0: main.sym("PauseMenu_Proc"),
+	0x802DBE2C: main.sym("SaveMenu_DrawBanner"),
+	0x802DC050: main.sym("SaveMenu_ProcDemo"),
+	0x802DC2B4: main.sym("SaveMenu_ProcStar"),
+	0x802DC330: main.sym("SaveMenu_Draw"),
+	0x802DC938: main.sym("SaveMenu_ProcSave"),
+	0x802DCBD4: main.sym("SaveMenu_Proc"),
+	0x802DCD98: main.sym("MessageProc", flag={"GLOBL"}),
 
 	# src/weather.c
-	0x802DCEE0: main.sym("weather_802DDDF0"),
-	0x802DD028: main.sym("weather_802DDF38"),
-	0x802DD1AC: main.sym("weather_802DE0BC"),
-	0x802DD204: main.sym("weather_802DE114", flag={"GLOBL"}),
-	0x802DD32C: main.sym("weather_802DE23C"),
-	0x802DD450: main.sym("weather_802DE360"),
-	0x802DD548: main.sym("weather_802DE458"),
-	0x802DD978: main.sym("weather_802DE888"),
-	0x802DDDC4: main.sym("weather_802DECD4"),
-	0x802DDE28: main.sym("weather_802DED38"),
-	0x802DE01C: main.sym("weather_802DEF2C", flag={"GLOBL"}),
-	0x802DE424: main.sym("weather_802DF334"),
-	0x802DE838: main.sym("weather_802DF748"),
-	0x802DECB8: main.sym("weather_802DFBC8", flag={"GLOBL"}),
+	0x802DCEE0: main.sym("SnowInit"),
+	0x802DD028: main.sym("SnowProc"),
+	0x802DD1AC: main.sym("WeatherFree"),
+	0x802DD204: main.sym("WeatherGetCoord", flag={"GLOBL"}),
+	0x802DD32C: main.sym("WeatherSetCoord"),
+	0x802DD450: main.sym("SnowIsVisible"),
+	0x802DD548: main.sym("SnowMakeSnow"),
+	0x802DD978: main.sym("SnowMakeBlizzard"),
+	0x802DDDC4: main.sym("BubbleIsVisible"),
+	0x802DDE28: main.sym("SnowMakeBubble"),
+	0x802DE01C: main.sym("WeatherXfm", flag={"GLOBL"}),
+	0x802DE424: main.sym("SnowVtx"),
+	0x802DE838: main.sym("SnowGfx"),
+	0x802DECB8: main.sym("WeatherDraw", flag={"GLOBL"}),
 
 	# src/lava.c
-	0x802DEE40: main.sym("lava_802DFD50"),
-	0x802DEEF0: main.sym("lava_802DFE00"),
-	0x802DEF70: main.sym("lava_802DFE80"),
-	0x802DF210: main.sym("lava_802E0120"),
-	0x802DF57C: main.sym("lava_802E048C"),
-	0x802DF74C: main.sym("lava_802E065C"),
-	0x802DF998: main.sym("lava_802E08A8"),
-	0x802DFA24: main.sym("lava_802E0934"),
-	0x802DFF14: main.sym("lava_802E0E24"),
-	0x802DFFA8: main.sym("lava_802E0EB8"),
-	0x802E0328: main.sym("lava_802E1238"),
+	0x802DEE40: main.sym("LavaIsVisible"),
+	0x802DEEF0: main.sym("FlowerRand"),
+	0x802DEF70: main.sym("LavaMakeFlower"),
+	0x802DF210: main.sym("LavaNew"),
+	0x802DF57C: main.sym("LavaMakeLava"),
+	0x802DF74C: main.sym("WhirpoolMove"),
+	0x802DF998: main.sym("WhirpoolIsVisible"),
+	0x802DFA24: main.sym("LavaMakeWhirlpool"),
+	0x802DFF14: main.sym("JetIsVisible"),
+	0x802DFFA8: main.sym("LavaMakeJet"),
+	0x802E0328: main.sym("LavaInit"),
 	0x802E035C: main.sym("L802E126C", flag={"GLOBL","LOCAL"}),
 	0x802E0364: main.sym("L802E1274", flag={"GLOBL","LOCAL"}),
 	0x802E0384: main.sym("L802E1294", flag={"GLOBL","LOCAL"}),
 	0x802E03A4: main.sym("L802E12B4", flag={"GLOBL","LOCAL"}),
 	0x802E03B8: main.sym("L802E12C8", flag={"GLOBL","LOCAL"}),
 	0x802E03CC: main.sym("L802E12DC", flag={"GLOBL","LOCAL"}),
-	0x802E0504: main.sym("lava_802E1414"),
-	0x802E0708: main.sym("lava_802E1618"),
-	0x802E0B10: main.sym("lava_802E1A20"),
-	0x802E0CA8: main.sym("lava_802E1BB8"),
-	0x802E0FC8: main.sym("lava_802E1ED8"),
-	0x802E1038: main.sym("lava_802E1F48", flag={"GLOBL"}),
+	0x802E0504: main.sym("LavaMake"),
+	0x802E0708: main.sym("LavaVtx"),
+	0x802E0B10: main.sym("LavaTxt"),
+	0x802E0CA8: main.sym("LavaGfx"),
+	0x802E0FC8: main.sym("LavaProc"),
+	0x802E1038: main.sym("LavaDraw", flag={"GLOBL"}),
 
 	# src/tag.c
-	0x802E1190: main.sym("tag_ang"),
-	0x802E1224: main.sym("tag_enter_code"),
-	0x802E12CC: main.sym("tag_enter_arg"),
-	0x802E1374: main.sym("tag_enter_xyz"),
-	0x802E142C: main.sym("tag_enter_old"),
-	0x802E1504: main.sym("tag_obj_load", flag={"GLOBL"}),
-	0x802E1780: main.sym("tag_load", flag={"GLOBL"}),
+	0x802E1190: main.sym("TagAng"),
+	0x802E1224: main.sym("TagEnterCode"),
+	0x802E12CC: main.sym("TagEnterArg"),
+	0x802E1374: main.sym("TagEnterXYZ"),
+	0x802E142C: main.sym("TagEnterOLD"),
+	0x802E1504: main.sym("TagObjLoad", flag={"GLOBL"}),
+	0x802E1780: main.sym("TagLoad", flag={"GLOBL"}),
 	0x802E1848: main.sym("L802E2758", flag={"GLOBL","LOCAL"}),
 	0x802E187C: main.sym("L802E278C", flag={"GLOBL","LOCAL"}),
 	0x802E18B0: main.sym("L802E27C0", flag={"GLOBL","LOCAL"}),
@@ -3173,7 +3176,7 @@ sym_J0_code_text = {
 	0x802E194C: main.sym("L802E285C", flag={"GLOBL","LOCAL"}),
 	0x802E1980: main.sym("L802E2890", flag={"GLOBL","LOCAL"}),
 	0x802E19B4: main.sym("L802E28C4", flag={"GLOBL","LOCAL"}),
-	0x802E19DC: main.sym("map_obj_load", flag={"GLOBL"}),
+	0x802E19DC: main.sym("MapObjLoad", flag={"GLOBL"}),
 	0x802E1B9C: main.sym("L802E2AAC", flag={"GLOBL","LOCAL"}),
 	0x802E1BC8: main.sym("L802E2AD8", flag={"GLOBL","LOCAL"}),
 	0x802E1C20: main.sym("L802E2B30", flag={"GLOBL","LOCAL"}),
@@ -3181,23 +3184,23 @@ sym_J0_code_text = {
 	0x802E1D4C: main.sym("L802E2C5C", flag={"GLOBL","LOCAL"}),
 
 	# src/hud.c
-	0x802E1DE0: main.sym("hud_draw_char"),
-	0x802E1F48: main.sym("hud_draw_8x8"),
-	0x802E21A4: main.sym("meter_draw_n"),
-	0x802E2304: main.sym("meter_draw"),
-	0x802E24A8: main.sym("meter_alert"),
-	0x802E2520: main.sym("meter_show"),
-	0x802E25D4: main.sym("meter_hide"),
-	0x802E261C: main.sym("meter_proc"),
-	0x802E2744: main.sym("hud_draw_power"),
-	0x802E2834: main.sym("hud_draw_life"),
-	0x802E2898: main.sym("hud_draw_coin"),
-	0x802E28FC: main.sym("hud_draw_star"),
-	0x802E29D4: main.sym("hud_draw_key"),
-	0x802E2A4C: main.sym("hud_draw_time"),
-	0x802E2C0C: main.sym("hud_set_camera", flag={"GLOBL"}),
-	0x802E2C2C: main.sym("hud_draw_camera"),
-	0x802E2E1C: main.sym("hud_draw", flag={"GLOBL"}),
+	0x802E1DE0: main.sym("HUD_DrawChar"),
+	0x802E1F48: main.sym("HUD_Draw8x8"),
+	0x802E21A4: main.sym("MeterDrawN"),
+	0x802E2304: main.sym("MeterDraw"),
+	0x802E24A8: main.sym("MeterAlert"),
+	0x802E2520: main.sym("MeterShow"),
+	0x802E25D4: main.sym("MeterHide"),
+	0x802E261C: main.sym("MeterProc"),
+	0x802E2744: main.sym("HUD_DrawPower"),
+	0x802E2834: main.sym("HUD_DrawLife"),
+	0x802E2898: main.sym("HUD_DrawCoin"),
+	0x802E28FC: main.sym("HUD_DrawStar"),
+	0x802E29D4: main.sym("HUD_DrawKey"),
+	0x802E2A4C: main.sym("HUD_DrawTime"),
+	0x802E2C0C: main.sym("HUD_SetCamera", flag={"GLOBL"}),
+	0x802E2C2C: main.sym("HUD_DrawCamera"),
+	0x802E2E1C: main.sym("HUD_Draw", flag={"GLOBL"}),
 
 	# src/object_b.c
 	0x802E2F40: main.sym("object_b_802E3E50", flag={"GLOBL"}),
@@ -3510,8 +3513,8 @@ sym_J0_code_text = {
 	0x802F1BD4: main.sym("object_b_802F2C24"),
 	#0x802F2C84: main.sym("object_b_802F2C84", flag={"GLOBL"}),
 	#0x802F2D8C: main.sym("object_b_802F2D8C", flag={"GLOBL"}),
-	#0x802F2E6C: main.sym("redcoin_init", flag={"GLOBL"}),
-	#0x802F2F2C: main.sym("redcoin_proc", flag={"GLOBL"}),
+	#0x802F2E6C: main.sym("RedCoin_Init", flag={"GLOBL"}),
+	#0x802F2F2C: main.sym("RedCoin_Proc", flag={"GLOBL"}),
 	#0x802F3014: main.sym("object_b_802F3014", flag={"GLOBL"}),
 	#0x802F30F0: main.sym("object_b_802F30F0", flag={"GLOBL"}),
 	#0x802F31BC: main.sym("object_b_802F31BC", flag={"GLOBL"}),
@@ -3975,8 +3978,8 @@ sym_J0_code_text = {
 	#0x8030D598: main.sym("object_c_8030D598", flag={"GLOBL"}),
 	#0x8030D640: main.sym("object_c_8030D640", flag={"GLOBL"}),
 	#0x8030D8D4: main.sym("object_c_8030D8D4", flag={"GLOBL"}),
-	#0x8030D93C: main.sym("s_object_c_8030D93C", flag={"GLOBL"}),
-	#0x8030D9AC: main.sym("s_object_c_8030D9AC", flag={"GLOBL"}),
+	#0x8030D93C: main.sym("Ctrl_object_c_8030D93C", flag={"GLOBL"}),
+	#0x8030D9AC: main.sym("Ctrl_object_c_8030D9AC", flag={"GLOBL"}),
 	0x8030C914: main.sym("object_c_8030DA14"),
 	0x8030CA38: main.sym("object_c_8030DB38"),
 	#0x8030DC70: main.sym("object_c_8030DC70", flag={"GLOBL"}),
@@ -4406,8 +4409,8 @@ sym_J0_code_text = {
 	0x803212A0: main.sym("Na_StarAppear", flag={"GLOBL"}),
 	0x803212F0: main.sym("Na_Fanfare", flag={"GLOBL"}),
 	0x8032132C: main.sym("Na_ToadMessage", flag={"GLOBL"}),
-	0x80321368: main.sym("Na_Mode", flag={"GLOBL"}),
-	0x80321434: main.sym("Na_Output", flag={"GLOBL"}),
+	0x80321368: main.sym("Na_SetMode", flag={"GLOBL"}),
+	0x80321434: main.sym("Na_SetOutput", flag={"GLOBL"}),
 	#0x80322348: main.sym("Na_game_80322348"),
 	#0x8032235C: main.sym("Na_game_8032235C"),
 
@@ -4651,18 +4654,18 @@ sym_J0_code_text = {
 	0x8032C6BA: main.sym("demo_rec+0x02"),
 	0x8032C6BB: main.sym("demo_rec+0x03"),
 
-	0x8032C9F0: main.sym("collision_table+0x00"),
-	0x8032C9F4: main.sym("collision_table+0x04"),
+	0x8032C9F0: main.sym("collisiontab+0x00"),
+	0x8032C9F4: main.sym("collisiontab+0x04"),
 
-	0x8032CB7B: main.sym("player_8032DACC+1*15"),
-	0x8032CB80: main.sym("player_8032DAE0+0"),
-	0x8032CB84: main.sym("player_8032DAE0+4"),
+	0x8032CB7B: main.sym("pl_unpresstab+1*15"),
+	0x8032CB80: main.sym("pl_flash_pattern+0"),
+	0x8032CB84: main.sym("pl_flash_pattern+4"),
 
-	0x8032CC82: main.sym("pl_demo_8032DC3C-1*90"),
-	0x8032CCD6: main.sym("pl_demo_8032DC34+2"),
-	0x8032CCDA: main.sym("pl_demo_8032DC38+2"),
+	0x8032CC82: main.sym("pldemo_8032DC3C-1*90"),
+	0x8032CCD6: main.sym("pldemo_8032DC34+2"),
+	0x8032CCDA: main.sym("pldemo_8032DC38+2"),
 
-	0x8032CE37: main.sym("course_table-1"),
+	0x8032CE37: main.sym("coursetab-1"),
 
 	#0x8032F4D4: main.sym("camdemo_8032F4D4+0x00"),
 	#0x8032F4D8: main.sym("camdemo_8032F4D4+0x04"),
@@ -4790,35 +4793,35 @@ sym_J0_code_text = {
 	#0x80330DAC: main.sym("object_a_80330DAC+0x00"),
 	#0x80330DB4: main.sym("object_a_80330DAC+0x08"),
 
-	#0x80330EE0: main.sym("shadow_rect_table+0x00"),
-	#0x80330EE4: main.sym("shadow_rect_table+0x04"),
-	#0x80330EE8: main.sym("shadow_rect_table+0x08"),
+	0x8032FF80: main.sym("shadow_rect_table+0x00"),
+	0x8032FF84: main.sym("shadow_rect_table+0x04"),
+	0x8032FF88: main.sym("shadow_rect_table+0x08"),
 
-	#0x80330F64: main.sym("water_table_a+0x00"),
-	#0x80330F70: main.sym("water_table_a+0x0C"),
-	#0x80330F84: main.sym("water_table_a+0x20"),
+	0x80330004: main.sym("fluidtab+0x00"),
+	0x80330010: main.sym("fluidtab+0x0C"),
+	0x80330024: main.sym("fluidtab+0x20"),
 
-	#0x803311A4: main.sym("water_table_b+0x00"),
-	#0x803311B0: main.sym("water_table_b+0x0C"),
-	#0x803311C4: main.sym("water_table_b+0x20"),
+	0x80330244: main.sym("fluidtabL+0x00"),
+	0x80330250: main.sym("fluidtabL+0x0C"),
+	0x80330264: main.sym("fluidtabL+0x20"),
 
-	#0x8033127C: main.sym("water_table_c+0x00"),
-	#0x80331288: main.sym("water_table_c+0x0C"),
-	#0x8033129C: main.sym("water_table_c+0x20"),
+	0x8033031C: main.sym("fluidtabS+0x00"),
+	0x80330328: main.sym("fluidtabS+0x0C"),
+	0x8033033C: main.sym("fluidtabS+0x20"),
 
-	#0x803317E0: main.sym("tag_obj_table+0x00"),
-	#0x803317E4: main.sym("tag_obj_table+0x04"),
-	#0x803317E6: main.sym("tag_obj_table+0x06"),
+	0x803306D0: main.sym("tagobjtab+0x00"),
+	0x803306D4: main.sym("tagobjtab+0x04"),
+	0x803306D6: main.sym("tagobjtab+0x06"),
 
-	#0x80332350: main.sym("map_obj_table+0x00"),
-	#0x80332351: main.sym("map_obj_table+0x01"),
-	#0x80332352: main.sym("map_obj_table+0x02"),
-	#0x80332353: main.sym("map_obj_table+0x03"),
-	#0x80332354: main.sym("map_obj_table+0x04"),
+	0x80331240: main.sym("mapobjtab+0x00"),
+	0x80331241: main.sym("mapobjtab+0x01"),
+	0x80331242: main.sym("mapobjtab+0x02"),
+	0x80331243: main.sym("mapobjtab+0x03"),
+	0x80331244: main.sym("mapobjtab+0x04"),
 
-	#0x803325F0: main.sym("meter+0x00"),
-	#0x803325F2: main.sym("meter+0x02"),
-	#0x803325F4: main.sym("meter+0x04"),
+	0x803314E0: main.sym("meter+0x00"),
+	0x803314E2: main.sym("meter+0x02"),
+	0x803314E4: main.sym("meter+0x04"),
 
 	#0x8033282C: main.sym("object_b_8033282C+2*0"),
 	#0x8033282E: main.sym("object_b_8033282C+2*1"),
@@ -5096,17 +5099,17 @@ sym_J0_code_text = {
 	0x8033BF06: main.sym("bgdebug+0x02"),
 	0x8033BF08: main.sym("bgdebug+0x04"),
 	0x8033C18C: main.sym("object_data+0x74"),
-	0x8035FB24: main.sym("object_dummy+0x0C"),
-	0x8035FB25: main.sym("object_dummy+0x0D"),
+	0x8035FB30: main.sym("object_dummy+0x0C"),
+	0x8035FB31: main.sym("object_dummy+0x0D"),
 	0x8035FDE0: main.sym("obj_freelist+0x60"),
 	0x8035FE68: main.sym("area_table+0"),
 	0x8035FE69: main.sym("area_table+1"),
 
-	0x8035FF50: main.sym("back_data+0x00"),
-	0x8035FF52: main.sym("back_data+0x02"),
-	0x8035FF54: main.sym("back_data+0x04"),
-	0x8035FF58: main.sym("back_data+0x08"),
-	0x8035FF5C: main.sym("back_data+0x0C"),
+	0x8035FF50: main.sym("backdata+0x00"),
+	0x8035FF52: main.sym("backdata+0x02"),
+	0x8035FF54: main.sym("backdata+0x04"),
+	0x8035FF58: main.sym("backdata+0x08"),
+	0x8035FF5C: main.sym("backdata+0x0C"),
 
 	0x80360120: main.sym("_Na_game_bss+0x00"),
 	0x80360128: main.sym("_Na_game_bss+0x08"),
@@ -5147,111 +5150,132 @@ sym_J0_code_text = {
 
 	# ==========================================================================
 
-	#0x80220D98: main.sym("_Na_work_bss-0x08"),
-	#0x80220DA0: main.sym("_Na_work_bss+0x00"),
-	#0x80220DB0: main.sym("_Na_work_bss+0x10"),
-	#0x80220DB1: main.sym("_Na_work_bss+0x11"),
-	#0x80220EA0: main.sym("_Na_work_bss+0x100"),
-	#0x80220EA2: main.sym("_Na_work_bss+0x102"),
-	#0x80220EA3: main.sym("_Na_work_bss+0x103"),
-	#0x80220EA8: main.sym("_Na_work_bss+0x108"),
-	#0x80220EB0: main.sym("_Na_work_bss+0x110"),
-	#0x80220EB8: main.sym("_Na_work_bss+0x118"),
-	#0x80220EC8: main.sym("_Na_work_bss+0x128"),
-	#0x80220EF8: main.sym("_Na_work_bss+0x158"),
-	#0x80220F08: main.sym("_Na_work_bss+0x168"),
-	#0x80220F18: main.sym("_Na_work_bss+0x178"),
-	#0x80220F28: main.sym("_Na_work_bss+0x188"),
-	#0x80220F2C: main.sym("_Na_work_bss+0x18C"),
-	#0x802210BC: main.sym("_Na_work_bss+0x31C"),
-	#0x802210C0: main.sym("_Na_work_bss+0x320"),
-	#0x802210F8: main.sym("_Na_work_bss+0x358"),
-	#0x802210FC: main.sym("_Na_work_bss+0x35C"),
-	#0x8022128C: main.sym("_Na_work_bss+0x4EC"),
-	#0x80221290: main.sym("_Na_work_bss+0x4F0"),
-	#0x802212C8: main.sym("_Na_work_bss+0x528"),
-	#0x802212CC: main.sym("_Na_work_bss+0x52C"),
-	#0x8022145C: main.sym("_Na_work_bss+0x6BC"),
-	#0x80221460: main.sym("_Na_work_bss+0x6C0"),
-	#0x80221498: main.sym("_Na_work_bss+0x6F8"),
-	#0x802214A8: main.sym("_Na_work_bss+0x708"),
-	#0x802214B0: main.sym("_Na_work_bss+0x710"),
-	#0x802214C0: main.sym("_Na_work_bss+0x720"),
-	#0x802214D0: main.sym("_Na_work_bss+0x730"),
-	#0x80221510: main.sym("_Na_work_bss+0x770"),
-	#0x80221610: main.sym("_Na_work_bss+0x870"),
-	#0x80222610: main.sym("_Na_work_bss+0x1870"),
-	#0x80222618: main.sym("_Na_work_bss+0x1878"),
-	#0x80222619: main.sym("_Na_work_bss+0x1879"),
-	#0x8022261A: main.sym("_Na_work_bss+0x187A"),
-	#0x80222630: main.sym("_Na_work_bss+0x1890"),
-	#0x80222644: main.sym("_Na_work_bss+0x18A4"),
-	#0x802226A8: main.sym("_Na_work_bss+0x1908"),
-	#0x802228C4: main.sym("_Na_work_bss+0x1B24"),
-	#0x802229D8: main.sym("_Na_work_bss+0x1C38"),
-	#0x802241D8: main.sym("_Na_work_bss+0x3438"),
-	#0x80224248: main.sym("_Na_work_bss+0x34A8"),
-	#0x80225BD8: main.sym("_Na_work_bss+0x4E38"),
-	#0x80225C98: main.sym("_Na_work_bss+0x4EF8"),
-	#0x80225CA8: main.sym("_Na_work_bss+0x4F08"),
-	#0x80225CAC: main.sym("_Na_work_bss+0x4F0C"),
-	#0x80225CB8: main.sym("_Na_work_bss+0x4F18"),
-	#0x80225CC8: main.sym("_Na_work_bss+0x4F28"),
-	#0x80225CD8: main.sym("_Na_work_bss+0x4F38"),
-	#0x80225CE8: main.sym("_Na_work_bss+0x4F48"),
-	#0x80225D00: main.sym("_Na_work_bss+0x4F60"),
-	#0x80225E00: main.sym("_Na_work_bss+0x5060"),
-	#0x80226300: main.sym("_Na_work_bss+0x5560"),
-	#0x80226318: main.sym("_Na_work_bss+0x5578"),
-	#0x80226320: main.sym("_Na_work_bss+0x5580"),
-	#0x80226338: main.sym("_Na_work_bss+0x5598"),
-	#0x80226938: main.sym("_Na_work_bss+0x5B98"),
-	#0x8022693C: main.sym("_Na_work_bss+0x5B9C"),
-	#0x80226940: main.sym("_Na_work_bss+0x5BA0"),
-	#0x80226948: main.sym("_Na_work_bss+0x5BA8"),
-	#0x80226A48: main.sym("_Na_work_bss+0x5CA8"),
-	#0x80226B48: main.sym("_Na_work_bss+0x5DA8"),
-	#0x80226B49: main.sym("_Na_work_bss+0x5DA9"),
-	#0x80226B4A: main.sym("_Na_work_bss+0x5DAA"),
-	#0x80226B4B: main.sym("_Na_work_bss+0x5DAB"),
-	#0x80226B4C: main.sym("_Na_work_bss+0x5DAC"),
-	#0x80226B50: main.sym("_Na_work_bss+0x5DB0"),
-	#0x80226B54: main.sym("_Na_work_bss+0x5DB4"),
-	#0x80226B58: main.sym("_Na_work_bss+0x5DB8"),
-	#0x80226B5C: main.sym("_Na_work_bss+0x5DBC"),
-	#0x80226B60: main.sym("_Na_work_bss+0x5DC0"),
-	#0x80226B64: main.sym("_Na_work_bss+0x5DC4"),
-	#0x80226B68: main.sym("_Na_work_bss+0x5DC8"),
-	#0x80226B6C: main.sym("_Na_work_bss+0x5DCC"),
-	#0x80226B70: main.sym("_Na_work_bss+0x5DD0"),
-	#0x80226B74: main.sym("_Na_work_bss+0x5DD4"),
-	#0x80226B78: main.sym("_Na_work_bss+0x5DD8"),
-	#0x80226B7C: main.sym("_Na_work_bss+0x5DDC"),
-	#0x80226B7E: main.sym("_Na_work_bss+0x5DDE"),
-	#0x80226B7F: main.sym("_Na_work_bss+0x5DDF"),
-	#0x80226B80: main.sym("_Na_work_bss+0x5DE0"),
-	#0x80226B84: main.sym("_Na_work_bss+0x5DE4"),
-	#0x80226B88: main.sym("_Na_work_bss+0x5DE8"),
-	#0x80226B8C: main.sym("_Na_work_bss+0x5DEC"),
-	#0x80226B90: main.sym("_Na_work_bss+0x5DF0"),
-	#0x80226B98: main.sym("_Na_work_bss+0x5DF8"),
-	#0x80226B9C: main.sym("_Na_work_bss+0x5DFC"),
-	#0x80226BA0: main.sym("_Na_work_bss+0x5E00"),
-	#0x80226C40: main.sym("_Na_work_bss+0x5EA0"),
-	#0x80226C4C: main.sym("_Na_work_bss+0x5EAC"),
-	#0x80226C52: main.sym("_Na_work_bss+0x5EB2"),
-	#0x80226C58: main.sym("_Na_work_bss+0x5EB8"),
-	#0x80226C98: main.sym("_Na_work_bss+0x5EF8"),
-	#0x80226CB8: main.sym("_Na_work_bss+0x5F18"),
-	#0x80226CC0: main.sym("_Na_work_bss+0x5F20"),
+	#0x80220D98: main.sym("Na_WorkStart-8"),
+	#0x80220DB0: main.sym("_Na_work_bss_10-0x10+0x10"),
+	#0x80220DB1: main.sym("_Na_work_bss_10-0x10+0x11"),
+	#0x80220EA0: main.sym("_Na_work_bss_10-0x10+0x100"),
+	#0x80220EA2: main.sym("_Na_work_bss_10-0x10+0x102"),
+	#0x80220EA3: main.sym("_Na_work_bss_10-0x10+0x103"),
+	#0x80220EA8: main.sym("_Na_work_bss_10-0x10+0x108"),
+	#0x80220EB0: main.sym("_Na_work_bss_10-0x10+0x110"),
+	#0x80220EB8: main.sym("_Na_work_bss_10-0x10+0x118"),
+	#0x80220EC8: main.sym("_Na_work_bss_10-0x10+0x128"),
+	#0x80220EF8: main.sym("_Na_work_bss_10-0x10+0x158"),
+	#0x80220F08: main.sym("_Na_work_bss_10-0x10+0x168"),
+	#0x80220F18: main.sym("_Na_work_bss_10-0x10+0x178"),
+	#0x80220F28: main.sym("_Na_work_bss_10-0x10+0x188"),
+	#0x80220F2C: main.sym("_Na_work_bss_10-0x10+0x18C"),
+	#0x802210BC: main.sym("_Na_work_bss_10-0x10+0x31C"),
+	#0x802210C0: main.sym("_Na_work_bss_10-0x10+0x320"),
+	#0x802210F8: main.sym("_Na_work_bss_10-0x10+0x358"),
+	#0x802210FC: main.sym("_Na_work_bss_10-0x10+0x35C"),
+	#0x8022128C: main.sym("_Na_work_bss_10-0x10+0x4EC"),
+	#0x80221290: main.sym("_Na_work_bss_10-0x10+0x4F0"),
+	#0x802212C8: main.sym("_Na_work_bss_10-0x10+0x528"),
+	#0x802212CC: main.sym("_Na_work_bss_10-0x10+0x52C"),
+	#0x8022145C: main.sym("_Na_work_bss_10-0x10+0x6BC"),
+	#0x80221460: main.sym("_Na_work_bss_10-0x10+0x6C0"),
+	#0x80221498: main.sym("_Na_work_bss_10-0x10+0x6F8"),
+	#0x802214A8: main.sym("_Na_work_bss_10-0x10+0x708"),
+	#0x802214B0: main.sym("_Na_work_bss_10-0x10+0x710"),
+	#0x802214C0: main.sym("_Na_work_bss_10-0x10+0x720"),
+	#0x802214D0: main.sym("_Na_work_bss_10-0x10+0x730"),
+	#0x80221510: main.sym("_Na_work_bss_10-0x10+0x770"),
+	#0x80221610: main.sym("_Na_work_bss_10-0x10+0x870"),
+	#0x80222610: main.sym("_Na_work_bss_10-0x10+0x1870"),
+	#0x80222618: main.sym("_Na_work_bss_10-0x10+0x1878"),
+	#0x80222619: main.sym("_Na_work_bss_10-0x10+0x1879"),
+	#0x8022261A: main.sym("_Na_work_bss_10-0x10+0x187A"),
+	#0x80222630: main.sym("_Na_work_bss_10-0x10+0x1890"),
+	#0x80222644: main.sym("_Na_work_bss_10-0x10+0x18A4"),
+	#0x802226A8: main.sym("_Na_work_bss_10-0x10+0x1908"),
+	#0x802228C4: main.sym("_Na_work_bss_10-0x10+0x1B24"),
+	#0x802229D8: main.sym("_Na_work_bss_10-0x10+0x1C38"),
+	#0x802241D8: main.sym("_Na_work_bss_10-0x10+0x3438"),
+	#0x80224248: main.sym("_Na_work_bss_10-0x10+0x34A8"),
+	#0x80225BD8: main.sym("_Na_work_bss_10-0x10+0x4E38"),
+	#0x80225C98: main.sym("_Na_work_bss_10-0x10+0x4EF8"),
+	#0x80225CA8: main.sym("_Na_work_bss_10-0x10+0x4F08"),
+	#0x80225CAC: main.sym("_Na_work_bss_10-0x10+0x4F0C"),
+	#0x80225CB8: main.sym("_Na_work_bss_10-0x10+0x4F18"),
+	#0x80225CC8: main.sym("_Na_work_bss_10-0x10+0x4F28"),
+	#0x80225CD8: main.sym("_Na_work_bss_10-0x10+0x4F38"),
+	#0x80225CE8: main.sym("_Na_work_bss_10-0x10+0x4F48"),
+	#0x80225D00: main.sym("_Na_work_bss_10-0x10+0x4F60"),
+	#0x80225E00: main.sym("_Na_work_bss_10-0x10+0x5060"),
+	#0x80226300: main.sym("_Na_work_bss_10-0x10+0x5560"),
+	#0x80226318: main.sym("_Na_work_bss_10-0x10+0x5578"),
+	#0x80226320: main.sym("_Na_work_bss_10-0x10+0x5580"),
+	#0x80226338: main.sym("_Na_work_bss_10-0x10+0x5598"),
+	#0x80226938: main.sym("_Na_work_bss_10-0x10+0x5B98"),
+	#0x8022693C: main.sym("_Na_work_bss_10-0x10+0x5B9C"),
+	#0x80226940: main.sym("_Na_work_bss_10-0x10+0x5BA0"),
+	#0x80226948: main.sym("_Na_work_bss_10-0x10+0x5BA8"),
+	#0x80226A48: main.sym("_Na_work_bss_10-0x10+0x5CA8"),
+	#0x80226B48: main.sym("_Na_work_bss_10-0x10+0x5DA8"),
+	#0x80226B49: main.sym("_Na_work_bss_10-0x10+0x5DA9"),
+	#0x80226B4A: main.sym("_Na_work_bss_10-0x10+0x5DAA"),
+	#0x80226B4B: main.sym("_Na_work_bss_10-0x10+0x5DAB"),
+	#0x80226B4C: main.sym("_Na_work_bss_10-0x10+0x5DAC"),
+	#0x80226B50: main.sym("_Na_work_bss_10-0x10+0x5DB0"),
+	#0x80226B54: main.sym("_Na_work_bss_10-0x10+0x5DB4"),
+	#0x80226B58: main.sym("_Na_work_bss_10-0x10+0x5DB8"),
+	#0x80226B5C: main.sym("_Na_work_bss_10-0x10+0x5DBC"),
+	#0x80226B60: main.sym("_Na_work_bss_10-0x10+0x5DC0"),
+	#0x80226B64: main.sym("_Na_work_bss_10-0x10+0x5DC4"),
+	#0x80226B68: main.sym("_Na_work_bss_10-0x10+0x5DC8"),
+	#0x80226B6C: main.sym("_Na_work_bss_10-0x10+0x5DCC"),
+	#0x80226B70: main.sym("_Na_work_bss_10-0x10+0x5DD0"),
+	#0x80226B74: main.sym("_Na_work_bss_10-0x10+0x5DD4"),
+	#0x80226B78: main.sym("_Na_work_bss_10-0x10+0x5DD8"),
+	#0x80226B7C: main.sym("_Na_work_bss_10-0x10+0x5DDC"),
+	#0x80226B7E: main.sym("_Na_work_bss_10-0x10+0x5DDE"),
+	#0x80226B7F: main.sym("_Na_work_bss_10-0x10+0x5DDF"),
+	#0x80226B80: main.sym("_Na_work_bss_10-0x10+0x5DE0"),
+	#0x80226B84: main.sym("_Na_work_bss_10-0x10+0x5DE4"),
+	#0x80226B88: main.sym("_Na_work_bss_10-0x10+0x5DE8"),
+	#0x80226B8C: main.sym("_Na_work_bss_10-0x10+0x5DEC"),
+	#0x80226B90: main.sym("_Na_work_bss_10-0x10+0x5DF0"),
+	#0x80226B98: main.sym("_Na_work_bss_10-0x10+0x5DF8"),
+	#0x80226B9C: main.sym("_Na_work_bss_10-0x10+0x5DFC"),
+	#0x80226BA0: main.sym("_Na_work_bss_10-0x10+0x5E00"),
+	#0x80226C40: main.sym("_Na_work_bss_10-0x10+0x5EA0"),
+	#0x80226C4C: main.sym("_Na_work_bss_10-0x10+0x5EAC"),
+	#0x80226C52: main.sym("_Na_work_bss_10-0x10+0x5EB2"),
+	#0x80226C58: main.sym("_Na_work_bss_10-0x10+0x5EB8"),
+	#0x80226C98: main.sym("_Na_work_bss_10-0x10+0x5EF8"),
 
-	0x80207A90: main.sym("save-0x70"),
-	0x80207A98: main.sym("save-0x68"),
-	0x80207A9C: main.sym("save-0x64"),
-	0x80207B08: main.sym("save+0x08"),
-	0x80207B0C: main.sym("save+0x0C"),
-	0x80207B25: main.sym("save+0x25"),
-	0x80207CC0: main.sym("save+0x1C0"),
+	0x80207A90: main.sym("backup-0x70"),
+	0x80207A98: main.sym("backup-0x68"),
+	0x80207A9C: main.sym("backup-0x64"),
+	0x80207B08: main.sym("backup+0x08"),
+	0x80207B0C: main.sym("backup+0x0C"),
+	0x80207B25: main.sym("backup+0x25"),
+	0x80207CC0: main.sym("backup+0x1C0"),
+
+	0x030293E0: main.sym("txt_meter_n"),
+	0x03029480: main.sym("gfx_meter_0"),
+	0x03029570: main.sym("gfx_meter_n"),
+	0x030295A0: main.sym("gfx_meter_end"),
+
+	0x0700B3A0: main.sym("gfx_logo"),
+	0x0700C6A0: main.sym("gfx_symbol"),
+	0x0700C790: main.sym("logo_scale_a"),
+	0x0700C880: main.sym("logo_scale_b"),
+	0x0A000100: main.sym("gfx_titlebg_start"),
+	0x0A000118: main.sym("gfx_titlebg_vtx"),
+	0x0A000190: main.sym("gfx_titlebg_end"),
+
+	0x0700D108: main.sym("gfx_smfont_start"),
+	0x0700D160: main.sym("gfx_smfont_end"),
+	0x0700F228: main.sym("gfx_course"),
+
+	0x0702A880: main.sym("gfx_inside_0702A880"),
+	0x07019248: main.sym("rr_07019080"),
+	0x070192F0: main.sym("gfx_rr_07019128"),
+	0x07019360: main.sym("gfx_rr_07019198"),
+	0x070193C8: main.sym("gfx_rr_07019200"),
+	0x07026400: main.sym("gfx_ending"),
 }
 
 seg_J0_code_text = {
@@ -5334,7 +5358,7 @@ sym_J0_code_data = {
 	0x8032C6D4: main.sym("aud_endless_flag"),
 	0x8032C6D8: main.sym("aud_8032D618"),
 	0x8032C6DC: main.sym("aud_8032D61C"),
-	0x8032C6E8: main.sym("aud_output_table"),
+	0x8032C6E8: main.sym("aud_modetab"),
 	0x8032C6F0: main.sym("aud_levelse_table"),
 	0x8032C780: main.sym("aud_wave_flag"),
 
@@ -5365,69 +5389,69 @@ sym_J0_code_data = {
 	0x8032C9E0: main.sym("mid_flag"),
 
 	# src/collision.c
-	0x8032C9F0: main.sym("collision_table", flag={"GLOBL"}),
-	0x8032CAE8: main.sym("collision_8032DA48", flag={"GLOBL"}),
-	0x8032CB0C: main.sym("collision_8032DA6C", flag={"GLOBL"}),
-	0x8032CB30: main.sym("collision_8032DA90", flag={"GLOBL"}),
-	0x8032CB34: main.sym("collision_8032DA94", flag={"GLOBL"}),
-	0x8032CB38: main.sym("collision_8032DA98", flag={"GLOBL"}),
+	0x8032C9F0: main.sym("collisiontab"),
+	0x8032CAE8: main.sym("fdamagetab"),
+	0x8032CB0C: main.sym("bdamagetab"),
+	0x8032CB30: main.sym("door_flag"),
+	0x8032CB34: main.sym("pipe_flag"),
+	0x8032CB38: main.sym("slider_flag"),
 
 	# src/player.c
-	0x8032CB40: main.sym("player_8032DAA0", flag={"GLOBL"}),
-	0x8032CB6C: main.sym("player_8032DACC", flag={"GLOBL"}),
-	0x8032CB80: main.sym("player_8032DAE0", flag={"GLOBL"}),
+	0x8032CB40: main.sym("pl_surfacetab"),
+	0x8032CB6C: main.sym("pl_unpresstab"),
+	0x8032CB80: main.sym("pl_flash_pattern"),
 
 	# src/physics.c
-	0x8032CB90: main.sym("physics_8032DAF0", flag={"GLOBL"}),
-	0x8032CB98: main.sym("physics_8032DAF8", flag={"GLOBL"}),
+	0x8032CB90: main.sym("quicksand_speed", flag={"GLOBL"}),
+	0x8032CB98: main.sym("water_ground", flag={"GLOBL"}),
 
 	# src/pldemo.c
-	0x8032CBD0: main.sym("vp_pl_demo", flag={"GLOBL"}),
-	0x8032CBE0: main.sym("pl_demo_staff", flag={"GLOBL"}),
-	0x8032CBE4: main.sym("pl_demo_8032DB44", flag={"GLOBL"}),
-	0x8032CBE8: main.sym("pl_demo_8032DB48", flag={"GLOBL"}),
-	0x8032CBEC: main.sym("pl_demo_8032DB4C", flag={"GLOBL"}),
-	0x8032CBF4: main.sym("pl_demo_8032DB54", flag={"GLOBL"}),
-	0x8032CBFC: main.sym("pl_demo_8032DB5C", flag={"GLOBL"}),
-	0x8032CCD4: main.sym("pl_demo_8032DC34", flag={"GLOBL"}),
-	0x8032CCD8: main.sym("pl_demo_8032DC38", flag={"GLOBL"}),
-	0x8032CCDC: main.sym("pl_demo_8032DC3C", flag={"GLOBL"}),
+	0x8032CBD0: main.sym("pldemo_vp", flag={"GLOBL"}),
+	0x8032CBE0: main.sym("pldemo_staff", flag={"GLOBL"}),
+	0x8032CBE4: main.sym("pldemo_8032DB44", flag={"GLOBL"}),
+	0x8032CBE8: main.sym("pldemo_8032DB48", flag={"GLOBL"}),
+	0x8032CBEC: main.sym("pldemo_8032DB4C", flag={"GLOBL"}),
+	0x8032CBF4: main.sym("pldemo_8032DB54", flag={"GLOBL"}),
+	0x8032CBFC: main.sym("pldemo_8032DB5C", flag={"GLOBL"}),
+	0x8032CCD4: main.sym("pldemo_8032DC34", flag={"GLOBL"}),
+	0x8032CCD8: main.sym("pldemo_8032DC38", flag={"GLOBL"}),
+	0x8032CCDC: main.sym("pldemo_8032DC3C", flag={"GLOBL"}),
 
 	# src/plmove.c
-	#0x8032DC50: main.sym("pl_move_8032DC50", flag={"GLOBL"}),
-	#0x8032DC68: main.sym("pl_move_8032DC68", flag={"GLOBL"}),
-	#0x8032DC80: main.sym("pl_move_8032DC80", flag={"GLOBL"}),
-	#0x8032DC98: main.sym("pl_move_8032DC98", flag={"GLOBL"}),
-	#0x8032DCB0: main.sym("pl_move_8032DCB0", flag={"GLOBL"}),
-	#0x8032DCC8: main.sym("pl_move_8032DCC8", flag={"GLOBL"}),
-	#0x8032DCE0: main.sym("pl_move_8032DCE0", flag={"GLOBL"}),
-	#0x8032DCF8: main.sym("pl_move_8032DCF8", flag={"GLOBL"}),
-	#0x8032DD10: main.sym("pl_move_8032DD10", flag={"GLOBL"}),
+	#0x8032DC50: main.sym("plmove_8032DC50", flag={"GLOBL"}),
+	#0x8032DC68: main.sym("plmove_8032DC68", flag={"GLOBL"}),
+	#0x8032DC80: main.sym("plmove_8032DC80", flag={"GLOBL"}),
+	#0x8032DC98: main.sym("plmove_8032DC98", flag={"GLOBL"}),
+	#0x8032DCB0: main.sym("plmove_8032DCB0", flag={"GLOBL"}),
+	#0x8032DCC8: main.sym("plmove_8032DCC8", flag={"GLOBL"}),
+	#0x8032DCE0: main.sym("plmove_8032DCE0", flag={"GLOBL"}),
+	#0x8032DCF8: main.sym("plmove_8032DCF8", flag={"GLOBL"}),
+	#0x8032DD10: main.sym("plmove_8032DD10", flag={"GLOBL"}),
 
 	# src/plswim.c
-	#0x8032DD30: main.sym("pl_swim_8032DD30", flag={"GLOBL"}),
-	#0x8032DD34: main.sym("pl_swim_8032DD34", flag={"GLOBL"}),
-	#0x8032DD38: main.sym("pl_swim_8032DD38", flag={"GLOBL"}),
+	#0x8032DD30: main.sym("plswim_8032DD30", flag={"GLOBL"}),
+	#0x8032DD34: main.sym("plswim_8032DD34", flag={"GLOBL"}),
+	#0x8032DD38: main.sym("plswim_8032DD38", flag={"GLOBL"}),
 
-	# src/plhold.c
-	#0x8032DD40: main.sym("pl_hold_8032DD40", flag={"GLOBL"}),
+	# src/pltake.c
+	#0x8032DD40: main.sym("pltake_8032DD40", flag={"GLOBL"}),
 
 	# src/callback.c
-	#0x8032DD50: main.sym("pl_eyes_table"),
-	#0x8032DD58: main.sym("pl_punch_table"),
-	#0x8032DD6C: main.sym("pl_punch_stamp"),
+	0x8032CDF0: main.sym("pl_eyes_table"),
+	0x8032CDF8: main.sym("pl_punch_table"),
+	0x8032CE0C: main.sym("pl_punch_stamp"),
 
 	# src/memory.c
 	0x8032CE10: main.sym("mem_frame"),
 
-	# src/save.c
-	0x8032CE20: main.sym("save_course", flag={"GLOBL"}),
-	0x8032CE24: main.sym("save_level", flag={"GLOBL"}),
-	0x8032CE28: main.sym("save_hiscore", flag={"GLOBL"}),
-	0x8032CE2C: main.sym("save_myscore", flag={"GLOBL"}),
-	0x8032CE30: main.sym("save_star", flag={"GLOBL"}),
-	0x8032CE34: main.sym("save_jump", flag={"GLOBL"}),
-	0x8032CE38: main.sym("course_table", flag={"GLOBL"}),
+	# src/backup.c
+	0x8032CE20: main.sym("bu_course", flag={"GLOBL"}),
+	0x8032CE24: main.sym("bu_level", flag={"GLOBL"}),
+	0x8032CE28: main.sym("bu_hiscore", flag={"GLOBL"}),
+	0x8032CE2C: main.sym("bu_myscore", flag={"GLOBL"}),
+	0x8032CE30: main.sym("bu_star", flag={"GLOBL"}),
+	0x8032CE34: main.sym("bu_jump", flag={"GLOBL"}),
+	0x8032CE38: main.sym("coursetab", flag={"GLOBL"}),
 
 	# src/scene.c
 	0x8032CE60: main.sym("mario_actor", flag={"GLOBL"}),
@@ -5435,8 +5459,8 @@ sym_J0_code_data = {
 	0x8032CE68: main.sym("scene_table", flag={"GLOBL"}),
 	0x8032CE6C: main.sym("scenep", flag={"GLOBL"}),
 	0x8032CE70: main.sym("staffp", flag={"GLOBL"}),
-	0x8032CE74: main.sym("scene_viewport"),
-	0x8032CE78: main.sym("scene_scissor"),
+	0x8032CE74: main.sym("sn_viewport"),
+	0x8032CE78: main.sym("sn_scissor"),
 	0x8032CE7C: main.sym("wipe_delay"),
 	0x8032CE80: main.sym("scene_fill"),
 	0x8032CE84: main.sym("blank_fill"),
@@ -5445,25 +5469,25 @@ sym_J0_code_data = {
 	0x8032CE90: main.sym("blank_b"),
 	0x8032CE94: main.sym("file_index", flag={"GLOBL"}),
 	0x8032CE98: main.sym("stage_index", flag={"GLOBL"}),
-	#0x8032DDFC: main.sym("port_script"),
-	#0x8032DE4C: main.sym("port_type"),
-	#0x8032DE60: main.sym("vp_default"),
+	0x8032CE9C: main.sym("port_script"),
+	0x8032CEEC: main.sym("port_type"),
+	0x8032CF00: main.sym("default_vp"),
 
 	# src/draw.c
-	#0x8032DE70: main.sym("draw_rendermode_1"),
-	#0x8032DEB0: main.sym("draw_rendermode_2"),
-	0x8032CF90: main.sym("s_scene", flag={"GLOBL"}),
-	0x8032CF94: main.sym("s_layer", flag={"GLOBL"}),
-	0x8032CF98: main.sym("s_persp", flag={"GLOBL"}),
-	0x8032CF9C: main.sym("s_camera", flag={"GLOBL"}),
-	0x8032CFA0: main.sym("s_object", flag={"GLOBL"}),
-	0x8032CFA4: main.sym("s_hand", flag={"GLOBL"}),
+	0x8032CF10: main.sym("draw_rendermode_1"),
+	0x8032CF50: main.sym("draw_rendermode_2"),
+	0x8032CF90: main.sym("draw_scene", flag={"GLOBL"}),
+	0x8032CF94: main.sym("draw_layer", flag={"GLOBL"}),
+	0x8032CF98: main.sym("draw_persp", flag={"GLOBL"}),
+	0x8032CF9C: main.sym("draw_camera", flag={"GLOBL"}),
+	0x8032CFA0: main.sym("draw_object", flag={"GLOBL"}),
+	0x8032CFA4: main.sym("draw_hand", flag={"GLOBL"}),
 	0x8032CFA8: main.sym("draw_timer", flag={"GLOBL"}),
 
 	# src/time.c
-	#0x8032DF10: main.sym("time_mode"),
-	#0x8032DF14: main.sym("time_cpu"),
-	#0x8032DF18: main.sym("time_rcp"),
+	0x8032CFB0: main.sym("time_mode"),
+	0x8032CFB4: main.sym("time_cpu"),
+	0x8032CFB8: main.sym("time_rcp"),
 
 	# src/camera.c
 	#0x8032DF20: main.sym("camera_8032DF20", flag={"GLOBL"}),
@@ -5613,13 +5637,13 @@ sym_J0_code_data = {
 	#0x8032FE94: main.sym("campath_ccm1_look", flag={"GLOBL"}),
 
 	# src/object.c
-	#0x8032FEC0: main.sym("objproc_table"),
-	#0x8032FECC: main.sym("pl_effect"),
+	0x8032EF60: main.sym("objproc_table"),
+	0x8032EF6C: main.sym("pl_effecttab"),
 
-	# src/objlib.c
-	#0x80330000: main.sym("objlib_80330000", flag={"GLOBL"}),
-	#0x80330004: main.sym("objlib_80330004", flag={"GLOBL"}),
-	#0x80330014: main.sym("objlib_80330014", flag={"GLOBL"}),
+	# src/objectlib.c
+	#0x80330000: main.sym("objectlib_80330000", flag={"GLOBL"}),
+	#0x80330004: main.sym("bittab", flag={"GLOBL"}),
+	#0x80330014: main.sym("areastagetab", flag={"GLOBL"}),
 
 	# src/object_a.c
 	#0x80330020: main.sym("object_a_80330020", flag={"GLOBL"}),
@@ -5745,148 +5769,145 @@ sym_J0_code_data = {
 	#0x80330DAC: main.sym("object_a_80330DAC", flag={"GLOBL"}),
 
 	# src/ride.c
-	#0x80330E20: main.sym("ride_80330E20"),
-	#0x80330E24: main.sym("ride_80330E24"),
-	#0x80330E34: main.sym("ride_obj"),
+	0x8032FEC0: main.sym("ride_80330E20"),
+	0x8032FEC4: main.sym("ride_80330E24"),
+	0x8032FED4: main.sym("ride_obj"),
 
 	# src/debug.c
-	#0x80330E40: main.sym("db_edit_effectinfo"),
-	#0x80330E64: main.sym("db_edit_enemyinfo"),
-	#0x80330E88: main.sym("db_button"),
-	#0x80330E8C: main.sym("db_repeat"),
-	#0x80330E90: main.sym("db_init_flag"),
-	#0x80330E94: main.sym("db_page"),
-	#0x80330E98: main.sym("db_hideinfo"),
-	#0x80330E9C: main.sym("db_edit_flag"),
-	#0x80330EA0: main.sym("db_line"),
-	#0x80330EA4: main.sym("db_info_idx"),
-	#0x80330EA8: main.sym("db_info_seq"),
+	0x8032FEE0: main.sym("db_edit_effectinfo"),
+	0x8032FF04: main.sym("db_edit_enemyinfo"),
+	0x8032FF28: main.sym("db_button"),
+	0x8032FF2C: main.sym("db_repeat"),
+	0x8032FF30: main.sym("db_init_flag"),
+	0x8032FF34: main.sym("db_page"),
+	0x8032FF38: main.sym("db_hideinfo"),
+	0x8032FF3C: main.sym("db_edit_flag"),
+	0x8032FF40: main.sym("db_line"),
+	0x8032FF44: main.sym("db_info_idx"),
+	0x8032FF48: main.sym("db_info_seq"),
 
 	# src/wipe.c
-	#0x80330EC0: main.sym("wipe_timer"),
-	#0x80330EC4: main.sym("wipe_ang"),
-	#0x80330EC8: main.sym("txt_wipe"),
+	0x8032FF60: main.sym("wipe_timer"),
+	0x8032FF64: main.sym("wipe_ang"),
+	0x8032FF68: main.sym("txt_wipe"),
 
 	# src/shadow.c
-	#0x80330EE0: main.sym("shadow_rect_table"),
+	0x8032FF80: main.sym("shadow_rect_table"),
 
-	# src/back.c
-	#0x80330F00: main.sym("back_table"),
-	#0x80330F28: main.sym("back_shade"),
+	# src/background.c
+	0x8032FFA0: main.sym("backtab"),
+	0x8032FFC8: main.sym("back_shade"),
 
 	# src/water.c
-	#0x80330F30: main.sym("water_80330F30", flag={"GLOBL"}),
-	#0x80330F34: main.sym("water_80330F34", flag={"GLOBL"}),
-	#0x80330F38: main.sym("water_80330F38", flag={"GLOBL"}),
-	#0x80330F3C: main.sym("water_80330F3C", flag={"GLOBL"}),
-	#0x80330F40: main.sym("water_80330F40", flag={"GLOBL"}),
-	#0x80330F44: main.sym("txt_water", flag={"GLOBL"}),
-	#0x80330F64: main.sym("water_table_a", flag={"GLOBL"}),
-	#0x803311A4: main.sym("water_table_b", flag={"GLOBL"}),
-	#0x8033127C: main.sym("water_table_c", flag={"GLOBL"}),
-	#0x803312E8: main.sym("water_803312E8", flag={"GLOBL"}),
+	0x8032FFD0: main.sym("water_timer"),
+	0x8032FFD4: main.sym("water_stamp"),
+	0x8032FFD8: main.sym("water_color"),
+	0x8032FFDC: main.sym("pool_entry", flag={"GLOBL"}),
+	0x8032FFE0: main.sym("pool_flag"),
+	0x8032FFE4: main.sym("txt_water"),
+	0x80330004: main.sym("fluidtab"),
+	0x80330244: main.sym("fluidtabL"),
+	0x8033031C: main.sym("fluidtabS"),
+	0x80330388: main.sym("water_leveltab"),
 
 	# src/objshape.c
-	#0x803312F0: main.sym("objshape_803312F0"),
-	#0x803312F4: main.sym("objshape_803312F4"),
-	#0x803312F8: main.sym("objshape_803312F8"),
+	0x80330390: main.sym("objshape_803312F0"),
+	0x80330394: main.sym("objshape_803312F4"),
+	0x80330398: main.sym("objshape_803312F8"),
 
 	# src/wave.c
-	#0x80331300: main.sym("wave_80331300", flag={"GLOBL"}),
-	#0x80331308: main.sym("wave_80331308", flag={"GLOBL"}),
-	#0x80331344: main.sym("wave_80331344", flag={"GLOBL"}),
-	#0x8033134C: main.sym("wave_8033134C", flag={"GLOBL"}),
-	#0x80331358: main.sym("wave_80331358", flag={"GLOBL"}),
-	#0x8033135C: main.sym("wave_8033135C", flag={"GLOBL"}),
+	0x803303A0: main.sym("wavetab0"),
+	0x803303A8: main.sym("wavetab1"),
+	0x803303E4: main.sym("wavetab2"),
+	0x803303EC: main.sym("wavetab"),
+	0x803303F8: main.sym("wave_timer"),
+	0x803303FC: main.sym("wave_stamp"),
 
 	# src/dprint.c
-	#0x80331360: main.sym("dprint_index"),
+	0x80330400: main.sym("dprint_index"),
 
 	# src/message.c
-	#0x80331370: main.sym("font_kerning"),
-	#0x80331470: main.sym("msg_state"),
-	#0x80331474: main.sym("msg_angle"),
-	#0x80331478: main.sym("msg_scale"),
-	#0x8033147C: main.sym("msg_scroll"),
-	#0x80331480: main.sym("msg_type"),
-	#0x80331484: main.sym("msg_code"),
-	#0x80331488: main.sym("msg_next"),
-	#0x8033148C: main.sym("msg_index"),
-	#0x80331490: main.sym("msg_cursor"),
-	#0x80331494: main.sym("msg_cursor_flag"),
-	#0x80331498: main.sym("cursor_status"),
-	#0x8033149C: main.sym("cursor_timer"),
-	0x80330440: main.sym("msg_answer"),
-	#0x803314A4: main.sym("str_803314A4"),
-	#0x803314B0: main.sym("str_803314B0"),
-	#0x803314B4: main.sym("str_803314B4"),
-	#0x803314B8: main.sym("str_803314B8"),
-	#0x803314BC: main.sym("str_803314BC"),
-	#0x803314C0: main.sym("str_803314C0"),
-	#0x803314CC: main.sym("msg_battle"),
-	#0x803314D8: main.sym("msg_fanfare"),
-	#0x803314E0: main.sym("msg_se7_1e"),
-	#0x803314EC: main.sym("msg_bgmstop"),
-	#0x803314F8: main.sym("menu_code"),
-	#0x803315E4: main.sym("caption_table"),
-	#0x8033160C: main.sym("caption_alpha"),
-	#0x80331610: main.sym("caption_code"),
-	#0x80331614: main.sym("caption_frame"),
-	#0x80331618: main.sym("caption_timer"),
-	#0x8033161C: main.sym("camera_cursor"),
-	#0x80331620: main.sym("pausemenu_level", flag={"GLOBL"}),
-	#0x80331624: main.sym("str_80331624"),
-	#0x8033162C: main.sym("str_8033162C"),
-	#0x80331638: main.sym("str_80331638"),
-	#0x8033163C: main.sym("str_8033163C"),
-	#0x80331640: main.sym("str_80331640"),
-	#0x80331650: main.sym("str_80331650"),
-	#0x80331660: main.sym("str_80331660"),
-	#0x80331674: main.sym("str_80331674"),
-	#0x80331684: main.sym("str_80331684"),
-	#0x80331690: main.sym("str_80331690"),
-	#0x8033169C: main.sym("str_8033169C"),
-	#0x803316B4: main.sym("str_803316B4"),
-	#0x803316BC: main.sym("str_803316BC"),
-	#0x803316C0: main.sym("str_803316C0"),
-	#0x803316C4: main.sym("str_803316C4"),
-	#0x803316C8: main.sym("savedemo_end"),
-	#0x803316CC: main.sym("savedemo_timer"),
-	#0x803316D0: main.sym("savedemo_coin"),
-	#0x803316D4: main.sym("savemenu_code", flag={"GLOBL"}),
-	#0x803316D8: main.sym("str_803316D8"),
-	#0x803316E4: main.sym("str_803316E4"),
-	#0x803316F4: main.sym("str_803316F4"),
-	#0x803316F8: main.sym("str_803316F8"),
-	#0x803316FC: main.sym("str_803316FC"),
-	#0x80331704: main.sym("str_80331704"),
-	#0x8033170C: main.sym("str_8033170C"),
-	#0x80331714: main.sym("str_80331714"),
-	#0x80331718: main.sym("str_80331718"),
-	#0x80331728: main.sym("str_80331728"),
-	#0x80331734: main.sym("str_80331734"),
+	0x80330410: main.sym("msg_state"),
+	0x80330414: main.sym("msg_angle"),
+	0x80330418: main.sym("msg_scale"),
+	0x8033041C: main.sym("msg_scroll"),
+	0x80330420: main.sym("msg_type"),
+	0x80330424: main.sym("msg_code"),
+	0x80330428: main.sym("msg_next"),
+	0x8033042C: main.sym("msg_index"),
+	0x80330430: main.sym("msg_cursor"),
+	0x80330434: main.sym("msg_cursor_flag"),
+	0x80330438: main.sym("cursor_status"),
+	0x8033043C: main.sym("cursor_timer"),
+	0x80330440: main.sym("msg_answer", flag={"GLOBL"}),
+	0x80330444: main.sym("str_803314B0"),
+	0x80330448: main.sym("str_803314B4"),
+	0x8033044C: main.sym("str_803314B8"),
+	0x80330450: main.sym("str_803314BC"),
+	0x80330454: main.sym("msg_battle"),
+	0x80330460: main.sym("msg_fanfare"),
+	0x80330468: main.sym("msg_se7_1e"),
+	0x80330474: main.sym("msg_bgmstop"),
+	0x8033047C: main.sym("menu_code"),
+	0x803304F8: main.sym("captiontab"),
+	0x80330520: main.sym("demo_alpha"),
+	0x80330524: main.sym("caption"),
+	0x80330528: main.sym("demo_frame"),
+	0x8033052C: main.sym("demo_timer"),
+	0x80330530: main.sym("camera_cursor"),
+	0x80330534: main.sym("pausemenu_level", flag={"GLOBL"}),
+	0x80330538: main.sym("str_80331624"),
+	0x8033053C: main.sym("str_8033162C"),
+	0x80330544: main.sym("str_80331638"),
+	0x80330548: main.sym("str_8033163C"),
+	0x8033054C: main.sym("str_80331640"),
+	0x80330558: main.sym("str_80331650"),
+	0x80330568: main.sym("str_80331660"),
+	0x80330574: main.sym("str_80331674"),
+	0x80330580: main.sym("str_80331684"),
+	0x80330590: main.sym("str_80331690"),
+	0x8033059C: main.sym("str_8033169C"),
+	0x803305AC: main.sym("str_803316B4"),
+	0x803305B4: main.sym("str_803316BC"),
+	0x803305B8: main.sym("str_803316C0"),
+	0x803305BC: main.sym("str_803316C4"),
+	0x803305C0: main.sym("savedemo_end"),
+	0x803305C4: main.sym("savedemo_timer"),
+	0x803305C8: main.sym("savedemo_coin"),
+	0x803305CC: main.sym("savemenu_code", flag={"GLOBL"}),
+	0x803305D0: main.sym("str_803316D8"),
+	0x803305D8: main.sym("str_803316E4"),
+	0x803305E8: main.sym("str_803316F4"),
+	0x803305EC: main.sym("str_803316F8"),
+	0x803305F0: main.sym("str_803316FC"),
+	0x803305F4: main.sym("str_80331704"),
+	0x803305F8: main.sym("str_8033170C"),
+	0x80330600: main.sym("str_80331714"),
+	0x80330608: main.sym("str_80331718"),
+	0x80330618: main.sym("str_80331728"),
+	0x80330624: main.sym("str_80331734"),
 
 	# src/weather.c
-	#0x80331750: main.sym("weather_80331750", flag={"GLOBL"}),
-	#0x80331758: main.sym("vtx_weather_snow", flag={"GLOBL"}),
-	#0x80331788: main.sym("weather_80331788", flag={"GLOBL"}),
-	#0x80331790: main.sym("weather_80331790", flag={"GLOBL"}),
-	#0x80331798: main.sym("weather_80331798", flag={"GLOBL"}),
+	0x80330640: main.sym("weather_code", flag={"GLOBL"}),
+	0x80330648: main.sym("snow_template"),
+	0x80330678: main.sym("snow_v0"),
+	0x80330680: main.sym("snow_v1"),
+	0x80330688: main.sym("snow_v2"),
 
 	# src/lava.c
-	#0x803317A0: main.sym("lava_803317A0", flag={"GLOBL"}),
-	#0x803317A8: main.sym("vtx_weather_lava", flag={"GLOBL"}),
+	0x80330690: main.sym("lava_803317A0"),
+	0x80330698: main.sym("lava_template"),
 
 	# src/tag.c
-	#0x803317E0: main.sym("tag_obj_table"),
-	#0x80332350: main.sym("map_obj_table"),
+	0x803306D0: main.sym("tagobjtab"),
+	0x80331240: main.sym("mapobjtab"),
 
 	# src/hud.c
-	#0x803325F0: main.sym("meter"),
-	#0x803325FC: main.sym("hud_timer"),
-	#0x80332600: main.sym("hud_80332600"),
-	#0x80332604: main.sym("hud_80332604"),
-	#0x80332608: main.sym("hud_camera"),
+	0x803314E0: main.sym("meter"),
+	0x803314EC: main.sym("hud_timer"),
+	0x803314F0: main.sym("hud_80332600"),
+	0x803314F4: main.sym("hud_80332604"),
+	0x803314F8: main.sym("hud_camera"),
 
 	# src/object_b.c
 	#0x80332610: main.sym("object_b_80332610", flag={"GLOBL"}),
@@ -6216,7 +6237,7 @@ sym_J0_code_data = {
 	0x80335298: main.sym("player_80336438"),
 	0x803352B8: main.sym("player_80336458"),
 	0x8033534C: main.sym("player_803364EC"),
-	0x8033534C: main.sym("player_8033650C"),
+	0x8033536C: main.sym("player_8033650C"),
 	0x80335400: main.sym("player_803365A0"),
 	0x80335404: main.sym("player_803365A4"),
 	0x80335408: main.sym("player_803365A8"),
@@ -6249,132 +6270,132 @@ sym_J0_code_data = {
 	0x80335520: main.sym("physics_803366C0"),
 
 	# src/pldemo.c
-	0x80335530: main.sym("pl_demo_803366D0"),
-	#0x803366D4: main.sym("pl_demo_803366D4"),
-	#0x803366E8: main.sym("pl_demo_803366E8"),
-	#0x803366EC: main.sym("pl_demo_803366EC"),
-	#0x80336708: main.sym("pl_demo_80336708"),
-	#0x8033670C: main.sym("pl_demo_8033670C"),
-	#0x80336710: main.sym("pl_demo_80336710"),
-	#0x80336714: main.sym("pl_demo_80336714"),
-	#0x80336718: main.sym("pl_demo_80336718"),
-	#0x8033671C: main.sym("pl_demo_8033671C"),
-	#0x80336720: main.sym("pl_demo_80336720"),
-	#0x80336754: main.sym("pl_demo_80336754"),
-	#0x80336770: main.sym("pl_demo_80336770"),
-	#0x80336784: main.sym("pl_demo_80336784"),
-	#0x80336848: main.sym("pl_demo_80336848"),
+	0x80335530: main.sym("pldemo_803366D0"),
+	#0x803366D4: main.sym("pldemo_803366D4"),
+	#0x803366E8: main.sym("pldemo_803366E8"),
+	#0x803366EC: main.sym("pldemo_803366EC"),
+	#0x80336708: main.sym("pldemo_80336708"),
+	#0x8033670C: main.sym("pldemo_8033670C"),
+	#0x80336710: main.sym("pldemo_80336710"),
+	#0x80336714: main.sym("pldemo_80336714"),
+	#0x80336718: main.sym("pldemo_80336718"),
+	#0x8033671C: main.sym("pldemo_8033671C"),
+	#0x80336720: main.sym("pldemo_80336720"),
+	#0x80336754: main.sym("pldemo_80336754"),
+	#0x80336770: main.sym("pldemo_80336770"),
+	#0x80336784: main.sym("pldemo_80336784"),
+	#0x80336848: main.sym("pldemo_80336848"),
 
-	# src/plhang.c
-	#0x80336940: main.sym("pl_hang_80336940"),
-	#0x80336944: main.sym("pl_hang_80336944"),
-	#0x80336948: main.sym("pl_hang_80336948"),
-	#0x8033694C: main.sym("pl_hang_8033694C"),
-	#0x80336950: main.sym("pl_hang_80336950"),
+	# src/plspec.c
+	#0x80336940: main.sym("plspec_80336940"),
+	#0x80336944: main.sym("plspec_80336944"),
+	#0x80336948: main.sym("plspec_80336948"),
+	#0x8033694C: main.sym("plspec_8033694C"),
+	#0x80336950: main.sym("plspec_80336950"),
 
 	# src/plwait.c
-	#0x80336970: main.sym("pl_wait_80336970"),
-	#0x80336974: main.sym("pl_wait_80336974"),
-	#0x80336978: main.sym("pl_wait_80336978"),
-	#0x803369A4: main.sym("pl_wait_803369A4"),
-	#0x803369B8: main.sym("pl_wait_803369B8"),
-	#0x80336A18: main.sym("pl_wait_80336A18"),
+	#0x80336970: main.sym("plwait_80336970"),
+	#0x80336974: main.sym("plwait_80336974"),
+	#0x80336978: main.sym("plwait_80336978"),
+	#0x803369A4: main.sym("plwait_803369A4"),
+	#0x803369B8: main.sym("plwait_803369B8"),
+	#0x80336A18: main.sym("plwait_80336A18"),
 
 	# src/plmove.c
-	#0x80336A80: main.sym("pl_move_80336A80"),
-	#0x80336A84: main.sym("pl_move_80336A84"),
-	#0x80336A88: main.sym("pl_move_80336A88"),
-	#0x80336A8C: main.sym("pl_move_80336A8C"),
-	#0x80336A90: main.sym("pl_move_80336A90"),
-	#0x80336A94: main.sym("pl_move_80336A94"),
-	#0x80336A98: main.sym("pl_move_80336A98"),
-	#0x80336A9C: main.sym("pl_move_80336A9C"),
-	#0x80336AA0: main.sym("pl_move_80336AA0"),
-	#0x80336AA4: main.sym("pl_move_80336AA4"),
-	#0x80336AA8: main.sym("pl_move_80336AA8"),
-	#0x80336AAC: main.sym("pl_move_80336AAC"),
-	#0x80336AB0: main.sym("pl_move_80336AB0"),
-	#0x80336AB4: main.sym("pl_move_80336AB4"),
-	#0x80336AB8: main.sym("pl_move_80336AB8"),
-	#0x80336ABC: main.sym("pl_move_80336ABC"),
-	#0x80336AC0: main.sym("pl_move_80336AC0"),
-	#0x80336AC4: main.sym("pl_move_80336AC4"),
-	#0x80336AC8: main.sym("pl_move_80336AC8"),
-	#0x80336ACC: main.sym("pl_move_80336ACC"),
-	#0x80336AD0: main.sym("pl_move_80336AD0"),
-	#0x80336AD4: main.sym("pl_move_80336AD4"),
-	#0x80336AD8: main.sym("pl_move_80336AD8"),
-	#0x80336ADC: main.sym("pl_move_80336ADC"),
-	#0x80336AE0: main.sym("pl_move_80336AE0"),
-	#0x80336AE4: main.sym("pl_move_80336AE4"),
-	#0x80336AE8: main.sym("pl_move_80336AE8"),
-	#0x80336AEC: main.sym("pl_move_80336AEC"),
-	#0x80336AF0: main.sym("pl_move_80336AF0"),
-	#0x80336AF8: main.sym("pl_move_80336AF8"),
-	#0x80336B00: main.sym("pl_move_80336B00"),
-	#0x80336B04: main.sym("pl_move_80336B04"),
-	#0x80336B08: main.sym("pl_move_80336B08"),
-	#0x80336B0C: main.sym("pl_move_80336B0C"),
-	#0x80336B38: main.sym("pl_move_80336B38"),
-	#0x80336BB4: main.sym("pl_move_80336BB4"),
-	#0x80336BCC: main.sym("pl_move_80336BCC"),
+	#0x80336A80: main.sym("plmove_80336A80"),
+	#0x80336A84: main.sym("plmove_80336A84"),
+	#0x80336A88: main.sym("plmove_80336A88"),
+	#0x80336A8C: main.sym("plmove_80336A8C"),
+	#0x80336A90: main.sym("plmove_80336A90"),
+	#0x80336A94: main.sym("plmove_80336A94"),
+	#0x80336A98: main.sym("plmove_80336A98"),
+	#0x80336A9C: main.sym("plmove_80336A9C"),
+	#0x80336AA0: main.sym("plmove_80336AA0"),
+	#0x80336AA4: main.sym("plmove_80336AA4"),
+	#0x80336AA8: main.sym("plmove_80336AA8"),
+	#0x80336AAC: main.sym("plmove_80336AAC"),
+	#0x80336AB0: main.sym("plmove_80336AB0"),
+	#0x80336AB4: main.sym("plmove_80336AB4"),
+	#0x80336AB8: main.sym("plmove_80336AB8"),
+	#0x80336ABC: main.sym("plmove_80336ABC"),
+	#0x80336AC0: main.sym("plmove_80336AC0"),
+	#0x80336AC4: main.sym("plmove_80336AC4"),
+	#0x80336AC8: main.sym("plmove_80336AC8"),
+	#0x80336ACC: main.sym("plmove_80336ACC"),
+	#0x80336AD0: main.sym("plmove_80336AD0"),
+	#0x80336AD4: main.sym("plmove_80336AD4"),
+	#0x80336AD8: main.sym("plmove_80336AD8"),
+	#0x80336ADC: main.sym("plmove_80336ADC"),
+	#0x80336AE0: main.sym("plmove_80336AE0"),
+	#0x80336AE4: main.sym("plmove_80336AE4"),
+	#0x80336AE8: main.sym("plmove_80336AE8"),
+	#0x80336AEC: main.sym("plmove_80336AEC"),
+	#0x80336AF0: main.sym("plmove_80336AF0"),
+	#0x80336AF8: main.sym("plmove_80336AF8"),
+	#0x80336B00: main.sym("plmove_80336B00"),
+	#0x80336B04: main.sym("plmove_80336B04"),
+	#0x80336B08: main.sym("plmove_80336B08"),
+	#0x80336B0C: main.sym("plmove_80336B0C"),
+	#0x80336B38: main.sym("plmove_80336B38"),
+	#0x80336BB4: main.sym("plmove_80336BB4"),
+	#0x80336BCC: main.sym("plmove_80336BCC"),
 
 	# src/pljump.c
-	#0x80336C00: main.sym("pl_jump_80336C00"),
-	#0x80336C04: main.sym("pl_jump_80336C04"),
-	#0x80336C08: main.sym("pl_jump_80336C08"),
-	#0x80336C0C: main.sym("pl_jump_80336C0C"),
-	#0x80336C10: main.sym("pl_jump_80336C10"),
-	#0x80336C14: main.sym("pl_jump_80336C14"),
-	#0x80336C18: main.sym("pl_jump_80336C18"),
-	#0x80336C1C: main.sym("pl_jump_80336C1C"),
-	#0x80336C38: main.sym("pl_jump_80336C38"),
-	#0x80336C3C: main.sym("pl_jump_80336C3C"),
-	#0x80336C40: main.sym("pl_jump_80336C40"),
-	#0x80336C44: main.sym("pl_jump_80336C44"),
-	#0x80336C48: main.sym("pl_jump_80336C48"),
-	#0x80336C4C: main.sym("pl_jump_80336C4C"),
-	#0x80336C50: main.sym("pl_jump_80336C50"),
-	#0x80336C54: main.sym("pl_jump_80336C54"),
-	#0x80336C58: main.sym("pl_jump_80336C58"),
-	#0x80336C60: main.sym("pl_jump_80336C60"),
-	#0x80336D20: main.sym("pl_jump_80336D20"),
-	#0x80336D5C: main.sym("pl_jump_80336D5C"),
+	#0x80336C00: main.sym("pljump_80336C00"),
+	#0x80336C04: main.sym("pljump_80336C04"),
+	#0x80336C08: main.sym("pljump_80336C08"),
+	#0x80336C0C: main.sym("pljump_80336C0C"),
+	#0x80336C10: main.sym("pljump_80336C10"),
+	#0x80336C14: main.sym("pljump_80336C14"),
+	#0x80336C18: main.sym("pljump_80336C18"),
+	#0x80336C1C: main.sym("pljump_80336C1C"),
+	#0x80336C38: main.sym("pljump_80336C38"),
+	#0x80336C3C: main.sym("pljump_80336C3C"),
+	#0x80336C40: main.sym("pljump_80336C40"),
+	#0x80336C44: main.sym("pljump_80336C44"),
+	#0x80336C48: main.sym("pljump_80336C48"),
+	#0x80336C4C: main.sym("pljump_80336C4C"),
+	#0x80336C50: main.sym("pljump_80336C50"),
+	#0x80336C54: main.sym("pljump_80336C54"),
+	#0x80336C58: main.sym("pljump_80336C58"),
+	#0x80336C60: main.sym("pljump_80336C60"),
+	#0x80336D20: main.sym("pljump_80336D20"),
+	#0x80336D5C: main.sym("pljump_80336D5C"),
 
 	# src/plswim.c
-	#0x80336E10: main.sym("pl_swim_80336E10"),
-	#0x80336E14: main.sym("pl_swim_80336E14"),
-	#0x80336E2C: main.sym("pl_swim_80336E2C"),
-	#0x80336E44: main.sym("pl_swim_80336E44"),
-	#0x80336E48: main.sym("pl_swim_80336E48"),
-	#0x80336E4C: main.sym("pl_swim_80336E4C"),
-	#0x80336E50: main.sym("pl_swim_80336E50"),
-	#0x80336E54: main.sym("pl_swim_80336E54"),
-	#0x80336E58: main.sym("pl_swim_80336E58"),
-	#0x80336E5C: main.sym("pl_swim_80336E5C"),
-	#0x80336EA4: main.sym("pl_swim_80336EA4"),
+	#0x80336E10: main.sym("plswim_80336E10"),
+	#0x80336E14: main.sym("plswim_80336E14"),
+	#0x80336E2C: main.sym("plswim_80336E2C"),
+	#0x80336E44: main.sym("plswim_80336E44"),
+	#0x80336E48: main.sym("plswim_80336E48"),
+	#0x80336E4C: main.sym("plswim_80336E4C"),
+	#0x80336E50: main.sym("plswim_80336E50"),
+	#0x80336E54: main.sym("plswim_80336E54"),
+	#0x80336E58: main.sym("plswim_80336E58"),
+	#0x80336E5C: main.sym("plswim_80336E5C"),
+	#0x80336EA4: main.sym("plswim_80336EA4"),
 
-	# src/plhold.c
-	#0x80336ED0: main.sym("pl_hold_80336ED0"),
-	#0x80336EF8: main.sym("pl_hold_80336EF8"),
+	# src/pltake.c
+	#0x80336ED0: main.sym("pltake_80336ED0"),
+	#0x80336EF8: main.sym("pltake_80336EF8"),
 
 	# src/callback.c
-	#0x80336F40: main.sym("callback_80336F40"),
-	#0x80336F54: main.sym("callback_80336F54"),
-	#0x80336F58: main.sym("callback_80336F58"),
-	#0x80336F60: main.sym("callback_80336F60"),
-	#0x80336F68: main.sym("callback_80336F68"),
+	0x80335DA0: main.sym("callback_80336F40"),
+	0x80335DB4: main.sym("callback_80336F54"),
+	0x80335DB8: main.sym("callback_80336F58"),
+	0x80335DC0: main.sym("callback_80336F60"),
+	0x80335DC8: main.sym("callback_80336F68"),
 
 	# src/scene.c
-	#0x80336F70: main.sym("str_scene_no_controller"),
-	#0x80336F80: main.sym("str_scene_press"),
-	#0x80336F88: main.sym("str_scene_start"),
+	0x80335DD0: main.sym("str_scene_no_controller"),
+	0x80335DE0: main.sym("str_scene_press"),
+	0x80335DE8: main.sym("str_scene_start"),
 
 	# src/draw.c
-	#0x80336F90: main.sym("str_draw_mem"),
-	#0x80336F98: main.sym("draw_80336F98"),
-	#0x80336F9C: main.sym("draw_80336F9C"),
-	#0x8033704C: main.sym("draw_8033704C"),
+	0x80335DF0: main.sym("str_draw_mem"),
+	0x80335DF8: main.sym("draw_80336F98"),
+	0x80335DFC: main.sym("draw_80336F9C"),
+	0x80335EAC: main.sym("draw_8033704C"),
 
 	# src/camera.c
 	#0x803370F0: main.sym("camera_803370F0"),
@@ -6533,35 +6554,35 @@ sym_J0_code_data = {
 	#0x80337780: main.sym("camera_80337780"),
 
 	# src/object.c
-	#0x803377A0: main.sym("object_803377A0"),
-	#0x803377A8: main.sym("object_803377A8"),
+	0x80336600: main.sym("object_803377A0"),
+	0x80336608: main.sym("object_803377A8"),
 
-	# src/objlib.c
-	#0x803377B0: main.sym("str_objlib_areainfo"),
-	#0x803377BC: main.sym("objlib_803377BC"),
-	#0x803377C0: main.sym("objlib_803377C0"),
-	#0x803377C4: main.sym("objlib_803377C4"),
-	#0x803377C8: main.sym("objlib_803377C8"),
-	#0x803377CC: main.sym("objlib_803377CC"),
-	#0x803377D0: main.sym("objlib_803377D0"),
-	#0x803377D8: main.sym("objlib_803377D8"),
-	#0x803377E0: main.sym("objlib_803377E0"),
-	#0x803377E8: main.sym("objlib_803377E8"),
-	#0x803377F0: main.sym("objlib_803377F0"),
-	#0x803377F4: main.sym("objlib_803377F4"),
-	#0x803377F8: main.sym("objlib_803377F8"),
-	#0x80337800: main.sym("objlib_80337800"),
-	#0x80337808: main.sym("objlib_80337808"),
-	#0x80337810: main.sym("objlib_80337810"),
-	#0x80337814: main.sym("objlib_80337814"),
-	#0x80337818: main.sym("objlib_80337818"),
-	#0x8033781C: main.sym("objlib_8033781C"),
-	#0x80337820: main.sym("objlib_80337820"),
-	#0x80337824: main.sym("objlib_80337824"),
-	#0x80337828: main.sym("objlib_80337828"),
-	#0x8033782C: main.sym("objlib_8033782C"),
-	#0x80337830: main.sym("objlib_80337830"),
-	#0x80337834: main.sym("objlib_80337834"),
+	# src/objectlib.c
+	#0x803377B0: main.sym("str_objectlib_areainfo"),
+	#0x803377BC: main.sym("objectlib_803377BC"),
+	#0x803377C0: main.sym("objectlib_803377C0"),
+	#0x803377C4: main.sym("objectlib_803377C4"),
+	#0x803377C8: main.sym("objectlib_803377C8"),
+	#0x803377CC: main.sym("objectlib_803377CC"),
+	#0x803377D0: main.sym("objectlib_803377D0"),
+	#0x803377D8: main.sym("objectlib_803377D8"),
+	#0x803377E0: main.sym("objectlib_803377E0"),
+	#0x803377E8: main.sym("objectlib_803377E8"),
+	#0x803377F0: main.sym("objectlib_803377F0"),
+	#0x803377F4: main.sym("objectlib_803377F4"),
+	#0x803377F8: main.sym("objectlib_803377F8"),
+	#0x80337800: main.sym("objectlib_80337800"),
+	#0x80337808: main.sym("objectlib_80337808"),
+	#0x80337810: main.sym("objectlib_80337810"),
+	#0x80337814: main.sym("objectlib_80337814"),
+	#0x80337818: main.sym("objectlib_80337818"),
+	#0x8033781C: main.sym("objectlib_8033781C"),
+	#0x80337820: main.sym("objectlib_80337820"),
+	#0x80337824: main.sym("objectlib_80337824"),
+	#0x80337828: main.sym("objectlib_80337828"),
+	#0x8033782C: main.sym("objectlib_8033782C"),
+	#0x80337830: main.sym("objectlib_80337830"),
+	#0x80337834: main.sym("objectlib_80337834"),
 
 	# src/object_a.c
 	#0x80337850: main.sym("str_object_a_0_fmt"),
@@ -6750,18 +6771,18 @@ sym_J0_code_data = {
 	#0x80337DEC: main.sym("object_a_80337DEC"),
 
 	# src/hitcheck.c
-	#0x80337DF0: main.sym("str_hitcheck_on"),
+	0x80336C50: main.sym("str_hitcheck_on"),
 
 	# src/objlist.c
-	#0x80337E00: main.sym("objlist_80337E00"),
-	#0x80337E04: main.sym("objlist_80337E04"),
-	#0x80337E08: main.sym("objlist_80337E08"),
-	#0x80337E0C: main.sym("objlist_80337E0C"),
+	0x80336C60: main.sym("objlist_80337E00"),
+	0x80336C64: main.sym("objlist_80337E04"),
+	0x80336C68: main.sym("objlist_80337E08"),
+	0x80336C6C: main.sym("objlist_80337E0C"),
 
 	# src/objsound.c
-	#0x80337E10: main.sym("objsound_80337E10"),
-	#0x80337E14: main.sym("objsound_80337E14"),
-	#0x80337E18: main.sym("objsound_80337E18"),
+	0x80336C70: main.sym("objsound_80337E10"),
+	0x80336C74: main.sym("objsound_80337E14"),
+	0x80336C78: main.sym("objsound_80337E18"),
 
 	# src/debug.c
 	#0x80337E20: main.sym("str_debug_a0"),
@@ -6782,126 +6803,126 @@ sym_J0_code_data = {
 	#0x80337E94: main.sym("str_debug_b6"),
 	#0x80337E9C: main.sym("str_debug_b7"),
 	#0x80337EA4: main.sym("str_debug_b"),
-	#0x80337EA8: main.sym("str_debug_dprint_over"),
-	#0x80337EB4: main.sym("str_debug_mapinfo"),
-	#0x80337EBC: main.sym("str_debug_area"),
-	#0x80337EC4: main.sym("str_debug_wx"),
-	#0x80337ECC: main.sym("str_debug_wy"),
-	#0x80337ED4: main.sym("str_debug_wz"),
-	#0x80337EDC: main.sym("str_debug_bgy"),
-	#0x80337EE4: main.sym("str_debug_angy"),
-	#0x80337EEC: main.sym("str_debug_bgcode"),
-	#0x80337EF8: main.sym("str_debug_bgstatus"),
-	#0x80337F04: main.sym("str_debug_bgarea"),
-	#0x80337F10: main.sym("str_debug_water"),
-	#0x80337F1C: main.sym("str_debug_checkinfo"),
-	#0x80337F28: main.sym("str_debug_stageinfo"),
-	#0x80337F34: main.sym("str_debug_stage_param"),
-	#0x80337F44: main.sym("str_debug_effectinfo"),
-	#0x80337F50: main.sym("str_debug_enemyinfo"),
-	#0x80337F5C: main.sym("str_debug_obj"),
-	#0x80337F64: main.sym("str_debug_nullbg"),
-	#0x80337F70: main.sym("str_debug_wall"),
-	#0x80337F7C: main.sym("str_debug_bound"),
-	#0x80337F88: main.sym("str_debug_touch"),
-	#0x80337F94: main.sym("str_debug_takeoff"),
-	#0x80337FA0: main.sym("str_debug_dive"),
-	#0x80337FAC: main.sym("str_debug_s_water"),
-	#0x80337FB8: main.sym("str_debug_u_water"),
-	#0x80337FC4: main.sym("str_debug_b_water"),
-	#0x80337FD0: main.sym("str_debug_sky"),
-	#0x80337FDC: main.sym("str_debug_out_scope"),
-	#0x80337FF0: main.sym("debug_80337FF0"),
+	0x80336D08: main.sym("str_debug_dprint_over"),
+	0x80336D14: main.sym("str_debug_mapinfo"),
+	0x80336D1C: main.sym("str_debug_area"),
+	0x80336D24: main.sym("str_debug_wx"),
+	0x80336D2C: main.sym("str_debug_wy"),
+	0x80336D34: main.sym("str_debug_wz"),
+	0x80336D3C: main.sym("str_debug_bgy"),
+	0x80336D44: main.sym("str_debug_angy"),
+	0x80336D4C: main.sym("str_debug_bgcode"),
+	0x80336D58: main.sym("str_debug_bgstatus"),
+	0x80336D64: main.sym("str_debug_bgarea"),
+	0x80336D70: main.sym("str_debug_water"),
+	0x80336D7C: main.sym("str_DebugCheckinfo"),
+	0x80336D88: main.sym("str_debug_stageinfo"),
+	0x80336D94: main.sym("str_debug_stage_param"),
+	0x80336DA4: main.sym("str_debug_effectinfo"),
+	0x80336DB0: main.sym("str_debug_enemyinfo"),
+	0x80336DBC: main.sym("str_debug_obj"),
+	0x80336DC4: main.sym("str_debug_nullbg"),
+	0x80336DD0: main.sym("str_debug_wall"),
+	0x80336DDC: main.sym("str_debug_bound"),
+	0x80336DE8: main.sym("str_debug_touch"),
+	0x80336DF4: main.sym("str_debug_takeoff"),
+	0x80336E00: main.sym("str_debug_dive"),
+	0x80336E0C: main.sym("str_debug_s_water"),
+	0x80336E18: main.sym("str_debug_u_water"),
+	0x80336E24: main.sym("str_debug_b_water"),
+	0x80336E30: main.sym("str_debug_sky"),
+	0x80336E3C: main.sym("str_debug_out_scope"),
+	0x80336E50: main.sym("debug_80337FF0"),
 
 	# src/wipe.c
-	#0x80338000: main.sym("wipe_80338000"),
-	#0x80338008: main.sym("wipe_80338008"),
-	#0x80338010: main.sym("wipe_80338010"),
+	0x80336E60: main.sym("wipe_80338000"),
+	0x80336E68: main.sym("wipe_80338008"),
+	0x80336E70: main.sym("wipe_80338010"),
 
 	# src/shadow.c
-	#0x80338060: main.sym("shadow_80338060"),
-	#0x80338068: main.sym("shadow_80338068"),
-	#0x80338070: main.sym("shadow_80338070"),
-	#0x80338078: main.sym("shadow_80338078"),
-	#0x80338080: main.sym("shadow_80338080"),
-	#0x80338088: main.sym("shadow_80338088"),
-	#0x80338090: main.sym("shadow_80338090"),
-	#0x80338098: main.sym("shadow_80338098"),
-	#0x803380A0: main.sym("shadow_803380A0"),
-	#0x803380A8: main.sym("shadow_803380A8"),
-	#0x803380B0: main.sym("shadow_803380B0"),
-	#0x803380B8: main.sym("shadow_803380B8"),
-	#0x803380C0: main.sym("shadow_803380C0"),
-	#0x803380C8: main.sym("shadow_803380C8"),
-	#0x803380D0: main.sym("shadow_803380D0"),
-	#0x803380D8: main.sym("shadow_803380D8"),
-	#0x803380E0: main.sym("shadow_803380E0"),
-	#0x803380E8: main.sym("shadow_803380E8"),
-	#0x803380F0: main.sym("shadow_803380F0"),
-	#0x803380F8: main.sym("shadow_803380F8"),
-	#0x80338100: main.sym("shadow_80338100"),
-	#0x80338108: main.sym("shadow_80338108"),
+	0x80336EC0: main.sym("shadow_80338060"),
+	0x80336EC8: main.sym("shadow_80338068"),
+	0x80336ED0: main.sym("shadow_80338070"),
+	0x80336ED8: main.sym("shadow_80338078"),
+	0x80336EE0: main.sym("shadow_80338080"),
+	0x80336EE8: main.sym("shadow_80338088"),
+	0x80336EF0: main.sym("shadow_80338090"),
+	0x80336EF8: main.sym("shadow_80338098"),
+	0x80336F00: main.sym("shadow_803380A0"),
+	0x80336F08: main.sym("shadow_803380A8"),
+	0x80336F10: main.sym("shadow_803380B0"),
+	0x80336F18: main.sym("shadow_803380B8"),
+	0x80336F20: main.sym("shadow_803380C0"),
+	0x80336F28: main.sym("shadow_803380C8"),
+	0x80336F30: main.sym("shadow_803380D0"),
+	0x80336F38: main.sym("shadow_803380D8"),
+	0x80336F40: main.sym("shadow_803380E0"),
+	0x80336F48: main.sym("shadow_803380E8"),
+	0x80336F50: main.sym("shadow_803380F0"),
+	0x80336F58: main.sym("shadow_803380F8"),
+	0x80336F60: main.sym("shadow_80338100"),
+	0x80336F68: main.sym("shadow_80338108"),
 
-	# src/back.c
-	#0x80338140: main.sym("back_80338140"),
-	#0x80338148: main.sym("back_80338148"),
-	#0x80338150: main.sym("back_80338150"),
-	#0x80338158: main.sym("back_80338158"),
+	# src/background.c
+	0x80336FA0: main.sym("background_80338140"),
+	0x80336FA8: main.sym("background_80338148"),
+	0x80336FB0: main.sym("background_80338150"),
+	0x80336FB8: main.sym("background_80338158"),
 
 	# src/water.c
-	#0x80338160: main.sym("water_80338160"),
+	0x80336FC0: main.sym("water_80338160"),
 
 	# src/wave.c
-	#0x80338170: main.sym("wave_80338170"),
-	#0x80338178: main.sym("wave_80338178"),
-	#0x80338180: main.sym("wave_80338180"),
-	#0x80338188: main.sym("wave_80338188"),
-	#0x80338190: main.sym("wave_80338190"),
+	0x80336FD0: main.sym("wave_80338170"),
+	0x80336FD8: main.sym("wave_80338178"),
+	0x80336FE0: main.sym("wave_80338180"),
+	0x80336FE8: main.sym("wave_80338188"),
+	0x80336FF0: main.sym("wave_80338190"),
 
 	# src/message.c
-	#0x803381A0: main.sym("message_803381A0"),
-	#0x803381A8: main.sym("message_803381A8"),
-	#0x803381B0: main.sym("message_803381B0"),
+	0x80337000: main.sym("message_803381A0"),
+	0x80337008: main.sym("message_803381A8"),
+	0x80337010: main.sym("message_803381B0"),
 	0x80337018: main.sym("message_803381B8"),
 
 	# src/weather.c
-	#0x80338280: main.sym("weather_80338280"),
-	#0x80338288: main.sym("weather_80338288"),
-	#0x80338290: main.sym("weather_80338290"),
-	#0x80338298: main.sym("weather_80338298"),
-	#0x803382A0: main.sym("weather_803382A0"),
-	#0x803382A8: main.sym("weather_803382A8"),
-	#0x803382B0: main.sym("weather_803382B0"),
+	0x803370A0: main.sym("weather_80338280"),
+	0x803370A8: main.sym("weather_80338288"),
+	0x803370B0: main.sym("weather_80338290"),
+	0x803370B8: main.sym("weather_80338298"),
+	0x803370C0: main.sym("weather_803382A0"),
+	0x803370C8: main.sym("weather_803382A8"),
+	0x803370D0: main.sym("weather_803382B0"),
 
 	# src/lava.c
-	#0x803382C0: main.sym("lava_803382C0"),
-	#0x803382C4: main.sym("lava_803382C4"),
-	#0x803382C8: main.sym("lava_803382C8"),
-	#0x803382CC: main.sym("lava_803382CC"),
-	#0x803382D0: main.sym("lava_803382D0"),
-	#0x803382D4: main.sym("lava_803382D4"),
+	0x803370E0: main.sym("lava_803382C0"),
+	0x803370E4: main.sym("lava_803382C4"),
+	0x803370E8: main.sym("lava_803382C8"),
+	0x803370EC: main.sym("lava_803382CC"),
+	0x803370F0: main.sym("lava_803382D0"),
+	0x803370F4: main.sym("lava_803382D4"),
 
 	# src/tag.c
-	#0x80338310: main.sym("tag_80338310"),
-	#0x80338368: main.sym("tag_80338368"),
+	0x80337130: main.sym("tag_80338310"),
+	0x80337188: main.sym("tag_80338368"),
 
 	# src/hud.c
-	#0x80338380: main.sym("str_hud_life_icon"),
-	#0x80338384: main.sym("str_hud_life_x"),
-	#0x80338388: main.sym("str_hud_life_fmt"),
-	#0x8033838C: main.sym("str_hud_coin_icon"),
-	#0x80338390: main.sym("str_hud_coin_x"),
-	#0x80338394: main.sym("str_hud_coin_fmt"),
-	#0x80338398: main.sym("str_hud_star_icon"),
-	#0x8033839C: main.sym("str_hud_star_x"),
-	#0x803383A0: main.sym("str_hud_star_fmt"),
-	#0x803383A4: main.sym("str_hud_key"),
-	#0x803383A8: main.sym("str_hud_time_text"),
-	#0x803383B0: main.sym("str_hud_time_min"),
-	#0x803383B4: main.sym("str_hud_time_sec"),
-	#0x803383BC: main.sym("str_hud_time_frc"),
-	#0x803383C0: main.sym("hud_803383C0"),
-	#0x803383C8: main.sym("hud_803383C8"),
+	0x803371A0: main.sym("str_hud_life_icon"),
+	0x803371A4: main.sym("str_hud_life_x"),
+	0x803371A8: main.sym("str_hud_life_fmt"),
+	0x803371AC: main.sym("str_hud_coin_icon"),
+	0x803371B0: main.sym("str_hud_coin_x"),
+	0x803371B4: main.sym("str_hud_coin_fmt"),
+	0x803371B8: main.sym("str_hud_star_icon"),
+	0x803371BC: main.sym("str_hud_star_x"),
+	0x803371C0: main.sym("str_hud_star_fmt"),
+	0x803371C4: main.sym("str_hud_key"),
+	0x803371C8: main.sym("str_hud_time_text"),
+	0x803371D0: main.sym("str_hud_time_min"),
+	0x803371D4: main.sym("str_hud_time_sec"),
+	0x803371DC: main.sym("str_hud_time_frc"),
+	0x803371E0: main.sym("hud_803383C0"),
+	0x803371E8: main.sym("hud_803383C8"),
 
 	# src/object_b.c
 	#0x803383D0: main.sym("object_b_803383D0"),
@@ -7447,32 +7468,32 @@ sym_J0_code_data = {
 	0x80339EFE: main.sym("first_msg", flag={"GLOBL"}),
 
 	# src/collision.c
-	0x80339F00: main.sym("collision_8033B270", flag={"GLOBL"}),
-	0x80339F02: main.sym("collision_8033B272", flag={"GLOBL"}),
+	0x80339F00: main.sym("hit_enemy"),
+	0x80339F02: main.sym("invincible"),
 
 	# src/player.c
-	0x80339F10: main.sym("player_8033B280", flag={"GLOBL"}),
+	0x80339F10: main.sym("player_8033B280"),
 
 	# src/physics.c
 	0x80339F20: main.sym("physics_8033B290", flag={"GLOBL"}),
 
 	# src/pldemo.c
-	0x80339F30: main.sym("pl_demo_8033B2A0", flag={"GLOBL"}),
-	0x80339F34: main.sym("pl_demo_8033B2A4", flag={"GLOBL"}),
-	0x80339F38: main.sym("pl_demo_8033B2A8", flag={"GLOBL"}),
-	0x80339F3C: main.sym("pl_demo_8033B2AC", flag={"GLOBL"}),
-	0x80339F40: main.sym("pl_demo_8033B2B0", flag={"GLOBL"}),
-	0x80339F44: main.sym("pl_demo_8033B2B4", flag={"GLOBL"}),
-	0x80339F48: main.sym("pl_demo_8033B2B8", flag={"GLOBL"}),
-	0x80339F4C: main.sym("pl_demo_8033B2BC", flag={"GLOBL"}),
+	0x80339F30: main.sym("pldemo_8033B2A0", flag={"GLOBL"}),
+	0x80339F34: main.sym("pldemo_8033B2A4", flag={"GLOBL"}),
+	0x80339F38: main.sym("pldemo_8033B2A8", flag={"GLOBL"}),
+	0x80339F3C: main.sym("pldemo_8033B2AC", flag={"GLOBL"}),
+	0x80339F40: main.sym("pldemo_8033B2B0", flag={"GLOBL"}),
+	0x80339F44: main.sym("pldemo_8033B2B4", flag={"GLOBL"}),
+	0x80339F48: main.sym("pldemo_8033B2B8", flag={"GLOBL"}),
+	0x80339F4C: main.sym("pldemo_8033B2BC", flag={"GLOBL"}),
 
 	# src/plmove.c
-	0x80339F50: main.sym("pl_move_8033B2C0", flag={"GLOBL"}),
+	0x80339F50: main.sym("plmove_8033B2C0", flag={"GLOBL"}),
 
 	# src/plswim.c
-	0x80339FD0: main.sym("pl_swim_8033B340", flag={"GLOBL"}),
-	0x80339FD2: main.sym("pl_swim_8033B342", flag={"GLOBL"}),
-	0x80339FD4: main.sym("pl_swim_8033B344", flag={"GLOBL"}),
+	0x80339FD0: main.sym("plswim_8033B340", flag={"GLOBL"}),
+	0x80339FD2: main.sym("plswim_8033B342", flag={"GLOBL"}),
+	0x80339FD4: main.sym("plswim_8033B344", flag={"GLOBL"}),
 
 	# src/callback.c
 	0x80339FE0: main.sym("mario_mirror"),
@@ -7487,14 +7508,14 @@ sym_J0_code_data = {
 	0x8033A120: main.sym("mem_blockr"),
 	0x8033A124: main.sym("mem_heap", flag={"GLOBL"}),
 
-	# src/save.c
-	0x8033A130: main.sym("save_mid_level"),
-	0x8033A131: main.sym("save_mid_course"),
-	0x8033A132: main.sym("save_mid_stage"),
-	0x8033A133: main.sym("save_mid_scene"),
-	0x8033A134: main.sym("save_mid_port"),
-	0x8033A135: main.sym("save_data_dirty"),
-	0x8033A136: main.sym("save_file_dirty"),
+	# src/backup.c
+	0x8033A130: main.sym("mid_level"),
+	0x8033A131: main.sym("mid_course"),
+	0x8033A132: main.sym("mid_stage"),
+	0x8033A133: main.sym("mid_scene"),
+	0x8033A134: main.sym("mid_port"),
+	0x8033A135: main.sym("bu_info_dirty"),
+	0x8033A136: main.sym("bu_file_dirty"),
 
 	# src/scene.c
 	0x8033A140: main.sym("player_actor", flag={"GLOBL"}),
@@ -7583,15 +7604,15 @@ sym_J0_code_data = {
 	0x8035FEF2: main.sym("object_80361262", flag={"GLOBL"}),
 	0x8035FEF4: main.sym("object_80361264", flag={"GLOBL"}),
 
-	# src/objlib.c
-	0x8035FF00: main.sym("objlib_80361270", flag={"GLOBL"}),
+	# src/objectlib.c
+	0x8035FF00: main.sym("objectlib_80361270", flag={"GLOBL"}),
 
 	# src/object_a.c
 	0x8035FF10: main.sym("object_a_80361280", flag={"GLOBL"}),
 
 	# src/debug.c
-	0x8035FF20: main.sym("debug_out"),
-	0x8035FF30: main.sym("debug_err"),
+	0x8035FF20: main.sym("db_out"),
+	0x8035FF30: main.sym("db_err"),
 
 	# src/shadow.c
 	0x8035FF40: main.sym("shadow_offset"),
@@ -7599,23 +7620,23 @@ sym_J0_code_data = {
 	0x8035FF44: main.sym("shadow_onwater", flag={"GLOBL"}),
 	0x8035FF45: main.sym("shadow_ondecal", flag={"GLOBL"}),
 
-	# src/back.c
-	0x8035FF50: main.sym("back_data"),
+	# src/background.c
+	0x8035FF50: main.sym("backdata"),
 
 	# src/water.c
-	0x8035FF70: main.sym("water_803612E0", flag={"GLOBL"}),
+	0x8035FF70: main.sym("water_txt"),
 
 	# src/objshape.c
 	0x8035FF80: main.sym("objshape_803612F0", flag={"GLOBL"}),
 
 	# src/wave.c
-	0x8035FF90: main.sym("wave_80361300", flag={"GLOBL"}),
-	0x8035FF94: main.sym("wave_80361304", flag={"GLOBL"}),
-	0x8035FF98: main.sym("wave_80361308", flag={"GLOBL"}),
-	0x8035FF9C: main.sym("wave_8036130C", flag={"GLOBL"}),
-	0x8035FFA0: main.sym("wave_80361310", flag={"GLOBL"}),
-	0x8035FFA4: main.sym("wave_80361314", flag={"GLOBL"}),
-	0x8035FFA8: main.sym("wavedatap", flag={"GLOBL"}),
+	0x8035FF90: main.sym("wave_bgcode"),
+	0x8035FF94: main.sym("wave_posx"),
+	0x8035FF98: main.sym("wave_posy"),
+	0x8035FF9C: main.sym("wave_posz"),
+	0x8035FFA0: main.sym("wavevtx"),
+	0x8035FFA4: main.sym("wavenorm"),
+	0x8035FFA8: main.sym("wavep", flag={"GLOBL"}),
 	0x8035FFAC: main.sym("wave_8036131C", flag={"GLOBL"}),
 
 	# src/dprint.c
@@ -7631,38 +7652,38 @@ sym_J0_code_data = {
 	0x8036008E: main.sym("redcoin_count", flag={"GLOBL"}),
 
 	# src/weather.c
-	0x80360090: main.sym("weather", flag={"GLOBL"}),
-	0x80360098: main.sym("weather_80361408", flag={"GLOBL"}),
-	0x803600A4: main.sym("weather_80361414", flag={"GLOBL"}),
-	0x803600A6: main.sym("weather_80361416", flag={"GLOBL"}),
+	0x80360090: main.sym("weatherp", flag={"GLOBL"}),
+	0x80360098: main.sym("snow_pos"),
+	0x803600A4: main.sym("snow_len"),
+	0x803600A6: main.sym("snow_max"),
 
 	# src/lava.c
-	0x803600B0: main.sym("lava_80361420", flag={"GLOBL"}),
-	0x803600B4: main.sym("gfx_weather_lava", flag={"GLOBL"}),
-	0x803600B8: main.sym("lava_80361438", flag={"GLOBL"}),
-	0x803600BC: main.sym("lava_8036143C", flag={"GLOBL"}),
+	0x803600B0: main.sym("lava_info", flag={"GLOBL"}),
+	0x803600C4: main.sym("lava_glistp"),
+	0x803600C8: main.sym("lava_max"),
+	0x803600CC: main.sym("lava_len"),
 
 	# src/hud.c
-	0x803600C0: main.sym("meter_power"),
+	0x803600D0: main.sym("meter_power"),
 
 	# src/object_b.c
-	0x803600D0: main.sym("object_b_80361450", flag={"GLOBL"}),
+	0x803600E0: main.sym("object_b_80361450", flag={"GLOBL"}),
 
 	# src/object_c.c
-	0x803600E0: main.sym("object_c_80361460", flag={"GLOBL"}),
-	0x803600E4: main.sym("object_c_80361464", flag={"GLOBL"}),
-	0x803600E8: main.sym("object_c_80361468", flag={"GLOBL"}),
-	0x803600EC: main.sym("object_c_8036146C", flag={"GLOBL"}),
-	0x803600F0: main.sym("object_c_80361470", flag={"GLOBL"}),
-	0x803600F4: main.sym("object_c_80361474", flag={"GLOBL"}),
-	0x803600F8: main.sym("object_c_80361478", flag={"GLOBL"}),
-	0x803600FC: main.sym("object_c_8036147C", flag={"GLOBL"}),
-	0x80360100: main.sym("object_c_80361480", flag={"GLOBL"}),
-	0x80360104: main.sym("object_c_80361484", flag={"GLOBL"}),
-	0x80360108: main.sym("object_c_80361488", flag={"GLOBL"}),
+	0x803600F0: main.sym("object_c_80361460", flag={"GLOBL"}),
+	0x803600F4: main.sym("object_c_80361464", flag={"GLOBL"}),
+	0x803600F8: main.sym("object_c_80361468", flag={"GLOBL"}),
+	0x803600FC: main.sym("object_c_8036146C", flag={"GLOBL"}),
+	0x80360100: main.sym("object_c_80361470", flag={"GLOBL"}),
+	0x80360104: main.sym("object_c_80361474", flag={"GLOBL"}),
+	0x80360108: main.sym("object_c_80361478", flag={"GLOBL"}),
+	0x8036010C: main.sym("object_c_8036147C", flag={"GLOBL"}),
+	0x80360110: main.sym("object_c_80361480", flag={"GLOBL"}),
+	0x80360114: main.sym("object_c_80361484", flag={"GLOBL"}),
+	0x80360118: main.sym("object_c_80361488", flag={"GLOBL"}),
 
 	# src/audio/game.c
-	0x80360110: main.sym("_Na_game_bss"),
+	0x80360120: main.sym("_Na_game_bss"),
 
 	# libultra
 	0x80363830: main.sym("__osEventStateTab"),
@@ -7721,12 +7742,15 @@ sym_J0_code_data = {
 	0x80203200: main.sym("aud_stack", flag={"GLOBL"}),
 	0x80205200: main.sym("gfx_stack", flag={"GLOBL"}),
 	0x80207200: main.sym("gfx_sp_yield", flag={"GLOBL"}),
-	0x80207B00: main.sym("save", flag={"GLOBL"}),
+	0x80207B00: main.sym("backup", flag={"GLOBL"}),
 	0x80207D00: main.sym("gfx_sp_stack", flag={"GLOBL"}),
 	0x80208100: main.sym("frame_data", flag={"GLOBL"}),
 
 	# src/audio/work.c
-	#0x80220DA0: main.sym("_Na_work_bss"),
+	#0x80220DA0: main.sym("Na_WorkStart"),
+	#0x80220DB0: main.sym("_Na_work_bss_10"),
+	0x80226EB8: main.sym("Na_Random"),
+	#0x80226CC0: main.sym("_Na_work_80226CC0"),
 	# 0x80220DA0 (max 0x6260)
 
 	# src/fifo.c
@@ -7737,40 +7761,76 @@ sym_J0_code_data = {
 	0x803B5000: main.sym("c_image_b", flag={"GLOBL"}),
 	0x803DA800: main.sym("c_image_c", flag={"GLOBL"}),
 
-	# object
-	0x13000708: main.sym("o_13000708"),
-	0x13001850: main.sym("o_13001850"),
-	0x13001BB4: main.sym("o_13001BB4"),
-	0x13001BD4: main.sym("o_13001BD4"),
-	0x13001C34: main.sym("o_13001C34"),
-	0x13002F20: main.sym("o_13002F40"),
-	0x130032C0: main.sym("o_signpost"),
-	0x13003444: main.sym("o_13003464"),
-	0x1300344C: main.sym("o_1300346C"),
-	0x13003454: main.sym("o_13003474"),
-	0x13003848: main.sym("o_13003868"),
-	0x13003890: main.sym("o_130038B0"),
-	0x13003D98: main.sym("o_13003DB8"),
-	0x13003DB8: main.sym("o_13003DD8"),
-	0x13003DD8: main.sym("o_13003DF8"),
-	0x13003DFC: main.sym("o_13003E1C"),
-	0x13004FB4: main.sym("o_13004FD4"),
-	0x13005004: main.sym("o_13005024"),
-
+	# shape
+	0x03007940: main.sym("gfx_redcoin_0"),
+	0x03007968: main.sym("gfx_redcoin_1"),
+	0x03007990: main.sym("gfx_redcoin_2"),
+	0x030079B8: main.sym("gfx_redcoin_3"),
 	0x03009AC8: main.sym("map_pipe"),
+
+	# select
+	0x0700ABD0: main.sym("txt_selfont"),
+	0x0700CD08: main.sym("txt_smfont"),
+
+	# stage
+	# 4
+	0x07026E24: main.sym("water_0400"),
+	0x07026E34: main.sym("water_0401"),
+	# 5
+	0x07016708: main.sym("water_0501"),
+	# 6
+	0x070790F0: main.sym("water_0600"),
+	0x07079100: main.sym("water_0612"),
+	# 7
+	0x0702B900: main.sym("water_0701"),
+	0x0702B950: main.sym("water_0702"),
+	# 8
+	0x07004930: main.sym("fluid_0801S"),
+	0x070049B4: main.sym("fluid_0802S"),
+	0x07012778: main.sym("water_0801"),
+	0x070127C8: main.sym("water_0851"),
+	# 10
+	0x0700FA70: main.sym("water_1001"),
+	# 11
+	0x07018748: main.sym("water_1101"),
+	0x07018778: main.sym("water_1102"),
+	# 12
+	0x0700D2CC: main.sym("water_1201"),
+	0x0700D304: main.sym("water_1205"),
+	0x0701139C: main.sym("water_1202"),
+	# 13
+	0x0700E31C: main.sym("water_1301"),
+	0x0700E39C: main.sym("water_1302"),
+	# 14
+	0x07016840: main.sym("fluid_1400L"),
+	0x07016904: main.sym("fluid_1401L"),
+	# 16
+	0x0700EA58: main.sym("gfx_grounds_0700EA58"),
+	0x07010E80: main.sym("water_1601"),
+	# 22
+	0x07028810: main.sym("water_2202"),
+	# 23
+	0x0700FCB4: main.sym("water_2301"),
+	0x0700FD00: main.sym("water_2302"),
+	# 24
+	0x07011E08: main.sym("water_2401"),
+	# 26
+	0x07006E6C: main.sym("water_2601"),
+	# 36
+	0x07017124: main.sym("water_3601"),
 }
 
 seg_J0_code_data = {
-	#0x80330F00: "J0.BackA",
-	#0x80330F04: "J0.BackD",
-	#0x80330F08: "J0.BackE",
-	#0x80330F0C: "J0.BackF",
-	#0x80330F10: "J0.BackB",
-	#0x80330F14: "J0.BackG",
-	#0x80330F18: "J0.BackH",
-	#0x80330F1C: "J0.BackI",
-	#0x80330F20: "J0.BackC",
-	#0x80330F24: "J0.BackJ",
+	#0x80330F00: "J0.BackgroundA",
+	#0x80330F04: "J0.BackgroundD",
+	#0x80330F08: "J0.BackgroundE",
+	#0x80330F0C: "J0.BackgroundF",
+	#0x80330F10: "J0.BackgroundB",
+	#0x80330F14: "J0.BackgroundG",
+	#0x80330F18: "J0.BackgroundH",
+	#0x80330F1C: "J0.BackgroundI",
+	#0x80330F20: "J0.BackgroundC",
+	#0x80330F24: "J0.BackgroundJ",
 }
 
 sym_E0_rspboot_text = {
@@ -7813,20 +7873,21 @@ sym_E0_crt0_text = {
 sym_E0_code_text = {
 	0x000F5580: main.sym("_ulibSegmentRomStart"),
 	0x00108A10: main.sym("_ulibSegmentRomEnd"),
+	0x0036F530: main.sym("_WeatherSegmentRomStart"),
 
 	# ==========================================================================
 	# text
 	# ==========================================================================
 
 	# src/main.c
-	0x80246050: main.sym_fnc("debug_check", flag={"GLOBL"}), # unused
+	0x80246050: main.sym_fnc("DebugCheck", flag={"GLOBL"}), # unused
 	0x80246170: main.sym_fnc("dummy"), # unused
-	0x802461CC: main.sym_fnc("debug_entry"),
-	0x802461DC: main.sym_fnc("debug_sched_proc"),
-	0x802461EC: main.sym_fnc("debug_sched_vi"),
-	0x802461FC: main.sym_fnc("sched_init"),
-	0x802462E0: main.sym_fnc("sched_init_mem"),
-	0x80246338: main.sym_fnc("thread_create", arg=(
+	0x802461CC: main.sym_fnc("DebugEntry"),
+	0x802461DC: main.sym_fnc("DebugSchedProc"),
+	0x802461EC: main.sym_fnc("DebugSchedVI"),
+	0x802461FC: main.sym_fnc("ScInit"),
+	0x802462E0: main.sym_fnc("ScInitMem"),
+	0x80246338: main.sym_fnc("CreateThread", arg=(
 		"OSThread *t",
 		"OSId id",
 		"void (*entry)(void *)",
@@ -7834,18 +7895,18 @@ sym_E0_code_text = {
 		"void *sp",
 		"OSPri pri",
 	)),
-	0x8024639C: main.sym_fnc("sc_event_prenmi"),
-	0x802463EC: main.sym_fnc("sc_task_flush"),
-	0x8024651C: main.sym_fnc("sc_task_start", arg=(
+	0x8024639C: main.sym_fnc("ScEventPreNMI"),
+	0x802463EC: main.sym_fnc("ScTaskFlush"),
+	0x8024651C: main.sym_fnc("ScTaskStart", arg=(
 		"int type",
 	)),
-	0x8024659C: main.sym_fnc("sc_task_yield"),
-	0x802465EC: main.sym_fnc("sc_event_gfxtask"),
-	0x80246648: main.sym_fnc("sc_audtask_skip"),
-	0x8024669C: main.sym_fnc("sc_event_vi"),
-	0x802467FC: main.sym_fnc("sc_event_sp"),
-	0x8024694C: main.sym_fnc("sc_event_dp"),
-	0x802469B8: main.sym_fnc("sched_proc", arg=(
+	0x8024659C: main.sym_fnc("ScTaskYield"),
+	0x802465EC: main.sym_fnc("ScEventGfxTask"),
+	0x80246648: main.sym_fnc("ScSkipAudTask"),
+	0x8024669C: main.sym_fnc("ScEventVI"),
+	0x802467FC: main.sym_fnc("ScEventSP"),
+	0x8024694C: main.sym_fnc("ScEventDP"),
+	0x802469B8: main.sym_fnc("SchedProc", arg=(
 		"void *arg",
 	)),
 	0x80246A9C: main.sym_fnc("L80246A9C", flag={"GLOBL","LOCAL"}),
@@ -7853,138 +7914,138 @@ sym_E0_code_text = {
 	0x80246ABC: main.sym_fnc("L80246ABC", flag={"GLOBL","LOCAL"}),
 	0x80246ACC: main.sym_fnc("L80246ACC", flag={"GLOBL","LOCAL"}),
 	0x80246ADC: main.sym_fnc("L80246ADC", flag={"GLOBL","LOCAL"}),
-	0x80246B14: main.sym_fnc("sc_setclient", arg=(
+	0x80246B14: main.sym_fnc("ScSetClient", arg=(
 		"int i",
 		"SCCLIENT *client",
 		"OSMesgQueue *mq",
 		"OSMesg msg",
 	), flag={"GLOBL"}),
-	0x80246B74: main.sym_fnc("sc_queue_task", arg=(
+	0x80246B74: main.sym_fnc("ScQueueTask", arg=(
 		"SCTASK *task",
 	), flag={"GLOBL"}), # unused
-	0x80246BB4: main.sym_fnc("sc_queue_audtask", arg=(
+	0x80246BB4: main.sym_fnc("ScQueueAudTask", arg=(
 		"SCTASK *task",
 	), flag={"GLOBL"}),
-	0x80246C10: main.sym_fnc("sc_queue_gfxtask", arg=(
+	0x80246C10: main.sym_fnc("ScQueueGfxTask", arg=(
 		"SCTASK *task",
 	), flag={"GLOBL"}),
-	0x80246C9C: main.sym_fnc("sc_aud_enable", flag={"GLOBL"}), # unused
-	0x80246CB8: main.sym_fnc("sc_aud_disable", flag={"GLOBL"}), # unused
-	0x80246CF0: main.sym_fnc("idle_proc", arg=(
+	0x80246C9C: main.sym_fnc("ScAudEnable", flag={"GLOBL"}), # unused
+	0x80246CB8: main.sym_fnc("ScAudDisable", flag={"GLOBL"}), # unused
+	0x80246CF0: main.sym_fnc("IdleProc", arg=(
 		"void *arg",
 	)),
 	0x80246DF8: main.sym_fnc("entry", flag={"GLOBL"}),
 
 	# src/graphics.c
-	0x80246E70: main.sym_fnc("gfx_init_dp"),
-	0x802471A4: main.sym_fnc("gfx_init_sp"),
-	0x80247284: main.sym_fnc("gfx_init_zimg"),
-	0x802473C8: main.sym_fnc("gfx_init_cimg"),
-	0x802474B8: main.sym_fnc("gfx_clear", arg=(
+	0x80246E70: main.sym_fnc("GfxInitDP"),
+	0x802471A4: main.sym_fnc("GfxInitSP"),
+	0x80247284: main.sym_fnc("GfxInitZB"),
+	0x802473C8: main.sym_fnc("GfxInitCB"),
+	0x802474B8: main.sym_fnc("GfxClear", arg=(
 		"u32 fill",
 	), flag={"GLOBL"}),
-	0x80247620: main.sym_fnc("gfx_vp_clear", arg=(
+	0x80247620: main.sym_fnc("GfxVpClear", arg=(
 		"Vp *vp",
 		"u32 fill",
 	), flag={"GLOBL"}),
-	0x8024784C: main.sym_fnc("gfx_draw_border"),
-	0x802479BC: main.sym_fnc("gfx_vp_scissor", arg=(
+	0x8024784C: main.sym_fnc("GfxDrawBorder"),
+	0x802479BC: main.sym_fnc("GfxVpScissor", arg=(
 		"Vp *vp",
 	), flag={"GLOBL"}),
-	0x80247B3C: main.sym_fnc("gfx_make_task"),
-	0x80247CCC: main.sym_fnc("gfx_start", flag={"GLOBL"}),
-	0x80247D14: main.sym_fnc("gfx_end", flag={"GLOBL"}),
-	0x80247DB4: main.sym_fnc("gfx_reset"),
-	0x80247F08: main.sym_fnc("frame_init"),
-	0x80247FDC: main.sym_fnc("frame_start"),
-	0x80248090: main.sym_fnc("frame_end"),
-	0x802481E0: main.sym_fnc("demo_record"), # unused
-	0x80248304: main.sym_fnc("cont_proc_stick", arg=(
+	0x80247B3C: main.sym_fnc("GfxMakeTask"),
+	0x80247CCC: main.sym_fnc("GfxStart", flag={"GLOBL"}),
+	0x80247D14: main.sym_fnc("GfxEnd", flag={"GLOBL"}),
+	0x80247DB4: main.sym_fnc("GfxReset"),
+	0x80247F08: main.sym_fnc("FrameInit"),
+	0x80247FDC: main.sym_fnc("FrameStart"),
+	0x80248090: main.sym_fnc("FrameEnd"),
+	0x802481E0: main.sym_fnc("DemoRecord"), # unused
+	0x80248304: main.sym_fnc("ContProcStick", arg=(
 		"CONTROLLER *cont",
 	)),
-	0x80248498: main.sym_fnc("demo_proc"),
-	0x80248638: main.sym_fnc("cont_proc"),
-	0x80248824: main.sym_fnc("cont_init"),
-	0x80248964: main.sym_fnc("gfx_init"),
-	0x80248AF0: main.sym_fnc("gfx_proc", arg=(
+	0x80248498: main.sym_fnc("DemoProc"),
+	0x80248638: main.sym_fnc("ContProc"),
+	0x80248824: main.sym_fnc("ContInit"),
+	0x80248964: main.sym_fnc("GfxInit"),
+	0x80248AF0: main.sym_fnc("GfxProc", arg=(
 		"void *arg",
 	), flag={"GLOBL"}),
 
 	# src/audio.c
-	0x80248C40: main.sym_fnc("aud_reset_mute", flag={"GLOBL"}),
-	0x80248C58: main.sym_fnc("aud_set_mute", arg=(
+	0x80248C40: main.sym_fnc("AudResetMute", flag={"GLOBL"}),
+	0x80248C58: main.sym_fnc("AudSetMute", arg=(
 		"int flag",
 	), flag={"GLOBL"}),
-	0x80248CE8: main.sym_fnc("aud_clr_mute", arg=(
+	0x80248CE8: main.sym_fnc("AudClrMute", arg=(
 		"int flag",
 	), flag={"GLOBL"}),
-	0x80248D78: main.sym_fnc("aud_lock", flag={"GLOBL"}),
-	0x80248DC0: main.sym_fnc("aud_unlock", flag={"GLOBL"}),
-	0x80248E08: main.sym_fnc("aud_sound_mode", arg=(
+	0x80248D78: main.sym_fnc("AudLock", flag={"GLOBL"}),
+	0x80248DC0: main.sym_fnc("AudUnlock", flag={"GLOBL"}),
+	0x80248E08: main.sym_fnc("AudSetMode", arg=(
 		"USHORT mode",
 	), flag={"GLOBL"}),
-	0x80248E54: main.sym_fnc("aud_face_sound", arg=(
+	0x80248E54: main.sym_fnc("AudPlayFaceSound", arg=(
 		"SHORT flag",
 	), flag={"GLOBL"}),
-	0x80248FEC: main.sym_fnc("aud_wave_sound", flag={"GLOBL"}),
-	0x80249070: main.sym_fnc("aud_endless_music", flag={"GLOBL"}),
-	0x80249178: main.sym_fnc("bgm_play", arg=(
+	0x80248FEC: main.sym_fnc("AudProcWaveSound", flag={"GLOBL"}),
+	0x80249070: main.sym_fnc("AudProcEndlessMusic", flag={"GLOBL"}),
+	0x80249178: main.sym_fnc("AudPlayBGM", arg=(
 		"USHORT mode",
 		"USHORT bgm",
 		"SHORT fadein",
 	), flag={"GLOBL"}),
-	0x8024922C: main.sym_fnc("aud_fadeout", arg=(
+	0x8024922C: main.sym_fnc("AudFadeout", arg=(
 		"SHORT fadeout",
 	), flag={"GLOBL"}),
-	0x8024927C: main.sym_fnc("bgm_fadeout", arg=(
+	0x8024927C: main.sym_fnc("AudFadeoutBGM", arg=(
 		"SHORT fadeout",
 	), flag={"GLOBL"}),
-	0x802492D0: main.sym_fnc("bgm_stage_play", arg=(
+	0x802492D0: main.sym_fnc("AudPlayStageBGM", arg=(
 		"USHORT bgm",
 	), flag={"GLOBL"}),
-	0x80249310: main.sym_fnc("bgm_shell_play", flag={"GLOBL"}),
-	0x8024934C: main.sym_fnc("bgm_shell_stop", flag={"GLOBL"}),
-	0x80249398: main.sym_fnc("bgm_special_play", arg=(
+	0x80249310: main.sym_fnc("AudPlayShellBGM", flag={"GLOBL"}),
+	0x8024934C: main.sym_fnc("AudStopShellBGM", flag={"GLOBL"}),
+	0x80249398: main.sym_fnc("AudPlaySpecialBGM", arg=(
 		"USHORT bgm",
 	), flag={"GLOBL"}),
-	0x80249404: main.sym_fnc("bgm_special_fadeout", flag={"GLOBL"}),
-	0x80249448: main.sym_fnc("bgm_special_stop", flag={"GLOBL"}),
-	0x80249494: main.sym_fnc("aud_levelse_play", arg=(
+	0x80249404: main.sym_fnc("AudFadeoutSpecialBGM", flag={"GLOBL"}),
+	0x80249448: main.sym_fnc("AudStopSpecialBGM", flag={"GLOBL"}),
+	0x80249494: main.sym_fnc("AudPlayLevelSe", arg=(
 		"int se",
-		"VECF pos",
+		"FVEC pos",
 	), flag={"GLOBL"}),
-	0x802494D8: main.sym_fnc("aud_tick", flag={"GLOBL"}),
-	0x80249500: main.sym_fnc("aud_proc", arg=(
+	0x802494D8: main.sym_fnc("AudTick", flag={"GLOBL"}),
+	0x80249500: main.sym_fnc("AudProc", arg=(
 		"void *arg",
 	), flag={"GLOBL"}),
 
 	# src/game.c
-	0x802495E0: main.sym_fnc("time_ctrl", "int", arg=(
+	0x802495E0: main.sym_fnc("GmTimeCtrl", "int", arg=(
 		"int code",
 	), flag={"GLOBL"}),
-	0x802496B8: main.sym_fnc("game_checkpause", "int"),
-	0x80249764: main.sym_fnc("game_set_state", arg=(
+	0x802496B8: main.sym_fnc("GmCheckPause", "int"),
+	0x80249764: main.sym_fnc("GmSetState", arg=(
 		"SHORT state",
 	)),
-	0x8024978C: main.sym_fnc("game_exit", arg=(
+	0x8024978C: main.sym_fnc("GmExit", arg=(
 		"int code",
 	)),
-	0x802497B8: main.sym_fnc("game_fadeout", arg=(
+	0x802497B8: main.sym_fnc("GmFadeout", arg=(
 		"int code",
 		"int color",
 	), flag={"GLOBL"}),
 	0x8024982C: main.sym_fnc("game_8024982C"), # unused
-	0x8024983C: main.sym_fnc("game_init_msg", arg=(
+	0x8024983C: main.sym_fnc("GmInitMessage", arg=(
 		"int index",
 	), flag={"GLOBL"}),
-	0x8024995C: main.sym_fnc("pl_init_door", arg=(
+	0x8024995C: main.sym_fnc("PL_InitDoor", arg=(
 		"ACTOR *actor",
 		"u32 code",
 	)),
-	0x80249A10: main.sym_fnc("pl_init_cap", arg=(
+	0x80249A10: main.sym_fnc("PL_InitCap", arg=(
 		"PLAYER *pl",
 	)),
-	0x80249AB4: main.sym_fnc("pl_init_state", arg=(
+	0x80249AB4: main.sym_fnc("PL_InitState", arg=(
 		"PLAYER *pl",
 		"int type",
 		"u32 code",
@@ -8008,7 +8069,7 @@ sym_E0_code_text = {
 	0x80249C88: main.sym_fnc("L80249C88", flag={"GLOBL","LOCAL"}),
 	0x80249CA0: main.sym_fnc("L80249CA0", flag={"GLOBL","LOCAL"}),
 	0x80249CB8: main.sym_fnc("L80249CB8", flag={"GLOBL","LOCAL"}),
-	0x80249CD8: main.sym_fnc("game_init_port"),
+	0x80249CD8: main.sym_fnc("GmInitPort"),
 	0x80249EA4: main.sym_fnc("L80249EA4", flag={"GLOBL","LOCAL"}),
 	0x80249EC4: main.sym_fnc("L80249EC4", flag={"GLOBL","LOCAL"}),
 	0x80249EE4: main.sym_fnc("L80249EE4", flag={"GLOBL","LOCAL"}),
@@ -8016,22 +8077,22 @@ sym_E0_code_text = {
 	0x80249F2C: main.sym_fnc("L80249F2C", flag={"GLOBL","LOCAL"}),
 	0x80249F4C: main.sym_fnc("L80249F4C", flag={"GLOBL","LOCAL"}),
 	0x80249F6C: main.sym_fnc("L80249F6C", flag={"GLOBL","LOCAL"}),
-	0x8024A124: main.sym_fnc("game_proc_entry"),
-	0x8024A18C: main.sym_fnc("game_init_stage"),
-	0x8024A1D8: main.sym_fnc("game_init_staff"),
-	0x8024A374: main.sym_fnc("game_proc_connect"),
-	0x8024A584: main.sym_fnc("game_is_same_bgm", "int", (
+	0x8024A124: main.sym_fnc("GmProcEntry"),
+	0x8024A18C: main.sym_fnc("GmInitStage"),
+	0x8024A1D8: main.sym_fnc("GmInitStaff"),
+	0x8024A374: main.sym_fnc("GmProcConnect"),
+	0x8024A584: main.sym_fnc("GmIsSameBGM", "int", (
 		"SHORT port",
 	)),
-	0x8024A700: main.sym_fnc("game_set_entry", arg=(
+	0x8024A700: main.sym_fnc("GmSetEntry", arg=(
 		"SHORT stage",
 		"SHORT scene",
 		"SHORT port",
 		"u32 code",
 	)),
-	0x8024A7B4: main.sym_fnc("bgport_get", "BGPORT *"),
-	0x8024A85C: main.sym_fnc("game_proc_bgport"),
-	0x8024A9CC: main.sym_fnc("pl_fade", "int", (
+	0x8024A7B4: main.sym_fnc("GmGetBGPort", "BGPORT *"),
+	0x8024A85C: main.sym_fnc("GmProcBGPort"),
+	0x8024A9CC: main.sym_fnc("PL_Fade", "int", (
 		"PLAYER *pl",
 		"int mode",
 	), flag={"GLOBL"}),
@@ -8048,127 +8109,200 @@ sym_E0_code_text = {
 	0x8024ADC0: main.sym_fnc("L8024ADC0", flag={"GLOBL","LOCAL"}),
 	0x8024ADEC: main.sym_fnc("L8024ADEC", flag={"GLOBL","LOCAL"}),
 	0x8024AE60: main.sym_fnc("L8024AE60", flag={"GLOBL","LOCAL"}),
-	0x8024AEDC: main.sym_fnc("game_proc_fade"),
+	0x8024AEDC: main.sym_fnc("GmProcFade"),
 	0x8024AFC4: main.sym_fnc("L8024AFC4", flag={"GLOBL","LOCAL"}),
 	0x8024AFDC: main.sym_fnc("L8024AFDC", flag={"GLOBL","LOCAL"}),
 	0x8024AFF8: main.sym_fnc("L8024AFF8", flag={"GLOBL","LOCAL"}),
 	0x8024B008: main.sym_fnc("L8024B008", flag={"GLOBL","LOCAL"}),
 	0x8024B03C: main.sym_fnc("L8024B03C", flag={"GLOBL","LOCAL"}),
-	0x8024B13C: main.sym_fnc("game_proc_hud"),
-	0x8024B390: main.sym_fnc("game_sceneproc", arg=(
+	0x8024B13C: main.sym_fnc("GmProcHUD"),
+	0x8024B390: main.sym_fnc("GmSceneProc", arg=(
 		"short *timer",
 	)),
-	0x8024B3E4: main.sym_fnc("game_proc_normal", "int"),
-	0x8024B5D4: main.sym_fnc("game_proc_pause", "int"),
-	0x8024B6CC: main.sym_fnc("game_proc_frameadv", "int"),
-	0x8024B798: main.sym_fnc("game_freeze", arg=(
+	0x8024B3E4: main.sym_fnc("GmProcNormal", "int"),
+	0x8024B5D4: main.sym_fnc("GmProcPause", "int"),
+	0x8024B6CC: main.sym_fnc("GmProcFrameAdv", "int"),
+	0x8024B798: main.sym_fnc("GmFreeze", arg=(
 		"SHORT timer",
 		"FREEZECALL *callback",
 	), flag={"GLOBL"}),
-	0x8024B7C0: main.sym_fnc("game_proc_freeze", "int"),
-	0x8024B880: main.sym_fnc("game_proc_exit", "int"),
-	0x8024B940: main.sym_fnc("game_proc_exit_old", "int"),
-	0x8024B9B8: main.sym_fnc("game_proc", "int"),
+	0x8024B7C0: main.sym_fnc("GmProcFreeze", "int"),
+	0x8024B880: main.sym_fnc("GmProcExit", "int"),
+	0x8024B940: main.sym_fnc("GmProcExitOLD", "int"),
+	0x8024B9B8: main.sym_fnc("GmProc", "int"),
 	0x8024B9EC: main.sym_fnc("L8024B9EC", flag={"GLOBL","LOCAL"}),
 	0x8024BA00: main.sym_fnc("L8024BA00", flag={"GLOBL","LOCAL"}),
 	0x8024BA14: main.sym_fnc("L8024BA14", flag={"GLOBL","LOCAL"}),
 	0x8024BA28: main.sym_fnc("L8024BA28", flag={"GLOBL","LOCAL"}),
 	0x8024BA3C: main.sym_fnc("L8024BA3C", flag={"GLOBL","LOCAL"}),
 	0x8024BA50: main.sym_fnc("L8024BA50", flag={"GLOBL","LOCAL"}),
-	0x8024BA8C: main.sym_fnc("game_init", "int"),
-	0x8024BCD8: main.sym_fnc("game_process", "long", (
+	0x8024BA8C: main.sym_fnc("GmInit", "int"),
+	0x8024BCD8: main.sym_fnc("GameProc", "long", (
 		"SHORT code",
 		"long status",
-	), flag={"GLOBL"}), # p callback
-	0x8024BD5C: main.sym_fnc("game_initialize", "long", (
+	), flag={"GLOBL"}), # prgcall
+	0x8024BD5C: main.sym_fnc("GameInit", "long", (
 		"SHORT code",
 		"long status",
-	), flag={"GLOBL"}), # p callback
-	0x8024BE14: main.sym_fnc("game_checkselect", "long", (
+	), flag={"GLOBL"}), # prgcall
+	0x8024BE14: main.sym_fnc("GameCheckSelect", "long", (
 		"SHORT code",
 		"long status",
-	), flag={"GLOBL"}), # p callback
-	0x8024BFA0: main.sym_fnc("ending_sound", "long", (
+	), flag={"GLOBL"}), # prgcall
+	0x8024BFA0: main.sym_fnc("EndingSound", "long", (
 		"SHORT code",
 		"long status",
-	), flag={"GLOBL"}), # p callback
+	), flag={"GLOBL"}), # prgcall
 
 	# src/collision.c
-	0x8024BFF0: main.sym("collision_8024BFF0"),
-	0x8024C0B8: main.sym("collision_8024C0B8"),
-	0x8024C16C: main.sym("collision_8024C16C", flag={"GLOBL"}),
-	0x8024C1D8: main.sym("collision_8024C1D8"),
-	0x8024C51C: main.sym("collision_8024C51C"),
+	0x8024BFF0: main.sym_fnc("ObjGetCapFlag", "u32", (
+		"OBJECT *obj",
+	)),
+	0x8024C0B8: main.sym_fnc("PL_IsFacingObj", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+		"SHORT range",
+	)),
+	0x8024C16C: main.sym_fnc("PL_GetAngToObj", "SHORT", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x8024C1D8: main.sym_fnc("PL_CheckAttack", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x8024C51C: main.sym_fnc("ObjAttack", "int", (
+		"OBJECT *obj",
+		"int flag",
+	)),
 	0x8024C590: main.sym_fnc("L8024C590", flag={"GLOBL","LOCAL"}),
 	0x8024C5A0: main.sym_fnc("L8024C5A0", flag={"GLOBL","LOCAL"}),
 	0x8024C5B0: main.sym_fnc("L8024C5B0", flag={"GLOBL","LOCAL"}),
 	0x8024C5C0: main.sym_fnc("L8024C5C0", flag={"GLOBL","LOCAL"}),
 	0x8024C5F0: main.sym_fnc("L8024C5F0", flag={"GLOBL","LOCAL"}),
-	0x8024C618: main.sym("collision_8024C618", flag={"GLOBL"}),
-	0x8024C66C: main.sym("collision_8024C66C", flag={"GLOBL"}),
-	0x8024C6C0: main.sym("collision_8024C6C0", flag={"GLOBL"}),
-	0x8024C780: main.sym("collision_8024C780", flag={"GLOBL"}),
-	0x8024C894: main.sym("collision_8024C894", flag={"GLOBL"}),
-	0x8024C8FC: main.sym("collision_8024C8FC", flag={"GLOBL"}),
-	0x8024C928: main.sym("collision_8024C928", flag={"GLOBL"}),
-	0x8024CA68: main.sym("collision_8024CA68", flag={"GLOBL"}),
-	0x8024CAF8: main.sym("collision_8024CAF8", flag={"GLOBL"}),
-	0x8024CB58: main.sym("collision_8024CB58"),
-	0x8024CBFC: main.sym("collision_8024CBFC", flag={"GLOBL"}),
-	0x8024CC7C: main.sym("collision_8024CC7C", flag={"GLOBL"}),
-	0x8024CE08: main.sym("collision_8024CE08"),
-	0x8024D0B4: main.sym("collision_8024D0B4"),
-	0x8024D130: main.sym("collision_8024D130"),
-	0x8024D16C: main.sym("collision_8024D16C"), # unused
-	0x8024D2BC: main.sym("collision_8024D2BC"),
-	0x8024D578: main.sym("collision_8024D578"),
-	0x8024D72C: main.sym("collision_8024D72C"),
-	0x8024D804: main.sym("collision_8024D804"),
-	0x8024D8B0: main.sym("collision_8024D8B0"),
-	0x8024D998: main.sym("collision_8024D998"),
-	0x8024DAAC: main.sym("collision_8024DAAC"),
-	0x8024DB2C: main.sym_fnc("collision_8024DB2C", "int", (
+	0x8024C618: main.sym_fnc("PL_StopRide", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C66C: main.sym_fnc("PL_TakeObject", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C6C0: main.sym_fnc("PL_DropObject", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C780: main.sym_fnc("PL_ThrowObject", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C894: main.sym_fnc("PL_DropAll", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C8FC: main.sym_fnc("PL_IsWearingDefCap", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024C928: main.sym_fnc("PL_BlowCap", arg=(
+		"PLAYER *pl",
+		"float speed",
+	), flag={"GLOBL"}),
+	0x8024CA68: main.sym_fnc("MarioStealCap", "int", (
+		"int flag",
+	), flag={"GLOBL"}),
+	0x8024CAF8: main.sym_fnc("MarioReturnCap", flag={"GLOBL"}),
+	0x8024CB58: main.sym_fnc("PL_IsTaking", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x8024CBFC: main.sym_fnc("PL_GetHitObj", "OBJECT *", (
+		"PLAYER *pl",
+		"int code",
+	), flag={"GLOBL"}),
+	0x8024CC7C: main.sym_fnc("PL_CheckTaking", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8024CE08: main.sym_fnc("PL_BumpObject", "u32", (
+		"PLAYER *pl",
+	)),
+	0x8024D0B4: main.sym_fnc("PL_Stomp", arg=(
+		"PLAYER *pl",
+		"OBJECT *obj",
+		"float vely",
+	)),
+	0x8024D130: main.sym_fnc("PL_HeadAttack", arg=(
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x8024D16C: main.sym_fnc("PL_GetBlowState", "u32", (
+		"PLAYER *pl",
+	)), # unused
+	0x8024D2BC: main.sym_fnc("PL_GetDamageState", "u32", (
+		"PLAYER *pl",
+		"int ap",
+	)),
+	0x8024D578: main.sym_fnc("PL_RepelFromObj", arg=(
+		"PLAYER *pl",
+		"OBJECT *obj",
+		"float gap",
+	)),
+	0x8024D72C: main.sym_fnc("PL_PunchKickRecoil", arg=(
+		"PLAYER *pl",
+		"int flag",
+	)),
+	0x8024D804: main.sym_fnc("PL_GetDoorCode", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x8024D8B0: main.sym_fnc("PL_TakeDamage", "int", (
+		"PLAYER *pl",
+	)),
+	0x8024D998: main.sym_fnc("PL_CheckDamage", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x8024DAAC: main.sym_fnc("collision_8024DAAC", arg=(
+		"PLAYER *pl",
+	)),
+	0x8024DB2C: main.sym_fnc("PL_CollideCoin", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024DBF0: main.sym_fnc("collision_8024DBF0", "int", (
+	)), # data
+	0x8024DBF0: main.sym_fnc("PL_CollideRecover", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024DC28: main.sym_fnc("collision_8024DC28", "int", (
+	)), # data
+	0x8024DC28: main.sym_fnc("PL_CollideStar", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024DE4C: main.sym_fnc("collision_8024DE4C", "int", (
+	)), # data
+	0x8024DE4C: main.sym_fnc("PL_CollideCage", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024DF10: main.sym_fnc("collision_8024DF10", "int", (
+	)), # data
+	0x8024DF10: main.sym_fnc("PL_CollidePipe", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E0C4: main.sym_fnc("collision_8024E0C4", "int", (
+	)), # data
+	0x8024E0C4: main.sym_fnc("PL_CollidePortDoor", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E2FC: main.sym("collision_8024E2FC", flag={"GLOBL"}),
+	)), # data
+	0x8024E2FC: main.sym_fnc("PL_GetStarDoorFlag", "u32", (
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
 	0x8024E388: main.sym_fnc("L8024E388", flag={"GLOBL","LOCAL"}),
 	0x8024E3B0: main.sym_fnc("L8024E3B0", flag={"GLOBL","LOCAL"}),
 	0x8024E3D8: main.sym_fnc("L8024E3D8", flag={"GLOBL","LOCAL"}),
 	0x8024E3E8: main.sym_fnc("L8024E3E8", flag={"GLOBL","LOCAL"}),
 	0x8024E3F8: main.sym_fnc("L8024E3F8", flag={"GLOBL","LOCAL"}),
 	0x8024E408: main.sym_fnc("L8024E408", flag={"GLOBL","LOCAL"}),
-	0x8024E420: main.sym_fnc("collision_8024E420", "int", (
+	0x8024E420: main.sym_fnc("PL_CollideDoor", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
+	)), # data
 	0x8024E5A4: main.sym_fnc("L8024E5A4", flag={"GLOBL","LOCAL"}),
 	0x8024E5B4: main.sym_fnc("L8024E5B4", flag={"GLOBL","LOCAL"}),
 	0x8024E5C4: main.sym_fnc("L8024E5C4", flag={"GLOBL","LOCAL"}),
@@ -8176,174 +8310,305 @@ sym_E0_code_text = {
 	0x8024E5E4: main.sym_fnc("L8024E5E4", flag={"GLOBL","LOCAL"}),
 	0x8024E5F4: main.sym_fnc("L8024E5F4", flag={"GLOBL","LOCAL"}),
 	0x8024E604: main.sym_fnc("L8024E604", flag={"GLOBL","LOCAL"}),
-	0x8024E6EC: main.sym_fnc("collision_8024E6EC", "int", (
+	0x8024E6EC: main.sym_fnc("PL_CollideCannon", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E778: main.sym_fnc("collision_8024E778", "int", (
+	)), # data
+	0x8024E778: main.sym_fnc("PL_CollideIgloo", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E7D4: main.sym_fnc("collision_8024E7D4", "int", (
+	)), # data
+	0x8024E7D4: main.sym_fnc("PL_CollideTornado", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E8F0: main.sym_fnc("collision_8024E8F0", "int", (
+	)), # data
+	0x8024E8F0: main.sym_fnc("PL_CollideWhirlpool", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024E9D0: main.sym_fnc("collision_8024E9D0", "int", (
+	)), # data
+	0x8024E9D0: main.sym_fnc("PL_CollideWind", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024EAD8: main.sym_fnc("collision_8024EAD8", "int", (
+	)), # data
+	0x8024EAD8: main.sym_fnc("PL_CollideBurn", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024EC54: main.sym_fnc("collision_8024EC54", "int", (
+	)), # data
+	0x8024EC54: main.sym_fnc("PL_CollideBullet", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024ED84: main.sym_fnc("collision_8024ED84", "int", (
+	)), # data
+	0x8024ED84: main.sym_fnc("PL_CollideClam", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024EE44: main.sym_fnc("collision_8024EE44", "int", (
+	)), # data
+	0x8024EE44: main.sym_fnc("PL_CollideBump", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024EFF8: main.sym_fnc("collision_8024EFF8", "int", (
+	)), # data
+	0x8024EFF8: main.sym_fnc("PL_CollideElecShock", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F134: main.sym("collision_8024F134"), # unused
-	0x8024F170: main.sym_fnc("collision_8024F170", "int", (
+	)), # data
+	0x8024F134: main.sym_fnc("PL_CollideDummy", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F1E0: main.sym_fnc("collision_8024F1E0", "int", (
+	)), # unused
+	0x8024F170: main.sym_fnc("PL_CollideEnemy", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F354: main.sym_fnc("collision_8024F354", "int", (
+	)), # data
+	0x8024F1E0: main.sym_fnc("PL_CollideFlyEnemy", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F4AC: main.sym_fnc("collision_8024F4AC", "int", (
+	)), # data
+	0x8024F354: main.sym_fnc("PL_CollideBounce", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F55C: main.sym_fnc("collision_8024F55C", "int", (
+	)), # data
+	0x8024F4AC: main.sym_fnc("PL_CollideSpiny", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F5CC: main.sym_fnc("collision_8024F5CC", "int", (
+	)), # data
+	0x8024F55C: main.sym_fnc("PL_CollideDamage", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F6A4: main.sym_fnc("collision_8024F6A4", "int", (
+	)), # data
+	0x8024F5CC: main.sym_fnc("PL_CollideItemBox", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024F7A8: main.sym("collision_8024F7A8"),
-	0x8024F8BC: main.sym_fnc("collision_8024F8BC", "int", (
+	)), # data
+	0x8024F6A4: main.sym_fnc("PL_CollideShell", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024FA60: main.sym_fnc("collision_8024FA60", "int", (
+	)), # data
+	0x8024F7A8: main.sym_fnc("PL_CheckTaken", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024FB30: main.sym_fnc("collision_8024FB30", "int", (
+	)),
+	0x8024F8BC: main.sym_fnc("PL_CollidePole", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024FD2C: main.sym_fnc("collision_8024FD2C", "int", (
+	)), # data
+	0x8024FA60: main.sym_fnc("PL_CollideHang", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x8024FE6C: main.sym("collision_8024FE6C"),
-	0x8024FF04: main.sym("collision_8024FF04"),
-	0x80250098: main.sym("collision_80250098"),
-	0x80250198: main.sym_fnc("collision_80250198", "int", (
+	)), # data
+	0x8024FB30: main.sym_fnc("PL_CollideCap", "int", (
 		"PLAYER *pl",
 		"u32 flag",
 		"OBJECT *obj",
-	), flag={"GLOBL"}), # data
-	0x80250230: main.sym("collision_80250230"),
-	0x802503F0: main.sym("collision_802503F0", flag={"GLOBL"}),
-	0x802505C8: main.sym("collision_802505C8"),
-	0x8025065C: main.sym("collision_8025065C"),
-	0x80250724: main.sym("collision_80250724"),
-	0x80250778: main.sym("collision_80250778"),
-	0x802507FC: main.sym("collision_802507FC", flag={"GLOBL"}),
+	)), # data
+	0x8024FD2C: main.sym_fnc("PL_CollideTake", "int", (
+		"PLAYER *pl",
+		"u32 flag",
+		"OBJECT *obj",
+	)), # data
+	0x8024FE6C: main.sym_fnc("PL_CanOpenMessage", "int", (
+		"PLAYER *pl",
+		"int flag",
+	)),
+	0x8024FF04: main.sym_fnc("PL_CheckReading", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x80250098: main.sym_fnc("PL_CheckTalking", "int", (
+		"PLAYER *pl",
+		"OBJECT *obj",
+	)),
+	0x80250198: main.sym_fnc("PL_CollideMessage", "int", (
+		"PLAYER *pl",
+		"u32 flag",
+		"OBJECT *obj",
+	)), # data
+	0x80250230: main.sym_fnc("PL_CheckPunchKickWall", arg=(
+		"PLAYER *pl",
+	)),
+	0x802503F0: main.sym_fnc("PL_CheckCollision", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802505C8: main.sym_fnc("PL_CheckFall", arg=(
+		"PLAYER *pl",
+	)),
+	0x8025065C: main.sym_fnc("PL_GroundBurn", arg=(
+		"PLAYER *pl",
+	)),
+	0x80250724: main.sym_fnc("PL_StartTimer", arg=(
+		"PLAYER *pl",
+	)),
+	0x80250778: main.sym_fnc("PL_StopTimer", arg=(
+		"PLAYER *pl",
+	)),
+	0x802507FC: main.sym_fnc("PL_CheckGroundCollision", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 
 	# src/player.c
-	0x80250940: main.sym("player_80250940", flag={"GLOBL"}),
-	0x8025097C: main.sym("player_8025097C", flag={"GLOBL"}),
-	0x802509B8: main.sym("pl_set_anime", flag={"GLOBL"}),
-	0x80250B04: main.sym("player_80250B04", flag={"GLOBL"}),
-	0x80250C7C: main.sym("player_80250C7C", flag={"GLOBL"}),
-	0x80250D38: main.sym("player_80250D38", flag={"GLOBL"}),
-	0x80250E54: main.sym("player_80250E54", flag={"GLOBL"}),
-	0x80251020: main.sym("player_80251020", flag={"GLOBL"}),
-	0x802510DC: main.sym("player_802510DC", flag={"GLOBL"}),
-	0x80251120: main.sym("player_80251120", flag={"GLOBL"}),
-	0x8025118C: main.sym("player_8025118C", flag={"GLOBL"}),
-	0x80251274: main.sym("player_80251274", flag={"GLOBL"}),
-	0x80251310: main.sym("player_80251310", flag={"GLOBL"}),
-	0x80251444: main.sym("player_80251444", flag={"GLOBL"}),
-	0x802514AC: main.sym("player_802514AC", flag={"GLOBL"}),
-	0x80251510: main.sym("player_80251510", flag={"GLOBL"}),
-	0x80251574: main.sym("player_80251574", flag={"GLOBL"}),
-	0x802515D8: main.sym("player_802515D8", flag={"GLOBL"}),
-	0x8025163C: main.sym("player_8025163C", flag={"GLOBL"}),
-	0x80251708: main.sym("player_80251708", flag={"GLOBL"}),
-	0x8025177C: main.sym("player_8025177C", flag={"GLOBL"}),
+	0x80250940: main.sym_fnc("PL_IsAnimeLast1F", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8025097C: main.sym_fnc("PL_IsAnimeLast2F", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802509B8: main.sym_fnc("PL_SetAnime", "int", (
+		"PLAYER *pl",
+		"int index",
+	), flag={"GLOBL"}),
+	0x80250B04: main.sym_fnc("PL_SetAnimeV", "int", (
+		"PLAYER *pl",
+		"int index",
+		"int speed",
+	), flag={"GLOBL"}),
+	0x80250C7C: main.sym_fnc("PL_SetAnimeFrame", arg=(
+		"PLAYER *pl",
+		"SHORT frame",
+	), flag={"GLOBL"}),
+	0x80250D38: main.sym_fnc("PL_IsAnimeAtFrame", "int", (
+		"PLAYER *pl",
+		"SHORT frame",
+	), flag={"GLOBL"}),
+	0x80250E54: main.sym_fnc("PL_GetAnimePos", "int", (
+		"OBJECT *obj",
+		"SHORT angy",
+		"SVEC pos",
+	), flag={"GLOBL"}),
+	0x80251020: main.sym_fnc("PL_UseAnimePos", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802510DC: main.sym_fnc("PL_GetAnimeY", "SHORT", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80251120: main.sym_fnc("PL_TrigSound", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+		"u32 flag",
+	), flag={"GLOBL"}),
+	0x8025118C: main.sym_fnc("PL_TrigJumpVoice", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80251274: main.sym_fnc("PL_SetSpeedEffect", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80251310: main.sym_fnc("PL_PlayEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+		"int flag",
+	), flag={"GLOBL"}),
+	0x80251444: main.sym_fnc("PL_TrigEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+		"int flag",
+	), flag={"GLOBL"}),
+	0x802514AC: main.sym_fnc("PL_PlayLandEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+	), flag={"GLOBL"}),
+	0x80251510: main.sym_fnc("PL_TrigLandEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+	), flag={"GLOBL"}),
+	0x80251574: main.sym_fnc("PL_PlayFallEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+	), flag={"GLOBL"}),
+	0x802515D8: main.sym_fnc("PL_TrigFallEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+	), flag={"GLOBL"}),
+	0x8025163C: main.sym_fnc("PL_TrigJumpEffect", arg=(
+		"PLAYER *pl",
+		"Na_Se se",
+		"Na_Se voice",
+	), flag={"GLOBL"}),
+	0x80251708: main.sym_fnc("PL_SetSpeed", arg=(
+		"PLAYER *pl",
+		"float speed",
+	), flag={"GLOBL"}),
+	0x8025177C: main.sym_fnc("PL_GetSlip", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80251818: main.sym_fnc("L80251818", flag={"GLOBL","LOCAL"}),
 	0x80251828: main.sym_fnc("L80251828", flag={"GLOBL","LOCAL"}),
 	0x80251838: main.sym_fnc("L80251838", flag={"GLOBL","LOCAL"}),
 	0x80251848: main.sym_fnc("L80251848", flag={"GLOBL","LOCAL"}),
-	0x802518A8: main.sym("player_802518A8", flag={"GLOBL"}),
+	0x802518A8: main.sym_fnc("PL_GetSurface", "u32", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x802519A8: main.sym_fnc("L802519A8", flag={"GLOBL","LOCAL"}),
 	0x802519B4: main.sym_fnc("L802519B4", flag={"GLOBL","LOCAL"}),
 	0x802519C4: main.sym_fnc("L802519C4", flag={"GLOBL","LOCAL"}),
 	0x802519D4: main.sym_fnc("L802519D4", flag={"GLOBL","LOCAL"}),
 	0x802519E4: main.sym_fnc("L802519E4", flag={"GLOBL","LOCAL"}),
 	0x802519F4: main.sym_fnc("L802519F4", flag={"GLOBL","LOCAL"}),
-	0x80251A48: main.sym("player_80251A48", flag={"GLOBL"}),
-	0x80251AFC: main.sym("player_80251AFC", flag={"GLOBL"}),
-	0x80251B54: main.sym("player_80251B54", flag={"GLOBL"}),
-	0x80251BD4: main.sym("player_80251BD4", flag={"GLOBL"}),
-	0x80251CFC: main.sym("player_80251CFC", flag={"GLOBL"}),
-	0x80251E24: main.sym("player_80251E24"),
-	0x80251F24: main.sym("player_80251F24", flag={"GLOBL"}),
-	0x80252000: main.sym("player_80252000", flag={"GLOBL"}),
-	0x802521A0: main.sym("player_802521A0", flag={"GLOBL"}),
-	0x8025229C: main.sym("player_8025229C"),
-	0x802523C8: main.sym("player_802523C8"),
-	0x80252460: main.sym("player_80252460"),
+	0x80251A48: main.sym_fnc("PL_CheckWall", "BGFACE *", (
+		"FVEC pos",
+		"float offset",
+		"float radius",
+	), flag={"GLOBL"}),
+	0x80251AFC: main.sym_fnc("PL_CheckRoof", "float", (
+		"FVEC pos",
+		"float y",
+		"BGFACE **roof",
+	), flag={"GLOBL"}),
+	0x80251B54: main.sym_fnc("PL_IsFaceDownSlope", "int", (
+		"PLAYER *pl",
+		"int flag",
+	), flag={"GLOBL"}),
+	0x80251BD4: main.sym_fnc("PL_IsSlipMin", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80251CFC: main.sym_fnc("PL_IsSlipMax", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80251E24: main.sym_fnc("PL_IsSlipJump", "int", (
+		"PLAYER *pl",
+	)),
+	0x80251F24: main.sym_fnc("PL_CheckGroundYNear", "float", (
+		"PLAYER *pl",
+		"SHORT angy",
+		"float dist",
+	), flag={"GLOBL"}),
+	0x80252000: main.sym_fnc("PL_GetGroundAngX", "SHORT", (
+		"PLAYER *pl",
+		"SHORT angy",
+	), flag={"GLOBL"}),
+	0x802521A0: main.sym_fnc("player_802521A0", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8025229C: main.sym_fnc("PL_SetSlipJump", arg=(
+		"PLAYER *pl",
+	)),
+	0x802523C8: main.sym_fnc("PL_SetJumpSpeed", arg=(
+		"PLAYER *pl",
+		"float speed",
+		"float scale",
+	)),
+	0x80252460: main.sym_fnc("PL_SetJump", "u32", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	)),
 	0x8025260C: main.sym_fnc("L8025260C", flag={"GLOBL","LOCAL"}),
 	0x802526A4: main.sym_fnc("L802526A4", flag={"GLOBL","LOCAL"}),
 	0x80252720: main.sym_fnc("L80252720", flag={"GLOBL","LOCAL"}),
@@ -8351,148 +8616,276 @@ sym_E0_code_text = {
 	0x802527E4: main.sym_fnc("L802527E4", flag={"GLOBL","LOCAL"}),
 	0x80252898: main.sym_fnc("L80252898", flag={"GLOBL","LOCAL"}),
 	0x802529A4: main.sym_fnc("L802529A4", flag={"GLOBL","LOCAL"}),
-	0x802529E4: main.sym("player_802529E4"),
-	0x80252BD4: main.sym("player_80252BD4"),
-	0x80252C18: main.sym("player_80252C18"),
-	0x80252CF4: main.sym_fnc("pl_set_state", "int", (
+	0x802529E4: main.sym_fnc("PL_SetMove", "u32", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	)),
+	0x80252BD4: main.sym_fnc("PL_SetSwim", "u32", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	)),
+	0x80252C18: main.sym_fnc("PL_SetDemo", "u32", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	)),
+	0x80252CF4: main.sym_fnc("PL_SetState", "int", (
 		"PLAYER *pl",
 		"u32 state",
 		"u32 code",
 	), flag={"GLOBL"}),
-	0x80252E5C: main.sym("player_80252E5C", flag={"GLOBL"}),
-	0x802530A0: main.sym("player_802530A0", flag={"GLOBL"}),
-	0x80253178: main.sym("player_80253178", flag={"GLOBL"}),
-	0x802531C4: main.sym("player_802531C4", flag={"GLOBL"}),
-	0x80253218: main.sym("player_80253218", flag={"GLOBL"}),
-	0x80253300: main.sym("player_80253300", flag={"GLOBL"}),
-	0x802533E4: main.sym("player_802533E4", flag={"GLOBL"}),
-	0x80253488: main.sym("player_80253488", flag={"GLOBL"}),
-	0x80253588: main.sym("player_80253588"),
-	0x80253720: main.sym("player_80253720"),
-	0x80253838: main.sym("player_80253838"),
-	0x8025395C: main.sym("player_8025395C"),
-	0x80253A60: main.sym("player_80253A60"),
-	0x80253D58: main.sym("player_80253D58"),
-	0x80253EC0: main.sym("player_80253EC0"),
-	0x80254060: main.sym("player_80254060"),
-	0x802542B4: main.sym("player_802542B4"),
-	0x80254338: main.sym("player_80254338"),
-	0x80254390: main.sym("player_80254390"),
-	0x802543E8: main.sym("player_802543E8"),
-	0x80254588: main.sym("player_80254588"),
-	0x80254768: main.sym("player_80254768"), # unused
-	0x80254830: main.sym_fnc("mario_exec", "u32", (
+	0x80252E5C: main.sym_fnc("PL_SetTripJump", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802530A0: main.sym_fnc("PL_SetStateJump", "int", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	), flag={"GLOBL"}),
+	0x80253178: main.sym_fnc("PL_SetStateDrop", "int", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	), flag={"GLOBL"}),
+	0x802531C4: main.sym_fnc("PL_SetStateDamage", "int", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+		"SHORT damage",
+	), flag={"GLOBL"}),
+	0x80253218: main.sym_fnc("PL_CheckMotion", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80253300: main.sym_fnc("PL_CheckMotionTake", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802533E4: main.sym_fnc("PL_EnterField", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80253488: main.sym_fnc("PL_EnterWater", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80253588: main.sym_fnc("PL_ProcPress", arg=(
+		"PLAYER *pl",
+	)),
+	0x80253720: main.sym_fnc("PL_ProcDebug", arg=(
+		"PLAYER *pl",
+	)),
+	0x80253838: main.sym_fnc("PL_ProcButton", arg=(
+		"PLAYER *pl",
+	)),
+	0x8025395C: main.sym_fnc("PL_ProcStick", arg=(
+		"PLAYER *pl",
+	)),
+	0x80253A60: main.sym_fnc("PL_ProcBG", arg=(
+		"PLAYER *pl",
+	)),
+	0x80253D58: main.sym_fnc("PL_ProcStatus", arg=(
+		"PLAYER *pl",
+	)),
+	0x80253EC0: main.sym_fnc("PL_ProcSwimCamera", arg=(
+		"PLAYER *pl",
+	)),
+	0x80254060: main.sym_fnc("PL_ProcPower", arg=(
+		"PLAYER *pl",
+	)),
+	0x802542B4: main.sym_fnc("PL_ProcInfo", arg=(
+		"PLAYER *pl",
+	)),
+	0x80254338: main.sym_fnc("PL_InitShape", arg=(
+		"PLAYER *pl",
+	)),
+	0x80254390: main.sym_fnc("PL_ProcSink", arg=(
+		"PLAYER *pl",
+	)),
+	0x802543E8: main.sym_fnc("PL_ProcCap", "u32", (
+		"PLAYER *pl",
+	)),
+	0x80254588: main.sym_fnc("PL_ProcShape", arg=(
+		"PLAYER *pl",
+	)),
+	0x80254768: main.sym_fnc("DebugCap", arg=(
+		"USHORT button",
+		"u32 flag",
+		"USHORT timer",
+		"USHORT bgm",
+	)), # unused
+	0x80254830: main.sym_fnc("MarioExec", "u32", (
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x80254B20: main.sym_fnc("player_80254B20", flag={"GLOBL"}),
-	0x80254F44: main.sym_fnc("player_80254F44", flag={"GLOBL"}),
+	0x80254B20: main.sym_fnc("MarioEnter", flag={"GLOBL"}),
+	0x80254F44: main.sym_fnc("MarioInit", flag={"GLOBL"}),
 
 	# src/physics.c
-	0x80255080: main.sym("physics_80255080", flag={"GLOBL"}),
-	0x8025509C: main.sym("physics_8025509C", flag={"GLOBL"}),
-	0x802550B0: main.sym("physics_802550B0", flag={"GLOBL"}),
-	0x802550C0: main.sym("physics_802550C0", flag={"GLOBL"}),
-	0x80255238: main.sym("physics_80255238", flag={"GLOBL"}),
-	0x802552FC: main.sym("physics_802552FC", flag={"GLOBL"}),
-	0x80255414: main.sym("physics_80255414", flag={"GLOBL"}),
+	0x80255080: main.sym_fnc("PL_GetTrampolinePower", "float", flag={"GLOBL"}),
+	0x8025509C: main.sym_fnc("PL_ProcTrampoline", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802550B0: main.sym_fnc("TrampolineProc", flag={"GLOBL"}),
+	0x802550C0: main.sym_fnc("BumpCollision", arg=(
+		"BUMP *a",
+		"BUMP *b",
+	), flag={"GLOBL"}),
+	0x80255238: main.sym_fnc("BumpInit", arg=(
+		"BUMP *bump",
+		"float posx",
+		"float posz",
+		"float speed",
+		"SHORT angy",
+		"float power",
+		"float radius",
+	), flag={"GLOBL"}),
+	0x802552FC: main.sym_fnc("PL_Reflect", arg=(
+		"PLAYER *pl",
+		"int flag",
+	), flag={"GLOBL"}),
+	0x80255414: main.sym_fnc("PL_Sink", "int", (
+		"PLAYER *pl",
+		"float sink",
+	), flag={"GLOBL"}),
 	0x802554B0: main.sym_fnc("L802554B0", flag={"GLOBL","LOCAL"}),
 	0x802554FC: main.sym_fnc("L802554FC", flag={"GLOBL","LOCAL"}),
 	0x80255548: main.sym_fnc("L80255548", flag={"GLOBL","LOCAL"}),
 	0x80255594: main.sym_fnc("L80255594", flag={"GLOBL","LOCAL"}),
 	0x802555F4: main.sym_fnc("L802555F4", flag={"GLOBL","LOCAL"}),
 	0x80255620: main.sym_fnc("L80255620", flag={"GLOBL","LOCAL"}),
-	0x80255654: main.sym("physics_80255654", flag={"GLOBL"}),
-	0x8025570C: main.sym("physics_8025570C", flag={"GLOBL"}),
-	0x8025580C: main.sym("physics_8025580C", flag={"GLOBL"}),
-	0x802559B0: main.sym("physics_802559B0", flag={"GLOBL"}),
-	0x80255A34: main.sym("physics_80255A34", flag={"GLOBL"}),
-	0x80255B04: main.sym("physics_80255B04"),
-	0x80255D88: main.sym("physics_80255D88", flag={"GLOBL"}),
-	0x80255EC4: main.sym("physics_80255EC4"),
-	0x802560AC: main.sym("physics_802560AC"),
-	0x802564E0: main.sym("physics_802564E0"),
-	0x80256584: main.sym("physics_80256584"),
-	0x8025661C: main.sym("physics_8025661C"),
-	0x802569F8: main.sym("physics_802569F8"),
-	0x80256B24: main.sym("physics_80256B24", flag={"GLOBL"}),
-	0x80256CD8: main.sym("physics_80256CD8"), # unused
-	0x80256D8C: main.sym("physics_80256D8C"), # unused
+	0x80255654: main.sym_fnc("PL_SteepFall", "int", (
+		"PLAYER *pl",
+		"u32 state",
+		"u32 code",
+	), flag={"GLOBL"}),
+	0x8025570C: main.sym_fnc("PL_ProcQuicksand", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x8025580C: main.sym_fnc("PL_ProcWind", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x802559B0: main.sym_fnc("PL_Stop", arg=(
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80255A34: main.sym_fnc("PL_ProcWait", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80255B04: main.sym_fnc("PL_CheckWalk", "int", (
+		"PLAYER *pl",
+		"FVEC pos",
+	)),
+	0x80255D88: main.sym_fnc("PL_ProcWalk", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
+	0x80255EC4: main.sym_fnc("PL_CheckLedge", "int", (
+		"PLAYER *pl",
+		"BGFACE *wall",
+		"FVEC oldpos",
+		"FVEC newpos",
+	)),
+	0x802560AC: main.sym_fnc("PL_CheckJump", "int", (
+		"PLAYER *pl",
+		"FVEC pos",
+		"int flag",
+	)),
+	0x802564E0: main.sym_fnc("PL_ProcSpinGravity", arg=(
+		"PLAYER *pl",
+	)),
+	0x80256584: main.sym_fnc("PL_IsJumpCancel", "int", (
+		"PLAYER *pl",
+	)),
+	0x8025661C: main.sym_fnc("PL_ProcGravity", arg=(
+		"PLAYER *pl",
+	)),
+	0x802569F8: main.sym_fnc("PL_ProcUpWind", arg=(
+		"PLAYER *pl",
+	)),
+	0x80256B24: main.sym_fnc("PL_ProcJump", "int", (
+		"PLAYER *pl",
+		"int flag",
+	), flag={"GLOBL"}),
+	0x80256CD8: main.sym_fnc("PL_SetSpeed3D", arg=(
+		"PLAYER *pl",
+	)), # unused
+	0x80256D8C: main.sym_fnc("PL_SetSpeed2D", arg=(
+		"PLAYER *pl",
+	)), # unused
 
 	# src/pldemo.c
-	0x80256E00: main.sym("pl_demo_80256E00"),
-	0x80256E88: main.sym_fnc("staff_draw", flag={"GLOBL"}),
-	0x80257060: main.sym("pl_demo_80257060", flag={"GLOBL"}), # o callback
-	0x802570DC: main.sym("pl_demo_802570DC", flag={"GLOBL"}), # o callback
-	0x80257198: main.sym("s_pl_demo_80257198", flag={"GLOBL"}), # s callback
-	0x80257270: main.sym("pl_demo_80257270"), # unused
-	0x802572B0: main.sym("pl_demo_802572B0"),
-	0x8025733C: main.sym("pl_demo_8025733C"),
-	0x80257450: main.sym("pl_demo_80257450"),
-	0x802574E8: main.sym("pl_demo_802574E8"),
-	0x80257548: main.sym("pl_demo_80257548"),
-	0x802575A8: main.sym("pl_demo_802575A8", flag={"GLOBL"}),
-	0x80257640: main.sym("pl_demo_80257640", flag={"GLOBL"}),
-	0x80257748: main.sym("pl_demo_80257748"),
-	0x80257980: main.sym("pl_demo_80257980"),
-	0x80257A0C: main.sym("pl_demo_80257A0C"),
-	0x80257AB0: main.sym("pl_demo_80257AB0"),
-	0x80257CE4: main.sym("pl_demo_80257CE4"),
-	0x80257EAC: main.sym("pl_demo_80257EAC"),
-	0x80258184: main.sym("pl_demo_80258184"),
-	0x80258420: main.sym("pl_demo_80258420"),
-	0x802584DC: main.sym("pl_demo_802584DC"),
-	0x802585C0: main.sym("pl_demo_802585C0"),
-	0x802586CC: main.sym("pl_demo_802586CC"),
-	0x80258744: main.sym("pl_demo_80258744"),
-	0x802587EC: main.sym("pl_demo_802587EC"),
-	0x8025883C: main.sym("pl_demo_8025883C"),
-	0x8025888C: main.sym("pl_demo_8025888C"),
-	0x802588F8: main.sym("pl_demo_802588F8"),
-	0x80258964: main.sym("pl_demo_80258964"),
-	0x80258A7C: main.sym("pl_demo_80258A7C"),
-	0x80258B24: main.sym("pl_demo_80258B24"),
-	0x80258BA8: main.sym("pl_demo_80258BA8"),
-	0x80258DAC: main.sym("pl_demo_80258DAC"),
-	0x80258F94: main.sym("pl_demo_80258F94"),
-	0x80259264: main.sym("pl_demo_80259264"),
-	0x802593CC: main.sym("pl_demo_802593CC"),
-	0x802594D4: main.sym("pl_demo_802594D4"),
-	0x80259608: main.sym("pl_demo_80259608"),
-	0x80259740: main.sym("pl_demo_80259740"),
-	0x802597AC: main.sym("pl_demo_802597AC"),
-	0x80259854: main.sym("pl_demo_80259854"),
-	0x802598D0: main.sym("pl_demo_802598D0"),
-	0x80259C30: main.sym("pl_demo_80259C30"),
-	0x80259CE8: main.sym("pl_demo_80259CE8"),
-	0x80259D74: main.sym("pl_demo_80259D74"),
-	0x80259E00: main.sym("pl_demo_80259E00"),
-	0x80259EF8: main.sym("pl_demo_80259EF8"),
-	0x80259FCC: main.sym("pl_demo_80259FCC"),
-	0x8025A040: main.sym("pl_demo_8025A040"),
-	0x8025A0BC: main.sym("pl_demo_8025A0BC"),
+	0x80256E00: main.sym("pldemo_80256E00"),
+	0x80256E88: main.sym_fnc("StaffDraw", flag={"GLOBL"}),
+	0x80257060: main.sym("pldemo_80257060", flag={"GLOBL"}), # objcall
+	0x802570DC: main.sym("pldemo_802570DC", flag={"GLOBL"}), # objcall
+	0x80257198: main.sym("Ctrl_pldemo_80257198", flag={"GLOBL"}), # shpcall
+	0x80257270: main.sym("pldemo_80257270"), # unused
+	0x802572B0: main.sym("pldemo_802572B0"),
+	0x8025733C: main.sym("pldemo_8025733C"),
+	0x80257450: main.sym("pldemo_80257450"),
+	0x802574E8: main.sym("pldemo_802574E8"),
+	0x80257548: main.sym("pldemo_80257548"),
+	0x802575A8: main.sym_fnc("pldemo_802575A8", "int", flag={"GLOBL"}),
+	0x80257640: main.sym_fnc("pldemo_80257640", "int", (
+		"int",
+	), flag={"GLOBL"}),
+	0x80257748: main.sym("pldemo_80257748"),
+	0x80257980: main.sym("pldemo_80257980"),
+	0x80257A0C: main.sym("pldemo_80257A0C"),
+	0x80257AB0: main.sym("pldemo_80257AB0"),
+	0x80257CE4: main.sym("pldemo_80257CE4"),
+	0x80257EAC: main.sym("pldemo_80257EAC"),
+	0x80258184: main.sym("pldemo_80258184"),
+	0x80258420: main.sym("pldemo_80258420"),
+	0x802584DC: main.sym("pldemo_802584DC"),
+	0x802585C0: main.sym("pldemo_802585C0"),
+	0x802586CC: main.sym("pldemo_802586CC"),
+	0x80258744: main.sym("pldemo_80258744"),
+	0x802587EC: main.sym("pldemo_802587EC"),
+	0x8025883C: main.sym("pldemo_8025883C"),
+	0x8025888C: main.sym("pldemo_8025888C"),
+	0x802588F8: main.sym("pldemo_802588F8"),
+	0x80258964: main.sym("pldemo_80258964"),
+	0x80258A7C: main.sym("pldemo_80258A7C"),
+	0x80258B24: main.sym("pldemo_80258B24"),
+	0x80258BA8: main.sym("pldemo_80258BA8"),
+	0x80258DAC: main.sym("pldemo_80258DAC"),
+	0x80258F94: main.sym("pldemo_80258F94"),
+	0x80259264: main.sym("pldemo_80259264"),
+	0x802593CC: main.sym("pldemo_802593CC"),
+	0x802594D4: main.sym("pldemo_802594D4"),
+	0x80259608: main.sym("pldemo_80259608"),
+	0x80259740: main.sym("pldemo_80259740"),
+	0x802597AC: main.sym("pldemo_802597AC"),
+	0x80259854: main.sym("pldemo_80259854"),
+	0x802598D0: main.sym("pldemo_802598D0"),
+	0x80259C30: main.sym("pldemo_80259C30"),
+	0x80259CE8: main.sym("pldemo_80259CE8"),
+	0x80259D74: main.sym("pldemo_80259D74"),
+	0x80259E00: main.sym("pldemo_80259E00"),
+	0x80259EF8: main.sym("pldemo_80259EF8"),
+	0x80259FCC: main.sym("pldemo_80259FCC"),
+	0x8025A040: main.sym("pldemo_8025A040"),
+	0x8025A0BC: main.sym("pldemo_8025A0BC"),
 	0x8025A1AC: main.sym_fnc("L8025A1AC", flag={"GLOBL","LOCAL"}),
 	0x8025A244: main.sym_fnc("L8025A244", flag={"GLOBL","LOCAL"}),
 	0x8025A2E0: main.sym_fnc("L8025A2E0", flag={"GLOBL","LOCAL"}),
 	0x8025A450: main.sym_fnc("L8025A450", flag={"GLOBL","LOCAL"}),
-	0x8025A494: main.sym("pl_demo_8025A494"),
-	0x8025A610: main.sym("pl_demo_8025A610"),
-	0x8025A6FC: main.sym("pl_demo_8025A6FC"),
-	0x8025A858: main.sym("pl_demo_8025A858"),
-	0x8025A9AC: main.sym("pl_demo_8025A9AC"),
-	0x8025AE0C: main.sym("pl_demo_8025AE0C"),
-	0x8025AEA8: main.sym("pl_demo_8025AEA8"),
-	0x8025AFFC: main.sym("pl_demo_8025AFFC"),
-	0x8025B050: main.sym("pl_demo_8025B050"),
-	0x8025B0A4: main.sym("pl_demo_8025B0A4"),
-	0x8025B0F8: main.sym("pl_demo_8025B0F8"),
-	0x8025B11C: main.sym("pl_demo_8025B11C"),
-	0x8025B178: main.sym("pl_demo_8025B178"),
-	0x8025B234: main.sym("pl_demo_8025B234"),
-	0x8025B2EC: main.sym("pl_demo_8025B2EC"),
-	0x8025B404: main.sym("pl_demo_8025B404"),
-	0x8025B454: main.sym("pl_demo_8025B454"),
-	0x8025B520: main.sym("pl_demo_8025B520"),
-	0x8025B58C: main.sym("pl_demo_8025B58C"),
+	0x8025A494: main.sym("pldemo_8025A494"),
+	0x8025A610: main.sym("pldemo_8025A610"),
+	0x8025A6FC: main.sym("pldemo_8025A6FC"),
+	0x8025A858: main.sym("pldemo_8025A858"),
+	0x8025A9AC: main.sym("pldemo_8025A9AC"),
+	0x8025AE0C: main.sym("pldemo_8025AE0C"),
+	0x8025AEA8: main.sym("pldemo_8025AEA8"),
+	0x8025AFFC: main.sym("pldemo_8025AFFC"),
+	0x8025B050: main.sym("pldemo_8025B050"),
+	0x8025B0A4: main.sym("pldemo_8025B0A4"),
+	0x8025B0F8: main.sym("pldemo_8025B0F8"),
+	0x8025B11C: main.sym("pldemo_8025B11C"),
+	0x8025B178: main.sym("pldemo_8025B178"),
+	0x8025B234: main.sym("pldemo_8025B234"),
+	0x8025B2EC: main.sym("pldemo_8025B2EC"),
+	0x8025B404: main.sym("pldemo_8025B404"),
+	0x8025B454: main.sym("pldemo_8025B454"),
+	0x8025B520: main.sym("pldemo_8025B520"),
+	0x8025B58C: main.sym("pldemo_8025B58C"),
 	0x8025B5C4: main.sym_fnc("L8025B5C4", flag={"GLOBL","LOCAL"}),
 	0x8025B5D4: main.sym_fnc("L8025B5D4", flag={"GLOBL","LOCAL"}),
 	0x8025B5E4: main.sym_fnc("L8025B5E4", flag={"GLOBL","LOCAL"}),
@@ -8500,26 +8893,26 @@ sym_E0_code_text = {
 	0x8025B604: main.sym_fnc("L8025B604", flag={"GLOBL","LOCAL"}),
 	0x8025B614: main.sym_fnc("L8025B614", flag={"GLOBL","LOCAL"}),
 	0x8025B624: main.sym_fnc("L8025B624", flag={"GLOBL","LOCAL"}),
-	0x8025B654: main.sym("pl_demo_8025B654"),
-	0x8025B760: main.sym("pl_demo_8025B760"),
-	0x8025B9A8: main.sym("pl_demo_8025B9A8"),
-	0x8025BBEC: main.sym("pl_demo_8025BBEC"),
-	0x8025BC80: main.sym("pl_demo_8025BC80"),
-	0x8025BEB8: main.sym("pl_demo_8025BEB8"),
-	0x8025BF64: main.sym("pl_demo_8025BF64"),
-	0x8025C014: main.sym("pl_demo_8025C014"),
-	0x8025C0C4: main.sym("pl_demo_8025C0C4"),
-	0x8025C1C0: main.sym("pl_demo_8025C1C0"),
-	0x8025C498: main.sym("pl_demo_8025C498"),
-	0x8025C600: main.sym("pl_demo_8025C600"),
-	0x8025C6F8: main.sym("pl_demo_8025C6F8"),
-	0x8025C904: main.sym("pl_demo_8025C904"),
-	0x8025CA48: main.sym("pl_demo_8025CA48"),
-	0x8025CBDC: main.sym("pl_demo_8025CBDC"),
-	0x8025CD6C: main.sym("pl_demo_8025CD6C"),
-	0x8025CEF0: main.sym("pl_demo_8025CEF0"),
-	0x8025CFE4: main.sym("pl_demo_8025CFE4"),
-	0x8025D040: main.sym("pl_demo_8025D040"),
+	0x8025B654: main.sym("pldemo_8025B654"),
+	0x8025B760: main.sym("pldemo_8025B760"),
+	0x8025B9A8: main.sym("pldemo_8025B9A8"),
+	0x8025BBEC: main.sym("pldemo_8025BBEC"),
+	0x8025BC80: main.sym("pldemo_8025BC80"),
+	0x8025BEB8: main.sym("pldemo_8025BEB8"),
+	0x8025BF64: main.sym("pldemo_8025BF64"),
+	0x8025C014: main.sym("pldemo_8025C014"),
+	0x8025C0C4: main.sym("pldemo_8025C0C4"),
+	0x8025C1C0: main.sym("pldemo_8025C1C0"),
+	0x8025C498: main.sym("pldemo_8025C498"),
+	0x8025C600: main.sym("pldemo_8025C600"),
+	0x8025C6F8: main.sym("pldemo_8025C6F8"),
+	0x8025C904: main.sym("pldemo_8025C904"),
+	0x8025CA48: main.sym("pldemo_8025CA48"),
+	0x8025CBDC: main.sym("pldemo_8025CBDC"),
+	0x8025CD6C: main.sym("pldemo_8025CD6C"),
+	0x8025CEF0: main.sym("pldemo_8025CEF0"),
+	0x8025CFE4: main.sym("pldemo_8025CFE4"),
+	0x8025D040: main.sym("pldemo_8025D040"),
 	0x8025D078: main.sym_fnc("L8025D078", flag={"GLOBL","LOCAL"}),
 	0x8025D088: main.sym_fnc("L8025D088", flag={"GLOBL","LOCAL"}),
 	0x8025D098: main.sym_fnc("L8025D098", flag={"GLOBL","LOCAL"}),
@@ -8533,10 +8926,12 @@ sym_E0_code_text = {
 	0x8025D118: main.sym_fnc("L8025D118", flag={"GLOBL","LOCAL"}),
 	0x8025D128: main.sym_fnc("L8025D128", flag={"GLOBL","LOCAL"}),
 	0x8025D138: main.sym_fnc("L8025D138", flag={"GLOBL","LOCAL"}),
-	0x8025D1D4: main.sym("pl_demo_8025D1D4"),
-	0x8025D4F0: main.sym("pl_demo_8025D4F0"),
-	0x8025D70C: main.sym("pl_demo_8025D70C"),
-	0x8025D798: main.sym("pl_demo_exec", flag={"GLOBL"}),
+	0x8025D1D4: main.sym("pldemo_8025D1D4"),
+	0x8025D4F0: main.sym("pldemo_8025D4F0"),
+	0x8025D70C: main.sym("pldemo_8025D70C"),
+	0x8025D798: main.sym_fnc("PL_ExecDemo", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x8025D92C: main.sym_fnc("L8025D92C", flag={"GLOBL","LOCAL"}),
 	0x8025D954: main.sym_fnc("L8025D954", flag={"GLOBL","LOCAL"}),
 	0x8025D968: main.sym_fnc("L8025D968", flag={"GLOBL","LOCAL"}),
@@ -8585,35 +8980,37 @@ sym_E0_code_text = {
 	0x8025DD00: main.sym_fnc("L8025DD00", flag={"GLOBL","LOCAL"}),
 	0x8025DD14: main.sym_fnc("L8025DD14", flag={"GLOBL","LOCAL"}),
 
-	# src/plhang.c
-	0x8025DD70: main.sym("pl_hang_8025DD70"),
-	0x8025DE1C: main.sym("pl_hang_8025DE1C"),
-	0x8025DF04: main.sym("pl_hang_8025DF04"),
-	0x8025E21C: main.sym("pl_hang_8025E21C"),
-	0x8025E5A8: main.sym("pl_hang_8025E5A8"),
-	0x8025E7A4: main.sym("pl_hang_8025E7A4"),
-	0x8025E830: main.sym("pl_hang_8025E830"),
-	0x8025E930: main.sym("pl_hang_8025E930"),
-	0x8025EA30: main.sym("pl_hang_8025EA30"),
-	0x8025EB50: main.sym("pl_hang_8025EB50"),
-	0x8025ECFC: main.sym("pl_hang_8025ECFC"),
-	0x8025EED0: main.sym("pl_hang_8025EED0"),
-	0x8025EF58: main.sym("pl_hang_8025EF58"),
-	0x8025F0B4: main.sym("pl_hang_8025F0B4"),
-	0x8025F1E4: main.sym("pl_hang_8025F1E4"),
-	0x8025F384: main.sym("pl_hang_8025F384"),
-	0x8025F4B4: main.sym("pl_hang_8025F4B4"),
-	0x8025F560: main.sym("pl_hang_8025F560"),
-	0x8025F644: main.sym("pl_hang_8025F644"),
-	0x8025F6C0: main.sym("pl_hang_8025F6C0"),
-	0x8025F970: main.sym("pl_hang_8025F970"),
-	0x8025FA64: main.sym("pl_hang_8025FA64"),
-	0x8025FAE8: main.sym("pl_hang_8025FAE8"),
-	0x8025FB90: main.sym("pl_hang_8025FB90"),
-	0x8025FC6C: main.sym("pl_hang_8025FC6C"),
-	0x80260154: main.sym("pl_hang_80260154"),
-	0x80260568: main.sym("pl_hang_80260568"),
-	0x802605D0: main.sym("pl_hang_exec", flag={"GLOBL"}),
+	# src/plspec.c
+	0x8025DD70: main.sym("plspec_8025DD70"),
+	0x8025DE1C: main.sym("plspec_8025DE1C"),
+	0x8025DF04: main.sym("plspec_8025DF04"),
+	0x8025E21C: main.sym("plspec_8025E21C"),
+	0x8025E5A8: main.sym("plspec_8025E5A8"),
+	0x8025E7A4: main.sym("plspec_8025E7A4"),
+	0x8025E830: main.sym("plspec_8025E830"),
+	0x8025E930: main.sym("plspec_8025E930"),
+	0x8025EA30: main.sym("plspec_8025EA30"),
+	0x8025EB50: main.sym("plspec_8025EB50"),
+	0x8025ECFC: main.sym("plspec_8025ECFC"),
+	0x8025EED0: main.sym("plspec_8025EED0"),
+	0x8025EF58: main.sym("plspec_8025EF58"),
+	0x8025F0B4: main.sym("plspec_8025F0B4"),
+	0x8025F1E4: main.sym("plspec_8025F1E4"),
+	0x8025F384: main.sym("plspec_8025F384"),
+	0x8025F4B4: main.sym("plspec_8025F4B4"),
+	0x8025F560: main.sym("plspec_8025F560"),
+	0x8025F644: main.sym("plspec_8025F644"),
+	0x8025F6C0: main.sym("plspec_8025F6C0"),
+	0x8025F970: main.sym("plspec_8025F970"),
+	0x8025FA64: main.sym("plspec_8025FA64"),
+	0x8025FAE8: main.sym("plspec_8025FAE8"),
+	0x8025FB90: main.sym("plspec_8025FB90"),
+	0x8025FC6C: main.sym("plspec_8025FC6C"),
+	0x80260154: main.sym("plspec_80260154"),
+	0x80260568: main.sym("plspec_80260568"),
+	0x802605D0: main.sym_fnc("PL_ExecSpec", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80260748: main.sym_fnc("L80260748", flag={"GLOBL","LOCAL"}),
 	0x8026075C: main.sym_fnc("L8026075C", flag={"GLOBL","LOCAL"}),
 	0x80260770: main.sym_fnc("L80260770", flag={"GLOBL","LOCAL"}),
@@ -8621,50 +9018,52 @@ sym_E0_code_text = {
 	0x80260798: main.sym_fnc("L80260798", flag={"GLOBL","LOCAL"}),
 
 	# src/plwait.c
-	0x802608B0: main.sym("pl_wait_802608B0"),
-	0x80260AAC: main.sym("pl_wait_80260AAC"),
-	0x80260CB4: main.sym("pl_wait_80260CB4"),
-	0x80260F94: main.sym("pl_wait_80260F94"),
-	0x80261000: main.sym("pl_wait_80261000"),
-	0x80261268: main.sym("pl_wait_80261268"),
-	0x802614FC: main.sym("pl_wait_802614FC"),
-	0x8026168C: main.sym("pl_wait_8026168C"),
-	0x802618D8: main.sym("pl_wait_802618D8"),
-	0x802619D0: main.sym("pl_wait_802619D0"),
-	0x80261AD0: main.sym("pl_wait_80261AD0"),
-	0x80261BF8: main.sym("pl_wait_80261BF8"),
-	0x80261CEC: main.sym("pl_wait_80261CEC"),
-	0x80261DB4: main.sym("pl_wait_80261DB4"),
-	0x80261F70: main.sym("pl_wait_80261F70"),
-	0x80262080: main.sym("pl_wait_80262080"),
-	0x8026217C: main.sym("pl_wait_8026217C"),
-	0x802621DC: main.sym("pl_wait_802621DC"),
-	0x802622DC: main.sym("pl_wait_802622DC"),
-	0x80262398: main.sym("pl_wait_80262398"),
-	0x80262490: main.sym("pl_wait_80262490"),
-	0x80262530: main.sym("pl_wait_80262530"),
-	0x80262650: main.sym("pl_wait_80262650"),
-	0x80262770: main.sym("pl_wait_80262770"),
-	0x80262890: main.sym("pl_wait_80262890"),
-	0x80262980: main.sym("pl_wait_80262980"),
-	0x80262BC4: main.sym("pl_wait_80262BC4"),
-	0x80262C34: main.sym("pl_wait_80262C34"),
-	0x80262D68: main.sym("pl_wait_80262D68"),
-	0x80262DC4: main.sym("pl_wait_80262DC4"),
-	0x80262E20: main.sym("pl_wait_80262E20"),
-	0x80262E94: main.sym("pl_wait_80262E94"),
-	0x80262EF0: main.sym("pl_wait_80262EF0"),
-	0x80262F50: main.sym("pl_wait_80262F50"),
-	0x80262FEC: main.sym("pl_wait_80262FEC"),
-	0x8026305C: main.sym("pl_wait_8026305C"),
-	0x802630F8: main.sym("pl_wait_802630F8"),
-	0x802631F0: main.sym("pl_wait_802631F0"),
-	0x802632E8: main.sym("pl_wait_802632E8"),
-	0x802633B4: main.sym("pl_wait_802633B4"),
-	0x8026350C: main.sym("pl_wait_8026350C"),
-	0x802635E8: main.sym("pl_wait_802635E8"),
-	0x80263784: main.sym("pl_wait_80263784"),
-	0x80263898: main.sym("pl_wait_exec", flag={"GLOBL"}),
+	0x802608B0: main.sym("plwait_802608B0"),
+	0x80260AAC: main.sym("plwait_80260AAC"),
+	0x80260CB4: main.sym("plwait_80260CB4"),
+	0x80260F94: main.sym("plwait_80260F94"),
+	0x80261000: main.sym("plwait_80261000"),
+	0x80261268: main.sym("plwait_80261268"),
+	0x802614FC: main.sym("plwait_802614FC"),
+	0x8026168C: main.sym("plwait_8026168C"),
+	0x802618D8: main.sym("plwait_802618D8"),
+	0x802619D0: main.sym("plwait_802619D0"),
+	0x80261AD0: main.sym("plwait_80261AD0"),
+	0x80261BF8: main.sym("plwait_80261BF8"),
+	0x80261CEC: main.sym("plwait_80261CEC"),
+	0x80261DB4: main.sym("plwait_80261DB4"),
+	0x80261F70: main.sym("plwait_80261F70"),
+	0x80262080: main.sym("plwait_80262080"),
+	0x8026217C: main.sym("plwait_8026217C"),
+	0x802621DC: main.sym("plwait_802621DC"),
+	0x802622DC: main.sym("plwait_802622DC"),
+	0x80262398: main.sym("plwait_80262398"),
+	0x80262490: main.sym("plwait_80262490"),
+	0x80262530: main.sym("plwait_80262530"),
+	0x80262650: main.sym("plwait_80262650"),
+	0x80262770: main.sym("plwait_80262770"),
+	0x80262890: main.sym("plwait_80262890"),
+	0x80262980: main.sym("plwait_80262980"),
+	0x80262BC4: main.sym("plwait_80262BC4"),
+	0x80262C34: main.sym("plwait_80262C34"),
+	0x80262D68: main.sym("plwait_80262D68"),
+	0x80262DC4: main.sym("plwait_80262DC4"),
+	0x80262E20: main.sym("plwait_80262E20"),
+	0x80262E94: main.sym("plwait_80262E94"),
+	0x80262EF0: main.sym("plwait_80262EF0"),
+	0x80262F50: main.sym("plwait_80262F50"),
+	0x80262FEC: main.sym("plwait_80262FEC"),
+	0x8026305C: main.sym("plwait_8026305C"),
+	0x802630F8: main.sym("plwait_802630F8"),
+	0x802631F0: main.sym("plwait_802631F0"),
+	0x802632E8: main.sym("plwait_802632E8"),
+	0x802633B4: main.sym("plwait_802633B4"),
+	0x8026350C: main.sym("plwait_8026350C"),
+	0x802635E8: main.sym("plwait_802635E8"),
+	0x80263784: main.sym("plwait_80263784"),
+	0x80263898: main.sym_fnc("PL_ExecWait", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80263B38: main.sym_fnc("L80263B38", flag={"GLOBL","LOCAL"}),
 	0x80263B4C: main.sym_fnc("L80263B4C", flag={"GLOBL","LOCAL"}),
 	0x80263B88: main.sym_fnc("L80263B88", flag={"GLOBL","LOCAL"}),
@@ -8693,79 +9092,85 @@ sym_E0_code_text = {
 	0x80263E08: main.sym_fnc("L80263E08", flag={"GLOBL","LOCAL"}),
 
 	# src/plmove.c
-	0x80263E60: main.sym("pl_move_80263E60"),
-	0x80263EE4: main.sym("pl_move_80263EE4", flag={"GLOBL"}),
-	0x80264024: main.sym("pl_move_80264024"),
-	0x8026409C: main.sym("pl_move_8026409C"),
-	0x802640FC: main.sym("pl_move_802640FC"),
-	0x802642B4: main.sym("pl_move_802642B4"),
-	0x80264340: main.sym("pl_move_80264340"),
-	0x8026440C: main.sym("pl_move_8026440C"),
-	0x80264740: main.sym("pl_move_80264740"),
-	0x80264B54: main.sym("pl_move_80264B54"),
-	0x80264D80: main.sym("pl_move_80264D80"),
-	0x80264E18: main.sym("pl_move_80264E18"),
-	0x80265080: main.sym("pl_move_80265080"),
-	0x802651B0: main.sym("pl_move_802651B0"),
-	0x80265244: main.sym("pl_move_80265244"),
-	0x80265458: main.sym("pl_move_80265458"),
-	0x80265514: main.sym("pl_move_80265514"),
-	0x80265558: main.sym("pl_move_80265558"),
-	0x80265620: main.sym("pl_move_80265620"),
-	0x80265700: main.sym("pl_move_80265700"),
-	0x80265B1C: main.sym("pl_move_80265B1C"),
-	0x80265D90: main.sym("pl_move_80265D90"),
-	0x80265DF8: main.sym("pl_move_80265DF8"),
-	0x80266038: main.sym("pl_move_80266038"),
-	0x802661CC: main.sym("pl_move_802661CC"),
-	0x80266354: main.sym("pl_move_80266354"),
-	0x802665B4: main.sym("pl_move_802665B4"),
-	0x80266734: main.sym("pl_move_80266734"),
-	0x8026699C: main.sym("pl_move_8026699C"),
-	0x80266AF8: main.sym("pl_move_80266AF8"),
-	0x80266D4C: main.sym("pl_move_80266D4C"),
-	0x80266E48: main.sym("pl_move_80266E48"),
-	0x80266FC8: main.sym("pl_move_80266FC8"),
-	0x80267240: main.sym("pl_move_80267240"),
-	0x80267504: main.sym("pl_move_80267504"),
-	0x80267728: main.sym("pl_move_80267728"),
-	0x8026795C: main.sym("pl_move_8026795C"),
-	0x80267C24: main.sym("pl_move_80267C24"),
-	0x80267CE4: main.sym("pl_move_80267CE4"),
-	0x80267FA4: main.sym("pl_move_80267FA4"),
-	0x80268074: main.sym("pl_move_80268074"),
-	0x802680D4: main.sym("pl_move_802680D4"),
-	0x80268168: main.sym("pl_move_80268168"),
-	0x80268338: main.sym("pl_move_80268338"),
-	0x802684AC: main.sym("pl_move_802684AC"),
-	0x802685C0: main.sym("pl_move_802685C0"),
-	0x80268608: main.sym("pl_move_80268608"),
-	0x80268684: main.sym("pl_move_80268684"),
-	0x802687B8: main.sym("pl_move_802687B8"),
-	0x802689F8: main.sym("pl_move_802689F8"),
-	0x80268ADC: main.sym("pl_move_80268ADC"),
-	0x80268B64: main.sym("pl_move_80268B64"),
-	0x80268BB0: main.sym("pl_move_80268BB0"),
-	0x80268BFC: main.sym("pl_move_80268BFC"),
-	0x80268C48: main.sym("pl_move_80268C48"),
-	0x80268C94: main.sym("pl_move_80268C94"),
-	0x80268D04: main.sym("pl_move_80268D04"),
-	0x80268DCC: main.sym("pl_move_80268DCC"),
-	0x80268F78: main.sym("pl_move_80268F78"),
-	0x80269108: main.sym("pl_move_80269108"),
-	0x80269170: main.sym("pl_move_80269170"),
-	0x802691D8: main.sym("pl_move_802691D8"),
-	0x80269264: main.sym("pl_move_80269264"),
-	0x80269300: main.sym("pl_move_80269300"),
-	0x8026939C: main.sym("pl_move_8026939C"),
-	0x8026947C: main.sym("pl_move_8026947C"),
-	0x802694E4: main.sym("pl_move_802694E4"),
-	0x80269588: main.sym("pl_move_80269588"),
-	0x80269640: main.sym("pl_move_80269640"),
-	0x80269788: main.sym("pl_move_80269788"),
-	0x802697DC: main.sym("pl_move_802697DC"),
-	0x80269830: main.sym("pl_move_80269830"),
-	0x80269954: main.sym("pl_move_exec", flag={"GLOBL"}),
+	0x80263E60: main.sym("plmove_80263E60"),
+	0x80263EE4: main.sym_fnc("plmove_80263EE4", arg=(
+		"PLAYER *pl",
+		"SHORT",
+		"SHORT",
+	), flag={"GLOBL"}),
+	0x80264024: main.sym("plmove_80264024"),
+	0x8026409C: main.sym("plmove_8026409C"),
+	0x802640FC: main.sym("plmove_802640FC"),
+	0x802642B4: main.sym("plmove_802642B4"),
+	0x80264340: main.sym("plmove_80264340"),
+	0x8026440C: main.sym("plmove_8026440C"),
+	0x80264740: main.sym("plmove_80264740"),
+	0x80264B54: main.sym("plmove_80264B54"),
+	0x80264D80: main.sym("plmove_80264D80"),
+	0x80264E18: main.sym("plmove_80264E18"),
+	0x80265080: main.sym("plmove_80265080"),
+	0x802651B0: main.sym("plmove_802651B0"),
+	0x80265244: main.sym("plmove_80265244"),
+	0x80265458: main.sym("plmove_80265458"),
+	0x80265514: main.sym("plmove_80265514"),
+	0x80265558: main.sym("plmove_80265558"),
+	0x80265620: main.sym("plmove_80265620"),
+	0x80265700: main.sym("plmove_80265700"),
+	0x80265B1C: main.sym("plmove_80265B1C"),
+	0x80265D90: main.sym("plmove_80265D90"),
+	0x80265DF8: main.sym("plmove_80265DF8"),
+	0x80266038: main.sym("plmove_80266038"),
+	0x802661CC: main.sym("plmove_802661CC"),
+	0x80266354: main.sym("plmove_80266354"),
+	0x802665B4: main.sym("plmove_802665B4"),
+	0x80266734: main.sym("plmove_80266734"),
+	0x8026699C: main.sym("plmove_8026699C"),
+	0x80266AF8: main.sym("plmove_80266AF8"),
+	0x80266D4C: main.sym("plmove_80266D4C"),
+	0x80266E48: main.sym("plmove_80266E48"),
+	0x80266FC8: main.sym("plmove_80266FC8"),
+	0x80267240: main.sym("plmove_80267240"),
+	0x80267504: main.sym("plmove_80267504"),
+	0x80267728: main.sym("plmove_80267728"),
+	0x8026795C: main.sym("plmove_8026795C"),
+	0x80267C24: main.sym("plmove_80267C24"),
+	0x80267CE4: main.sym("plmove_80267CE4"),
+	0x80267FA4: main.sym("plmove_80267FA4"),
+	0x80268074: main.sym("plmove_80268074"),
+	0x802680D4: main.sym("plmove_802680D4"),
+	0x80268168: main.sym("plmove_80268168"),
+	0x80268338: main.sym("plmove_80268338"),
+	0x802684AC: main.sym("plmove_802684AC"),
+	0x802685C0: main.sym("plmove_802685C0"),
+	0x80268608: main.sym("plmove_80268608"),
+	0x80268684: main.sym("plmove_80268684"),
+	0x802687B8: main.sym("plmove_802687B8"),
+	0x802689F8: main.sym("plmove_802689F8"),
+	0x80268ADC: main.sym("plmove_80268ADC"),
+	0x80268B64: main.sym("plmove_80268B64"),
+	0x80268BB0: main.sym("plmove_80268BB0"),
+	0x80268BFC: main.sym("plmove_80268BFC"),
+	0x80268C48: main.sym("plmove_80268C48"),
+	0x80268C94: main.sym("plmove_80268C94"),
+	0x80268D04: main.sym("plmove_80268D04"),
+	0x80268DCC: main.sym("plmove_80268DCC"),
+	0x80268F78: main.sym("plmove_80268F78"),
+	0x80269108: main.sym("plmove_80269108"),
+	0x80269170: main.sym("plmove_80269170"),
+	0x802691D8: main.sym("plmove_802691D8"),
+	0x80269264: main.sym("plmove_80269264"),
+	0x80269300: main.sym("plmove_80269300"),
+	0x8026939C: main.sym("plmove_8026939C"),
+	0x8026947C: main.sym("plmove_8026947C"),
+	0x802694E4: main.sym("plmove_802694E4"),
+	0x80269588: main.sym("plmove_80269588"),
+	0x80269640: main.sym("plmove_80269640"),
+	0x80269788: main.sym("plmove_80269788"),
+	0x802697DC: main.sym("plmove_802697DC"),
+	0x80269830: main.sym("plmove_80269830"),
+	0x80269954: main.sym_fnc("PL_ExecMove", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80269BEC: main.sym_fnc("L80269BEC", flag={"GLOBL","LOCAL"}),
 	0x80269C00: main.sym_fnc("L80269C00", flag={"GLOBL","LOCAL"}),
 	0x80269C14: main.sym_fnc("L80269C14", flag={"GLOBL","LOCAL"}),
@@ -8794,22 +9199,22 @@ sym_E0_code_text = {
 	0x80269ED0: main.sym_fnc("L80269ED0", flag={"GLOBL","LOCAL"}),
 
 	# src/pljump.c
-	0x80269F40: main.sym("pl_jump_80269F40"),
-	0x80269FC0: main.sym("pl_jump_80269FC0"),
-	0x8026A090: main.sym("pl_jump_8026A090"),
-	0x8026A12C: main.sym("pl_jump_8026A12C"),
-	0x8026A224: main.sym("pl_jump_8026A224"),
-	0x8026A400: main.sym("pl_jump_8026A400"),
-	0x8026A494: main.sym("pl_jump_8026A494"),
-	0x8026A598: main.sym("pl_jump_8026A598"),
-	0x8026A62C: main.sym("pl_jump_8026A62C"),
-	0x8026A818: main.sym("pl_jump_8026A818"),
-	0x8026AA48: main.sym("pl_jump_8026AA48"),
-	0x8026ACD8: main.sym("pl_jump_8026ACD8"),
-	0x8026AE5C: main.sym("pl_jump_8026AE5C"),
-	0x8026B004: main.sym("pl_jump_8026B004"),
-	0x8026B17C: main.sym("pl_jump_8026B17C"),
-	0x8026B444: main.sym("pl_jump_8026B444"),
+	0x80269F40: main.sym("pljump_80269F40"),
+	0x80269FC0: main.sym("pljump_80269FC0"),
+	0x8026A090: main.sym("pljump_8026A090"),
+	0x8026A12C: main.sym("pljump_8026A12C"),
+	0x8026A224: main.sym("pljump_8026A224"),
+	0x8026A400: main.sym("pljump_8026A400"),
+	0x8026A494: main.sym("pljump_8026A494"),
+	0x8026A598: main.sym("pljump_8026A598"),
+	0x8026A62C: main.sym("pljump_8026A62C"),
+	0x8026A818: main.sym("pljump_8026A818"),
+	0x8026AA48: main.sym("pljump_8026AA48"),
+	0x8026ACD8: main.sym("pljump_8026ACD8"),
+	0x8026AE5C: main.sym("pljump_8026AE5C"),
+	0x8026B004: main.sym("pljump_8026B004"),
+	0x8026B17C: main.sym("pljump_8026B17C"),
+	0x8026B444: main.sym("pljump_8026B444"),
 	0x8026B49C: main.sym_fnc("L8026B49C", flag={"GLOBL","LOCAL"}),
 	0x8026B4B0: main.sym_fnc("L8026B4B0", flag={"GLOBL","LOCAL"}),
 	0x8026B4E0: main.sym_fnc("L8026B4E0", flag={"GLOBL","LOCAL"}),
@@ -8817,54 +9222,56 @@ sym_E0_code_text = {
 	0x8026B654: main.sym_fnc("L8026B654", flag={"GLOBL","LOCAL"}),
 	0x8026B670: main.sym_fnc("L8026B670", flag={"GLOBL","LOCAL"}),
 	0x8026B680: main.sym_fnc("L8026B680", flag={"GLOBL","LOCAL"}),
-	0x8026B6A0: main.sym("pl_jump_8026B6A0"),
-	0x8026B740: main.sym("pl_jump_8026B740"),
-	0x8026B814: main.sym("pl_jump_8026B814"),
-	0x8026B90C: main.sym("pl_jump_8026B90C"),
-	0x8026B9AC: main.sym("pl_jump_8026B9AC"),
-	0x8026BAB8: main.sym("pl_jump_8026BAB8"),
-	0x8026BBB4: main.sym("pl_jump_8026BBB4"),
-	0x8026BCC0: main.sym("pl_jump_8026BCC0"),
-	0x8026BDCC: main.sym("pl_jump_8026BDCC"),
-	0x8026BE78: main.sym("pl_jump_8026BE78"),
-	0x8026BF40: main.sym("pl_jump_8026BF40"),
-	0x8026C034: main.sym("pl_jump_8026C034"),
-	0x8026C1E0: main.sym("pl_jump_8026C1E0"),
-	0x8026C4B8: main.sym("pl_jump_8026C4B8"),
-	0x8026C5D0: main.sym("pl_jump_8026C5D0"),
-	0x8026C738: main.sym("pl_jump_8026C738"),
-	0x8026C880: main.sym("pl_jump_8026C880"),
-	0x8026C9FC: main.sym("pl_jump_8026C9FC"),
-	0x8026CD0C: main.sym("pl_jump_8026CD0C"),
-	0x8026CE50: main.sym("pl_jump_8026CE50"),
-	0x8026CF28: main.sym("pl_jump_8026CF28"),
-	0x8026D1B0: main.sym("pl_jump_8026D1B0"),
-	0x8026D33C: main.sym("pl_jump_8026D33C"),
-	0x8026D3C8: main.sym("pl_jump_8026D3C8"),
-	0x8026D43C: main.sym("pl_jump_8026D43C"),
-	0x8026D4B0: main.sym("pl_jump_8026D4B0"),
-	0x8026D508: main.sym("pl_jump_8026D508"),
-	0x8026D560: main.sym("pl_jump_8026D560"),
-	0x8026D608: main.sym("pl_jump_8026D608"),
-	0x8026D6FC: main.sym("pl_jump_8026D6FC"),
-	0x8026D770: main.sym("pl_jump_8026D770"),
-	0x8026D988: main.sym("pl_jump_8026D988"),
-	0x8026DB54: main.sym("pl_jump_8026DB54"),
-	0x8026DCF4: main.sym("pl_jump_8026DCF4"),
-	0x8026DE98: main.sym("pl_jump_8026DE98"),
-	0x8026E088: main.sym("pl_jump_8026E088"),
-	0x8026E2B4: main.sym("pl_jump_8026E2B4"),
-	0x8026E59C: main.sym("pl_jump_8026E59C"),
-	0x8026E810: main.sym("pl_jump_8026E810"),
-	0x8026E968: main.sym("pl_jump_8026E968"),
-	0x8026EC00: main.sym("pl_jump_8026EC00"),
-	0x8026F158: main.sym("pl_jump_8026F158"),
-	0x8026F2EC: main.sym("pl_jump_8026F2EC"),
-	0x8026F614: main.sym("pl_jump_8026F614"),
-	0x8026F660: main.sym("pl_jump_8026F660"),
-	0x8026F840: main.sym("pl_jump_8026F840"),
-	0x8026FA18: main.sym("pl_jump_8026FA18"),
-	0x8026FB04: main.sym("pl_jump_exec", flag={"GLOBL"}),
+	0x8026B6A0: main.sym("pljump_8026B6A0"),
+	0x8026B740: main.sym("pljump_8026B740"),
+	0x8026B814: main.sym("pljump_8026B814"),
+	0x8026B90C: main.sym("pljump_8026B90C"),
+	0x8026B9AC: main.sym("pljump_8026B9AC"),
+	0x8026BAB8: main.sym("pljump_8026BAB8"),
+	0x8026BBB4: main.sym("pljump_8026BBB4"),
+	0x8026BCC0: main.sym("pljump_8026BCC0"),
+	0x8026BDCC: main.sym("pljump_8026BDCC"),
+	0x8026BE78: main.sym("pljump_8026BE78"),
+	0x8026BF40: main.sym("pljump_8026BF40"),
+	0x8026C034: main.sym("pljump_8026C034"),
+	0x8026C1E0: main.sym("pljump_8026C1E0"),
+	0x8026C4B8: main.sym("pljump_8026C4B8"),
+	0x8026C5D0: main.sym("pljump_8026C5D0"),
+	0x8026C738: main.sym("pljump_8026C738"),
+	0x8026C880: main.sym("pljump_8026C880"),
+	0x8026C9FC: main.sym("pljump_8026C9FC"),
+	0x8026CD0C: main.sym("pljump_8026CD0C"),
+	0x8026CE50: main.sym("pljump_8026CE50"),
+	0x8026CF28: main.sym("pljump_8026CF28"),
+	0x8026D1B0: main.sym("pljump_8026D1B0"),
+	0x8026D33C: main.sym("pljump_8026D33C"),
+	0x8026D3C8: main.sym("pljump_8026D3C8"),
+	0x8026D43C: main.sym("pljump_8026D43C"),
+	0x8026D4B0: main.sym("pljump_8026D4B0"),
+	0x8026D508: main.sym("pljump_8026D508"),
+	0x8026D560: main.sym("pljump_8026D560"),
+	0x8026D608: main.sym("pljump_8026D608"),
+	0x8026D6FC: main.sym("pljump_8026D6FC"),
+	0x8026D770: main.sym("pljump_8026D770"),
+	0x8026D988: main.sym("pljump_8026D988"),
+	0x8026DB54: main.sym("pljump_8026DB54"),
+	0x8026DCF4: main.sym("pljump_8026DCF4"),
+	0x8026DE98: main.sym("pljump_8026DE98"),
+	0x8026E088: main.sym("pljump_8026E088"),
+	0x8026E2B4: main.sym("pljump_8026E2B4"),
+	0x8026E59C: main.sym("pljump_8026E59C"),
+	0x8026E810: main.sym("pljump_8026E810"),
+	0x8026E968: main.sym("pljump_8026E968"),
+	0x8026EC00: main.sym("pljump_8026EC00"),
+	0x8026F158: main.sym("pljump_8026F158"),
+	0x8026F2EC: main.sym("pljump_8026F2EC"),
+	0x8026F614: main.sym("pljump_8026F614"),
+	0x8026F660: main.sym("pljump_8026F660"),
+	0x8026F840: main.sym("pljump_8026F840"),
+	0x8026FA18: main.sym("pljump_8026FA18"),
+	0x8026FB04: main.sym_fnc("PL_ExecJump", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x8026FD70: main.sym_fnc("L8026FD70", flag={"GLOBL","LOCAL"}),
 	0x8026FD84: main.sym_fnc("L8026FD84", flag={"GLOBL","LOCAL"}),
 	0x8026FD98: main.sym_fnc("L8026FD98", flag={"GLOBL","LOCAL"}),
@@ -8899,44 +9306,44 @@ sym_E0_code_text = {
 	0x802700E0: main.sym_fnc("L802700E0", flag={"GLOBL","LOCAL"}),
 
 	# src/plswim.c
-	0x80270110: main.sym("pl_swim_80270110"),
-	0x802701CC: main.sym("pl_swim_802701CC"),
-	0x80270234: main.sym("pl_swim_80270234"),
-	0x80270304: main.sym("pl_swim_80270304"),
-	0x80270500: main.sym("pl_swim_80270500"),
-	0x80270918: main.sym("pl_swim_80270918"),
-	0x80270A74: main.sym("pl_swim_80270A74"),
-	0x80270B4C: main.sym("pl_swim_80270B4C"),
-	0x80270C94: main.sym("pl_swim_80270C94"),
-	0x80270E40: main.sym("pl_swim_80270E40"),
-	0x80270FD8: main.sym("pl_swim_80270FD8"),
-	0x802710C4: main.sym("pl_swim_802710C4"),
-	0x802711D4: main.sym("pl_swim_802711D4"),
-	0x802712C0: main.sym("pl_swim_802712C0"),
-	0x802713BC: main.sym("pl_swim_802713BC"),
-	0x802714A8: main.sym("pl_swim_802714A8"),
-	0x802715EC: main.sym("pl_swim_802715EC"),
-	0x8027163C: main.sym("pl_swim_8027163C"),
-	0x80271704: main.sym("pl_swim_80271704"),
-	0x80271918: main.sym("pl_swim_80271918"),
-	0x8027197C: main.sym("pl_swim_8027197C"),
-	0x80271AA0: main.sym("pl_swim_80271AA0"),
-	0x80271D04: main.sym("pl_swim_80271D04"),
-	0x80271EB4: main.sym("pl_swim_80271EB4"),
-	0x8027202C: main.sym("pl_swim_8027202C"),
-	0x8027226C: main.sym("pl_swim_8027226C"),
-	0x802723F0: main.sym("pl_swim_802723F0"),
-	0x80272548: main.sym("pl_swim_80272548"),
-	0x8027267C: main.sym("pl_swim_8027267C"),
-	0x80272778: main.sym("pl_swim_80272778"),
-	0x80272870: main.sym("pl_swim_80272870"),
-	0x80272A60: main.sym("pl_swim_80272A60"),
-	0x80272B1C: main.sym("pl_swim_80272B1C"),
-	0x80272B64: main.sym("pl_swim_80272B64"),
-	0x80272BAC: main.sym("pl_swim_80272BAC"),
-	0x80272CBC: main.sym("pl_swim_80272CBC"),
-	0x80272DC0: main.sym("pl_swim_80272DC0"),
-	0x80272E3C: main.sym("pl_swim_80272E3C"),
+	0x80270110: main.sym("plswim_80270110"),
+	0x802701CC: main.sym("plswim_802701CC"),
+	0x80270234: main.sym("plswim_80270234"),
+	0x80270304: main.sym("plswim_80270304"),
+	0x80270500: main.sym("plswim_80270500"),
+	0x80270918: main.sym("plswim_80270918"),
+	0x80270A74: main.sym("plswim_80270A74"),
+	0x80270B4C: main.sym("plswim_80270B4C"),
+	0x80270C94: main.sym("plswim_80270C94"),
+	0x80270E40: main.sym("plswim_80270E40"),
+	0x80270FD8: main.sym("plswim_80270FD8"),
+	0x802710C4: main.sym("plswim_802710C4"),
+	0x802711D4: main.sym("plswim_802711D4"),
+	0x802712C0: main.sym("plswim_802712C0"),
+	0x802713BC: main.sym("plswim_802713BC"),
+	0x802714A8: main.sym("plswim_802714A8"),
+	0x802715EC: main.sym("plswim_802715EC"),
+	0x8027163C: main.sym("plswim_8027163C"),
+	0x80271704: main.sym("plswim_80271704"),
+	0x80271918: main.sym("plswim_80271918"),
+	0x8027197C: main.sym("plswim_8027197C"),
+	0x80271AA0: main.sym("plswim_80271AA0"),
+	0x80271D04: main.sym("plswim_80271D04"),
+	0x80271EB4: main.sym("plswim_80271EB4"),
+	0x8027202C: main.sym("plswim_8027202C"),
+	0x8027226C: main.sym("plswim_8027226C"),
+	0x802723F0: main.sym("plswim_802723F0"),
+	0x80272548: main.sym("plswim_80272548"),
+	0x8027267C: main.sym("plswim_8027267C"),
+	0x80272778: main.sym("plswim_80272778"),
+	0x80272870: main.sym("plswim_80272870"),
+	0x80272A60: main.sym("plswim_80272A60"),
+	0x80272B1C: main.sym("plswim_80272B1C"),
+	0x80272B64: main.sym("plswim_80272B64"),
+	0x80272BAC: main.sym("plswim_80272BAC"),
+	0x80272CBC: main.sym("plswim_80272CBC"),
+	0x80272DC0: main.sym("plswim_80272DC0"),
+	0x80272E3C: main.sym("plswim_80272E3C"),
 	0x80272FE8: main.sym_fnc("L80272FE8", flag={"GLOBL","LOCAL"}),
 	0x80273004: main.sym_fnc("L80273004", flag={"GLOBL","LOCAL"}),
 	0x80273020: main.sym_fnc("L80273020", flag={"GLOBL","LOCAL"}),
@@ -8949,25 +9356,27 @@ sym_E0_code_text = {
 	0x802730F4: main.sym_fnc("L802730F4", flag={"GLOBL","LOCAL"}),
 	0x80273108: main.sym_fnc("L80273108", flag={"GLOBL","LOCAL"}),
 	0x8027311C: main.sym_fnc("L8027311C", flag={"GLOBL","LOCAL"}),
-	0x80273160: main.sym("pl_swim_80273160"),
-	0x80273518: main.sym("pl_swim_80273518"),
-	0x802735A4: main.sym("pl_swim_802735A4"),
-	0x80273618: main.sym("pl_swim_80273618"),
-	0x802737F4: main.sym("pl_swim_802737F4"),
-	0x80273A2C: main.sym("pl_swim_80273A2C"),
-	0x80273BD4: main.sym("pl_swim_80273BD4"),
-	0x80273CD0: main.sym("pl_swim_80273CD0"),
-	0x80273E74: main.sym("pl_swim_80273E74"),
-	0x80274030: main.sym("pl_swim_80274030"),
-	0x80274134: main.sym("pl_swim_80274134"),
-	0x80274268: main.sym("pl_swim_80274268"),
-	0x80274384: main.sym("pl_swim_80274384"),
-	0x802744AC: main.sym("pl_swim_802744AC"),
-	0x80274580: main.sym("pl_swim_80274580"),
-	0x80274688: main.sym("pl_swim_80274688"),
-	0x8027475C: main.sym("pl_swim_8027475C"),
-	0x80274864: main.sym("pl_swim_80274864"),
-	0x8027499C: main.sym("pl_swim_exec", flag={"GLOBL"}),
+	0x80273160: main.sym("plswim_80273160"),
+	0x80273518: main.sym("plswim_80273518"),
+	0x802735A4: main.sym("plswim_802735A4"),
+	0x80273618: main.sym("plswim_80273618"),
+	0x802737F4: main.sym("plswim_802737F4"),
+	0x80273A2C: main.sym("plswim_80273A2C"),
+	0x80273BD4: main.sym("plswim_80273BD4"),
+	0x80273CD0: main.sym("plswim_80273CD0"),
+	0x80273E74: main.sym("plswim_80273E74"),
+	0x80274030: main.sym("plswim_80274030"),
+	0x80274134: main.sym("plswim_80274134"),
+	0x80274268: main.sym("plswim_80274268"),
+	0x80274384: main.sym("plswim_80274384"),
+	0x802744AC: main.sym("plswim_802744AC"),
+	0x80274580: main.sym("plswim_80274580"),
+	0x80274688: main.sym("plswim_80274688"),
+	0x8027475C: main.sym("plswim_8027475C"),
+	0x80274864: main.sym("plswim_80274864"),
+	0x8027499C: main.sym_fnc("PL_ExecSwim", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80274CBC: main.sym_fnc("L80274CBC", flag={"GLOBL","LOCAL"}),
 	0x80274CD0: main.sym_fnc("L80274CD0", flag={"GLOBL","LOCAL"}),
 	0x80274CE4: main.sym_fnc("L80274CE4", flag={"GLOBL","LOCAL"}),
@@ -8985,9 +9394,11 @@ sym_E0_code_text = {
 	0x80274E74: main.sym_fnc("L80274E74", flag={"GLOBL","LOCAL"}),
 	0x80274E88: main.sym_fnc("L80274E88", flag={"GLOBL","LOCAL"}),
 
-	# src/plhold.c
-	0x80274EB0: main.sym("pl_hold_80274EB0"),
-	0x80274F10: main.sym("pl_hold_80274F10", flag={"GLOBL"}),
+	# src/pltake.c
+	0x80274EB0: main.sym("pltake_80274EB0"),
+	0x80274F10: main.sym_fnc("pltake_80274F10", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x80274F90: main.sym_fnc("L80274F90", flag={"GLOBL","LOCAL"}),
 	0x80274FA8: main.sym_fnc("L80274FA8", flag={"GLOBL","LOCAL"}),
 	0x80275050: main.sym_fnc("L80275050", flag={"GLOBL","LOCAL"}),
@@ -8997,18 +9408,20 @@ sym_E0_code_text = {
 	0x802751EC: main.sym_fnc("L802751EC", flag={"GLOBL","LOCAL"}),
 	0x80275280: main.sym_fnc("L80275280", flag={"GLOBL","LOCAL"}),
 	0x80275308: main.sym_fnc("L80275308", flag={"GLOBL","LOCAL"}),
-	0x80275328: main.sym("pl_hold_80275328"),
-	0x8027546C: main.sym("pl_hold_8027546C"),
-	0x802755FC: main.sym("pl_hold_802755FC"),
-	0x802756C8: main.sym("pl_hold_802756C8"),
-	0x80275794: main.sym("pl_hold_80275794"),
-	0x802758C0: main.sym("pl_hold_802758C0"),
-	0x802759B4: main.sym("pl_hold_802759B4"),
-	0x80275A80: main.sym("pl_hold_80275A80"),
-	0x80275B34: main.sym("pl_hold_80275B34"),
-	0x80275E78: main.sym("pl_hold_80275E78"),
-	0x80275F0C: main.sym("pl_hold_80275F0C"),
-	0x80275FE0: main.sym("pl_hold_exec", flag={"GLOBL"}),
+	0x80275328: main.sym("pltake_80275328"),
+	0x8027546C: main.sym("pltake_8027546C"),
+	0x802755FC: main.sym("pltake_802755FC"),
+	0x802756C8: main.sym("pltake_802756C8"),
+	0x80275794: main.sym("pltake_80275794"),
+	0x802758C0: main.sym("pltake_802758C0"),
+	0x802759B4: main.sym("pltake_802759B4"),
+	0x80275A80: main.sym("pltake_80275A80"),
+	0x80275B34: main.sym("pltake_80275B34"),
+	0x80275E78: main.sym("pltake_80275E78"),
+	0x80275F0C: main.sym("pltake_80275F0C"),
+	0x80275FE0: main.sym_fnc("PL_ExecTake", "int", (
+		"PLAYER *pl",
+	), flag={"GLOBL"}),
 	0x802760C8: main.sym_fnc("L802760C8", flag={"GLOBL","LOCAL"}),
 	0x802760DC: main.sym_fnc("L802760DC", flag={"GLOBL","LOCAL"}),
 	0x802760F0: main.sym_fnc("L802760F0", flag={"GLOBL","LOCAL"}),
@@ -9019,381 +9432,381 @@ sym_E0_code_text = {
 	0x8027617C: main.sym_fnc("L8027617C", flag={"GLOBL","LOCAL"}),
 
 	# src/callback.c
-	0x802761D0: main.sym_fnc("s_stage_weather", "void *", (
+	0x802761D0: main.sym_fnc("CtrlWeather", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802763D4: main.sym_fnc("s_stage_back", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802763D4: main.sym_fnc("CtrlBackground", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802764B0: main.sym_fnc("s_face_proc", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802764B0: main.sym_fnc("CtrlFace", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
+	), flag={"GLOBL"}), # shpcall
 	0x8027657C: main.sym_fnc("callback_8027657C"),
 	0x802765FC: main.sym_fnc("callback_802765FC"),
 	0x802766B4: main.sym_fnc("callback_802766B4"),
 	0x802767B8: main.sym_fnc("callback_802767B8"),
 	0x80276804: main.sym_fnc("callback_80276804"),
-	0x8027684C: main.sym_fnc("callback_8027684C", flag={"GLOBL"}), # o callback
+	0x8027684C: main.sym_fnc("callback_8027684C", flag={"GLOBL"}), # objcall
 	0x802768A8: main.sym_fnc("L802768A8", flag={"GLOBL","LOCAL"}),
 	0x802768B8: main.sym_fnc("L802768B8", flag={"GLOBL","LOCAL"}),
 	0x802768C8: main.sym_fnc("L802768C8", flag={"GLOBL","LOCAL"}),
 	0x802768D8: main.sym_fnc("L802768D8", flag={"GLOBL","LOCAL"}),
 	0x802768E8: main.sym_fnc("L802768E8", flag={"GLOBL","LOCAL"}),
-	0x80276910: main.sym_fnc("callback_80276910", flag={"GLOBL"}), # o callback
+	0x80276910: main.sym_fnc("callback_80276910", flag={"GLOBL"}), # objcall
 	0x80276AA0: main.sym_fnc("callback_80276AA0", arg=(
 		"SHORT angy",
 	)),
-	0x80276BB8: main.sym_fnc("callback_80276BB8", flag={"GLOBL"}), # o callback
-	0x80276CCC: main.sym_fnc("callback_80276CCC", flag={"GLOBL"}), # o callback
+	0x80276BB8: main.sym_fnc("callback_80276BB8", flag={"GLOBL"}), # objcall
+	0x80276CCC: main.sym_fnc("callback_80276CCC", flag={"GLOBL"}), # objcall
 	0x80276F90: main.sym_fnc("callback_80276F90", "Gfx *", (
-		"S_CALLBACK *shp",
+		"SCALLBACK *shp",
 		"SHORT alpha",
 	)),
-	0x802770A4: main.sym_fnc("s_player_alpha", "void *", (
+	0x802770A4: main.sym_fnc("CtrlPlayerAlpha", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277150: main.sym_fnc("s_player_select_lod", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277150: main.sym_fnc("CtrlPlayerLOD", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802771BC: main.sym_fnc("s_player_select_eyes", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802771BC: main.sym_fnc("CtrlPlayerEyes", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277294: main.sym_fnc("s_player_torso", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277294: main.sym_fnc("CtrlPlayerTorso", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802773A4: main.sym_fnc("s_player_head", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802773A4: main.sym_fnc("CtrlPlayerNeck", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802774F4: main.sym_fnc("s_mario_select_hand", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802774F4: main.sym_fnc("CtrlMarioHand", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802775CC: main.sym_fnc("s_mario_punch", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802775CC: main.sym_fnc("CtrlMarioPunch", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802776D8: main.sym_fnc("s_player_select_cap", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802776D8: main.sym_fnc("CtrlPlayerCap", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277740: main.sym_fnc("s_player_select_head", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277740: main.sym_fnc("CtrlPlayerHead", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277824: main.sym_fnc("s_player_wing", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277824: main.sym_fnc("CtrlPlayerWing", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x8027795C: main.sym_fnc("s_player_hand", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x8027795C: main.sym_fnc("CtrlPlayerHand", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277B14: main.sym_fnc("s_inside_mirror", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277B14: main.sym_fnc("CtrlInsideMirror", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x80277D6C: main.sym_fnc("s_mario_mirror", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x80277D6C: main.sym_fnc("CtrlMarioMirror", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
+	), flag={"GLOBL"}), # shpcall
 
 	# src/memory.c
-	0x80277EE0: main.sym_fnc("segment_set", "unsigned long", (
+	0x80277EE0: main.sym_fnc("SegmentSet", "unsigned long", (
 		"int number",
 		"void *addr",
 	), flag={"GLOBL"}),
-	0x80277F20: main.sym_fnc("segment_get", "void *", (
+	0x80277F20: main.sym_fnc("SegmentGet", "void *", (
 		"int number",
 	), flag={"GLOBL"}), # unused
-	0x80277F50: main.sym_fnc("segment_to_virtual", "void *", (
+	0x80277F50: main.sym_fnc("SegmentToVirtual", "void *", (
 		"const void *addr",
 	), flag={"GLOBL"}),
-	0x80277FA8: main.sym_fnc("virtual_to_segment", "void *", (
+	0x80277FA8: main.sym_fnc("VirtualToSegment", "void *", (
 		"int number",
 		"const void *addr",
 	), flag={"GLOBL"}),
-	0x80277FF0: main.sym_fnc("segment_write", flag={"GLOBL"}),
-	0x80278074: main.sym_fnc("mem_init", arg=(
+	0x80277FF0: main.sym_fnc("SegmentWrite", flag={"GLOBL"}),
+	0x80278074: main.sym_fnc("MemInit", arg=(
 		"void *start",
 		"void *end",
 	), flag={"GLOBL"}),
-	0x80278120: main.sym_fnc("mem_alloc", "void *", (
+	0x80278120: main.sym_fnc("MemAlloc", "void *", (
 		"size_t size",
 		"int mode",
 	), flag={"GLOBL"}),
-	0x80278238: main.sym_fnc("mem_free", "size_t", (
+	0x80278238: main.sym_fnc("MemFree", "size_t", (
 		"void *ptr",
 	), flag={"GLOBL"}),
-	0x80278358: main.sym_fnc("mem_realloc", "void *", (
+	0x80278358: main.sym_fnc("MemRealloc", "void *", (
 		"void *ptr",
 		"size_t size",
 	), flag={"GLOBL"}), # static
-	0x802783C8: main.sym_fnc("mem_available", "size_t", flag={"GLOBL"}),
-	0x802783E8: main.sym_fnc("mem_push", "size_t", flag={"GLOBL"}),
-	0x80278498: main.sym_fnc("mem_pull", "size_t", flag={"GLOBL"}),
-	0x80278504: main.sym_fnc("mem_dma", arg=(
+	0x802783C8: main.sym_fnc("MemAvailable", "size_t", flag={"GLOBL"}),
+	0x802783E8: main.sym_fnc("MemPush", "size_t", flag={"GLOBL"}),
+	0x80278498: main.sym_fnc("MemPull", "size_t", flag={"GLOBL"}),
+	0x80278504: main.sym_fnc("MemRead", arg=(
 		"char *dst",
 		"const char *start",
 		"const char *end",
 	), flag={"GLOBL"}), # static
-	0x80278610: main.sym_fnc("mem_load", "void *", (
+	0x80278610: main.sym_fnc("MemLoad", "void *", (
 		"const char *start",
 		"const char *end",
 		"int mode",
 	), flag={"GLOBL"}), # static
-	0x8027868C: main.sym_fnc("mem_load_data", "void *", (
+	0x8027868C: main.sym_fnc("MemLoadData", "void *", (
 		"int seg",
 		"const char *start",
 		"const char *end",
 		"int mode",
 	), flag={"GLOBL"}),
-	0x802786F0: main.sym_fnc("mem_load_code", "void *", (
+	0x802786F0: main.sym_fnc("MemLoadCode", "void *", (
 		"char *addr",
 		"const char *start",
 		"const char *end",
 	), flag={"GLOBL"}),
-	0x802787D8: main.sym_fnc("mem_load_pres", "void *", (
+	0x802787D8: main.sym_fnc("MemLoadPres", "void *", (
 		"int seg",
 		"const char *start",
 		"const char *end",
 	), flag={"GLOBL"}),
-	0x802788B4: main.sym_fnc("mem_load_text", "void *", (
+	0x802788B4: main.sym_fnc("MemLoadText", "void *", (
 		"int seg",
 		"const char *start",
 		"const char *end",
 	), flag={"GLOBL"}),
-	0x80278974: main.sym_fnc("mem_load_ulib", flag={"GLOBL"}),
-	0x80278A14: main.sym_fnc("arena_create", "ARENA *", (
+	0x80278974: main.sym_fnc("MemLoadULib", flag={"GLOBL"}),
+	0x80278A14: main.sym_fnc("ArenaCreate", "ARENA *", (
 		"size_t size",
 		"int mode",
 	), flag={"GLOBL"}),
-	0x80278AB8: main.sym_fnc("arena_alloc", "void *", (
+	0x80278AB8: main.sym_fnc("ArenaAlloc", "void *", (
 		"ARENA *arena",
 		"long size",
 	), flag={"GLOBL"}),
-	0x80278B28: main.sym_fnc("arena_resize", "void *", (
+	0x80278B28: main.sym_fnc("ArenaResize", "void *", (
 		"ARENA *arena",
 		"size_t size",
 	), flag={"GLOBL"}),
-	0x80278B98: main.sym_fnc("heap_create", "HEAP *", (
+	0x80278B98: main.sym_fnc("HeapCreate", "HEAP *", (
 		"size_t size",
 		"int mode",
 	), flag={"GLOBL"}),
-	0x80278C58: main.sym_fnc("heap_alloc", "void *", (
+	0x80278C58: main.sym_fnc("HeapAlloc", "void *", (
 		"HEAP *heap",
 		"size_t size",
 	), flag={"GLOBL"}),
-	0x80278D74: main.sym_fnc("heap_free", arg=(
+	0x80278D74: main.sym_fnc("HeapFree", arg=(
 		"HEAP *heap",
 		"void *ptr",
 	), flag={"GLOBL"}),
-	0x80278F2C: main.sym_fnc("gfx_alloc", "void *", (
+	0x80278F2C: main.sym_fnc("GfxAlloc", "void *", (
 		"size_t size",
 	), flag={"GLOBL"}),
-	0x80278FA0: main.sym_fnc("bank_load_info", "BANKINFO *", (
+	0x80278FA0: main.sym_fnc("BankLoadInfo", "BANKINFO *", (
 		"const char *src",
 	)),
-	0x80279028: main.sym_fnc("bank_init", arg=(
+	0x80279028: main.sym_fnc("BankInit", arg=(
 		"BANK *bank",
 		"const char *src",
 		"void *buf",
 	), flag={"GLOBL"}),
-	0x80279084: main.sym_fnc("bank_load", "int", (
+	0x80279084: main.sym_fnc("BankLoad", "int", (
 		"BANK *bank",
 		"unsigned int index",
 	), flag={"GLOBL"}),
 
-	# src/save.c
-	0x80279160: main.sym_fnc("save_init_debug"),
-	0x80279174: main.sym_fnc("save_rd", "int", (
+	# src/backup.c
+	0x80279160: main.sym_fnc("BuInitDebug"),
+	0x80279174: main.sym_fnc("BackupRead", "int", (
 		"void *data",
 		"int size",
 	)),
-	0x80279218: main.sym_fnc("save_wr", "int", (
-		"void *data",
+	0x80279218: main.sym_fnc("BackupWrite", "int", (
+		"const void *data",
 		"int size",
 	)),
-	0x802792C0: main.sym_fnc("save_check_sum", "USHORT", (
+	0x802792C0: main.sym_fnc("BuCheckSum", "USHORT", (
 		"u8 *data",
 		"int size",
 	)),
-	0x80279314: main.sym_fnc("save_check", "int", (
+	0x80279314: main.sym_fnc("BuCheck", "int", (
 		"void *data",
 		"int size",
 		"USHORT key",
 	)),
-	0x8027939C: main.sym_fnc("save_check_set", arg=(
+	0x8027939C: main.sym_fnc("BuCheckSet", arg=(
 		"void *data",
 		"int size",
 		"USHORT key",
 	)),
-	0x802793FC: main.sym_fnc("save_data_recover", arg=(
+	0x802793FC: main.sym_fnc("BuInfoRecover", arg=(
 		"int src",
 	)),
-	0x802794A0: main.sym_fnc("save_data_write"),
-	0x8027951C: main.sym_fnc("save_data_erase"),
-	0x802795A0: main.sym_fnc("save_get_time", "int", (
+	0x802794A0: main.sym_fnc("BuInfoWrite"),
+	0x8027951C: main.sym_fnc("BuInfoErase"),
+	0x802795A0: main.sym_fnc("BuGetTime", "int", (
 		"int file",
 		"int course",
 	)),
-	0x802795D4: main.sym_fnc("save_set_time", arg=(
+	0x802795D4: main.sym_fnc("BuSetTime", arg=(
 		"int file",
 		"int course",
 		"int time",
 	)),
-	0x80279650: main.sym_fnc("save_update_time", arg=(
+	0x80279650: main.sym_fnc("BuUpdateTime", arg=(
 		"int file",
 		"int course",
 	)),
-	0x80279700: main.sym_fnc("save_update_time_all", arg=(
+	0x80279700: main.sym_fnc("BuUpdateTimeAll", arg=(
 		"int file",
 	)),
-	0x80279748: main.sym_fnc("save_file_recover", arg=(
+	0x80279748: main.sym_fnc("BuFileRecover", arg=(
 		"int file",
 		"int src",
 	)),
-	0x80279840: main.sym_fnc("save_file_write", arg=(
+	0x80279840: main.sym_fnc("BuFileWrite", arg=(
 		"int file",
 	), flag={"GLOBL"}),
-	0x802798FC: main.sym_fnc("save_file_erase", arg=(
+	0x802798FC: main.sym_fnc("BuFileErase", arg=(
 		"int file",
 	), flag={"GLOBL"}),
-	0x80279960: main.sym_fnc("save_file_copy", arg=(
+	0x80279960: main.sym_fnc("BuFileCopy", arg=(
 		"int src",
 		"int dst",
 	), flag={"GLOBL"}),
-	0x802799DC: main.sym_fnc("save_init", flag={"GLOBL"}),
-	0x80279BC8: main.sym_fnc("save_reset", flag={"GLOBL"}),
-	0x80279C44: main.sym_fnc("save_set", arg=(
+	0x802799DC: main.sym_fnc("BackupInit", flag={"GLOBL"}),
+	0x80279BC8: main.sym_fnc("BuReset", flag={"GLOBL"}),
+	0x80279C44: main.sym_fnc("BuSet", arg=(
 		"SHORT coin",
 		"SHORT level",
 	), flag={"GLOBL"}),
-	0x80279E44: main.sym_fnc("save_file_isactive", "int", (
+	0x80279E44: main.sym_fnc("BuFileIsActive", "int", (
 		"int file",
 	), flag={"GLOBL"}),
-	0x80279E80: main.sym_fnc("save_hiscore_get", "u32", (
+	0x80279E80: main.sym_fnc("BuGetHiScore", "u32", (
 		"int course",
 	), flag={"GLOBL"}),
-	0x80279F80: main.sym_fnc("save_file_star_count", "int", (
+	0x80279F80: main.sym_fnc("BuFileStarCount", "int", (
 		"int file",
 		"int course",
 	), flag={"GLOBL"}),
-	0x8027A010: main.sym_fnc("save_file_star_range", "int", (
+	0x8027A010: main.sym_fnc("BuFileStarRange", "int", (
 		"int file",
 		"int min",
 		"int max",
 	), flag={"GLOBL"}),
-	0x8027A0A8: main.sym_fnc("save_set_flag", arg=(
+	0x8027A0A8: main.sym_fnc("BuSetFlag", arg=(
 		"unsigned int flag",
 	), flag={"GLOBL"}),
-	0x8027A0F4: main.sym_fnc("save_clr_flag", arg=(
+	0x8027A0F4: main.sym_fnc("BuClrFlag", arg=(
 		"unsigned int flag",
 	), flag={"GLOBL"}),
-	0x8027A16C: main.sym_fnc("save_get_flag", "unsigned int", flag={"GLOBL"}),
-	0x8027A1C8: main.sym_fnc("save_file_get_star", "int", (
+	0x8027A16C: main.sym_fnc("BuGetFlag", "unsigned int", flag={"GLOBL"}),
+	0x8027A1C8: main.sym_fnc("BuFileGetStar", "int", (
 		"int file",
 		"int course",
 	), flag={"GLOBL"}),
-	0x8027A23C: main.sym_fnc("save_file_set_star", arg=(
+	0x8027A23C: main.sym_fnc("BuFileSetStar", arg=(
 		"int file",
 		"int course",
 		"int flag",
 	), flag={"GLOBL"}), # static
-	0x8027A310: main.sym_fnc("save_file_get_coin", "int", (
+	0x8027A310: main.sym_fnc("BuFileGetCoin", "int", (
 		"int file",
 		"int course",
 	), flag={"GLOBL"}),
-	0x8027A340: main.sym_fnc("save_get_cannon", "int", flag={"GLOBL"}),
-	0x8027A390: main.sym_fnc("save_set_cannon", flag={"GLOBL"}),
-	0x8027A418: main.sym_fnc("save_set_cap", arg=(
+	0x8027A340: main.sym_fnc("BuGetCannon", "int", flag={"GLOBL"}),
+	0x8027A390: main.sym_fnc("BuSetCannon", flag={"GLOBL"}),
+	0x8027A418: main.sym_fnc("BuSetCap", arg=(
 		"SHORT x",
 		"SHORT y",
 		"SHORT z",
 	), flag={"GLOBL"}),
-	0x8027A4AC: main.sym_fnc("save_get_cap", "int", (
-		"VECS pos",
+	0x8027A4AC: main.sym_fnc("BuGetCap", "int", (
+		"SVEC pos",
 	), flag={"GLOBL"}),
-	0x8027A564: main.sym_fnc("save_set_sound", arg=(
+	0x8027A564: main.sym_fnc("BuSetSound", arg=(
 		"USHORT sound",
 	), flag={"GLOBL"}),
-	0x8027A5B4: main.sym_fnc("save_get_sound", "USHORT", flag={"GLOBL"}),
-	0x8027A5D4: main.sym_fnc("save_init_cap", flag={"GLOBL"}),
-	0x8027A698: main.sym_fnc("save_clr_mid", flag={"GLOBL"}),
-	0x8027A6B0: main.sym_fnc("save_set_mid", arg=(
+	0x8027A5B4: main.sym_fnc("BuGetSound", "USHORT", flag={"GLOBL"}),
+	0x8027A5D4: main.sym_fnc("BuInitCap", flag={"GLOBL"}),
+	0x8027A698: main.sym_fnc("BuClrMid", flag={"GLOBL"}),
+	0x8027A6B0: main.sym_fnc("BuSetMid", arg=(
 		"PORTINFO *p",
 	), flag={"GLOBL"}),
-	0x8027A718: main.sym_fnc("save_get_mid", "int", (
+	0x8027A718: main.sym_fnc("BuGetMid", "int", (
 		"PORTINFO *p",
 	), flag={"GLOBL"}),
 
 	# src/scene.c
-	0x8027A7D0: main.sym_fnc("scene_set_vp", arg=(
+	0x8027A7D0: main.sym_fnc("SnSetVp", arg=(
 		"Vp *viewport",
 		"Vp *scissor",
 		"UCHAR r",
 		"UCHAR g",
 		"UCHAR b",
 	), flag={"GLOBL"}),
-	0x8027A83C: main.sym_fnc("scene_set_blank", arg=(
+	0x8027A83C: main.sym_fnc("SnSetBlank", arg=(
 		"UCHAR r",
 		"UCHAR g",
 		"UCHAR b",
 	)),
-	0x8027A8B0: main.sym_fnc("scene_demo", flag={"GLOBL"}),
-	0x8027A93C: main.sym_fnc("port_get_type", "int", (
+	0x8027A8B0: main.sym_fnc("SceneDemo", flag={"GLOBL"}),
+	0x8027A93C: main.sym_fnc("SnGetPortType", "int", (
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x8027A9C8: main.sym_fnc("port_get", "PORT *", (
+	0x8027A9C8: main.sym_fnc("SnGetPort", "PORT *", (
 		"UCHAR index",
 	), flag={"GLOBL"}),
-	0x8027AA28: main.sym_fnc("obj_get_port", "PORT *", (
+	0x8027AA28: main.sym_fnc("ObjGetPort", "PORT *", (
 		"OBJECT *obj",
 	)),
-	0x8027AA74: main.sym_fnc("port_init"),
-	0x8027AB04: main.sym_fnc("scene_init", flag={"GLOBL"}),
-	0x8027AD74: main.sym_fnc("scene_exit", flag={"GLOBL"}),
-	0x8027AE44: main.sym_fnc("scene_open", arg=(
+	0x8027AA74: main.sym_fnc("SnInitPort"),
+	0x8027AB04: main.sym_fnc("SceneInit", flag={"GLOBL"}),
+	0x8027AD74: main.sym_fnc("SceneExit", flag={"GLOBL"}),
+	0x8027AE44: main.sym_fnc("SceneOpen", arg=(
 		"int index",
 	), flag={"GLOBL"}),
-	0x8027AF48: main.sym_fnc("scene_close", flag={"GLOBL"}),
-	0x8027AFBC: main.sym_fnc("scene_player_open", flag={"GLOBL"}),
-	0x8027B038: main.sym_fnc("scene_player_close", flag={"GLOBL"}),
-	0x8027B0C0: main.sym_fnc("scene_set", arg=(
+	0x8027AF48: main.sym_fnc("SceneClose", flag={"GLOBL"}),
+	0x8027AFBC: main.sym_fnc("SnOpenPlayer", flag={"GLOBL"}),
+	0x8027B038: main.sym_fnc("SnClosePlayer", flag={"GLOBL"}),
+	0x8027B0C0: main.sym_fnc("SceneSet", arg=(
 		"int index",
 	), flag={"GLOBL"}),
-	0x8027B164: main.sym_fnc("scene_proc", flag={"GLOBL"}),
-	0x8027B1A0: main.sym_fnc("scene_wipe", arg=(
+	0x8027B164: main.sym_fnc("SceneProc", flag={"GLOBL"}),
+	0x8027B1A0: main.sym_fnc("SnWipe", arg=(
 		"SHORT type",
 		"SHORT frame",
 		"UCHAR r",
 		"UCHAR g",
 		"UCHAR b",
 	), flag={"GLOBL"}),
-	0x8027B35C: main.sym_fnc("scene_wipe_delay", arg=(
+	0x8027B35C: main.sym_fnc("SnWipeDelay", arg=(
 		"SHORT type",
 		"SHORT frame",
 		"UCHAR r",
@@ -9401,85 +9814,85 @@ sym_E0_code_text = {
 		"UCHAR b",
 		"SHORT delay",
 	), flag={"GLOBL"}),
-	0x8027B3B4: main.sym_fnc("scene_draw", flag={"GLOBL"}),
+	0x8027B3B4: main.sym_fnc("SceneDraw", flag={"GLOBL"}),
 
 	# src/draw.c
-	0x8027B6C0: main.sym_fnc("draw_layer_list", arg=(
-		"S_LAYER *shp",
+	0x8027B6C0: main.sym_fnc("DrawLayerList", arg=(
+		"SLAYER *shp",
 	)),
-	0x8027B904: main.sym_fnc("draw_layer_gfx", arg=(
+	0x8027B904: main.sym_fnc("DrawLayerGfx", arg=(
 		"Gfx *gfx",
 		"SHORT layer",
 	)),
-	0x8027BA00: main.sym_fnc("draw_layer", arg=(
-		"S_LAYER *shp",
+	0x8027BA00: main.sym_fnc("DrawLayer", arg=(
+		"SLAYER *shp",
 	)),
-	0x8027BA98: main.sym_fnc("draw_ortho", arg=(
-		"S_ORTHO *shp",
+	0x8027BA98: main.sym_fnc("DrawOrtho", arg=(
+		"SORTHO *shp",
 	)),
-	0x8027BC74: main.sym_fnc("draw_persp", arg=(
-		"S_PERSP *shp",
+	0x8027BC74: main.sym_fnc("DrawPersp", arg=(
+		"SPERSP *shp",
 	)),
-	0x8027BDF0: main.sym_fnc("draw_lod", arg=(
-		"S_LOD *shp",
+	0x8027BDF0: main.sym_fnc("DrawLOD", arg=(
+		"SLOD *shp",
 	)),
-	0x8027BE84: main.sym_fnc("draw_select", arg=(
-		"S_SELECT *shp",
+	0x8027BE84: main.sym_fnc("DrawSelect", arg=(
+		"SSELECT *shp",
 	)),
-	0x8027BF58: main.sym_fnc("draw_camera", arg=(
-		"S_CAMERA *shp",
+	0x8027BF58: main.sym_fnc("DrawCamera", arg=(
+		"SCAMERA *shp",
 	)),
-	0x8027C114: main.sym_fnc("draw_coord", arg=(
-		"S_COORD *shp",
+	0x8027C114: main.sym_fnc("DrawCoord", arg=(
+		"SCOORD *shp",
 	)),
-	0x8027C238: main.sym_fnc("draw_pos", arg=(
-		"S_POS *shp",
+	0x8027C238: main.sym_fnc("DrawPos", arg=(
+		"SPOS *shp",
 	)),
-	0x8027C35C: main.sym_fnc("draw_ang", arg=(
-		"S_ANG *shp",
+	0x8027C35C: main.sym_fnc("DrawAng", arg=(
+		"SANG *shp",
 	)),
-	0x8027C474: main.sym_fnc("draw_scale", arg=(
-		"S_SCALE *shp",
+	0x8027C474: main.sym_fnc("DrawScale", arg=(
+		"SSCALE *shp",
 	)),
-	0x8027C594: main.sym_fnc("draw_billboard", arg=(
-		"S_BILLBOARD *shp",
+	0x8027C594: main.sym_fnc("DrawBillboard", arg=(
+		"SBILLBOARD *shp",
 	)),
-	0x8027C73C: main.sym_fnc("draw_gfx", arg=(
-		"S_GFX *shp",
+	0x8027C73C: main.sym_fnc("DrawGfx", arg=(
+		"SGFX *shp",
 	)),
-	0x8027C7A4: main.sym_fnc("draw_callback", arg=(
-		"S_CALLBACK *shp",
+	0x8027C7A4: main.sym_fnc("DrawCallback", arg=(
+		"SCALLBACK *shp",
 	)),
-	0x8027C858: main.sym_fnc("draw_back", arg=(
-		"S_BACK *shp",
+	0x8027C858: main.sym_fnc("DrawBack", arg=(
+		"SBACK *shp",
 	)),
-	0x8027CA70: main.sym_fnc("draw_joint", arg=(
-		"S_JOINT *shp",
+	0x8027CA70: main.sym_fnc("DrawJoint", arg=(
+		"SJOINT *shp",
 	)),
-	0x8027CF38: main.sym_fnc("draw_skeleton", arg=(
+	0x8027CF38: main.sym_fnc("DrawSkeleton", arg=(
 		"SKELETON *skel",
 		"int flag",
 	)),
-	0x8027D0B8: main.sym_fnc("draw_shadow", arg=(
-		"S_SHADOW *shp",
+	0x8027D0B8: main.sym_fnc("DrawShadow", arg=(
+		"SSHADOW *shp",
 	)),
-	0x8027D518: main.sym_fnc("sobj_isvisible", "int", (
-		"S_OBJECT *shp",
-		"MTXF *mf",
+	0x8027D518: main.sym_fnc("SObjIsVisible", "int", (
+		"SOBJECT *shp",
+		"FMTX *m",
 	)),
-	0x8027D6FC: main.sym_fnc("draw_object", arg=(
-		"S_OBJECT *shp",
+	0x8027D6FC: main.sym_fnc("DrawObject", arg=(
+		"SOBJECT *shp",
 	)),
-	0x8027DA10: main.sym_fnc("draw_list", arg=(
-		"S_LIST *shp",
+	0x8027DA10: main.sym_fnc("DrawBranch", arg=(
+		"SBRANCH *shp",
 	)),
-	0x8027DA84: main.sym_fnc("draw_hand", arg=(
-		"S_HAND *shp",
+	0x8027DA84: main.sym_fnc("DrawHand", arg=(
+		"SHAND *shp",
 	)),
-	0x8027DE68: main.sym_fnc("draw_child", arg=(
+	0x8027DE68: main.sym_fnc("DrawChild", arg=(
 		"SHAPE *shape",
 	)),
-	0x8027DEA8: main.sym_fnc("draw_shape", arg=(
+	0x8027DEA8: main.sym_fnc("DrawShape", arg=(
 		"SHAPE *shape",
 	)),
 	0x8027DF90: main.sym_fnc("L8027DF90", flag={"GLOBL","LOCAL"}),
@@ -9502,27 +9915,27 @@ sym_E0_code_text = {
 	0x8027E0A0: main.sym_fnc("L8027E0A0", flag={"GLOBL","LOCAL"}),
 	0x8027E0B0: main.sym_fnc("L8027E0B0", flag={"GLOBL","LOCAL"}),
 	0x8027E0C0: main.sym_fnc("L8027E0C0", flag={"GLOBL","LOCAL"}),
-	0x8027E130: main.sym_fnc("draw_scene", arg=(
-		"S_SCENE *shp",
+	0x8027E130: main.sym_fnc("DrawScene", arg=(
+		"SSCENE *shp",
 		"Vp *viewport",
 		"Vp *scissor",
 		"u32 fill",
 	), flag={"GLOBL"}),
 
 	# src/time.c
-	0x8027E3E0: main.sym_fnc("time_gfxcpu", arg=(
+	0x8027E3E0: main.sym_fnc("TimeGfxCPU", arg=(
 		"int",
 	), flag={"GLOBL"}),
-	0x8027E490: main.sym_fnc("time_audcpu", flag={"GLOBL"}),
-	0x8027E520: main.sym_fnc("time_gfxrcp", arg=(
+	0x8027E490: main.sym_fnc("TimeAudCPU", flag={"GLOBL"}),
+	0x8027E520: main.sym_fnc("TimeGfxRCP", arg=(
 		"int",
 	), flag={"GLOBL"}),
-	0x8027E5CC: main.sym_fnc("time_audrcp", flag={"GLOBL"}),
-	0x8027E65C: main.sym("time_draw_d"),
-	0x8027E958: main.sym("time_draw_scale"),
-	0x8027EBCC: main.sym("time_draw_abs"),
-	0x8027EEAC: main.sym("time_draw_rel"),
-	0x8027F460: main.sym_fnc("time_draw", flag={"GLOBL"}),
+	0x8027E5CC: main.sym_fnc("TimeAudRCP", flag={"GLOBL"}),
+	0x8027E65C: main.sym("TimeDrawD"),
+	0x8027E958: main.sym("TimeDrawScale"),
+	0x8027EBCC: main.sym("TimeDrawAbs"),
+	0x8027EEAC: main.sym("TimeDrawRel"),
+	0x8027F460: main.sym_fnc("TimeDraw", flag={"GLOBL"}),
 
 	# src/slidec.s
 	0x8027F4E0: main.sym_fnc("slidec", arg=(
@@ -9531,7 +9944,9 @@ sym_E0_code_text = {
 	), flag={"GLOBL"}),
 
 	# src/camera.c
-	0x8027F590: main.sym("camera_8027F590", flag={"GLOBL"}),
+	0x8027F590: main.sym_fnc("camera_8027F590", arg=(
+		"SHORT",
+	), flag={"GLOBL"}),
 	0x8027F5CC: main.sym_fnc("L8027F5CC", flag={"GLOBL","LOCAL"}),
 	0x8027F5EC: main.sym_fnc("L8027F5EC", flag={"GLOBL","LOCAL"}),
 	0x8027F614: main.sym_fnc("L8027F614", flag={"GLOBL","LOCAL"}),
@@ -9552,7 +9967,12 @@ sym_E0_code_text = {
 	0x8027F9A8: main.sym_fnc("L8027F9A8", flag={"GLOBL","LOCAL"}),
 	0x8027F9C0: main.sym_fnc("L8027F9C0", flag={"GLOBL","LOCAL"}),
 	0x8027F9D8: main.sym_fnc("L8027F9D8", flag={"GLOBL","LOCAL"}),
-	0x8027F9F0: main.sym("camera_8027F9F0", flag={"GLOBL"}),
+	0x8027F9F0: main.sym_fnc("camera_8027F9F0", arg=(
+		"int",
+		"float",
+		"float",
+		"float",
+	), flag={"GLOBL"}),
 	0x8027FB74: main.sym("camera_8027FB74"), # unused
 	0x8027FC18: main.sym("camera_8027FC18"),
 	0x8027FE20: main.sym("camera_8027FE20"),
@@ -9563,13 +9983,13 @@ sym_E0_code_text = {
 	0x802806A4: main.sym("camera_802806A4"),
 	0x80280810: main.sym_fnc("camera_80280810", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80280970: main.sym_fnc("camera_80280970", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80280B00: main.sym("camera_80280B00"),
 	0x80281188: main.sym("camera_80281188"),
@@ -9579,29 +9999,29 @@ sym_E0_code_text = {
 	0x80281588: main.sym("camera_80281588"),
 	0x802816A0: main.sym_fnc("camera_802816A0", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x802817FC: main.sym("camera_802817FC"),
 	0x80281904: main.sym_fnc("camera_80281904", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80282280: main.sym_fnc("camera_80282280", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x802826A0: main.sym_fnc("camera_802826A0", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80282C0C: main.sym_fnc("camera_80282C0C", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80282C28: main.sym("camera_80282C28"), # unused
 	0x80282C3C: main.sym("camera_80282C3C"),
@@ -9609,22 +10029,22 @@ sym_E0_code_text = {
 	0x80282CE0: main.sym("camera_80282CE0"),
 	0x80282D78: main.sym_fnc("camera_80282D78", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80283340: main.sym("camera_80283340"),
 	0x80283578: main.sym("camera_80283578"),
 	0x802839E4: main.sym("camera_802839E4"),
 	0x80283A18: main.sym_fnc("camera_80283A18", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80283A34: main.sym("camera_80283A34"),
 	0x80283A68: main.sym_fnc("camera_80283A68", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80283AF8: main.sym("camera_80283AF8"),
 	0x80284CB8: main.sym("camera_80284CB8"),
@@ -9632,14 +10052,14 @@ sym_E0_code_text = {
 	0x80284D38: main.sym("camera_80284D38"),
 	0x80284D74: main.sym_fnc("camera_80284D74", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x802850AC: main.sym("camera_802850AC"),
 	0x802850EC: main.sym_fnc("camera_802850EC", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x8028517C: main.sym("camera_8028517C"), # unused
 	0x802851DC: main.sym("camera_802851DC"),
@@ -9648,21 +10068,25 @@ sym_E0_code_text = {
 	0x80285370: main.sym("camera_80285370"),
 	0x80285808: main.sym_fnc("camera_80285808", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x802858A4: main.sym("camera_802858A4"),
 	0x80285A2C: main.sym("camera_80285A2C"),
 	0x80285D20: main.sym("camera_80285D20"),
 	0x80285ED8: main.sym_fnc("camera_80285ED8", "int", (
 		"CAMERA *cam",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}), # data / tbl
 	0x80285F60: main.sym("camera_80285F60"),
 	0x8028603C: main.sym("camera_8028603C"),
 	0x80286088: main.sym("camera_80286088"),
-	0x80286188: main.sym("camera_80286188", flag={"GLOBL"}),
+	0x80286188: main.sym_fnc("camera_80286188", arg=(
+		"CAMERA *cam",
+		"SHORT",
+		"SHORT",
+	), flag={"GLOBL"}),
 	0x80286420: main.sym("camera_80286420"),
 	0x802868F8: main.sym_fnc("camera_802868F8", arg=(
 		"CAMERA *",
@@ -9700,7 +10124,7 @@ sym_E0_code_text = {
 	0x80287BC4: main.sym_fnc("camera_80287BC4", flag={"GLOBL"}),
 	0x80287BE0: main.sym("camera_80287BE0"),
 	0x80287CB8: main.sym("camera_80287CB8"),
-	0x80287D30: main.sym("s_stage_camera", flag={"GLOBL"}), # s callback
+	0x80287D30: main.sym("CtrlCamera", flag={"GLOBL"}), # shpcall
 	0x80287DC0: main.sym("camera_80287DC0"),
 	0x80287DD4: main.sym("camera_80287DD4"),
 	0x80287DE8: main.sym("camera_80287DE8"),
@@ -10016,8 +10440,15 @@ sym_E0_code_text = {
 	0x8028FE24: main.sym("camera_8028FE24"),
 	0x8028FE58: main.sym("camera_8028FE58"),
 	0x8028FE84: main.sym("camera_8028FE84"), # unused
-	0x8028FF04: main.sym("camera_8028FF04", flag={"GLOBL"}),
-	0x8028FFC8: main.sym("camera_8028FFC8", flag={"GLOBL"}),
+	0x8028FF04: main.sym_fnc("camera_8028FF04", "int", (
+		"int",
+		"OBJECT *",
+		"int",
+	), flag={"GLOBL"}),
+	0x8028FFC8: main.sym_fnc("camera_8028FFC8", "int", (
+		"int",
+		"OBJECT *",
+	), flag={"GLOBL"}),
 	0x8029000C: main.sym("camera_8029000C", flag={"GLOBL"}),
 	0x80290098: main.sym("camera_80290098"),
 	0x802900E0: main.sym("camera_802900E0"),
@@ -10521,7 +10952,7 @@ sym_E0_code_text = {
 	0x8029A8D0: main.sym("camera_8029A8D0"),
 	0x8029A968: main.sym("camera_8029A968"),
 	0x8029A9A4: main.sym("camera_8029A9A4"),
-	0x8029AA3C: main.sym("s_stage_perspective", flag={"GLOBL"}), # s callback
+	0x8029AA3C: main.sym("CtrlPerspective", flag={"GLOBL"}), # shpcall
 	0x8029AAAC: main.sym_fnc("L8029AAAC", flag={"GLOBL","LOCAL"}),
 	0x8029AABC: main.sym_fnc("L8029AABC", flag={"GLOBL","LOCAL"}),
 	0x8029AACC: main.sym_fnc("L8029AACC", flag={"GLOBL","LOCAL"}),
@@ -10541,15 +10972,15 @@ sym_E0_code_text = {
 	0x8029AE40: main.sym("camera_8029AE40"), # unused
 	0x8029AEF8: main.sym("camera_8029AEF8"),
 	0x8029AF98: main.sym("camera_8029AF98"),
-	0x8029B08C: main.sym("camera_8029B08C", flag={"GLOBL"}), # o callback
+	0x8029B08C: main.sym("camera_8029B08C", flag={"GLOBL"}), # objcall
 	0x8029B28C: main.sym("camera_8029B28C"),
 	0x8029B358: main.sym("camera_8029B358"),
 	0x8029B3C8: main.sym("camera_8029B3C8"),
-	0x8029B49C: main.sym("camera_8029B49C", flag={"GLOBL"}), # o callback
-	0x8029BDE4: main.sym("camera_8029BDE4", flag={"GLOBL"}), # o callback
-	0x8029BF64: main.sym("camera_8029BF64", flag={"GLOBL"}), # o callback
+	0x8029B49C: main.sym("camera_8029B49C", flag={"GLOBL"}), # objcall
+	0x8029BDE4: main.sym("camera_8029BDE4", flag={"GLOBL"}), # objcall
+	0x8029BF64: main.sym("camera_8029BF64", flag={"GLOBL"}), # objcall
 	0x8029C0E4: main.sym("camera_8029C0E4"),
-	0x8029C254: main.sym("camera_8029C254", flag={"GLOBL"}), # o callback
+	0x8029C254: main.sym("camera_8029C254", flag={"GLOBL"}), # objcall
 	0x8029C2FC: main.sym_fnc("L8029C2FC", flag={"GLOBL","LOCAL"}),
 	0x8029C320: main.sym_fnc("L8029C320", flag={"GLOBL","LOCAL"}),
 	0x8029C344: main.sym_fnc("L8029C344", flag={"GLOBL","LOCAL"}),
@@ -10557,91 +10988,156 @@ sym_E0_code_text = {
 	0x8029C5EC: main.sym_fnc("L8029C5EC", flag={"GLOBL","LOCAL"}),
 
 	# src/course.c
-	0x8029C770: main.sym_fnc("course_init", flag={"GLOBL"}),
+	0x8029C770: main.sym_fnc("CourseInit", flag={"GLOBL"}),
 
 	# src/object.c
-	0x8029C780: main.sym_fnc("player_copyinfo"),
-	0x8029C9CC: main.sym_fnc("player_seteffect", arg=(
+	0x8029C780: main.sym_fnc("Player_CopyInfo"),
+	0x8029C9CC: main.sym_fnc("Player_SetEffect", arg=(
 		"u32 flag",
 		"SHORT shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 	)),
-	0x8029CA58: main.sym_fnc("mario_proc", flag={"GLOBL"}), # o callback
-	0x8029CB34: main.sym_fnc("objlist_exec_normal", "int", (
+	0x8029CA58: main.sym_fnc("Mario_Proc", flag={"GLOBL"}), # objcall
+	0x8029CB34: main.sym_fnc("ObjListExecNormal", "int", (
 		"OBJECT *root",
 		"OBJECT *obj",
 	)),
-	0x8029CBC8: main.sym_fnc("objlist_exec_frozen", "int", (
+	0x8029CBC8: main.sym_fnc("ObjListExecFrozen", "int", (
 		"OBJECT *root",
 		"OBJECT *obj",
 	)),
-	0x8029CD28: main.sym_fnc("objlist_exec", "int", (
+	0x8029CD28: main.sym_fnc("ObjListExec", "int", (
 		"OBJECT *root",
 	)),
-	0x8029CD98: main.sym_fnc("objlist_cleanup", "int", (
+	0x8029CD98: main.sym_fnc("ObjListCleanup", "int", (
 		"OBJECT *root",
 	)),
-	0x8029CE58: main.sym_fnc("obj_set_actorflag", arg=(
+	0x8029CE58: main.sym_fnc("ObjSetActorFlag", arg=(
 		"OBJECT *obj",
 		"UCHAR flag",
 	), flag={"GLOBL"}),
-	0x8029CEDC: main.sym_fnc("object_close", arg=(
+	0x8029CEDC: main.sym_fnc("ObjectClose", arg=(
 		"int screen",
 		"int group",
 	), flag={"GLOBL"}),
-	0x8029CFB0: main.sym_fnc("object_open", arg=(
+	0x8029CFB0: main.sym_fnc("ObjectOpen", arg=(
 		"int screen",
 		"ACTOR *actor",
 	), flag={"GLOBL"}),
 	0x8029D1D8: main.sym_fnc("object_8029D1D8"),
-	0x8029D1E8: main.sym_fnc("object_init", flag={"GLOBL"}),
-	0x8029D324: main.sym_fnc("object_exec_1"),
-	0x8029D374: main.sym_fnc("object_exec_2"),
-	0x8029D428: main.sym_fnc("object_cleanup"),
+	0x8029D1E8: main.sym_fnc("ObjectInit", flag={"GLOBL"}),
+	0x8029D324: main.sym_fnc("ObjectExec1"),
+	0x8029D374: main.sym_fnc("ObjectExec2"),
+	0x8029D428: main.sym_fnc("ObjectCleanup"),
 	0x8029D4D0: main.sym_fnc("object_8029D4D0", "USHORT", (
 		"OSTime *t",
 		"int i",
 	)), # unused
-	0x8029D690: main.sym_fnc("object_proc", arg=(
+	0x8029D690: main.sym_fnc("ObjectProc", arg=(
 		"int screen",
 	), flag={"GLOBL"}),
 
-	# src/objlib.c
-	0x8029D890: main.sym("s_objlib_8029D890", flag={"GLOBL"}), # s callback
-	0x8029D924: main.sym("s_objlib_8029D924", flag={"GLOBL"}), # s callback
-	0x8029DB48: main.sym("s_objlib_8029DB48", flag={"GLOBL"}), # s callback
-	0x8029DBD4: main.sym("s_objlib_8029DBD4", flag={"GLOBL"}), # s callback
-	0x8029DCD4: main.sym("objlib_8029DCD4", flag={"GLOBL"}),
-	0x8029DDA8: main.sym_fnc("objlib_8029DDA8", arg=(
+	# src/objectlib.c
+	0x8029D890: main.sym_fnc("CtrlObjectHand", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL","LOCAL"}), # shpcall
+	0x8029D924: main.sym_fnc("CtrlObjectAlpha", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL","LOCAL"}), # shpcall
+	0x8029DB48: main.sym_fnc("CtrlObjectShape", "void *", (
+		"int code",
+		"SHAPE *shape",
+	), flag={"GLOBL","LOCAL"}), # shpcall
+	0x8029DBD4: main.sym_fnc("CtrlArea", "void *", (
+		"int code",
+		"SHAPE *shape",
+	), flag={"GLOBL","LOCAL"}), # shpcall
+	0x8029DCD4: main.sym_fnc("ObjSetPosRelXFM", arg=(
+		"FMTX m",
 		"OBJECT *obj",
-		"MTXF a",
-		"MTXF b",
 	), flag={"GLOBL"}),
-	0x8029DE80: main.sym("objlib_8029DE80", flag={"GLOBL"}),
-	0x8029E1B0: main.sym("objlib_8029E1B0", flag={"GLOBL"}),
-	0x8029E27C: main.sym("objlib_8029E27C", flag={"GLOBL"}), # 2D distance
-	0x8029E2F8: main.sym_fnc("objlib_8029E2F8", "float", (
+	0x8029DDA8: main.sym_fnc("ObjFMtxScaleCopy", arg=(
+		"OBJECT *obj",
+		"FMTX dst",
+		"FMTX src",
+	), flag={"GLOBL"}),
+	0x8029DE80: main.sym_fnc("FMtxInvCatAffine", arg=(
+		"FMTX dst",
+		"FMTX src",
+		"FMTX cam",
+	), flag={"GLOBL"}),
+	0x8029E1B0: main.sym_fnc("ObjectSetTake", arg=(
+		"OBJECT *o",
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029E27C: main.sym_fnc("ObjCalcDist2D", "float", (
 		"OBJECT *obj",
 		"OBJECT *o",
-	), flag={"GLOBL"}), # 3D distance
-	0x8029E398: main.sym("objlib_8029E398", flag={"GLOBL"}),
-	0x8029E3E8: main.sym("objlib_8029E3E8", flag={"GLOBL"}),
-	0x8029E494: main.sym("objlib_8029E494", flag={"GLOBL"}),
-	0x8029E530: main.sym("objlib_8029E530", flag={"GLOBL"}),
-	0x8029E5EC: main.sym("objlib_8029E5EC", flag={"GLOBL"}),
-	0x8029E694: main.sym_fnc("objlib_8029E694", "int", (
-		"OBJECT *",
-		"OBJECT *",
-	), flag={"GLOBL"}), # delta ang
-	0x8029E714: main.sym("objlib_8029E714", flag={"GLOBL"}),
-	0x8029E8BC: main.sym("objlib_8029E8BC", flag={"GLOBL"}),
-	0x8029E914: main.sym("objlib_8029E914", flag={"GLOBL"}),
-	0x8029E96C: main.sym("objlib_8029E96C", flag={"GLOBL"}),
-	0x8029E9AC: main.sym_fnc("obj_make_abs", "OBJECT *", (
+	), flag={"GLOBL"}),
+	0x8029E2F8: main.sym_fnc("ObjCalcDist3D", "float", (
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x8029E398: main.sym_fnc("ObjectAccelerate", arg=(
+		"float limit",
+		"float accel",
+	), flag={"GLOBL"}),
+	0x8029E3E8: main.sym_fnc("Accelerate", "int", (
+		"float *speed",
+		"float limit",
+		"float accel",
+	), flag={"GLOBL"}),
+	0x8029E494: main.sym_fnc("ApproachPos", "float", (
+		"float x",
+		"float target",
+		"float speed",
+	), flag={"GLOBL"}),
+	0x8029E530: main.sym_fnc("ApproachAng", "short", (
+		"short x",
+		"short target",
+		"short speed",
+	), flag={"GLOBL"}),
+	0x8029E5EC: main.sym_fnc("ObjectTurn", "int", (
+		"SHORT target",
+		"SHORT speed",
+	), flag={"GLOBL"}),
+	0x8029E694: main.sym_fnc("ObjCalcAngY", "SHORT", (
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x8029E714: main.sym_fnc("ObjectTurnTo", "short", (
+		"OBJECT *a",
+		"OBJECT *b",
+		"SHORT mem",
+		"SHORT speed",
+	), flag={"GLOBL"}),
+	0x8029E8BC: main.sym_fnc("ObjSetRel", arg=(
+		"OBJECT *obj",
+		"SHORT offx",
+		"SHORT offy",
+		"SHORT offz",
+	), flag={"GLOBL"}),
+	0x8029E914: main.sym_fnc("ObjSetPos", arg=(
+		"OBJECT *obj",
+		"SHORT posx",
+		"SHORT posy",
+		"SHORT posz",
+	), flag={"GLOBL"}),
+	0x8029E96C: main.sym_fnc("ObjSetAng", arg=(
+		"OBJECT *obj",
+		"SHORT angx",
+		"SHORT angy",
+		"SHORT angz",
+	), flag={"GLOBL"}),
+	0x8029E9AC: main.sym_fnc("ObjMakeAt", "OBJECT *", (
 		"OBJECT *parent",
 		"SHORT arg",
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 		"SHORT posx",
 		"SHORT posy",
 		"SHORT posz",
@@ -10649,319 +11145,677 @@ sym_E0_code_text = {
 		"SHORT angy",
 		"SHORT angz",
 	), flag={"GLOBL"}),
-	0x8029EA24: main.sym_fnc("obj_make_rel", "OBJECT *", (
+	0x8029EA24: main.sym_fnc("ObjMakeRel", "OBJECT *", (
 		"OBJECT *parent",
 		"int shape",
-		"O_SCRIPT *script",
-		"SHORT posx",
-		"SHORT posy",
-		"SHORT posz",
+		"OBJLANG *script",
+		"SHORT relx",
+		"SHORT rely",
+		"SHORT relz",
 		"SHORT angx",
 		"SHORT angy",
 		"SHORT angz",
 	), flag={"GLOBL"}),
-	0x8029EAAC: main.sym("objlib_8029EAAC"), # unused
-	0x8029EB04: main.sym_fnc("objlib_8029EB04", arg=(
-		"OBJECT *",
-		"OBJ_SPLASH *",
-	), flag={"GLOBL"}), # make splash
-	0x8029ED20: main.sym_fnc("obj_make", "OBJECT *", (
+	0x8029EAAC: main.sym_fnc("ObjMakeHereMtx", "OBJECT *", (
+		"OBJECT *parent",
+		"int shape",
+		"OBJLANG *script",
+	)), # unused
+	0x8029EB04: main.sym_fnc("ObjMakeSplash", "OBJECT *", (
+		"OBJECT *parent",
+		"SPLASH *splash",
+	), flag={"GLOBL"}),
+	0x8029ED20: main.sym_fnc("ObjMake", "OBJECT *", (
 		"OBJECT *parent",
 		"SHORT arg",
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 	), flag={"GLOBL"}),
-	0x8029EDCC: main.sym_fnc("obj_make_here", "OBJECT *", (
+	0x8029EDCC: main.sym_fnc("ObjMakeHere", "OBJECT *", (
 		"OBJECT *parent",
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 	), flag={"GLOBL"}),
-	0x8029EE24: main.sym("objlib_8029EE24", flag={"GLOBL"}), # makeobj effect
-	0x8029EEB8: main.sym("objlib_8029EEB8", flag={"GLOBL"}), # makeobj scale
-	0x8029EF20: main.sym("objlib_8029EF20"),
-	0x8029EF64: main.sym_fnc("obj_make_off", "OBJECT *", (
+	0x8029EE24: main.sym_fnc("ObjMakeEffect", "OBJECT *", (
+		"SHORT offy",
+		"float scale",
+		"OBJECT *parent",
+		"int shape",
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029EEB8: main.sym_fnc("ObjMakeHereScale", "OBJECT *", (
+		"OBJECT *parent",
+		"int shape",
+		"OBJLANG *script",
+		"float scale",
+	), flag={"GLOBL"}),
+	0x8029EF20: main.sym_fnc("ObjAddRelPos", arg=(
+		"OBJECT *obj",
+	)), # static
+	0x8029EF64: main.sym_fnc("ObjMakeOff", "OBJECT *", (
 		"SHORT code",
-		"SHORT ox",
-		"SHORT oy",
-		"SHORT oz",
+		"SHORT offx",
+		"SHORT offy",
+		"SHORT offz",
 		"OBJECT *parent",
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 	), flag={"GLOBL"}),
-	0x8029EFFC: main.sym("objlib_8029EFFC", flag={"GLOBL"}), # makeobj off scale
-	0x8029F070: main.sym("objlib_8029F070"), # unused
-	0x8029F0C8: main.sym("objlib_8029F0C8", flag={"GLOBL"}),
-	0x8029F0E0: main.sym_fnc("objlib_8029F0E0", arg=(
+	0x8029EFFC: main.sym_fnc("ObjMakeOffScale", "OBJECT *", (
+		"SHORT code",
+		"SHORT offx",
+		"SHORT offy",
+		"SHORT offz",
+		"float scale",
+		"OBJECT *parent",
+		"int shape",
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029F070: main.sym_fnc("ObjectMove3D"), # unused
+	0x8029F0C8: main.sym_fnc("ObjCopyShapeOff", arg=(
 		"OBJECT *obj",
 		"OBJECT *o",
-	), flag={"GLOBL"}), # copy pos?
-	0x8029F120: main.sym("objlib_8029F120", flag={"GLOBL"}),
-	0x8029F148: main.sym("objlib_8029F148"),
-	0x8029F188: main.sym("objlib_8029F188", flag={"GLOBL"}),
-	0x8029F1B0: main.sym("objlib_8029F1B0"), # unused
-	0x8029F200: main.sym_fnc("objlib_8029F200", arg=(
-		"MTXF mf",
-		"VECF dst",
-		"VECF src",
 	), flag={"GLOBL"}),
-	0x8029F274: main.sym_fnc("objlib_8029F274", arg=(
-		"MTXF mf",
-		"VECF dst",
-		"VECF src",
+	0x8029F0E0: main.sym_fnc("ObjCopyCoord", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
 	), flag={"GLOBL"}),
-	0x8029F2EC: main.sym("objlib_8029F2EC"),
-	0x8029F3A8: main.sym("objlib_8029F3A8", flag={"GLOBL"}),
-	0x8029F3D0: main.sym("objlib_8029F3D0", flag={"GLOBL"}),
-	0x8029F404: main.sym_fnc("obj_set_scale", arg=(
+	0x8029F120: main.sym_fnc("ObjCopyPos", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x8029F148: main.sym_fnc("ObjCopyAng", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}), # static
+	0x8029F188: main.sym_fnc("ObjSetShapePos", arg=(
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x8029F1B0: main.sym_fnc("ObjStartAnime", arg=(
+		"OBJECT *obj",
+		"int anime",
+	)), # unused
+	0x8029F200: main.sym_fnc("MtxTransform3", arg=(
+		"FMTX m",
+		"FVEC dst",
+		"FVEC src",
+	), flag={"GLOBL"}),
+	0x8029F274: main.sym_fnc("InvTransform3", arg=(
+		"FMTX m",
+		"FVEC dst",
+		"FVEC src",
+	), flag={"GLOBL"}),
+	0x8029F2EC: main.sym_fnc("ObjScaleMtx", arg=(
+		"OBJECT *obj",
+	)),
+	0x8029F3A8: main.sym_fnc("ObjCopyScale", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x8029F3D0: main.sym_fnc("ObjSetScaleXYZ", arg=(
+		"OBJECT *obj",
+		"float scalex",
+		"float scaley",
+		"float scalez",
+	), flag={"GLOBL"}),
+	0x8029F404: main.sym_fnc("ObjSetScale", arg=(
 		"OBJECT *obj",
 		"float scale",
 	), flag={"GLOBL"}),
-	0x8029F430: main.sym_fnc("object_set_scale", arg=(
+	0x8029F430: main.sym_fnc("ObjectSetScale", arg=(
 		"float scale",
 	), flag={"GLOBL"}),
-	0x8029F464: main.sym("objlib_8029F464", flag={"GLOBL"}),
-	0x8029F4B4: main.sym("objlib_8029F4B4", flag={"GLOBL"}),
-	0x8029F514: main.sym("objlib_8029F514", flag={"GLOBL"}),
-	0x8029F59C: main.sym("objlib_8029F59C", flag={"GLOBL"}),
-	0x8029F600: main.sym("objlib_8029F600"), # unused
-	0x8029F620: main.sym("objlib_8029F620", flag={"GLOBL"}),
-	0x8029F644: main.sym("objlib_8029F644"), # unused
-	0x8029F66C: main.sym("objlib_8029F66C", flag={"GLOBL"}),
-	0x8029F694: main.sym("objlib_8029F694", flag={"GLOBL"}),
-	0x8029F6BC: main.sym_fnc("objlib_8029F6BC", flag={"GLOBL"}), # shape hide
-	0x8029F6E0: main.sym("objlib_8029F6E0", flag={"GLOBL"}),
-	0x8029F7D8: main.sym("objlib_8029F7D8"),
-	0x8029F820: main.sym("objlib_8029F820", flag={"GLOBL"}),
-	0x8029F848: main.sym("objlib_8029F848"), # unused
-	0x8029F8EC: main.sym_fnc("objlib_8029F8EC", arg=(
-		"OBJECT *",
+	0x8029F464: main.sym_fnc("ObjectStartAnime", arg=(
+		"int anime",
 	), flag={"GLOBL"}),
-	0x8029F914: main.sym("objlib_8029F914", flag={"GLOBL"}),
-	0x8029F95C: main.sym("objlib_8029F95C", flag={"GLOBL"}),
-	0x8029F998: main.sym("objlib_8029F998", flag={"GLOBL"}),
-	0x8029F9EC: main.sym("objlib_8029F9EC", flag={"GLOBL"}),
-	0x8029FB1C: main.sym_fnc("objlib_8029FB1C", "OBJECT *", flag={"GLOBL"}),
-	0x8029FB68: main.sym("objlib_8029FB68"), # unused
-	0x8029FBDC: main.sym("objlib_8029FBDC", flag={"GLOBL"}),
-	0x8029FC9C: main.sym("objlib_8029FC9C", flag={"GLOBL"}),
-	0x8029FD8C: main.sym("objlib_8029FD8C"),
-	0x8029FDB4: main.sym("objlib_8029FDB4", flag={"GLOBL"}),
-	0x8029FE00: main.sym("objlib_8029FE00", flag={"GLOBL"}),
-	0x8029FE6C: main.sym("objlib_8029FE6C", flag={"GLOBL"}),
-	0x8029FEA4: main.sym("objlib_8029FEA4", flag={"GLOBL"}),
-	0x8029FF04: main.sym("objlib_8029FF04", flag={"GLOBL"}),
-	0x8029FFA4: main.sym("objlib_8029FFA4", flag={"GLOBL"}),
-	0x802A0008: main.sym_fnc("objlib_802A0008", "int", (
-		"int",
+	0x8029F4B4: main.sym_fnc("ObjectSetAnime", arg=(
+		"int anime",
 	), flag={"GLOBL"}),
-	0x802A0050: main.sym("objlib_802A0050", flag={"GLOBL"}),
-	0x802A00AC: main.sym("objlib_802A00AC"), # unused
-	0x802A0114: main.sym("objlib_802A0114", flag={"GLOBL"}),
-	0x802A0154: main.sym("objlib_802A0154", flag={"GLOBL"}),
-	0x802A0198: main.sym("objlib_802A0198", flag={"GLOBL"}),
-	0x802A01D8: main.sym("objlib_802A01D8", flag={"GLOBL"}),
-	0x802A0234: main.sym("objlib_802A0234"),
-	0x802A0380: main.sym("objlib_802A0380", flag={"GLOBL"}),
-	0x802A0474: main.sym("objlib_802A0474", flag={"GLOBL"}),
-	0x802A04C0: main.sym("objlib_802A04C0", flag={"GLOBL"}),
-	0x802A04F0: main.sym("objlib_802A04F0"), # unused
-	0x802A0514: main.sym("objlib_802A0514", flag={"GLOBL"}),
-	0x802A0568: main.sym_fnc("objlib_802A0568", arg=(
+	0x8029F514: main.sym_fnc("ObjectSetAnimeV", arg=(
+		"int anime",
+		"float speed",
+	), flag={"GLOBL"}),
+	0x8029F59C: main.sym_fnc("ObjInitAnime", arg=(
+		"OBJECT *obj",
+		"void *animep",
+		"int anime",
+	), flag={"GLOBL"}),
+	0x8029F600: main.sym_fnc("ObjActivate", arg=(
+		"OBJECT *obj",
+	)), # unused
+	0x8029F620: main.sym_fnc("ObjectSetActive", flag={"GLOBL"}),
+	0x8029F644: main.sym_fnc("ObjDeactivate", arg=(
+		"OBJECT *obj",
+	)), # unused
+	0x8029F66C: main.sym_fnc("ObjectClrActive", flag={"GLOBL"}),
+	0x8029F694: main.sym_fnc("ObjectShow", flag={"GLOBL"}),
+	0x8029F6BC: main.sym_fnc("ObjectHide", flag={"GLOBL"}),
+	0x8029F6E0: main.sym_fnc("ObjectSetPosOff", arg=(
+		"OBJECT *o",
+		"float offx",
+		"float offy",
+		"float offz",
+	), flag={"GLOBL"}),
+	0x8029F7D8: main.sym_fnc("ObjectSetPosOffParent", arg=(
+		"float offx",
+		"float offy",
+		"float offz",
+	)),
+	0x8029F820: main.sym_fnc("objectlib_8029F820", flag={"GLOBL"}),
+	0x8029F848: main.sym_fnc("objectlib_8029F848"), # unused
+	0x8029F8EC: main.sym_fnc("ObjSetShapeAng", arg=(
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x802A057C: main.sym("objlib_802A057C", flag={"GLOBL"}),
-	0x802A05B4: main.sym("objlib_802A05B4", flag={"GLOBL"}),
-	0x802A05D4: main.sym("objlib_802A05D4", flag={"GLOBL"}),
-	0x802A05F0: main.sym("objlib_802A05F0", flag={"GLOBL"}),
-	0x802A0604: main.sym("objlib_802A0604", flag={"GLOBL"}),
-	0x802A064C: main.sym("objlib_802A064C", flag={"GLOBL"}),
-	0x802A069C: main.sym("objlib_802A069C"),
-	0x802A079C: main.sym("objlib_802A079C", flag={"GLOBL"}),
-	0x802A07E8: main.sym("objlib_802A07E8"),
-	0x802A0AB0: main.sym("objlib_802A0AB0"),
-	0x802A0BDC: main.sym("objlib_802A0BDC"),
-	0x802A0D84: main.sym("objlib_802A0D84"),
-	0x802A0E68: main.sym("objlib_802A0E68", flag={"GLOBL"}),
-	0x802A10E0: main.sym("objlib_802A10E0"), # unused
-	0x802A10F0: main.sym("objlib_802A10F0"),
-	0x802A113C: main.sym("objlib_802A113C"), # unused
-	0x802A11A8: main.sym("objlib_802A11A8", flag={"GLOBL"}),
-	0x802A120C: main.sym_fnc("objlib_802A120C", flag={"GLOBL"}),
-	0x802A12A4: main.sym_fnc("objlib_802A12A4", flag={"GLOBL"}),
-	0x802A1308: main.sym("objlib_802A1308", flag={"GLOBL"}), # o callback
-	0x802A1370: main.sym("objlib_802A1370", flag={"GLOBL"}),
-	0x802A1424: main.sym("objlib_802A1424", flag={"GLOBL"}),
-	0x802A148C: main.sym("objlib_802A148C", flag={"GLOBL"}),
-	0x802A14C4: main.sym("objlib_802A14C4", flag={"GLOBL"}),
-	0x802A14FC: main.sym_fnc("objlib_802A14FC", "int", arg=(
-		"O_SCRIPT *",
-	), flag={"GLOBL"}), # has script
-	0x802A1554: main.sym("objlib_802A1554", flag={"GLOBL"}),
-	0x802A15AC: main.sym("objlib_802A15AC", flag={"GLOBL"}),
-	0x802A1634: main.sym("objlib_802A1634", flag={"GLOBL"}),
-	0x802A16AC: main.sym("objlib_802A16AC"), # unused
-	0x802A1774: main.sym("objlib_802A1774"), # unused
-	0x802A184C: main.sym("objlib_802A184C", flag={"GLOBL"}),
-	0x802A188C: main.sym("objlib_802A188C", flag={"GLOBL"}),
-	0x802A18DC: main.sym("objlib_802A18DC", flag={"GLOBL"}),
-	0x802A1930: main.sym("objlib_802A1930", flag={"GLOBL"}),
-	0x802A1960: main.sym("objlib_802A1960"), # unused
-	0x802A19AC: main.sym("objlib_802A19AC", flag={"GLOBL"}),
-	0x802A19C8: main.sym("objlib_802A19C8", flag={"GLOBL"}),
-	0x802A19F0: main.sym("objlib_802A19F0", flag={"GLOBL"}),
-	0x802A1A18: main.sym("objlib_802A1A18"),
-	0x802A1B34: main.sym("objlib_802A1B34"),
-	0x802A1B8C: main.sym("objlib_802A1B8C", flag={"GLOBL"}),
-	0x802A1BDC: main.sym("objlib_802A1BDC", flag={"GLOBL"}),
-	0x802A1C68: main.sym("objlib_802A1C68"), # unused
-	0x802A1CC4: main.sym("objlib_802A1CC4"), # unused
-	0x802A1D7C: main.sym("objlib_802A1D7C"),
-	0x802A1F3C: main.sym("objlib_802A1F3C", flag={"GLOBL"}),
-	0x802A20F4: main.sym("objlib_802A20F4"),
-	0x802A21D4: main.sym("objlib_802A21D4"),
-	0x802A2320: main.sym("objlib_802A2320", flag={"GLOBL"}), # o callback
-	0x802A2348: main.sym("objlib_802A2348", flag={"GLOBL"}),
-	0x802A24D0: main.sym("objlib_802A24D0"),
-	0x802A25B4: main.sym("objlib_802A25B4", flag={"GLOBL"}),
-	0x802A2644: main.sym("objlib_802A2644", flag={"GLOBL"}), # o callback
-	0x802A2674: main.sym("objlib_802A2674"), # unused
-	0x802A2748: main.sym("objlib_802A2748", flag={"GLOBL"}),
-	0x802A27B0: main.sym("objlib_802A27B0", flag={"GLOBL"}),
-	0x802A2804: main.sym("objlib_802A2804", flag={"GLOBL"}),
-	0x802A2930: main.sym_fnc("objlib_802A2930", arg=(
+	0x8029F914: main.sym_fnc("ObjGetScriptType", "int", (
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029F95C: main.sym_fnc("ObjectFindObj", "OBJECT *", (
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029F998: main.sym_fnc("ObjectFindDist", "float", (
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029F9EC: main.sym_fnc("ObjectFind", "OBJECT *", (
+		"OBJLANG *script",
+		"float *distp",
+	), flag={"GLOBL"}),
+	0x8029FB1C: main.sym_fnc("ObjGetEffect", "OBJECT *", flag={"GLOBL"}),
+	0x8029FB68: main.sym_fnc("ObjCountEffect", "int"), # unused
+	0x8029FBDC: main.sym_fnc("ObjCount", "int", (
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x8029FC9C: main.sym_fnc("ObjectFindTake", "OBJECT *", (
+		"OBJLANG *script",
+		"float dist",
+	), flag={"GLOBL"}),
+	0x8029FD8C: main.sym_fnc("ObjectResetState"),
+	0x8029FDB4: main.sym_fnc("ObjectInitState", arg=(
+		"int state",
+	), flag={"GLOBL"}),
+	0x8029FE00: main.sym_fnc("ObjectMatchP1Speed", arg=(
+		"float min",
+		"float scale",
+	), flag={"GLOBL"}),
+	0x8029FE6C: main.sym_fnc("ObjectAnimeHold", flag={"GLOBL"}),
+	0x8029FEA4: main.sym_fnc("ObjectAnimeHoldEnd", flag={"GLOBL"}),
+	0x8029FF04: main.sym_fnc("objectlib_8029FF04", "int", flag={"GLOBL"}),
+	0x8029FFA4: main.sym_fnc("objectlib_8029FFA4", "int", flag={"GLOBL"}),
+	0x802A0008: main.sym_fnc("ObjectIsAnimeFrame", "int", (
+		"int frame",
+	), flag={"GLOBL"}),
+	0x802A0050: main.sym_fnc("ObjectIsAnimeFrameRange", "int", (
+		"int start",
+		"int count",
+	), flag={"GLOBL"}),
+	0x802A00AC: main.sym_fnc("ObjectIsAnimeFrameTable", "int", (
+		"short *table",
+	)), # unused
+	0x802A0114: main.sym_fnc("Player1IsJump", "int", flag={"GLOBL"}),
+	0x802A0154: main.sym_fnc("objectlib_802A0154", "int", flag={"GLOBL"}),
+	0x802A0198: main.sym_fnc("ObjectSetAnimeJump", arg=(
+		"float vely",
+		"int anime",
+	), flag={"GLOBL"}),
+	0x802A01D8: main.sym_fnc("objectlib_802A01D8", arg=(
+		"int anime",
+		"int state",
+	), flag={"GLOBL"}),
+	0x802A0234: main.sym_fnc("objectlib_802A0234", arg=(
+		"float velf",
+		"float vely",
+	)),
+	0x802A0380: main.sym_fnc("objectlib_802A0380", arg=(
+		"float velf",
+		"float vely",
+		"int state",
+	), flag={"GLOBL"}),
+	0x802A0474: main.sym_fnc("objectlib_802A0474", flag={"GLOBL"}),
+	0x802A04C0: main.sym_fnc("ObjectSetShape", arg=(
+		"int shape",
+	), flag={"GLOBL"}),
+	0x802A04F0: main.sym_fnc("Player1SetFlag", arg=(
+		"u32 flag",
+	)), # unused
+	0x802A0514: main.sym_fnc("ObjectCheckHitResult", "int", (
+		"int flag",
+	), flag={"GLOBL"}),
+	0x802A0568: main.sym_fnc("ObjKill", arg=(
 		"OBJECT *obj",
-		"int pos",
-		"int ang",
 	), flag={"GLOBL"}),
-	0x802A2A18: main.sym_fnc("objlib_802A2A18", arg=(
-		"OBJECT *",
+	0x802A057C: main.sym_fnc("objectlib_802A057C", flag={"GLOBL"}),
+	0x802A05B4: main.sym_fnc("ObjectHitOFF", flag={"GLOBL"}),
+	0x802A05D4: main.sym_fnc("ObjectHitON", flag={"GLOBL"}),
+	0x802A05F0: main.sym_fnc("ObjHitON", arg=(
+		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x802A2A84: main.sym_fnc("objlib_802A2A84", arg=(
-		"OBJECT *",
+	0x802A0604: main.sym_fnc("ObjectCheckGroundY", flag={"GLOBL"}),
+	0x802A064C: main.sym_fnc("ObjectCheckGround", "BGFACE *", flag={"GLOBL"}),
+	0x802A069C: main.sym_fnc("CalcDrag", arg=(
+		"float *vel",
+		"float drag",
+	)),
+	0x802A079C: main.sym_fnc("ObjectCalcDrag", arg=(
+		"float drag",
 	), flag={"GLOBL"}),
-	0x802A2B28: main.sym("objlib_802A2B28"), # unused
-	0x802A2B6C: main.sym("objlib_802A2B6C"), # unused
-	0x802A2BC4: main.sym("objlib_802A2BC4", flag={"GLOBL"}), # o callback
-	0x802A2C1C: main.sym("objlib_802A2C1C"), # unused
-	0x802A2C5C: main.sym("objlib_802A2C5C", flag={"GLOBL"}),
-	0x802A2ED4: main.sym("objlib_802A2ED4", flag={"GLOBL"}),
-	0x802A2F14: main.sym("objlib_802A2F14", flag={"GLOBL"}),
-	0x802A2F5C: main.sym("objlib_802A2F5C", flag={"GLOBL"}),
-	0x802A2FC0: main.sym("objlib_802A2FC0", flag={"GLOBL"}),
-	0x802A308C: main.sym("objlib_802A308C", flag={"GLOBL"}),
-	0x802A3124: main.sym("objlib_802A3124"),
-	0x802A31E0: main.sym("objlib_802A31E0", flag={"GLOBL"}),
-	0x802A3268: main.sym("objlib_802A3268", flag={"GLOBL"}),
-	0x802A32AC: main.sym("objlib_802A32AC", flag={"GLOBL"}),
-	0x802A34A4: main.sym("objlib_802A34A4", flag={"GLOBL"}),
-	0x802A3604: main.sym("objlib_802A3604", flag={"GLOBL"}),
-	0x802A3634: main.sym_fnc("objlib_802A3634", "float", (
-		"float",
+	0x802A07E8: main.sym_fnc("objectlib_802A07E8", "int", (
+		"float ny",
+		"int flag",
+	)),
+	0x802A0AB0: main.sym_fnc("objectlib_802A0AB0"),
+	0x802A0BDC: main.sym_fnc("objectlib_802A0BDC", arg=(
+		"float gravity",
+		"float density",
+	)),
+	0x802A0D84: main.sym_fnc("objectlib_802A0D84", "float", (
+		"float gravity",
+		"float bounce",
+	)),
+	0x802A0E68: main.sym_fnc("objectlib_802A0E68", arg=(
+		"float gravity",
+		"float density",
+		"float bounce",
 	), flag={"GLOBL"}),
-	0x802A3674: main.sym("objlib_802A3674", flag={"GLOBL"}),
-	0x802A36A4: main.sym("objlib_802A36A4", flag={"GLOBL"}),
-	0x802A3754: main.sym("objlib_802A3754", flag={"GLOBL"}),
-	0x802A37AC: main.sym("objlib_802A37AC", flag={"GLOBL"}),
-	0x802A37DC: main.sym("objlib_802A37DC", flag={"GLOBL"}),
-	0x802A3818: main.sym("objlib_802A3818", flag={"GLOBL"}),
-	0x802A390C: main.sym("objlib_802A390C", flag={"GLOBL"}),
-	0x802A399C: main.sym("objlib_802A399C", flag={"GLOBL"}), # o callback
-	0x802A3A3C: main.sym("objlib_802A3A3C"), # unused
-	0x802A3A4C: main.sym("objlib_802A3A4C", flag={"GLOBL"}),
-	0x802A3A88: main.sym("objlib_802A3A88", flag={"GLOBL"}),
-	0x802A3B28: main.sym("objlib_802A3B28"), # unused
-	0x802A3B40: main.sym("objlib_802A3B40", flag={"GLOBL"}),
-	0x802A3C18: main.sym("objlib_802A3C18", flag={"GLOBL"}),
-	0x802A3CEC: main.sym("objlib_802A3CEC"), # unused
-	0x802A3CFC: main.sym("objlib_802A3CFC", flag={"GLOBL"}),
-	0x802A3D40: main.sym("objlib_802A3D40"), # unused
-	0x802A3DD4: main.sym("objlib_802A3DD4", flag={"GLOBL"}),
-	0x802A3E30: main.sym("objlib_802A3E30", flag={"GLOBL"}),
-	0x802A3E80: main.sym("objlib_802A3E80"),
-	0x802A3EF8: main.sym("objlib_802A3EF8"), # unused
-	0x802A3F24: main.sym("objlib_802A3F24", flag={"GLOBL"}),
-	0x802A3F48: main.sym("objlib_802A3F48", flag={"GLOBL"}),
-	0x802A404C: main.sym("objlib_802A404C", flag={"GLOBL"}),
-	0x802A40B8: main.sym("objlib_802A40B8", flag={"GLOBL"}),
-	0x802A4110: main.sym("objlib_802A4110"), # unused
-	0x802A4120: main.sym_fnc("objlib_802A4120", flag={"GLOBL"}), # o callback / init area?
-	0x802A4210: main.sym_fnc("objlib_802A4210", flag={"GLOBL"}), # proc area?
-	0x802A4360: main.sym("objlib_802A4360", flag={"GLOBL"}),
-	0x802A4440: main.sym("objlib_802A4440", flag={"GLOBL"}),
-	0x802A44F4: main.sym("objlib_802A44F4", flag={"GLOBL"}),
-	0x802A452C: main.sym("objlib_802A452C", flag={"GLOBL"}),
-	0x802A4564: main.sym("objlib_802A4564", flag={"GLOBL"}),
-	0x802A45E4: main.sym("s_objlib_802A45E4", flag={"GLOBL"}), # s callback
-	0x802A462C: main.sym("objlib_802A462C"), # unused
-	0x802A46CC: main.sym("objlib_802A46CC", flag={"GLOBL"}),
-	0x802A4704: main.sym("objlib_802A4704", flag={"GLOBL"}),
-	0x802A4728: main.sym("objlib_802A4728", flag={"GLOBL"}),
-	0x802A4750: main.sym("objlib_802A4750", flag={"GLOBL"}),
-	0x802A4774: main.sym("objlib_802A4774", flag={"GLOBL"}),
-	0x802A47A0: main.sym("objlib_802A47A0", flag={"GLOBL"}),
-	0x802A48BC: main.sym("objlib_802A48BC", flag={"GLOBL"}),
-	0x802A48FC: main.sym("objlib_802A48FC"),
-	0x802A4960: main.sym("objlib_802A4960", flag={"GLOBL"}),
+	0x802A10E0: main.sym_fnc("objectlib_802A10E0"), # unused
+	0x802A10F0: main.sym_fnc("CheckFlag", "int", (
+		"int *flag",
+		"int mask",
+	), flag={"GLOBL"}), # static
+	0x802A113C: main.sym_fnc("ObjectHitWall", arg=(
+		"float offset",
+		"float radius",
+	)), # unused
+	0x802A11A8: main.sym_fnc("DeltaAng", "SHORT", (
+		"SHORT a",
+		"SHORT b",
+	), flag={"GLOBL"}),
+	0x802A120C: main.sym_fnc("ObjectMoveF", flag={"GLOBL"}),
+	0x802A12A4: main.sym_fnc("ObjectMoveY", flag={"GLOBL"}),
+	0x802A1308: main.sym_fnc("ObjectCalcVelF", flag={"GLOBL"}), # objcall
+	0x802A1370: main.sym_fnc("objectlib_802A1370", "float", (
+		"float x",
+		"float target",
+		"float limit",
+		"float speed",
+	), flag={"GLOBL"}),
+	0x802A1424: main.sym_fnc("ObjIsObjHit", "int", (
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x802A148C: main.sym_fnc("ObjectSetScript", arg=(
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x802A14C4: main.sym_fnc("ObjSetScript", arg=(
+		"OBJECT *obj",
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x802A14FC: main.sym_fnc("ObjectHasScript", "int", arg=(
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x802A1554: main.sym_fnc("ObjHasScript", "int", arg=(
+		"OBJECT *obj",
+		"OBJLANG *script",
+	), flag={"GLOBL"}),
+	0x802A15AC: main.sym_fnc("ObjectDistMarioToSave", "float", flag={"GLOBL"}),
+	0x802A1634: main.sym_fnc("ObjectDistToSave", "float", flag={"GLOBL"}),
+	0x802A16AC: main.sym_fnc("ObjectInSaveSquare", "int", (
+		"float size",
+	)), # unused
+	0x802A1774: main.sym_fnc("ObjectInSaveRect", "int", (
+		"float xmin",
+		"float xmax",
+		"float zmin",
+		"float zmax",
+	)), # unused
+	0x802A184C: main.sym_fnc("ObjectSavePos", flag={"GLOBL"}),
+	0x802A188C: main.sym_fnc("ObjectSavePosStop", flag={"GLOBL"}),
+	0x802A18DC: main.sym_fnc("ObjectShake", arg=(
+		"float offy",
+	), flag={"GLOBL"}),
+	0x802A1930: main.sym_fnc("objectlib_802A1930", arg=(
+		"OBJECT *obj",
+		"int a1",
+	), flag={"GLOBL"}),
+	0x802A1960: main.sym_fnc("objectlib_802A1960", arg=(
+		"OBJECT *obj",
+		"int a1",
+		"float dist",
+	)), # unused
+	0x802A19AC: main.sym_fnc("ObjSetBillboard", arg=(
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x802A19C8: main.sym_fnc("ObjectSetHitBox", arg=(
+		"float radius",
+		"float height",
+	), flag={"GLOBL"}),
+	0x802A19F0: main.sym_fnc("ObjectSetDmgBox", arg=(
+		"float radius",
+		"float height",
+	), flag={"GLOBL"}),
+	0x802A1A18: main.sym_fnc("ObjectMakeCoinCommon", arg=(
+		"OBJECT *obj",
+		"int max",
+		"float f7",
+		"OBJLANG *script",
+		"SHORT range",
+		"SHORT shape",
+	)),
+	0x802A1B34: main.sym_fnc("objectlib_802A1B34", arg=(
+		"OBJECT *obj",
+		"int max",
+		"float f7",
+		"SHORT range",
+	)),
+	0x802A1B8C: main.sym_fnc("ObjectMakeCoin", arg=(
+		"OBJECT *obj",
+		"int max",
+		"float f7",
+	), flag={"GLOBL"}),
+	0x802A1BDC: main.sym_fnc("objectlib_802A1BDC", flag={"GLOBL"}),
+	0x802A1C68: main.sym_fnc("ObjectDistToSaveY", "float"), # unused
+	0x802A1CC4: main.sym_fnc("objectlib_802A1CC4", "int"), # unused
+	0x802A1D7C: main.sym_fnc("objectlib_802A1D7C", "int", (
+		"SHORT ang",
+	)),
+	0x802A1F3C: main.sym_fnc("ObjectCheckWall", "int", flag={"GLOBL"}),
+	0x802A20F4: main.sym_fnc("objectlib_802A20F4"),
+	0x802A21D4: main.sym_fnc("objectlib_802A21D4", arg=(
+		"SHORT ang",
+	)),
+	0x802A2320: main.sym_fnc("objectlib_802A2320", flag={"GLOBL"}), # objcall
+	0x802A2348: main.sym_fnc("objectlib_802A2348", arg=(
+		"SHORT ang",
+	), flag={"GLOBL"}),
+	0x802A24D0: main.sym_fnc("objectlib_802A24D0", "int"),
+	0x802A25B4: main.sym_fnc("ObjectProcMove", flag={"GLOBL"}),
+	0x802A2644: main.sym_fnc("ObjectProcMoveF", flag={"GLOBL"}), # objcall
+	0x802A2674: main.sym_fnc("ObjCopyCoordOff", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+		"float offx",
+		"float offy",
+		"float offz",
+	)), # unused
+	0x802A2748: main.sym_fnc("ObjectAngToSave", "SHORT", flag={"GLOBL"}),
+	0x802A27B0: main.sym_fnc("ObjCopyCoordToShape", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x802A2804: main.sym_fnc("ObjAddTransform", arg=(
+		"OBJECT *obj",
+		"SHORT dst",
+		"SHORT src",
+	), flag={"GLOBL"}),
+	0x802A2930: main.sym_fnc("ObjCalcMtx", arg=(
+		"OBJECT *obj",
+		"SHORT pos",
+		"SHORT ang",
+	), flag={"GLOBL"}),
+	0x802A2A18: main.sym_fnc("ObjSetMtx", arg=(
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x802A2A84: main.sym_fnc("ObjCalcRel", arg=(
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x802A2B28: main.sym_fnc("ObjClrRel", arg=(
+		"OBJECT *obj",
+	)), # unused
+	0x802A2B6C: main.sym_fnc("ObjectRotate"), # unused
+	0x802A2BC4: main.sym_fnc("ObjectRotateShape", flag={"GLOBL"}), # objcall
+	0x802A2C1C: main.sym_fnc("ObjectSyncAng"), # unused
+	0x802A2C5C: main.sym_fnc("ObjectProcPath", "int", (
+		"int status",
+	), flag={"GLOBL"}),
+	0x802A2ED4: main.sym_fnc("ChainInit", arg=(
+		"CHAIN *chain",
+	), flag={"GLOBL"}),
+	0x802A2F14: main.sym_fnc("RandRange", "float", (
+		"float range",
+	), flag={"GLOBL"}),
+	0x802A2F5C: main.sym_fnc("ObjRandScale", arg=(
+		"OBJECT *obj",
+		"float range",
+		"float start",
+	), flag={"GLOBL"}),
+	0x802A2FC0: main.sym_fnc("ObjRandOff3D", arg=(
+		"OBJECT *obj",
+		"float range",
+	), flag={"GLOBL"}),
+	0x802A308C: main.sym_fnc("ObjRandOff2D", arg=(
+		"OBJECT *obj",
+		"float range",
+	), flag={"GLOBL"}),
+	0x802A3124: main.sym_fnc("ObjCalcVelULF", arg=(
+		"OBJECT *obj",
+	)),
+	0x802A31E0: main.sym_fnc("ObjectMoveULF", flag={"GLOBL"}),
+	0x802A3268: main.sym_fnc("objectlib_802A3268", "short", flag={"GLOBL"}),
+	0x802A32AC: main.sym_fnc("ObjectMakeParticle", arg=(
+		"PARTICLE *part",
+	), flag={"GLOBL"}),
+	0x802A34A4: main.sym_fnc("ObjSetHitInfo", arg=(
+		"OBJECT *obj",
+		"HITINFO *hit",
+	), flag={"GLOBL"}),
+	0x802A3604: main.sym_fnc("GetSign", "int", (
+		"int x",
+	), flag={"GLOBL"}),
+	0x802A3634: main.sym_fnc("fabsf", "float", (
+		"float x",
+	), flag={"GLOBL"}),
+	0x802A3674: main.sym_fnc("abs", "int", (
+		"int i",
+	), flag={"GLOBL"}),
+	0x802A36A4: main.sym_fnc("ObjectFlash", "int", (
+		"int start",
+		"int count",
+	), flag={"GLOBL"}),
+	0x802A3754: main.sym_fnc("objectlib_802A3754", "int", flag={"GLOBL"}),
+	0x802A37AC: main.sym_fnc("objectlib_802A37AC", flag={"GLOBL"}),
+	0x802A37DC: main.sym_fnc("objectlib_802A37DC", arg=(
+		"Na_Se se",
+	), flag={"GLOBL"}),
+	0x802A3818: main.sym_fnc("ObjectRepelMario2D", arg=(
+		"float radius",
+	), flag={"GLOBL"}),
+	0x802A390C: main.sym_fnc("ObjectRepelMario3D", arg=(
+		"float radius",
+		"float height",
+	), flag={"GLOBL"}),
+	0x802A399C: main.sym_fnc("objectlib_802A399C", flag={"GLOBL"}), # objcall
+	0x802A3A3C: main.sym_fnc("objectlib_802A3A3C"), # unused
+	0x802A3A4C: main.sym_fnc("objectlib_802A3A4C", "CHAR", (
+		"void *table",
+	), flag={"GLOBL"}),
+	0x802A3A88: main.sym_fnc("objectlib_802A3A88", "CHAR", flag={"GLOBL"}),
+	0x802A3B28: main.sym_fnc("objectlib_802A3B28", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	)), # unused
+	0x802A3B40: main.sym_fnc("ObjectScaleTime", arg=(
+		"int flag",
+		"int time",
+		"float min",
+		"float max",
+	), flag={"GLOBL"}),
+	0x802A3C18: main.sym_fnc("ObjectDebugPos", flag={"GLOBL"}),
+	0x802A3CEC: main.sym_fnc("objectlib_802A3CEC"), # unused
+	0x802A3CFC: main.sym_fnc("ObjectIsMarioRide", "int", flag={"GLOBL"}),
+	0x802A3D40: main.sym_fnc("objectlib_802A3D40", "int", (
+		"int count",
+		"int offy",
+	)), # unused
+	0x802A3DD4: main.sym_fnc("objectlib_802A3DD4", "int", (
+		"int index",
+	), flag={"GLOBL"}),
+	0x802A3E30: main.sym_fnc("ObjectCallState", arg=(
+		"OBJCALL **statetab",
+	), flag={"GLOBL"}),
+	0x802A3E80: main.sym_fnc("objectlib_802A3E80", "OBJECT *", (
+		"int code",
+		"int v9",
+	)),
+	0x802A3EF8: main.sym_fnc("objectlib_802A3EF8"), # unused
+	0x802A3F24: main.sym_fnc("GetBit", "int", (
+		"int index",
+	), flag={"GLOBL"}),
+	0x802A3F48: main.sym_fnc("objectlib_802A3F48", "int", flag={"GLOBL"}),
+	0x802A404C: main.sym_fnc("objectlib_802A404C", "int", (
+		"int speed",
+	), flag={"GLOBL"}),
+	0x802A40B8: main.sym_fnc("InTable", "int", (
+		"CHAR value",
+		"s8 *table",
+	), flag={"GLOBL"}),
+	0x802A4110: main.sym_fnc("objectlib_802A4110"), # unused
+	0x802A4120: main.sym_fnc("ObjectInitArea", flag={"GLOBL"}), # objcall
+	0x802A4210: main.sym_fnc("ObjectProcArea", flag={"GLOBL"}),
+	0x802A4360: main.sym_fnc("objectlib_802A4360", "int", (
+		"HITINFO *hit",
+		"Na_Se se",
+		"int nocoin",
+	), flag={"GLOBL"}),
+	0x802A4440: main.sym_fnc("objectlib_802A4440", arg=(
+		"float a0",
+		"int a1",
+	), flag={"GLOBL"}),
+	0x802A44F4: main.sym_fnc("ObjSetMap", arg=(
+		"OBJECT *obj",
+		"MAP *map",
+	), flag={"GLOBL"}),
+	0x802A452C: main.sym_fnc("objectlib_802A452C", flag={"GLOBL"}),
+	0x802A4564: main.sym_fnc("objectlib_802A4564", "int", (
+		"float height",
+	), flag={"GLOBL"}),
+	0x802A45E4: main.sym_fnc("Ctrl_objectlib_802A45E4", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL","LOCAL"}), # shpcall
+	0x802A462C: main.sym_fnc("Ctrl_objectlib_802A462C", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	)), # unused
+	0x802A46CC: main.sym_fnc("ObjIsHide", "int", (
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x802A4704: main.sym_fnc("objectlib_802A4704", flag={"GLOBL"}),
+	0x802A4728: main.sym_fnc("objectlib_802A4728", flag={"GLOBL"}),
+	0x802A4750: main.sym_fnc("objectlib_802A4750", arg=(
+		"unsigned int flag",
+	), flag={"GLOBL"}),
+	0x802A4774: main.sym_fnc("objectlib_802A4774", arg=(
+		"unsigned int flag",
+	), flag={"GLOBL"}),
+	0x802A47A0: main.sym_fnc("objectlib_802A47A0", "int", (
+		"float radius",
+		"float height",
+		"SHORT range",
+	), flag={"GLOBL"}),
+	0x802A48BC: main.sym_fnc("objectlib_802A48BC", "int", (
+		"float radius",
+		"float height",
+	), flag={"GLOBL"}),
+	0x802A48FC: main.sym_fnc("objectlib_802A48FC", arg=(
+		"int flag",
+		"int code",
+	)),
+	0x802A4960: main.sym_fnc("objectlib_802A4960", "int", (
+		"int a0",
+		"int flag",
+		"int msg",
+		"int a3",
+	), flag={"GLOBL"}),
 	0x802A49B4: main.sym_fnc("L802A49B4", flag={"GLOBL","LOCAL"}),
 	0x802A4A28: main.sym_fnc("L802A4A28", flag={"GLOBL","LOCAL"}),
 	0x802A4A58: main.sym_fnc("L802A4A58", flag={"GLOBL","LOCAL"}),
 	0x802A4AAC: main.sym_fnc("L802A4AAC", flag={"GLOBL","LOCAL"}),
 	0x802A4B30: main.sym_fnc("L802A4B30", flag={"GLOBL","LOCAL"}),
-	0x802A4BE4: main.sym_fnc("objlib_802A4BE4", "int", (
-		"int",
-		"int",
-		"int",
-		"int",
+	0x802A4BE4: main.sym_fnc("objectlib_802A4BE4", "int", (
+		"int a0",
+		"int flag",
+		"int msg",
+		"int a3",
 	), flag={"GLOBL"}),
-	0x802A4F04: main.sym("objlib_802A4F04", flag={"GLOBL"}),
-	0x802A4F58: main.sym("objlib_802A4F58", flag={"GLOBL"}),
-	0x802A5034: main.sym("objlib_802A5034"), # unused
-	0x802A50FC: main.sym("objlib_802A50FC", flag={"GLOBL"}),
-	0x802A513C: main.sym("objlib_802A513C", flag={"GLOBL"}),
-	0x802A51AC: main.sym("objlib_802A51AC", flag={"GLOBL"}),
-	0x802A5228: main.sym("objlib_802A5228", flag={"GLOBL"}),
-	0x802A5248: main.sym("objlib_802A5248", flag={"GLOBL"}),
-	0x802A5288: main.sym("objlib_802A5288", flag={"GLOBL"}),
-	0x802A52C4: main.sym("objlib_802A52C4", flag={"GLOBL"}),
-	0x802A52F8: main.sym("objlib_802A52F8", flag={"GLOBL"}),
-	0x802A5358: main.sym("objlib_802A5358", flag={"GLOBL"}),
-	0x802A540C: main.sym("objlib_802A540C"), # unused
-	0x802A5460: main.sym("objlib_802A5460"), # unused
-	0x802A5498: main.sym("objlib_802A5498", flag={"GLOBL"}),
-	0x802A54D8: main.sym("objlib_802A54D8", flag={"GLOBL"}),
-	0x802A5524: main.sym("objlib_802A5524", flag={"GLOBL"}),
-	0x802A5588: main.sym("objlib_802A5588", flag={"GLOBL"}),
+	0x802A4F04: main.sym_fnc("ObjectHasShapeID", "int", (
+		"USHORT shape",
+	), flag={"GLOBL"}),
+	0x802A4F58: main.sym_fnc("ObjectStand", flag={"GLOBL"}),
+	0x802A5034: main.sym_fnc("MarioInRect", "int", (
+		"SHORT xmin",
+		"SHORT xmax",
+		"SHORT zmin",
+		"SHORT zmax",
+	)), # unused
+	0x802A50FC: main.sym_fnc("objectlib_802A50FC", arg=(
+		"int a0",
+	), flag={"GLOBL"}),
+	0x802A513C: main.sym_fnc("objectlib_802A513C", "int", (
+		"OBJECT *obj",
+	), flag={"GLOBL"}),
+	0x802A51AC: main.sym_fnc("objectlib_802A51AC", "int", flag={"GLOBL"}),
+	0x802A5228: main.sym_fnc("ObjCopyActorInfo", arg=(
+		"OBJECT *obj",
+		"OBJECT *o",
+	), flag={"GLOBL"}),
+	0x802A5248: main.sym_fnc("ObjectSetAnimeFrame", arg=(
+		"int anime",
+		"int frame",
+	), flag={"GLOBL"}),
+	0x802A5288: main.sym_fnc("objectlib_802A5288", "int", (
+		"int anime",
+	), flag={"GLOBL"}),
+	0x802A52C4: main.sym_fnc("ObjectSetAnimeHoldEnd", arg=(
+		"int anime",
+	), flag={"GLOBL"}),
+	0x802A52F8: main.sym_fnc("objectlib_802A52F8", "int", flag={"GLOBL"}),
+	0x802A5358: main.sym_fnc("objectlib_802A5358", "int", flag={"GLOBL"}),
+	0x802A540C: main.sym_fnc("objectlib_802A540C", arg=(
+		"int l",
+		"int r",
+		"Na_Se se",
+	)), # unused
+	0x802A5460: main.sym_fnc("objectlib_802A5460"), # unused
+	0x802A5498: main.sym_fnc("objectlib_802A5498", flag={"GLOBL"}),
+	0x802A54D8: main.sym_fnc("objectlib_802A54D8", "int", flag={"GLOBL"}),
+	0x802A5524: main.sym_fnc("objectlib_802A5524", flag={"GLOBL"}),
+	0x802A5588: main.sym_fnc("objectlib_802A5588", arg=(
+		"float x",
+		"float y",
+		"float z",
+		"float offy",
+	), flag={"GLOBL"}),
 
 	# src/object_a.c
 	0x802A5620: main.sym("object_a_802A5620"),
-	0x802A56BC: main.sym("object_a_802A56BC", flag={"GLOBL"}), # o callback
+	0x802A56BC: main.sym("object_a_802A56BC", flag={"GLOBL"}), # objcall
 	0x802A5704: main.sym_fnc("L802A5704", flag={"GLOBL","LOCAL"}),
 	0x802A5768: main.sym_fnc("L802A5768", flag={"GLOBL","LOCAL"}),
 	0x802A57F0: main.sym_fnc("L802A57F0", flag={"GLOBL","LOCAL"}),
 	0x802A5824: main.sym_fnc("L802A5824", flag={"GLOBL","LOCAL"}),
 	0x802A58A4: main.sym_fnc("L802A58A4", flag={"GLOBL","LOCAL"}),
-	0x802A58DC: main.sym("object_a_802A58DC", flag={"GLOBL"}), # o callback
+	0x802A58DC: main.sym("object_a_802A58DC", flag={"GLOBL"}), # objcall
 	0x802A597C: main.sym_fnc("object_a_802A597C", flag={"GLOBL"}), # data
 	0x802A5A44: main.sym_fnc("object_a_802A5A44", flag={"GLOBL"}), # data
-	0x802A5AA0: main.sym("object_a_802A5AA0", flag={"GLOBL"}), # o callback
+	0x802A5AA0: main.sym("object_a_802A5AA0", flag={"GLOBL"}), # objcall
 	0x802A5ACC: main.sym("object_a_802A5ACC"),
-	0x802A5BD4: main.sym("object_a_802A5BD4", flag={"GLOBL"}), # o callback
+	0x802A5BD4: main.sym("object_a_802A5BD4", flag={"GLOBL"}), # objcall
 	0x802A5D4C: main.sym_fnc("object_a_802A5D4C", flag={"GLOBL"}), # data
 	0x802A6518: main.sym_fnc("object_a_802A6518", flag={"GLOBL"}), # data
 	0x802A68A0: main.sym_fnc("object_a_802A68A0", flag={"GLOBL"}), # data
 	0x802A6AD8: main.sym_fnc("object_a_802A6AD8", flag={"GLOBL"}), # data
-	0x802A6B7C: main.sym("object_a_802A6B7C", flag={"GLOBL"}), # o callback
-	0x802A6C20: main.sym("object_a_802A6C20", flag={"GLOBL"}), # o callback
-	0x802A6C74: main.sym("object_a_802A6C74", flag={"GLOBL"}), # o callback
-	0x802A6CF4: main.sym("object_a_802A6CF4", flag={"GLOBL"}), # o callback
-	0x802A6D64: main.sym("object_a_802A6D64", flag={"GLOBL"}), # o callback
+	0x802A6B7C: main.sym("object_a_802A6B7C", flag={"GLOBL"}), # objcall
+	0x802A6C20: main.sym("object_a_802A6C20", flag={"GLOBL"}), # objcall
+	0x802A6C74: main.sym("object_a_802A6C74", flag={"GLOBL"}), # objcall
+	0x802A6CF4: main.sym("object_a_802A6CF4", flag={"GLOBL"}), # objcall
+	0x802A6D64: main.sym("object_a_802A6D64", flag={"GLOBL"}), # objcall
 	0x802A6EE4: main.sym_fnc("object_a_802A6EE4", flag={"GLOBL"}), # data
 	0x802A7020: main.sym_fnc("object_a_802A7020", flag={"GLOBL"}), # data
 	0x802A708C: main.sym_fnc("object_a_802A708C", flag={"GLOBL"}), # data
 	0x802A7160: main.sym_fnc("object_a_802A7160", flag={"GLOBL"}), # data
-	0x802A7170: main.sym("object_a_802A7170", flag={"GLOBL"}), # o callback
-	0x802A719C: main.sym("s_object_a_802A719C", flag={"GLOBL"}), # s callback
-	0x802A7230: main.sym("object_a_802A7230", flag={"GLOBL"}), # o callback
+	0x802A7170: main.sym("object_a_802A7170", flag={"GLOBL"}), # objcall
+	0x802A719C: main.sym("Ctrl_object_a_802A719C", flag={"GLOBL"}), # shpcall
+	0x802A7230: main.sym("object_a_802A7230", flag={"GLOBL"}), # objcall
 	0x802A7264: main.sym_fnc("object_a_802A7264", flag={"GLOBL"}), # data
 	0x802A7384: main.sym("object_a_802A7384"),
 	0x802A73D8: main.sym_fnc("object_a_802A73D8", flag={"GLOBL"}), # data
@@ -10978,23 +11832,23 @@ sym_E0_code_text = {
 	0x802A7F08: main.sym_fnc("L802A7F08", flag={"GLOBL","LOCAL"}),
 	0x802A7F70: main.sym_fnc("L802A7F70", flag={"GLOBL","LOCAL"}),
 	0x802A7FBC: main.sym("object_a_802A7FBC"),
-	0x802A8064: main.sym("object_a_802A8064", flag={"GLOBL"}), # o callback
-	0x802A816C: main.sym("object_a_802A816C", flag={"GLOBL"}), # o callback
-	0x802A81E8: main.sym("object_a_802A81E8", flag={"GLOBL"}), # o callback
-	0x802A821C: main.sym("object_a_802A821C", flag={"GLOBL"}), # o callback
-	0x802A8370: main.sym("object_a_802A8370", flag={"GLOBL"}), # o callback
-	0x802A83A0: main.sym("object_a_802A83A0", flag={"GLOBL"}), # o callback
-	0x802A8630: main.sym("object_a_802A8630", flag={"GLOBL"}), # o callback
+	0x802A8064: main.sym("object_a_802A8064", flag={"GLOBL"}), # objcall
+	0x802A816C: main.sym("object_a_802A816C", flag={"GLOBL"}), # objcall
+	0x802A81E8: main.sym("object_a_802A81E8", flag={"GLOBL"}), # objcall
+	0x802A821C: main.sym("object_a_802A821C", flag={"GLOBL"}), # objcall
+	0x802A8370: main.sym("object_a_802A8370", flag={"GLOBL"}), # objcall
+	0x802A83A0: main.sym("object_a_802A83A0", flag={"GLOBL"}), # objcall
+	0x802A8630: main.sym("object_a_802A8630", flag={"GLOBL"}), # objcall
 	0x802A86BC: main.sym("object_a_802A86BC"), # unused
-	0x802A870C: main.sym("object_a_802A870C", flag={"GLOBL"}), # o callback
-	0x802A88A4: main.sym("object_a_802A88A4", flag={"GLOBL"}), # o callback
+	0x802A870C: main.sym("object_a_802A870C", flag={"GLOBL"}), # objcall
+	0x802A88A4: main.sym("object_a_802A88A4", flag={"GLOBL"}), # objcall
 	0x802A8A38: main.sym("object_a_802A8A38"),
-	0x802A8B18: main.sym("object_a_802A8B18", flag={"GLOBL"}), # o callback
-	0x802A8BC0: main.sym("object_a_802A8BC0", flag={"GLOBL"}), # o callback
-	0x802A8C88: main.sym("object_a_802A8C88", flag={"GLOBL"}), # o callback
-	0x802A8CDC: main.sym("object_a_802A8CDC", flag={"GLOBL"}), # o callback
-	0x802A8D48: main.sym("object_a_802A8D48", flag={"GLOBL"}), # o callback
-	0x802A8D98: main.sym("object_a_802A8D98", flag={"GLOBL"}), # o callback
+	0x802A8B18: main.sym("object_a_802A8B18", flag={"GLOBL"}), # objcall
+	0x802A8BC0: main.sym("object_a_802A8BC0", flag={"GLOBL"}), # objcall
+	0x802A8C88: main.sym("object_a_802A8C88", flag={"GLOBL"}), # objcall
+	0x802A8CDC: main.sym("object_a_802A8CDC", flag={"GLOBL"}), # objcall
+	0x802A8D48: main.sym("object_a_802A8D48", flag={"GLOBL"}), # objcall
+	0x802A8D98: main.sym("object_a_802A8D98", flag={"GLOBL"}), # objcall
 	0x802A8DC0: main.sym_fnc("object_a_802A8DC0", flag={"GLOBL"}), # data
 	0x802A8F40: main.sym_fnc("object_a_802A8F40", flag={"GLOBL"}), # data
 	0x802A9114: main.sym_fnc("object_a_802A9114", flag={"GLOBL"}), # data
@@ -11002,10 +11856,10 @@ sym_E0_code_text = {
 	0x802A93F8: main.sym_fnc("object_a_802A93F8", flag={"GLOBL"}), # data
 	0x802A9440: main.sym_fnc("object_a_802A9440", flag={"GLOBL"}), # data
 	0x802A9460: main.sym_fnc("object_a_802A9460", flag={"GLOBL"}), # data
-	0x802A9498: main.sym("object_a_802A9498", flag={"GLOBL"}), # o callback
-	0x802A94F8: main.sym("object_a_802A94F8", flag={"GLOBL"}), # o callback
+	0x802A9498: main.sym("object_a_802A9498", flag={"GLOBL"}), # objcall
+	0x802A94F8: main.sym("object_a_802A94F8", flag={"GLOBL"}), # objcall
 	0x802A958C: main.sym("object_a_802A958C"),
-	0x802A9708: main.sym("object_a_802A9708", flag={"GLOBL"}), # o callback
+	0x802A9708: main.sym("object_a_802A9708", flag={"GLOBL"}), # objcall
 	0x802A973C: main.sym("object_a_802A973C"), # unused
 	0x802A98C4: main.sym("object_a_802A98C4"),
 	0x802A9994: main.sym_fnc("object_a_802A9994", flag={"GLOBL"}), # data
@@ -11013,207 +11867,219 @@ sym_E0_code_text = {
 	0x802A9F54: main.sym_fnc("object_a_802A9F54", flag={"GLOBL"}), # data
 	0x802A9FC8: main.sym_fnc("object_a_802A9FC8", flag={"GLOBL"}), # data
 	0x802AA02C: main.sym("object_a_802AA02C"),
-	0x802AA0AC: main.sym("object_a_802AA0AC", flag={"GLOBL"}), # o callback
-	0x802AA1B8: main.sym("object_a_802AA1B8", flag={"GLOBL"}), # o callback
+	0x802AA0AC: main.sym("object_a_802AA0AC", flag={"GLOBL"}), # objcall
+	0x802AA1B8: main.sym("object_a_802AA1B8", flag={"GLOBL"}), # objcall
 	0x802AA280: main.sym("object_a_802AA280"),
 	0x802AA3C8: main.sym("object_a_802AA3C8"),
-	0x802AA3F4: main.sym("object_a_802AA3F4", flag={"GLOBL"}), # o callback
-	0x802AA700: main.sym("object_a_802AA700", flag={"GLOBL"}), # o callback
-	0x802AA774: main.sym("object_a_802AA774", flag={"GLOBL"}), # o callback
-	0x802AA830: main.sym("object_a_802AA830", flag={"GLOBL"}), # o callback
+	0x802AA3F4: main.sym("object_a_802AA3F4", flag={"GLOBL"}), # objcall
+	0x802AA700: main.sym("object_a_802AA700", flag={"GLOBL"}), # objcall
+	0x802AA774: main.sym("object_a_802AA774", flag={"GLOBL"}), # objcall
+	0x802AA830: main.sym("object_a_802AA830", flag={"GLOBL"}), # objcall
 	0x802AA948: main.sym("object_a_802AA948"),
-	0x802AA97C: main.sym("object_a_802AA97C", flag={"GLOBL"}), # o callback
-	0x802AAA60: main.sym("object_a_802AAA60", flag={"GLOBL"}), # o callback
-	0x802AAB54: main.sym("object_a_802AAB54", flag={"GLOBL"}), # o callback
-	0x802AAC48: main.sym("object_a_802AAC48", flag={"GLOBL"}), # o callback
-	0x802AAE8C: main.sym("object_a_802AAE8C", flag={"GLOBL"}), # extern / make effect?
-	0x802AAF48: main.sym("object_a_802AAF48", flag={"GLOBL"}), # o callback
+	0x802AA97C: main.sym("object_a_802AA97C", flag={"GLOBL"}), # objcall
+	0x802AAA60: main.sym("object_a_802AAA60", flag={"GLOBL"}), # objcall
+	0x802AAB54: main.sym("object_a_802AAB54", flag={"GLOBL"}), # objcall
+	0x802AAC48: main.sym("object_a_802AAC48", flag={"GLOBL"}), # objcall
+	0x802AAE8C: main.sym_fnc("object_a_802AAE8C", arg=(
+		"int",
+		"int",
+		"float",
+	), flag={"GLOBL"}), # extern / make effect?
+	0x802AAF48: main.sym("object_a_802AAF48", flag={"GLOBL"}), # objcall
 	0x802AAFFC: main.sym("object_a_802AAFFC"),
 	0x802AB060: main.sym("object_a_802AB060"),
 	0x802AB158: main.sym("object_a_802AB158"),
 	0x802AB18C: main.sym("object_a_802AB18C"),
-	0x802AB1C8: main.sym("object_a_802AB1C8", flag={"GLOBL"}), # o callback
+	0x802AB1C8: main.sym("object_a_802AB1C8", flag={"GLOBL"}), # objcall
 	0x802AB558: main.sym_fnc("object_a_802AB558", arg=(
 		"int",
 	), flag={"GLOBL"}), # extern / make selroom star
 	0x802AB5C8: main.sym("object_a_802AB5C8"),
-	0x802AB650: main.sym("object_a_802AB650", flag={"GLOBL"}), # o callback
-	0x802AB70C: main.sym("object_a_802AB70C", flag={"GLOBL"}), # o callback
-	0x802AB748: main.sym("object_a_802AB748", flag={"GLOBL"}), # o callback
-	0x802AB7A4: main.sym("object_a_802AB7A4", flag={"GLOBL"}), # o callback
-	0x802AB860: main.sym("object_a_802AB860", flag={"GLOBL"}), # o callback
-	0x802ABA40: main.sym("object_a_802ABA40", flag={"GLOBL"}), # o callback
+	0x802AB650: main.sym("object_a_802AB650", flag={"GLOBL"}), # objcall
+	0x802AB70C: main.sym("object_a_802AB70C", flag={"GLOBL"}), # objcall
+	0x802AB748: main.sym("object_a_802AB748", flag={"GLOBL"}), # objcall
+	0x802AB7A4: main.sym("object_a_802AB7A4", flag={"GLOBL"}), # objcall
+	0x802AB860: main.sym("object_a_802AB860", flag={"GLOBL"}), # objcall
+	0x802ABA40: main.sym("object_a_802ABA40", flag={"GLOBL"}), # objcall
 	0x802ABC04: main.sym("object_a_802ABC04"),
 	0x802ABC70: main.sym_fnc("L802ABC70", flag={"GLOBL","LOCAL"}),
 	0x802ABCA8: main.sym_fnc("L802ABCA8", flag={"GLOBL","LOCAL"}),
 	0x802ABCF8: main.sym_fnc("L802ABCF8", flag={"GLOBL","LOCAL"}),
 	0x802ABD88: main.sym_fnc("L802ABD88", flag={"GLOBL","LOCAL"}),
 	0x802ABE20: main.sym_fnc("L802ABE20", flag={"GLOBL","LOCAL"}),
-	0x802ABEE4: main.sym("object_a_802ABEE4", flag={"GLOBL"}), # o callback
-	0x802ABF0C: main.sym("object_a_802ABF0C", flag={"GLOBL"}), # o callback
+	0x802ABEE4: main.sym("object_a_802ABEE4", flag={"GLOBL"}), # objcall
+	0x802ABF0C: main.sym("object_a_802ABF0C", flag={"GLOBL"}), # objcall
 	0x802AC068: main.sym_fnc("object_a_802AC068", flag={"GLOBL"}), # data
 	0x802AC15C: main.sym_fnc("object_a_802AC15C", flag={"GLOBL"}), # data
-	0x802AC294: main.sym("object_a_802AC294", flag={"GLOBL"}), # o callback
-	0x802AC2C0: main.sym("object_a_802AC2C0", flag={"GLOBL"}), # o callback
-	0x802AC2EC: main.sym("object_a_802AC2EC", flag={"GLOBL"}), # o callback
-	0x802AC3A8: main.sym("object_a_802AC3A8", flag={"GLOBL"}), # o callback
-	0x802AC4A0: main.sym("object_a_802AC4A0", flag={"GLOBL"}), # o callback
-	0x802AC5B4: main.sym("object_a_802AC5B4", flag={"GLOBL"}), # o callback
-	0x802AC678: main.sym("object_a_802AC678", flag={"GLOBL"}), # o callback
-	0x802AC78C: main.sym("object_a_802AC78C", flag={"GLOBL"}), # o callback
-	0x802AC864: main.sym("object_a_802AC864", flag={"GLOBL"}), # o callback
+	0x802AC294: main.sym("object_a_802AC294", flag={"GLOBL"}), # objcall
+	0x802AC2C0: main.sym("object_a_802AC2C0", flag={"GLOBL"}), # objcall
+	0x802AC2EC: main.sym("object_a_802AC2EC", flag={"GLOBL"}), # objcall
+	0x802AC3A8: main.sym("object_a_802AC3A8", flag={"GLOBL"}), # objcall
+	0x802AC4A0: main.sym("object_a_802AC4A0", flag={"GLOBL"}), # objcall
+	0x802AC5B4: main.sym("object_a_802AC5B4", flag={"GLOBL"}), # objcall
+	0x802AC678: main.sym("object_a_802AC678", flag={"GLOBL"}), # objcall
+	0x802AC78C: main.sym("object_a_802AC78C", flag={"GLOBL"}), # objcall
+	0x802AC864: main.sym("object_a_802AC864", flag={"GLOBL"}), # objcall
 	0x802AC910: main.sym("object_a_802AC910"),
 	0x802AC958: main.sym("object_a_802AC958"),
 	0x802AC9D0: main.sym("object_a_802AC9D0"),
 	0x802ACA6C: main.sym("object_a_802ACA6C"),
-	0x802ACAC8: main.sym("object_a_802ACAC8", flag={"GLOBL"}), # o callback
+	0x802ACAC8: main.sym("object_a_802ACAC8", flag={"GLOBL"}), # objcall
 	0x802ACB90: main.sym_fnc("L802ACB90", flag={"GLOBL","LOCAL"}),
 	0x802ACBA0: main.sym_fnc("L802ACBA0", flag={"GLOBL","LOCAL"}),
 	0x802ACBB8: main.sym_fnc("L802ACBB8", flag={"GLOBL","LOCAL"}),
 	0x802ACBD0: main.sym_fnc("L802ACBD0", flag={"GLOBL","LOCAL"}),
 	0x802ACBE8: main.sym_fnc("L802ACBE8", flag={"GLOBL","LOCAL"}),
-	0x802ACC3C: main.sym("object_a_802ACC3C", flag={"GLOBL"}), # o callback
-	0x802ACE80: main.sym("object_a_802ACE80", flag={"GLOBL"}), # o callback
+	0x802ACC3C: main.sym("object_a_802ACC3C", flag={"GLOBL"}), # objcall
+	0x802ACE80: main.sym("object_a_802ACE80", flag={"GLOBL"}), # objcall
 	0x802AD078: main.sym_fnc("object_a_802AD078", flag={"GLOBL"}), # data
 	0x802AD10C: main.sym_fnc("object_a_802AD10C", flag={"GLOBL"}), # data
 	0x802AD1A4: main.sym_fnc("object_a_802AD1A4", flag={"GLOBL"}), # data
 	0x802AD238: main.sym_fnc("object_a_802AD238", flag={"GLOBL"}), # data
 	0x802AD2D0: main.sym_fnc("object_a_802AD2D0", flag={"GLOBL"}), # data
-	0x802AD34C: main.sym("object_a_802AD34C", flag={"GLOBL"}), # o callback
-	0x802AD378: main.sym("object_a_802AD378", flag={"GLOBL"}), # o callback
+	0x802AD34C: main.sym("object_a_802AD34C", flag={"GLOBL"}), # objcall
+	0x802AD378: main.sym("object_a_802AD378", flag={"GLOBL"}), # objcall
 	0x802AD580: main.sym_fnc("object_a_802AD580", flag={"GLOBL"}), # data
 	0x802AD76C: main.sym_fnc("object_a_802AD76C", flag={"GLOBL"}), # data
 	0x802AD7F4: main.sym_fnc("object_a_802AD7F4", flag={"GLOBL"}), # data
 	0x802AD828: main.sym_fnc("object_a_802AD828", flag={"GLOBL"}), # data
-	0x802AD890: main.sym("object_a_802AD890", flag={"GLOBL"}), # o callback
+	0x802AD890: main.sym("object_a_802AD890", flag={"GLOBL"}), # objcall
 	0x802AD8BC: main.sym("object_a_802AD8BC"),
 	0x802AD8F0: main.sym_fnc("object_a_802AD8F0", flag={"GLOBL"}), # data
 	0x802ADA4C: main.sym_fnc("object_a_802ADA4C", flag={"GLOBL"}), # data
 	0x802ADB88: main.sym_fnc("object_a_802ADB88", flag={"GLOBL"}), # data
 	0x802ADCE4: main.sym_fnc("object_a_802ADCE4", flag={"GLOBL"}), # data
 	0x802ADD70: main.sym_fnc("object_a_802ADD70", flag={"GLOBL"}), # data
-	0x802ADDF8: main.sym("object_a_802ADDF8", flag={"GLOBL"}), # o callback
-	0x802ADF6C: main.sym("object_a_802ADF6C", flag={"GLOBL"}), # o callback
-	0x802ADF98: main.sym("object_a_802ADF98", flag={"GLOBL"}), # o callback
-	0x802ADFD8: main.sym("object_a_802ADFD8", flag={"GLOBL"}), # o callback
-	0x802AE0CC: main.sym("object_a_802AE0CC", flag={"GLOBL"}), # extern
-	0x802AE238: main.sym("object_a_802AE238", flag={"GLOBL"}), # o callback
-	0x802AE304: main.sym("object_a_802AE304", flag={"GLOBL"}), # o callback
+	0x802ADDF8: main.sym("object_a_802ADDF8", flag={"GLOBL"}), # objcall
+	0x802ADF6C: main.sym("object_a_802ADF6C", flag={"GLOBL"}), # objcall
+	0x802ADF98: main.sym("object_a_802ADF98", flag={"GLOBL"}), # objcall
+	0x802ADFD8: main.sym("object_a_802ADFD8", flag={"GLOBL"}), # objcall
+	0x802AE0CC: main.sym_fnc("object_a_802AE0CC", arg=(
+		"SHORT",
+		"SHORT shape",
+		"float",
+		"SHORT",
+	), flag={"GLOBL"}), # extern
+	0x802AE238: main.sym("object_a_802AE238", flag={"GLOBL"}), # objcall
+	0x802AE304: main.sym("object_a_802AE304", flag={"GLOBL"}), # objcall
 	0x802AE334: main.sym("object_a_802AE334", flag={"GLOBL"}), # extern
-	0x802AE360: main.sym("object_a_802AE360", flag={"GLOBL"}), # o callback
+	0x802AE360: main.sym("object_a_802AE360", flag={"GLOBL"}), # objcall
 	0x802AE394: main.sym("object_a_802AE394"), # unused
 	0x802AE45C: main.sym("object_a_802AE45C"),
-	0x802AE48C: main.sym("object_a_802AE48C", flag={"GLOBL"}), # o callback
-	0x802AE4C0: main.sym("object_a_802AE4C0", flag={"GLOBL"}), # extern
-	0x802AE534: main.sym("object_a_802AE534", flag={"GLOBL"}), # o callback
-	0x802AE85C: main.sym("object_a_802AE85C", flag={"GLOBL"}), # o callback
-	0x802AE908: main.sym("object_a_802AE908", flag={"GLOBL"}), # o callback
+	0x802AE48C: main.sym("object_a_802AE48C", flag={"GLOBL"}), # objcall
+	0x802AE4C0: main.sym_fnc("object_a_802AE4C0", arg=(
+		"SHORT",
+		"SHORT",
+	), flag={"GLOBL"}), # extern
+	0x802AE534: main.sym("object_a_802AE534", flag={"GLOBL"}), # objcall
+	0x802AE85C: main.sym("object_a_802AE85C", flag={"GLOBL"}), # objcall
+	0x802AE908: main.sym("object_a_802AE908", flag={"GLOBL"}), # objcall
 	0x802AEA6C: main.sym_fnc("object_a_802AEA6C", flag={"GLOBL"}), # data
 	0x802AEAB8: main.sym_fnc("object_a_802AEAB8", flag={"GLOBL"}), # data
 	0x802AEB1C: main.sym_fnc("object_a_802AEB1C", flag={"GLOBL"}), # data
 	0x802AEB74: main.sym_fnc("object_a_802AEB74", flag={"GLOBL"}), # data
-	0x802AEB9C: main.sym("object_a_802AEB9C", flag={"GLOBL"}), # o callback
-	0x802AEBC8: main.sym("object_a_802AEBC8", flag={"GLOBL"}), # o callback
-	0x802AEC40: main.sym("object_a_802AEC40", flag={"GLOBL"}), # o callback
-	0x802AECA8: main.sym("object_a_802AECA8", flag={"GLOBL"}), # o callback
-	0x802AECDC: main.sym("object_a_802AECDC", flag={"GLOBL"}), # o callback
-	0x802AEDC0: main.sym("object_a_802AEDC0", flag={"GLOBL"}), # o callback
+	0x802AEB9C: main.sym("object_a_802AEB9C", flag={"GLOBL"}), # objcall
+	0x802AEBC8: main.sym("object_a_802AEBC8", flag={"GLOBL"}), # objcall
+	0x802AEC40: main.sym("object_a_802AEC40", flag={"GLOBL"}), # objcall
+	0x802AECA8: main.sym("object_a_802AECA8", flag={"GLOBL"}), # objcall
+	0x802AECDC: main.sym("object_a_802AECDC", flag={"GLOBL"}), # objcall
+	0x802AEDC0: main.sym("object_a_802AEDC0", flag={"GLOBL"}), # objcall
 	0x802AEE34: main.sym_fnc("L802AEE34", flag={"GLOBL","LOCAL"}),
 	0x802AEE68: main.sym_fnc("L802AEE68", flag={"GLOBL","LOCAL"}),
 	0x802AEE70: main.sym_fnc("L802AEE70", flag={"GLOBL","LOCAL"}),
-	0x802AEEA4: main.sym("object_a_802AEEA4", flag={"GLOBL"}), # o callback
-	0x802AEF1C: main.sym("object_a_802AEF1C", flag={"GLOBL"}), # o callback
-	0x802AF1E8: main.sym("object_a_802AF1E8", flag={"GLOBL"}), # o callback
-	0x802AF3FC: main.sym("object_a_802AF3FC", flag={"GLOBL"}), # o callback
-	0x802AF448: main.sym("object_a_802AF448", flag={"GLOBL"}), # o callback
-	0x802AF5F8: main.sym("object_a_802AF5F8", flag={"GLOBL"}), # o callback
-	0x802AF7C4: main.sym("object_a_802AF7C4", flag={"GLOBL"}), # o callback
-	0x802AF9CC: main.sym("object_a_802AF9CC", flag={"GLOBL"}), # o callback
-	0x802AFA0C: main.sym("object_a_802AFA0C", flag={"GLOBL"}), # o callback
-	0x802AFAE4: main.sym("object_a_802AFAE4", flag={"GLOBL"}), # o callback
-	0x802AFBF8: main.sym("object_a_802AFBF8", flag={"GLOBL"}), # o callback
-	0x802AFCE4: main.sym("object_a_802AFCE4", flag={"GLOBL"}), # o callback
-	0x802AFD1C: main.sym("object_a_802AFD1C", flag={"GLOBL"}), # o callback
-	0x802AFEE8: main.sym("object_a_802AFEE8", flag={"GLOBL"}), # o callback
-	0x802AFF30: main.sym("object_a_802AFF30", flag={"GLOBL"}), # o callback
-	0x802B00E4: main.sym("object_a_802B00E4", flag={"GLOBL"}), # o callback
+	0x802AEEA4: main.sym("object_a_802AEEA4", flag={"GLOBL"}), # objcall
+	0x802AEF1C: main.sym("object_a_802AEF1C", flag={"GLOBL"}), # objcall
+	0x802AF1E8: main.sym("object_a_802AF1E8", flag={"GLOBL"}), # objcall
+	0x802AF3FC: main.sym("object_a_802AF3FC", flag={"GLOBL"}), # objcall
+	0x802AF448: main.sym("object_a_802AF448", flag={"GLOBL"}), # objcall
+	0x802AF5F8: main.sym("object_a_802AF5F8", flag={"GLOBL"}), # objcall
+	0x802AF7C4: main.sym("object_a_802AF7C4", flag={"GLOBL"}), # objcall
+	0x802AF9CC: main.sym("object_a_802AF9CC", flag={"GLOBL"}), # objcall
+	0x802AFA0C: main.sym("object_a_802AFA0C", flag={"GLOBL"}), # objcall
+	0x802AFAE4: main.sym("object_a_802AFAE4", flag={"GLOBL"}), # objcall
+	0x802AFBF8: main.sym("object_a_802AFBF8", flag={"GLOBL"}), # objcall
+	0x802AFCE4: main.sym("object_a_802AFCE4", flag={"GLOBL"}), # objcall
+	0x802AFD1C: main.sym("object_a_802AFD1C", flag={"GLOBL"}), # objcall
+	0x802AFEE8: main.sym("object_a_802AFEE8", flag={"GLOBL"}), # objcall
+	0x802AFF30: main.sym("object_a_802AFF30", flag={"GLOBL"}), # objcall
+	0x802B00E4: main.sym("object_a_802B00E4", flag={"GLOBL"}), # objcall
 	0x802B0244: main.sym("object_a_802B0244"),
 	0x802B039C: main.sym("object_a_802B039C"),
-	0x802B04B4: main.sym("object_a_802B04B4", flag={"GLOBL"}), # o callback
-	0x802B0614: main.sym("object_a_802B0614", flag={"GLOBL"}), # o callback
-	0x802B0974: main.sym("object_a_802B0974", flag={"GLOBL"}), # o callback
+	0x802B04B4: main.sym("object_a_802B04B4", flag={"GLOBL"}), # objcall
+	0x802B0614: main.sym("object_a_802B0614", flag={"GLOBL"}), # objcall
+	0x802B0974: main.sym("object_a_802B0974", flag={"GLOBL"}), # objcall
 	0x802B0B9C: main.sym("object_a_802B0B9C"),
-	0x802B0BEC: main.sym("object_a_802B0BEC", flag={"GLOBL"}), # o callback
+	0x802B0BEC: main.sym("object_a_802B0BEC", flag={"GLOBL"}), # objcall
 	0x802B0C3C: main.sym_fnc("L802B0C3C", flag={"GLOBL","LOCAL"}),
 	0x802B0C5C: main.sym_fnc("L802B0C5C", flag={"GLOBL","LOCAL"}),
 	0x802B0C8C: main.sym_fnc("L802B0C8C", flag={"GLOBL","LOCAL"}),
 	0x802B0CBC: main.sym_fnc("L802B0CBC", flag={"GLOBL","LOCAL"}),
 	0x802B0CEC: main.sym_fnc("L802B0CEC", flag={"GLOBL","LOCAL"}),
-	0x802B0D48: main.sym("object_a_802B0D48", flag={"GLOBL"}), # o callback
-	0x802B0DF0: main.sym("object_a_802B0DF0", flag={"GLOBL"}), # o callback
-	0x802B1278: main.sym("object_a_802B1278", flag={"GLOBL"}), # o callback
+	0x802B0D48: main.sym("object_a_802B0D48", flag={"GLOBL"}), # objcall
+	0x802B0DF0: main.sym("object_a_802B0DF0", flag={"GLOBL"}), # objcall
+	0x802B1278: main.sym("object_a_802B1278", flag={"GLOBL"}), # objcall
 	0x802B12B0: main.sym_fnc("L802B12B0", flag={"GLOBL","LOCAL"}),
 	0x802B1344: main.sym_fnc("L802B1344", flag={"GLOBL","LOCAL"}),
 	0x802B13A0: main.sym_fnc("L802B13A0", flag={"GLOBL","LOCAL"}),
 	0x802B1470: main.sym_fnc("L802B1470", flag={"GLOBL","LOCAL"}),
 	0x802B14B4: main.sym_fnc("L802B14B4", flag={"GLOBL","LOCAL"}),
 	0x802B14F4: main.sym("object_a_802B14F4"),
-	0x802B15E8: main.sym("object_a_802B15E8", flag={"GLOBL"}), # o callback
+	0x802B15E8: main.sym("object_a_802B15E8", flag={"GLOBL"}), # objcall
 	0x802B1714: main.sym("object_a_802B1714"),
 	0x802B17F4: main.sym("object_a_802B17F4"),
 	0x802B19D8: main.sym("object_a_802B19D8"),
-	0x802B1AE0: main.sym("object_a_802B1AE0", flag={"GLOBL"}), # o callback
-	0x802B1B2C: main.sym("object_a_802B1B2C", flag={"GLOBL"}), # o callback
-	0x802B1BB0: main.sym_fnc("s_mario_copyparentpos", "void *", (
+	0x802B1AE0: main.sym("object_a_802B1AE0", flag={"GLOBL"}), # objcall
+	0x802B1B2C: main.sym("object_a_802B1B2C", flag={"GLOBL"}), # objcall
+	0x802B1BB0: main.sym_fnc("CtrlMarioCopyParentPos", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802B1C54: main.sym("object_a_802B1C54", flag={"GLOBL"}), # o callback
+	), flag={"GLOBL"}), # shpcall
+	0x802B1C54: main.sym("object_a_802B1C54", flag={"GLOBL"}), # objcall
 	0x802B1D7C: main.sym_fnc("object_a_802B1D7C", flag={"GLOBL"}), # data
 	0x802B1E6C: main.sym_fnc("object_a_802B1E6C", flag={"GLOBL"}), # data
 	0x802B1FF4: main.sym_fnc("object_a_802B1FF4", flag={"GLOBL"}), # data
 	0x802B20A0: main.sym_fnc("object_a_802B20A0", flag={"GLOBL"}), # data
 	0x802B2154: main.sym("object_a_802B2154"),
-	0x802B2278: main.sym("object_a_802B2278", flag={"GLOBL"}), # o callback
-	0x802B2340: main.sym("object_a_802B2340", flag={"GLOBL"}), # o callback
-	0x802B23E0: main.sym("object_a_802B23E0", flag={"GLOBL"}), # o callback
-	0x802B2494: main.sym("object_a_802B2494", flag={"GLOBL"}), # o callback
-	0x802B25AC: main.sym("object_a_802B25AC", flag={"GLOBL"}), # o callback
+	0x802B2278: main.sym("object_a_802B2278", flag={"GLOBL"}), # objcall
+	0x802B2340: main.sym("object_a_802B2340", flag={"GLOBL"}), # objcall
+	0x802B23E0: main.sym("object_a_802B23E0", flag={"GLOBL"}), # objcall
+	0x802B2494: main.sym("object_a_802B2494", flag={"GLOBL"}), # objcall
+	0x802B25AC: main.sym("object_a_802B25AC", flag={"GLOBL"}), # objcall
 	0x802B26A4: main.sym_fnc("object_a_802B26A4", flag={"GLOBL"}), # data
 	0x802B27D8: main.sym_fnc("object_a_802B27D8", flag={"GLOBL"}), # data
 	0x802B2824: main.sym("object_a_802B2824"),
-	0x802B288C: main.sym("object_a_802B288C", flag={"GLOBL"}), # o callback
-	0x802B29B8: main.sym("object_a_802B29B8", flag={"GLOBL"}), # o callback
+	0x802B288C: main.sym("object_a_802B288C", flag={"GLOBL"}), # objcall
+	0x802B29B8: main.sym("object_a_802B29B8", flag={"GLOBL"}), # objcall
 	0x802B2A04: main.sym_fnc("L802B2A04", flag={"GLOBL","LOCAL"}),
 	0x802B2A8C: main.sym_fnc("L802B2A8C", flag={"GLOBL","LOCAL"}),
 	0x802B2B24: main.sym_fnc("L802B2B24", flag={"GLOBL","LOCAL"}),
 	0x802B2B74: main.sym_fnc("L802B2B74", flag={"GLOBL","LOCAL"}),
 	0x802B2BA8: main.sym_fnc("L802B2BA8", flag={"GLOBL","LOCAL"}),
 	0x802B2BC8: main.sym("object_a_802B2BC8"),
-	0x802B2D10: main.sym("object_a_802B2D10", flag={"GLOBL"}), # o callback
+	0x802B2D10: main.sym("object_a_802B2D10", flag={"GLOBL"}), # objcall
 	0x802B2DAC: main.sym_fnc("object_a_802B2DAC", flag={"GLOBL"}), # data
 	0x802B2F34: main.sym_fnc("object_a_802B2F34", flag={"GLOBL"}), # data
 	0x802B3064: main.sym_fnc("object_a_802B3064", flag={"GLOBL"}), # data
-	0x802B3108: main.sym("object_a_802B3108", flag={"GLOBL"}), # o callback
+	0x802B3108: main.sym("object_a_802B3108", flag={"GLOBL"}), # objcall
 	0x802B3134: main.sym("object_a_802B3134"),
 	0x802B3250: main.sym("object_a_802B3250"),
-	0x802B329C: main.sym("object_a_802B329C", flag={"GLOBL"}), # o callback
-	0x802B3600: main.sym("object_a_802B3600", flag={"GLOBL"}), # o callback
-	0x802B37B8: main.sym("object_a_802B37B8", flag={"GLOBL"}), # o callback
-	0x802B3810: main.sym("object_a_802B3810", flag={"GLOBL"}), # o callback
+	0x802B329C: main.sym("object_a_802B329C", flag={"GLOBL"}), # objcall
+	0x802B3600: main.sym("object_a_802B3600", flag={"GLOBL"}), # objcall
+	0x802B37B8: main.sym("object_a_802B37B8", flag={"GLOBL"}), # objcall
+	0x802B3810: main.sym("object_a_802B3810", flag={"GLOBL"}), # objcall
 	0x802B3830: main.sym_fnc("object_a_802B3830", flag={"GLOBL"}), # data
 	0x802B38B8: main.sym_fnc("object_a_802B38B8", flag={"GLOBL"}), # data
 	0x802B394C: main.sym_fnc("object_a_802B394C", flag={"GLOBL"}), # data
 	0x802B3B08: main.sym_fnc("object_a_802B3B08", flag={"GLOBL"}), # data
 	0x802B3B24: main.sym_fnc("object_a_802B3B24", flag={"GLOBL"}), # data
-	0x802B3BE0: main.sym("object_a_802B3BE0", flag={"GLOBL"}), # o callback
+	0x802B3BE0: main.sym("object_a_802B3BE0", flag={"GLOBL"}), # objcall
 	0x802B3C2C: main.sym_fnc("object_a_802B3C2C", flag={"GLOBL"}), # data
 	0x802B3CDC: main.sym_fnc("object_a_802B3CDC", flag={"GLOBL"}), # data
 	0x802B3D10: main.sym_fnc("object_a_802B3D10", flag={"GLOBL"}), # data
-	0x802B3D74: main.sym("object_a_802B3D74", flag={"GLOBL"}), # o callback
-	0x802B3DF4: main.sym("object_a_802B3DF4", flag={"GLOBL"}), # o callback
-	0x802B4080: main.sym("object_a_802B4080", flag={"GLOBL"}), # o callback
+	0x802B3D74: main.sym("object_a_802B3D74", flag={"GLOBL"}), # objcall
+	0x802B3DF4: main.sym("object_a_802B3DF4", flag={"GLOBL"}), # objcall
+	0x802B4080: main.sym("object_a_802B4080", flag={"GLOBL"}), # objcall
 	0x802B4184: main.sym("object_a_802B4184"),
 	0x802B41FC: main.sym("object_a_802B41FC"),
 	0x802B4288: main.sym("object_a_802B4288"),
@@ -11274,9 +12140,9 @@ sym_E0_code_text = {
 	0x802B71E4: main.sym("object_a_802B71E4"),
 	0x802B72D4: main.sym("object_a_802B72D4"),
 	0x802B7418: main.sym("object_a_802B7418"),
-	0x802B75A4: main.sym("object_a_802B75A4", flag={"GLOBL"}), # o callback
-	0x802B7878: main.sym("object_a_802B7878", flag={"GLOBL"}), # o callback
-	0x802B798C: main.sym("s_object_a_802B798C", flag={"GLOBL"}), # s callback
+	0x802B75A4: main.sym("object_a_802B75A4", flag={"GLOBL"}), # objcall
+	0x802B7878: main.sym("object_a_802B7878", flag={"GLOBL"}), # objcall
+	0x802B798C: main.sym("Ctrl_object_a_802B798C", flag={"GLOBL"}), # shpcall
 	0x802B7A20: main.sym("object_a_802B7A20"),
 	0x802B7A78: main.sym_fnc("L802B7A78", flag={"GLOBL","LOCAL"}),
 	0x802B7AE8: main.sym_fnc("L802B7AE8", flag={"GLOBL","LOCAL"}),
@@ -11287,41 +12153,41 @@ sym_E0_code_text = {
 	0x802B7BC0: main.sym_fnc("L802B7BC0", flag={"GLOBL","LOCAL"}),
 	0x802B7C00: main.sym_fnc("L802B7C00", flag={"GLOBL","LOCAL"}),
 	0x802B7C24: main.sym_fnc("L802B7C24", flag={"GLOBL","LOCAL"}),
-	0x802B7C64: main.sym("s_object_a_802B7C64", flag={"GLOBL"}), # s callback
-	0x802B7D44: main.sym("s_object_a_802B7D44", flag={"GLOBL"}), # s callback
+	0x802B7C64: main.sym("Ctrl_object_a_802B7C64", flag={"GLOBL"}), # shpcall
+	0x802B7D44: main.sym("Ctrl_object_a_802B7D44", flag={"GLOBL"}), # shpcall
 	0x802B7E68: main.sym_fnc("object_a_802B7E68", flag={"GLOBL"}), # data
 	0x802B7EF0: main.sym_fnc("object_a_802B7EF0", flag={"GLOBL"}), # data
 	0x802B8024: main.sym_fnc("object_a_802B8024", flag={"GLOBL"}), # data
-	0x802B8384: main.sym("object_a_802B8384", flag={"GLOBL"}), # o callback
+	0x802B8384: main.sym("object_a_802B8384", flag={"GLOBL"}), # objcall
 	0x802B83B0: main.sym("object_a_802B83B0"),
 	0x802B8434: main.sym("object_a_802B8434"),
-	0x802B84AC: main.sym("object_a_802B84AC", flag={"GLOBL"}), # o callback
-	0x802B85B0: main.sym("object_a_802B85B0", flag={"GLOBL"}), # o callback
+	0x802B84AC: main.sym("object_a_802B84AC", flag={"GLOBL"}), # objcall
+	0x802B85B0: main.sym("object_a_802B85B0", flag={"GLOBL"}), # objcall
 	0x802B8654: main.sym("object_a_802B8654"),
-	0x802B8734: main.sym("object_a_802B8734", flag={"GLOBL"}), # o callback
-	0x802B8960: main.sym("object_a_802B8960", flag={"GLOBL"}), # o callback
-	0x802B89EC: main.sym("object_a_802B89EC", flag={"GLOBL"}), # o callback
-	0x802B8B1C: main.sym("object_a_802B8B1C", flag={"GLOBL"}), # o callback
-	0x802B8C38: main.sym("object_a_802B8C38", flag={"GLOBL"}), # o callback
-	0x802B8D68: main.sym("object_a_802B8D68", flag={"GLOBL"}), # o callback
-	0x802B8E7C: main.sym("object_a_802B8E7C", flag={"GLOBL"}), # o callback
-	0x802B9034: main.sym("object_a_802B9034", flag={"GLOBL"}), # o callback
-	0x802B90EC: main.sym("object_a_802B90EC", flag={"GLOBL"}), # o callback
-	0x802B921C: main.sym("object_a_802B921C", flag={"GLOBL"}), # o callback
-	0x802B935C: main.sym("object_a_802B935C", flag={"GLOBL"}), # o callback
-	0x802B9790: main.sym("object_a_802B9790", flag={"GLOBL"}), # o callback
+	0x802B8734: main.sym("object_a_802B8734", flag={"GLOBL"}), # objcall
+	0x802B8960: main.sym("object_a_802B8960", flag={"GLOBL"}), # objcall
+	0x802B89EC: main.sym("object_a_802B89EC", flag={"GLOBL"}), # objcall
+	0x802B8B1C: main.sym("object_a_802B8B1C", flag={"GLOBL"}), # objcall
+	0x802B8C38: main.sym("object_a_802B8C38", flag={"GLOBL"}), # objcall
+	0x802B8D68: main.sym("object_a_802B8D68", flag={"GLOBL"}), # objcall
+	0x802B8E7C: main.sym("object_a_802B8E7C", flag={"GLOBL"}), # objcall
+	0x802B9034: main.sym("object_a_802B9034", flag={"GLOBL"}), # objcall
+	0x802B90EC: main.sym("object_a_802B90EC", flag={"GLOBL"}), # objcall
+	0x802B921C: main.sym("object_a_802B921C", flag={"GLOBL"}), # objcall
+	0x802B935C: main.sym("object_a_802B935C", flag={"GLOBL"}), # objcall
+	0x802B9790: main.sym("object_a_802B9790", flag={"GLOBL"}), # objcall
 	0x802B98D4: main.sym("object_a_802B98D4"),
-	0x802B98FC: main.sym("object_a_802B98FC", flag={"GLOBL"}), # o callback
+	0x802B98FC: main.sym("object_a_802B98FC", flag={"GLOBL"}), # objcall
 	0x802B9A78: main.sym("object_a_802B9A78"),
 	0x802B9AF8: main.sym("object_a_802B9AF8"),
-	0x802B9BB4: main.sym("object_a_802B9BB4", flag={"GLOBL"}), # o callback
-	0x802B9BD8: main.sym("object_a_802B9BD8", flag={"GLOBL"}), # o callback
+	0x802B9BB4: main.sym("object_a_802B9BB4", flag={"GLOBL"}), # objcall
+	0x802B9BD8: main.sym("object_a_802B9BD8", flag={"GLOBL"}), # objcall
 	0x802B9C60: main.sym_fnc("L802B9C60", flag={"GLOBL","LOCAL"}),
 	0x802B9CA0: main.sym_fnc("L802B9CA0", flag={"GLOBL","LOCAL"}),
 	0x802B9CC0: main.sym_fnc("L802B9CC0", flag={"GLOBL","LOCAL"}),
 	0x802B9CD4: main.sym_fnc("L802B9CD4", flag={"GLOBL","LOCAL"}),
 	0x802B9CF4: main.sym_fnc("L802B9CF4", flag={"GLOBL","LOCAL"}),
-	0x802B9E94: main.sym("object_a_802B9E94", flag={"GLOBL"}), # o callback
+	0x802B9E94: main.sym("object_a_802B9E94", flag={"GLOBL"}), # objcall
 	0x802B9EFC: main.sym("object_a_802B9EFC"),
 	0x802B9F34: main.sym_fnc("L802B9F34", flag={"GLOBL","LOCAL"}),
 	0x802B9F68: main.sym_fnc("L802B9F68", flag={"GLOBL","LOCAL"}),
@@ -11330,14 +12196,14 @@ sym_E0_code_text = {
 	0x802BA064: main.sym_fnc("L802BA064", flag={"GLOBL","LOCAL"}),
 	0x802BA11C: main.sym_fnc("L802BA11C", flag={"GLOBL","LOCAL"}),
 	0x802BA13C: main.sym("object_a_802BA13C"),
-	0x802BA19C: main.sym("object_a_802BA19C", flag={"GLOBL"}), # o callback
-	0x802BA1E0: main.sym("object_a_802BA1E0", flag={"GLOBL"}), # o callback
-	0x802BA25C: main.sym("object_a_802BA25C", flag={"GLOBL"}), # o callback
-	0x802BA2B0: main.sym("s_object_a_802BA2B0", flag={"GLOBL"}), # s callback
-	0x802BA2F8: main.sym("object_a_802BA2F8", flag={"GLOBL"}), # o callback
-	0x802BA458: main.sym("object_a_802BA458", flag={"GLOBL"}), # o callback
-	0x802BA5BC: main.sym("object_a_802BA5BC", flag={"GLOBL"}), # o callback
-	0x802BA608: main.sym("object_a_802BA608", flag={"GLOBL"}), # o callback
+	0x802BA19C: main.sym("object_a_802BA19C", flag={"GLOBL"}), # objcall
+	0x802BA1E0: main.sym("object_a_802BA1E0", flag={"GLOBL"}), # objcall
+	0x802BA25C: main.sym("object_a_802BA25C", flag={"GLOBL"}), # objcall
+	0x802BA2B0: main.sym("Ctrl_object_a_802BA2B0", flag={"GLOBL"}), # shpcall
+	0x802BA2F8: main.sym("object_a_802BA2F8", flag={"GLOBL"}), # objcall
+	0x802BA458: main.sym("object_a_802BA458", flag={"GLOBL"}), # objcall
+	0x802BA5BC: main.sym("object_a_802BA5BC", flag={"GLOBL"}), # objcall
+	0x802BA608: main.sym("object_a_802BA608", flag={"GLOBL"}), # objcall
 	0x802BA7E0: main.sym("object_a_802BA7E0"),
 	0x802BA868: main.sym("object_a_802BA868"),
 	0x802BA8C4: main.sym("object_a_802BA8C4"), # unused
@@ -11368,41 +12234,41 @@ sym_E0_code_text = {
 	0x802BBB04: main.sym_fnc("L802BBB04", flag={"GLOBL","LOCAL"}),
 	0x802BBB60: main.sym_fnc("L802BBB60", flag={"GLOBL","LOCAL"}),
 	0x802BBB80: main.sym_fnc("L802BBB80", flag={"GLOBL","LOCAL"}),
-	0x802BBB98: main.sym("object_a_802BBB98", flag={"GLOBL"}), # o callback
-	0x802BBC0C: main.sym("object_a_802BBC0C", flag={"GLOBL"}), # o callback
+	0x802BBB98: main.sym("object_a_802BBB98", flag={"GLOBL"}), # objcall
+	0x802BBC0C: main.sym("object_a_802BBC0C", flag={"GLOBL"}), # objcall
 	0x802BBD6C: main.sym("object_a_802BBD6C"),
 	0x802BBFD8: main.sym("object_a_802BBFD8"),
-	0x802BC0F0: main.sym("object_a_802BC0F0", flag={"GLOBL"}), # o callback
-	0x802BC22C: main.sym("object_a_802BC22C", flag={"GLOBL"}), # o callback
-	0x802BC294: main.sym("object_a_802BC294", flag={"GLOBL"}), # o callback
+	0x802BC0F0: main.sym("object_a_802BC0F0", flag={"GLOBL"}), # objcall
+	0x802BC22C: main.sym("object_a_802BC22C", flag={"GLOBL"}), # objcall
+	0x802BC294: main.sym("object_a_802BC294", flag={"GLOBL"}), # objcall
 	0x802BC348: main.sym("object_a_802BC348"),
 	0x802BC4F4: main.sym_fnc("object_a_802BC4F4", flag={"GLOBL"}), # data
 	0x802BC538: main.sym_fnc("object_a_802BC538", flag={"GLOBL"}), # data
 	0x802BC590: main.sym_fnc("object_a_802BC590", flag={"GLOBL"}), # data
 	0x802BC5FC: main.sym_fnc("object_a_802BC5FC", flag={"GLOBL"}), # data
-	0x802BC618: main.sym("object_a_802BC618", flag={"GLOBL"}), # o callback
-	0x802BC660: main.sym("object_a_802BC660", flag={"GLOBL"}), # o callback
-	0x802BC728: main.sym("object_a_802BC728", flag={"GLOBL"}), # o callback
-	0x802BC898: main.sym("object_a_802BC898", flag={"GLOBL"}), # o callback
+	0x802BC618: main.sym("object_a_802BC618", flag={"GLOBL"}), # objcall
+	0x802BC660: main.sym("object_a_802BC660", flag={"GLOBL"}), # objcall
+	0x802BC728: main.sym("object_a_802BC728", flag={"GLOBL"}), # objcall
+	0x802BC898: main.sym("object_a_802BC898", flag={"GLOBL"}), # objcall
 	0x802BC934: main.sym("object_a_802BC934"),
-	0x802BCA74: main.sym("object_a_802BCA74", flag={"GLOBL"}), # o callback
+	0x802BCA74: main.sym("object_a_802BCA74", flag={"GLOBL"}), # objcall
 	0x802BCADC: main.sym_fnc("L802BCADC", flag={"GLOBL","LOCAL"}),
 	0x802BCB24: main.sym_fnc("L802BCB24", flag={"GLOBL","LOCAL"}),
 	0x802BCBA4: main.sym_fnc("L802BCBA4", flag={"GLOBL","LOCAL"}),
 	0x802BCC1C: main.sym_fnc("L802BCC1C", flag={"GLOBL","LOCAL"}),
 	0x802BCC90: main.sym_fnc("L802BCC90", flag={"GLOBL","LOCAL"}),
 	0x802BCCE8: main.sym("object_a_802BCCE8"),
-	0x802BCDA8: main.sym("object_a_802BCDA8", flag={"GLOBL"}), # o callback
-	0x802BCE58: main.sym("object_a_802BCE58", flag={"GLOBL"}), # o callback
+	0x802BCDA8: main.sym("object_a_802BCDA8", flag={"GLOBL"}), # objcall
+	0x802BCE58: main.sym("object_a_802BCE58", flag={"GLOBL"}), # objcall
 	0x802BCE9C: main.sym("object_a_802BCE9C"),
-	0x802BCF40: main.sym("object_a_802BCF40", flag={"GLOBL"}), # o callback
+	0x802BCF40: main.sym("object_a_802BCF40", flag={"GLOBL"}), # objcall
 	0x802BCFC4: main.sym("object_a_802BCFC4"),
-	0x802BD058: main.sym("object_a_802BD058", flag={"GLOBL"}), # o callback
+	0x802BD058: main.sym("object_a_802BD058", flag={"GLOBL"}), # objcall
 	0x802BD3E4: main.sym("object_a_802BD3E4"),
-	0x802BD488: main.sym("object_a_802BD488", flag={"GLOBL"}), # o callback
+	0x802BD488: main.sym("object_a_802BD488", flag={"GLOBL"}), # objcall
 	0x802BD5DC: main.sym("object_a_802BD5DC"),
 	0x802BD62C: main.sym("object_a_802BD62C"),
-	0x802BD680: main.sym("object_a_802BD680", flag={"GLOBL"}), # o callback
+	0x802BD680: main.sym("object_a_802BD680", flag={"GLOBL"}), # objcall
 	0x802BD8D0: main.sym("object_a_802BD8D0"),
 	0x802BD91C: main.sym("object_a_802BD91C"),
 	0x802BDB04: main.sym_fnc("object_a_802BDB04", flag={"GLOBL"}), # data
@@ -11413,7 +12279,7 @@ sym_E0_code_text = {
 	0x802BDC7C: main.sym_fnc("object_a_802BDC7C", flag={"GLOBL"}), # data
 	0x802BDCC8: main.sym_fnc("object_a_802BDCC8", flag={"GLOBL"}), # data
 	0x802BDD14: main.sym_fnc("object_a_802BDD14", flag={"GLOBL"}), # data
-	0x802BDD68: main.sym("object_a_802BDD68", flag={"GLOBL"}), # o callback
+	0x802BDD68: main.sym("object_a_802BDD68", flag={"GLOBL"}), # objcall
 	0x802BDD9C: main.sym_fnc("object_a_802BDD9C", flag={"GLOBL"}), # data
 	0x802BDE10: main.sym("object_a_802BDE10"),
 	0x802BDEEC: main.sym_fnc("object_a_802BDEEC", flag={"GLOBL"}), # data
@@ -11426,10 +12292,10 @@ sym_E0_code_text = {
 	0x802BE350: main.sym_fnc("object_a_802BE350", flag={"GLOBL"}), # data
 	0x802BE49C: main.sym("object_a_802BE49C"),
 	0x802BE50C: main.sym_fnc("object_a_802BE50C", flag={"GLOBL"}), # data
-	0x802BE5A0: main.sym("object_a_802BE5A0", flag={"GLOBL"}), # o callback
+	0x802BE5A0: main.sym("object_a_802BE5A0", flag={"GLOBL"}), # objcall
 	0x802BE628: main.sym("object_a_802BE628"),
 	0x802BE6D4: main.sym("object_a_802BE6D4"),
-	0x802BE79C: main.sym("object_a_802BE79C", flag={"GLOBL"}), # o callback
+	0x802BE79C: main.sym("object_a_802BE79C", flag={"GLOBL"}), # objcall
 	0x802BE8A8: main.sym_fnc("object_a_802BE8A8", flag={"GLOBL"}), # data
 	0x802BE8B8: main.sym_fnc("object_a_802BE8B8", flag={"GLOBL"}), # data
 	0x802BE8F4: main.sym("object_a_802BE8F4"),
@@ -11439,13 +12305,13 @@ sym_E0_code_text = {
 	0x802BEB8C: main.sym_fnc("object_a_802BEB8C", flag={"GLOBL"}), # data
 	0x802BEBC4: main.sym_fnc("object_a_802BEBC4", flag={"GLOBL"}), # data
 	0x802BEBFC: main.sym_fnc("object_a_802BEBFC", flag={"GLOBL"}), # data
-	0x802BEC34: main.sym("object_a_802BEC34", flag={"GLOBL"}), # o callback
+	0x802BEC34: main.sym("object_a_802BEC34", flag={"GLOBL"}), # objcall
 	0x802BECB0: main.sym("object_a_802BECB0"),
 	0x802BED7C: main.sym("object_a_802BED7C", flag={"GLOBL"}), # extern
 	0x802BEDEC: main.sym_fnc("object_a_802BEDEC", flag={"GLOBL"}), # data
 	0x802BEF8C: main.sym_fnc("object_a_802BEF8C", flag={"GLOBL"}), # data
 	0x802BF1D8: main.sym_fnc("object_a_802BF1D8", flag={"GLOBL"}), # data
-	0x802BF3C0: main.sym("object_a_802BF3C0", flag={"GLOBL"}), # o callback
+	0x802BF3C0: main.sym("object_a_802BF3C0", flag={"GLOBL"}), # objcall
 	0x802BF424: main.sym("object_a_802BF424"),
 	0x802BF474: main.sym_fnc("object_a_802BF474", flag={"GLOBL"}), # data
 	0x802BF57C: main.sym_fnc("object_a_802BF57C", flag={"GLOBL"}), # data
@@ -11454,29 +12320,29 @@ sym_E0_code_text = {
 	0x802BF760: main.sym_fnc("object_a_802BF760", flag={"GLOBL"}), # data
 	0x802BF90C: main.sym_fnc("object_a_802BF90C", flag={"GLOBL"}), # data
 	0x802BFA14: main.sym("object_a_802BFA14"),
-	0x802BFA88: main.sym("object_a_802BFA88", flag={"GLOBL"}), # o callback
-	0x802BFBAC: main.sym("s_object_a_802BFBAC", flag={"GLOBL"}), # s callback
+	0x802BFA88: main.sym("object_a_802BFA88", flag={"GLOBL"}), # objcall
+	0x802BFBAC: main.sym("Ctrl_object_a_802BFBAC", flag={"GLOBL"}), # shpcall
 	0x802BFCD8: main.sym_fnc("object_a_802BFCD8", flag={"GLOBL"}), # data
 	0x802BFEB8: main.sym_fnc("object_a_802BFEB8", flag={"GLOBL"}), # data
 	0x802BFF20: main.sym_fnc("object_a_802BFF20", flag={"GLOBL"}), # data
-	0x802BFF3C: main.sym("object_a_802BFF3C", flag={"GLOBL"}), # o callback
+	0x802BFF3C: main.sym("object_a_802BFF3C", flag={"GLOBL"}), # objcall
 	0x802BFF68: main.sym("object_a_802BFF68"),
 	0x802C00B4: main.sym_fnc("object_a_802C00B4", flag={"GLOBL"}), # data
 	0x802C0348: main.sym_fnc("object_a_802C0348", flag={"GLOBL"}), # data
 	0x802C06A8: main.sym_fnc("object_a_802C06A8", flag={"GLOBL"}), # data
-	0x802C0768: main.sym("object_a_802C0768", flag={"GLOBL"}), # o callback
-	0x802C08A8: main.sym("object_a_802C08A8", flag={"GLOBL"}), # o callback
+	0x802C0768: main.sym("object_a_802C0768", flag={"GLOBL"}), # objcall
+	0x802C08A8: main.sym("object_a_802C08A8", flag={"GLOBL"}), # objcall
 	0x802C0AAC: main.sym_fnc("object_a_802C0AAC", flag={"GLOBL"}), # data
 	0x802C0B50: main.sym_fnc("object_a_802C0B50", flag={"GLOBL"}), # data
 	0x802C0BA4: main.sym_fnc("object_a_802C0BA4", flag={"GLOBL"}), # data
 	0x802C0BC4: main.sym_fnc("object_a_802C0BC4", flag={"GLOBL"}), # data
-	0x802C0BE0: main.sym("object_a_802C0BE0", flag={"GLOBL"}), # o callback
+	0x802C0BE0: main.sym("object_a_802C0BE0", flag={"GLOBL"}), # objcall
 	0x802C0C0C: main.sym("object_a_802C0C0C"),
 	0x802C0CD4: main.sym_fnc("object_a_802C0CD4", flag={"GLOBL"}), # data
 	0x802C0D44: main.sym_fnc("object_a_802C0D44", flag={"GLOBL"}), # data
 	0x802C0F90: main.sym_fnc("object_a_802C0F90", flag={"GLOBL"}), # data
-	0x802C1204: main.sym("object_a_802C1204", flag={"GLOBL"}), # o callback
-	0x802C12C0: main.sym("object_a_802C12C0", flag={"GLOBL"}), # o callback
+	0x802C1204: main.sym("object_a_802C1204", flag={"GLOBL"}), # objcall
+	0x802C12C0: main.sym("object_a_802C12C0", flag={"GLOBL"}), # objcall
 	0x802C1308: main.sym_fnc("object_a_802C1308", flag={"GLOBL"}), # data
 	0x802C13EC: main.sym_fnc("object_a_802C13EC", flag={"GLOBL"}), # data
 	0x802C14B0: main.sym_fnc("object_a_802C14B0", flag={"GLOBL"}), # data
@@ -11484,33 +12350,33 @@ sym_E0_code_text = {
 	0x802C17BC: main.sym("object_a_802C17BC"),
 	0x802C18D0: main.sym_fnc("object_a_802C18D0", flag={"GLOBL"}), # data
 	0x802C1988: main.sym_fnc("object_a_802C1988", flag={"GLOBL"}), # data
-	0x802C19C0: main.sym("object_a_802C19C0", flag={"GLOBL"}), # o callback
-	0x802C19FC: main.sym("object_a_802C19FC", flag={"GLOBL"}), # o callback
-	0x802C1A40: main.sym("object_a_802C1A40", flag={"GLOBL"}), # o callback
-	0x802C1A80: main.sym("object_a_802C1A80", flag={"GLOBL"}), # o callback
-	0x802C1A90: main.sym("object_a_802C1A90", flag={"GLOBL"}), # o callback
-	0x802C1C44: main.sym("object_a_802C1C44", flag={"GLOBL"}), # o callback
-	0x802C1CD4: main.sym("object_a_802C1CD4", flag={"GLOBL"}), # o callback
-	0x802C1E10: main.sym("object_a_802C1E10", flag={"GLOBL"}), # o callback
-	0x802C2190: main.sym("object_a_802C2190", flag={"GLOBL"}), # o callback
-	0x802C2274: main.sym("object_a_802C2274", flag={"GLOBL"}), # o callback
-	0x802C22B8: main.sym("object_a_802C22B8", flag={"GLOBL"}), # o callback
-	0x802C242C: main.sym("object_a_802C242C", flag={"GLOBL"}), # o callback
-	0x802C263C: main.sym("object_a_802C263C", flag={"GLOBL"}), # o callback
-	0x802C26F8: main.sym("object_a_802C26F8", flag={"GLOBL"}), # o callback
-	0x802C2930: main.sym("object_a_802C2930", flag={"GLOBL"}), # o callback
-	0x802C2A24: main.sym("object_a_802C2A24", flag={"GLOBL"}), # o callback
+	0x802C19C0: main.sym("object_a_802C19C0", flag={"GLOBL"}), # objcall
+	0x802C19FC: main.sym("object_a_802C19FC", flag={"GLOBL"}), # objcall
+	0x802C1A40: main.sym("object_a_802C1A40", flag={"GLOBL"}), # objcall
+	0x802C1A80: main.sym("object_a_802C1A80", flag={"GLOBL"}), # objcall
+	0x802C1A90: main.sym("object_a_802C1A90", flag={"GLOBL"}), # objcall
+	0x802C1C44: main.sym("object_a_802C1C44", flag={"GLOBL"}), # objcall
+	0x802C1CD4: main.sym("object_a_802C1CD4", flag={"GLOBL"}), # objcall
+	0x802C1E10: main.sym("object_a_802C1E10", flag={"GLOBL"}), # objcall
+	0x802C2190: main.sym("object_a_802C2190", flag={"GLOBL"}), # objcall
+	0x802C2274: main.sym("object_a_802C2274", flag={"GLOBL"}), # objcall
+	0x802C22B8: main.sym("object_a_802C22B8", flag={"GLOBL"}), # objcall
+	0x802C242C: main.sym("object_a_802C242C", flag={"GLOBL"}), # objcall
+	0x802C263C: main.sym("object_a_802C263C", flag={"GLOBL"}), # objcall
+	0x802C26F8: main.sym("object_a_802C26F8", flag={"GLOBL"}), # objcall
+	0x802C2930: main.sym("object_a_802C2930", flag={"GLOBL"}), # objcall
+	0x802C2A24: main.sym("object_a_802C2A24", flag={"GLOBL"}), # objcall
 	0x802C2CE8: main.sym("object_a_802C2CE8"),
 	0x802C2EBC: main.sym_fnc("object_a_802C2EBC", flag={"GLOBL"}), # data
 	0x802C2FBC: main.sym_fnc("object_a_802C2FBC", flag={"GLOBL"}), # data
 	0x802C31C4: main.sym_fnc("object_a_802C31C4", flag={"GLOBL"}), # data
-	0x802C329C: main.sym("object_a_802C329C", flag={"GLOBL"}), # o callback
-	0x802C32E8: main.sym("object_a_802C32E8", flag={"GLOBL"}), # o callback
+	0x802C329C: main.sym("object_a_802C329C", flag={"GLOBL"}), # objcall
+	0x802C32E8: main.sym("object_a_802C32E8", flag={"GLOBL"}), # objcall
 	0x802C33F4: main.sym("object_a_802C33F4"),
-	0x802C3440: main.sym("object_a_802C3440", flag={"GLOBL"}), # o callback
+	0x802C3440: main.sym("object_a_802C3440", flag={"GLOBL"}), # objcall
 	0x802C3460: main.sym("object_a_802C3460"),
 	0x802C3534: main.sym("object_a_802C3534"),
-	0x802C3684: main.sym("object_a_802C3684", flag={"GLOBL"}), # o callback
+	0x802C3684: main.sym("object_a_802C3684", flag={"GLOBL"}), # objcall
 	0x802C3748: main.sym("object_a_802C3748"),
 	0x802C3884: main.sym("object_a_802C3884"),
 	0x802C39D4: main.sym("object_a_802C39D4"),
@@ -11530,7 +12396,7 @@ sym_E0_code_text = {
 	0x802C46D8: main.sym_fnc("object_a_802C46D8", flag={"GLOBL"}), # data
 	0x802C4720: main.sym_fnc("object_a_802C4720", flag={"GLOBL"}), # data
 	0x802C4790: main.sym_fnc("object_a_802C4790", flag={"GLOBL"}), # data
-	0x802C4824: main.sym("object_a_802C4824", flag={"GLOBL"}), # o callback
+	0x802C4824: main.sym("object_a_802C4824", flag={"GLOBL"}), # objcall
 	0x802C48C0: main.sym_fnc("object_a_802C48C0", flag={"GLOBL"}), # data
 	0x802C49F0: main.sym_fnc("object_a_802C49F0", flag={"GLOBL"}), # data
 	0x802C4B54: main.sym_fnc("object_a_802C4B54", flag={"GLOBL"}), # data
@@ -11539,49 +12405,49 @@ sym_E0_code_text = {
 	0x802C4C10: main.sym("object_a_802C4C10"),
 	0x802C4C70: main.sym_fnc("object_a_802C4C70", flag={"GLOBL"}), # data
 	0x802C4DD4: main.sym_fnc("object_a_802C4DD4", flag={"GLOBL"}), # data
-	0x802C4F30: main.sym("object_a_802C4F30", flag={"GLOBL"}), # o callback
+	0x802C4F30: main.sym("object_a_802C4F30", flag={"GLOBL"}), # objcall
 	0x802C4FB0: main.sym_fnc("object_a_802C4FB0", flag={"GLOBL"}), # data
 	0x802C503C: main.sym_fnc("object_a_802C503C", flag={"GLOBL"}), # data
 	0x802C50D8: main.sym_fnc("object_a_802C50D8", flag={"GLOBL"}), # data
 	0x802C5120: main.sym_fnc("object_a_802C5120", flag={"GLOBL"}), # data
-	0x802C515C: main.sym("object_a_802C515C", flag={"GLOBL"}), # o callback
-	0x802C51D4: main.sym("object_a_802C51D4", flag={"GLOBL"}), # o callback
-	0x802C5224: main.sym("object_a_802C5224", flag={"GLOBL"}), # o callback
+	0x802C515C: main.sym("object_a_802C515C", flag={"GLOBL"}), # objcall
+	0x802C51D4: main.sym("object_a_802C51D4", flag={"GLOBL"}), # objcall
+	0x802C5224: main.sym("object_a_802C5224", flag={"GLOBL"}), # objcall
 	0x802C53CC: main.sym("object_a_802C53CC"),
-	0x802C53EC: main.sym("object_a_802C53EC", flag={"GLOBL"}), # o callback
-	0x802C5414: main.sym("object_a_802C5414", flag={"GLOBL"}), # o callback
-	0x802C5688: main.sym("object_a_802C5688", flag={"GLOBL"}), # o callback
-	0x802C5890: main.sym("object_a_802C5890", flag={"GLOBL"}), # o callback
-	0x802C5A38: main.sym("object_a_802C5A38", flag={"GLOBL"}), # o callback
+	0x802C53EC: main.sym("object_a_802C53EC", flag={"GLOBL"}), # objcall
+	0x802C5414: main.sym("object_a_802C5414", flag={"GLOBL"}), # objcall
+	0x802C5688: main.sym("object_a_802C5688", flag={"GLOBL"}), # objcall
+	0x802C5890: main.sym("object_a_802C5890", flag={"GLOBL"}), # objcall
+	0x802C5A38: main.sym("object_a_802C5A38", flag={"GLOBL"}), # objcall
 	0x802C5B54: main.sym("object_a_802C5B54"),
-	0x802C5CA8: main.sym("object_a_802C5CA8", flag={"GLOBL"}), # o callback
-	0x802C5DC0: main.sym("object_a_802C5DC0", flag={"GLOBL"}), # o callback
-	0x802C5F48: main.sym("object_a_802C5F48", flag={"GLOBL"}), # o callback
-	0x802C5FDC: main.sym("object_a_802C5FDC", flag={"GLOBL"}), # o callback
-	0x802C6050: main.sym("object_a_802C6050", flag={"GLOBL"}), # o callback
-	0x802C60AC: main.sym("object_a_802C60AC", flag={"GLOBL"}), # o callback
+	0x802C5CA8: main.sym("object_a_802C5CA8", flag={"GLOBL"}), # objcall
+	0x802C5DC0: main.sym("object_a_802C5DC0", flag={"GLOBL"}), # objcall
+	0x802C5F48: main.sym("object_a_802C5F48", flag={"GLOBL"}), # objcall
+	0x802C5FDC: main.sym("object_a_802C5FDC", flag={"GLOBL"}), # objcall
+	0x802C6050: main.sym("object_a_802C6050", flag={"GLOBL"}), # objcall
+	0x802C60AC: main.sym("object_a_802C60AC", flag={"GLOBL"}), # objcall
 	0x802C6150: main.sym("object_a_802C6150"),
 	0x802C61D4: main.sym("object_a_802C61D4"),
 	0x802C6278: main.sym("object_a_802C6278"),
 	0x802C62BC: main.sym("object_a_802C62BC"),
 	0x802C6328: main.sym("object_a_802C6328"),
-	0x802C6348: main.sym("object_a_802C6348", flag={"GLOBL"}), # o callback
+	0x802C6348: main.sym("object_a_802C6348", flag={"GLOBL"}), # objcall
 	0x802C6380: main.sym_fnc("L802C6380", flag={"GLOBL","LOCAL"}),
 	0x802C6390: main.sym_fnc("L802C6390", flag={"GLOBL","LOCAL"}),
 	0x802C63A0: main.sym_fnc("L802C63A0", flag={"GLOBL","LOCAL"}),
 	0x802C63B0: main.sym_fnc("L802C63B0", flag={"GLOBL","LOCAL"}),
 	0x802C63C0: main.sym_fnc("L802C63C0", flag={"GLOBL","LOCAL"}),
-	0x802C63E8: main.sym("object_a_802C63E8", flag={"GLOBL"}), # o callback
-	0x802C64A4: main.sym("object_a_802C64A4", flag={"GLOBL"}), # o callback
+	0x802C63E8: main.sym("object_a_802C63E8", flag={"GLOBL"}), # objcall
+	0x802C64A4: main.sym("object_a_802C64A4", flag={"GLOBL"}), # objcall
 	0x802C6538: main.sym("object_a_802C6538"),
-	0x802C65C0: main.sym("object_a_802C65C0", flag={"GLOBL"}), # o callback
+	0x802C65C0: main.sym("object_a_802C65C0", flag={"GLOBL"}), # objcall
 	0x802C6668: main.sym_fnc("L802C6668", flag={"GLOBL","LOCAL"}),
 	0x802C66F0: main.sym_fnc("L802C66F0", flag={"GLOBL","LOCAL"}),
 	0x802C688C: main.sym_fnc("L802C688C", flag={"GLOBL","LOCAL"}),
 	0x802C6920: main.sym_fnc("L802C6920", flag={"GLOBL","LOCAL"}),
 	0x802C6990: main.sym_fnc("L802C6990", flag={"GLOBL","LOCAL"}),
 	0x802C6A1C: main.sym_fnc("L802C6A1C", flag={"GLOBL","LOCAL"}),
-	0x802C6B6C: main.sym("object_a_802C6B6C", flag={"GLOBL"}), # o callback
+	0x802C6B6C: main.sym("object_a_802C6B6C", flag={"GLOBL"}), # objcall
 	0x802C6CA0: main.sym("object_a_802C6CA0"),
 	0x802C6D6C: main.sym_fnc("object_a_802C6D6C", flag={"GLOBL"}), # data
 	0x802C6EC8: main.sym_fnc("object_a_802C6EC8", flag={"GLOBL"}), # data
@@ -11595,128 +12461,128 @@ sym_E0_code_text = {
 	0x802C76D4: main.sym_fnc("object_a_802C76D4", flag={"GLOBL"}), # data
 	0x802C7858: main.sym_fnc("object_a_802C7858", flag={"GLOBL"}), # data
 	0x802C7998: main.sym_fnc("object_a_802C7998", flag={"GLOBL"}), # data
-	0x802C79D8: main.sym("object_a_802C79D8", flag={"GLOBL"}), # o callback
-	0x802C7A70: main.sym("object_a_802C7A70", flag={"GLOBL"}), # o callback
-	0x802C7B14: main.sym("object_a_802C7B14", flag={"GLOBL"}), # o callback
-	0x802C7CAC: main.sym("object_a_802C7CAC", flag={"GLOBL"}), # o callback
-	0x802C7D40: main.sym("object_a_802C7D40", flag={"GLOBL"}), # o callback
-	0x802C7D90: main.sym("object_a_802C7D90", flag={"GLOBL"}), # o callback
-	0x802C7DFC: main.sym("object_a_802C7DFC", flag={"GLOBL"}), # o callback
-	0x802C7E5C: main.sym("object_a_802C7E5C", flag={"GLOBL"}), # o callback
-	0x802C7F98: main.sym("object_a_802C7F98", flag={"GLOBL"}), # o callback
+	0x802C79D8: main.sym("object_a_802C79D8", flag={"GLOBL"}), # objcall
+	0x802C7A70: main.sym("object_a_802C7A70", flag={"GLOBL"}), # objcall
+	0x802C7B14: main.sym("object_a_802C7B14", flag={"GLOBL"}), # objcall
+	0x802C7CAC: main.sym("object_a_802C7CAC", flag={"GLOBL"}), # objcall
+	0x802C7D40: main.sym("object_a_802C7D40", flag={"GLOBL"}), # objcall
+	0x802C7D90: main.sym("object_a_802C7D90", flag={"GLOBL"}), # objcall
+	0x802C7DFC: main.sym("object_a_802C7DFC", flag={"GLOBL"}), # objcall
+	0x802C7E5C: main.sym("object_a_802C7E5C", flag={"GLOBL"}), # objcall
+	0x802C7F98: main.sym("object_a_802C7F98", flag={"GLOBL"}), # objcall
 	0x802C81B4: main.sym("object_a_802C81B4", flag={"GLOBL"}), # extern
-	0x802C834C: main.sym("object_a_802C834C", flag={"GLOBL"}), # o callback
+	0x802C834C: main.sym("object_a_802C834C", flag={"GLOBL"}), # objcall
 	0x802C85A4: main.sym("object_a_802C85A4"),
-	0x802C863C: main.sym("object_a_802C863C", flag={"GLOBL"}), # o callback
+	0x802C863C: main.sym("object_a_802C863C", flag={"GLOBL"}), # objcall
 
 	# src/ride.c
-	0x802C89F0: main.sym_fnc("plride_find", flag={"GLOBL"}),
-	0x802C8B4C: main.sym_fnc("mario_get_pos", arg=(
+	0x802C89F0: main.sym_fnc("PLRideFind", flag={"GLOBL"}),
+	0x802C8B4C: main.sym_fnc("MarioGetPos", arg=(
 		"float *x",
 		"float *y",
 		"float *z",
 	), flag={"GLOBL"}),
-	0x802C8B8C: main.sym_fnc("mario_set_pos", arg=(
+	0x802C8B8C: main.sym_fnc("MarioSetPos", arg=(
 		"float x",
 		"float y",
 		"float z",
 	), flag={"GLOBL"}),
-	0x802C8BC8: main.sym_fnc("ride_proc", arg=(
+	0x802C8BC8: main.sym_fnc("RideProc", arg=(
 		"int ismario",
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x802C8EC0: main.sym_fnc("plride_proc", flag={"GLOBL"}),
-	0x802C8F28: main.sym_fnc("plride_clear", flag={"GLOBL"}),
+	0x802C8EC0: main.sym_fnc("PLRideProc", flag={"GLOBL"}),
+	0x802C8F28: main.sym_fnc("PLRideClear", flag={"GLOBL"}),
 
 	# src/hitcheck.c
-	0x802C8F40: main.sym_fnc("hitcheck_802C8F40", "OBJECT *", (
+	0x802C8F40: main.sym_fnc("ObjDebugHit", "OBJECT *", (
 		"OBJECT *obj",
 	)), # unused
-	0x802C8FE4: main.sym_fnc("obj_check_hit", "int", (
+	0x802C8FE4: main.sym_fnc("ObjCheckHit", "int", (
 		"OBJECT *a",
 		"OBJECT *b",
 	)),
-	0x802C91EC: main.sym_fnc("obj_check_dmg", "int", (
+	0x802C91EC: main.sym_fnc("ObjCheckDmg", "int", (
 		"OBJECT *a",
 		"OBJECT *b",
 	)),
-	0x802C9388: main.sym_fnc("hit_clear", arg=(
+	0x802C9388: main.sym_fnc("HitClear", arg=(
 		"OBJLIST *root",
 	)),
-	0x802C93F8: main.sym_fnc("hit_check_list", arg=(
+	0x802C93F8: main.sym_fnc("HitCheckList", arg=(
 		"OBJECT *obj",
 		"OBJECT *o",
 		"OBJLIST *root",
 	)),
-	0x802C94AC: main.sym_fnc("hit_check_player"),
-	0x802C95B4: main.sym_fnc("hit_check_enemyb"),
-	0x802C9630: main.sym_fnc("hit_check_attack"),
-	0x802C9724: main.sym_fnc("hit_check", flag={"GLOBL"}),
+	0x802C94AC: main.sym_fnc("HitCheckPlayer"),
+	0x802C95B4: main.sym_fnc("HitCheckEnemyB"),
+	0x802C9630: main.sym_fnc("HitCheckAttack"),
+	0x802C9724: main.sym_fnc("HitCheck", flag={"GLOBL"}),
 
 	# src/objlist.c
-	0x802C97D0: main.sym_fnc("list_init", arg=(
+	0x802C97D0: main.sym_fnc("ListInit", arg=(
 		"LIST *root",
 		"LIST *free",
 		"LIST *data",
 		"size_t size",
 		"int count",
 	)), # unused
-	0x802C9840: main.sym_fnc("list_alloc", "LIST *", (
+	0x802C9840: main.sym_fnc("ListAlloc", "LIST *", (
 		"LIST *root",
 		"LIST *free",
 	)), # unused
-	0x802C98A4: main.sym_fnc("objlist_alloc", "OBJECT *", (
+	0x802C98A4: main.sym_fnc("ObjListAlloc", "OBJECT *", (
 		"OBJLIST *root",
 		"OBJLIST *free",
 	)),
-	0x802C9950: main.sym_fnc("list_free", arg=(
+	0x802C9950: main.sym_fnc("ListFree", arg=(
 		"LIST *free",
 		"LIST *item",
 	)), # unused
-	0x802C9984: main.sym_fnc("objlist_free", arg=(
+	0x802C9984: main.sym_fnc("ObjListFree", arg=(
 		"OBJLIST *free",
 		"OBJECT *obj",
 	)),
-	0x802C99B8: main.sym_fnc("obj_freelist_init", flag={"GLOBL"}),
-	0x802C9A3C: main.sym_fnc("obj_rootlist_init", arg=(
+	0x802C99B8: main.sym_fnc("ObjFreeListInit", flag={"GLOBL"}),
+	0x802C9A3C: main.sym_fnc("ObjRootListInit", arg=(
 		"OBJLIST *root",
 	), flag={"GLOBL"}),
 	0x802C9AD8: main.sym_fnc("objlist_802C9AD8", arg=(
 		"SHAPE *shape",
 	)), # unused
-	0x802C9B68: main.sym_fnc("obj_free", arg=(
+	0x802C9B68: main.sym_fnc("ObjFree", arg=(
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
-	0x802C9C00: main.sym_fnc("obj_alloc", "OBJECT *", (
+	0x802C9C00: main.sym_fnc("ObjAlloc", "OBJECT *", (
 		"OBJLIST *root",
 	)),
-	0x802C9E5C: main.sym_fnc("obj_init_ground", arg=(
+	0x802C9E5C: main.sym_fnc("ObjInitGround", arg=(
 		"OBJECT *obj",
 	)),
-	0x802C9F04: main.sym_fnc("obj_create", "OBJECT *", (
-		"O_SCRIPT *script",
+	0x802C9F04: main.sym_fnc("ObjCreate", "OBJECT *", (
+		"OBJLANG *script",
 	), flag={"GLOBL"}),
-	0x802CA028: main.sym_fnc("obj_destroy", arg=(
+	0x802CA028: main.sym_fnc("ObjDestroy", arg=(
 		"OBJECT *obj",
 	), flag={"GLOBL"}),
 
 	# src/objsound.c
-	0x802CA040: main.sym_fnc("object_stepsound", arg=(
+	0x802CA040: main.sym_fnc("ObjectStepSound", arg=(
 		"STEPSOUND *ss",
 	), flag={"GLOBL"}),
-	0x802CA144: main.sym_fnc("object_makesound", arg=(
+	0x802CA144: main.sym_fnc("ObjectMakeSound", arg=(
 		"Na_Se se",
 	), flag={"GLOBL"}),
-	0x802CA190: main.sym_fnc("object_levelsound", arg=(
+	0x802CA190: main.sym_fnc("ObjectLevelSound", arg=(
 		"Na_Se se",
 	), flag={"GLOBL"}),
-	0x802CA1E0: main.sym_fnc("object_playsound", arg=(
+	0x802CA1E0: main.sym_fnc("ObjectPlaySound", arg=(
 		"Na_Se se",
 	), flag={"GLOBL"}),
-	0x802CA230: main.sym_fnc("se_calcvol_1", "int", (
+	0x802CA230: main.sym_fnc("CalcSeVol1", "int", (
 		"float x",
 	)), # unused
-	0x802CA2D4: main.sym_fnc("se_calcvol_2", "int", (
+	0x802CA2D4: main.sym_fnc("CalcSeVol2", "int", (
 		"float x",
 	)), # unused
 
@@ -11726,121 +12592,121 @@ sym_E0_code_text = {
 	0x802CA3A0: main.sym_fnc("_802CA3A0"), # unused
 
 	# src/debug.c
-	0x802CA3B0: main.sym_fnc("db_time_start", "OSTime", flag={"GLOBL"}),
-	0x802CA3E0: main.sym_fnc("db_time_count", "OSTime", (
+	0x802CA3B0: main.sym_fnc("DbTimeStart", "OSTime", flag={"GLOBL"}),
+	0x802CA3E0: main.sym_fnc("DbTimeCount", "OSTime", (
 		"OSTime start",
 	), flag={"GLOBL"}),
-	0x802CA418: main.sym_fnc("db_init", arg=(
-		"DEBUG *db",
+	0x802CA418: main.sym_fnc("DbPrintInit", arg=(
+		"DBPRINT *dp",
 		"SHORT x",
 		"SHORT y",
 		"SHORT min_y",
 		"SHORT max_y",
 		"SHORT height",
 	)),
-	0x802CA460: main.sym_fnc("db_print", arg=(
-		"DEBUG *db",
+	0x802CA460: main.sym_fnc("DbPrintEntry", arg=(
+		"DBPRINT *dp",
 		"const char *fmt",
 		"int value",
 	)),
-	0x802CA51C: main.sym_fnc("db_offset", arg=(
+	0x802CA51C: main.sym_fnc("DbPrintOffset", arg=(
 		"int off_x",
 		"int off_ln",
 	), flag={"GLOBL"}),
-	0x802CA568: main.sym_fnc("db_put_err", arg=(
+	0x802CA568: main.sym_fnc("DbPrintErr", arg=(
 		"const char *fmt",
 		"int value",
 	), flag={"GLOBL"}),
-	0x802CA5B8: main.sym_fnc("db_put", arg=(
+	0x802CA5B8: main.sym_fnc("DbPrint", arg=(
 		"const char *fmt",
 		"int value",
 	), flag={"GLOBL"}),
-	0x802CA618: main.sym_fnc("db_put_info", arg=(
+	0x802CA618: main.sym_fnc("DbPrintInfo", arg=(
 		"const char *fmt",
 		"int value",
 	), flag={"GLOBL"}),
-	0x802CA680: main.sym_fnc("db_put_title", arg=(
+	0x802CA680: main.sym_fnc("DbPrintTitle", arg=(
 		"const char *fmt",
 		"int value",
 	), flag={"GLOBL"}), # static
-	0x802CA6D0: main.sym_fnc("db_player_mapinfo"),
-	0x802CA8E8: main.sym_fnc("db_player_checkinfo"),
-	0x802CA918: main.sym_fnc("db_result_checkinfo"),
-	0x802CA94C: main.sym_fnc("db_player_stageinfo"),
-	0x802CA990: main.sym_fnc("db_put_edit", arg=(
+	0x802CA6D0: main.sym_fnc("DbPlayerMapInfo"),
+	0x802CA8E8: main.sym_fnc("DbPlayerCheckInfo"),
+	0x802CA918: main.sym_fnc("DbResultCheckInfo"),
+	0x802CA94C: main.sym_fnc("DbPlayerStageInfo"),
+	0x802CA990: main.sym_fnc("DbPrintEdit", arg=(
 		"const char *fmt[]",
 	)),
-	0x802CAA6C: main.sym_fnc("db_result_effectinfo"),
-	0x802CAAA8: main.sym_fnc("db_result_enemyinfo"),
-	0x802CAAE4: main.sym_fnc("db_proc_button"),
-	0x802CABAC: main.sym_fnc("debug_init", flag={"GLOBL"}),
-	0x802CAC20: main.sym_fnc("debug_clear", flag={"GLOBL"}),
-	0x802CACC8: main.sym_fnc("debug_proc_seq"), # unused
-	0x802CADC8: main.sym_fnc("debug_proc_page"), # unused
-	0x802CAE9C: main.sym_fnc("debug_proc_edit"), # unused
-	0x802CB0B0: main.sym_fnc("debug_exec", flag={"GLOBL"}),
-	0x802CB0C0: main.sym_fnc("debug_result", flag={"GLOBL"}),
-	0x802CB1C0: main.sym_fnc("debug_player", flag={"GLOBL"}), # o callback
-	0x802CB264: main.sym_fnc("debug_proc", flag={"GLOBL"}), # o callback
-	0x802CB394: main.sym_fnc("debug_putmovestat"), # unused
-	0x802CB564: main.sym_fnc("debug_sethit", arg=(
-		"OBJ_HIT *hit",
+	0x802CAA6C: main.sym_fnc("DbResultEffectInfo"),
+	0x802CAAA8: main.sym_fnc("DbResultEnemyInfo"),
+	0x802CAAE4: main.sym_fnc("DbProcButton"),
+	0x802CABAC: main.sym_fnc("DebugInit", flag={"GLOBL"}),
+	0x802CAC20: main.sym_fnc("DebugClear", flag={"GLOBL"}),
+	0x802CACC8: main.sym_fnc("DebugProcSeq"), # unused
+	0x802CADC8: main.sym_fnc("DebugProcPage"), # unused
+	0x802CAE9C: main.sym_fnc("DebugProcEdit"), # unused
+	0x802CB0B0: main.sym_fnc("DebugExec", flag={"GLOBL"}),
+	0x802CB0C0: main.sym_fnc("DebugResult", flag={"GLOBL"}),
+	0x802CB1C0: main.sym_fnc("DebugPlayer", flag={"GLOBL"}), # objcall
+	0x802CB264: main.sym_fnc("DebugProc", flag={"GLOBL"}), # objcall
+	0x802CB394: main.sym_fnc("DebugPrintMoveStatus"), # unused
+	0x802CB564: main.sym_fnc("DebugSetHit", arg=(
+		"HITINFO *hit",
 	)), # unused
 
 	# src/wipe.c
-	0x802CB5C0: main.sym_fnc("wipe_step", "int", (
+	0x802CB5C0: main.sym_fnc("WpStep", "int", (
 		"CHAR screen",
 		"UCHAR frame",
 	)),
-	0x802CB640: main.sym_fnc("wipe_fade_alpha", "UCHAR", (
+	0x802CB640: main.sym_fnc("WpFadeAlpha", "UCHAR", (
 		"CHAR code",
 		"CHAR screen",
 		"UCHAR frame",
 	)),
-	0x802CB894: main.sym_fnc("wipe_fade_vtx", "Vtx *", (
+	0x802CB894: main.sym_fnc("WpFadeVtx", "Vtx *", (
 		"WIPE_FADE *fade",
 		"UCHAR alpha",
 	)),
-	0x802CBA18: main.sym_fnc("wipe_fade_gfx", "int", (
+	0x802CBA18: main.sym_fnc("WpFadeGfx", "int", (
 		"CHAR screen",
 		"UCHAR frame",
 		"WIPE_FADE *fade",
 		"UCHAR alpha",
 	)),
-	0x802CBBC4: main.sym_fnc("wipe_fade_in", "int", (
+	0x802CBBC4: main.sym_fnc("WpFadeIn", "int", (
 		"CHAR screen",
 		"UCHAR frame",
 		"WIPE_FADE *fade",
 	)),
-	0x802CBC20: main.sym_fnc("wipe_fade_out", "int", (
+	0x802CBC20: main.sym_fnc("WpFadeOut", "int", (
 		"CHAR screen",
 		"UCHAR frame",
 		"WIPE_FADE *fade",
 	)),
-	0x802CBC7C: main.sym_fnc("wipe_win_size", "SHORT", (
+	0x802CBC7C: main.sym_fnc("WpWindowSize", "SHORT", (
 		"CHAR screen",
 		"UCHAR frame",
 		"WIPE_WINDOW *win",
 	)),
-	0x802CBD54: main.sym_fnc("wipe_win_dist", "float", (
+	0x802CBD54: main.sym_fnc("WpWindowDist", "float", (
 		"CHAR screen",
 		"UCHAR frame",
 		"WIPE_WINDOW *win",
 	)),
-	0x802CBE64: main.sym_fnc("wipe_win_ang", "u16", (
+	0x802CBE64: main.sym_fnc("WpWindowAng", "u16", (
 		"WIPE_WINDOW *win",
 	)),
-	0x802CBEE0: main.sym_fnc("wipe_win_x", "SHORT", (
+	0x802CBEE0: main.sym_fnc("WpWindowX", "SHORT", (
 		"WIPE_WINDOW *win",
 		"float dist",
 		"USHORT ang",
 	)),
-	0x802CBF64: main.sym_fnc("wipe_win_y", "SHORT", (
+	0x802CBF64: main.sym_fnc("WpWindowY", "SHORT", (
 		"WIPE_WINDOW *win",
 		"float dist",
 		"USHORT ang",
 	)),
-	0x802CBFE8: main.sym_fnc("wipe_win_vtx_set", arg=(
+	0x802CBFE8: main.sym_fnc("WpWindowVtxSet", arg=(
 		"Vtx *vtx",
 		"int i",
 		"CHAR screen",
@@ -11852,7 +12718,7 @@ sym_E0_code_text = {
 		"SHORT s",
 		"SHORT t",
 	)),
-	0x802CC180: main.sym_fnc("wipe_win_vtx", arg=(
+	0x802CC180: main.sym_fnc("WpWindowVtx", arg=(
 		"Vtx *vtx",
 		"CHAR screen",
 		"WIPE_WINDOW *win",
@@ -11861,14 +12727,14 @@ sym_E0_code_text = {
 		"SHORT size",
 		"CHAR code",
 	)),
-	0x802CC4D8: main.sym_fnc("wipe_win", "int", (
+	0x802CC4D8: main.sym_fnc("WpWindow", "int", (
 		"CHAR screen",
 		"CHAR frame",
 		"WIPE_WINDOW *win",
 		"CHAR txt",
 		"CHAR code",
 	)),
-	0x802CCBE8: main.sym_fnc("wipe_draw", "int", (
+	0x802CCBE8: main.sym_fnc("WipeDraw", "int", (
 		"CHAR screen",
 		"CHAR type",
 		"UCHAR frame",
@@ -11885,40 +12751,40 @@ sym_E0_code_text = {
 	0x802CCD60: main.sym_fnc("L802CCD60", flag={"GLOBL","LOCAL"}),
 	0x802CCD88: main.sym_fnc("L802CCD88", flag={"GLOBL","LOCAL"}),
 	0x802CCDB0: main.sym_fnc("L802CCDB0", flag={"GLOBL","LOCAL"}),
-	0x802CCDC8: main.sym_fnc("cannon_overlay_gfx", "Gfx *"),
-	0x802CD1E8: main.sym_fnc("s_cannon_overlay", "void *", (
+	0x802CCDC8: main.sym_fnc("CannonOverlayGfx", "Gfx *"),
+	0x802CD1E8: main.sym_fnc("CtrlCannonOverlay", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
+	), flag={"GLOBL"}), # shpcall
 
 	# src/shadow.c
-	0x802CD280: main.sym_fnc("shadow_rotate", arg=(
+	0x802CD280: main.sym_fnc("ShRotate", arg=(
 		"float *posz",
 		"float *posx",
 		"float z",
 		"float x",
 	)),
-	0x802CD328: main.sym_fnc("shadow_atan2", "float", (
+	0x802CD328: main.sym_fnc("ShAtan2", "float", (
 		"float y",
 		"float x",
 	)),
-	0x802CD388: main.sym_fnc("shadow_scale_size", "float", (
+	0x802CD388: main.sym_fnc("ShScaleSize", "float", (
 		"float size",
 		"float height",
 	)),
-	0x802CD444: main.sym_fnc("shadow_cut_size", "float", (
+	0x802CD444: main.sym_fnc("ShCutSize", "float", (
 		"float size",
 		"float height",
 	)),
-	0x802CD48C: main.sym_fnc("shadow_scale_alpha", "UCHAR", (
+	0x802CD48C: main.sym_fnc("ShScaleAlpha", "UCHAR", (
 		"UCHAR alpha",
 		"float height",
 	)),
-	0x802CD614: main.sym_fnc("shadow_check_water", "float", (
+	0x802CD614: main.sym_fnc("ShCheckWater", "float", (
 		"SHADOW *shadow",
 	)),
-	0x802CD6C4: main.sym_fnc("shadow_init", "int", (
+	0x802CD6C4: main.sym_fnc("ShInit", "int", (
 		"SHADOW *shadow",
 		"float x",
 		"float y",
@@ -11926,17 +12792,17 @@ sym_E0_code_text = {
 		"SHORT size",
 		"UCHAR alpha",
 	)),
-	0x802CD938: main.sym_fnc("shadow_vtx_st9", arg=(
+	0x802CD938: main.sym_fnc("ShVtxST9", arg=(
 		"CHAR i",
 		"short *s",
 		"short *t",
 	)),
-	0x802CD988: main.sym_fnc("shadow_vtx_st4", arg=(
+	0x802CD988: main.sym_fnc("ShVtxST4", arg=(
 		"CHAR i",
 		"short *s",
 		"short *t",
 	)),
-	0x802CD9EC: main.sym_fnc("shadow_vtx_set", arg=(
+	0x802CD9EC: main.sym_fnc("ShSetVtx", arg=(
 		"Vtx *vtx",
 		"CHAR i",
 		"float vx",
@@ -11945,18 +12811,18 @@ sym_E0_code_text = {
 		"UCHAR alpha",
 		"CHAR vcode",
 	)),
-	0x802CDB20: main.sym_fnc("shadow_project", "float", (
+	0x802CDB20: main.sym_fnc("ShProject", "float", (
 		"SHADOW shadow",
 		"float x",
 		"float z",
 	)),
-	0x802CDB74: main.sym_fnc("shadow_vtx_calc_off", arg=(
+	0x802CDB74: main.sym_fnc("ShCalcVtxOff", arg=(
 		"CHAR i",
 		"CHAR vcode",
 		"s8 *x",
 		"s8 *z",
 	)),
-	0x802CDC40: main.sym_fnc("shadow_vtx_calc_pos", arg=(
+	0x802CDC40: main.sym_fnc("ShCalcVtxPos", arg=(
 		"CHAR i",
 		"SHADOW shadow",
 		"float *x",
@@ -11964,47 +12830,47 @@ sym_E0_code_text = {
 		"float *z",
 		"CHAR vcode",
 	)),
-	0x802CDE94: main.sym_fnc("shadow_planecalc", "SHORT", (
+	0x802CDE94: main.sym_fnc("ShPlaneCalc", "SHORT", (
 		"SHADOW shadow",
 		"float x",
 		"float y",
 		"float z",
 	)),
-	0x802CDF3C: main.sym_fnc("shadow_vtx_calc", arg=(
+	0x802CDF3C: main.sym_fnc("ShCalcVtx", arg=(
 		"Vtx *vtx",
 		"CHAR i",
 		"SHADOW shadow",
 		"CHAR vcode",
 	)),
-	0x802CE128: main.sym_fnc("shadow_gfx", arg=(
+	0x802CE128: main.sym_fnc("ShGfx", arg=(
 		"Gfx *gfx",
 		"Vtx *vtx",
 		"CHAR vcode",
 		"CHAR tcode",
 	)),
-	0x802CE2BC: main.sym_fnc("shadow_fadein", arg=(
+	0x802CE2BC: main.sym_fnc("ShFadeIn", arg=(
 		"SHADOW *shadow",
 		"UCHAR alpha",
 		"SHORT frame",
 		"SHORT min",
 		"SHORT max",
 	)),
-	0x802CE3EC: main.sym_fnc("shadow_fadeout", arg=(
+	0x802CE3EC: main.sym_fnc("ShFadeOut", arg=(
 		"SHADOW *shadow",
 		"UCHAR alpha",
 		"SHORT frame",
 		"SHORT min",
 		"SHORT max",
 	)),
-	0x802CE524: main.sym_fnc("shadow_fade_player", "int", (
+	0x802CE524: main.sym_fnc("ShFadePlayer", "int", (
 		"int code",
 		"UCHAR alpha",
 		"SHADOW *shadow",
 	)),
-	0x802CE690: main.sym_fnc("shadow_check_player", arg=(
+	0x802CE690: main.sym_fnc("ShCheckPlayer", arg=(
 		"SHADOW *shadow",
 	)),
-	0x802CE79C: main.sym_fnc("shadow_draw_player", "Gfx *", (
+	0x802CE79C: main.sym_fnc("ShDrawPlayer", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
@@ -12012,41 +12878,41 @@ sym_E0_code_text = {
 		"UCHAR alpha",
 		"int code",
 	)),
-	0x802CE9D0: main.sym_fnc("shadow_draw_circle9", "Gfx *", (
+	0x802CE9D0: main.sym_fnc("ShDrawCircle9", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
 		"SHORT size",
 		"UCHAR alpha",
 	)),
-	0x802CEAE8: main.sym_fnc("shadow_draw_circle4", "Gfx *", (
+	0x802CEAE8: main.sym_fnc("ShDrawCircle4", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
 		"SHORT size",
 		"UCHAR alpha",
 	)),
-	0x802CEC04: main.sym_fnc("shadow_draw_circle4flat", "Gfx *", (
+	0x802CEC04: main.sym_fnc("ShDrawCircle4Flat", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
 		"SHORT size",
 		"UCHAR alpha",
 	)),
-	0x802CEDC0: main.sym_fnc("shadow_gfx_square", "Gfx *", (
+	0x802CEDC0: main.sym_fnc("ShGfxSquare", "Gfx *", (
 		"float x",
 		"float z",
 		"float y",
 		"UCHAR alpha",
 	)),
-	0x802CEF6C: main.sym_fnc("shadow_init_square", "int", (
+	0x802CEF6C: main.sym_fnc("ShInitSquare", "int", (
 		"float x",
 		"float y",
 		"float z",
 		"float *level",
 		"u8 *alpha",
 	)),
-	0x802CF080: main.sym_fnc("shadow_draw_square", "Gfx *", (
+	0x802CF080: main.sym_fnc("ShDrawSquare", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
@@ -12054,7 +12920,7 @@ sym_E0_code_text = {
 		"u8 alpha",
 		"CHAR type",
 	)),
-	0x802CF1F0: main.sym_fnc("shadow_draw_rect", "Gfx *", (
+	0x802CF1F0: main.sym_fnc("ShDrawRect", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
@@ -12062,7 +12928,7 @@ sym_E0_code_text = {
 		"u8 alpha",
 		"CHAR type",
 	)),
-	0x802CF34C: main.sym_fnc("shadow_draw", "Gfx *", (
+	0x802CF34C: main.sym_fnc("ShadowDraw", "Gfx *", (
 		"float x",
 		"float y",
 		"float z",
@@ -12078,37 +12944,37 @@ sym_E0_code_text = {
 	0x802CF4F4: main.sym_fnc("L802CF4F4", flag={"GLOBL","LOCAL"}),
 	0x802CF550: main.sym_fnc("L802CF550", flag={"GLOBL","LOCAL"}),
 
-	# src/back.c
-	0x802CF5B0: main.sym_fnc("back_posx", "int", (
+	# src/background.c
+	0x802CF5B0: main.sym_fnc("BackPosX", "int", (
 		"CHAR screen",
 		"float fovy",
 	)),
-	0x802CF69C: main.sym_fnc("back_posy", "int", (
+	0x802CF69C: main.sym_fnc("BackPosY", "int", (
 		"CHAR screen",
 		"float fovy",
 	)),
-	0x802CF77C: main.sym_fnc("back_index", "int", (
+	0x802CF77C: main.sym_fnc("BackIndex", "int", (
 		"CHAR screen",
 	)),
-	0x802CF804: main.sym_fnc("back_vtx", "Vtx *", (
+	0x802CF804: main.sym_fnc("BackVtx", "Vtx *", (
 		"int index",
 		"CHAR shade",
 	)),
-	0x802CFA2C: main.sym_fnc("back_tile", arg=(
+	0x802CFA2C: main.sym_fnc("BackTile", arg=(
 		"Gfx **g",
 		"CHAR type",
 		"CHAR screen",
 		"CHAR shade",
 	)),
-	0x802CFC68: main.sym_fnc("back_mtx", "Mtx *", (
+	0x802CFC68: main.sym_fnc("BackMtx", "Mtx *", (
 		"CHAR screen",
 	)),
-	0x802CFD88: main.sym_fnc("back_gfx", "Gfx *", (
+	0x802CFD88: main.sym_fnc("BackGfx", "Gfx *", (
 		"CHAR screen",
 		"CHAR type",
 		"CHAR shade",
 	)),
-	0x802CFEF4: main.sym_fnc("back_draw", "Gfx *", (
+	0x802CFEF4: main.sym_fnc("BackgroundDraw", "Gfx *", (
 		"CHAR screen",
 		"CHAR type",
 		"float fovy",
@@ -12121,27 +12987,102 @@ sym_E0_code_text = {
 	), flag={"GLOBL"}),
 
 	# src/water.c
-	0x802D0080: main.sym("s_water_802D0080", flag={"GLOBL"}), # s callback
-	0x802D01E0: main.sym("s_water_802D01E0", flag={"GLOBL"}), # s callback
-	0x802D0254: main.sym("water_802D0254"),
-	0x802D0484: main.sym("water_802D0484"),
-	0x802D0A84: main.sym("water_802D0A84"),
-	0x802D0BB0: main.sym("water_802D0BB0"),
-	0x802D0C84: main.sym("water_802D0C84"),
-	0x802D0F28: main.sym("water_802D0F28"),
-	0x802D104C: main.sym("s_water_802D104C", flag={"GLOBL"}), # s callback
-	0x802D1330: main.sym("water_802D1330"),
-	0x802D13CC: main.sym("water_802D13CC"),
-	0x802D1574: main.sym("water_802D1574"),
-	0x802D18B4: main.sym("water_802D18B4"),
-	0x802D1B70: main.sym("s_water_802D1B70", flag={"GLOBL"}), # s callback
-	0x802D1CDC: main.sym("s_water_802D1CDC", flag={"GLOBL"}), # s callback
-	0x802D1E48: main.sym("s_water_802D1E48", flag={"GLOBL"}), # s callback
-	0x802D1FA8: main.sym("s_water_802D1FA8", flag={"GLOBL"}), # s callback
-	0x802D2108: main.sym("s_water_802D2108", flag={"GLOBL"}), # s callback
+	0x802D0080: main.sym_fnc("CtrlPoolLevel", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D01E0: main.sym_fnc("CtrlWaterProc", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D0254: main.sym_fnc("WaterSetVtx", arg=(
+		"Vtx *vtx",
+		"int i",
+		"SHORT x",
+		"SHORT y",
+		"SHORT z",
+		"SHORT ang",
+		"SHORT off",
+		"float scale",
+		"UCHAR alpha",
+	)),
+	0x802D0484: main.sym_fnc("WaterDrawPlane", "Gfx *", (
+		"SHORT y",
+		"short *plane",
+	)),
+	0x802D0A84: main.sym_fnc("WaterDraw", "Gfx *", (
+		"SHORT y",
+		"short *data",
+	)),
+	0x802D0BB0: main.sym_fnc("WaterGfx", "Gfx *", (
+		"SHORT code",
+		"SHORT y",
+		"WATERINFO *info",
+	)),
+	0x802D0C84: main.sym_fnc("WaterGetInfo", "WATERINFO *", (
+		"unsigned int code",
+	)),
+	0x802D0F28: main.sym_fnc("WaterGfxStart", arg=(
+		"unsigned int code",
+		"Gfx **g",
+	)),
+	0x802D104C: main.sym_fnc("CtrlWaterDraw", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D1330: main.sym_fnc("FluidProc", arg=(
+		"short *data",
+		"int i",
+	)),
+	0x802D13CC: main.sym_fnc("FluidSetVtx0", arg=(
+		"Vtx *vtx",
+		"short *data",
+		"FLUIDINFO *info",
+		"CHAR type",
+	)),
+	0x802D1574: main.sym_fnc("FluidSetVtxN", arg=(
+		"Vtx *vtx",
+		"int i",
+		"short *data",
+		"FLUIDINFO *info",
+		"CHAR type",
+	)),
+	0x802D18B4: main.sym_fnc("FluidGfx", "Gfx *", (
+		"short *data",
+		"FLUIDINFO *info",
+		"CHAR type",
+	)),
+	0x802D1B70: main.sym_fnc("CtrlFluid", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D1CDC: main.sym_fnc("CtrlFluidL", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D1E48: main.sym_fnc("CtrlFluidDrawL", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D1FA8: main.sym_fnc("CtrlFluidDrawS", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D2108: main.sym_fnc("CtrlFluidProc", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
 
 	# src/objshape.c
-	0x802D2210: main.sym_fnc("vtx_set", arg=(
+	0x802D2210: main.sym_fnc("VtxSet", arg=(
 		"Vtx *vtx",
 		"int i",
 		"SHORT x",
@@ -12154,76 +13095,194 @@ sym_E0_code_text = {
 		"UCHAR b",
 		"UCHAR a",
 	), flag={"GLOBL"}),
-	0x802D22C4: main.sym_fnc("roundftos", "SHORT", (
+	0x802D22C4: main.sym_fnc("RoundFtoS", "SHORT", (
 		"float x",
 	), flag={"GLOBL"}),
-	0x802D2360: main.sym_fnc("s_objshape_802D2360", "void *", (
+	0x802D2360: main.sym_fnc("Ctrl_objshape_802D2360", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802D2470: main.sym_fnc("s_objshape_802D2470", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802D2470: main.sym_fnc("Ctrl_objshape_802D2470", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802D2520: main.sym_fnc("s_objshape_802D2520", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802D2520: main.sym_fnc("Ctrl_objshape_802D2520", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
-	0x802D28CC: main.sym_fnc("ending_draw", "void *", (
+	), flag={"GLOBL"}), # shpcall
+	0x802D28CC: main.sym_fnc("EndingDraw", "void *", (
 		"int code",
 		"SHAPE *shape",
 		"void *data",
-	), flag={"GLOBL"}), # s callback
+	), flag={"GLOBL"}), # shpcall
 
 	# src/wave.c
-	0x802D29C0: main.sym("wave_802D29C0"),
-	0x802D2A74: main.sym("wave_802D2A74"),
-	0x802D2B08: main.sym("wave_802D2B08"),
-	0x802D2B84: main.sym("wave_802D2B84"),
-	0x802D2C40: main.sym("wave_802D2C40"),
-	0x802D2D80: main.sym("wave_802D2D80"),
-	0x802D2DFC: main.sym("wave_802D2DFC"),
-	0x802D2EB8: main.sym("wave_802D2EB8"),
-	0x802D2FFC: main.sym("wave_802D2FFC"),
-	0x802D319C: main.sym("wave_802D319C"),
-	0x802D327C: main.sym("wave_802D327C"),
-	0x802D341C: main.sym("wave_802D341C"),
-	0x802D34FC: main.sym("wave_802D34FC"),
-	0x802D36AC: main.sym("wave_802D36AC"),
-	0x802D379C: main.sym("wave_802D379C"),
-	0x802D393C: main.sym("wave_802D393C"),
-	0x802D3A2C: main.sym("wave_802D3A2C"),
-	0x802D3BEC: main.sym("wave_802D3BEC"),
-	0x802D3CEC: main.sym("wave_802D3CEC"),
-	0x802D3E6C: main.sym("wave_802D3E6C"),
-	0x802D3EE4: main.sym("wave_802D3EE4"),
-	0x802D404C: main.sym("wave_802D404C"),
-	0x802D43F8: main.sym("wave_802D43F8"),
-	0x802D44BC: main.sym("wave_802D44BC"),
-	0x802D47D0: main.sym("wave_802D47D0"),
-	0x802D4EDC: main.sym("wave_802D4EDC"),
-	0x802D50DC: main.sym("wave_802D50DC"),
-	0x802D5354: main.sym("wave_802D5354"),
-	0x802D556C: main.sym("wave_802D556C"),
-	0x802D568C: main.sym("wave_802D568C"),
-	0x802D5778: main.sym("wave_802D5778"),
-	0x802D57A8: main.sym("wave_802D57A8"),
-	0x802D58E4: main.sym("wave_802D58E4"),
-	0x802D593C: main.sym("wave_802D593C"),
-	0x802D59A8: main.sym("wave_802D59A8"),
-	0x802D5AA0: main.sym("wave_802D5AA0"),
-	0x802D5B98: main.sym("s_wave_802D5B98", flag={"GLOBL"}), # s callback
-	0x802D5D0C: main.sym("s_wave_802D5D0C", flag={"GLOBL"}), # s callback
+	0x802D29C0: main.sym_fnc("WaveStopAll", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D2A74: main.sym_fnc("WaveYPosY", "float", (
+		"WAVE *wave",
+	)),
+	0x802D2B08: main.sym_fnc("WaveYPosZ", "float", (
+		"WAVE *wave",
+	)),
+	0x802D2B84: main.sym_fnc("WaveGetCenterY", "float", (
+		"WAVE *wave",
+		"CHAR code",
+	)),
+	0x802D2C40: main.sym_fnc("WaveXStep", "float", (
+		"WAVE *wave",
+	)),
+	0x802D2D80: main.sym_fnc("WaveXPosX", "float", (
+		"WAVE *wave",
+	)),
+	0x802D2DFC: main.sym_fnc("WaveGetCenterX", "float", (
+		"WAVE *wave",
+		"CHAR code",
+	)),
+	0x802D2EB8: main.sym_fnc("WaveStart", arg=(
+		"CHAR state",
+		"WAVE *wave",
+		"WAVE **table",
+		"CHAR xcode",
+		"CHAR ycode",
+		"CHAR tcode",
+	)),
+	0x802D2FFC: main.sym_fnc("WaveProcV10Still", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D319C: main.sym_fnc("WaveProcV10Touch", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D327C: main.sym_fnc("WaveProcV20Still", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D341C: main.sym_fnc("WaveProcV20Touch", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D34FC: main.sym_fnc("WaveProcH10Still", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D36AC: main.sym_fnc("WaveProcH10Touch", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D379C: main.sym_fnc("WaveProcH20Still", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D393C: main.sym_fnc("WaveProcH20Touch", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D3A2C: main.sym_fnc("WaveProcFlag", arg=(
+		"WAVE *wave",
+	)),
+	0x802D3BEC: main.sym_fnc("WaveProcMove", arg=(
+		"WAVE *wave",
+	)),
+	0x802D3CEC: main.sym_fnc("WaveCalcZ", "SHORT", (
+		"WAVE *wave",
+		"float x",
+		"float y",
+	)),
+	0x802D3E6C: main.sym_fnc("WaveGetZ", "SHORT", (
+		"WAVE *wave",
+		"SHORT flag",
+		"SHORT x",
+		"SHORT y",
+	)),
+	0x802D3EE4: main.sym_fnc("WaveMakeVtx", arg=(
+		"WAVE *wave",
+		"short *mesh",
+		"SHORT nvtx",
+	)),
+	0x802D404C: main.sym_fnc("WaveMakeTri", arg=(
+		"short *mesh",
+		"SHORT nvtx",
+		"SHORT ntri",
+	)),
+	0x802D43F8: main.sym_fnc("WaveScaleNormal", "CHAR", (
+		"float x",
+	)),
+	0x802D44BC: main.sym_fnc("WaveCalcNormal", arg=(
+		"short *norm",
+		"SHORT nvtx",
+	)),
+	0x802D47D0: main.sym_fnc("WaveDrawMesh", "Gfx *", (
+		"u16 *txt",
+		"SHORT wd",
+		"SHORT ht",
+		"short *mesh",
+		"SHORT nvtx",
+		"SHORT ntri",
+		"UCHAR alpha",
+	)),
+	0x802D4EDC: main.sym_fnc("WaveTransform", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D50DC: main.sym_fnc("WaveGfxShade", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D5354: main.sym_fnc("WaveGfxEnvMap", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D556C: main.sym_fnc("WaveGfxMove", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D568C: main.sym_fnc("WaveGfxStat", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D5778: main.sym_fnc("WaveExit", arg=(
+		"WAVE *wave",
+	)),
+	0x802D57A8: main.sym_fnc("WaveMoveDemo", arg=(
+		"WAVE *wave",
+		"float start",
+		"float end",
+		"float speed",
+	)),
+	0x802D58E4: main.sym_fnc("WaveSetLayer", arg=(
+		"SCALLBACK *shp",
+		"WAVE *wave",
+	)),
+	0x802D593C: main.sym_fnc("WaveGfx", "Gfx *", (
+		"WAVE *wave",
+	)),
+	0x802D59A8: main.sym_fnc("WaveProcV", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D5AA0: main.sym_fnc("WaveProcH", arg=(
+		"WAVE *wave",
+		"WAVE **table",
+	)),
+	0x802D5B98: main.sym_fnc("CtrlWaveDraw", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
+	0x802D5D0C: main.sym_fnc("CtrlWaveProc", "void *", (
+		"int code",
+		"SHAPE *shape",
+		"void *data",
+	), flag={"GLOBL"}), # shpcall
 
 	# src/dprint.c
-	0x802D5E00: main.sym_fnc("dprint_powi", "unsigned int", (
+	0x802D5E00: main.sym_fnc("Powi", "unsigned int", (
 		"int base",
 		"int exponent",
 	)),
-	0x802D5E54: main.sym_fnc("dprintf_write", arg=(
+	0x802D5E54: main.sym_fnc("dprintFormat", arg=(
 		"int value",
 		"int base",
 		"char *buf",
@@ -12231,7 +13290,7 @@ sym_E0_code_text = {
 		"UCHAR digit",
 		"CHAR zero",
 	)),
-	0x802D6144: main.sym_fnc("dprintf_read", arg=(
+	0x802D6144: main.sym_fnc("dprintGetFmt", arg=(
 		"const char *fmt",
 		"int *index",
 		"u8 *digit",
@@ -12253,99 +13312,99 @@ sym_E0_code_text = {
 		"int y",
 		"const char *str",
 	), flag={"GLOBL"}),
-	0x802D6858: main.sym_fnc("dprint_cvt", "CHAR", (
+	0x802D6858: main.sym_fnc("dprintCvt", "CHAR", (
 		"CHAR c",
 	)),
-	0x802D69F8: main.sym_fnc("dprint_draw_txt", arg=(
+	0x802D69F8: main.sym_fnc("dprintDrawTxt", arg=(
 		"CHAR c",
 	)),
-	0x802D6ACC: main.sym_fnc("dprint_clamp", arg=(
+	0x802D6ACC: main.sym_fnc("dprintClamp", arg=(
 		"int *x",
 		"int *y",
 	)),
-	0x802D6B3C: main.sym_fnc("dprint_draw_char", arg=(
+	0x802D6B3C: main.sym_fnc("dprintDrawChar", arg=(
 		"int x",
 		"int y",
 		"int n",
 	)),
-	0x802D6C88: main.sym_fnc("dprint_draw", flag={"GLOBL"}),
+	0x802D6C88: main.sym_fnc("dprintDraw", flag={"GLOBL"}),
 
 	# src/message.c
-	0x802D6F20: main.sym_fnc("gfx_loadident"),
-	0x802D7070: main.sym_fnc("gfx_translate", arg=(
+	0x802D6F20: main.sym_fnc("GfxLoadIdent"),
+	0x802D7070: main.sym_fnc("GfxTranslate", arg=(
 		"CHAR flag",
 		"float x",
 		"float y",
 		"float z",
 	), flag={"GLOBL"}),
-	0x802D7174: main.sym_fnc("gfx_rotate", arg=(
+	0x802D7174: main.sym_fnc("GfxRotate", arg=(
 		"CHAR flag",
 		"float a",
 		"float x",
 		"float y",
 		"float z",
 	), flag={"GLOBL"}), # static
-	0x802D7280: main.sym_fnc("gfx_scale", arg=(
+	0x802D7280: main.sym_fnc("GfxScale", arg=(
 		"CHAR flag",
 		"float x",
 		"float y",
 		"float z",
 	), flag={"GLOBL"}), # static
-	0x802D7384: main.sym_fnc("gfx_screenproj", flag={"GLOBL"}),
-	0x802D7480: main.sym_fnc("unpack_i1", "u8 *", (
+	0x802D7384: main.sym_fnc("GfxScreenProj", flag={"GLOBL"}),
+	0x802D7480: main.sym_fnc("UnpackI1", "u8 *", (
 		"u16 *src",
 		"SHORT w",
 		"SHORT h",
 	)), # unused
-	0x802D75DC: main.sym_fnc("print_lg_char", arg=(
+	0x802D75DC: main.sym_fnc("PrintLgChar", arg=(
 		"UCHAR c",
 	)),
-	0x802D76C8: main.sym_fnc("print_lg_multi", arg=(
+	0x802D76C8: main.sym_fnc("PrintLgMulti", arg=(
 		"CHAR code",
 	)),
-	0x802D77DC: main.sym_fnc("print_lg", arg=(
+	0x802D77DC: main.sym_fnc("PrintLg", arg=(
 		"SHORT x",
 		"SHORT y",
 		"const unsigned char *str",
 	), flag={"GLOBL"}),
-	0x802D7B84: main.sym_fnc("print_16", arg=(
+	0x802D7B84: main.sym_fnc("Print16", arg=(
 		"CHAR font",
 		"SHORT x",
 		"SHORT y",
 		"const unsigned char *str",
 	), flag={"GLOBL"}),
-	0x802D7E88: main.sym_fnc("print_sm", arg=(
+	0x802D7E88: main.sym_fnc("PrintSm", arg=(
 		"SHORT x",
 		"SHORT y",
 		"const unsigned char *str",
 	), flag={"GLOBL"}),
-	0x802D82D4: main.sym_fnc("print_8", arg=(
+	0x802D82D4: main.sym_fnc("Print8", arg=(
 		"SHORT x",
 		"SHORT y",
 		"const unsigned char *str",
 	), flag={"GLOBL"}), # static
-	0x802D862C: main.sym_fnc("cursor_proc", arg=(
+	0x802D862C: main.sym_fnc("CursorProc", arg=(
 		"CHAR code",
 		"s8 *cursor",
 		"CHAR min",
 		"CHAR max",
 	), flag={"GLOBL"}),
-	0x802D8844: main.sym_fnc("str_center_x", "SHORT", (
+	0x802D8844: main.sym_fnc("StrCenterX", "SHORT", (
 		"SHORT x",
 		"const unsigned char *str",
 		"float kerning",
 	), flag={"GLOBL"}),
-	0x802D8934: main.sym_fnc("str_width", "SHORT", (
+	0x802D8934: main.sym_fnc("StrWidth", "SHORT", (
 		"const unsigned char *str",
 	), flag={"GLOBL"}), # static
-	0x802D89B8: main.sym_fnc("print_coin", arg=(
+	0x802D89B8: main.sym_fnc("PrintCoin", arg=(
 		"int code",
 		"CHAR file",
 		"CHAR course",
 		"SHORT x",
 		"SHORT y",
 	), flag={"GLOBL"}),
-	0x802D8A80: main.sym_fnc("print_star", arg=(
+	0x802D8A80: main.sym_fnc("PrintStar", arg=(
 		"CHAR file",
 		"CHAR course",
 		"SHORT x",
@@ -12355,41 +13414,41 @@ sym_E0_code_text = {
 		"int value",
 		"unsigned char *str",
 	), flag={"GLOBL"}),
-	0x802D8C6C: main.sym_fnc("msg_get", "SHORT", flag={"GLOBL"}),
-	0x802D8C88: main.sym_fnc("msg_open", arg=(
+	0x802D8C6C: main.sym_fnc("MsgGet", "SHORT", flag={"GLOBL"}),
+	0x802D8C88: main.sym_fnc("MsgOpen", arg=(
 		"SHORT code",
 	), flag={"GLOBL"}),
-	0x802D8CC4: main.sym_fnc("msg_open_int", arg=(
+	0x802D8CC4: main.sym_fnc("MsgOpenInt", arg=(
 		"SHORT code",
 		"int value",
 	), flag={"GLOBL"}),
-	0x802D8D08: main.sym_fnc("msg_open_signpost", arg=(
+	0x802D8D08: main.sym_fnc("MsgOpenSignpost", arg=(
 		"SHORT code",
 	), flag={"GLOBL"}),
-	0x802D8D48: main.sym_fnc("msg_open_prompt", arg=(
+	0x802D8D48: main.sym_fnc("MsgOpenPrompt", arg=(
 		"SHORT code",
 	), flag={"GLOBL"}),
-	0x802D8D90: main.sym_fnc("msg_close", flag={"GLOBL"}),
-	0x802D8E2C: main.sym_fnc("msg_draw_back", arg=(
+	0x802D8D90: main.sym_fnc("MsgClose", flag={"GLOBL"}),
+	0x802D8E2C: main.sym_fnc("MsgDrawBack", arg=(
 		"MESSAGE *msg",
 		"CHAR line",
 	)),
-	0x802D9148: main.sym_fnc("msg_set_color", arg=(
+	0x802D9148: main.sym_fnc("MsgSetColor", arg=(
 		"CHAR code",
 		"CHAR line",
 	)),
-	0x802D9388: main.sym_fnc("msg_newline", arg=(
+	0x802D9388: main.sym_fnc("MsgNewline", arg=(
 		"CHAR line",
 		"CHAR end",
 		"char *state",
 		"char *space",
 		"short *count",
 	)),
-	0x802D944C: main.sym_fnc("msg_fmtint", arg=(
+	0x802D944C: main.sym_fnc("MsgFmtInt", arg=(
 		"char *space",
 		"short *count",
 	)),
-	0x802D9634: main.sym_fnc("msg_multi", arg=(
+	0x802D9634: main.sym_fnc("MsgMulti", arg=(
 		"CHAR code",
 		"CHAR line",
 		"short *count",
@@ -12397,10 +13456,10 @@ sym_E0_code_text = {
 		"CHAR space",
 		"CHAR start",
 	)),
-	0x802D9800: main.sym_fnc("msg_clamp", "unsigned int", (
+	0x802D9800: main.sym_fnc("MsgClamp", "unsigned int", (
 		"SHORT x",
 	)),
-	0x802D982C: main.sym_fnc("msg_draw", arg=(
+	0x802D982C: main.sym_fnc("MsgDraw", arg=(
 		"CHAR code",
 		"MESSAGE *msg",
 		"CHAR start",
@@ -12414,167 +13473,274 @@ sym_E0_code_text = {
 	0x802D9AD4: main.sym_fnc("L802D9AD4", flag={"GLOBL","LOCAL"}),
 	0x802D9B08: main.sym_fnc("L802D9B08", flag={"GLOBL","LOCAL"}),
 	0x802D9B1C: main.sym_fnc("L802D9B1C", flag={"GLOBL","LOCAL"}),
-	0x802D9CB0: main.sym_fnc("msg_draw_cursor"),
-	0x802D9DFC: main.sym_fnc("msg_draw_nextpage", arg=(
+	0x802D9CB0: main.sym_fnc("MsgDrawCursor"),
+	0x802D9DFC: main.sym_fnc("MsgDrawNextPage", arg=(
 		"CHAR line",
 	)),
-	0x802D9F84: main.sym_fnc("msg_proc_endsound", arg=(
+	0x802D9F84: main.sym_fnc("MsgProcEndSound", arg=(
 		"SHORT msg",
 	)),
-	0x802DA1AC: main.sym_fnc("msg_proc"),
-	0x802DA810: main.sym_fnc("menu_open", arg=(
+	0x802DA1AC: main.sym_fnc("MsgProc"),
+	0x802DA810: main.sym_fnc("MenuOpen", arg=(
 		"SHORT code",
 	), flag={"GLOBL"}),
-	0x802DA844: main.sym_fnc("staff_clear", flag={"GLOBL"}),
-	0x802DA85C: main.sym_fnc("staff_draw_start", flag={"GLOBL"}),
-	0x802DA8E4: main.sym_fnc("staff_draw_end", flag={"GLOBL"}),
-	0x802DA964: main.sym_fnc("staff_cvt", "UCHAR", (
+	0x802DA844: main.sym_fnc("StaffClear", flag={"GLOBL"}),
+	0x802DA85C: main.sym_fnc("StaffDrawStart", flag={"GLOBL"}),
+	0x802DA8E4: main.sym_fnc("StaffDrawEnd", flag={"GLOBL"}),
+	0x802DA964: main.sym_fnc("StaffCvt", "UCHAR", (
 		"UCHAR c",
 	)),
-	0x802DAA34: main.sym_fnc("staff_print", arg=(
+	0x802DAA34: main.sym_fnc("StaffPrint", arg=(
 		"SHORT x",
 		"SHORT y",
 		"const char *str",
 	), flag={"GLOBL"}),
-	0x802DAAE4: main.sym_fnc("caption_open", arg=(
+	0x802DAAE4: main.sym_fnc("CaptionOpen", arg=(
 		"SHORT x",
 		"SHORT y",
 		"SHORT code",
 		"SHORT frame",
 	), flag={"GLOBL"}),
-	0x802DAB58: main.sym_fnc("caption_draw", flag={"GLOBL"}),
-	0x802DAD54: main.sym_fnc("opening_draw"),
-	0x802DB08C: main.sym_fnc("cannon_reticle_draw", flag={"GLOBL"}),
-	0x802DB350: main.sym_fnc("pausemenu_init", flag={"GLOBL"}),
-	0x802DB368: main.sym_fnc("pausemenu_init_course"),
-	0x802DB3B8: main.sym_fnc("menu_draw_back"),
-	0x802DB498: main.sym_fnc("pausemenu_put_redcoin", arg=(
+	0x802DAB58: main.sym_fnc("CaptionDraw", flag={"GLOBL"}),
+	0x802DAD54: main.sym_fnc("OpeningDraw"),
+	0x802DB08C: main.sym_fnc("DrawCannonReticle", flag={"GLOBL"}),
+	0x802DB350: main.sym_fnc("PauseMenu_Init", flag={"GLOBL"}),
+	0x802DB368: main.sym_fnc("PauseMenu_InitCourse"),
+	0x802DB3B8: main.sym_fnc("MenuDrawBack"),
+	0x802DB498: main.sym_fnc("PauseMenu_PutRedCoin", arg=(
 		"SHORT x",
 		"SHORT y",
 	)),
-	0x802DB6E8: main.sym_fnc("pausemenu_draw_redcoin"),
-	0x802DB760: main.sym_fnc("pausemenu_draw_course"),
-	0x802DBB24: main.sym_fnc("pausemenu_proc_camera", arg=(
-		"SHORT x",
-		"SHORT y",
-		"s8 *cursor",
-		"SHORT space",
-	)),
-	0x802DBE68: main.sym_fnc("pausemenu_proc_course", arg=(
+	0x802DB6E8: main.sym_fnc("PauseMenu_DrawRedCoin"),
+	0x802DB760: main.sym_fnc("PauseMenu_DrawCourse"),
+	0x802DBB24: main.sym_fnc("PauseMenu_ProcCamera", arg=(
 		"SHORT x",
 		"SHORT y",
 		"s8 *cursor",
 		"SHORT space",
 	)),
-	0x802DC15C: main.sym_fnc("pausemenu_draw_scorebox", arg=(
+	0x802DBE68: main.sym_fnc("PauseMenu_ProcCourse", arg=(
+		"SHORT x",
+		"SHORT y",
+		"s8 *cursor",
+		"SHORT space",
+	)),
+	0x802DC15C: main.sym_fnc("PauseMenu_DrawScoreBox", arg=(
 		"SHORT x",
 		"SHORT y",
 	)),
-	0x802DC418: main.sym_fnc("pausemenu_init_select"),
-	0x802DC478: main.sym_fnc("pausemenu_draw_select"),
-	0x802DC570: main.sym_fnc("pausemenu_draw_star", arg=(
+	0x802DC418: main.sym_fnc("PauseMenu_InitSelect"),
+	0x802DC478: main.sym_fnc("PauseMenu_DrawSelect"),
+	0x802DC570: main.sym_fnc("PauseMenu_DrawStar", arg=(
 		"SHORT x",
 		"SHORT y",
 		"SHORT file",
 		"SHORT course",
 	)),
-	0x802DC718: main.sym_fnc("pausemenu_proc_score", arg=(
+	0x802DC718: main.sym_fnc("PauseMenu_ProcScore", arg=(
 		"SHORT x",
 		"SHORT y",
 	)),
-	0x802DCA88: main.sym_fnc("pausemenu_proc", "SHORT"),
-	0x802DCD04: main.sym_fnc("savemenu_draw_banner", arg=(
+	0x802DCA88: main.sym_fnc("PauseMenu_Proc", "SHORT"),
+	0x802DCD04: main.sym_fnc("SaveMenu_DrawBanner", arg=(
 		"CHAR code",
 	)),
-	0x802DCF30: main.sym_fnc("savemenu_proc_demo", arg=(
+	0x802DCF30: main.sym_fnc("SaveMenu_ProcDemo", arg=(
 		"SHORT x",
 		"SHORT y",
 	)),
-	0x802DD194: main.sym_fnc("savemenu_proc_star", arg=(
+	0x802DD194: main.sym_fnc("SaveMenu_ProcStar", arg=(
 		"int code",
 		"UCHAR star",
 	)),
-	0x802DD210: main.sym_fnc("savemenu_draw"),
-	0x802DD838: main.sym_fnc("savemenu_proc_save", arg=(
+	0x802DD210: main.sym_fnc("SaveMenu_Draw"),
+	0x802DD838: main.sym_fnc("SaveMenu_ProcSave", arg=(
 		"SHORT x",
 		"SHORT y",
 		"s8 *cursor",
 		"SHORT space",
 	)),
-	0x802DDAE0: main.sym_fnc("savemenu_proc", "SHORT"),
-	0x802DDCA4: main.sym_fnc("message_proc", "SHORT", flag={"GLOBL"}),
+	0x802DDAE0: main.sym_fnc("SaveMenu_Proc", "SHORT"),
+	0x802DDCA4: main.sym_fnc("MessageProc", "SHORT", flag={"GLOBL"}),
 
 	# src/weather.c
-	0x802DDDF0: main.sym("weather_802DDDF0"),
-	0x802DDF38: main.sym("weather_802DDF38"),
-	0x802DE0BC: main.sym("weather_802DE0BC"),
-	0x802DE114: main.sym("weather_802DE114", flag={"GLOBL"}),
-	0x802DE23C: main.sym("weather_802DE23C"),
-	0x802DE360: main.sym("weather_802DE360"),
-	0x802DE458: main.sym("weather_802DE458"),
-	0x802DE888: main.sym("weather_802DE888"),
-	0x802DECD4: main.sym("weather_802DECD4"), # unused
-	0x802DED38: main.sym("weather_802DED38"),
-	0x802DEF2C: main.sym("weather_802DEF2C", flag={"GLOBL"}),
-	0x802DF334: main.sym("weather_802DF334"),
-	0x802DF748: main.sym("weather_802DF748"),
-	0x802DFBC8: main.sym_fnc("weather_draw", "Gfx *", (
+	0x802DDDF0: main.sym_fnc("SnowInit", "int", (
 		"int code",
-		"VECS pos",
-		"VECS look",
-		"VECS eye",
+	)),
+	0x802DDF38: main.sym_fnc("SnowProc", arg=(
+		"int code",
+		"SVEC pos",
+	)),
+	0x802DE0BC: main.sym_fnc("WeatherFree", arg=(
+		"WEATHER *ptr",
+	)),
+	0x802DE114: main.sym_fnc("WeatherGetCoord", arg=(
+		"SVEC look",
+		"SVEC eye",
+		"short *dist",
+		"short *angx",
+		"short *angy",
+	), flag={"GLOBL"}),
+	0x802DE23C: main.sym_fnc("WeatherSetCoord", arg=(
+		"SVEC look",
+		"SVEC eye",
+		"SHORT dist",
+		"SHORT angx",
+		"SHORT angy",
+	)),
+	0x802DE360: main.sym_fnc("SnowIsVisible", "int", (
+		"int i",
+		"int x",
+		"int y",
+		"int z",
+	)),
+	0x802DE458: main.sym_fnc("SnowMakeSnow", arg=(
+		"int x",
+		"int y",
+		"int z",
+	)),
+	0x802DE888: main.sym_fnc("SnowMakeBlizzard", arg=(
+		"int x",
+		"int y",
+		"int z",
+	)),
+	0x802DECD4: main.sym_fnc("BubbleIsVisible", "int", (
+		"int x",
+		"int y",
+		"int z",
+	)), # unused
+	0x802DED38: main.sym_fnc("SnowMakeBubble", arg=(
+		"int x",
+		"int y",
+		"int z",
+	)),
+	0x802DEF2C: main.sym_fnc("WeatherXfm", arg=(
+		"SVEC v0",
+		"SVEC v1",
+		"SVEC v2",
+		"SHORT angx",
+		"SHORT angy",
+	), flag={"GLOBL"}),
+	0x802DF334: main.sym_fnc("SnowVtx", arg=(
+		"Gfx *g",
+		"int i",
+		"SVEC v0",
+		"SVEC v1",
+		"SVEC v2",
+	)),
+	0x802DF748: main.sym_fnc("SnowGfx", "Gfx *", (
+		"int code",
+		"SVEC pos",
+		"SVEC eye",
+		"SVEC look",
+	)),
+	0x802DFBC8: main.sym_fnc("WeatherDraw", "Gfx *", (
+		"int code",
+		"SVEC pos",
+		"SVEC look",
+		"SVEC eye",
 	), flag={"GLOBL"}),
 
 	# src/lava.c
-	0x802DFD50: main.sym("lava_802DFD50"),
-	0x802DFE00: main.sym("lava_802DFE00"),
-	0x802DFE80: main.sym("lava_802DFE80"),
-	0x802E0120: main.sym("lava_802E0120"),
-	0x802E048C: main.sym("lava_802E048C"),
-	0x802E065C: main.sym("lava_802E065C"),
-	0x802E08A8: main.sym("lava_802E08A8"),
-	0x802E0934: main.sym("lava_802E0934"),
-	0x802E0E24: main.sym("lava_802E0E24"),
-	0x802E0EB8: main.sym("lava_802E0EB8"),
-	0x802E1238: main.sym("lava_802E1238"),
+	0x802DFD50: main.sym_fnc("LavaIsVisible", "int", (
+		"int i",
+		"int x",
+		"int z",
+		"int radius",
+	)),
+	0x802DFE00: main.sym_fnc("FlowerRand", "int"),
+	0x802DFE80: main.sym_fnc("LavaMakeFlower", arg=(
+		"SVEC pos",
+	)),
+	0x802E0120: main.sym_fnc("LavaNew", arg=(
+		"int i",
+		"SVEC pos",
+	)),
+	0x802E048C: main.sym_fnc("LavaMakeLava", arg=(
+		"SVEC pos",
+	)),
+	0x802E065C: main.sym_fnc("WhirpoolMove", arg=(
+		"int *x",
+		"int *y",
+		"int *z",
+	)),
+	0x802E08A8: main.sym_fnc("WhirpoolIsVisible", "int", (
+		"int i",
+	)),
+	0x802E0934: main.sym_fnc("LavaMakeWhirlpool"),
+	0x802E0E24: main.sym_fnc("JetIsVisible", "int", (
+		"int i",
+	)),
+	0x802E0EB8: main.sym_fnc("LavaMakeJet"),
+	0x802E1238: main.sym_fnc("LavaInit", "int", (
+		"int code",
+	)),
 	0x802E126C: main.sym_fnc("L802E126C", flag={"GLOBL","LOCAL"}),
 	0x802E1274: main.sym_fnc("L802E1274", flag={"GLOBL","LOCAL"}),
 	0x802E1294: main.sym_fnc("L802E1294", flag={"GLOBL","LOCAL"}),
 	0x802E12B4: main.sym_fnc("L802E12B4", flag={"GLOBL","LOCAL"}),
 	0x802E12C8: main.sym_fnc("L802E12C8", flag={"GLOBL","LOCAL"}),
 	0x802E12DC: main.sym_fnc("L802E12DC", flag={"GLOBL","LOCAL"}),
-	0x802E1414: main.sym("lava_802E1414"),
-	0x802E1618: main.sym("lava_802E1618"),
-	0x802E1A20: main.sym("lava_802E1A20"),
-	0x802E1BB8: main.sym("lava_802E1BB8"),
-	0x802E1ED8: main.sym("lava_802E1ED8"),
-	0x802E1F48: main.sym("lava_802E1F48", flag={"GLOBL"}),
+	0x802E1414: main.sym_fnc("LavaMake", arg=(
+		"int code",
+		"SVEC pos",
+		"SVEC v0",
+		"SVEC v1",
+		"SVEC v2",
+	)),
+	0x802E1618: main.sym_fnc("LavaVtx", arg=(
+		"Gfx *g",
+		"int i",
+		"SVEC v0",
+		"SVEC v1",
+		"SVEC v2",
+		"Vtx *template",
+	)),
+	0x802E1A20: main.sym_fnc("LavaTxt", arg=(
+		"int code",
+		"SHORT i",
+	)),
+	0x802E1BB8: main.sym_fnc("LavaGfx", "Gfx *", (
+		"int code",
+		"SVEC pos",
+		"SVEC eye",
+		"SVEC look",
+	)),
+	0x802E1ED8: main.sym_fnc("LavaProc", arg=(
+		"int code",
+	)),
+	0x802E1F48: main.sym_fnc("LavaDraw", "Gfx *", (
+		"int code",
+		"SVEC pos",
+		"SVEC look",
+		"SVEC eye",
+	), flag={"GLOBL"}),
 
 	# src/tag.c
-	0x802E20A0: main.sym_fnc("tag_ang", "SHORT", (
+	0x802E20A0: main.sym_fnc("TagAng", "SHORT", (
 		"SHORT x",
 	)),
-	0x802E2134: main.sym_fnc("tag_enter_code", arg=(
+	0x802E2134: main.sym_fnc("TagEnterCode", arg=(
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 		"SHORT posx",
 		"SHORT posy",
 		"SHORT posz",
 		"SHORT angy",
 		"SHORT code",
 	)),
-	0x802E21DC: main.sym_fnc("tag_enter_arg", arg=(
+	0x802E21DC: main.sym_fnc("TagEnterArg", arg=(
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 		"SHORT posx",
 		"SHORT posy",
 		"SHORT posz",
 		"SHORT angy",
 		"SHORT arg",
 	)),
-	0x802E2284: main.sym_fnc("tag_enter_xyz", arg=(
+	0x802E2284: main.sym_fnc("TagEnterXYZ", arg=(
 		"int shape",
-		"O_SCRIPT *script",
+		"OBJLANG *script",
 		"SHORT posx",
 		"SHORT posy",
 		"SHORT posz",
@@ -12582,15 +13748,15 @@ sym_E0_code_text = {
 		"SHORT y",
 		"SHORT z",
 	)),
-	0x802E233C: main.sym_fnc("tag_enter_old", arg=(
-		"O_SCRIPT *script",
+	0x802E233C: main.sym_fnc("TagEnterOLD", arg=(
+		"OBJLANG *script",
 		"TAG *tag",
 	)), # unused
-	0x802E2414: main.sym_fnc("tag_obj_load", arg=(
+	0x802E2414: main.sym_fnc("TagObjLoad", arg=(
 		"SHORT scene",
 		"TAG *tag",
 	), flag={"GLOBL"}),
-	0x802E2690: main.sym_fnc("tag_load", arg=(
+	0x802E2690: main.sym_fnc("TagLoad", arg=(
 		"SHORT scene",
 		"TAG *tag",
 	), flag={"GLOBL"}),
@@ -12602,7 +13768,7 @@ sym_E0_code_text = {
 	0x802E285C: main.sym_fnc("L802E285C", flag={"GLOBL","LOCAL"}),
 	0x802E2890: main.sym_fnc("L802E2890", flag={"GLOBL","LOCAL"}),
 	0x802E28C4: main.sym_fnc("L802E28C4", flag={"GLOBL","LOCAL"}),
-	0x802E28EC: main.sym_fnc("map_obj_load", arg=(
+	0x802E28EC: main.sym_fnc("MapObjLoad", arg=(
 		"SHORT scene",
 		"MAP **map",
 	), flag={"GLOBL"}),
@@ -12613,39 +13779,39 @@ sym_E0_code_text = {
 	0x802E2C5C: main.sym_fnc("L802E2C5C", flag={"GLOBL","LOCAL"}),
 
 	# src/hud.c
-	0x802E2CF0: main.sym_fnc("hud_draw_char", arg=(
+	0x802E2CF0: main.sym_fnc("HUD_DrawChar", arg=(
 		"unsigned int x",
 		"unsigned int y",
 		"u16 *txt",
 	)),
-	0x802E2E58: main.sym_fnc("hud_draw_8x8", arg=(
+	0x802E2E58: main.sym_fnc("HUD_Draw8x8", arg=(
 		"unsigned int x",
 		"unsigned int y",
 		"u16 *txt",
 	)),
-	0x802E30B4: main.sym_fnc("meter_draw_n", arg=(
+	0x802E30B4: main.sym_fnc("MeterDrawN", arg=(
 		"int power",
 	)),
-	0x802E3214: main.sym_fnc("meter_draw", arg=(
+	0x802E3214: main.sym_fnc("MeterDraw", arg=(
 		"int power",
 	)),
-	0x802E33B8: main.sym_fnc("meter_alert"),
-	0x802E3430: main.sym_fnc("meter_show"),
-	0x802E34E4: main.sym_fnc("meter_hide"),
-	0x802E352C: main.sym_fnc("meter_proc", arg=(
+	0x802E33B8: main.sym_fnc("MeterAlert"),
+	0x802E3430: main.sym_fnc("MeterShow"),
+	0x802E34E4: main.sym_fnc("MeterHide"),
+	0x802E352C: main.sym_fnc("MeterProc", arg=(
 		"SHORT power",
 	)),
-	0x802E3654: main.sym_fnc("hud_draw_power"),
-	0x802E3744: main.sym_fnc("hud_draw_life"),
-	0x802E37A8: main.sym_fnc("hud_draw_coin"),
-	0x802E380C: main.sym_fnc("hud_draw_star"),
-	0x802E38E4: main.sym_fnc("hud_draw_key"),
-	0x802E395C: main.sym_fnc("hud_draw_time"),
-	0x802E3B1C: main.sym_fnc("hud_set_camera", arg=(
+	0x802E3654: main.sym_fnc("HUD_DrawPower"),
+	0x802E3744: main.sym_fnc("HUD_DrawLife"),
+	0x802E37A8: main.sym_fnc("HUD_DrawCoin"),
+	0x802E380C: main.sym_fnc("HUD_DrawStar"),
+	0x802E38E4: main.sym_fnc("HUD_DrawKey"),
+	0x802E395C: main.sym_fnc("HUD_DrawTime"),
+	0x802E3B1C: main.sym_fnc("HUD_SetCamera", arg=(
 		"SHORT flag",
 	), flag={"GLOBL"}),
-	0x802E3B3C: main.sym_fnc("hud_draw_camera"),
-	0x802E3D2C: main.sym_fnc("hud_draw", flag={"GLOBL"}),
+	0x802E3B3C: main.sym_fnc("HUD_DrawCamera"),
+	0x802E3D2C: main.sym_fnc("HUD_Draw", flag={"GLOBL"}),
 
 	# src/object_b.c
 	0x802E3E50: main.sym_fnc("object_b_802E3E50", flag={"GLOBL"}), # extern
@@ -12681,28 +13847,28 @@ sym_E0_code_text = {
 	0x802E5DE8: main.sym("object_b_802E5DE8"),
 	0x802E5E6C: main.sym("object_b_802E5E6C"),
 	0x802E5EA4: main.sym("object_b_802E5EA4"),
-	0x802E5EE8: main.sym("object_b_802E5EE8", flag={"GLOBL"}), # o callback
-	0x802E5F64: main.sym("object_b_802E5F64", flag={"GLOBL"}), # o callback
-	0x802E6098: main.sym("object_b_802E6098", flag={"GLOBL"}), # o callback
-	0x802E6114: main.sym("object_b_802E6114", flag={"GLOBL"}), # o callback
-	0x802E62A4: main.sym("object_b_802E62A4", flag={"GLOBL"}), # o callback
+	0x802E5EE8: main.sym("object_b_802E5EE8", flag={"GLOBL"}), # objcall
+	0x802E5F64: main.sym("object_b_802E5F64", flag={"GLOBL"}), # objcall
+	0x802E6098: main.sym("object_b_802E6098", flag={"GLOBL"}), # objcall
+	0x802E6114: main.sym("object_b_802E6114", flag={"GLOBL"}), # objcall
+	0x802E62A4: main.sym("object_b_802E62A4", flag={"GLOBL"}), # objcall
 	0x802E631C: main.sym("object_b_802E631C"),
 	0x802E63EC: main.sym("object_b_802E63EC"),
-	0x802E6474: main.sym("object_b_802E6474", flag={"GLOBL"}), # o callback
+	0x802E6474: main.sym("object_b_802E6474", flag={"GLOBL"}), # objcall
 	0x802E64F0: main.sym_fnc("L802E64F0", flag={"GLOBL","LOCAL"}),
 	0x802E6540: main.sym_fnc("L802E6540", flag={"GLOBL","LOCAL"}),
 	0x802E6550: main.sym_fnc("L802E6550", flag={"GLOBL","LOCAL"}),
 	0x802E6570: main.sym_fnc("L802E6570", flag={"GLOBL","LOCAL"}),
 	0x802E65A8: main.sym_fnc("L802E65A8", flag={"GLOBL","LOCAL"}),
-	0x802E6628: main.sym("object_b_802E6628", flag={"GLOBL"}), # o callback
+	0x802E6628: main.sym("object_b_802E6628", flag={"GLOBL"}), # objcall
 	0x802E6660: main.sym_fnc("L802E6660", flag={"GLOBL","LOCAL"}),
 	0x802E66D4: main.sym_fnc("L802E66D4", flag={"GLOBL","LOCAL"}),
 	0x802E66E4: main.sym_fnc("L802E66E4", flag={"GLOBL","LOCAL"}),
 	0x802E6704: main.sym_fnc("L802E6704", flag={"GLOBL","LOCAL"}),
 	0x802E673C: main.sym_fnc("L802E673C", flag={"GLOBL","LOCAL"}),
-	0x802E6790: main.sym("object_b_802E6790", flag={"GLOBL"}), # o callback
-	0x802E67DC: main.sym("object_b_802E67DC", flag={"GLOBL"}), # o callback
-	0x802E6A2C: main.sym("object_b_802E6A2C", flag={"GLOBL"}), # o callback
+	0x802E6790: main.sym("object_b_802E6790", flag={"GLOBL"}), # objcall
+	0x802E67DC: main.sym("object_b_802E67DC", flag={"GLOBL"}), # objcall
+	0x802E6A2C: main.sym("object_b_802E6A2C", flag={"GLOBL"}), # objcall
 	0x802E6A8C: main.sym("object_b_802E6A8C"),
 	0x802E6AF8: main.sym("object_b_802E6AF8"),
 	0x802E6BD4: main.sym("object_b_802E6BD4"),
@@ -12716,47 +13882,47 @@ sym_E0_code_text = {
 	0x802E7220: main.sym("object_b_802E7220"),
 	0x802E7280: main.sym("object_b_802E7280"),
 	0x802E7324: main.sym("object_b_802E7324"),
-	0x802E742C: main.sym("object_b_802E742C", flag={"GLOBL"}), # o callback
-	0x802E75A0: main.sym("object_b_802E75A0", flag={"GLOBL"}), # o callback
-	0x802E76AC: main.sym("object_b_802E76AC", flag={"GLOBL"}), # o callback
+	0x802E742C: main.sym("object_b_802E742C", flag={"GLOBL"}), # objcall
+	0x802E75A0: main.sym("object_b_802E75A0", flag={"GLOBL"}), # objcall
+	0x802E76AC: main.sym("object_b_802E76AC", flag={"GLOBL"}), # objcall
 	0x802E770C: main.sym("object_b_802E770C"),
 	0x802E7814: main.sym("object_b_802E7814"),
 	0x802E79DC: main.sym("object_b_802E79DC"),
 	0x802E7B00: main.sym("object_b_802E7B00"),
 	0x802E7BB0: main.sym("object_b_802E7BB0"),
-	0x802E7C4C: main.sym("object_b_802E7C4C", flag={"GLOBL"}), # o callback
-	0x802E7C90: main.sym("object_b_802E7C90", flag={"GLOBL"}), # o callback
+	0x802E7C4C: main.sym("object_b_802E7C4C", flag={"GLOBL"}), # objcall
+	0x802E7C90: main.sym("object_b_802E7C90", flag={"GLOBL"}), # objcall
 	0x802E7D4C: main.sym("object_b_802E7D4C"),
-	0x802E7E54: main.sym("object_b_802E7E54", flag={"GLOBL"}), # o callback
-	0x802E7F70: main.sym("object_b_802E7F70", flag={"GLOBL"}), # o callback
+	0x802E7E54: main.sym("object_b_802E7E54", flag={"GLOBL"}), # objcall
+	0x802E7F70: main.sym("object_b_802E7F70", flag={"GLOBL"}), # objcall
 	0x802E7FB8: main.sym("object_b_802E7FB8"),
 	0x802E7FEC: main.sym("object_b_802E7FEC"),
-	0x802E80DC: main.sym("object_b_802E80DC", flag={"GLOBL"}), # o callback
-	0x802E82B0: main.sym("object_b_802E82B0", flag={"GLOBL"}), # o callback
-	0x802E8388: main.sym("object_b_802E8388", flag={"GLOBL"}), # o callback
+	0x802E80DC: main.sym("object_b_802E80DC", flag={"GLOBL"}), # objcall
+	0x802E82B0: main.sym("object_b_802E82B0", flag={"GLOBL"}), # objcall
+	0x802E8388: main.sym("object_b_802E8388", flag={"GLOBL"}), # objcall
 	0x802E844C: main.sym("object_b_802E844C"),
 	0x802E84CC: main.sym("object_b_802E84CC"),
 	0x802E8618: main.sym("object_b_802E8618"),
 	0x802E885C: main.sym("object_b_802E885C"),
 	0x802E8920: main.sym("object_b_802E8920"),
-	0x802E89D4: main.sym("object_b_802E89D4", flag={"GLOBL"}), # o callback
+	0x802E89D4: main.sym("object_b_802E89D4", flag={"GLOBL"}), # objcall
 	0x802E8A0C: main.sym_fnc("L802E8A0C", flag={"GLOBL","LOCAL"}),
 	0x802E8A64: main.sym_fnc("L802E8A64", flag={"GLOBL","LOCAL"}),
 	0x802E8A74: main.sym_fnc("L802E8A74", flag={"GLOBL","LOCAL"}),
 	0x802E8A90: main.sym_fnc("L802E8A90", flag={"GLOBL","LOCAL"}),
 	0x802E8AA0: main.sym_fnc("L802E8AA0", flag={"GLOBL","LOCAL"}),
-	0x802E8AE4: main.sym("object_b_802E8AE4", flag={"GLOBL"}), # o callback
+	0x802E8AE4: main.sym("object_b_802E8AE4", flag={"GLOBL"}), # objcall
 	0x802E8C18: main.sym("object_b_802E8C18"),
 	0x802E8D98: main.sym("object_b_802E8D98"),
-	0x802E8ECC: main.sym("object_b_802E8ECC", flag={"GLOBL"}), # o callback
-	0x802E8F68: main.sym("object_b_802E8F68", flag={"GLOBL"}), # o callback
+	0x802E8ECC: main.sym("object_b_802E8ECC", flag={"GLOBL"}), # objcall
+	0x802E8F68: main.sym("object_b_802E8F68", flag={"GLOBL"}), # objcall
 	0x802E9018: main.sym("object_b_802E9018"),
 	0x802E9278: main.sym("object_b_802E9278"),
 	0x802E9470: main.sym("object_b_802E9470"),
 	0x802E94E4: main.sym("object_b_802E94E4"),
 	0x802E9548: main.sym("object_b_802E9548"),
-	0x802E96C8: main.sym("object_b_802E96C8", flag={"GLOBL"}), # o callback
-	0x802E9764: main.sym("object_b_802E9764", flag={"GLOBL"}), # o callback
+	0x802E96C8: main.sym("object_b_802E96C8", flag={"GLOBL"}), # objcall
+	0x802E9764: main.sym("object_b_802E9764", flag={"GLOBL"}), # objcall
 	0x802E97FC: main.sym("object_b_802E97FC"),
 	0x802E98C0: main.sym("object_b_802E98C0"),
 	0x802E9A4C: main.sym("object_b_802E9A4C"),
@@ -12767,24 +13933,24 @@ sym_E0_code_text = {
 	0x802EA258: main.sym("object_b_802EA258"),
 	0x802EA3F0: main.sym("object_b_802EA3F0"),
 	0x802EA4EC: main.sym("object_b_802EA4EC"),
-	0x802EA588: main.sym("object_b_802EA588", flag={"GLOBL"}), # o callback
-	0x802EA6A8: main.sym("object_b_802EA6A8", flag={"GLOBL"}), # o callback
+	0x802EA588: main.sym("object_b_802EA588", flag={"GLOBL"}), # objcall
+	0x802EA6A8: main.sym("object_b_802EA6A8", flag={"GLOBL"}), # objcall
 	0x802EA6F8: main.sym("object_b_802EA6F8"),
 	0x802EA75C: main.sym("object_b_802EA75C"),
-	0x802EA7E0: main.sym("object_b_802EA7E0", flag={"GLOBL"}), # o callback
-	0x802EA888: main.sym("object_b_802EA888", flag={"GLOBL"}), # o callback
-	0x802EA934: main.sym("object_b_802EA934", flag={"GLOBL"}), # o callback
-	0x802EAA10: main.sym("object_b_802EAA10", flag={"GLOBL"}), # o callback
-	0x802EAA50: main.sym("object_b_802EAA50", flag={"GLOBL"}), # o callback
-	0x802EAA8C: main.sym("object_b_802EAA8C", flag={"GLOBL"}), # o callback
-	0x802EAAD0: main.sym("object_b_802EAAD0", flag={"GLOBL"}), # o callback
-	0x802EABF0: main.sym("object_b_802EABF0", flag={"GLOBL"}), # o callback
-	0x802EAC3C: main.sym("object_b_802EAC3C", flag={"GLOBL"}), # o callback
-	0x802EAD3C: main.sym("object_b_802EAD3C", flag={"GLOBL"}), # o callback
-	0x802EAEF8: main.sym("object_b_802EAEF8", flag={"GLOBL"}), # o callback
+	0x802EA7E0: main.sym("object_b_802EA7E0", flag={"GLOBL"}), # objcall
+	0x802EA888: main.sym("object_b_802EA888", flag={"GLOBL"}), # objcall
+	0x802EA934: main.sym("object_b_802EA934", flag={"GLOBL"}), # objcall
+	0x802EAA10: main.sym("object_b_802EAA10", flag={"GLOBL"}), # objcall
+	0x802EAA50: main.sym("object_b_802EAA50", flag={"GLOBL"}), # objcall
+	0x802EAA8C: main.sym("object_b_802EAA8C", flag={"GLOBL"}), # objcall
+	0x802EAAD0: main.sym("object_b_802EAAD0", flag={"GLOBL"}), # objcall
+	0x802EABF0: main.sym("object_b_802EABF0", flag={"GLOBL"}), # objcall
+	0x802EAC3C: main.sym("object_b_802EAC3C", flag={"GLOBL"}), # objcall
+	0x802EAD3C: main.sym("object_b_802EAD3C", flag={"GLOBL"}), # objcall
+	0x802EAEF8: main.sym("object_b_802EAEF8", flag={"GLOBL"}), # objcall
 	0x802EAF84: main.sym("object_b_802EAF84"),
-	0x802EB05C: main.sym("object_b_802EB05C", flag={"GLOBL"}), # o callback
-	0x802EB104: main.sym("object_b_802EB104", flag={"GLOBL"}), # o callback
+	0x802EB05C: main.sym("object_b_802EB05C", flag={"GLOBL"}), # objcall
+	0x802EB104: main.sym("object_b_802EB104", flag={"GLOBL"}), # objcall
 	0x802EB1C0: main.sym("object_b_802EB1C0"),
 	0x802EB288: main.sym("object_b_802EB288"),
 	0x802EB3F0: main.sym("object_b_802EB3F0"),
@@ -12794,11 +13960,11 @@ sym_E0_code_text = {
 	0x802EB744: main.sym("object_b_802EB744"),
 	0x802EB7E0: main.sym("object_b_802EB7E0"),
 	0x802EB8B0: main.sym("object_b_802EB8B0"),
-	0x802EB9D0: main.sym("object_b_802EB9D0", flag={"GLOBL"}), # o callback
+	0x802EB9D0: main.sym("object_b_802EB9D0", flag={"GLOBL"}), # objcall
 	0x802EBB74: main.sym("object_b_802EBB74"),
-	0x802EBC00: main.sym("object_b_802EBC00", flag={"GLOBL"}), # o callback
+	0x802EBC00: main.sym("object_b_802EBC00", flag={"GLOBL"}), # objcall
 	0x802EBC88: main.sym("object_b_802EBC88"),
-	0x802EBCE0: main.sym("object_b_802EBCE0", flag={"GLOBL"}), # o callback
+	0x802EBCE0: main.sym("object_b_802EBCE0", flag={"GLOBL"}), # objcall
 	0x802EBD94: main.sym_fnc("L802EBD94", flag={"GLOBL","LOCAL"}),
 	0x802EBE04: main.sym_fnc("L802EBE04", flag={"GLOBL","LOCAL"}),
 	0x802EBE1C: main.sym_fnc("L802EBE1C", flag={"GLOBL","LOCAL"}),
@@ -12807,36 +13973,36 @@ sym_E0_code_text = {
 	0x802EBE9C: main.sym_fnc("L802EBE9C", flag={"GLOBL","LOCAL"}),
 	0x802EBF70: main.sym("object_b_802EBF70"),
 	0x802EC030: main.sym("object_b_802EC030"),
-	0x802EC1B0: main.sym("object_b_802EC1B0", flag={"GLOBL"}), # o callback
+	0x802EC1B0: main.sym("object_b_802EC1B0", flag={"GLOBL"}), # objcall
 	0x802EC200: main.sym("object_b_802EC200"),
 	0x802EC3D0: main.sym("object_b_802EC3D0"),
 	0x802EC4E0: main.sym("object_b_802EC4E0"),
 	0x802EC59C: main.sym("object_b_802EC59C"),
-	0x802EC75C: main.sym("object_b_802EC75C", flag={"GLOBL"}), # o callback
+	0x802EC75C: main.sym("object_b_802EC75C", flag={"GLOBL"}), # objcall
 	0x802EC7CC: main.sym("object_b_802EC7CC"), # unused
 	0x802EC818: main.sym("object_b_802EC818"),
-	0x802EC908: main.sym("object_b_802EC908", flag={"GLOBL"}), # o callback
-	0x802EC9B8: main.sym("object_b_802EC9B8", flag={"GLOBL"}), # o callback
+	0x802EC908: main.sym("object_b_802EC908", flag={"GLOBL"}), # objcall
+	0x802EC9B8: main.sym("object_b_802EC9B8", flag={"GLOBL"}), # objcall
 	0x802EC9F0: main.sym("object_b_802EC9F0"),
-	0x802ECBA4: main.sym("object_b_802ECBA4", flag={"GLOBL"}), # o callback
-	0x802ECC14: main.sym("object_b_802ECC14", flag={"GLOBL"}), # o callback
-	0x802ECD0C: main.sym("object_b_802ECD0C", flag={"GLOBL"}), # o callback
-	0x802ECEA0: main.sym("object_b_802ECEA0", flag={"GLOBL"}), # o callback
-	0x802ECFAC: main.sym("object_b_802ECFAC", flag={"GLOBL"}), # o callback
+	0x802ECBA4: main.sym("object_b_802ECBA4", flag={"GLOBL"}), # objcall
+	0x802ECC14: main.sym("object_b_802ECC14", flag={"GLOBL"}), # objcall
+	0x802ECD0C: main.sym("object_b_802ECD0C", flag={"GLOBL"}), # objcall
+	0x802ECEA0: main.sym("object_b_802ECEA0", flag={"GLOBL"}), # objcall
+	0x802ECFAC: main.sym("object_b_802ECFAC", flag={"GLOBL"}), # objcall
 	0x802ED10C: main.sym("object_b_802ED10C"),
 	0x802ED28C: main.sym("object_b_802ED28C"),
-	0x802ED39C: main.sym("object_b_802ED39C", flag={"GLOBL"}), # o callback
-	0x802ED40C: main.sym("object_b_802ED40C", flag={"GLOBL"}), # o callback
-	0x802ED45C: main.sym("object_b_802ED45C", flag={"GLOBL"}), # o callback
-	0x802ED498: main.sym("object_b_802ED498", flag={"GLOBL"}), # o callback
-	0x802ED62C: main.sym("object_b_802ED62C", flag={"GLOBL"}), # o callback
-	0x802ED78C: main.sym("object_b_802ED78C", flag={"GLOBL"}), # o callback
-	0x802ED7FC: main.sym("object_b_802ED7FC", flag={"GLOBL"}), # o callback
-	0x802EDACC: main.sym("object_b_802EDACC", flag={"GLOBL"}), # o callback
-	0x802EDB2C: main.sym("object_b_802EDB2C", flag={"GLOBL"}), # o callback
-	0x802EDDFC: main.sym("object_b_802EDDFC", flag={"GLOBL"}), # o callback
-	0x802EDF28: main.sym("object_b_802EDF28", flag={"GLOBL"}), # o callback
-	0x802EE124: main.sym("object_b_802EE124", flag={"GLOBL"}), # o callback
+	0x802ED39C: main.sym("object_b_802ED39C", flag={"GLOBL"}), # objcall
+	0x802ED40C: main.sym("object_b_802ED40C", flag={"GLOBL"}), # objcall
+	0x802ED45C: main.sym("object_b_802ED45C", flag={"GLOBL"}), # objcall
+	0x802ED498: main.sym("object_b_802ED498", flag={"GLOBL"}), # objcall
+	0x802ED62C: main.sym("object_b_802ED62C", flag={"GLOBL"}), # objcall
+	0x802ED78C: main.sym("object_b_802ED78C", flag={"GLOBL"}), # objcall
+	0x802ED7FC: main.sym("object_b_802ED7FC", flag={"GLOBL"}), # objcall
+	0x802EDACC: main.sym("object_b_802EDACC", flag={"GLOBL"}), # objcall
+	0x802EDB2C: main.sym("object_b_802EDB2C", flag={"GLOBL"}), # objcall
+	0x802EDDFC: main.sym("object_b_802EDDFC", flag={"GLOBL"}), # objcall
+	0x802EDF28: main.sym("object_b_802EDF28", flag={"GLOBL"}), # objcall
+	0x802EE124: main.sym("object_b_802EE124", flag={"GLOBL"}), # objcall
 	0x802EE1A0: main.sym("object_b_802EE1A0"),
 	0x802EE268: main.sym("object_b_802EE268"),
 	0x802EE2B8: main.sym_fnc("L802EE2B8", flag={"GLOBL","LOCAL"}),
@@ -12848,14 +14014,14 @@ sym_E0_code_text = {
 	0x802EE598: main.sym("object_b_802EE598"),
 	0x802EE728: main.sym("object_b_802EE728"),
 	0x802EE778: main.sym("object_b_802EE778"),
-	0x802EE7E0: main.sym("object_b_802EE7E0", flag={"GLOBL"}), # o callback
+	0x802EE7E0: main.sym("object_b_802EE7E0", flag={"GLOBL"}), # objcall
 	0x802EE818: main.sym_fnc("L802EE818", flag={"GLOBL","LOCAL"}),
 	0x802EE87C: main.sym_fnc("L802EE87C", flag={"GLOBL","LOCAL"}),
 	0x802EE8AC: main.sym_fnc("L802EE8AC", flag={"GLOBL","LOCAL"}),
 	0x802EE8BC: main.sym_fnc("L802EE8BC", flag={"GLOBL","LOCAL"}),
 	0x802EE8CC: main.sym_fnc("L802EE8CC", flag={"GLOBL","LOCAL"}),
-	0x802EE8F4: main.sym("object_b_802EE8F4", flag={"GLOBL"}), # o callback
-	0x802EE9CC: main.sym("object_b_802EE9CC", flag={"GLOBL"}), # o callback
+	0x802EE8F4: main.sym("object_b_802EE8F4", flag={"GLOBL"}), # objcall
+	0x802EE9CC: main.sym("object_b_802EE9CC", flag={"GLOBL"}), # objcall
 	0x802EEA24: main.sym("object_b_802EEA24"),
 	0x802EEA7C: main.sym("object_b_802EEA7C"),
 	0x802EEAB4: main.sym_fnc("L802EEAB4", flag={"GLOBL","LOCAL"}),
@@ -12870,62 +14036,62 @@ sym_E0_code_text = {
 	0x802EED54: main.sym_fnc("L802EED54", flag={"GLOBL","LOCAL"}),
 	0x802EED74: main.sym_fnc("L802EED74", flag={"GLOBL","LOCAL"}),
 	0x802EED94: main.sym_fnc("L802EED94", flag={"GLOBL","LOCAL"}),
-	0x802EEDF0: main.sym("object_b_802EEDF0", flag={"GLOBL"}), # o callback
-	0x802EEEB4: main.sym("object_b_802EEEB4", flag={"GLOBL"}), # o callback
-	0x802EEF9C: main.sym("object_b_802EEF9C", flag={"GLOBL"}), # o callback
-	0x802EF0E8: main.sym("object_b_802EF0E8", flag={"GLOBL"}), # o callback
-	0x802EF21C: main.sym("object_b_802EF21C", flag={"GLOBL"}), # o callback
-	0x802EF274: main.sym("object_b_802EF274", flag={"GLOBL"}), # o callback
-	0x802EF34C: main.sym("object_b_802EF34C", flag={"GLOBL"}), # o callback
+	0x802EEDF0: main.sym("object_b_802EEDF0", flag={"GLOBL"}), # objcall
+	0x802EEEB4: main.sym("object_b_802EEEB4", flag={"GLOBL"}), # objcall
+	0x802EEF9C: main.sym("object_b_802EEF9C", flag={"GLOBL"}), # objcall
+	0x802EF0E8: main.sym("object_b_802EF0E8", flag={"GLOBL"}), # objcall
+	0x802EF21C: main.sym("object_b_802EF21C", flag={"GLOBL"}), # objcall
+	0x802EF274: main.sym("object_b_802EF274", flag={"GLOBL"}), # objcall
+	0x802EF34C: main.sym("object_b_802EF34C", flag={"GLOBL"}), # objcall
 	0x802EF3F4: main.sym("object_b_802EF3F4"),
-	0x802EF524: main.sym("object_b_802EF524", flag={"GLOBL"}), # o callback
-	0x802EF63C: main.sym("object_b_802EF63C", flag={"GLOBL"}), # o callback
-	0x802EF66C: main.sym("object_b_802EF66C", flag={"GLOBL"}), # o callback
-	0x802EF820: main.sym("object_b_802EF820", flag={"GLOBL"}), # o callback
-	0x802EF858: main.sym("object_b_802EF858", flag={"GLOBL"}), # o callback
-	0x802EFCD0: main.sym("object_b_802EFCD0", flag={"GLOBL"}), # o callback
-	0x802EFD8C: main.sym("object_b_802EFD8C", flag={"GLOBL"}), # o callback
-	0x802EFE64: main.sym("object_b_802EFE64", flag={"GLOBL"}), # o callback
-	0x802EFEF4: main.sym("object_b_802EFEF4", flag={"GLOBL"}), # o callback
-	0x802F0104: main.sym("object_b_802F0104", flag={"GLOBL"}), # o callback
-	0x802F0168: main.sym("object_b_802F0168", flag={"GLOBL"}), # o callback
+	0x802EF524: main.sym("object_b_802EF524", flag={"GLOBL"}), # objcall
+	0x802EF63C: main.sym("object_b_802EF63C", flag={"GLOBL"}), # objcall
+	0x802EF66C: main.sym("object_b_802EF66C", flag={"GLOBL"}), # objcall
+	0x802EF820: main.sym("object_b_802EF820", flag={"GLOBL"}), # objcall
+	0x802EF858: main.sym("object_b_802EF858", flag={"GLOBL"}), # objcall
+	0x802EFCD0: main.sym("object_b_802EFCD0", flag={"GLOBL"}), # objcall
+	0x802EFD8C: main.sym("object_b_802EFD8C", flag={"GLOBL"}), # objcall
+	0x802EFE64: main.sym("object_b_802EFE64", flag={"GLOBL"}), # objcall
+	0x802EFEF4: main.sym("object_b_802EFEF4", flag={"GLOBL"}), # objcall
+	0x802F0104: main.sym("object_b_802F0104", flag={"GLOBL"}), # objcall
+	0x802F0168: main.sym("object_b_802F0168", flag={"GLOBL"}), # objcall
 	0x802F0288: main.sym("object_b_802F0288"),
 	0x802F04A0: main.sym("object_b_802F04A0"),
-	0x802F05B4: main.sym("object_b_802F05B4", flag={"GLOBL"}), # o callback
-	0x802F06A8: main.sym("object_b_802F06A8", flag={"GLOBL"}), # o callback
-	0x802F0714: main.sym("object_b_802F0714", flag={"GLOBL"}), # o callback
-	0x802F0788: main.sym("object_b_802F0788", flag={"GLOBL"}), # o callback
-	0x802F07F4: main.sym("object_b_802F07F4", flag={"GLOBL"}), # o callback
-	0x802F0820: main.sym("object_b_802F0820", flag={"GLOBL"}), # o callback
-	0x802F084C: main.sym("object_b_802F084C", flag={"GLOBL"}), # o callback
-	0x802F0898: main.sym("object_b_802F0898", flag={"GLOBL"}), # o callback
-	0x802F0950: main.sym("object_b_802F0950", flag={"GLOBL"}), # o callback
-	0x802F09A4: main.sym("object_b_802F09A4", flag={"GLOBL"}), # o callback
-	0x802F09F0: main.sym("object_b_802F09F0", flag={"GLOBL"}), # o callback
-	0x802F0A40: main.sym("object_b_802F0A40", flag={"GLOBL"}), # o callback
+	0x802F05B4: main.sym("object_b_802F05B4", flag={"GLOBL"}), # objcall
+	0x802F06A8: main.sym("object_b_802F06A8", flag={"GLOBL"}), # objcall
+	0x802F0714: main.sym("object_b_802F0714", flag={"GLOBL"}), # objcall
+	0x802F0788: main.sym("object_b_802F0788", flag={"GLOBL"}), # objcall
+	0x802F07F4: main.sym("object_b_802F07F4", flag={"GLOBL"}), # objcall
+	0x802F0820: main.sym("object_b_802F0820", flag={"GLOBL"}), # objcall
+	0x802F084C: main.sym("object_b_802F084C", flag={"GLOBL"}), # objcall
+	0x802F0898: main.sym("object_b_802F0898", flag={"GLOBL"}), # objcall
+	0x802F0950: main.sym("object_b_802F0950", flag={"GLOBL"}), # objcall
+	0x802F09A4: main.sym("object_b_802F09A4", flag={"GLOBL"}), # objcall
+	0x802F09F0: main.sym("object_b_802F09F0", flag={"GLOBL"}), # objcall
+	0x802F0A40: main.sym("object_b_802F0A40", flag={"GLOBL"}), # objcall
 	0x802F0B7C: main.sym("object_b_802F0B7C"),
 	0x802F0BD4: main.sym("object_b_802F0BD4"),
 	0x802F0C94: main.sym("object_b_802F0C94"),
 	0x802F0DF0: main.sym("object_b_802F0DF0"),
 	0x802F0FA8: main.sym("object_b_802F0FA8"),
-	0x802F105C: main.sym("object_b_802F105C", flag={"GLOBL"}), # o callback
+	0x802F105C: main.sym("object_b_802F105C", flag={"GLOBL"}), # objcall
 	0x802F1094: main.sym_fnc("L802F1094", flag={"GLOBL","LOCAL"}),
 	0x802F112C: main.sym_fnc("L802F112C", flag={"GLOBL","LOCAL"}),
 	0x802F1158: main.sym_fnc("L802F1158", flag={"GLOBL","LOCAL"}),
 	0x802F1184: main.sym_fnc("L802F1184", flag={"GLOBL","LOCAL"}),
 	0x802F1194: main.sym_fnc("L802F1194", flag={"GLOBL","LOCAL"}),
-	0x802F120C: main.sym("object_b_802F120C", flag={"GLOBL"}), # o callback
-	0x802F1370: main.sym("object_b_802F1370", flag={"GLOBL"}), # o callback
+	0x802F120C: main.sym("object_b_802F120C", flag={"GLOBL"}), # objcall
+	0x802F1370: main.sym("object_b_802F1370", flag={"GLOBL"}), # objcall
 	0x802F13A8: main.sym_fnc("L802F13A8", flag={"GLOBL","LOCAL"}),
 	0x802F13E4: main.sym_fnc("L802F13E4", flag={"GLOBL","LOCAL"}),
 	0x802F13EC: main.sym_fnc("L802F13EC", flag={"GLOBL","LOCAL"}),
 	0x802F1420: main.sym_fnc("L802F1420", flag={"GLOBL","LOCAL"}),
 	0x802F148C: main.sym_fnc("L802F148C", flag={"GLOBL","LOCAL"}),
-	0x802F151C: main.sym("object_b_802F151C", flag={"GLOBL"}), # o callback
-	0x802F15A8: main.sym("object_b_802F15A8", flag={"GLOBL"}), # o callback
+	0x802F151C: main.sym("object_b_802F151C", flag={"GLOBL"}), # objcall
+	0x802F15A8: main.sym("object_b_802F15A8", flag={"GLOBL"}), # objcall
 	0x802F162C: main.sym("object_b_802F162C"),
-	0x802F1714: main.sym("object_b_802F1714", flag={"GLOBL"}), # o callback
-	0x802F17F0: main.sym("object_b_802F17F0", flag={"GLOBL"}), # o callback
+	0x802F1714: main.sym("object_b_802F1714", flag={"GLOBL"}), # objcall
+	0x802F17F0: main.sym("object_b_802F17F0", flag={"GLOBL"}), # objcall
 	0x802F1954: main.sym("object_b_802F1954"),
 	0x802F19C8: main.sym("object_b_802F19C8"),
 	0x802F1A10: main.sym("object_b_802F1A10"),
@@ -12936,67 +14102,71 @@ sym_E0_code_text = {
 	0x802F1B38: main.sym_fnc("L802F1B38", flag={"GLOBL","LOCAL"}),
 	0x802F1BA8: main.sym_fnc("L802F1BA8", flag={"GLOBL","LOCAL"}),
 	0x802F1BB8: main.sym("object_b_802F1BB8"),
-	0x802F1D64: main.sym("object_b_802F1D64", flag={"GLOBL"}), # o callback
+	0x802F1D64: main.sym("object_b_802F1D64", flag={"GLOBL"}), # objcall
 	0x802F1DC0: main.sym("object_b_802F1DC0"),
 	0x802F1E5C: main.sym("object_b_802F1E5C"),
-	0x802F1F3C: main.sym("object_b_802F1F3C", flag={"GLOBL"}), # o callback
-	0x802F1FD0: main.sym("object_b_802F1FD0", flag={"GLOBL"}), # o callback
+	0x802F1F3C: main.sym("object_b_802F1F3C", flag={"GLOBL"}), # objcall
+	0x802F1FD0: main.sym("object_b_802F1FD0", flag={"GLOBL"}), # objcall
 	0x802F2030: main.sym("object_b_802F2030"),
-	0x802F20AC: main.sym("object_b_802F20AC", flag={"GLOBL"}), # o callback
-	0x802F2140: main.sym("object_b_802F2140", flag={"GLOBL"}), # o callback
+	0x802F20AC: main.sym("object_b_802F20AC", flag={"GLOBL"}), # objcall
+	0x802F2140: main.sym("object_b_802F2140", flag={"GLOBL"}), # objcall
 	0x802F21E0: main.sym("object_b_802F21E0"),
 	0x802F2284: main.sym("object_b_802F2284"),
-	0x802F23A8: main.sym("object_b_802F23A8", flag={"GLOBL"}), # o callback
-	0x802F2498: main.sym("object_b_802F2498", flag={"GLOBL"}), # o callback
-	0x802F24F4: main.sym("object_b_802F24F4", flag={"GLOBL"}), # o callback
-	0x802F25B0: main.sym("object_b_802F25B0", flag={"GLOBL"}), # o callback
-	0x802F2614: main.sym("object_b_802F2614", flag={"GLOBL"}), # o callback
-	0x802F2768: main.sym("object_b_802F2768", flag={"GLOBL"}), # o callback
+	0x802F23A8: main.sym("object_b_802F23A8", flag={"GLOBL"}), # objcall
+	0x802F2498: main.sym("object_b_802F2498", flag={"GLOBL"}), # objcall
+	0x802F24F4: main.sym("object_b_802F24F4", flag={"GLOBL"}), # objcall
+	0x802F25B0: main.sym("object_b_802F25B0", flag={"GLOBL"}), # objcall
+	0x802F2614: main.sym("object_b_802F2614", flag={"GLOBL"}), # objcall
+	0x802F2768: main.sym("object_b_802F2768", flag={"GLOBL"}), # objcall
 	0x802F2AA0: main.sym("object_b_802F2AA0"),
-	0x802F2B88: main.sym("object_b_802F2B88", flag={"GLOBL"}), # extern
+	0x802F2B88: main.sym_fnc("object_b_802F2B88", arg=(
+		"float",
+		"float",
+		"float",
+	), flag={"GLOBL"}), # extern
 	0x802F2BD4: main.sym("object_b_802F2BD4"),
 	0x802F2C24: main.sym("object_b_802F2C24"),
-	0x802F2C84: main.sym("object_b_802F2C84", flag={"GLOBL"}), # o callback
-	0x802F2D8C: main.sym("object_b_802F2D8C", flag={"GLOBL"}), # o callback
-	0x802F2E6C: main.sym("redcoin_init", flag={"GLOBL"}), # o callback
-	0x802F2F2C: main.sym("redcoin_proc", flag={"GLOBL"}), # o callback
-	0x802F3014: main.sym("object_b_802F3014", flag={"GLOBL"}), # o callback
-	0x802F30F0: main.sym("object_b_802F30F0", flag={"GLOBL"}), # o callback
-	0x802F31BC: main.sym("object_b_802F31BC", flag={"GLOBL"}), # o callback
-	0x802F328C: main.sym("object_b_802F328C", flag={"GLOBL"}), # o callback
-	0x802F336C: main.sym("object_b_802F336C", flag={"GLOBL"}), # o callback
+	0x802F2C84: main.sym("object_b_802F2C84", flag={"GLOBL"}), # objcall
+	0x802F2D8C: main.sym("object_b_802F2D8C", flag={"GLOBL"}), # objcall
+	0x802F2E6C: main.sym("RedCoin_Init", flag={"GLOBL"}), # objcall
+	0x802F2F2C: main.sym("RedCoin_Proc", flag={"GLOBL"}), # objcall
+	0x802F3014: main.sym("object_b_802F3014", flag={"GLOBL"}), # objcall
+	0x802F30F0: main.sym("object_b_802F30F0", flag={"GLOBL"}), # objcall
+	0x802F31BC: main.sym("object_b_802F31BC", flag={"GLOBL"}), # objcall
+	0x802F328C: main.sym("object_b_802F328C", flag={"GLOBL"}), # objcall
+	0x802F336C: main.sym("object_b_802F336C", flag={"GLOBL"}), # objcall
 	0x802F341C: main.sym("object_b_802F341C"),
-	0x802F36A4: main.sym("object_b_802F36A4", flag={"GLOBL"}), # o callback
+	0x802F36A4: main.sym("object_b_802F36A4", flag={"GLOBL"}), # objcall
 	0x802F38B0: main.sym("object_b_802F38B0"),
 	0x802F39B4: main.sym("object_b_802F39B4"),
-	0x802F3A30: main.sym("object_b_802F3A30", flag={"GLOBL"}), # o callback
-	0x802F3B98: main.sym("object_b_802F3B98", flag={"GLOBL"}), # o callback
+	0x802F3A30: main.sym("object_b_802F3A30", flag={"GLOBL"}), # objcall
+	0x802F3B98: main.sym("object_b_802F3B98", flag={"GLOBL"}), # objcall
 	0x802F3C54: main.sym("object_b_802F3C54"),
-	0x802F3CC8: main.sym("object_b_802F3CC8", flag={"GLOBL"}), # o callback
-	0x802F3D30: main.sym("object_b_802F3D30", flag={"GLOBL"}), # o callback
+	0x802F3CC8: main.sym("object_b_802F3CC8", flag={"GLOBL"}), # objcall
+	0x802F3D30: main.sym("object_b_802F3D30", flag={"GLOBL"}), # objcall
 	0x802F3DD0: main.sym("object_b_802F3DD0"),
 	0x802F3EA8: main.sym("object_b_802F3EA8"),
 	0x802F401C: main.sym("object_b_802F401C"),
-	0x802F40CC: main.sym("object_b_802F40CC", flag={"GLOBL"}), # o callback
-	0x802F4248: main.sym("object_b_802F4248", flag={"GLOBL"}), # o callback
+	0x802F40CC: main.sym("object_b_802F40CC", flag={"GLOBL"}), # objcall
+	0x802F4248: main.sym("object_b_802F4248", flag={"GLOBL"}), # objcall
 	0x802F43B8: main.sym("object_b_802F43B8"),
-	0x802F44C0: main.sym("object_b_802F44C0", flag={"GLOBL"}), # o callback
-	0x802F45B8: main.sym("object_b_802F45B8", flag={"GLOBL"}), # o callback
-	0x802F45F0: main.sym("object_b_802F45F0", flag={"GLOBL"}), # o callback
-	0x802F4710: main.sym("object_b_802F4710", flag={"GLOBL"}), # o callback
-	0x802F48F4: main.sym("object_b_802F48F4", flag={"GLOBL"}), # o callback
-	0x802F496C: main.sym("object_b_802F496C", flag={"GLOBL"}), # o callback
-	0x802F4B00: main.sym("object_b_802F4B00", flag={"GLOBL"}), # o callback
-	0x802F4B78: main.sym("object_b_802F4B78", flag={"GLOBL"}), # o callback
+	0x802F44C0: main.sym("object_b_802F44C0", flag={"GLOBL"}), # objcall
+	0x802F45B8: main.sym("object_b_802F45B8", flag={"GLOBL"}), # objcall
+	0x802F45F0: main.sym("object_b_802F45F0", flag={"GLOBL"}), # objcall
+	0x802F4710: main.sym("object_b_802F4710", flag={"GLOBL"}), # objcall
+	0x802F48F4: main.sym("object_b_802F48F4", flag={"GLOBL"}), # objcall
+	0x802F496C: main.sym("object_b_802F496C", flag={"GLOBL"}), # objcall
+	0x802F4B00: main.sym("object_b_802F4B00", flag={"GLOBL"}), # objcall
+	0x802F4B78: main.sym("object_b_802F4B78", flag={"GLOBL"}), # objcall
 	0x802F4C68: main.sym("object_b_802F4C68"),
 	0x802F4CE0: main.sym("object_b_802F4CE0"),
-	0x802F4D78: main.sym("object_b_802F4D78", flag={"GLOBL"}), # o callback
-	0x802F4EB4: main.sym("object_b_802F4EB4", flag={"GLOBL"}), # o callback
+	0x802F4D78: main.sym("object_b_802F4D78", flag={"GLOBL"}), # objcall
+	0x802F4EB4: main.sym("object_b_802F4EB4", flag={"GLOBL"}), # objcall
 	0x802F5010: main.sym("object_b_802F5010"),
 	0x802F5068: main.sym("object_b_802F5068"),
 	0x802F52C0: main.sym("object_b_802F52C0"),
 	0x802F547C: main.sym("object_b_802F547C"),
-	0x802F55A4: main.sym("object_b_802F55A4", flag={"GLOBL"}), # o callback
+	0x802F55A4: main.sym("object_b_802F55A4", flag={"GLOBL"}), # objcall
 	0x802F5618: main.sym_fnc("L802F5618", flag={"GLOBL","LOCAL"}),
 	0x802F56A0: main.sym_fnc("L802F56A0", flag={"GLOBL","LOCAL"}),
 	0x802F57E8: main.sym_fnc("L802F57E8", flag={"GLOBL","LOCAL"}),
@@ -13004,47 +14174,47 @@ sym_E0_code_text = {
 	0x802F5A78: main.sym_fnc("L802F5A78", flag={"GLOBL","LOCAL"}),
 	0x802F5BC0: main.sym_fnc("L802F5BC0", flag={"GLOBL","LOCAL"}),
 	0x802F5BD8: main.sym_fnc("L802F5BD8", flag={"GLOBL","LOCAL"}),
-	0x802F5CD4: main.sym("object_b_802F5CD4", flag={"GLOBL"}), # o callback
+	0x802F5CD4: main.sym("object_b_802F5CD4", flag={"GLOBL"}), # objcall
 	0x802F5D78: main.sym("object_b_802F5D78"),
 	0x802F5E44: main.sym("object_b_802F5E44"),
 	0x802F5F48: main.sym("object_b_802F5F48"),
 	0x802F6014: main.sym("object_b_802F6014"),
 	0x802F60D8: main.sym("object_b_802F60D8"),
 	0x802F6150: main.sym("object_b_802F6150"),
-	0x802F6228: main.sym("object_b_802F6228", flag={"GLOBL"}), # o callback
-	0x802F62E4: main.sym("object_b_802F62E4", flag={"GLOBL"}), # o callback
-	0x802F6448: main.sym("object_b_802F6448", flag={"GLOBL"}), # o callback
+	0x802F6228: main.sym("object_b_802F6228", flag={"GLOBL"}), # objcall
+	0x802F62E4: main.sym("object_b_802F62E4", flag={"GLOBL"}), # objcall
+	0x802F6448: main.sym("object_b_802F6448", flag={"GLOBL"}), # objcall
 	0x802F6588: main.sym("object_b_802F6588"),
 	0x802F665C: main.sym("object_b_802F665C"),
-	0x802F6984: main.sym("object_b_802F6984", flag={"GLOBL"}), # o callback
+	0x802F6984: main.sym("object_b_802F6984", flag={"GLOBL"}), # objcall
 	0x802F6A44: main.sym("object_b_802F6A44"),
 	0x802F6B2C: main.sym("object_b_802F6B2C"),
-	0x802F6C0C: main.sym("object_b_802F6C0C", flag={"GLOBL"}), # o callback
-	0x802F6D20: main.sym("object_b_802F6D20", flag={"GLOBL"}), # o callback
-	0x802F6D58: main.sym("object_b_802F6D58", flag={"GLOBL"}), # o callback
-	0x802F6E40: main.sym("object_b_802F6E40", flag={"GLOBL"}), # o callback
+	0x802F6C0C: main.sym("object_b_802F6C0C", flag={"GLOBL"}), # objcall
+	0x802F6D20: main.sym("object_b_802F6D20", flag={"GLOBL"}), # objcall
+	0x802F6D58: main.sym("object_b_802F6D58", flag={"GLOBL"}), # objcall
+	0x802F6E40: main.sym("object_b_802F6E40", flag={"GLOBL"}), # objcall
 	0x802F6EB0: main.sym("object_b_802F6EB0"),
 	0x802F7068: main.sym("object_b_802F7068"),
-	0x802F7264: main.sym("object_b_802F7264", flag={"GLOBL"}), # o callback
-	0x802F7348: main.sym("object_b_802F7348", flag={"GLOBL"}), # o callback
+	0x802F7264: main.sym("object_b_802F7264", flag={"GLOBL"}), # objcall
+	0x802F7348: main.sym("object_b_802F7348", flag={"GLOBL"}), # objcall
 	0x802F7398: main.sym("object_b_802F7398"),
 	0x802F7418: main.sym("object_b_802F7418"),
-	0x802F74DC: main.sym("object_b_802F74DC", flag={"GLOBL"}), # o callback
-	0x802F7760: main.sym("object_b_802F7760", flag={"GLOBL"}), # o callback
-	0x802F7924: main.sym("object_b_802F7924", flag={"GLOBL"}), # o callback
-	0x802F7978: main.sym("object_b_802F7978", flag={"GLOBL"}), # o callback
-	0x802F79B0: main.sym("object_b_802F79B0", flag={"GLOBL"}), # o callback
-	0x802F7A58: main.sym("object_b_802F7A58", flag={"GLOBL"}), # o callback
-	0x802F7C9C: main.sym("object_b_802F7C9C", flag={"GLOBL"}), # o callback
-	0x802F7D04: main.sym("object_b_802F7D04", flag={"GLOBL"}), # o callback
+	0x802F74DC: main.sym("object_b_802F74DC", flag={"GLOBL"}), # objcall
+	0x802F7760: main.sym("object_b_802F7760", flag={"GLOBL"}), # objcall
+	0x802F7924: main.sym("object_b_802F7924", flag={"GLOBL"}), # objcall
+	0x802F7978: main.sym("object_b_802F7978", flag={"GLOBL"}), # objcall
+	0x802F79B0: main.sym("object_b_802F79B0", flag={"GLOBL"}), # objcall
+	0x802F7A58: main.sym("object_b_802F7A58", flag={"GLOBL"}), # objcall
+	0x802F7C9C: main.sym("object_b_802F7C9C", flag={"GLOBL"}), # objcall
+	0x802F7D04: main.sym("object_b_802F7D04", flag={"GLOBL"}), # objcall
 	0x802F7F1C: main.sym("object_b_802F7F1C"),
-	0x802F7FA0: main.sym("object_b_802F7FA0", flag={"GLOBL"}), # o callback
-	0x802F8044: main.sym("object_b_802F8044", flag={"GLOBL"}), # o callback
-	0x802F8158: main.sym("object_b_802F8158", flag={"GLOBL"}), # o callback
-	0x802F8208: main.sym("object_b_802F8208", flag={"GLOBL"}), # o callback
-	0x802F82F8: main.sym("object_b_802F82F8", flag={"GLOBL"}), # o callback
-	0x802F83A4: main.sym("object_b_802F83A4", flag={"GLOBL"}), # o callback
-	0x802F8490: main.sym("object_b_802F8490", flag={"GLOBL"}), # o callback
+	0x802F7FA0: main.sym("object_b_802F7FA0", flag={"GLOBL"}), # objcall
+	0x802F8044: main.sym("object_b_802F8044", flag={"GLOBL"}), # objcall
+	0x802F8158: main.sym("object_b_802F8158", flag={"GLOBL"}), # objcall
+	0x802F8208: main.sym("object_b_802F8208", flag={"GLOBL"}), # objcall
+	0x802F82F8: main.sym("object_b_802F82F8", flag={"GLOBL"}), # objcall
+	0x802F83A4: main.sym("object_b_802F83A4", flag={"GLOBL"}), # objcall
+	0x802F8490: main.sym("object_b_802F8490", flag={"GLOBL"}), # objcall
 	0x802F85E0: main.sym("object_b_802F85E0"),
 	0x802F8760: main.sym("object_b_802F8760"),
 	0x802F8808: main.sym("object_b_802F8808"),
@@ -13060,15 +14230,15 @@ sym_E0_code_text = {
 	0x802F8B54: main.sym("object_b_802F8B54"),
 	0x802F8C74: main.sym("object_b_802F8C74"),
 	0x802F8CF8: main.sym("object_b_802F8CF8"),
-	0x802F8DAC: main.sym("object_b_802F8DAC", flag={"GLOBL"}), # o callback
-	0x802F8E54: main.sym("object_b_802F8E54", flag={"GLOBL"}), # o callback
+	0x802F8DAC: main.sym("object_b_802F8DAC", flag={"GLOBL"}), # objcall
+	0x802F8E54: main.sym("object_b_802F8E54", flag={"GLOBL"}), # objcall
 	0x802F8F08: main.sym("object_b_802F8F08"),
 	0x802F9054: main.sym("object_b_802F9054"),
 	0x802F923C: main.sym("object_b_802F923C"),
 	0x802F93A8: main.sym("object_b_802F93A8"),
 	0x802F9500: main.sym("object_b_802F9500"),
 	0x802F95AC: main.sym("object_b_802F95AC"),
-	0x802F965C: main.sym("object_b_802F965C", flag={"GLOBL"}), # o callback
+	0x802F965C: main.sym("object_b_802F965C", flag={"GLOBL"}), # objcall
 	0x802F9694: main.sym_fnc("L802F9694", flag={"GLOBL","LOCAL"}),
 	0x802F96A4: main.sym_fnc("L802F96A4", flag={"GLOBL","LOCAL"}),
 	0x802F96B4: main.sym_fnc("L802F96B4", flag={"GLOBL","LOCAL"}),
@@ -13137,7 +14307,7 @@ sym_E0_code_text = {
 	0x802FB938: main.sym("object_c_802FB938"),
 	0x802FBA40: main.sym("object_c_802FBA40"),
 	0x802FBAB4: main.sym("object_c_802FBAB4"),
-	0x802FBC4C: main.sym("object_c_802FBC4C", flag={"GLOBL"}), # o callback
+	0x802FBC4C: main.sym("object_c_802FBC4C", flag={"GLOBL"}), # objcall
 	0x802FBD5C: main.sym("object_c_802FBD5C"),
 	0x802FBDD4: main.sym("object_c_802FBDD4"),
 	0x802FBE50: main.sym("object_c_802FBE50"),
@@ -13170,31 +14340,31 @@ sym_E0_code_text = {
 	0x802FD738: main.sym_fnc("L802FD738", flag={"GLOBL","LOCAL"}),
 	0x802FD748: main.sym_fnc("L802FD748", flag={"GLOBL","LOCAL"}),
 	0x802FD758: main.sym_fnc("L802FD758", flag={"GLOBL","LOCAL"}),
-	0x802FD7F8: main.sym("object_c_802FD7F8", flag={"GLOBL"}), # o callback
-	0x802FD950: main.sym("object_c_802FD950", flag={"GLOBL"}), # o callback
-	0x802FDA28: main.sym("object_c_802FDA28", flag={"GLOBL"}), # o callback
+	0x802FD7F8: main.sym("object_c_802FD7F8", flag={"GLOBL"}), # objcall
+	0x802FD950: main.sym("object_c_802FD950", flag={"GLOBL"}), # objcall
+	0x802FDA28: main.sym("object_c_802FDA28", flag={"GLOBL"}), # objcall
 	0x802FDEA8: main.sym("object_c_802FDEA8"),
 	0x802FDFC4: main.sym("object_c_802FDFC4"),
 	0x802FE37C: main.sym("object_c_802FE37C"),
-	0x802FE3B0: main.sym("object_c_802FE3B0", flag={"GLOBL"}), # o callback
+	0x802FE3B0: main.sym("object_c_802FE3B0", flag={"GLOBL"}), # objcall
 	0x802FE450: main.sym("object_c_802FE450"),
 	0x802FE520: main.sym("object_c_802FE520"),
-	0x802FE8B4: main.sym("object_c_802FE8B4", flag={"GLOBL"}), # o callback
+	0x802FE8B4: main.sym("object_c_802FE8B4", flag={"GLOBL"}), # objcall
 	0x802FE988: main.sym("object_c_802FE988"),
 	0x802FEB00: main.sym("object_c_802FEB00"),
 	0x802FED50: main.sym("object_c_802FED50"),
 	0x802FEF18: main.sym("object_c_802FEF18"),
-	0x802FF040: main.sym("object_c_802FF040", flag={"GLOBL"}), # o callback
-	0x802FF214: main.sym("object_c_802FF214", flag={"GLOBL"}), # o callback
-	0x802FF408: main.sym("object_c_802FF408", flag={"GLOBL"}), # o callback
+	0x802FF040: main.sym("object_c_802FF040", flag={"GLOBL"}), # objcall
+	0x802FF214: main.sym("object_c_802FF214", flag={"GLOBL"}), # objcall
+	0x802FF408: main.sym("object_c_802FF408", flag={"GLOBL"}), # objcall
 	0x802FF518: main.sym("object_c_802FF518"),
 	0x802FF584: main.sym("object_c_802FF584"),
 	0x802FF600: main.sym("object_c_802FF600"),
 	0x802FF868: main.sym("object_c_802FF868"),
 	0x802FF8E8: main.sym("object_c_802FF8E8"),
 	0x802FF94C: main.sym("object_c_802FF94C"),
-	0x802FF96C: main.sym("object_c_802FF96C", flag={"GLOBL"}), # o callback
-	0x802FFB38: main.sym("object_c_802FFB38", flag={"GLOBL"}), # o callback
+	0x802FF96C: main.sym("object_c_802FF96C", flag={"GLOBL"}), # objcall
+	0x802FFB38: main.sym("object_c_802FFB38", flag={"GLOBL"}), # objcall
 	0x802FFC60: main.sym("object_c_802FFC60"),
 	0x802FFDAC: main.sym("object_c_802FFDAC"),
 	0x8030009C: main.sym("object_c_8030009C"),
@@ -13213,11 +14383,11 @@ sym_E0_code_text = {
 	0x80300A68: main.sym_fnc("L80300A68", flag={"GLOBL","LOCAL"}),
 	0x80300A78: main.sym_fnc("L80300A78", flag={"GLOBL","LOCAL"}),
 	0x80300DD4: main.sym("object_c_80300DD4"),
-	0x80300E40: main.sym("object_c_80300E40", flag={"GLOBL"}), # o callback
-	0x80300ECC: main.sym("object_c_80300ECC", flag={"GLOBL"}), # o callback
-	0x80301148: main.sym("object_c_80301148", flag={"GLOBL"}), # o callback
-	0x80301180: main.sym("object_c_80301180", flag={"GLOBL"}), # o callback
-	0x80301210: main.sym("object_c_80301210", flag={"GLOBL"}), # o callback
+	0x80300E40: main.sym("object_c_80300E40", flag={"GLOBL"}), # objcall
+	0x80300ECC: main.sym("object_c_80300ECC", flag={"GLOBL"}), # objcall
+	0x80301148: main.sym("object_c_80301148", flag={"GLOBL"}), # objcall
+	0x80301180: main.sym("object_c_80301180", flag={"GLOBL"}), # objcall
+	0x80301210: main.sym("object_c_80301210", flag={"GLOBL"}), # objcall
 	0x803014CC: main.sym("object_c_803014CC"),
 	0x803016E0: main.sym("object_c_803016E0"),
 	0x80301940: main.sym("object_c_80301940"),
@@ -13226,7 +14396,7 @@ sym_E0_code_text = {
 	0x80301F70: main.sym("object_c_80301F70"),
 	0x80302024: main.sym("object_c_80302024"),
 	0x803020E4: main.sym("object_c_803020E4"),
-	0x80302154: main.sym("object_c_80302154", flag={"GLOBL"}), # o callback
+	0x80302154: main.sym("object_c_80302154", flag={"GLOBL"}), # objcall
 	0x80302278: main.sym_fnc("L80302278", flag={"GLOBL","LOCAL"}),
 	0x80302288: main.sym_fnc("L80302288", flag={"GLOBL","LOCAL"}),
 	0x80302298: main.sym_fnc("L80302298", flag={"GLOBL","LOCAL"}),
@@ -13236,7 +14406,7 @@ sym_E0_code_text = {
 	0x803023E4: main.sym("object_c_803023E4"),
 	0x8030267C: main.sym("object_c_8030267C"),
 	0x803027AC: main.sym("object_c_803027AC"),
-	0x80302910: main.sym("object_c_80302910", flag={"GLOBL"}), # o callback
+	0x80302910: main.sym("object_c_80302910", flag={"GLOBL"}), # objcall
 	0x803029B8: main.sym("object_c_803029B8"),
 	0x80302A54: main.sym("object_c_80302A54"),
 	0x80302B20: main.sym("object_c_80302B20"),
@@ -13244,24 +14414,24 @@ sym_E0_code_text = {
 	0x80302DB0: main.sym("object_c_80302DB0"),
 	0x80302E84: main.sym("object_c_80302E84"),
 	0x80302F04: main.sym("object_c_80302F04"),
-	0x80303028: main.sym("object_c_80303028", flag={"GLOBL"}), # o callback
+	0x80303028: main.sym("object_c_80303028", flag={"GLOBL"}), # objcall
 	0x803030A8: main.sym("object_c_803030A8"),
 	0x803031B4: main.sym("object_c_803031B4"),
 	0x8030320C: main.sym("object_c_8030320C"),
 	0x80303498: main.sym("object_c_80303498"),
 	0x80303634: main.sym("object_c_80303634"),
-	0x8030369C: main.sym("object_c_8030369C", flag={"GLOBL"}), # o callback
-	0x80303744: main.sym("object_c_80303744", flag={"GLOBL"}), # o callback
-	0x80303984: main.sym("object_c_80303984", flag={"GLOBL"}), # o callback
+	0x8030369C: main.sym("object_c_8030369C", flag={"GLOBL"}), # objcall
+	0x80303744: main.sym("object_c_80303744", flag={"GLOBL"}), # objcall
+	0x80303984: main.sym("object_c_80303984", flag={"GLOBL"}), # objcall
 	0x80303A20: main.sym("object_c_80303A20"),
 	0x80303B08: main.sym("object_c_80303B08"),
 	0x80303C14: main.sym("object_c_80303C14"),
-	0x80303F64: main.sym("object_c_80303F64", flag={"GLOBL"}), # o callback
+	0x80303F64: main.sym("object_c_80303F64", flag={"GLOBL"}), # objcall
 	0x803041A0: main.sym("object_c_803041A0"),
 	0x80304274: main.sym("object_c_80304274"),
-	0x803043F8: main.sym("object_c_803043F8", flag={"GLOBL"}), # o callback
+	0x803043F8: main.sym("object_c_803043F8", flag={"GLOBL"}), # objcall
 	0x80304474: main.sym("object_c_80304474"),
-	0x803044C0: main.sym("object_c_803044C0", flag={"GLOBL"}), # o callback
+	0x803044C0: main.sym("object_c_803044C0", flag={"GLOBL"}), # objcall
 	0x803044DC: main.sym("object_c_803044DC"),
 	0x80304710: main.sym("object_c_80304710"),
 	0x803047AC: main.sym("object_c_803047AC"),
@@ -13271,7 +14441,7 @@ sym_E0_code_text = {
 	0x80304A14: main.sym("object_c_80304A14"),
 	0x80304A70: main.sym("object_c_80304A70"),
 	0x80304AE0: main.sym("object_c_80304AE0"),
-	0x80304BA8: main.sym("object_c_80304BA8", flag={"GLOBL"}), # o callback
+	0x80304BA8: main.sym("object_c_80304BA8", flag={"GLOBL"}), # objcall
 	0x80304C14: main.sym_fnc("L80304C14", flag={"GLOBL","LOCAL"}),
 	0x80304C24: main.sym_fnc("L80304C24", flag={"GLOBL","LOCAL"}),
 	0x80304C34: main.sym_fnc("L80304C34", flag={"GLOBL","LOCAL"}),
@@ -13282,59 +14452,59 @@ sym_E0_code_text = {
 	0x80304C84: main.sym_fnc("L80304C84", flag={"GLOBL","LOCAL"}),
 	0x80304E28: main.sym("object_c_80304E28"),
 	0x80304F74: main.sym("object_c_80304F74"),
-	0x80304FD4: main.sym("object_c_80304FD4", flag={"GLOBL"}), # o callback
+	0x80304FD4: main.sym("object_c_80304FD4", flag={"GLOBL"}), # objcall
 	0x8030505C: main.sym("object_c_8030505C"),
 	0x8030508C: main.sym("object_c_8030508C"),
-	0x80305100: main.sym("object_c_80305100", flag={"GLOBL"}), # o callback
+	0x80305100: main.sym("object_c_80305100", flag={"GLOBL"}), # objcall
 	0x8030522C: main.sym("object_c_8030522C"),
 	0x803053DC: main.sym("object_c_803053DC"),
 	0x80305474: main.sym("object_c_80305474"),
 	0x8030586C: main.sym("object_c_8030586C"),
 	0x803058A4: main.sym("object_c_803058A4"),
 	0x80305904: main.sym("object_c_80305904"),
-	0x80305A58: main.sym("object_c_80305A58", flag={"GLOBL"}), # o callback
+	0x80305A58: main.sym("object_c_80305A58", flag={"GLOBL"}), # objcall
 	0x80305A90: main.sym_fnc("L80305A90", flag={"GLOBL","LOCAL"}),
 	0x80305AA0: main.sym_fnc("L80305AA0", flag={"GLOBL","LOCAL"}),
 	0x80305AB0: main.sym_fnc("L80305AB0", flag={"GLOBL","LOCAL"}),
 	0x80305AC0: main.sym_fnc("L80305AC0", flag={"GLOBL","LOCAL"}),
 	0x80305AD0: main.sym_fnc("L80305AD0", flag={"GLOBL","LOCAL"}),
-	0x80305BB0: main.sym("object_c_80305BB0", flag={"GLOBL"}), # o callback
-	0x80305C14: main.sym("object_c_80305C14", flag={"GLOBL"}), # o callback
-	0x80305C90: main.sym("object_c_80305C90", flag={"GLOBL"}), # o callback
-	0x80305E2C: main.sym("object_c_80305E2C", flag={"GLOBL"}), # o callback
-	0x80305F24: main.sym("object_c_80305F24", flag={"GLOBL"}), # o callback
-	0x80306084: main.sym("object_c_80306084", flag={"GLOBL"}), # o callback
+	0x80305BB0: main.sym("object_c_80305BB0", flag={"GLOBL"}), # objcall
+	0x80305C14: main.sym("object_c_80305C14", flag={"GLOBL"}), # objcall
+	0x80305C90: main.sym("object_c_80305C90", flag={"GLOBL"}), # objcall
+	0x80305E2C: main.sym("object_c_80305E2C", flag={"GLOBL"}), # objcall
+	0x80305F24: main.sym("object_c_80305F24", flag={"GLOBL"}), # objcall
+	0x80306084: main.sym("object_c_80306084", flag={"GLOBL"}), # objcall
 	0x803062A8: main.sym("object_c_803062A8"),
 	0x80306304: main.sym("object_c_80306304"),
 	0x80306364: main.sym("object_c_80306364"),
 	0x8030668C: main.sym("object_c_8030668C"),
 	0x803066D8: main.sym("object_c_803066D8"),
-	0x803067E8: main.sym("object_c_803067E8", flag={"GLOBL"}), # o callback
-	0x803068C0: main.sym("object_c_803068C0", flag={"GLOBL"}), # o callback
-	0x8030699C: main.sym("object_c_8030699C", flag={"GLOBL"}), # o callback
-	0x80306A38: main.sym("object_c_80306A38", flag={"GLOBL"}), # o callback
-	0x80306CC4: main.sym("object_c_80306CC4", flag={"GLOBL"}), # o callback
-	0x80306D38: main.sym("object_c_80306D38", flag={"GLOBL"}), # o callback
-	0x80306F48: main.sym("object_c_80306F48", flag={"GLOBL"}), # o callback
-	0x80307010: main.sym("object_c_80307010", flag={"GLOBL"}), # o callback
-	0x803071B8: main.sym("object_c_803071B8", flag={"GLOBL"}), # o callback
+	0x803067E8: main.sym("object_c_803067E8", flag={"GLOBL"}), # objcall
+	0x803068C0: main.sym("object_c_803068C0", flag={"GLOBL"}), # objcall
+	0x8030699C: main.sym("object_c_8030699C", flag={"GLOBL"}), # objcall
+	0x80306A38: main.sym("object_c_80306A38", flag={"GLOBL"}), # objcall
+	0x80306CC4: main.sym("object_c_80306CC4", flag={"GLOBL"}), # objcall
+	0x80306D38: main.sym("object_c_80306D38", flag={"GLOBL"}), # objcall
+	0x80306F48: main.sym("object_c_80306F48", flag={"GLOBL"}), # objcall
+	0x80307010: main.sym("object_c_80307010", flag={"GLOBL"}), # objcall
+	0x803071B8: main.sym("object_c_803071B8", flag={"GLOBL"}), # objcall
 	0x80307240: main.sym("object_c_80307240"),
 	0x80307348: main.sym("object_c_80307348"),
 	0x803073F8: main.sym("object_c_803073F8"),
 	0x80307434: main.sym("object_c_80307434"),
 	0x803075F8: main.sym("object_c_803075F8"),
-	0x80307670: main.sym("object_c_80307670", flag={"GLOBL"}), # o callback
-	0x80307760: main.sym("object_c_80307760", flag={"GLOBL"}), # o callback
-	0x803077E0: main.sym("object_c_803077E0", flag={"GLOBL"}), # o callback
-	0x80307930: main.sym("object_c_80307930", flag={"GLOBL"}), # o callback
-	0x803079C8: main.sym("object_c_803079C8", flag={"GLOBL"}), # o callback
-	0x80307AE4: main.sym("object_c_80307AE4", flag={"GLOBL"}), # o callback
-	0x80307B58: main.sym("object_c_80307B58", flag={"GLOBL"}), # o callback
-	0x80307C88: main.sym("object_c_80307C88", flag={"GLOBL"}), # o callback
-	0x80307CF8: main.sym("object_c_80307CF8", flag={"GLOBL"}), # o callback
-	0x80307EA4: main.sym("object_c_80307EA4", flag={"GLOBL"}), # o callback
+	0x80307670: main.sym("object_c_80307670", flag={"GLOBL"}), # objcall
+	0x80307760: main.sym("object_c_80307760", flag={"GLOBL"}), # objcall
+	0x803077E0: main.sym("object_c_803077E0", flag={"GLOBL"}), # objcall
+	0x80307930: main.sym("object_c_80307930", flag={"GLOBL"}), # objcall
+	0x803079C8: main.sym("object_c_803079C8", flag={"GLOBL"}), # objcall
+	0x80307AE4: main.sym("object_c_80307AE4", flag={"GLOBL"}), # objcall
+	0x80307B58: main.sym("object_c_80307B58", flag={"GLOBL"}), # objcall
+	0x80307C88: main.sym("object_c_80307C88", flag={"GLOBL"}), # objcall
+	0x80307CF8: main.sym("object_c_80307CF8", flag={"GLOBL"}), # objcall
+	0x80307EA4: main.sym("object_c_80307EA4", flag={"GLOBL"}), # objcall
 	0x80307FB8: main.sym("object_c_80307FB8"),
-	0x8030803C: main.sym("object_c_8030803C", flag={"GLOBL"}), # o callback
+	0x8030803C: main.sym("object_c_8030803C", flag={"GLOBL"}), # objcall
 	0x80308110: main.sym("object_c_80308110"),
 	0x80308228: main.sym("object_c_80308228"),
 	0x803082EC: main.sym("object_c_803082EC"),
@@ -13343,7 +14513,7 @@ sym_E0_code_text = {
 	0x80308A74: main.sym("object_c_80308A74"),
 	0x80308AF0: main.sym("object_c_80308AF0"),
 	0x80308BB8: main.sym("object_c_80308BB8"),
-	0x80308D6C: main.sym("object_c_80308D6C", flag={"GLOBL"}), # o callback
+	0x80308D6C: main.sym("object_c_80308D6C", flag={"GLOBL"}), # objcall
 	0x80308DB0: main.sym_fnc("L80308DB0", flag={"GLOBL","LOCAL"}),
 	0x80308DC0: main.sym_fnc("L80308DC0", flag={"GLOBL","LOCAL"}),
 	0x80308DD0: main.sym_fnc("L80308DD0", flag={"GLOBL","LOCAL"}),
@@ -13355,82 +14525,82 @@ sym_E0_code_text = {
 	0x80308F08: main.sym("object_c_80308F08"),
 	0x80308F94: main.sym("object_c_80308F94"),
 	0x803090B8: main.sym("object_c_803090B8"),
-	0x80309154: main.sym("object_c_80309154", flag={"GLOBL"}), # o callback
-	0x803091E0: main.sym("object_c_803091E0", flag={"GLOBL"}), # o callback
-	0x80309354: main.sym("object_c_80309354", flag={"GLOBL"}), # o callback
-	0x80309454: main.sym("object_c_80309454", flag={"GLOBL"}), # o callback
-	0x803094D0: main.sym("object_c_803094D0", flag={"GLOBL"}), # o callback
-	0x803094F8: main.sym("object_c_803094F8", flag={"GLOBL"}), # o callback
-	0x80309530: main.sym("object_c_80309530", flag={"GLOBL"}), # o callback
-	0x803097A4: main.sym("object_c_803097A4", flag={"GLOBL"}), # o callback
-	0x803098C0: main.sym("object_c_803098C0", flag={"GLOBL"}), # o callback
-	0x80309B64: main.sym("object_c_80309B64", flag={"GLOBL"}), # o callback
-	0x80309CEC: main.sym("object_c_80309CEC", flag={"GLOBL"}), # o callback
+	0x80309154: main.sym("object_c_80309154", flag={"GLOBL"}), # objcall
+	0x803091E0: main.sym("object_c_803091E0", flag={"GLOBL"}), # objcall
+	0x80309354: main.sym("object_c_80309354", flag={"GLOBL"}), # objcall
+	0x80309454: main.sym("object_c_80309454", flag={"GLOBL"}), # objcall
+	0x803094D0: main.sym("object_c_803094D0", flag={"GLOBL"}), # objcall
+	0x803094F8: main.sym("object_c_803094F8", flag={"GLOBL"}), # objcall
+	0x80309530: main.sym("object_c_80309530", flag={"GLOBL"}), # objcall
+	0x803097A4: main.sym("object_c_803097A4", flag={"GLOBL"}), # objcall
+	0x803098C0: main.sym("object_c_803098C0", flag={"GLOBL"}), # objcall
+	0x80309B64: main.sym("object_c_80309B64", flag={"GLOBL"}), # objcall
+	0x80309CEC: main.sym("object_c_80309CEC", flag={"GLOBL"}), # objcall
 	0x80309ED4: main.sym("object_c_80309ED4"),
 	0x80309F68: main.sym("object_c_80309F68"),
 	0x8030A0E8: main.sym("object_c_8030A0E8"),
-	0x8030A11C: main.sym("object_c_8030A11C", flag={"GLOBL"}), # o callback
-	0x8030A1C0: main.sym("object_c_8030A1C0", flag={"GLOBL"}), # o callback
+	0x8030A11C: main.sym("object_c_8030A11C", flag={"GLOBL"}), # objcall
+	0x8030A1C0: main.sym("object_c_8030A1C0", flag={"GLOBL"}), # objcall
 	0x8030A2A8: main.sym("object_c_8030A2A8"),
 	0x8030A390: main.sym("object_c_8030A390"),
 	0x8030A514: main.sym("object_c_8030A514"),
 	0x8030A614: main.sym("object_c_8030A614"),
-	0x8030A93C: main.sym("object_c_8030A93C", flag={"GLOBL"}), # o callback
+	0x8030A93C: main.sym("object_c_8030A93C", flag={"GLOBL"}), # objcall
 	0x8030AA54: main.sym_fnc("L8030AA54", flag={"GLOBL","LOCAL"}),
 	0x8030AA64: main.sym_fnc("L8030AA64", flag={"GLOBL","LOCAL"}),
 	0x8030AA7C: main.sym_fnc("L8030AA7C", flag={"GLOBL","LOCAL"}),
 	0x8030AA84: main.sym_fnc("L8030AA84", flag={"GLOBL","LOCAL"}),
 	0x8030AA94: main.sym_fnc("L8030AA94", flag={"GLOBL","LOCAL"}),
-	0x8030AABC: main.sym("object_c_8030AABC", flag={"GLOBL"}), # o callback
+	0x8030AABC: main.sym("object_c_8030AABC", flag={"GLOBL"}), # objcall
 	0x8030AD04: main.sym("object_c_8030AD04"),
 	0x8030AE9C: main.sym("object_c_8030AE9C"),
 	0x8030B0B8: main.sym("object_c_8030B0B8"),
 	0x8030B0F0: main.sym("object_c_8030B0F0"),
 	0x8030B220: main.sym("object_c_8030B220"),
-	0x8030B2F4: main.sym("object_c_8030B2F4", flag={"GLOBL"}), # o callback
-	0x8030B658: main.sym("object_c_8030B658", flag={"GLOBL"}), # o callback
+	0x8030B2F4: main.sym("object_c_8030B2F4", flag={"GLOBL"}), # objcall
+	0x8030B658: main.sym("object_c_8030B658", flag={"GLOBL"}), # objcall
 	0x8030B6D8: main.sym("object_c_8030B6D8"),
 	0x8030BA68: main.sym("object_c_8030BA68"),
-	0x8030BC90: main.sym("object_c_8030BC90", flag={"GLOBL"}), # o callback
+	0x8030BC90: main.sym("object_c_8030BC90", flag={"GLOBL"}), # objcall
 	0x8030BD2C: main.sym("object_c_8030BD2C"),
 	0x8030BDF8: main.sym("object_c_8030BDF8"),
-	0x8030BFD0: main.sym("object_c_8030BFD0", flag={"GLOBL"}), # o callback
+	0x8030BFD0: main.sym("object_c_8030BFD0", flag={"GLOBL"}), # objcall
 	0x8030C06C: main.sym("object_c_8030C06C"),
 	0x8030C0F0: main.sym("object_c_8030C0F0"),
 	0x8030C210: main.sym("object_c_8030C210"),
 	0x8030C2C8: main.sym("object_c_8030C2C8"),
-	0x8030C364: main.sym("object_c_8030C364", flag={"GLOBL"}), # o callback
-	0x8030C4B0: main.sym("object_c_8030C4B0", flag={"GLOBL"}), # o callback
+	0x8030C364: main.sym("object_c_8030C364", flag={"GLOBL"}), # objcall
+	0x8030C4B0: main.sym("object_c_8030C4B0", flag={"GLOBL"}), # objcall
 	0x8030C564: main.sym("object_c_8030C564"),
 	0x8030C60C: main.sym("object_c_8030C60C"),
 	0x8030C6A4: main.sym("object_c_8030C6A4"),
 	0x8030C828: main.sym("object_c_8030C828"),
 	0x8030C894: main.sym("object_c_8030C894"),
-	0x8030C8EC: main.sym("object_c_8030C8EC", flag={"GLOBL"}), # o callback
+	0x8030C8EC: main.sym("object_c_8030C8EC", flag={"GLOBL"}), # objcall
 	0x8030C924: main.sym_fnc("L8030C924", flag={"GLOBL","LOCAL"}),
 	0x8030C934: main.sym_fnc("L8030C934", flag={"GLOBL","LOCAL"}),
 	0x8030C944: main.sym_fnc("L8030C944", flag={"GLOBL","LOCAL"}),
 	0x8030C954: main.sym_fnc("L8030C954", flag={"GLOBL","LOCAL"}),
 	0x8030C964: main.sym_fnc("L8030C964", flag={"GLOBL","LOCAL"}),
-	0x8030C98C: main.sym("object_c_8030C98C", flag={"GLOBL"}), # o callback
+	0x8030C98C: main.sym("object_c_8030C98C", flag={"GLOBL"}), # objcall
 	0x8030CD30: main.sym("object_c_8030CD30", flag={"GLOBL"}), # extern
-	0x8030CDDC: main.sym("object_c_8030CDDC", flag={"GLOBL"}), # o callback
+	0x8030CDDC: main.sym("object_c_8030CDDC", flag={"GLOBL"}), # objcall
 	0x8030CEC0: main.sym("object_c_8030CEC0"),
 	0x8030D140: main.sym("object_c_8030D140"),
-	0x8030D2F0: main.sym("object_c_8030D2F0", flag={"GLOBL"}), # o callback
+	0x8030D2F0: main.sym("object_c_8030D2F0", flag={"GLOBL"}), # objcall
 	0x8030D42C: main.sym("object_c_8030D42C"),
 	0x8030D4D4: main.sym("object_c_8030D4D4"),
-	0x8030D598: main.sym("object_c_8030D598", flag={"GLOBL"}), # o callback
-	0x8030D640: main.sym("object_c_8030D640", flag={"GLOBL"}), # o callback
-	0x8030D8D4: main.sym("object_c_8030D8D4", flag={"GLOBL"}), # o callback
-	0x8030D93C: main.sym("s_object_c_8030D93C", flag={"GLOBL"}), # s callback
-	0x8030D9AC: main.sym("s_object_c_8030D9AC", flag={"GLOBL"}), # s callback
+	0x8030D598: main.sym("object_c_8030D598", flag={"GLOBL"}), # objcall
+	0x8030D640: main.sym("object_c_8030D640", flag={"GLOBL"}), # objcall
+	0x8030D8D4: main.sym("object_c_8030D8D4", flag={"GLOBL"}), # objcall
+	0x8030D93C: main.sym("Ctrl_object_c_8030D93C", flag={"GLOBL"}), # shpcall
+	0x8030D9AC: main.sym("Ctrl_object_c_8030D9AC", flag={"GLOBL"}), # shpcall
 	0x8030DA14: main.sym("object_c_8030DA14"),
 	0x8030DB38: main.sym("object_c_8030DB38"),
-	0x8030DC70: main.sym("object_c_8030DC70", flag={"GLOBL"}), # o callback
-	0x8030DFC4: main.sym("object_c_8030DFC4", flag={"GLOBL"}), # o callback
-	0x8030E14C: main.sym("object_c_8030E14C", flag={"GLOBL"}), # o callback
-	0x8030E16C: main.sym("object_c_8030E16C", flag={"GLOBL"}), # o callback
+	0x8030DC70: main.sym("object_c_8030DC70", flag={"GLOBL"}), # objcall
+	0x8030DFC4: main.sym("object_c_8030DFC4", flag={"GLOBL"}), # objcall
+	0x8030E14C: main.sym("object_c_8030E14C", flag={"GLOBL"}), # objcall
+	0x8030E16C: main.sym("object_c_8030E16C", flag={"GLOBL"}), # objcall
 	0x8030E384: main.sym("object_c_8030E384"),
 	0x8030E3E0: main.sym("object_c_8030E3E0"),
 	0x8030E488: main.sym("object_c_8030E488"),
@@ -13438,7 +14608,7 @@ sym_E0_code_text = {
 	0x8030E688: main.sym("object_c_8030E688"),
 	0x8030E6D4: main.sym("object_c_8030E6D4"),
 	0x8030E9E0: main.sym("object_c_8030E9E0"),
-	0x8030EA9C: main.sym("object_c_8030EA9C", flag={"GLOBL"}), # o callback
+	0x8030EA9C: main.sym("object_c_8030EA9C", flag={"GLOBL"}), # objcall
 	0x8030EAD4: main.sym_fnc("L8030EAD4", flag={"GLOBL","LOCAL"}),
 	0x8030EAE4: main.sym_fnc("L8030EAE4", flag={"GLOBL","LOCAL"}),
 	0x8030EAF4: main.sym_fnc("L8030EAF4", flag={"GLOBL","LOCAL"}),
@@ -13462,7 +14632,7 @@ sym_E0_code_text = {
 	0x8030FC34: main.sym("object_c_8030FC34"),
 	0x8030FCF4: main.sym("object_c_8030FCF4"),
 	0x8030FE38: main.sym("object_c_8030FE38"),
-	0x8030FFF8: main.sym("object_c_8030FFF8", flag={"GLOBL"}), # o callback
+	0x8030FFF8: main.sym("object_c_8030FFF8", flag={"GLOBL"}), # objcall
 	0x80310078: main.sym_fnc("L80310078", flag={"GLOBL","LOCAL"}),
 	0x80310088: main.sym_fnc("L80310088", flag={"GLOBL","LOCAL"}),
 	0x80310098: main.sym_fnc("L80310098", flag={"GLOBL","LOCAL"}),
@@ -13481,7 +14651,7 @@ sym_E0_code_text = {
 	0x803101DC: main.sym("object_c_803101DC"),
 	0x80310258: main.sym("object_c_80310258"),
 	0x80310318: main.sym("object_c_80310318"),
-	0x80310498: main.sym("object_c_80310498", flag={"GLOBL"}), # o callback
+	0x80310498: main.sym("object_c_80310498", flag={"GLOBL"}), # objcall
 	0x8031054C: main.sym("object_c_8031054C"),
 	0x80310774: main.sym("object_c_80310774"),
 	0x8031097C: main.sym("object_c_8031097C"),
@@ -13492,7 +14662,7 @@ sym_E0_code_text = {
 	0x80311018: main.sym("object_c_80311018"),
 	0x8031111C: main.sym("object_c_8031111C"),
 	0x8031126C: main.sym("object_c_8031126C"),
-	0x8031129C: main.sym("object_c_8031129C", flag={"GLOBL"}), # o callback
+	0x8031129C: main.sym("object_c_8031129C", flag={"GLOBL"}), # objcall
 	0x80311358: main.sym_fnc("L80311358", flag={"GLOBL","LOCAL"}),
 	0x80311378: main.sym_fnc("L80311378", flag={"GLOBL","LOCAL"}),
 	0x80311390: main.sym_fnc("L80311390", flag={"GLOBL","LOCAL"}),
@@ -13503,51 +14673,51 @@ sym_E0_code_text = {
 	0x803113E0: main.sym_fnc("L803113E0", flag={"GLOBL","LOCAL"}),
 	0x8031157C: main.sym("object_c_8031157C"),
 	0x803116C0: main.sym("object_c_803116C0"),
-	0x80311874: main.sym("object_c_80311874", flag={"GLOBL"}), # o callback
-	0x803118E4: main.sym("object_c_803118E4", flag={"GLOBL"}), # o callback
+	0x80311874: main.sym("object_c_80311874", flag={"GLOBL"}), # objcall
+	0x803118E4: main.sym("object_c_803118E4", flag={"GLOBL"}), # objcall
 	0x80311954: main.sym("object_c_80311954"),
 	0x803119E4: main.sym("object_c_803119E4"),
 	0x80311B18: main.sym("object_c_80311B18"),
 	0x80311B7C: main.sym("object_c_80311B7C"),
 	0x80311DD8: main.sym("object_c_80311DD8"),
 	0x80311EA4: main.sym("object_c_80311EA4"),
-	0x80312070: main.sym("object_c_80312070", flag={"GLOBL"}), # o callback
+	0x80312070: main.sym("object_c_80312070", flag={"GLOBL"}), # objcall
 	0x803120B0: main.sym_fnc("L803120B0", flag={"GLOBL","LOCAL"}),
 	0x803120C0: main.sym_fnc("L803120C0", flag={"GLOBL","LOCAL"}),
 	0x803120D0: main.sym_fnc("L803120D0", flag={"GLOBL","LOCAL"}),
 	0x803120E0: main.sym_fnc("L803120E0", flag={"GLOBL","LOCAL"}),
 	0x803120F0: main.sym_fnc("L803120F0", flag={"GLOBL","LOCAL"}),
 	0x80312100: main.sym_fnc("L80312100", flag={"GLOBL","LOCAL"}),
-	0x80312168: main.sym("object_c_80312168", flag={"GLOBL"}), # o callback
-	0x80312200: main.sym("object_c_80312200", flag={"GLOBL"}), # o callback
-	0x80312248: main.sym("object_c_80312248", flag={"GLOBL"}), # o callback
+	0x80312168: main.sym("object_c_80312168", flag={"GLOBL"}), # objcall
+	0x80312200: main.sym("object_c_80312200", flag={"GLOBL"}), # objcall
+	0x80312248: main.sym("object_c_80312248", flag={"GLOBL"}), # objcall
 	0x80312370: main.sym("object_c_80312370"),
 	0x8031262C: main.sym("object_c_8031262C"),
-	0x8031274C: main.sym("object_c_8031274C", flag={"GLOBL"}), # o callback
+	0x8031274C: main.sym("object_c_8031274C", flag={"GLOBL"}), # objcall
 	0x80312804: main.sym("object_c_80312804"),
 	0x80312900: main.sym("object_c_80312900"),
-	0x80312A54: main.sym("object_c_80312A54", flag={"GLOBL"}), # o callback
+	0x80312A54: main.sym("object_c_80312A54", flag={"GLOBL"}), # objcall
 	0x80312AF4: main.sym("object_c_80312AF4"),
 	0x80312B80: main.sym("object_c_80312B80"),
 	0x80312D0C: main.sym("object_c_80312D0C"),
 	0x80312EA8: main.sym("object_c_80312EA8"),
-	0x80313110: main.sym("object_c_80313110", flag={"GLOBL"}), # o callback
-	0x803131E8: main.sym("object_c_803131E8", flag={"GLOBL"}), # o callback
-	0x8031326C: main.sym("object_c_8031326C", flag={"GLOBL"}), # o callback
-	0x80313294: main.sym("object_c_80313294", flag={"GLOBL"}), # o callback
-	0x80313354: main.sym("object_c_80313354", flag={"GLOBL"}), # o callback
-	0x80313530: main.sym("object_c_80313530", flag={"GLOBL"}), # o callback
-	0x803136CC: main.sym("object_c_803136CC", flag={"GLOBL"}), # o callback
-	0x80313754: main.sym("object_c_80313754", flag={"GLOBL"}), # o callback
-	0x803137F4: main.sym("object_c_803137F4", flag={"GLOBL"}), # o callback
+	0x80313110: main.sym("object_c_80313110", flag={"GLOBL"}), # objcall
+	0x803131E8: main.sym("object_c_803131E8", flag={"GLOBL"}), # objcall
+	0x8031326C: main.sym("object_c_8031326C", flag={"GLOBL"}), # objcall
+	0x80313294: main.sym("object_c_80313294", flag={"GLOBL"}), # objcall
+	0x80313354: main.sym("object_c_80313354", flag={"GLOBL"}), # objcall
+	0x80313530: main.sym("object_c_80313530", flag={"GLOBL"}), # objcall
+	0x803136CC: main.sym("object_c_803136CC", flag={"GLOBL"}), # objcall
+	0x80313754: main.sym("object_c_80313754", flag={"GLOBL"}), # objcall
+	0x803137F4: main.sym("object_c_803137F4", flag={"GLOBL"}), # objcall
 	0x8031381C: main.sym("object_c_8031381C"),
 	0x803139F0: main.sym("object_c_803139F0"),
 	0x80313BE4: main.sym("object_c_80313BE4"),
 	0x80313E1C: main.sym("object_c_80313E1C"),
-	0x80313FC0: main.sym("object_c_80313FC0", flag={"GLOBL"}), # o callback
+	0x80313FC0: main.sym("object_c_80313FC0", flag={"GLOBL"}), # objcall
 	0x80314098: main.sym("object_c_80314098"),
 	0x8031427C: main.sym("object_c_8031427C"),
-	0x803145D4: main.sym("object_c_803145D4", flag={"GLOBL"}), # o callback
+	0x803145D4: main.sym("object_c_803145D4", flag={"GLOBL"}), # objcall
 
 	# src/audio/driver.c
 	0x80314A30: main.sym("Na_driver_80314A30"),
@@ -13985,10 +15155,10 @@ sym_E0_code_text = {
 	), flag={"GLOBL"}), # ext
 	0x803221B8: main.sym_fnc("Na_Fanfare", flag={"GLOBL"}), # ext
 	0x803221F4: main.sym_fnc("Na_ToadMessage", flag={"GLOBL"}), # ext
-	0x80322230: main.sym_fnc("Na_Mode", arg=(
+	0x80322230: main.sym_fnc("Na_SetMode", arg=(
 		"u8",
 	), flag={"GLOBL"}), # ext
-	0x8032231C: main.sym_fnc("Na_Output", arg=(
+	0x8032231C: main.sym_fnc("Na_SetOutput", arg=(
 		"int",
 	), flag={"GLOBL"}), # ext
 	0x80322348: main.sym_fnc("Na_game_80322348", arg=(
@@ -14711,18 +15881,18 @@ sym_E0_code_text = {
 	0x8032D5FA: main.sym("demo_rec+0x02"), # stick_y
 	0x8032D5FB: main.sym("demo_rec+0x03"), # button
 
-	0x8032D950: main.sym("collision_table+0x00"), # type
-	0x8032D954: main.sym("collision_table+0x04"), # callback
+	0x8032D950: main.sym("collisiontab+0x00"), # type
+	0x8032D954: main.sym("collisiontab+0x04"), # proc
 
-	0x8032DADB: main.sym("player_8032DACC+1*15"),
-	0x8032DAE0: main.sym("player_8032DAE0+0"),
-	0x8032DAE4: main.sym("player_8032DAE0+4"),
+	0x8032DADB: main.sym("pl_unpresstab+1*15"),
+	0x8032DAE0: main.sym("pl_flash_pattern+0"),
+	0x8032DAE4: main.sym("pl_flash_pattern+4"),
 
-	0x8032DBE2: main.sym("pl_demo_8032DC3C-1*90"),
-	0x8032DC36: main.sym("pl_demo_8032DC34+2"),
-	0x8032DC3A: main.sym("pl_demo_8032DC38+2"),
+	0x8032DBE2: main.sym("pldemo_8032DC3C-1*90"),
+	0x8032DC36: main.sym("pldemo_8032DC34+2"),
+	0x8032DC3A: main.sym("pldemo_8032DC38+2"),
 
-	0x8032DD97: main.sym("course_table-1"),
+	0x8032DD97: main.sym("coursetab-1"),
 
 	0x8032F4D4: main.sym("camdemo_8032F4D4+0x00"), # callback
 	0x8032F4D8: main.sym("camdemo_8032F4D4+0x04"), # time
@@ -14854,27 +16024,27 @@ sym_E0_code_text = {
 	0x80330EE4: main.sym("shadow_rect_table+0x04"), # sizez
 	0x80330EE8: main.sym("shadow_rect_table+0x08"), # flag
 
-	0x80330F64: main.sym("water_table_a+0x00"), # index
-	0x80330F70: main.sym("water_table_a+0x0C"), # data
-	0x80330F84: main.sym("water_table_a+0x20"), # layer
+	0x80330F64: main.sym("fluidtab+0x00"), # code
+	0x80330F70: main.sym("fluidtab+0x0C"), # data
+	0x80330F84: main.sym("fluidtab+0x20"), # layer
 
-	0x803311A4: main.sym("water_table_b+0x00"), # index
-	0x803311B0: main.sym("water_table_b+0x0C"), # data
-	0x803311C4: main.sym("water_table_b+0x20"), # layer
+	0x803311A4: main.sym("fluidtabL+0x00"), # code
+	0x803311B0: main.sym("fluidtabL+0x0C"), # data
+	0x803311C4: main.sym("fluidtabL+0x20"), # layer
 
-	0x8033127C: main.sym("water_table_c+0x00"), # index
-	0x80331288: main.sym("water_table_c+0x0C"), # data
-	0x8033129C: main.sym("water_table_c+0x20"), # layer
+	0x8033127C: main.sym("fluidtabS+0x00"), # code
+	0x80331288: main.sym("fluidtabS+0x0C"), # data
+	0x8033129C: main.sym("fluidtabS+0x20"), # layer
 
-	0x803317E0: main.sym("tag_obj_table+0x00"), # script
-	0x803317E4: main.sym("tag_obj_table+0x04"), # shape
-	0x803317E6: main.sym("tag_obj_table+0x06"), # arg
+	0x803317E0: main.sym("tagobjtab+0x00"), # script
+	0x803317E4: main.sym("tagobjtab+0x04"), # shape
+	0x803317E6: main.sym("tagobjtab+0x06"), # arg
 
-	0x80332350: main.sym("map_obj_table+0x00"), # index
-	0x80332351: main.sym("map_obj_table+0x01"), # type
-	0x80332352: main.sym("map_obj_table+0x02"), # arg
-	0x80332353: main.sym("map_obj_table+0x03"), # shape
-	0x80332354: main.sym("map_obj_table+0x04"), # script
+	0x80332350: main.sym("mapobjtab+0x00"), # index
+	0x80332351: main.sym("mapobjtab+0x01"), # type
+	0x80332352: main.sym("mapobjtab+0x02"), # arg
+	0x80332353: main.sym("mapobjtab+0x03"), # shape
+	0x80332354: main.sym("mapobjtab+0x04"), # script
 
 	0x803325F0: main.sym("meter+0x00"), # state
 	0x803325F2: main.sym("meter+0x02"), # x
@@ -14955,9 +16125,9 @@ sym_E0_code_text = {
 
 	0x8033B098: main.sym("demo_bank+0x08"), # buf
 
-	0x8033B1A2: main.sym("player_data+0x32+2*0"), # ang_vel[0]
-	0x8033B1A4: main.sym("player_data+0x32+2*1"), # ang_vel[1]
-	0x8033B1A6: main.sym("player_data+0x32+2*2"), # ang_vel[2]
+	0x8033B1A2: main.sym("player_data+0x32+2*0"), # rot[0]
+	0x8033B1A4: main.sym("player_data+0x32+2*1"), # rot[1]
+	0x8033B1A6: main.sym("player_data+0x32+2*2"), # rot[2]
 	0x8033B1AC: main.sym("player_data+0x3C+4*0"), # pos[0]
 	0x8033B1B0: main.sym("player_data+0x3C+4*1"), # pos[1]
 	0x8033B1B4: main.sym("player_data+0x3C+4*2"), # pos[2]
@@ -15017,7 +16187,7 @@ sym_E0_code_text = {
 	0x8033BABE: main.sym("wipe+0x0E"), # data.window.sy
 	0x8033BAC0: main.sym("wipe+0x10"), # data.window.ex
 	0x8033BAC2: main.sym("wipe+0x12"), # data.window.ey
-	0x8033BAC4: main.sym("wipe+0x14"), # data.window.ang_vel
+	0x8033BAC4: main.sym("wipe+0x14"), # data.window.rot
 
 	0x8033BB18: main.sym("draw_mtxf+4*(4*3+0)"),
 	0x8033BB1C: main.sym("draw_mtxf+4*(4*3+1)"),
@@ -15162,11 +16332,11 @@ sym_E0_code_text = {
 	0x803611D8: main.sym("area_table+0"),
 	0x803611D9: main.sym("area_table+1"),
 
-	0x803612C0: main.sym("back_data+0x00"),
-	0x803612C2: main.sym("back_data+0x02"),
-	0x803612C4: main.sym("back_data+0x04"),
-	0x803612C8: main.sym("back_data+0x08"),
-	0x803612CC: main.sym("back_data+0x0C"),
+	0x803612C0: main.sym("backdata+0x00"),
+	0x803612C2: main.sym("backdata+0x02"),
+	0x803612C4: main.sym("backdata+0x04"),
+	0x803612C8: main.sym("backdata+0x08"),
+	0x803612CC: main.sym("backdata+0x0C"),
 
 	0x80361490: main.sym("_Na_game_bss+0x00"),
 	0x80361498: main.sym("_Na_game_bss+0x08"), # la
@@ -15207,111 +16377,109 @@ sym_E0_code_text = {
 
 	# ==========================================================================
 
-	0x80220D98: main.sym("_Na_work_bss-0x08"), # la
-	0x80220DA0: main.sym("_Na_work_bss+0x00"), # la
-	0x80220DB0: main.sym("_Na_work_bss+0x10"), # la
-	0x80220DB1: main.sym("_Na_work_bss+0x11"),
-	0x80220EA0: main.sym("_Na_work_bss+0x100"),
-	0x80220EA2: main.sym("_Na_work_bss+0x102"),
-	0x80220EA3: main.sym("_Na_work_bss+0x103"),
-	0x80220EA8: main.sym("_Na_work_bss+0x108"), # la
-	0x80220EB0: main.sym("_Na_work_bss+0x110"),
-	0x80220EB8: main.sym("_Na_work_bss+0x118"), # la
-	0x80220EC8: main.sym("_Na_work_bss+0x128"), # la
-	0x80220EF8: main.sym("_Na_work_bss+0x158"), # la
-	0x80220F08: main.sym("_Na_work_bss+0x168"), # la
-	0x80220F18: main.sym("_Na_work_bss+0x178"), # la
-	0x80220F28: main.sym("_Na_work_bss+0x188"),
-	0x80220F2C: main.sym("_Na_work_bss+0x18C"), # la
-	0x802210BC: main.sym("_Na_work_bss+0x31C"), # la
-	0x802210C0: main.sym("_Na_work_bss+0x320"), # la
-	0x802210F8: main.sym("_Na_work_bss+0x358"),
-	0x802210FC: main.sym("_Na_work_bss+0x35C"), # la
-	0x8022128C: main.sym("_Na_work_bss+0x4EC"), # la
-	0x80221290: main.sym("_Na_work_bss+0x4F0"), # la
-	0x802212C8: main.sym("_Na_work_bss+0x528"), # la
-	0x802212CC: main.sym("_Na_work_bss+0x52C"), # la
-	0x8022145C: main.sym("_Na_work_bss+0x6BC"), # la
-	0x80221460: main.sym("_Na_work_bss+0x6C0"), # la
-	0x80221498: main.sym("_Na_work_bss+0x6F8"), # la
-	0x802214A8: main.sym("_Na_work_bss+0x708"), # la
-	0x802214B0: main.sym("_Na_work_bss+0x710"), # la
-	0x802214C0: main.sym("_Na_work_bss+0x720"), # la
-	0x802214D0: main.sym("_Na_work_bss+0x730"),
-	0x80221510: main.sym("_Na_work_bss+0x770"),
-	0x80221610: main.sym("_Na_work_bss+0x870"), # la
-	0x80222610: main.sym("_Na_work_bss+0x1870"),
-	0x80222618: main.sym("_Na_work_bss+0x1878"),
-	0x80222619: main.sym("_Na_work_bss+0x1879"),
-	0x8022261A: main.sym("_Na_work_bss+0x187A"),
-	0x80222630: main.sym("_Na_work_bss+0x1890"),
-	0x80222644: main.sym("_Na_work_bss+0x18A4"),
-	0x802226A8: main.sym("_Na_work_bss+0x1908"), # la
-	0x802228C4: main.sym("_Na_work_bss+0x1B24"),
-	0x802229D8: main.sym("_Na_work_bss+0x1C38"), # la
-	0x802241D8: main.sym("_Na_work_bss+0x3438"), # la
-	0x80224248: main.sym("_Na_work_bss+0x34A8"), # la
-	0x80225BD8: main.sym("_Na_work_bss+0x4E38"), # la
-	0x80225C98: main.sym("_Na_work_bss+0x4EF8"),
-	0x80225CA8: main.sym("_Na_work_bss+0x4F08"), # la
-	0x80225CAC: main.sym("_Na_work_bss+0x4F0C"),
-	0x80225CB8: main.sym("_Na_work_bss+0x4F18"), # la
-	0x80225CC8: main.sym("_Na_work_bss+0x4F28"), # la
-	0x80225CD8: main.sym("_Na_work_bss+0x4F38"), # la
-	0x80225CE8: main.sym("_Na_work_bss+0x4F48"), # la
-	0x80225D00: main.sym("_Na_work_bss+0x4F60"), # la
-	0x80225E00: main.sym("_Na_work_bss+0x5060"), # la
-	0x80226300: main.sym("_Na_work_bss+0x5560"), # la
-	0x80226318: main.sym("_Na_work_bss+0x5578"), # la
-	0x80226320: main.sym("_Na_work_bss+0x5580"), # la
-	0x80226338: main.sym("_Na_work_bss+0x5598"), # la
-	0x80226938: main.sym("_Na_work_bss+0x5B98"),
-	0x8022693C: main.sym("_Na_work_bss+0x5B9C"),
-	0x80226940: main.sym("_Na_work_bss+0x5BA0"),
-	0x80226948: main.sym("_Na_work_bss+0x5BA8"), # la
-	0x80226A48: main.sym("_Na_work_bss+0x5CA8"), # la
-	0x80226B48: main.sym("_Na_work_bss+0x5DA8"),
-	0x80226B49: main.sym("_Na_work_bss+0x5DA9"),
-	0x80226B4A: main.sym("_Na_work_bss+0x5DAA"),
-	0x80226B4B: main.sym("_Na_work_bss+0x5DAB"),
-	0x80226B4C: main.sym("_Na_work_bss+0x5DAC"),
-	0x80226B50: main.sym("_Na_work_bss+0x5DB0"),
-	0x80226B54: main.sym("_Na_work_bss+0x5DB4"),
-	0x80226B58: main.sym("_Na_work_bss+0x5DB8"),
-	0x80226B5C: main.sym("_Na_work_bss+0x5DBC"),
-	0x80226B60: main.sym("_Na_work_bss+0x5DC0"),
-	0x80226B64: main.sym("_Na_work_bss+0x5DC4"),
-	0x80226B68: main.sym("_Na_work_bss+0x5DC8"), # la
-	0x80226B6C: main.sym("_Na_work_bss+0x5DCC"), # la
-	0x80226B70: main.sym("_Na_work_bss+0x5DD0"),
-	0x80226B74: main.sym("_Na_work_bss+0x5DD4"),
-	0x80226B78: main.sym("_Na_work_bss+0x5DD8"),
-	0x80226B7C: main.sym("_Na_work_bss+0x5DDC"),
-	0x80226B7E: main.sym("_Na_work_bss+0x5DDE"),
-	0x80226B7F: main.sym("_Na_work_bss+0x5DDF"),
-	0x80226B80: main.sym("_Na_work_bss+0x5DE0"), # la
-	0x80226B84: main.sym("_Na_work_bss+0x5DE4"), # la
-	0x80226B88: main.sym("_Na_work_bss+0x5DE8"),
-	0x80226B8C: main.sym("_Na_work_bss+0x5DEC"),
-	0x80226B90: main.sym("_Na_work_bss+0x5DF0"),
-	0x80226B98: main.sym("_Na_work_bss+0x5DF8"),
-	0x80226B9C: main.sym("_Na_work_bss+0x5DFC"),
-	0x80226BA0: main.sym("_Na_work_bss+0x5E00"), # la
-	0x80226C40: main.sym("_Na_work_bss+0x5EA0"),
-	0x80226C4C: main.sym("_Na_work_bss+0x5EAC"),
-	0x80226C52: main.sym("_Na_work_bss+0x5EB2"), # la
-	0x80226C58: main.sym("_Na_work_bss+0x5EB8"), # la
-	0x80226C98: main.sym("_Na_work_bss+0x5EF8"), # la
-	0x80226CB8: main.sym("_Na_work_bss+0x5F18"),
-	0x80226CC0: main.sym("_Na_work_bss+0x5F20"), # la
+	0x80220D98: main.sym("Na_WorkStart-8"), # la
 
-	0x80207A90: main.sym("save-0x70"),
-	0x80207A98: main.sym("save-0x68"),
-	0x80207A9C: main.sym("save-0x64"),
-	0x80207B08: main.sym("save+0x08"),
-	0x80207B0C: main.sym("save+0x0C"),
-	0x80207B25: main.sym("save+0x25"),
-	0x80207CC0: main.sym("save+0x1C0"),
+	0x80220DB0: main.sym("_Na_work_bss_10-0x10+0x10"), # la
+	0x80220DB1: main.sym("_Na_work_bss_10-0x10+0x11"),
+	0x80220EA0: main.sym("_Na_work_bss_10-0x10+0x100"),
+	0x80220EA2: main.sym("_Na_work_bss_10-0x10+0x102"),
+	0x80220EA3: main.sym("_Na_work_bss_10-0x10+0x103"),
+	0x80220EA8: main.sym("_Na_work_bss_10-0x10+0x108"), # la
+	0x80220EB0: main.sym("_Na_work_bss_10-0x10+0x110"),
+	0x80220EB8: main.sym("_Na_work_bss_10-0x10+0x118"), # la
+	0x80220EC8: main.sym("_Na_work_bss_10-0x10+0x128"), # la
+	0x80220EF8: main.sym("_Na_work_bss_10-0x10+0x158"), # la
+	0x80220F08: main.sym("_Na_work_bss_10-0x10+0x168"), # la
+	0x80220F18: main.sym("_Na_work_bss_10-0x10+0x178"), # la
+	0x80220F28: main.sym("_Na_work_bss_10-0x10+0x188"),
+	0x80220F2C: main.sym("_Na_work_bss_10-0x10+0x18C"), # la
+	0x802210BC: main.sym("_Na_work_bss_10-0x10+0x31C"), # la
+	0x802210C0: main.sym("_Na_work_bss_10-0x10+0x320"), # la
+	0x802210F8: main.sym("_Na_work_bss_10-0x10+0x358"),
+	0x802210FC: main.sym("_Na_work_bss_10-0x10+0x35C"), # la
+	0x8022128C: main.sym("_Na_work_bss_10-0x10+0x4EC"), # la
+	0x80221290: main.sym("_Na_work_bss_10-0x10+0x4F0"), # la
+	0x802212C8: main.sym("_Na_work_bss_10-0x10+0x528"), # la
+	0x802212CC: main.sym("_Na_work_bss_10-0x10+0x52C"), # la
+	0x8022145C: main.sym("_Na_work_bss_10-0x10+0x6BC"), # la
+	0x80221460: main.sym("_Na_work_bss_10-0x10+0x6C0"), # la
+	0x80221498: main.sym("_Na_work_bss_10-0x10+0x6F8"), # la
+	0x802214A8: main.sym("_Na_work_bss_10-0x10+0x708"), # la
+	0x802214B0: main.sym("_Na_work_bss_10-0x10+0x710"), # la
+	0x802214C0: main.sym("_Na_work_bss_10-0x10+0x720"), # la
+	0x802214D0: main.sym("_Na_work_bss_10-0x10+0x730"),
+	0x80221510: main.sym("_Na_work_bss_10-0x10+0x770"),
+	0x80221610: main.sym("_Na_work_bss_10-0x10+0x870"), # la
+	0x80222610: main.sym("_Na_work_bss_10-0x10+0x1870"),
+	0x80222618: main.sym("_Na_work_bss_10-0x10+0x1878"),
+	0x80222619: main.sym("_Na_work_bss_10-0x10+0x1879"),
+	0x8022261A: main.sym("_Na_work_bss_10-0x10+0x187A"),
+	0x80222630: main.sym("_Na_work_bss_10-0x10+0x1890"),
+	0x80222644: main.sym("_Na_work_bss_10-0x10+0x18A4"),
+	0x802226A8: main.sym("_Na_work_bss_10-0x10+0x1908"), # la
+	0x802228C4: main.sym("_Na_work_bss_10-0x10+0x1B24"),
+	0x802229D8: main.sym("_Na_work_bss_10-0x10+0x1C38"), # la
+	0x802241D8: main.sym("_Na_work_bss_10-0x10+0x3438"), # la
+	0x80224248: main.sym("_Na_work_bss_10-0x10+0x34A8"), # la
+	0x80225BD8: main.sym("_Na_work_bss_10-0x10+0x4E38"), # la
+	0x80225C98: main.sym("_Na_work_bss_10-0x10+0x4EF8"),
+	0x80225CA8: main.sym("_Na_work_bss_10-0x10+0x4F08"), # la
+	0x80225CAC: main.sym("_Na_work_bss_10-0x10+0x4F0C"),
+	0x80225CB8: main.sym("_Na_work_bss_10-0x10+0x4F18"), # la
+	0x80225CC8: main.sym("_Na_work_bss_10-0x10+0x4F28"), # la
+	0x80225CD8: main.sym("_Na_work_bss_10-0x10+0x4F38"), # la
+	0x80225CE8: main.sym("_Na_work_bss_10-0x10+0x4F48"), # la
+	0x80225D00: main.sym("_Na_work_bss_10-0x10+0x4F60"), # la
+	0x80225E00: main.sym("_Na_work_bss_10-0x10+0x5060"), # la
+	0x80226300: main.sym("_Na_work_bss_10-0x10+0x5560"), # la
+	0x80226318: main.sym("_Na_work_bss_10-0x10+0x5578"), # la
+	0x80226320: main.sym("_Na_work_bss_10-0x10+0x5580"), # la
+	0x80226338: main.sym("_Na_work_bss_10-0x10+0x5598"), # la
+	0x80226938: main.sym("_Na_work_bss_10-0x10+0x5B98"),
+	0x8022693C: main.sym("_Na_work_bss_10-0x10+0x5B9C"),
+	0x80226940: main.sym("_Na_work_bss_10-0x10+0x5BA0"),
+	0x80226948: main.sym("_Na_work_bss_10-0x10+0x5BA8"), # la
+	0x80226A48: main.sym("_Na_work_bss_10-0x10+0x5CA8"), # la
+	0x80226B48: main.sym("_Na_work_bss_10-0x10+0x5DA8"),
+	0x80226B49: main.sym("_Na_work_bss_10-0x10+0x5DA9"),
+	0x80226B4A: main.sym("_Na_work_bss_10-0x10+0x5DAA"),
+	0x80226B4B: main.sym("_Na_work_bss_10-0x10+0x5DAB"),
+	0x80226B4C: main.sym("_Na_work_bss_10-0x10+0x5DAC"),
+	0x80226B50: main.sym("_Na_work_bss_10-0x10+0x5DB0"),
+	0x80226B54: main.sym("_Na_work_bss_10-0x10+0x5DB4"),
+	0x80226B58: main.sym("_Na_work_bss_10-0x10+0x5DB8"),
+	0x80226B5C: main.sym("_Na_work_bss_10-0x10+0x5DBC"),
+	0x80226B60: main.sym("_Na_work_bss_10-0x10+0x5DC0"),
+	0x80226B64: main.sym("_Na_work_bss_10-0x10+0x5DC4"),
+	0x80226B68: main.sym("_Na_work_bss_10-0x10+0x5DC8"), # la
+	0x80226B6C: main.sym("_Na_work_bss_10-0x10+0x5DCC"), # la
+	0x80226B70: main.sym("_Na_work_bss_10-0x10+0x5DD0"),
+	0x80226B74: main.sym("_Na_work_bss_10-0x10+0x5DD4"),
+	0x80226B78: main.sym("_Na_work_bss_10-0x10+0x5DD8"),
+	0x80226B7C: main.sym("_Na_work_bss_10-0x10+0x5DDC"),
+	0x80226B7E: main.sym("_Na_work_bss_10-0x10+0x5DDE"),
+	0x80226B7F: main.sym("_Na_work_bss_10-0x10+0x5DDF"),
+	0x80226B80: main.sym("_Na_work_bss_10-0x10+0x5DE0"), # la
+	0x80226B84: main.sym("_Na_work_bss_10-0x10+0x5DE4"), # la
+	0x80226B88: main.sym("_Na_work_bss_10-0x10+0x5DE8"),
+	0x80226B8C: main.sym("_Na_work_bss_10-0x10+0x5DEC"),
+	0x80226B90: main.sym("_Na_work_bss_10-0x10+0x5DF0"),
+	0x80226B98: main.sym("_Na_work_bss_10-0x10+0x5DF8"),
+	0x80226B9C: main.sym("_Na_work_bss_10-0x10+0x5DFC"),
+	0x80226BA0: main.sym("_Na_work_bss_10-0x10+0x5E00"), # la
+	0x80226C40: main.sym("_Na_work_bss_10-0x10+0x5EA0"),
+	0x80226C4C: main.sym("_Na_work_bss_10-0x10+0x5EAC"),
+	0x80226C52: main.sym("_Na_work_bss_10-0x10+0x5EB2"), # la
+	0x80226C58: main.sym("_Na_work_bss_10-0x10+0x5EB8"), # la
+	0x80226C98: main.sym("_Na_work_bss_10-0x10+0x5EF8"), # la
+
+	0x80207690: main.sym("backup-0x70"),
+	0x80207698: main.sym("backup-0x68"),
+	0x8020769C: main.sym("backup-0x64"),
+	0x80207708: main.sym("backup+0x08"),
+	0x8020770C: main.sym("backup+0x0C"),
+	0x80207725: main.sym("backup+0x25"),
+	0x802078C0: main.sym("backup+0x1C0"),
 }
 
 seg_E0_code_text = {
@@ -15441,8 +16609,8 @@ sym_E0_code_data = {
 	0x8032D610: main.sym_var("bgm_special", "u16", flag={"DALIGN"}),
 	0x8032D614: main.sym_var("aud_endless_flag", "unsigned char", flag={"DALIGN"}),
 	0x8032D618: main.sym_var("aud_8032D618", "char"), # unused
-	0x8032D61C: main.sym_var("aud_8032D61C", "VECF"), # unused
-	0x8032D628: main.sym_var("aud_output_table", "s16", "[]"),
+	0x8032D61C: main.sym_var("aud_8032D61C", "FVEC"), # unused
+	0x8032D628: main.sym_var("aud_modetab", "s16", "[]"),
 	0x8032D630: main.sym_var("aud_levelse_table", "Na_Se", "[]"),
 	0x8032D6C0: main.sym_var("aud_wave_flag", "char", flag={"DALIGN"}),
 
@@ -15473,69 +16641,69 @@ sym_E0_code_data = {
 	0x8032D944: main.sym_var("mid_flag", "char", flag={"DALIGN"}),
 
 	# src/collision.c
-	0x8032D950: main.sym_var("collision_table", "COLLISION", "[]", flag={"GLOBL"}),
-	0x8032DA48: main.sym_var("collision_8032DA48", "u32", "[]", flag={"GLOBL"}),
-	0x8032DA6C: main.sym_var("collision_8032DA6C", "u32", "[]", flag={"GLOBL"}),
-	0x8032DA90: main.sym_var("collision_8032DA90", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DA94: main.sym_var("collision_8032DA94", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DA98: main.sym_var("collision_8032DA98", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032D950: main.sym_var("collisiontab", "COLLISION", "[]"),
+	0x8032DA48: main.sym_var("fdamagetab", "u32", "[3][3]"),
+	0x8032DA6C: main.sym_var("bdamagetab", "u32", "[3][3]"),
+	0x8032DA90: main.sym_var("door_flag", "u8", flag={"DALIGN"}),
+	0x8032DA94: main.sym_var("pipe_flag", "u8", flag={"DALIGN"}),
+	0x8032DA98: main.sym_var("slider_flag", "u8", flag={"DALIGN"}),
 
 	# src/player.c
-	0x8032DAA0: main.sym_var("player_8032DAA0", "s8", "[][6]", flag={"GLOBL"}),
-	0x8032DACC: main.sym_var("player_8032DACC", "u8", "[]", flag={"GLOBL"}),
-	0x8032DAE0: main.sym_var("player_8032DAE0", "u64", flag={"GLOBL"}),
+	0x8032DAA0: main.sym_var("pl_surfacetab", "char", "[][6]"),
+	0x8032DACC: main.sym_var("pl_unpresstab", "u8", "[]"),
+	0x8032DAE0: main.sym_var("pl_flash_pattern", "u64"),
 
 	# src/physics.c
-	0x8032DAF0: main.sym_var("physics_8032DAF0", "s16", "[]", flag={"GLOBL"}),
-	0x8032DAF8: main.sym_var("physics_8032DAF8", "BGFACE", flag={"GLOBL"}),
+	0x8032DAF0: main.sym_var("quicksand_speed", "s16", "[]"),
+	0x8032DAF8: main.sym_var("water_ground", "BGFACE", flag={"GLOBL"}),
 
 	# src/pldemo.c
-	0x8032DB30: main.sym_var("vp_pl_demo", "Vp", flag={"GLOBL"}),
-	0x8032DB40: main.sym_var("pl_demo_staff", "STAFF *", flag={"GLOBL","DALIGN"}),
-	0x8032DB44: main.sym_var("pl_demo_8032DB44", "s8", flag={"GLOBL","DALIGN"}),
-	0x8032DB48: main.sym_var("pl_demo_8032DB48", "s8", flag={"GLOBL","DALIGN"}),
-	0x8032DB4C: main.sym_var("pl_demo_8032DB4C", "s8", "[]", flag={"GLOBL"}),
-	0x8032DB54: main.sym_var("pl_demo_8032DB54", "u8", "[]", flag={"GLOBL"}),
-	0x8032DB5C: main.sym_var("pl_demo_8032DB5C", "BSPLINE", "[]", flag={"GLOBL"}),
-	0x8032DC34: main.sym_var("pl_demo_8032DC34", "s32", flag={"GLOBL","DALIGN"}),
-	0x8032DC38: main.sym_var("pl_demo_8032DC38", "s32", flag={"GLOBL","DALIGN"}),
-	0x8032DC3C: main.sym_var("pl_demo_8032DC3C", "u8", "[]", flag={"GLOBL"}),
+	0x8032DB30: main.sym_var("pldemo_vp", "Vp", flag={"GLOBL"}),
+	0x8032DB40: main.sym_var("pldemo_staff", "STAFF *", flag={"GLOBL","DALIGN"}),
+	0x8032DB44: main.sym_var("pldemo_8032DB44", "s8", flag={"GLOBL","DALIGN"}),
+	0x8032DB48: main.sym_var("pldemo_8032DB48", "s8", flag={"GLOBL","DALIGN"}),
+	0x8032DB4C: main.sym_var("pldemo_8032DB4C", "s8", "[]", flag={"GLOBL"}),
+	0x8032DB54: main.sym_var("pldemo_8032DB54", "u8", "[]", flag={"GLOBL"}),
+	0x8032DB5C: main.sym_var("pldemo_8032DB5C", "BSPLINE", "[]", flag={"GLOBL"}),
+	0x8032DC34: main.sym_var("pldemo_8032DC34", "s32", flag={"GLOBL","DALIGN"}),
+	0x8032DC38: main.sym_var("pldemo_8032DC38", "s32", flag={"GLOBL","DALIGN"}),
+	0x8032DC3C: main.sym_var("pldemo_8032DC3C", "u8", "[]", flag={"GLOBL"}),
 
 	# src/plmove.c
-	0x8032DC50: main.sym_var("pl_move_8032DC50", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DC68: main.sym_var("pl_move_8032DC68", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DC80: main.sym_var("pl_move_8032DC80", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DC98: main.sym_var("pl_move_8032DC98", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DCB0: main.sym_var("pl_move_8032DCB0", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DCC8: main.sym_var("pl_move_8032DCC8", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DCE0: main.sym_var("pl_move_8032DCE0", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DCF8: main.sym_var("pl_move_8032DCF8", "PL_MOVE", flag={"GLOBL"}),
-	0x8032DD10: main.sym_var("pl_move_8032DD10", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DC50: main.sym_var("plmove_8032DC50", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DC68: main.sym_var("plmove_8032DC68", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DC80: main.sym_var("plmove_8032DC80", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DC98: main.sym_var("plmove_8032DC98", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DCB0: main.sym_var("plmove_8032DCB0", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DCC8: main.sym_var("plmove_8032DCC8", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DCE0: main.sym_var("plmove_8032DCE0", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DCF8: main.sym_var("plmove_8032DCF8", "PL_MOVE", flag={"GLOBL"}),
+	0x8032DD10: main.sym_var("plmove_8032DD10", "PL_MOVE", flag={"GLOBL"}),
 
 	# src/plswim.c
-	0x8032DD30: main.sym_var("pl_swim_8032DD30", "s16", flag={"GLOBL","DALIGN"}),
-	0x8032DD34: main.sym_var("pl_swim_8032DD34", "s16", flag={"GLOBL","DALIGN"}),
-	0x8032DD38: main.sym_var("pl_swim_8032DD38", "s16", "[]", flag={"GLOBL"}),
+	0x8032DD30: main.sym_var("plswim_8032DD30", "s16", flag={"GLOBL","DALIGN"}),
+	0x8032DD34: main.sym_var("plswim_8032DD34", "s16", flag={"GLOBL","DALIGN"}),
+	0x8032DD38: main.sym_var("plswim_8032DD38", "s16", "[]", flag={"GLOBL"}),
 
-	# src/plhold.c
-	0x8032DD40: main.sym_var("pl_hold_8032DD40", "s8", "[]", flag={"GLOBL"}),
+	# src/pltake.c
+	0x8032DD40: main.sym_var("pltake_8032DD40", "s8", "[]", flag={"GLOBL"}),
 
 	# src/callback.c
 	0x8032DD50: main.sym_var("pl_eyes_table", "s8", "[]"),
 	0x8032DD58: main.sym_var("pl_punch_table", "s8", "[]"),
-	0x8032DD6C: main.sym_var("pl_punch_stamp", "s16", flag={"DALIGN"}),
+	0x8032DD6C: main.sym_var("pl_punch_stamp", "short", flag={"DALIGN"}),
 
 	# src/memory.c
 	0x8032DD70: main.sym_var("mem_frame", "MEM_FRAME *", flag={"DALIGN"}),
 
-	# src/save.c
-	0x8032DD80: main.sym_var("save_course", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD84: main.sym_var("save_level", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD88: main.sym_var("save_hiscore", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD8C: main.sym_var("save_myscore", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD90: main.sym_var("save_star", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD94: main.sym_var("save_jump", "u8", flag={"GLOBL","DALIGN"}),
-	0x8032DD98: main.sym_var("course_table", "s8", "[]", flag={"GLOBL"}),
+	# src/backup.c
+	0x8032DD80: main.sym_var("bu_course", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD84: main.sym_var("bu_level", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD88: main.sym_var("bu_hiscore", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD8C: main.sym_var("bu_myscore", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD90: main.sym_var("bu_star", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD94: main.sym_var("bu_jump", "u8", flag={"GLOBL","DALIGN"}),
+	0x8032DD98: main.sym_var("coursetab", "s8", "[]", flag={"GLOBL"}),
 
 	# src/scene.c
 	0x8032DDC0: main.sym_var("mario_actor", "ACTOR *", flag={"GLOBL","DALIGN"}),
@@ -15543,8 +16711,8 @@ sym_E0_code_data = {
 	0x8032DDC8: main.sym_var("scene_table", "SCENE *", flag={"GLOBL","DALIGN"}),
 	0x8032DDCC: main.sym_var("scenep", "SCENE *", flag={"GLOBL","DALIGN"}),
 	0x8032DDD0: main.sym_var("staffp", "STAFF *", flag={"GLOBL","DALIGN"}),
-	0x8032DDD4: main.sym_var("scene_viewport", "Vp *", flag={"DALIGN"}),
-	0x8032DDD8: main.sym_var("scene_scissor", "Vp *", flag={"DALIGN"}),
+	0x8032DDD4: main.sym_var("sn_viewport", "Vp *", flag={"DALIGN"}),
+	0x8032DDD8: main.sym_var("sn_scissor", "Vp *", flag={"DALIGN"}),
 	0x8032DDDC: main.sym_var("wipe_delay", "s16", flag={"DALIGN"}),
 	0x8032DDE0: main.sym_var("scene_fill", "u32", flag={"DALIGN"}),
 	0x8032DDE4: main.sym_var("blank_fill", "u32", flag={"DALIGN"}),
@@ -15553,19 +16721,19 @@ sym_E0_code_data = {
 	0x8032DDF0: main.sym_var("blank_b", "u8", flag={"DALIGN"}),
 	0x8032DDF4: main.sym_var("file_index", "s16", flag={"GLOBL","DALIGN"}),
 	0x8032DDF8: main.sym_var("stage_index", "s16", flag={"GLOBL","DALIGN"}),
-	0x8032DDFC: main.sym_var("port_script", "O_SCRIPT *", "[]"),
+	0x8032DDFC: main.sym_var("port_script", "OBJLANG *", "[]"),
 	0x8032DE4C: main.sym_var("port_type", "u8", "[]"),
-	0x8032DE60: main.sym_var("vp_default", "Vp"),
+	0x8032DE60: main.sym_var("default_vp", "Vp"),
 
 	# src/draw.c
 	0x8032DE70: main.sym_var("draw_rendermode_1", "u32", "[2][8]"),
 	0x8032DEB0: main.sym_var("draw_rendermode_2", "u32", "[2][8]"),
-	0x8032DEF0: main.sym_var("s_scene", "S_SCENE *", flag={"GLOBL","DALIGN"}),
-	0x8032DEF4: main.sym_var("s_layer", "S_LAYER *", flag={"GLOBL","DALIGN"}),
-	0x8032DEF8: main.sym_var("s_persp", "S_PERSP *", flag={"GLOBL","DALIGN"}),
-	0x8032DEFC: main.sym_var("s_camera", "S_CAMERA *", flag={"GLOBL","DALIGN"}),
-	0x8032DF00: main.sym_var("s_object", "S_OBJECT *", flag={"GLOBL","DALIGN"}),
-	0x8032DF04: main.sym_var("s_hand", "S_HAND *", flag={"GLOBL","DALIGN"}),
+	0x8032DEF0: main.sym_var("draw_scene", "SSCENE *", flag={"GLOBL","DALIGN"}),
+	0x8032DEF4: main.sym_var("draw_layer", "SLAYER *", flag={"GLOBL","DALIGN"}),
+	0x8032DEF8: main.sym_var("draw_persp", "SPERSP *", flag={"GLOBL","DALIGN"}),
+	0x8032DEFC: main.sym_var("draw_camera", "SCAMERA *", flag={"GLOBL","DALIGN"}),
+	0x8032DF00: main.sym_var("draw_object", "SOBJECT *", flag={"GLOBL","DALIGN"}),
+	0x8032DF04: main.sym_var("draw_hand", "SHAND *", flag={"GLOBL","DALIGN"}),
 	0x8032DF08: main.sym_var("draw_timer", "u16", flag={"GLOBL","DALIGN"}),
 
 	# src/time.c
@@ -15593,18 +16761,18 @@ sym_E0_code_data = {
 	0x8032DF60: main.sym_var("mario_cam", "PL_CAMERA *", flag={"GLOBL","DALIGN"}),
 	0x8032DF64: main.sym_var("luigi_cam", "PL_CAMERA *", flag={"GLOBL","DALIGN"}),
 	0x8032DF68: main.sym_var("camera_8032DF68", "s32", flag={"GLOBL","DALIGN"}), # unused
-	0x8032DF6C: main.sym_var("camera_8032DF6C", "VECF", flag={"GLOBL"}),
-	0x8032DF78: main.sym_var("camera_8032DF78", "VECF", flag={"GLOBL"}), # unused
-	0x8032DF84: main.sym_var("camera_8032DF84", "VECF", flag={"GLOBL"}), # unused
-	0x8032DF90: main.sym_var("camera_8032DF90", "VECF", flag={"GLOBL"}), # unused
-	0x8032DF9C: main.sym_var("camera_8032DF9C", "VECF", flag={"GLOBL"}), # unused
+	0x8032DF6C: main.sym_var("camera_8032DF6C", "FVEC", flag={"GLOBL"}),
+	0x8032DF78: main.sym_var("camera_8032DF78", "FVEC", flag={"GLOBL"}), # unused
+	0x8032DF84: main.sym_var("camera_8032DF84", "FVEC", flag={"GLOBL"}), # unused
+	0x8032DF90: main.sym_var("camera_8032DF90", "FVEC", flag={"GLOBL"}), # unused
+	0x8032DF9C: main.sym_var("camera_8032DF9C", "FVEC", flag={"GLOBL"}), # unused
 	0x8032DFA8: main.sym_var_fnc("camera_8032DFA8", lst="[]", val="int", arg=(
 		"CAMERA *",
-		"VECF",
-		"VECF",
+		"FVEC",
+		"FVEC",
 	), flag={"GLOBL"}),
-	0x8032DFF0: main.sym_var("camera_8032DFF0", "VECF", flag={"GLOBL"}),
-	0x8032DFFC: main.sym_var("camera_8032DFFC", "VECF", flag={"GLOBL"}),
+	0x8032DFF0: main.sym_var("camera_8032DFF0", "FVEC", flag={"GLOBL"}),
+	0x8032DFFC: main.sym_var("camera_8032DFFC", "FVEC", flag={"GLOBL"}),
 	0x8032E008: main.sym_var("camera_8032E008", "u16", "[]", flag={"GLOBL"}), # unused
 	0x8032E018: main.sym_var("camera_8032E018", "u8", "[]", flag={"GLOBL"}),
 	0x8032E020: main.sym_var("campos_bbh_library_test", "CAMPOS", "[]", flag={"GLOBL"}), # unused
@@ -15631,9 +16799,9 @@ sym_E0_code_data = {
 	0x8032F130: main.sym_var("campath_8032F130", "CAMPATH", "[]", flag={"GLOBL"}),
 	0x8032F178: main.sym_var("campath_8032F178", "CAMPATH", "[]", flag={"GLOBL"}),
 	0x8032F1B8: main.sym_var("campath_8032F1B8", "CAMPATH", "[]", flag={"GLOBL"}),
-	0x8032F1F0: main.sym_var("camera_8032F1F0", "VECF", flag={"GLOBL"}),
-	0x8032F1FC: main.sym_var("camera_8032F1FC", "VECF", flag={"GLOBL"}),
-	0x8032F208: main.sym_var("camera_8032F208", "VECF", flag={"GLOBL"}),
+	0x8032F1F0: main.sym_var("camera_8032F1F0", "FVEC", flag={"GLOBL"}),
+	0x8032F1FC: main.sym_var("camera_8032F1FC", "FVEC", flag={"GLOBL"}),
+	0x8032F208: main.sym_var("camera_8032F208", "FVEC", flag={"GLOBL"}),
 	0x8032F214: main.sym_var("campath_8032F214", "CAMPATH", "[]", flag={"GLOBL"}),
 	0x8032F32C: main.sym_var("campath_8032F32C", "CAMPATH", "[]", flag={"GLOBL"}),
 	0x8032F444: main.sym_var("campath_8032F444", "CAMPATH", "[]", flag={"GLOBL"}),
@@ -15726,20 +16894,20 @@ sym_E0_code_data = {
 
 	# src/object.c
 	0x8032FEC0: main.sym_var("objproc_table", "s8", "[]"),
-	0x8032FECC: main.sym_var("pl_effect", "PL_EFFECT", "[]"),
+	0x8032FECC: main.sym_var("pl_effecttab", "PL_EFFECT", "[]"),
 
-	# src/objlib.c
-	0x80330000: main.sym_var("objlib_80330000", "s8", "[]", flag={"GLOBL"}),
-	0x80330004: main.sym_var("objlib_80330004", "s16", "[]", flag={"GLOBL"}),
-	0x80330014: main.sym_var("objlib_80330014", "s8", "[]", flag={"GLOBL"}),
+	# src/objectlib.c
+	0x80330000: main.sym_var("objectlib_80330000", "signed char", "[]", flag={"GLOBL"}),
+	0x80330004: main.sym_var("bittab", "short", "[]", flag={"GLOBL"}),
+	0x80330014: main.sym_var("areastagetab", "s8", "[]", flag={"GLOBL"}),
 
 	# src/object_a.c
 	0x80330020: main.sym_var("object_a_80330020", "u32", "[]", flag={"GLOBL"}),
 	0x8033002C: main.sym_var("object_a_8033002C", "s16", "[]", flag={"GLOBL"}),
 	0x8033006C: main.sym_var("object_a_8033006C", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330074: main.sym_var("object_a_80330074", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330084: main.sym_var("object_a_80330084", "OBJ_HIT", flag={"GLOBL"}),
-	0x80330094: main.sym_var("object_a_80330094", "OBJ_EFFECT", flag={"GLOBL"}),
+	0x80330084: main.sym_var("object_a_80330084", "HITINFO", flag={"GLOBL"}),
+	0x80330094: main.sym_var("object_a_80330094", "PARTICLE", flag={"GLOBL"}),
 	0x803300A8: main.sym_var("object_a_803300A8", "u8", "[]", flag={"GLOBL"}), # unused
 	0x803300AC: main.sym_var("object_a_803300AC", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x803300BC: main.sym_var("object_a_803300BC", "OBJCALL *", "[]", flag={"GLOBL"}),
@@ -15748,10 +16916,10 @@ sym_E0_code_data = {
 	0x8033015C: main.sym_var("object_a_8033015C", "struct object_a_0", "[]", flag={"GLOBL"}), # unused
 	0x80330198: main.sym_var("object_a_80330198", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x803301A8: main.sym_var("object_a_803301A8", "struct object_a_1", "[]", flag={"GLOBL"}),
-	0x803301C0: main.sym_var("object_a_803301C0", "OBJ_HIT", flag={"GLOBL"}),
-	0x803301D0: main.sym_var("object_a_803301D0", "OBJ_EFFECT", flag={"GLOBL"}),
-	0x803301E4: main.sym_var("object_a_803301E4", "OBJ_HIT", flag={"GLOBL"}),
-	0x803301F4: main.sym_var("object_a_803301F4", "OBJ_HIT", flag={"GLOBL"}),
+	0x803301C0: main.sym_var("object_a_803301C0", "HITINFO", flag={"GLOBL"}),
+	0x803301D0: main.sym_var("object_a_803301D0", "PARTICLE", flag={"GLOBL"}),
+	0x803301E4: main.sym_var("object_a_803301E4", "HITINFO", flag={"GLOBL"}),
+	0x803301F4: main.sym_var("object_a_803301F4", "HITINFO", flag={"GLOBL"}),
 	0x80330204: main.sym_var("object_a_80330204", "s16", "[][2]", flag={"GLOBL"}),
 	0x80330224: main.sym_var("object_a_80330224", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x8033022C: main.sym_var("object_a_8033022C", "s16", "[][2]", flag={"GLOBL"}),
@@ -15764,22 +16932,22 @@ sym_E0_code_data = {
 	0x803302DC: main.sym_var("object_a_803302DC", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x803302EC: main.sym_var("object_a_803302EC", "s16", "[][3]", flag={"GLOBL"}),
 	0x80330318: main.sym_var("object_a_80330318", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x8033032C: main.sym_var("object_a_8033032C", "OBJ_EFFECT", flag={"GLOBL"}),
-	0x80330340: main.sym_var("object_a_80330340", "OBJ_EFFECT", flag={"GLOBL"}),
+	0x8033032C: main.sym_var("object_a_8033032C", "PARTICLE", flag={"GLOBL"}),
+	0x80330340: main.sym_var("object_a_80330340", "PARTICLE", flag={"GLOBL"}),
 	0x80330354: main.sym_var("object_a_80330354", "s16", "[]", flag={"GLOBL"}),
-	0x8033035C: main.sym_var("object_a_8033035C", "OBJ_EFFECT", flag={"GLOBL"}),
+	0x8033035C: main.sym_var("object_a_8033035C", "PARTICLE", flag={"GLOBL"}),
 	0x80330370: main.sym_var("object_a_80330370", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330380: main.sym_var("object_a_80330380", "f32", "[]", flag={"GLOBL"}),
-	0x80330390: main.sym_var("object_a_80330390", "OBJ_HIT", flag={"GLOBL"}),
-	0x803303A0: main.sym_var("object_a_803303A0", "OBJ_HIT", flag={"GLOBL"}),
-	0x803303B0: main.sym_var("object_a_803303B0", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330390: main.sym_var("object_a_80330390", "HITINFO", flag={"GLOBL"}),
+	0x803303A0: main.sym_var("object_a_803303A0", "HITINFO", flag={"GLOBL"}),
+	0x803303B0: main.sym_var("object_a_803303B0", "HITINFO", flag={"GLOBL"}),
 	0x803303C0: main.sym_var("object_a_803303C0", "s16", "[][2]", flag={"GLOBL"}),
 	0x803303E8: main.sym_var("object_a_803303E8", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x803303F8: main.sym_var("object_a_803303F8", "OBJ_HIT", flag={"GLOBL"}),
+	0x803303F8: main.sym_var("object_a_803303F8", "HITINFO", flag={"GLOBL"}),
 	0x80330408: main.sym_var("object_a_80330408", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330410: main.sym_var("object_a_80330410", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330410: main.sym_var("object_a_80330410", "HITINFO", flag={"GLOBL"}),
 	0x80330420: main.sym_var("object_a_80330420", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x8033042C: main.sym_var("object_a_8033042C", "OBJ_HIT", flag={"GLOBL"}),
+	0x8033042C: main.sym_var("object_a_8033042C", "HITINFO", flag={"GLOBL"}),
 	0x8033043C: main.sym_var("object_a_8033043C", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330450: main.sym_var("object_a_80330450", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x8033045C: main.sym_var("object_a_8033045C", "s8", "[]", flag={"GLOBL"}),
@@ -15794,8 +16962,8 @@ sym_E0_code_data = {
 	0x803305F4: main.sym_var("object_a_803305F4", "s8", "[]", flag={"GLOBL"}),
 	0x803305F8: main.sym_var("object_a_803305F8", "struct object_a_3", "[]", flag={"GLOBL"}),
 	0x8033067C: main.sym_var("object_a_8033067C", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330688: main.sym_var("object_a_80330688", "OBJ_HIT", flag={"GLOBL"}),
-	0x80330698: main.sym_var("object_a_80330698", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330688: main.sym_var("object_a_80330688", "HITINFO", flag={"GLOBL"}),
+	0x80330698: main.sym_var("object_a_80330698", "HITINFO", flag={"GLOBL"}),
 	0x803306A8: main.sym_var("object_a_803306A8", "f32", "[]", flag={"GLOBL"}),
 	0x803306B4: main.sym_var("object_a_803306B4", "struct object_a_4", "[]", flag={"GLOBL"}),
 	0x803306DC: main.sym_var("object_a_803306DC", "PATH", "[]", flag={"GLOBL"}),
@@ -15805,7 +16973,7 @@ sym_E0_code_data = {
 	0x803307F4: main.sym_var("object_a_803307F4", "static s16", "[]"),
 	0x80330828: main.sym_var("object_a_80330828", "s16 *", "[]", flag={"GLOBL"}),
 	0x80330830: main.sym_var("object_a_80330830", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330840: main.sym_var("object_a_80330840", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330840: main.sym_var("object_a_80330840", "HITINFO", flag={"GLOBL"}),
 	0x80330850: main.sym_var("object_a_80330850", "static s8", "[]"),
 	0x80330884: main.sym_var("object_a_80330884", "static s8", "[]"),
 	0x803308A8: main.sym_var("object_a_803308A8", "static s8", "[]"),
@@ -15835,25 +17003,25 @@ sym_E0_code_data = {
 	0x80330B68: main.sym_var("object_a_80330B68", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330B74: main.sym_var("object_a_80330B74", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330B84: main.sym_var("object_a_80330B84", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330B90: main.sym_var("object_a_80330B90", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330B90: main.sym_var("object_a_80330B90", "HITINFO", flag={"GLOBL"}),
 	0x80330BA0: main.sym_var("object_a_80330BA0", "struct object_a_6", "[]", flag={"GLOBL"}),
 	0x80330C20: main.sym_var("object_a_80330C20", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330C38: main.sym_var("object_a_80330C38", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330C38: main.sym_var("object_a_80330C38", "HITINFO", flag={"GLOBL"}),
 	0x80330C48: main.sym_var("object_a_80330C48", "struct object_a_7", "[]", flag={"GLOBL"}),
-	0x80330C58: main.sym_var("object_a_80330C58", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330C58: main.sym_var("object_a_80330C58", "HITINFO", flag={"GLOBL"}),
 	0x80330C68: main.sym_var("object_a_80330C68", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330C74: main.sym_var("object_a_80330C74", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330C74: main.sym_var("object_a_80330C74", "HITINFO", flag={"GLOBL"}),
 	0x80330C84: main.sym_var("object_a_80330C84", "s16", "[][3]", flag={"GLOBL"}),
 	0x80330C98: main.sym_var("object_a_80330C98", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330CB0: main.sym_var("object_a_80330CB0", "OBJCALL *", "[]", flag={"GLOBL"}),
 	0x80330CC4: main.sym_var("object_a_80330CC4", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330CD4: main.sym_var("object_a_80330CD4", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330CD4: main.sym_var("object_a_80330CD4", "HITINFO", flag={"GLOBL"}),
 	0x80330CE4: main.sym_var("object_a_80330CE4", "OBJCALL *", "[]", flag={"GLOBL"}),
-	0x80330D0C: main.sym_var("object_a_80330D0C", "OBJ_SPLASH", flag={"GLOBL"}),
-	0x80330D30: main.sym_var("object_a_80330D30", "OBJ_SPLASH", flag={"GLOBL"}),
-	0x80330D54: main.sym_var("object_a_80330D54", "OBJ_SPLASH", flag={"GLOBL"}),
-	0x80330D78: main.sym_var("object_a_80330D78", "OBJ_SPLASH", flag={"GLOBL"}),
-	0x80330D9C: main.sym_var("object_a_80330D9C", "OBJ_HIT", flag={"GLOBL"}),
+	0x80330D0C: main.sym_var("object_a_80330D0C", "SPLASH", flag={"GLOBL"}),
+	0x80330D30: main.sym_var("object_a_80330D30", "SPLASH", flag={"GLOBL"}),
+	0x80330D54: main.sym_var("object_a_80330D54", "SPLASH", flag={"GLOBL"}),
+	0x80330D78: main.sym_var("object_a_80330D78", "SPLASH", flag={"GLOBL"}),
+	0x80330D9C: main.sym_var("object_a_80330D9C", "HITINFO", flag={"GLOBL"}),
 	0x80330DAC: main.sym_var("object_a_80330DAC", "struct object_a_8", "[]", flag={"GLOBL"}),
 
 	# src/ride.c
@@ -15882,21 +17050,21 @@ sym_E0_code_data = {
 	# src/shadow.c
 	0x80330EE0: main.sym_var("shadow_rect_table", "SHADOW_RECT", "[]"),
 
-	# src/back.c
-	0x80330F00: main.sym_var("back_table", "BACK *", "[]"),
+	# src/background.c
+	0x80330F00: main.sym_var("backtab", "BACKGROUND *", "[]"),
 	0x80330F28: main.sym_var("back_shade", "u8", "[][3]"),
 
 	# src/water.c
-	0x80330F30: main.sym_var("water_80330F30", "s16", flag={"GLOBL","DALIGN"}),
-	0x80330F34: main.sym_var("water_80330F34", "s16", flag={"GLOBL","DALIGN"}),
-	0x80330F38: main.sym_var("water_80330F38", "s8", flag={"GLOBL","DALIGN"}),
-	0x80330F3C: main.sym_var("water_80330F3C", "f32", flag={"GLOBL","DALIGN"}),
-	0x80330F40: main.sym_var("water_80330F40", "s32", flag={"GLOBL","DALIGN"}),
-	0x80330F44: main.sym_var("txt_water", "u16 *", "[]", flag={"GLOBL"}),
-	0x80330F64: main.sym_var("water_table_a", "WATER", "[]", flag={"GLOBL"}),
-	0x803311A4: main.sym_var("water_table_b", "WATER", "[]", flag={"GLOBL"}),
-	0x8033127C: main.sym_var("water_table_c", "WATER", "[]", flag={"GLOBL"}),
-	0x803312E8: main.sym_var("water_803312E8", "s8", "[]", flag={"GLOBL"}), # unused
+	0x80330F30: main.sym_var("water_timer", "s16", flag={"DALIGN"}),
+	0x80330F34: main.sym_var("water_stamp", "s16", flag={"DALIGN"}),
+	0x80330F38: main.sym_var("water_color", "s8", flag={"DALIGN"}),
+	0x80330F3C: main.sym_var("pool_entry", "float", flag={"GLOBL","DALIGN"}),
+	0x80330F40: main.sym_var("pool_flag", "int", flag={"DALIGN"}),
+	0x80330F44: main.sym_var("txt_water", "u16 *", "[]"),
+	0x80330F64: main.sym_var("fluidtab", "FLUID", "[]"),
+	0x803311A4: main.sym_var("fluidtabL", "FLUID", "[]"),
+	0x8033127C: main.sym_var("fluidtabS", "FLUID", "[]"),
+	0x803312E8: main.sym_var("water_leveltab", "short", "[]"), # unused
 
 	# src/objshape.c
 	0x803312F0: main.sym_var("objshape_803312F0", "s16", flag={"DALIGN"}),
@@ -15904,18 +17072,18 @@ sym_E0_code_data = {
 	0x803312F8: main.sym_var("objshape_803312F8", "s16", flag={"DALIGN"}),
 
 	# src/wave.c
-	0x80331300: main.sym_var("wave_80331300", "struct wave *", "[]", flag={"GLOBL"}),
-	0x80331308: main.sym_var("wave_80331308", "struct wave *", "[]", flag={"GLOBL"}),
-	0x80331344: main.sym_var("wave_80331344", "struct wave *", "[]", flag={"GLOBL"}),
-	0x8033134C: main.sym_var("wave_8033134C", "struct wave **", "[]", flag={"GLOBL"}),
-	0x80331358: main.sym_var("wave_80331358", "s16", flag={"GLOBL","DALIGN"}),
-	0x8033135C: main.sym_var("wave_8033135C", "s16", flag={"GLOBL","DALIGN"}),
+	0x80331300: main.sym_var("wavetab0", "WAVE *", "[]"),
+	0x80331308: main.sym_var("wavetab1", "WAVE *", "[]"),
+	0x80331344: main.sym_var("wavetab2", "WAVE *", "[]"),
+	0x8033134C: main.sym_var("wavetab", "WAVE **", "[]"),
+	0x80331358: main.sym_var("wave_timer", "s16", flag={"DALIGN"}),
+	0x8033135C: main.sym_var("wave_stamp", "s16", flag={"DALIGN"}),
 
 	# src/dprint.c
 	0x80331360: main.sym_var("dprint_index", "s16", flag={"DALIGN"}),
 
 	# src/message.c
-	0x80331370: main.sym_var("font_kerning", "u8", "[256]"),
+	0x80331370: main.sym_var("kerningtab", "u8", "[256]"),
 	0x80331470: main.sym_var("msg_state", "s8", flag={"DALIGN"}),
 	0x80331474: main.sym_var("msg_angle", "float", flag={"DALIGN"}),
 	0x80331478: main.sym_var("msg_scale", "float", flag={"DALIGN"}),
@@ -15928,7 +17096,7 @@ sym_E0_code_data = {
 	0x80331494: main.sym_var("msg_cursor_flag", "char", flag={"DALIGN"}),
 	0x80331498: main.sym_var("cursor_status", "u8", flag={"DALIGN"}),
 	0x8033149C: main.sym_var("cursor_timer", "u8", flag={"DALIGN"}),
-	0x803314A0: main.sym_var("msg_answer", "int", flag={"DALIGN"}),
+	0x803314A0: main.sym_var("msg_answer", "int", flag={"GLOBL","DALIGN"}),
 	0x803314A4: main.sym_var("str_803314A4", "unsigned char", "[][5]"), # the / you
 	0x803314B0: main.sym_var("str_803314B0", "unsigned char", "[]"), # [+]
 	0x803314B4: main.sym_var("str_803314B4", "unsigned char", "[]"), # [x]
@@ -15940,11 +17108,11 @@ sym_E0_code_data = {
 	0x803314E0: main.sym_var("msg_se7_1e", "s16", "[]"),
 	0x803314EC: main.sym_var("msg_bgmstop", "s16", "[]"),
 	0x803314F8: main.sym_var("menu_code", "s16", flag={"DALIGN"}),
-	0x803315E4: main.sym_var("caption_table", "unsigned char *", "[]"),
-	0x8033160C: main.sym_var("caption_alpha", "u16", flag={"DALIGN"}),
-	0x80331610: main.sym_var("caption_code", "s16", flag={"DALIGN"}),
-	0x80331614: main.sym_var("caption_frame", "s16", flag={"DALIGN"}),
-	0x80331618: main.sym_var("caption_timer", "s16", flag={"DALIGN"}),
+	0x803315E4: main.sym_var("captiontab", "unsigned char *", "[]"),
+	0x8033160C: main.sym_var("demo_alpha", "u16", flag={"DALIGN"}),
+	0x80331610: main.sym_var("caption", "s16", flag={"DALIGN"}),
+	0x80331614: main.sym_var("demo_frame", "s16", flag={"DALIGN"}),
+	0x80331618: main.sym_var("demo_timer", "s16", flag={"DALIGN"}),
 	0x8033161C: main.sym_var("camera_cursor", "s8", flag={"DALIGN"}),
 	0x80331620: main.sym_var("pausemenu_level", "s8", flag={"GLOBL","DALIGN"}),
 	0x80331624: main.sym_var("str_80331624", "unsigned char", "[]"), # COURSE
@@ -15979,19 +17147,19 @@ sym_E0_code_data = {
 	0x80331734: main.sym_var("str_80331734", "unsigned char", "[]"), # CONTINUE, DON'T SAVE
 
 	# src/weather.c
-	0x80331750: main.sym_var("weather_80331750", "s8", flag={"GLOBL","DALIGN"}),
-	0x80331758: main.sym_var("vtx_weather_snow", "Vtx", "[]", flag={"GLOBL"}),
-	0x80331788: main.sym_var("weather_80331788", "VECS", flag={"GLOBL"}),
-	0x80331790: main.sym_var("weather_80331790", "VECS", flag={"GLOBL"}),
-	0x80331798: main.sym_var("weather_80331798", "VECS", flag={"GLOBL"}),
+	0x80331750: main.sym_var("weather_code", "s8", flag={"GLOBL","DALIGN"}),
+	0x80331758: main.sym_var("snow_template", "Vtx", "[]"),
+	0x80331788: main.sym_var("snow_v0", "SVEC"),
+	0x80331790: main.sym_var("snow_v1", "SVEC"),
+	0x80331798: main.sym_var("snow_v2", "SVEC"),
 
 	# src/lava.c
-	0x803317A0: main.sym_var("lava_803317A0", "s8", flag={"GLOBL","DALIGN"}),
-	0x803317A8: main.sym_var("vtx_weather_lava", "Vtx", "[]", flag={"GLOBL"}),
+	0x803317A0: main.sym_var("lava_803317A0", "char", flag={"DALIGN"}), # unused
+	0x803317A8: main.sym_var("lava_template", "Vtx", "[]"),
 
 	# src/tag.c
-	0x803317E0: main.sym_var("tag_obj_table", "static TAG_OBJ", "[]"),
-	0x80332350: main.sym_var("map_obj_table", "static MAP_OBJ", "[]"),
+	0x803317E0: main.sym_var("tagobjtab", "static TAGOBJ", "[]"),
+	0x80332350: main.sym_var("mapobjtab", "static MAPOBJ", "[]"),
 
 	# src/hud.c
 	0x803325F0: main.sym_var("meter", "METER"),
@@ -16006,64 +17174,64 @@ sym_E0_code_data = {
 	0x80332618: main.sym_var("object_b_80332618", "s8", flag={"GLOBL","DALIGN"}),
 	0x8033261C: main.sym_var("object_b_8033261C", "s8", flag={"GLOBL","DALIGN"}),
 	0x80332620: main.sym_var("object_b_80332620", "s8", flag={"GLOBL","DALIGN"}),
-	0x80332624: main.sym_var("object_b_80332624", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332634: main.sym_var("object_b_80332634", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332644: main.sym_var("object_b_80332644", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332654: main.sym_var("object_b_80332654", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332664: main.sym_var("object_b_80332664", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332674: main.sym_var("object_b_80332674", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332684: main.sym_var("object_b_80332684", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332694: main.sym_var("object_b_80332694", "OBJ_HIT", flag={"GLOBL"}),
-	0x803326A4: main.sym_var("object_b_803326A4", "OBJ_HIT", flag={"GLOBL"}),
-	0x803326B4: main.sym_var("object_b_803326B4", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332624: main.sym_var("object_b_80332624", "HITINFO", flag={"GLOBL"}),
+	0x80332634: main.sym_var("object_b_80332634", "HITINFO", flag={"GLOBL"}),
+	0x80332644: main.sym_var("object_b_80332644", "HITINFO", flag={"GLOBL"}),
+	0x80332654: main.sym_var("object_b_80332654", "HITINFO", flag={"GLOBL"}),
+	0x80332664: main.sym_var("object_b_80332664", "HITINFO", flag={"GLOBL"}),
+	0x80332674: main.sym_var("object_b_80332674", "HITINFO", flag={"GLOBL"}),
+	0x80332684: main.sym_var("object_b_80332684", "HITINFO", flag={"GLOBL"}),
+	0x80332694: main.sym_var("object_b_80332694", "HITINFO", flag={"GLOBL"}),
+	0x803326A4: main.sym_var("object_b_803326A4", "HITINFO", flag={"GLOBL"}),
+	0x803326B4: main.sym_var("object_b_803326B4", "HITINFO", flag={"GLOBL"}),
 	0x803326C4: main.sym_var("object_b_803326C4", "PATH", "[]", flag={"GLOBL"}),
 	0x80332718: main.sym_var("object_b_80332718", "PATH", "[]", flag={"GLOBL"}),
-	0x80332764: main.sym_var("object_b_80332764", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332774: main.sym_var("object_b_80332774", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332784: main.sym_var("object_b_80332784", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332794: main.sym_var("redcoin_hit", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332764: main.sym_var("object_b_80332764", "HITINFO", flag={"GLOBL"}),
+	0x80332774: main.sym_var("object_b_80332774", "HITINFO", flag={"GLOBL"}),
+	0x80332784: main.sym_var("object_b_80332784", "HITINFO", flag={"GLOBL"}),
+	0x80332794: main.sym_var("redcoin_hit", "HITINFO", flag={"GLOBL"}),
 	0x803327A4: main.sym_var("object_b_803327A4", "s8", flag={"GLOBL","DALIGN"}),
-	0x803327A8: main.sym_var("object_b_803327A8", "OBJ_HIT", flag={"GLOBL"}),
+	0x803327A8: main.sym_var("object_b_803327A8", "HITINFO", flag={"GLOBL"}),
 	0x803327B8: main.sym_var("object_b_803327B8", "PATH", "[]", flag={"GLOBL"}),
-	0x803327FC: main.sym_var("object_b_803327FC", "OBJ_HIT", flag={"GLOBL"}),
-	0x8033280C: main.sym_var("object_b_8033280C", "OBJ_HIT", flag={"GLOBL"}),
-	0x8033281C: main.sym_var("object_b_8033281C", "OBJ_HIT", flag={"GLOBL"}),
+	0x803327FC: main.sym_var("object_b_803327FC", "HITINFO", flag={"GLOBL"}),
+	0x8033280C: main.sym_var("object_b_8033280C", "HITINFO", flag={"GLOBL"}),
+	0x8033281C: main.sym_var("object_b_8033281C", "HITINFO", flag={"GLOBL"}),
 	0x8033282C: main.sym_var("object_b_8033282C", "s16", "[][2]", flag={"GLOBL"}),
 
 	# src/object_c.c
-	0x80332840: main.sym_var("object_c_80332840", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332840: main.sym_var("object_c_80332840", "HITINFO", flag={"GLOBL"}),
 	0x80332850: main.sym_var("object_c_80332850", "u8", "[6]", flag={"GLOBL"}), # template
 	0x80332858: main.sym_var("object_c_80332858", "u8", "[6]", flag={"GLOBL"}), # template
 	0x80332860: main.sym_var("object_c_80332860", "struct object_c_0", "[]", flag={"GLOBL"}),
-	0x80332880: main.sym_var("object_c_80332880", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332880: main.sym_var("object_c_80332880", "HITINFO", flag={"GLOBL"}),
 	0x80332890: main.sym_var("object_c_80332890", "u8", "[6]", flag={"GLOBL"}), # template
-	0x80332898: main.sym_var("object_c_80332898", "OBJ_HIT", flag={"GLOBL"}),
-	0x803328A8: main.sym_var("object_c_803328A8", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332898: main.sym_var("object_c_80332898", "HITINFO", flag={"GLOBL"}),
+	0x803328A8: main.sym_var("object_c_803328A8", "HITINFO", flag={"GLOBL"}),
 	0x803328B8: main.sym_var("object_c_803328B8", "s16", "[]", flag={"GLOBL"}),
-	0x803328C0: main.sym_var("object_c_803328C0", "OBJ_HIT", flag={"GLOBL"}),
+	0x803328C0: main.sym_var("object_c_803328C0", "HITINFO", flag={"GLOBL"}),
 	0x803328D0: main.sym_var("object_c_803328D0", "struct object_c_1", "[]", flag={"GLOBL"}),
 	0x803328F4: main.sym_var("object_c_803328F4", "u8", "[][6]", flag={"GLOBL"}), # template
-	0x80332900: main.sym_var("object_c_80332900", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332910: main.sym_var("object_c_80332910", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332920: main.sym_var("object_c_80332920", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332900: main.sym_var("object_c_80332900", "HITINFO", flag={"GLOBL"}),
+	0x80332910: main.sym_var("object_c_80332910", "HITINFO", flag={"GLOBL"}),
+	0x80332920: main.sym_var("object_c_80332920", "HITINFO", flag={"GLOBL"}),
 	0x80332930: main.sym_var("object_c_80332930", "u8", "[6]", flag={"GLOBL"}), # template
 	0x80332938: main.sym_var("object_c_80332938", "f32", "[]", flag={"GLOBL"}),
 	0x80332948: main.sym_var("object_c_80332948", "int", "[]", flag={"GLOBL"}),
-	0x80332954: main.sym_var("object_c_80332954", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332954: main.sym_var("object_c_80332954", "HITINFO", flag={"GLOBL"}),
 	0x80332964: main.sym_var("object_c_80332964", "u8", "[6]", flag={"GLOBL"}), # template
-	0x8033296C: main.sym_var("object_c_8033296C", "OBJ_HIT", flag={"GLOBL"}),
+	0x8033296C: main.sym_var("object_c_8033296C", "HITINFO", flag={"GLOBL"}),
 	0x8033297C: main.sym_var("object_c_8033297C", "s8", "[]", flag={"GLOBL"}),
-	0x80332984: main.sym_var("object_c_80332984", "OBJ_EFFECT", flag={"GLOBL"}),
-	0x80332998: main.sym_var("object_c_80332998", "OBJ_HIT", flag={"GLOBL"}),
-	0x803329A8: main.sym_var("object_c_803329A8", "OBJ_HIT", flag={"GLOBL"}),
-	0x803329B8: main.sym_var("object_c_803329B8", "OBJ_EFFECT", flag={"GLOBL"}),
+	0x80332984: main.sym_var("object_c_80332984", "PARTICLE", flag={"GLOBL"}),
+	0x80332998: main.sym_var("object_c_80332998", "HITINFO", flag={"GLOBL"}),
+	0x803329A8: main.sym_var("object_c_803329A8", "HITINFO", flag={"GLOBL"}),
+	0x803329B8: main.sym_var("object_c_803329B8", "PARTICLE", flag={"GLOBL"}),
 	0x803329CC: main.sym_var("object_c_803329CC", "MAP *", "[]", flag={"GLOBL"}),
 	0x803329DC: main.sym_var("object_c_803329DC", "PATH *", "[]", flag={"GLOBL"}),
 	0x80332A00: main.sym_var("object_c_80332A00", "MAP *", "[]", flag={"GLOBL"}),
 	0x80332A20: main.sym_var("object_c_80332A20", "struct object_c_2", "[]", flag={"GLOBL"}),
-	0x80332A38: main.sym_var("object_c_80332A38", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332A48: main.sym_var("object_c_80332A48", "OBJ_EFFECT", flag={"GLOBL"}),
-	0x80332A5C: main.sym_var("object_c_80332A5C", "OBJ_EFFECT", flag={"GLOBL"}),
+	0x80332A38: main.sym_var("object_c_80332A38", "HITINFO", flag={"GLOBL"}),
+	0x80332A48: main.sym_var("object_c_80332A48", "PARTICLE", flag={"GLOBL"}),
+	0x80332A5C: main.sym_var("object_c_80332A5C", "PARTICLE", flag={"GLOBL"}),
 	0x80332A70: main.sym_var("object_c_80332A70", "MAP *", "[]", flag={"GLOBL"}),
 	0x80332A78: main.sym_var("object_c_80332A78", "u8", "[]", flag={"GLOBL"}),
 	0x80332A7C: main.sym_var("object_c_80332A7C", "f32", "[]", flag={"GLOBL"}),
@@ -16080,41 +17248,41 @@ sym_E0_code_data = {
 	0x80332AE4: main.sym_var("object_c_80332AE4", "s16", "[]", flag={"GLOBL"}),
 	0x80332AE8: main.sym_var("object_c_80332AE8", "s16", "[][4]", flag={"GLOBL"}),
 	0x80332AF8: main.sym_var("object_c_80332AF8", "s16", "[]", flag={"GLOBL"}),
-	0x80332B00: main.sym_var("object_c_80332B00", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332B10: main.sym_var("object_c_80332B10", "OBJ_EFFECT", flag={"GLOBL"}),
-	0x80332B24: main.sym_var("object_c_80332B24", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332B00: main.sym_var("object_c_80332B00", "HITINFO", flag={"GLOBL"}),
+	0x80332B10: main.sym_var("object_c_80332B10", "PARTICLE", flag={"GLOBL"}),
+	0x80332B24: main.sym_var("object_c_80332B24", "HITINFO", flag={"GLOBL"}),
 	0x80332B34: main.sym_var("object_c_80332B34", "MAP *", "[]", flag={"GLOBL"}),
 	0x80332B54: main.sym_var("object_c_80332B54", "MAP *", "[]", flag={"GLOBL"}),
 	0x80332B5C: main.sym_var("object_c_80332B5C", "s16", "[]", flag={"GLOBL"}),
 	0x80332B64: main.sym_var("object_c_80332B64", "struct object_c_3", "[][5]", flag={"GLOBL"}),
 	0x80332BDC: main.sym_var("object_c_80332BDC", "s16", "[]", flag={"GLOBL"}),
 	0x80332BE4: main.sym_var("object_c_80332BE4", "MAP *", "[]", flag={"GLOBL"}),
-	0x80332BF0: main.sym_var("object_c_80332BF0", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C00: main.sym_var("object_c_80332C00", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C10: main.sym_var("object_c_80332C10", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C20: main.sym_var("object_c_80332C20", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C30: main.sym_var("object_c_80332C30", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332BF0: main.sym_var("object_c_80332BF0", "HITINFO", flag={"GLOBL"}),
+	0x80332C00: main.sym_var("object_c_80332C00", "HITINFO", flag={"GLOBL"}),
+	0x80332C10: main.sym_var("object_c_80332C10", "HITINFO", flag={"GLOBL"}),
+	0x80332C20: main.sym_var("object_c_80332C20", "HITINFO", flag={"GLOBL"}),
+	0x80332C30: main.sym_var("object_c_80332C30", "HITINFO", flag={"GLOBL"}),
 	0x80332C40: main.sym_var("object_c_80332C40", "s16", "[][2]", flag={"GLOBL"}),
-	0x80332C4C: main.sym_var("object_c_80332C4C", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C5C: main.sym_var("object_c_80332C5C", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332C4C: main.sym_var("object_c_80332C4C", "HITINFO", flag={"GLOBL"}),
+	0x80332C5C: main.sym_var("object_c_80332C5C", "HITINFO", flag={"GLOBL"}),
 	0x80332C6C: main.sym_var("object_c_80332C6C", "f32", "[]", flag={"GLOBL"}),
-	0x80332C74: main.sym_var("object_c_80332C74", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C84: main.sym_var("object_c_80332C84", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332C94: main.sym_var("object_c_80332C94", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332CA4: main.sym_var("object_c_80332CA4", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332C74: main.sym_var("object_c_80332C74", "HITINFO", flag={"GLOBL"}),
+	0x80332C84: main.sym_var("object_c_80332C84", "HITINFO", flag={"GLOBL"}),
+	0x80332C94: main.sym_var("object_c_80332C94", "HITINFO", flag={"GLOBL"}),
+	0x80332CA4: main.sym_var("object_c_80332CA4", "HITINFO", flag={"GLOBL"}),
 	0x80332CB4: main.sym_var("object_c_80332CB4", "s8", "[]", flag={"GLOBL"}),
-	0x80332CBC: main.sym_var("object_c_80332CBC", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332CCC: main.sym_var("object_c_80332CCC", "VECF", "[]", flag={"GLOBL"}),
+	0x80332CBC: main.sym_var("object_c_80332CBC", "HITINFO", flag={"GLOBL"}),
+	0x80332CCC: main.sym_var("object_c_80332CCC", "FVEC", "[]", flag={"GLOBL"}),
 	0x80332CF0: main.sym_var("object_c_80332CF0", "u8", "[6]", flag={"GLOBL"}), # template
 	0x80332CF8: main.sym_var("object_c_80332CF8", "struct object_c_4", "[]", flag={"GLOBL"}),
 	0x80332D10: main.sym_var("object_c_80332D10", "s16", "[][2]", flag={"GLOBL"}),
-	0x80332D28: main.sym_var("object_c_80332D28", "OBJ_HIT", flag={"GLOBL"}),
-	0x80332D38: main.sym_var("object_c_80332D38", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332D28: main.sym_var("object_c_80332D28", "HITINFO", flag={"GLOBL"}),
+	0x80332D38: main.sym_var("object_c_80332D38", "HITINFO", flag={"GLOBL"}),
 	0x80332D48: main.sym_var("object_c_80332D48", "s16", "[][2]", flag={"GLOBL"}),
-	0x80332D58: main.sym_var("object_c_80332D58", "VECS", "[]", flag={"GLOBL"}),
-	0x80332E14: main.sym_var("object_c_80332E14", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332D58: main.sym_var("object_c_80332D58", "SVEC", "[]", flag={"GLOBL"}),
+	0x80332E14: main.sym_var("object_c_80332E14", "HITINFO", flag={"GLOBL"}),
 	0x80332E24: main.sym_var("object_c_80332E24", "struct object_c_5", "[]", flag={"GLOBL"}),
-	0x80332E3C: main.sym_var("object_c_80332E3C", "OBJ_HIT", flag={"GLOBL"}),
+	0x80332E3C: main.sym_var("object_c_80332E3C", "HITINFO", flag={"GLOBL"}),
 
 	# src/audio/game.c
 	0x80332E50: main.sym_var("Na_game_80332E50", "s32", flag={"GLOBL","DALIGN"}), # rng?
@@ -16145,8 +17313,8 @@ sym_E0_code_data = {
 	0x803331CC: main.sym_var("Na_game_803331CC", "u8", "[]", flag={"GLOBL"}),
 	0x803331D8: main.sym_var("Na_game_803331D8", "u8", "[]", flag={"GLOBL"}),
 	0x803331E4: main.sym_var("Na_game_803331E4", "u8", "[]", flag={"GLOBL"}),
-	0x803331F0: main.sym_var("Na_0", "VECF", flag={"GLOBL"}),
-	0x803331FC: main.sym_var("Na_1", "VECF", flag={"GLOBL"}), # unused
+	0x803331F0: main.sym_var("Na_0", "FVEC", flag={"GLOBL"}),
+	0x803331FC: main.sym_var("Na_1", "FVEC", flag={"GLOBL"}), # unused
 	0x80333208: main.sym_var("Na_PortStatus", "u8", "[]", flag={"GLOBL"}),
 	0x80333214: main.sym_var("Na_game_80333214", "u8", flag={"GLOBL","DALIGN"}), # unused
 	0x80333218: main.sym_var("Na_game_80333218", "u8", flag={"GLOBL","DALIGN"}),
@@ -16395,114 +17563,114 @@ sym_E0_code_data = {
 	0x803366C0: main.sym_var("physics_803366C0", "const float"),
 
 	# src/pldemo.c
-	0x803366D0: main.sym_var("pl_demo_803366D0", "const float"),
-	0x803366D4: main.sym_var_fnc("pl_demo_803366D4", "const", "[]"),
-	0x803366E8: main.sym_var("pl_demo_803366E8", "const float"),
-	0x803366EC: main.sym_var_fnc("pl_demo_803366EC", "const", "[]"),
-	0x80336708: main.sym_var("pl_demo_80336708", "const float"),
-	0x8033670C: main.sym_var("pl_demo_8033670C", "const float"),
-	0x80336710: main.sym_var("pl_demo_80336710", "const float"),
-	0x80336714: main.sym_var("pl_demo_80336714", "const float"),
-	0x80336718: main.sym_var("pl_demo_80336718", "const float"),
-	0x8033671C: main.sym_var("pl_demo_8033671C", "const float"),
-	0x80336720: main.sym_var_fnc("pl_demo_80336720", "const", "[]"),
-	0x80336754: main.sym_var_fnc("pl_demo_80336754", "const", "[]"),
-	0x80336770: main.sym_var_fnc("pl_demo_80336770", "const", "[]"),
-	0x80336784: main.sym_var_fnc("pl_demo_80336784", "const", "[]"),
-	0x80336848: main.sym_var_fnc("pl_demo_80336848", "const", "[]"),
+	0x803366D0: main.sym_var("pldemo_803366D0", "const float"),
+	0x803366D4: main.sym_var_fnc("pldemo_803366D4", "const", "[]"),
+	0x803366E8: main.sym_var("pldemo_803366E8", "const float"),
+	0x803366EC: main.sym_var_fnc("pldemo_803366EC", "const", "[]"),
+	0x80336708: main.sym_var("pldemo_80336708", "const float"),
+	0x8033670C: main.sym_var("pldemo_8033670C", "const float"),
+	0x80336710: main.sym_var("pldemo_80336710", "const float"),
+	0x80336714: main.sym_var("pldemo_80336714", "const float"),
+	0x80336718: main.sym_var("pldemo_80336718", "const float"),
+	0x8033671C: main.sym_var("pldemo_8033671C", "const float"),
+	0x80336720: main.sym_var_fnc("pldemo_80336720", "const", "[]"),
+	0x80336754: main.sym_var_fnc("pldemo_80336754", "const", "[]"),
+	0x80336770: main.sym_var_fnc("pldemo_80336770", "const", "[]"),
+	0x80336784: main.sym_var_fnc("pldemo_80336784", "const", "[]"),
+	0x80336848: main.sym_var_fnc("pldemo_80336848", "const", "[]"),
 
-	# src/plhang.c
-	0x80336940: main.sym_var("pl_hang_80336940", "const float"),
-	0x80336944: main.sym_var("pl_hang_80336944", "const float"),
-	0x80336948: main.sym_var("pl_hang_80336948", "const float"),
-	0x8033694C: main.sym_var("pl_hang_8033694C", "const float"),
-	0x80336950: main.sym_var_fnc("pl_hang_80336950", "const", "[]"),
+	# src/plspec.c
+	0x80336940: main.sym_var("plspec_80336940", "const float"),
+	0x80336944: main.sym_var("plspec_80336944", "const float"),
+	0x80336948: main.sym_var("plspec_80336948", "const float"),
+	0x8033694C: main.sym_var("plspec_8033694C", "const float"),
+	0x80336950: main.sym_var_fnc("plspec_80336950", "const", "[]"),
 
 	# src/plwait.c
-	0x80336970: main.sym_var("pl_wait_80336970", "const float"),
-	0x80336974: main.sym_var("pl_wait_80336974", "const float"),
-	0x80336978: main.sym_var_fnc("pl_wait_80336978", "const", "[]"),
-	0x803369A4: main.sym_var_fnc("pl_wait_803369A4", "const", "[]"),
-	0x803369B8: main.sym_var_fnc("pl_wait_803369B8", "const", "[]"),
-	0x80336A18: main.sym_var_fnc("pl_wait_80336A18", "const", "[]"),
+	0x80336970: main.sym_var("plwait_80336970", "const float"),
+	0x80336974: main.sym_var("plwait_80336974", "const float"),
+	0x80336978: main.sym_var_fnc("plwait_80336978", "const", "[]"),
+	0x803369A4: main.sym_var_fnc("plwait_803369A4", "const", "[]"),
+	0x803369B8: main.sym_var_fnc("plwait_803369B8", "const", "[]"),
+	0x80336A18: main.sym_var_fnc("plwait_80336A18", "const", "[]"),
 
 	# src/plmove.c
-	0x80336A80: main.sym_var("pl_move_80336A80", "const float"),
-	0x80336A84: main.sym_var("pl_move_80336A84", "const float"),
-	0x80336A88: main.sym_var("pl_move_80336A88", "const float"),
-	0x80336A8C: main.sym_var("pl_move_80336A8C", "const float"),
-	0x80336A90: main.sym_var("pl_move_80336A90", "const float"),
-	0x80336A94: main.sym_var("pl_move_80336A94", "const float"),
-	0x80336A98: main.sym_var("pl_move_80336A98", "const float"),
-	0x80336A9C: main.sym_var("pl_move_80336A9C", "const float"),
-	0x80336AA0: main.sym_var("pl_move_80336AA0", "const float"),
-	0x80336AA4: main.sym_var("pl_move_80336AA4", "const float"),
-	0x80336AA8: main.sym_var("pl_move_80336AA8", "const float"),
-	0x80336AAC: main.sym_var("pl_move_80336AAC", "const float"),
-	0x80336AB0: main.sym_var("pl_move_80336AB0", "const float"),
-	0x80336AB4: main.sym_var("pl_move_80336AB4", "const float"),
-	0x80336AB8: main.sym_var("pl_move_80336AB8", "const float"),
-	0x80336ABC: main.sym_var("pl_move_80336ABC", "const float"),
-	0x80336AC0: main.sym_var("pl_move_80336AC0", "const float"),
-	0x80336AC4: main.sym_var("pl_move_80336AC4", "const float"),
-	0x80336AC8: main.sym_var("pl_move_80336AC8", "const float"),
-	0x80336ACC: main.sym_var("pl_move_80336ACC", "const float"),
-	0x80336AD0: main.sym_var("pl_move_80336AD0", "const float"),
-	0x80336AD4: main.sym_var("pl_move_80336AD4", "const float"),
-	0x80336AD8: main.sym_var("pl_move_80336AD8", "const float"),
-	0x80336ADC: main.sym_var("pl_move_80336ADC", "const float"),
-	0x80336AE0: main.sym_var("pl_move_80336AE0", "const float"),
-	0x80336AE4: main.sym_var("pl_move_80336AE4", "const float"),
-	0x80336AE8: main.sym_var("pl_move_80336AE8", "const float"),
-	0x80336AEC: main.sym_var("pl_move_80336AEC", "const float"),
-	0x80336AF0: main.sym_var("pl_move_80336AF0", "const float"),
-	0x80336AF8: main.sym_var("pl_move_80336AF8", "const double"),
-	0x80336B00: main.sym_var("pl_move_80336B00", "const float"),
-	0x80336B04: main.sym_var("pl_move_80336B04", "const float"),
-	0x80336B08: main.sym_var("pl_move_80336B08", "const float"),
-	0x80336B0C: main.sym_var_fnc("pl_move_80336B0C", "const", "[]"),
-	0x80336B38: main.sym_var_fnc("pl_move_80336B38", "const", "[]"),
-	0x80336BB4: main.sym_var_fnc("pl_move_80336BB4", "const", "[]"),
-	0x80336BCC: main.sym_var_fnc("pl_move_80336BCC", "const", "[]"),
+	0x80336A80: main.sym_var("plmove_80336A80", "const float"),
+	0x80336A84: main.sym_var("plmove_80336A84", "const float"),
+	0x80336A88: main.sym_var("plmove_80336A88", "const float"),
+	0x80336A8C: main.sym_var("plmove_80336A8C", "const float"),
+	0x80336A90: main.sym_var("plmove_80336A90", "const float"),
+	0x80336A94: main.sym_var("plmove_80336A94", "const float"),
+	0x80336A98: main.sym_var("plmove_80336A98", "const float"),
+	0x80336A9C: main.sym_var("plmove_80336A9C", "const float"),
+	0x80336AA0: main.sym_var("plmove_80336AA0", "const float"),
+	0x80336AA4: main.sym_var("plmove_80336AA4", "const float"),
+	0x80336AA8: main.sym_var("plmove_80336AA8", "const float"),
+	0x80336AAC: main.sym_var("plmove_80336AAC", "const float"),
+	0x80336AB0: main.sym_var("plmove_80336AB0", "const float"),
+	0x80336AB4: main.sym_var("plmove_80336AB4", "const float"),
+	0x80336AB8: main.sym_var("plmove_80336AB8", "const float"),
+	0x80336ABC: main.sym_var("plmove_80336ABC", "const float"),
+	0x80336AC0: main.sym_var("plmove_80336AC0", "const float"),
+	0x80336AC4: main.sym_var("plmove_80336AC4", "const float"),
+	0x80336AC8: main.sym_var("plmove_80336AC8", "const float"),
+	0x80336ACC: main.sym_var("plmove_80336ACC", "const float"),
+	0x80336AD0: main.sym_var("plmove_80336AD0", "const float"),
+	0x80336AD4: main.sym_var("plmove_80336AD4", "const float"),
+	0x80336AD8: main.sym_var("plmove_80336AD8", "const float"),
+	0x80336ADC: main.sym_var("plmove_80336ADC", "const float"),
+	0x80336AE0: main.sym_var("plmove_80336AE0", "const float"),
+	0x80336AE4: main.sym_var("plmove_80336AE4", "const float"),
+	0x80336AE8: main.sym_var("plmove_80336AE8", "const float"),
+	0x80336AEC: main.sym_var("plmove_80336AEC", "const float"),
+	0x80336AF0: main.sym_var("plmove_80336AF0", "const float"),
+	0x80336AF8: main.sym_var("plmove_80336AF8", "const double"),
+	0x80336B00: main.sym_var("plmove_80336B00", "const float"),
+	0x80336B04: main.sym_var("plmove_80336B04", "const float"),
+	0x80336B08: main.sym_var("plmove_80336B08", "const float"),
+	0x80336B0C: main.sym_var_fnc("plmove_80336B0C", "const", "[]"),
+	0x80336B38: main.sym_var_fnc("plmove_80336B38", "const", "[]"),
+	0x80336BB4: main.sym_var_fnc("plmove_80336BB4", "const", "[]"),
+	0x80336BCC: main.sym_var_fnc("plmove_80336BCC", "const", "[]"),
 
 	# src/pljump.c
-	0x80336C00: main.sym_var("pl_jump_80336C00", "const float"),
-	0x80336C04: main.sym_var("pl_jump_80336C04", "const float"),
-	0x80336C08: main.sym_var("pl_jump_80336C08", "const float"),
-	0x80336C0C: main.sym_var("pl_jump_80336C0C", "const float"),
-	0x80336C10: main.sym_var("pl_jump_80336C10", "const float"),
-	0x80336C14: main.sym_var("pl_jump_80336C14", "const float"),
-	0x80336C18: main.sym_var("pl_jump_80336C18", "const float"),
-	0x80336C1C: main.sym_var_fnc("pl_jump_80336C1C", "const", "[]"),
-	0x80336C38: main.sym_var("pl_jump_80336C38", "const float"),
-	0x80336C3C: main.sym_var("pl_jump_80336C3C", "const float"),
-	0x80336C40: main.sym_var("pl_jump_80336C40", "const float"),
-	0x80336C44: main.sym_var("pl_jump_80336C44", "const float"),
-	0x80336C48: main.sym_var("pl_jump_80336C48", "const float"),
-	0x80336C4C: main.sym_var("pl_jump_80336C4C", "const float"),
-	0x80336C50: main.sym_var("pl_jump_80336C50", "const float"),
-	0x80336C54: main.sym_var("pl_jump_80336C54", "const float"),
-	0x80336C58: main.sym_var("pl_jump_80336C58", "const double"),
-	0x80336C60: main.sym_var_fnc("pl_jump_80336C60", "const", "[]"),
-	0x80336D20: main.sym_var_fnc("pl_jump_80336D20", "const", "[]"),
-	0x80336D5C: main.sym_var_fnc("pl_jump_80336D5C", "const", "[]"),
+	0x80336C00: main.sym_var("pljump_80336C00", "const float"),
+	0x80336C04: main.sym_var("pljump_80336C04", "const float"),
+	0x80336C08: main.sym_var("pljump_80336C08", "const float"),
+	0x80336C0C: main.sym_var("pljump_80336C0C", "const float"),
+	0x80336C10: main.sym_var("pljump_80336C10", "const float"),
+	0x80336C14: main.sym_var("pljump_80336C14", "const float"),
+	0x80336C18: main.sym_var("pljump_80336C18", "const float"),
+	0x80336C1C: main.sym_var_fnc("pljump_80336C1C", "const", "[]"),
+	0x80336C38: main.sym_var("pljump_80336C38", "const float"),
+	0x80336C3C: main.sym_var("pljump_80336C3C", "const float"),
+	0x80336C40: main.sym_var("pljump_80336C40", "const float"),
+	0x80336C44: main.sym_var("pljump_80336C44", "const float"),
+	0x80336C48: main.sym_var("pljump_80336C48", "const float"),
+	0x80336C4C: main.sym_var("pljump_80336C4C", "const float"),
+	0x80336C50: main.sym_var("pljump_80336C50", "const float"),
+	0x80336C54: main.sym_var("pljump_80336C54", "const float"),
+	0x80336C58: main.sym_var("pljump_80336C58", "const double"),
+	0x80336C60: main.sym_var_fnc("pljump_80336C60", "const", "[]"),
+	0x80336D20: main.sym_var_fnc("pljump_80336D20", "const", "[]"),
+	0x80336D5C: main.sym_var_fnc("pljump_80336D5C", "const", "[]"),
 
 	# src/plswim.c
-	0x80336E10: main.sym_var("pl_swim_80336E10", "const float"),
-	0x80336E14: main.sym_var_fnc("pl_swim_80336E14", "const", "[]"),
-	0x80336E2C: main.sym_var_fnc("pl_swim_80336E2C", "const", "[]"),
-	0x80336E44: main.sym_var("pl_swim_80336E44", "const float"),
-	0x80336E48: main.sym_var("pl_swim_80336E48", "const float"),
-	0x80336E4C: main.sym_var("pl_swim_80336E4C", "const float"),
-	0x80336E50: main.sym_var("pl_swim_80336E50", "const float"),
-	0x80336E54: main.sym_var("pl_swim_80336E54", "const float"),
-	0x80336E58: main.sym_var("pl_swim_80336E58", "const float"),
-	0x80336E5C: main.sym_var_fnc("pl_swim_80336E5C", "const", "[]"),
-	0x80336EA4: main.sym_var_fnc("pl_swim_80336EA4", "const", "[]"),
+	0x80336E10: main.sym_var("plswim_80336E10", "const float"),
+	0x80336E14: main.sym_var_fnc("plswim_80336E14", "const", "[]"),
+	0x80336E2C: main.sym_var_fnc("plswim_80336E2C", "const", "[]"),
+	0x80336E44: main.sym_var("plswim_80336E44", "const float"),
+	0x80336E48: main.sym_var("plswim_80336E48", "const float"),
+	0x80336E4C: main.sym_var("plswim_80336E4C", "const float"),
+	0x80336E50: main.sym_var("plswim_80336E50", "const float"),
+	0x80336E54: main.sym_var("plswim_80336E54", "const float"),
+	0x80336E58: main.sym_var("plswim_80336E58", "const float"),
+	0x80336E5C: main.sym_var_fnc("plswim_80336E5C", "const", "[]"),
+	0x80336EA4: main.sym_var_fnc("plswim_80336EA4", "const", "[]"),
 
-	# src/plhold.c
-	0x80336ED0: main.sym_var_fnc("pl_hold_80336ED0", "const", "[]"),
-	0x80336EF8: main.sym_var_fnc("pl_hold_80336EF8", "const", "[]"),
+	# src/pltake.c
+	0x80336ED0: main.sym_var_fnc("pltake_80336ED0", "const", "[]"),
+	0x80336EF8: main.sym_var_fnc("pltake_80336EF8", "const", "[]"),
 
 	# src/callback.c
 	0x80336F40: main.sym_var_fnc("callback_80336F40", "const", "[]"),
@@ -16682,32 +17850,32 @@ sym_E0_code_data = {
 	0x803377A0: main.sym_var("object_803377A0", "const double"),
 	0x803377A8: main.sym_var("object_803377A8", "const double"),
 
-	# src/objlib.c
-	0x803377B0: main.sym_var("str_objlib_areainfo", "const char", "[]"),
-	0x803377BC: main.sym_var("objlib_803377BC", "const float"),
-	0x803377C0: main.sym_var("objlib_803377C0", "const float"),
-	0x803377C4: main.sym_var("objlib_803377C4", "const float"),
-	0x803377C8: main.sym_var("objlib_803377C8", "const float"),
-	0x803377CC: main.sym_var("objlib_803377CC", "const float"),
-	0x803377D0: main.sym_var("objlib_803377D0", "const float"),
-	0x803377D8: main.sym_var("objlib_803377D8", "const double"),
-	0x803377E0: main.sym_var("objlib_803377E0", "const double"),
-	0x803377E8: main.sym_var("objlib_803377E8", "const double"),
-	0x803377F0: main.sym_var("objlib_803377F0", "const float"),
-	0x803377F4: main.sym_var("objlib_803377F4", "const float"),
-	0x803377F8: main.sym_var("objlib_803377F8", "const double"),
-	0x80337800: main.sym_var("objlib_80337800", "const float"),
-	0x80337808: main.sym_var("objlib_80337808", "const double"),
-	0x80337810: main.sym_var("objlib_80337810", "const float"),
-	0x80337814: main.sym_var("objlib_80337814", "const float"),
-	0x80337818: main.sym_var("objlib_80337818", "const float"),
-	0x8033781C: main.sym_var("objlib_8033781C", "const float"),
-	0x80337820: main.sym_var("objlib_80337820", "const float"),
-	0x80337824: main.sym_var("objlib_80337824", "const float"),
-	0x80337828: main.sym_var("objlib_80337828", "const float"),
-	0x8033782C: main.sym_var("objlib_8033782C", "const float"),
-	0x80337830: main.sym_var("objlib_80337830", "const float"),
-	0x80337834: main.sym_var_fnc("objlib_80337834", "const", "[]"),
+	# src/objectlib.c
+	0x803377B0: main.sym_var("str_objectlib_areainfo", "const char", "[]"),
+	0x803377BC: main.sym_var("objectlib_803377BC", "const float"),
+	0x803377C0: main.sym_var("objectlib_803377C0", "const float"),
+	0x803377C4: main.sym_var("objectlib_803377C4", "const float"),
+	0x803377C8: main.sym_var("objectlib_803377C8", "const float"),
+	0x803377CC: main.sym_var("objectlib_803377CC", "const float"),
+	0x803377D0: main.sym_var("objectlib_803377D0", "const float"),
+	0x803377D8: main.sym_var("objectlib_803377D8", "const double"),
+	0x803377E0: main.sym_var("objectlib_803377E0", "const double"),
+	0x803377E8: main.sym_var("objectlib_803377E8", "const double"),
+	0x803377F0: main.sym_var("objectlib_803377F0", "const float"),
+	0x803377F4: main.sym_var("objectlib_803377F4", "const float"),
+	0x803377F8: main.sym_var("objectlib_803377F8", "const double"),
+	0x80337800: main.sym_var("objectlib_80337800", "const float"),
+	0x80337808: main.sym_var("objectlib_80337808", "const double"),
+	0x80337810: main.sym_var("objectlib_80337810", "const float"),
+	0x80337814: main.sym_var("objectlib_80337814", "const float"),
+	0x80337818: main.sym_var("objectlib_80337818", "const float"),
+	0x8033781C: main.sym_var("objectlib_8033781C", "const float"),
+	0x80337820: main.sym_var("objectlib_80337820", "const float"),
+	0x80337824: main.sym_var("objectlib_80337824", "const float"),
+	0x80337828: main.sym_var("objectlib_80337828", "const float"),
+	0x8033782C: main.sym_var("objectlib_8033782C", "const float"),
+	0x80337830: main.sym_var("objectlib_80337830", "const float"),
+	0x80337834: main.sym_var_fnc("objectlib_80337834", "const", "[]"),
 
 	# src/object_a.c
 	0x80337850: main.sym_var("str_object_a_0_fmt", "const char", "[]"),
@@ -16940,7 +18108,7 @@ sym_E0_code_data = {
 	0x80337EF8: main.sym_var("str_debug_bgstatus", "const char", "[]"),
 	0x80337F04: main.sym_var("str_debug_bgarea", "const char", "[]"),
 	0x80337F10: main.sym_var("str_debug_water", "const char", "[]"),
-	0x80337F1C: main.sym_var("str_debug_checkinfo", "const char", "[]"),
+	0x80337F1C: main.sym_var("str_DebugCheckinfo", "const char", "[]"),
 	0x80337F28: main.sym_var("str_debug_stageinfo", "const char", "[]"),
 	0x80337F34: main.sym_var("str_debug_stage_param", "const char", "[]"),
 	0x80337F44: main.sym_var("str_debug_effectinfo", "const char", "[]"),
@@ -16988,11 +18156,11 @@ sym_E0_code_data = {
 	0x80338100: main.sym_var("shadow_80338100", "const double"),
 	0x80338108: main.sym_var_fnc("shadow_80338108", "const", "[]"),
 
-	# src/back.c
-	0x80338140: main.sym_var("back_80338140", "const double"),
-	0x80338148: main.sym_var("back_80338148", "const double"),
-	0x80338150: main.sym_var("back_80338150", "const double"),
-	0x80338158: main.sym_var("back_80338158", "const double"),
+	# src/background.c
+	0x80338140: main.sym_var("background_80338140", "const double"),
+	0x80338148: main.sym_var("background_80338148", "const double"),
+	0x80338150: main.sym_var("background_80338150", "const double"),
+	0x80338158: main.sym_var("background_80338158", "const double"),
 
 	# src/water.c
 	0x80338160: main.sym_var("water_80338160", "const double"),
@@ -17588,7 +18756,7 @@ sym_E0_code_data = {
 
 	# src/audio.c
 	0x8033B0A0: main.sym_var("aud_levelse_8033B0A0", "u32", "[]", flag={"BALIGN"}), # unused
-	0x8033B130: main.sym_var("aud_0", "VECF", flag={"BALIGN"}),
+	0x8033B130: main.sym_var("aud_0", "FVEC", flag={"BALIGN"}),
 	0x8033B140: main.sym_var("aud_vi_mq", "OSMesgQueue", flag={"BALIGN"}),
 	0x8033B158: main.sym_var("aud_vi_mbox", "OSMesg"),
 	0x8033B160: main.sym_var("aud_client", "SCCLIENT", flag={"BALIGN"}),
@@ -17611,35 +18779,35 @@ sym_E0_code_data = {
 	0x8033B26E: main.sym_var("first_msg", "char", flag={"GLOBL"}),
 
 	# src/collision.c
-	0x8033B270: main.sym_var("collision_8033B270", "u8", flag={"GLOBL"}),
-	0x8033B272: main.sym_var("collision_8033B272", "s16", flag={"GLOBL"}),
+	0x8033B270: main.sym_var("hit_enemy", "u8"),
+	0x8033B272: main.sym_var("invincible", "short"),
 
 	# src/player.c
-	0x8033B280: main.sym_var("player_8033B280", "s32", flag={"GLOBL"}),
+	0x8033B280: main.sym_var("player_8033B280", "int"),
 
 	# src/physics.c
-	0x8033B290: main.sym_var("physics_8033B290", "s32", flag={"GLOBL"}), # unused
+	0x8033B290: main.sym_var("physics_8033B290", "int"), # unused
 
 	# src/pldemo.c
-	0x8033B2A0: main.sym_var("pl_demo_8033B2A0", "OBJECT *", flag={"GLOBL"}),
-	0x8033B2A4: main.sym_var("pl_demo_8033B2A4", "OBJECT *", flag={"GLOBL"}),
-	0x8033B2A8: main.sym_var("pl_demo_8033B2A8", "OBJECT *", flag={"GLOBL"}),
-	0x8033B2AC: main.sym_var("pl_demo_8033B2AC", "OBJECT *", flag={"GLOBL"}),
-	0x8033B2B0: main.sym_var("pl_demo_8033B2B0", "OBJECT *", flag={"GLOBL"}),
-	0x8033B2B4: main.sym_var("pl_demo_8033B2B4", "OBJECT *", flag={"GLOBL"}), # unused
-	0x8033B2B8: main.sym_var("pl_demo_8033B2B8", "s16", flag={"GLOBL"}),
-	0x8033B2BC: main.sym_var("pl_demo_8033B2BC", "s16", "[2]", flag={"GLOBL"}),
+	0x8033B2A0: main.sym_var("pldemo_8033B2A0", "OBJECT *", flag={"GLOBL"}),
+	0x8033B2A4: main.sym_var("pldemo_8033B2A4", "OBJECT *", flag={"GLOBL"}),
+	0x8033B2A8: main.sym_var("pldemo_8033B2A8", "OBJECT *", flag={"GLOBL"}),
+	0x8033B2AC: main.sym_var("pldemo_8033B2AC", "OBJECT *", flag={"GLOBL"}),
+	0x8033B2B0: main.sym_var("pldemo_8033B2B0", "OBJECT *", flag={"GLOBL"}),
+	0x8033B2B4: main.sym_var("pldemo_8033B2B4", "OBJECT *", flag={"GLOBL"}), # unused
+	0x8033B2B8: main.sym_var("pldemo_8033B2B8", "s16", flag={"GLOBL"}),
+	0x8033B2BC: main.sym_var("pldemo_8033B2BC", "s16", "[2]", flag={"GLOBL"}),
 
 	# src/plmove.c
-	0x8033B2C0: main.sym_var("pl_move_8033B2C0", "MTXF", "[2]", flag={"GLOBL"}),
+	0x8033B2C0: main.sym_var("plmove_8033B2C0", "FMTX", "[2]", flag={"GLOBL"}),
 
 	# src/plswim.c
-	0x8033B340: main.sym_var("pl_swim_8033B340", "s16", flag={"GLOBL"}),
-	0x8033B342: main.sym_var("pl_swim_8033B342", "s16", flag={"GLOBL"}),
-	0x8033B344: main.sym_var("pl_swim_8033B344", "f32", flag={"GLOBL"}),
+	0x8033B340: main.sym_var("plswim_8033B340", "s16", flag={"GLOBL"}),
+	0x8033B342: main.sym_var("plswim_8033B342", "s16", flag={"GLOBL"}),
+	0x8033B344: main.sym_var("plswim_8033B344", "f32", flag={"GLOBL"}),
 
 	# src/callback.c
-	0x8033B350: main.sym_var("mario_mirror", "S_OBJECT", flag={"BALIGN"}),
+	0x8033B350: main.sym_var("mario_mirror", "SOBJECT", flag={"BALIGN"}),
 	0x8033B3B0: main.sym_var("pl_shape_data", "PL_SHAPE", "[2]", flag={"GLOBL","BALIGN"}),
 
 	# src/memory.c
@@ -17651,14 +18819,14 @@ sym_E0_code_data = {
 	0x8033B490: main.sym_var("mem_blockr", "MEM_BLOCK *"),
 	0x8033B494: main.sym_var("mem_heap", "HEAP *", flag={"GLOBL"}),
 
-	# src/save.c
-	0x8033B4A0: main.sym_var("save_mid_level", "u8"),
-	0x8033B4A1: main.sym_var("save_mid_course", "u8"),
-	0x8033B4A2: main.sym_var("save_mid_stage", "u8"),
-	0x8033B4A3: main.sym_var("save_mid_scene", "u8"),
-	0x8033B4A4: main.sym_var("save_mid_port", "u8"),
-	0x8033B4A5: main.sym_var("save_data_dirty", "char"),
-	0x8033B4A6: main.sym_var("save_file_dirty", "char"),
+	# src/backup.c
+	0x8033B4A0: main.sym_var("mid_level", "u8"),
+	0x8033B4A1: main.sym_var("mid_course", "u8"),
+	0x8033B4A2: main.sym_var("mid_stage", "u8"),
+	0x8033B4A3: main.sym_var("mid_scene", "u8"),
+	0x8033B4A4: main.sym_var("mid_port", "u8"),
+	0x8033B4A5: main.sym_var("bu_info_dirty", "char"),
+	0x8033B4A6: main.sym_var("bu_file_dirty", "char"),
 
 	# src/scene.c
 	0x8033B4B0: main.sym_var("player_actor", "ACTOR", "[1]", flag={"GLOBL","BALIGN"}),
@@ -17674,7 +18842,7 @@ sym_E0_code_data = {
 
 	# src/draw.c
 	0x8033BAE0: main.sym_var("draw_m", "s16"),
-	0x8033BAE8: main.sym_var("draw_mtxf", "MTXF", "[32]", flag={"BALIGN"}),
+	0x8033BAE8: main.sym_var("draw_mtxf", "FMTX", "[32]", flag={"BALIGN"}),
 	0x8033C2E8: main.sym_var("draw_mtx", "Mtx *", "[32]", flag={"BALIGN"}),
 	0x8033C368: main.sym_var("joint_save_type", "u8"),
 	0x8033C369: main.sym_var("joint_save_shadow", "u8"),
@@ -17723,15 +18891,15 @@ sym_E0_code_data = {
 	0x80361158: main.sym_var("mario_obj", "OBJECT *", flag={"GLOBL"}),
 	0x8036115C: main.sym_var("luigi_obj", "OBJECT *", flag={"GLOBL"}),
 	0x80361160: main.sym_var("object", "OBJECT *", flag={"GLOBL"}),
-	0x80361164: main.sym_var("object_pc", "O_SCRIPT *", flag={"GLOBL"}),
+	0x80361164: main.sym_var("object_pc", "OBJLANG *", flag={"GLOBL"}),
 	0x80361168: main.sym_var("obj_prevcount", "s16", flag={"GLOBL"}),
 	0x8036116C: main.sym_var("bglist_count", "int", flag={"GLOBL"}),
 	0x80361170: main.sym_var("bgface_count", "int", flag={"GLOBL"}),
 	0x80361174: main.sym_var("bglist_static", "int", flag={"GLOBL"}),
 	0x80361178: main.sym_var("bgface_static", "int", flag={"GLOBL"}),
 	0x8036117C: main.sym_var("object_heap", "HEAP *", flag={"GLOBL"}),
-	0x80361180: main.sym_var("object_80361180", "s16", flag={"GLOBL"}),
-	0x80361182: main.sym_var("object_80361182", "s16", flag={"GLOBL"}),
+	0x80361180: main.sym_var("object_80361180", "short", flag={"GLOBL"}),
+	0x80361182: main.sym_var("object_80361182", "short", flag={"GLOBL"}),
 	0x80361184: main.sym_var("waterp", "MAP *", flag={"GLOBL"}),
 	0x80361188: main.sym_var("water_table", "int", "[20]", flag={"GLOBL","BALIGN"}),
 	0x803611D8: main.sym_var("area_table", "AREA", "[60][2]", flag={"GLOBL","BALIGN"}),
@@ -17747,15 +18915,15 @@ sym_E0_code_data = {
 	0x80361262: main.sym_var("object_80361262", "s16", flag={"GLOBL"}),
 	0x80361264: main.sym_var("object_80361264", "s16", flag={"GLOBL"}),
 
-	# src/objlib.c
-	0x80361270: main.sym_var("objlib_80361270", "s32", flag={"GLOBL"}),
+	# src/objectlib.c
+	0x80361270: main.sym_var("objectlib_80361270", "s32", flag={"GLOBL"}),
 
 	# src/object_a.c
 	0x80361280: main.sym_var("object_a_80361280", "s16", flag={"GLOBL"}),
 
 	# src/debug.c
-	0x80361290: main.sym_var("debug_out", "DEBUG", flag={"BALIGN"}),
-	0x803612A0: main.sym_var("debug_err", "DEBUG", flag={"BALIGN"}),
+	0x80361290: main.sym_var("db_out", "DBPRINT", flag={"BALIGN"}),
+	0x803612A0: main.sym_var("db_err", "DBPRINT", flag={"BALIGN"}),
 
 	# src/shadow.c
 	0x803612B0: main.sym_var("shadow_offset", "char"),
@@ -17763,23 +18931,23 @@ sym_E0_code_data = {
 	0x803612B4: main.sym_var("shadow_onwater", "char", flag={"GLOBL"}),
 	0x803612B5: main.sym_var("shadow_ondecal", "char", flag={"GLOBL"}),
 
-	# src/back.c
-	0x803612C0: main.sym_var("back_data", "BACKDATA", "[2]"),
+	# src/background.c
+	0x803612C0: main.sym_var("backdata", "BACKDATA", "[2]"),
 
 	# src/water.c
-	0x803612E0: main.sym_var("water_803612E0", "s16", flag={"GLOBL"}),
+	0x803612E0: main.sym_var("water_txt", "short"),
 
 	# src/objshape.c
 	0x803612F0: main.sym_var("objshape_803612F0", "s8", flag={"GLOBL"}),
 
 	# src/wave.c
-	0x80361300: main.sym_var("wave_80361300", "s16", flag={"GLOBL"}),
-	0x80361304: main.sym_var("wave_80361304", "f32", flag={"GLOBL"}),
-	0x80361308: main.sym_var("wave_80361308", "f32", flag={"GLOBL"}),
-	0x8036130C: main.sym_var("wave_8036130C", "f32", flag={"GLOBL"}),
-	0x80361310: main.sym_var("wave_80361310", "s16 *", flag={"GLOBL"}),
-	0x80361314: main.sym_var("wave_80361314", "f32 *", flag={"GLOBL"}),
-	0x80361318: main.sym_var("wavedatap", "WAVEDATA *", flag={"GLOBL"}),
+	0x80361300: main.sym_var("wave_bgcode", "short"),
+	0x80361304: main.sym_var("wave_posx", "float"),
+	0x80361308: main.sym_var("wave_posy", "float"),
+	0x8036130C: main.sym_var("wave_posz", "float"),
+	0x80361310: main.sym_var("wavevtx", "WAVEVTX *"),
+	0x80361314: main.sym_var("wavenorm", "WAVENORM *"),
+	0x80361318: main.sym_var("wavep", "WAVE *", flag={"GLOBL"}),
 	0x8036131C: main.sym_var("wave_8036131C", "s8", flag={"GLOBL"}),
 
 	# src/dprint.c
@@ -17795,16 +18963,16 @@ sym_E0_code_data = {
 	0x803613FE: main.sym_var("redcoin_count", "s8", flag={"GLOBL"}),
 
 	# src/weather.c
-	0x80361400: main.sym_var("weather", "struct weather *", flag={"GLOBL"}),
-	0x80361408: main.sym_var("weather_80361408", "s32", "[3]", flag={"GLOBL","BALIGN"}),
-	0x80361414: main.sym_var("weather_80361414", "s16", flag={"GLOBL"}),
-	0x80361416: main.sym_var("weather_80361416", "s16", flag={"GLOBL"}),
+	0x80361400: main.sym_var("weatherp", "WEATHER *", flag={"GLOBL"}),
+	0x80361408: main.sym_var("snow_pos", "int", "[3]", flag={"BALIGN"}),
+	0x80361414: main.sym_var("snow_len", "s16"),
+	0x80361416: main.sym_var("snow_max", "s16"),
 
 	# src/lava.c
-	0x80361420: main.sym_var("lava_80361420", "s16", "[10]", flag={"GLOBL","BALIGN"}),
-	0x80361434: main.sym_var("gfx_weather_lava", "Gfx *", flag={"GLOBL"}),
-	0x80361438: main.sym_var("lava_80361438", "s32", flag={"GLOBL"}),
-	0x8036143C: main.sym_var("lava_8036143C", "s32", flag={"GLOBL"}),
+	0x80361420: main.sym_var("lava_info", "short", "[10]", flag={"GLOBL","BALIGN"}),
+	0x80361434: main.sym_var("lava_glistp", "Gfx *"),
+	0x80361438: main.sym_var("lava_max", "int"),
+	0x8036143C: main.sym_var("lava_len", "int"),
 
 	# src/hud.c
 	0x80361440: main.sym_var("meter_power", "s16"),
@@ -17906,13 +19074,15 @@ sym_E0_code_data = {
 	0x80202E00: main.sym_var("aud_stack", "long long", "[MAIN_STACK_LEN]", flag={"GLOBL","BALIGN"}),
 	0x80204E00: main.sym_var("gfx_stack", "long long", "[MAIN_STACK_LEN]", flag={"GLOBL","BALIGN"}),
 	0x80206E00: main.sym_var("gfx_sp_yield", "u64", "[OS_YIELD_DATA_SIZE/8]", flag={"GLOBL","BALIGN"}),
-	0x80207700: main.sym_var("save", "SAVE", flag={"GLOBL","BALIGN"}),
+	0x80207700: main.sym_var("backup", "BACKUP", flag={"GLOBL","BALIGN"}),
 	0x80207900: main.sym_var("gfx_sp_stack", "u64", "[SP_DRAM_STACK_SIZE64]", flag={"GLOBL","BALIGN"}),
 	0x80207D00: main.sym_var("frame_data", "FRAME", "[2]", flag={"GLOBL","BALIGN"}),
 
 	# src/audio/work.c
-	0x80220DA0: main.sym_var("_Na_work_bss", "char", "[0x5F1C]", flag={"BALIGN"}),
-	# 0x80220DA0 (max 0x6260)
+	0x80220DA0: main.sym_var("Na_WorkStart", "char", "[16]", flag={"BALIGN"}),
+	0x80220DB0: main.sym_var("_Na_work_bss_10", "char", "[0x5F08]", flag={"BALIGN"}),
+	0x80226CB8: main.sym_var("Na_Random", "u32", flag={"GLOBL"}),
+	0x80226CC0: main.sym_var("Na_WorkEnd", "char", "[16]", flag={"BALIGN"}),
 
 	# src/fifo.c
 	0x80227000: main.sym_var("gfx_fifo", "u64", "[FIFO_LEN]", flag={"GLOBL","BALIGN"}),
@@ -17927,16 +19097,16 @@ sym_E0_code_data = {
 }
 
 seg_E0_code_data = {
-	0x80330F00: "E0.BackA",
-	0x80330F04: "E0.BackD",
-	0x80330F08: "E0.BackE",
-	0x80330F0C: "E0.BackF",
-	0x80330F10: "E0.BackB",
-	0x80330F14: "E0.BackG",
-	0x80330F18: "E0.BackH",
-	0x80330F1C: "E0.BackI",
-	0x80330F20: "E0.BackC",
-	0x80330F24: "E0.BackJ",
+	0x80330F00: "E0.BackgroundA",
+	0x80330F04: "E0.BackgroundD",
+	0x80330F08: "E0.BackgroundE",
+	0x80330F0C: "E0.BackgroundF",
+	0x80330F10: "E0.BackgroundB",
+	0x80330F14: "E0.BackgroundG",
+	0x80330F18: "E0.BackgroundH",
+	0x80330F1C: "E0.BackgroundI",
+	0x80330F20: "E0.BackgroundC",
+	0x80330F24: "E0.BackgroundJ",
 }
 
 sym_G0_crt0_text = {
@@ -17955,7 +19125,7 @@ sym_G0_code_text = {
 	# text
 
 	# src/main.c
-	0x80246050: main.sym("debug_check", flag={"GLOBL"}),
+	0x80246050: main.sym("DebugCheck", flag={"GLOBL"}),
 	0x80246C20: main.sym("entry", flag={"GLOBL"}),
 
 	# src/graphics.c
@@ -18004,8 +19174,22 @@ sym_DD_code_text = {
 	# text
 
 	# src/main.c
-	0x80400050: main.sym("debug_check", flag={"GLOBL"}),
+	0x80400050: main.sym("DebugCheck", flag={"GLOBL"}),
 	0x80400BE0: main.sym("entry", flag={"GLOBL"}),
+
+	# src/disk.c
+	0x8040B980: main.sym("DiskInit", flag={"GLOBL"}),
+	0x8040B9A4: main.sym("DiskRead"),
+	0x8040BA8C: main.sym("DiskWrite", flag={"GLOBL"}),
+	0x8040BAEC: main.sym("disk_8040BAEC", flag={"GLOBL"}),
+	0x8040BBE0: main.sym("MemRead", flag={"GLOBL"}),
+}
+
+sym_DD_code_data = {
+	0x804A7CD0: main.sym("disk_audbuf"),
+	0x804A7CD4: main.sym("disk_gfxbuf"),
+	0x804A7CD8: main.sym("disk_lastlba"),
+	0x804A7CDC: main.sym("disk_lastxfer"),
 }
 
 sym_P0_crt0_text = {
@@ -18024,7 +19208,7 @@ sym_P0_code_text = {
 	# text
 
 	0x80241850: main.sym("fault_80241850"),
-	0x802422F0: main.sym("debug_check", flag={"GLOBL"}),
+	0x802422F0: main.sym("DebugCheck", flag={"GLOBL"}),
 	0x80242E80: main.sym("entry", flag={"GLOBL"}),
 }
 

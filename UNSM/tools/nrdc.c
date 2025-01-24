@@ -83,8 +83,7 @@ int main(int argc, char *argv[])
 	}
 	if (opt_title)
 	{
-		size_t i;
-		size_t n = strlen(opt_title);
+		size_t i, n = strlen(opt_title);
 		if (n > 20) n = 20;
 		fseek(fp, 0x20, SEEK_SET);
 		fwrite(opt_title, 1, n, fp);

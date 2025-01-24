@@ -66,7 +66,7 @@ static void WriteGatewayRegister(int active)
 	__osPiRelAccess();
 }
 
-static void cont_read(void)
+static void ContRead(void)
 {
 	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
 	osContGetReadData(cont_pad);
@@ -88,7 +88,7 @@ static void cont_read(void)
 
 #else
 
-#define cont_read() \
+#define ContRead() \
 { \
 	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK); \
 	osContGetReadData(cont_pad); \
@@ -96,7 +96,7 @@ static void cont_read(void)
 
 #endif
 
-static void gfx_init_dp(void)
+static void GfxInitDP(void)
 {
 	gDPPipeSync(glistp++);
 	gDPPipelineMode(glistp++, G_PM_1PRIMITIVE);
@@ -116,7 +116,7 @@ static void gfx_init_dp(void)
 	gDPPipeSync(glistp++);
 }
 
-static void gfx_init_sp(void)
+static void GfxInitSP(void)
 {
 	gSPClearGeometryMode(
 		glistp++,
@@ -130,7 +130,7 @@ static void gfx_init_sp(void)
 	gSPTexture(glistp++, 0x0000, 0x0000, G_TX_NOLOD, G_TX_RENDERTILE, G_OFF);
 }
 
-static void gfx_init_zimg(void)
+static void GfxInitZB(void)
 {
 	gDPPipeSync(glistp++);
 	gDPSetDepthSource(glistp++, G_ZS_PIXEL);
@@ -144,7 +144,7 @@ static void gfx_init_zimg(void)
 	);
 }
 
-static void gfx_init_cimg(void)
+static void GfxInitCB(void)
 {
 	gDPPipeSync(glistp++);
 	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
@@ -159,7 +159,7 @@ static void gfx_init_cimg(void)
 #endif
 }
 
-void gfx_clear(u32 fill)
+void GfxClear(u32 fill)
 {
 	gDPPipeSync(glistp++);
 	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
@@ -172,7 +172,7 @@ void gfx_clear(u32 fill)
 	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
 }
 
-void gfx_vp_clear(Vp *vp, u32 fill)
+void GfxVpClear(Vp *vp, u32 fill)
 {
 	SHORT ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
 	SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
@@ -187,7 +187,7 @@ void gfx_vp_clear(Vp *vp, u32 fill)
 	gDPSetCycleType(glistp++, G_CYC_1CYCLE);
 }
 
-static void gfx_draw_border(void)
+static void GfxDrawBorder(void)
 {
 	gDPPipeSync(glistp++);
 	gDPSetScissor(glistp++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WD, SCREEN_HT);
@@ -202,7 +202,7 @@ static void gfx_draw_border(void)
 #endif
 }
 
-void gfx_vp_scissor(Vp *vp)
+void GfxVpScissor(Vp *vp)
 {
 	SHORT ulx = (vp->vp.vtrans[0]-vp->vp.vscale[0])/4 + 1;
 	SHORT uly = (vp->vp.vtrans[1]-vp->vp.vscale[1])/4 + 1;
@@ -211,7 +211,7 @@ void gfx_vp_scissor(Vp *vp)
 	gDPSetScissor(glistp++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
 }
 
-static void gfx_make_task(void)
+static void GfxMakeTask(void)
 {
 	int len = glistp - framep->gfx;
 	gfx_task->mq = &gfx_dp_mq;
@@ -235,30 +235,29 @@ static void gfx_make_task(void)
 	gfx_task->task.t.yield_data_size = OS_YIELD_DATA_SIZE;
 }
 
-void gfx_start(void)
+void GfxStart(void)
 {
-	segment_write();
-	gfx_init_dp();
-	gfx_init_sp();
-	gfx_init_zimg();
-	gfx_init_cimg();
+	SegmentWrite();
+	GfxInitDP();
+	GfxInitSP();
+	GfxInitZB();
+	GfxInitCB();
 }
 
-void gfx_end(void)
+void GfxEnd(void)
 {
-	gfx_draw_border();
-	if (debug_time) time_draw();
+	GfxDrawBorder();
+	if (debug_time) TimeDraw();
 	gDPFullSync(glistp++);
 	gSPEndDisplayList(glistp++);
-	gfx_make_task();
+	GfxMakeTask();
 }
 
-static void gfx_reset(void)
+static void GfxReset(void)
 {
-	if (reset_timer != 0 && reset_frame < 15)
+	if (reset_timer && reset_frame < 15)
 	{
-		int y;
-		int x;
+		int y, x;
 		int vi = gfx_vi == 0 ? 2 : gfx_vi-1;
 		u64 *cimg = (void *)PHYS_TO_K0(gfx_cimg[vi]);
 		cimg += SCREEN_WD/4 * reset_frame++;
@@ -273,44 +272,44 @@ static void gfx_reset(void)
 	osRecvMesg(&gfx_vi_mq, &null_msg, OS_MESG_BLOCK);
 }
 
-static void frame_init(void)
+static void FrameInit(void)
 {
 	framep = &frame_data[0];
-	segment_set(SEG_FRAME, framep);
+	SegmentSet(SEG_FRAME, framep);
 	gfx_task = &framep->task;
 	glistp = framep->gfx;
 	gfx_mem = (char *)framep->gfx + sizeof(framep->gfx);
-	gfx_start();
-	gfx_clear(0x00000000);
-	gfx_end();
-	sc_queue_gfxtask(&framep->task);
+	GfxStart();
+	GfxClear(0x00000000);
+	GfxEnd();
+	ScQueueGfxTask(&framep->task);
 	gfx_dp++;
 	gfx_frame++;
 }
 
-static void frame_start(void)
+static void FrameStart(void)
 {
 	framep = &frame_data[gfx_frame & 1];
-	segment_set(SEG_FRAME, framep);
+	SegmentSet(SEG_FRAME, framep);
 	gfx_task = &framep->task;
 	glistp = framep->gfx;
 	gfx_mem = (char *)framep->gfx + sizeof(framep->gfx);
 }
 
-static void frame_end(void)
+static void FrameEnd(void)
 {
-	time_gfxcpu(TIME_GFXCPU_ENDFRM);
+	TimeGfxCPU(TIME_GFXCPU_ENDFRM);
 	osRecvMesg(&gfx_dp_mq, &null_msg, OS_MESG_BLOCK);
 	if (gfx_callback)
 	{
 		gfx_callback();
 		gfx_callback = NULL;
 	}
-	sc_queue_gfxtask(&framep->task);
-	time_gfxcpu(TIME_GFXCPU_ENDRDP);
+	ScQueueGfxTask(&framep->task);
+	TimeGfxCPU(TIME_GFXCPU_ENDRDP);
 	osRecvMesg(&gfx_vi_mq, &null_msg, OS_MESG_BLOCK);
 	osViSwapBuffer((void *)PHYS_TO_K0(gfx_cimg[gfx_vi]));
-	time_gfxcpu(TIME_GFXCPU_END);
+	TimeGfxCPU(TIME_GFXCPU_END);
 	osRecvMesg(&gfx_vi_mq, &null_msg, OS_MESG_BLOCK);
 	if (++gfx_vi == 3) gfx_vi = 0;
 	if (++gfx_dp == 3) gfx_dp = 0;
@@ -318,7 +317,7 @@ static void frame_end(void)
 }
 
 UNUSED
-static void demo_record(void)
+static void DemoRecord(void)
 {
 	static DEMO record = {0};
 	u8 button = (cont1->held & 0xF000) >> 8 | (cont1->held & 0x000F);
@@ -345,7 +344,7 @@ static void demo_record(void)
 	record.count++;
 }
 
-static void cont_proc_stick(CONTROLLER *cont)
+static void ContProcStick(CONTROLLER *cont)
 {
 	UNUSED int i;
 	cont->x = 0;
@@ -354,16 +353,16 @@ static void cont_proc_stick(CONTROLLER *cont)
 	if (cont->stick_x >=  8) cont->x = cont->stick_x - 6;
 	if (cont->stick_y <= -8) cont->y = cont->stick_y + 6;
 	if (cont->stick_y >=  8) cont->y = cont->stick_y - 6;
-	cont->d = sqrtf(cont->x*cont->x + cont->y*cont->y);
-	if (cont->d > 64)
+	cont->dist = DIST2(cont->x, cont->y);
+	if (cont->dist > 64)
 	{
-		cont->x *= 64/cont->d;
-		cont->y *= 64/cont->d;
-		cont->d  = 64;
+		cont->x *= 64/cont->dist;
+		cont->y *= 64/cont->dist;
+		cont->dist = 64;
 	}
 }
 
-static void demo_proc(void)
+static void DemoProc(void)
 {
 	controller_data[0].pad->button &= 0xFF3F;
 	if (demop)
@@ -393,11 +392,11 @@ static void demo_proc(void)
 	}
 }
 
-static void cont_proc(void)
+static void ContProc(void)
 {
 	int i;
-	if (cont_bitpattern) cont_read();
-	demo_proc();
+	if (cont_bitpattern) ContRead();
+	DemoProc();
 	for (i = 0; i < CONTROLLER_MAX; i++)
 	{
 		CONTROLLER *cont = &controller_data[i];
@@ -407,7 +406,7 @@ static void cont_proc(void)
 			cont->stick_y = cont->pad->stick_y;
 			cont->down    = cont->pad->button & (cont->pad->button^cont->held);
 			cont->held    = cont->pad->button;
-			cont_proc_stick(cont);
+			ContProcStick(cont);
 		}
 		else
 		{
@@ -417,22 +416,21 @@ static void cont_proc(void)
 			cont->held    = 0;
 			cont->x       = 0;
 			cont->y       = 0;
-			cont->d       = 0;
+			cont->dist    = 0;
 		}
 	}
 	contp->stick_x = cont1->stick_x;
 	contp->stick_y = cont1->stick_y;
 	contp->x       = cont1->x;
 	contp->y       = cont1->y;
-	contp->d       = cont1->d;
+	contp->dist    = cont1->dist;
 	contp->down    = cont1->down;
 	contp->held    = cont1->held;
 }
 
-static void cont_init(void)
+static void ContInit(void)
 {
-	SHORT i;
-	SHORT c;
+	SHORT i, c;
 	controller_data[0].status = &cont_status[0];
 	controller_data[0].pad    = &cont_pad[0];
 	osContInit(&si_mq, &cont_bitpattern, cont_status);
@@ -454,55 +452,55 @@ extern const char _GfxSegmentRomEnd[];
 extern const char _AnimeSegmentRomStart[];
 extern const char _DemoSegmentRomStart[];
 
-static void gfx_init(void)
+static void GfxInit(void)
 {
 	UNUSED int i;
-	segment_set(0x00, (void *)0x80000000);
+	SegmentSet(0x00, (void *)0x80000000);
 	osCreateMesgQueue(&gfx_dp_mq, &gfx_dp_mbox, 1);
 	osCreateMesgQueue(&gfx_vi_mq, &gfx_vi_mbox, 1);
 	gfx_zimg    = K0_TO_PHYS(z_image);
 	gfx_cimg[0] = K0_TO_PHYS(c_image_a);
 	gfx_cimg[1] = K0_TO_PHYS(c_image_b);
 	gfx_cimg[2] = K0_TO_PHYS(c_image_c);
-	mario_anime_buf = mem_alloc(16384, MEM_ALLOC_L);
-	segment_set(SEG_MARIO_ANIME, mario_anime_buf);
-	bank_init(&mario_anime_bank, _AnimeSegmentRomStart, mario_anime_buf);
-	demo_buf = mem_alloc(2048, MEM_ALLOC_L);
-	segment_set(SEG_DEMO, demo_buf);
-	bank_init(&demo_bank, _DemoSegmentRomStart, demo_buf);
-	mem_load_data(
+	mario_anime_buf = MemAlloc(16384, MEM_ALLOC_L);
+	SegmentSet(SEG_MARIO_ANIME, mario_anime_buf);
+	BankInit(&mario_anime_bank, _AnimeSegmentRomStart, mario_anime_buf);
+	demo_buf = MemAlloc(2048, MEM_ALLOC_L);
+	SegmentSet(SEG_DEMO, demo_buf);
+	BankInit(&demo_bank, _DemoSegmentRomStart, demo_buf);
+	MemLoadData(
 		SEG_MAIN, _MainSegmentRomStart, _MainSegmentRomEnd, MEM_ALLOC_L
 	);
-	mem_load_pres(SEG_GFX, _GfxSegmentRomStart, _GfxSegmentRomEnd);
+	MemLoadPres(SEG_GFX, _GfxSegmentRomStart, _GfxSegmentRomEnd);
 }
 
-extern P_SCRIPT p_main[];
+extern PRGLANG p_main[];
 
-void gfx_proc(UNUSED void *arg)
+void GfxProc(UNUSED void *arg)
 {
-	P_SCRIPT *pc;
-	gfx_init();
-	cont_init();
-	save_init();
-	sc_setclient(SC_GFXCLIENT, &gfx_client, &gfx_vi_mq, (OSMesg)1);
-	pc = segment_to_virtual(p_main);
+	PRGLANG *pc;
+	GfxInit();
+	ContInit();
+	BackupInit();
+	ScSetClient(SC_GFXCLIENT, &gfx_client, &gfx_vi_mq, (OSMesg)1);
+	pc = SegmentToVirtual(p_main);
 	Na_BgmPlay(2, NA_SEQ_SE, 0);
-	aud_sound_mode(save_get_sound());
-	frame_init();
+	AudSetMode(BuGetSound());
+	FrameInit();
 	for (;;)
 	{
-		if (reset_timer != 0)
+		if (reset_timer)
 		{
-			gfx_reset();
+			GfxReset();
 			continue;
 		}
-		time_gfxcpu(TIME_GFXCPU_START);
+		TimeGfxCPU(TIME_GFXCPU_START);
 		if (cont_bitpattern) osContStartReadData(&si_mq);
-		aud_tick();
-		frame_start();
-		cont_proc();
-		pc = p_execute(pc);
-		frame_end();
+		AudTick();
+		FrameStart();
+		ContProc();
+		pc = PrgLangExec(pc);
+		FrameEnd();
 		if (debug_mem) dprintf(180, 20, "BUF %d", gfx_mem-(char *)glistp);
 	}
 }

@@ -10,7 +10,7 @@
 
 #define MAP_OFF_Y               (-78)
 
-static int bglist_check_wall(BGLIST *list, WALLCHECK *check)
+static int BGListCheckWall(BGLIST *list, WALLCHECK *check)
 {
 	register BGFACE *face;
 	register float offset;
@@ -18,8 +18,7 @@ static int bglist_check_wall(BGLIST *list, WALLCHECK *check)
 	register float x = check->x;
 	register float y = check->y + check->offset;
 	register float z = check->z;
-	register float wx, wz;
-	register float x0, x1, x2, y0, y1, y2;
+	register float wx, wz, x0, x1, x2, y0, y1, y2;
 	int count = 0;
 	if (radius > 200) radius = 200;
 	while (list)
@@ -77,7 +76,7 @@ static int bglist_check_wall(BGLIST *list, WALLCHECK *check)
 				if (object && (object->flag & OBJ_0040)) continue;
 				if (object && object == mario_obj)
 				{
-					if (mario->flag & PL_0002) continue;
+					if (mario->flag & PL_VANISHCAP) continue;
 				}
 			}
 		}
@@ -89,7 +88,7 @@ static int bglist_check_wall(BGLIST *list, WALLCHECK *check)
 	return count;
 }
 
-int bg_hit_wall(float *x, float *y, float *z, float offset, float radius)
+int BGHitWall(float *x, float *y, float *z, float offset, float radius)
 {
 	WALLCHECK check;
 	int count = 0;
@@ -99,14 +98,14 @@ int bg_hit_wall(float *x, float *y, float *z, float offset, float radius)
 	check.y = *y;
 	check.z = *z;
 	check.count = 0;
-	count = bg_check_wall(&check);
+	count = BGCheckWall(&check);
 	*x = check.x;
 	*y = check.y;
 	*z = check.z;
 	return count;
 }
 
-int bg_check_wall(WALLCHECK *check)
+int BGCheckWall(WALLCHECK *check)
 {
 	BGLIST *list;
 	SHORT ix, iz;
@@ -119,22 +118,21 @@ int bg_check_wall(WALLCHECK *check)
 	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_WALL].next;
-	count += bglist_check_wall(list, check);
+	count += BGListCheckWall(list, check);
 	list = statbg_root[iz][ix].list[BG_WALL].next;
-	count += bglist_check_wall(list, check);
+	count += BGListCheckWall(list, check);
 	bgdebug.wall++;
 	return count;
 }
 
-static BGFACE *bglist_check_roof(
+static BGFACE *BGListCheckRoof(
 	BGLIST *list, int x, int y, int z, float *roof_y
 )
 {
 	register BGFACE *face;
 	register int x0, z0, x1, z1, x2, z2;
 	BGFACE *roof = NULL;
-	float nx, ny, nz, nw;
-	float level;
+	float nx, ny, nz, nw, level;
 	roof = NULL;
 	while (list)
 	{
@@ -168,7 +166,7 @@ static BGFACE *bglist_check_roof(
 	return roof;
 }
 
-float bg_check_roof(float x, float y, float z, BGFACE **roof)
+float BGCheckRoof(float x, float y, float z, BGFACE **roof)
 {
 	SHORT iz, ix;
 	BGFACE *statbg;
@@ -185,9 +183,9 @@ float bg_check_roof(float x, float y, float z, BGFACE **roof)
 	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_ROOF].next;
-	movebg = bglist_check_roof(list, wx, wy, wz, &move_y);
+	movebg = BGListCheckRoof(list, wx, wy, wz, &move_y);
 	list = statbg_root[iz][ix].list[BG_ROOF].next;
-	statbg = bglist_check_roof(list, wx, wy, wz, &stat_y);
+	statbg = BGListCheckRoof(list, wx, wy, wz, &stat_y);
 	if (move_y < stat_y)
 	{
 		statbg = movebg;
@@ -199,21 +197,21 @@ float bg_check_roof(float x, float y, float z, BGFACE **roof)
 }
 
 UNUSED static
-float obj_ground_y(OBJECT *obj)
+float ObjCheckGroundY(OBJECT *obj)
 {
-	BGFACE *roof;
-	float roof_y = bg_check_ground(
-		obj->o_pos_x, obj->o_pos_y, obj->o_pos_z, &roof
+	BGFACE *ground;
+	float ground_y = BGCheckGround(
+		obj->o_posx, obj->o_posy, obj->o_posz, &ground
 	);
-	return roof_y;
+	return ground_y;
 }
 
-float bg_check_plane(float x, float y, float z, PLANE **plane)
+float BGCheckPlane(float x, float y, float z, PLANE **plane)
 {
 	static PLANE ground_plane;
 	UNUSED static char pad[56];
 	BGFACE *ground;
-	float ground_y = bg_check_ground(x, y, z, &ground);
+	float ground_y = BGCheckGround(x, y, z, &ground);
 	*plane = NULL;
 	if (ground)
 	{
@@ -226,14 +224,13 @@ float bg_check_plane(float x, float y, float z, PLANE **plane)
 	return ground_y;
 }
 
-static BGFACE *bglist_check_ground(
+static BGFACE *BGListCheckGround(
 	BGLIST *list, int x, int y, int z, float *ground_y
 )
 {
 	register BGFACE *face;
 	register int x0, z0, x1, z1, x2, z2;
-	float nx, ny, nz, nw;
-	float level;
+	float nx, ny, nz, nw, level;
 	BGFACE *ground = NULL;
 	while (list)
 	{
@@ -267,15 +264,15 @@ static BGFACE *bglist_check_ground(
 	return ground;
 }
 
-float bg_check_ground_y(float x, float y, float z)
+float BGCheckGroundY(float x, float y, float z)
 {
 	BGFACE *ground;
-	float ground_y = bg_check_ground(x, y, z, &ground);
+	float ground_y = BGCheckGround(x, y, z, &ground);
 	return ground_y;
 }
 
 UNUSED static
-float bg_check_ground_movebg(float x, float y, float z, BGFACE **ground)
+float BGCheckGroundMoveBG(float x, float y, float z, BGFACE **ground)
 {
 	BGLIST *list;
 	BGFACE *face;
@@ -286,12 +283,12 @@ float bg_check_ground_movebg(float x, float y, float z, BGFACE **ground)
 	SHORT ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	SHORT iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_GROUND].next;
-	face = bglist_check_ground(list, wx, wy, wz, &ground_y);
+	face = BGListCheckGround(list, wx, wy, wz, &ground_y);
 	*ground = face;
 	return ground_y;
 }
 
-float bg_check_ground(float x, float y, float z, BGFACE **ground)
+float BGCheckGround(float x, float y, float z, BGFACE **ground)
 {
 	SHORT iz, ix;
 	BGFACE *statbg;
@@ -308,14 +305,14 @@ float bg_check_ground(float x, float y, float z, BGFACE **ground)
 	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_GROUND].next;
-	movebg = bglist_check_ground(list, wx, wy, wz, &move_y);
+	movebg = BGListCheckGround(list, wx, wy, wz, &move_y);
 	list = statbg_root[iz][ix].list[BG_GROUND].next;
-	statbg = bglist_check_ground(list, wx, wy, wz, &stat_y);
+	statbg = BGListCheckGround(list, wx, wy, wz, &stat_y);
 	if (!object_80361182)
 	{
 		if (statbg && statbg->code == BG_18)
 		{
-			statbg = bglist_check_ground(list, wx, stat_y-200, wz, &stat_y);
+			statbg = BGListCheckGround(list, wx, stat_y-200, wz, &stat_y);
 		}
 	}
 	else
@@ -333,10 +330,9 @@ float bg_check_ground(float x, float y, float z, BGFACE **ground)
 	return stat_y;
 }
 
-float bg_check_water(float x, float z)
+float BGCheckWater(float x, float z)
 {
-	int i;
-	int n;
+	int i, n;
 	MAP code;
 	float xl, xh, zl, zh;
 	float y = MAP_MIN_Y;
@@ -362,10 +358,9 @@ float bg_check_water(float x, float z)
 	return y;
 }
 
-float bg_check_gas(float x, float z)
+float BGCheckGas(float x, float z)
 {
-	int i;
-	int n;
+	int i, n;
 	UNUSED int arg;
 	MAP code;
 	float xl, xh, zl, zh;
@@ -395,7 +390,7 @@ float bg_check_gas(float x, float z)
 	return y;
 }
 
-static int bglist_len(BGLIST *list)
+static int BGListLen(BGLIST *list)
 {
 	int len = 0;
 	while (list)
@@ -406,7 +401,7 @@ static int bglist_len(BGLIST *list)
 	return len;
 }
 
-void bgcheck_debug(float x, float z)
+void BGCheckDebug(float x, float z)
 {
 	BGLIST *list;
 	int ground = 0;
@@ -415,36 +410,36 @@ void bgcheck_debug(float x, float z)
 	int ix = (x+MAP_HALF)/BGAREA_SIZE;
 	int iz = (z+MAP_HALF)/BGAREA_SIZE;
 	list = statbg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_GROUND].next;
-	ground += bglist_len(list);
+	ground += BGListLen(list);
 	list = movebg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_GROUND].next;
-	ground += bglist_len(list);
+	ground += BGListLen(list);
 	list = statbg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_WALL].next;
-	wall += bglist_len(list);
+	wall += BGListLen(list);
 	list = movebg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_WALL].next;
-	wall += bglist_len(list);
+	wall += BGListLen(list);
 	list = statbg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_ROOF].next;
-	roof += bglist_len(list);
+	roof += BGListLen(list);
 	list = movebg_root[iz & BGAREA_MASK][ix & BGAREA_MASK].list[BG_ROOF].next;
-	roof += bglist_len(list);
-	db_put_info("area   %x", BGAREA_N*iz+ix);
-	db_put_info("dg %d", ground);
-	db_put_info("dw %d", wall);
-	db_put_info("dr %d", roof);
-	db_offset(80, -3);
-	db_put_info("%d", bgdebug.ground);
-	db_put_info("%d", bgdebug.wall);
-	db_put_info("%d", bgdebug.roof);
-	db_offset(-80, 0);
-	db_put_info("listal %d", bglist_count);
-	db_put_info("statbg %d", bgface_static);
-	db_put_info("movebg %d", bgface_count-bgface_static);
+	roof += BGListLen(list);
+	DbPrintInfo("area   %x", BGAREA_N*iz+ix);
+	DbPrintInfo("dg %d", ground);
+	DbPrintInfo("dw %d", wall);
+	DbPrintInfo("dr %d", roof);
+	DbPrintOffset(80, -3);
+	DbPrintInfo("%d", bgdebug.ground);
+	DbPrintInfo("%d", bgdebug.wall);
+	DbPrintInfo("%d", bgdebug.roof);
+	DbPrintOffset(-80, 0);
+	DbPrintInfo("listal %d", bglist_count);
+	DbPrintInfo("statbg %d", bgface_static);
+	DbPrintInfo("movebg %d", bgface_count-bgface_static);
 	bgdebug.ground = 0;
 	bgdebug.roof = 0;
 	bgdebug.wall = 0;
 }
 
 UNUSED static
-int bg_hit_ground_roof(
+int BGHitGroundRoof(
 	int flag, float *x, float *y, float *z, float radius,
 	BGFACE **face, float *face_y
 )
@@ -455,8 +450,8 @@ int bg_hit_ground_roof(
 	float wz = *z;
 	float offset, dist;
 	*face = NULL;
-	if (flag)   *face_y = bg_check_roof(wx, wy, wz, face);
-	else        *face_y = bg_check_ground(wx, wy, wz, face);
+	if (flag)   *face_y = BGCheckRoof(wx, wy, wz, face);
+	else        *face_y = BGCheckGround(wx, wy, wz, face);
 	if (!*face) return -1;
 	nx = (*face)->nx;
 	ny = (*face)->ny;

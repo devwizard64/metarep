@@ -5,7 +5,7 @@ static s16 time_mode = 0;
 static s16 time_cpu = 1;
 static s16 time_rcp = 0;
 
-void time_gfxcpu(int index)
+void TimeGfxCPU(int index)
 {
 	time_data[time_cpu].gfxcpu[index] = osGetTime();
 	if (index == TIME_GFXCPU_END)
@@ -15,7 +15,7 @@ void time_gfxcpu(int index)
 	}
 }
 
-void time_audcpu(void)
+void TimeAudCPU(void)
 {
 	TIME *time = &time_data[time_cpu];
 	if (time->audcpu_i < TIME_AUDCPU_MAX)
@@ -24,7 +24,7 @@ void time_audcpu(void)
 	}
 }
 
-void time_gfxrcp(int index)
+void TimeGfxRCP(int index)
 {
 	if (index == TIME_GFXRCP_START)
 	{
@@ -34,7 +34,7 @@ void time_gfxrcp(int index)
 	time_data[time_rcp].gfxrcp[index] = osGetTime();
 }
 
-void time_audrcp(void)
+void TimeAudRCP(void)
 {
 	TIME *time = &time_data[time_rcp];
 	if (time->audrcp_i < TIME_AUDRCP_MAX)
@@ -53,14 +53,14 @@ void time_audrcp(void)
 #define F_RED       GPACK_RGBA5551(0xFF, 0x28, 0x28, 1)
 #define F_CYAN      GPACK_RGBA5551(0x28, 0xC0, 0xE0, 1)
 
-#define time_draw_rect(xl, xh, y, fill) \
+#define TimeDrawRect(xl, xh, y, fill) \
 { \
 	gDPPipeSync(glistp++); \
 	gDPSetFillColor(glistp++, (fill) << 16 | (fill)); \
 	gDPFillRectangle(glistp++, (xl), (y), (xh), (y)+TIME_H-1); \
 }
 
-static void time_draw_d(
+static void TimeDrawD(
 	OSTime start, OSTime tl, OSTime th, SHORT y, USHORT fill
 )
 {
@@ -73,15 +73,15 @@ static void time_draw_d(
 	/* meant xl, xh */
 	if (xl > SCREEN_WD-1) tl = SCREEN_WD-1;
 	if (xh > SCREEN_WD-1) th = SCREEN_WD-1;
-	if (xl < xh) time_draw_rect(xl, xh, y, fill);
+	if (xl < xh) TimeDrawRect(xl, xh, y, fill);
 }
 
-static void time_draw_scale(void)
+static void TimeDrawScale(void)
 {
-	time_draw_rect(TIME_X+49*0, TIME_X+49*1, TIME_Y(0), F_BLUE);
-	time_draw_rect(TIME_X+49*1, TIME_X+49*2, TIME_Y(0), F_YELLOW);
-	time_draw_rect(TIME_X+49*2, TIME_X+49*3, TIME_Y(0), F_ORANGE);
-	time_draw_rect(TIME_X+49*3, TIME_X+49*4, TIME_Y(0), F_RED);
+	TimeDrawRect(TIME_X+49*0, TIME_X+49*1, TIME_Y(0), F_BLUE);
+	TimeDrawRect(TIME_X+49*1, TIME_X+49*2, TIME_Y(0), F_YELLOW);
+	TimeDrawRect(TIME_X+49*2, TIME_X+49*3, TIME_Y(0), F_ORANGE);
+	TimeDrawRect(TIME_X+49*3, TIME_X+49*4, TIME_Y(0), F_RED);
 }
 
 /*
@@ -104,28 +104,28 @@ orange: gfx RDP
 #define GFXRCP_ENDRDP   time->gfxrcp[TIME_GFXRCP_ENDRDP]
 #define AUDCPU_START    time->audcpu[0]
 
-static void time_draw_abs(void)
+static void TimeDrawAbs(void)
 {
 	int i;
 	TIME *time = &time_data[time_cpu^1];
 	OSTime start = AUDCPU_START - OS_USEC_TO_CYCLES(16433);
-	time_draw_d(start, GFXCPU_START,  GFXCPU_ENDPRC, TIME_Y(2), F_YELLOW);
-	time_draw_d(start, GFXCPU_ENDPRC, GFXCPU_ENDFRM, TIME_Y(2), F_ORANGE);
-	time_draw_d(start, GFXCPU_ENDFRM, GFXCPU_ENDRDP, TIME_Y(2), F_CYAN);
+	TimeDrawD(start, GFXCPU_START,  GFXCPU_ENDPRC, TIME_Y(2), F_YELLOW);
+	TimeDrawD(start, GFXCPU_ENDPRC, GFXCPU_ENDFRM, TIME_Y(2), F_ORANGE);
+	TimeDrawD(start, GFXCPU_ENDFRM, GFXCPU_ENDRDP, TIME_Y(2), F_CYAN);
 	time->audcpu_i &= (USHORT)~1;
-	for (i = 0; i < time->audcpu_i; i += 2) time_draw_d(
+	for (i = 0; i < time->audcpu_i; i += 2) TimeDrawD(
 		start, time->audcpu[i+0], time->audcpu[i+1], TIME_Y(2), F_RED
 	);
-	time_draw_d(start, GFXRCP_START,  GFXRCP_ENDRSP, TIME_Y(1), F_YELLOW);
-	time_draw_d(start, GFXRCP_ENDRSP, GFXRCP_ENDRDP, TIME_Y(1), F_ORANGE);
+	TimeDrawD(start, GFXRCP_START,  GFXRCP_ENDRSP, TIME_Y(1), F_YELLOW);
+	TimeDrawD(start, GFXRCP_ENDRSP, GFXRCP_ENDRDP, TIME_Y(1), F_ORANGE);
 	time->audrcp_i &= (USHORT)~1;
-	for (i = 0; i < time->audrcp_i; i += 2) time_draw_d(
+	for (i = 0; i < time->audrcp_i; i += 2) TimeDrawD(
 		start, time->audrcp[i+0], time->audrcp[i+1], TIME_Y(1), F_RED
 	);
-	time_draw_scale();
+	TimeDrawScale();
 }
 
-static void time_draw_rel(void)
+static void TimeDrawRel(void)
 {
 	int i;
 	TIME *time = &time_data[time_cpu^1];
@@ -151,18 +151,18 @@ static void time_draw_rel(void)
 		audrsp += time->audrcp[i+1]-time->audrcp[i+0];
 	}
 	start = 0;
-	time_draw_d(0, start, start+audcpu, TIME_Y(2), F_RED   ); start += audcpu;
-	time_draw_d(0, start, start+gfxprc, TIME_Y(2), F_YELLOW); start += gfxprc;
-	time_draw_d(0, start, start+gfxfrm, TIME_Y(2), F_ORANGE);
-	time_draw_d(0, 0, gfxrdp, TIME_Y(1), F_ORANGE);
-	time_draw_d(0, 0, gfxrsp, TIME_Y(1), F_YELLOW);
-	time_draw_d(0, 0, audrsp, TIME_Y(1), F_RED   );
-	time_draw_scale();
+	TimeDrawD(0, start, start+audcpu, TIME_Y(2), F_RED   ); start += audcpu;
+	TimeDrawD(0, start, start+gfxprc, TIME_Y(2), F_YELLOW); start += gfxprc;
+	TimeDrawD(0, start, start+gfxfrm, TIME_Y(2), F_ORANGE);
+	TimeDrawD(0, 0, gfxrdp, TIME_Y(1), F_ORANGE);
+	TimeDrawD(0, 0, gfxrsp, TIME_Y(1), F_YELLOW);
+	TimeDrawD(0, 0, audrsp, TIME_Y(1), F_RED   );
+	TimeDrawScale();
 }
 
-void time_draw(void)
+void TimeDraw(void)
 {
 	if (cont1->down & L_TRIG) time_mode ^= 1;
-	if (time_mode == 0) time_draw_rel();
-	else                time_draw_abs();
+	if (time_mode == 0) TimeDrawRel();
+	else                TimeDrawAbs();
 }

@@ -5,24 +5,18 @@
 typedef struct seq
 {
 	char *path;
-	unsigned int offset;
-	unsigned int size;
+	unsigned int offset, size;
 }
 SEQ;
 
 int main(int argc, char *argv[])
 {
-	int i;
-	int n;
-	FILE *fp;
-	FILE *in;
+	int i, n;
+	FILE *fp, *in;
 	char *buf;
 	SEQ *seq;
-	unsigned int offset;
-	unsigned int size;
-	int code;
-	int count;
-	int index;
+	unsigned int offset, size;
+	int code, count, index;
 	if (argc < 4)
 	{
 		fprintf(stderr, "usage: %s <code> <output> <input> [...]\n", argv[0]);

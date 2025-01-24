@@ -22,19 +22,19 @@ char shadow_ondecal;
 static char shadow_offset;
 static short shadow_bgcode;
 
-static void shadow_rotate(float *posz, float *posx, float z, float x)
+static void ShRotate(float *posz, float *posx, float z, float x)
 {
-	OBJECT *obj = (OBJECT *)s_object;
-	*posz = z*COS(obj->o_shape_ang_y) - x*SIN(obj->o_shape_ang_y);
-	*posx = z*SIN(obj->o_shape_ang_y) + x*COS(obj->o_shape_ang_y);
+	OBJECT *obj = (OBJECT *)draw_object;
+	*posz = z*COS(obj->o_shapeangy) - x*SIN(obj->o_shapeangy);
+	*posx = z*SIN(obj->o_shapeangy) + x*COS(obj->o_shapeangy);
 }
 
-static float shadow_atan2(float y, float x)
+static float ShAtan2(float y, float x)
 {
 	return (float)ATAN2(y, x) / 65535.0 * 360.0;
 }
 
-static float shadow_scale_size(float size, float height)
+static float ShScaleSize(float size, float height)
 {
 	float scale;
 	if (height <= 0.0)
@@ -52,7 +52,7 @@ static float shadow_scale_size(float size, float height)
 	return scale;
 }
 
-static float shadow_cut_size(float size, float height)
+static float ShCutSize(float size, float height)
 {
 	if (height >= 600.0)
 	{
@@ -64,7 +64,7 @@ static float shadow_cut_size(float size, float height)
 	}
 }
 
-static UCHAR shadow_scale_alpha(UCHAR alpha, float height)
+static UCHAR ShScaleAlpha(UCHAR alpha, float height)
 {
 	if (alpha <= 120)
 	{
@@ -85,9 +85,9 @@ static UCHAR shadow_scale_alpha(UCHAR alpha, float height)
 	}
 }
 
-static float shadow_check_water(SHADOW *shadow)
+static float ShCheckWater(SHADOW *shadow)
 {
-	float water_y = bg_check_water(shadow->x, shadow->z);
+	float water_y = BGCheckWater(shadow->x, shadow->z);
 	if (water_y < -10000.0)
 	{
 		return 0;
@@ -102,7 +102,7 @@ static float shadow_check_water(SHADOW *shadow)
 #endif
 }
 
-static int shadow_init(
+static int ShInit(
 	SHADOW *shadow, float x, float y, float z, SHORT size, UCHAR alpha
 )
 {
@@ -116,8 +116,8 @@ static int shadow_init(
 	shadow->x = x;
 	shadow->y = y;
 	shadow->z = z;
-	shadow->level = bg_check_plane(shadow->x, shadow->y, shadow->z, &plane);
-	if (waterp) water_y = shadow_check_water(shadow);
+	shadow->level = BGCheckPlane(shadow->x, shadow->y, shadow->z, &plane);
+	if (waterp) water_y = ShCheckWater(shadow);
 	if (shadow_onwater)
 	{
 		shadow->level = water_y;
@@ -137,44 +137,44 @@ static int shadow_init(
 		shadow->nz = plane->nz;
 		shadow->nw = plane->nw;
 	}
-	if (alpha != 0) shadow->alpha = shadow_scale_alpha(alpha, y - shadow->level);
-	shadow->scale = shadow_scale_size(size, y - shadow->level);
-	shadow->angy = shadow_atan2(shadow->nz, shadow->nx);
-	if ((d = sqrtf(shadow->nx*shadow->nx + shadow->nz*shadow->nz)) == 0.0)
+	if (alpha) shadow->alpha = ShScaleAlpha(alpha, y - shadow->level);
+	shadow->scale = ShScaleSize(size, y - shadow->level);
+	shadow->angy = ShAtan2(shadow->nz, shadow->nx);
+	if ((d = DIST2(shadow->nx, shadow->nz)) == 0.0)
 	{
 		shadow->angx = 0;
 	}
 	else
 	{
-		shadow->angx = 90.0 - shadow_atan2(d, shadow->ny);
+		shadow->angx = 90.0 - ShAtan2(d, shadow->ny);
 	}
 	return FALSE;
 }
 
-static void shadow_vtx_st9(CHAR i, short *s, short *t)
+static void ShVtxST9(CHAR i, short *s, short *t)
 {
 	*s = 15 * (i%3 - 1);
 	*t = 15 * (i/3 - 1);
 }
 
-static void shadow_vtx_st4(CHAR i, short *s, short *t)
+static void ShVtxST4(CHAR i, short *s, short *t)
 {
 	*s = 15 * (2*(i%2) - 1);
 	*t = 15 * (2*(i/2) - 1);
 }
 
-static void shadow_vtx_set(
+static void ShSetVtx(
 	Vtx *vtx, CHAR i, float vx, float vy, float vz, UCHAR alpha, CHAR vcode
 )
 {
-	SHORT x = roundftos(vx);
-	SHORT y = roundftos(vy);
-	SHORT z = roundftos(vz);
+	SHORT x = RoundFtoS(vx);
+	SHORT y = RoundFtoS(vy);
+	SHORT z = RoundFtoS(vz);
 	short s, t;
 	switch (vcode)
 	{
-	case 0: shadow_vtx_st9(i, &s, &t); break;
-	case 1: shadow_vtx_st4(i, &s, &t); break;
+	case 0: ShVtxST9(i, &s, &t); break;
+	case 1: ShVtxST4(i, &s, &t); break;
 #ifdef __GNUC__
 	default: __builtin_unreachable();
 #endif
@@ -185,15 +185,15 @@ static void shadow_vtx_set(
 		y += 5;
 		z += 5;
 	}
-	vtx_set(vtx, i, x, y, z, 32*s, 32*t, 0xFF, 0xFF, 0xFF, alpha);
+	VtxSet(vtx, i, x, y, z, 32*s, 32*t, 0xFF, 0xFF, 0xFF, alpha);
 }
 
-static float shadow_project(SHADOW shadow, float x, float z)
+static float ShProject(SHADOW shadow, float x, float z)
 {
 	return -(shadow.nx*x + shadow.nz*z + shadow.nw) / shadow.ny;
 }
 
-static void shadow_vtx_calc_off(CHAR i, CHAR vcode, s8 *x, s8 *z)
+static void ShCalcVtxOff(CHAR i, CHAR vcode, s8 *x, s8 *z)
 {
 	*x = i%(3-vcode) - 1;
 	*z = i/(3-vcode) - 1;
@@ -204,7 +204,7 @@ static void shadow_vtx_calc_off(CHAR i, CHAR vcode, s8 *x, s8 *z)
 	}
 }
 
-static void shadow_vtx_calc_pos(
+static void ShCalcVtxPos(
 	CHAR i, SHADOW shadow, float *x, float *y, float *z, CHAR vcode
 )
 {
@@ -213,7 +213,7 @@ static void shadow_vtx_calc_pos(
 	PLANE *plane;
 	scalez = cosf(shadow.angx * M_PI/180) * shadow.scale;
 	angy = shadow.angy * M_PI/180;
-	shadow_vtx_calc_off(i, vcode, &offx, &offz);
+	ShCalcVtxOff(i, vcode, &offx, &offz);
 	posx = offx * shadow.scale / 2.0;
 	posz = offz * scalez       / 2.0;
 	*x = posz*sinf(angy) + posx*cosf(angy) + shadow.x;
@@ -226,8 +226,8 @@ static void shadow_vtx_calc_pos(
 	{
 		switch (vcode)
 		{
-		case 0: *y = bg_check_plane(*x, shadow.y, *z, &plane); break;
-		case 1: *y = shadow_project(shadow, *x, *z); break;
+		case 0: *y = BGCheckPlane(*x, shadow.y, *z, &plane); break;
+		case 1: *y = ShProject(shadow, *x, *z); break;
 #ifdef __GNUC__
 		default: __builtin_unreachable();
 #endif
@@ -235,7 +235,7 @@ static void shadow_vtx_calc_pos(
 	}
 }
 
-static SHORT shadow_planecalc(SHADOW shadow, float x, float y, float z)
+static SHORT ShPlaneCalc(SHADOW shadow, float x, float y, float z)
 {
 	float dx = x - shadow.x;
 	float dy = y - shadow.level;
@@ -244,24 +244,24 @@ static SHORT shadow_planecalc(SHADOW shadow, float x, float y, float z)
 	return d;
 }
 
-static void shadow_vtx_calc(Vtx *vtx, CHAR i, SHADOW shadow, CHAR vcode)
+static void ShCalcVtx(Vtx *vtx, CHAR i, SHADOW shadow, CHAR vcode)
 {
 	float x, y, z, vx, vy, vz;
 	UCHAR alpha = shadow.alpha;
 	if (shadow_onwater) alpha = 200;
-	shadow_vtx_calc_pos(i, shadow, &x, &y, &z, vcode);
+	ShCalcVtxPos(i, shadow, &x, &y, &z, vcode);
 	if (vcode == 0 && !shadow_onwater)
 	{
-		if (shadow_planecalc(shadow, x, y, z) != 0)
+		if (ShPlaneCalc(shadow, x, y, z) != 0)
 		{
-			y = shadow_project(shadow, x, z);
+			y = ShProject(shadow, x, z);
 			alpha = 0;
 		}
 	}
 	vx = x - shadow.x;
 	vy = y - shadow.y;
 	vz = z - shadow.z;
-	shadow_vtx_set(vtx, i, vx, vy, vz, alpha, vcode);
+	ShSetVtx(vtx, i, vx, vy, vz, alpha, vcode);
 }
 
 extern Gfx gfx_shadow_circle[];
@@ -270,7 +270,7 @@ extern Gfx gfx_shadow_9[];
 extern Gfx gfx_shadow_4[];
 extern Gfx gfx_shadow_end[];
 
-static void shadow_gfx(Gfx *gfx, Vtx *vtx, CHAR vcode, CHAR tcode)
+static void ShGfx(Gfx *gfx, Vtx *vtx, CHAR vcode, CHAR tcode)
 {
 	switch (tcode)
 	{
@@ -303,7 +303,7 @@ static void shadow_gfx(Gfx *gfx, Vtx *vtx, CHAR vcode, CHAR tcode)
 	gSPEndDisplayList(gfx);
 }
 
-static void shadow_fadein(
+static void ShFadeIn(
 	SHADOW *shadow, UCHAR alpha, SHORT frame, SHORT min, SHORT max
 )
 {
@@ -321,7 +321,7 @@ static void shadow_fadein(
 	}
 }
 
-static void shadow_fadeout(
+static void ShFadeOut(
 	SHADOW *shadow, UCHAR alpha, SHORT frame, SHORT min, SHORT max
 )
 {
@@ -335,7 +335,7 @@ static void shadow_fadeout(
 	}
 }
 
-static int shadow_fade_player(int code, UCHAR alpha, SHADOW *shadow)
+static int ShFadePlayer(int code, UCHAR alpha, SHADOW *shadow)
 {
 	OBJECT *obj;
 	CHAR result;
@@ -355,15 +355,15 @@ static int shadow_fade_player(int code, UCHAR alpha, SHADOW *shadow)
 		result = 0;
 		break;
 	case 52:
-		shadow_fadein(shadow, alpha, frame, 5, 14);
+		ShFadeIn(shadow, alpha, frame, 5, 14);
 		result = 1;
 		break;
 	case 0:
-		shadow_fadein(shadow, alpha, frame, 21, 33);
+		ShFadeIn(shadow, alpha, frame, 21, 33);
 		result = 1;
 		break;
 	case 28:
-		shadow_fadeout(shadow, alpha, frame, 0, 5);
+		ShFadeOut(shadow, alpha, frame, 0, 5);
 		result = 1;
 		break;
 	default:
@@ -373,7 +373,7 @@ static int shadow_fade_player(int code, UCHAR alpha, SHADOW *shadow)
 	return result;
 }
 
-static void shadow_check_player(SHADOW *shadow)
+static void ShCheckPlayer(SHADOW *shadow)
 {
 	if (stage_index == STAGE_BITFS && shadow_bgcode == 1)
 	{
@@ -395,7 +395,7 @@ static void shadow_check_player(SHADOW *shadow)
 	}
 }
 
-static Gfx *shadow_draw_player(
+static Gfx *ShDrawPlayer(
 	float x, float y, float z, SHORT size, UCHAR alpha, int code
 )
 {
@@ -417,26 +417,26 @@ static Gfx *shadow_draw_player(
 			break;
 		}
 	}
-	switch (shadow_fade_player(code, alpha, &shadow))
+	switch (ShFadePlayer(code, alpha, &shadow))
 	{
 		case 0: return NULL; break;
-		case 1: flag = shadow_init(&shadow, x, y, z, size, 0);      break;
-		case 2: flag = shadow_init(&shadow, x, y, z, size, alpha);  break;
+		case 1: flag = ShInit(&shadow, x, y, z, size, 0);      break;
+		case 2: flag = ShInit(&shadow, x, y, z, size, alpha);  break;
 #ifdef __GNUC__
 		default: __builtin_unreachable();
 #endif
 	}
 	if (flag) return NULL;
-	vtx = gfx_alloc(sizeof(Vtx)*9);
-	gfx = gfx_alloc(sizeof(Gfx)*5);
+	vtx = GfxAlloc(sizeof(Vtx)*9);
+	gfx = GfxAlloc(sizeof(Gfx)*5);
 	if (!vtx || !gfx) return NULL;
-	shadow_check_player(&shadow);
-	for (i = 0; i < 9; i++) shadow_vtx_calc(vtx, i, shadow, 0);
-	shadow_gfx(gfx, vtx, 0, 10);
+	ShCheckPlayer(&shadow);
+	for (i = 0; i < 9; i++) ShCalcVtx(vtx, i, shadow, 0);
+	ShGfx(gfx, vtx, 0, 10);
 	return gfx;
 }
 
-static Gfx *shadow_draw_circle9(
+static Gfx *ShDrawCircle9(
 	float x, float y, float z, SHORT size, UCHAR alpha
 )
 {
@@ -444,16 +444,16 @@ static Gfx *shadow_draw_circle9(
 	Gfx *gfx;
 	SHADOW shadow;
 	int i;
-	if (shadow_init(&shadow, x, y, z, size, alpha)) return NULL;
-	vtx = gfx_alloc(sizeof(Vtx)*9);
-	gfx = gfx_alloc(sizeof(Gfx)*5);
+	if (ShInit(&shadow, x, y, z, size, alpha)) return NULL;
+	vtx = GfxAlloc(sizeof(Vtx)*9);
+	gfx = GfxAlloc(sizeof(Gfx)*5);
 	if (!vtx || !gfx) return NULL;
-	for (i = 0; i < 9; i++) shadow_vtx_calc(vtx, i, shadow, 0);
-	shadow_gfx(gfx, vtx, 0, 10);
+	for (i = 0; i < 9; i++) ShCalcVtx(vtx, i, shadow, 0);
+	ShGfx(gfx, vtx, 0, 10);
 	return gfx;
 }
 
-static Gfx *shadow_draw_circle4(
+static Gfx *ShDrawCircle4(
 	float x, float y, float z, SHORT size, UCHAR alpha
 )
 {
@@ -461,16 +461,16 @@ static Gfx *shadow_draw_circle4(
 	Gfx *gfx;
 	SHADOW shadow;
 	int i;
-	if (shadow_init(&shadow, x, y, z, size, alpha)) return NULL;
-	vtx = gfx_alloc(sizeof(Vtx)*4);
-	gfx = gfx_alloc(sizeof(Gfx)*5);
+	if (ShInit(&shadow, x, y, z, size, alpha)) return NULL;
+	vtx = GfxAlloc(sizeof(Vtx)*4);
+	gfx = GfxAlloc(sizeof(Gfx)*5);
 	if (!vtx || !gfx) return NULL;
-	for (i = 0; i < 4; i++) shadow_vtx_calc(vtx, i, shadow, 1);
-	shadow_gfx(gfx, vtx, 1, 10);
+	for (i = 0; i < 4; i++) ShCalcVtx(vtx, i, shadow, 1);
+	ShGfx(gfx, vtx, 1, 10);
 	return gfx;
 }
 
-static Gfx *shadow_draw_circle4flat(
+static Gfx *ShDrawCircle4Flat(
 	float x, float y, float z, SHORT size, UCHAR alpha
 )
 {
@@ -478,51 +478,51 @@ static Gfx *shadow_draw_circle4flat(
 	Gfx *gfx;
 	PLANE *plane;
 	float level;
-	float ground_y = bg_check_plane(x, y, z, &plane);
+	float ground_y = BGCheckPlane(x, y, z, &plane);
 	float radius = size/2;
 	if (ground_y < -10000.0) return NULL;
 	else level = ground_y - y;
-	vtx = gfx_alloc(sizeof(Vtx)*4);
-	gfx = gfx_alloc(sizeof(Gfx)*5);
+	vtx = GfxAlloc(sizeof(Vtx)*4);
+	gfx = GfxAlloc(sizeof(Gfx)*5);
 	if (!vtx || !gfx) return NULL;
-	shadow_vtx_set(vtx, 0, -radius, level, -radius, alpha, 1);
-	shadow_vtx_set(vtx, 1, +radius, level, -radius, alpha, 1);
-	shadow_vtx_set(vtx, 2, -radius, level, +radius, alpha, 1);
-	shadow_vtx_set(vtx, 3, +radius, level, +radius, alpha, 1);
-	shadow_gfx(gfx, vtx, 1, 10);
+	ShSetVtx(vtx, 0, -radius, level, -radius, alpha, 1);
+	ShSetVtx(vtx, 1, +radius, level, -radius, alpha, 1);
+	ShSetVtx(vtx, 2, -radius, level, +radius, alpha, 1);
+	ShSetVtx(vtx, 3, +radius, level, +radius, alpha, 1);
+	ShGfx(gfx, vtx, 1, 10);
 	return gfx;
 }
 
-static Gfx *shadow_gfx_square(float x, float z, float y, UCHAR alpha)
+static Gfx *ShGfxSquare(float x, float z, float y, UCHAR alpha)
 {
-	Vtx *vtx = gfx_alloc(sizeof(Vtx)*4);
-	Gfx *gfx = gfx_alloc(sizeof(Gfx)*5);
+	Vtx *vtx = GfxAlloc(sizeof(Vtx)*4);
+	Gfx *gfx = GfxAlloc(sizeof(Gfx)*5);
 	float x0, z0, x1, z1, x2, z2, x3, z3;
 	if (!vtx || !gfx) return NULL;
-	shadow_rotate(&z0, &x0, -z, -x);
-	shadow_rotate(&z1, &x1, -z, +x);
-	shadow_rotate(&z2, &x2, +z, -x);
-	shadow_rotate(&z3, &x3, +z, +x);
-	shadow_vtx_set(vtx, 0, x0, y, z0, alpha, 1);
-	shadow_vtx_set(vtx, 1, x1, y, z1, alpha, 1);
-	shadow_vtx_set(vtx, 2, x2, y, z2, alpha, 1);
-	shadow_vtx_set(vtx, 3, x3, y, z3, alpha, 1);
-	shadow_gfx(gfx, vtx, 1, 20);
+	ShRotate(&z0, &x0, -z, -x);
+	ShRotate(&z1, &x1, -z, +x);
+	ShRotate(&z2, &x2, +z, -x);
+	ShRotate(&z3, &x3, +z, +x);
+	ShSetVtx(vtx, 0, x0, y, z0, alpha, 1);
+	ShSetVtx(vtx, 1, x1, y, z1, alpha, 1);
+	ShSetVtx(vtx, 2, x2, y, z2, alpha, 1);
+	ShSetVtx(vtx, 3, x3, y, z3, alpha, 1);
+	ShGfx(gfx, vtx, 1, 20);
 	return gfx;
 }
 
-static int shadow_init_square(
+static int ShInitSquare(
 	float x, float y, float z, float *level, u8 *alpha
 )
 {
 	PLANE *plane;
 	float water_y;
-	*level = bg_check_plane(x, y, z, &plane);
+	*level = BGCheckPlane(x, y, z, &plane);
 	if (*level < -10000.0)
 	{
 		return TRUE;
 	}
-	else if ((water_y = bg_check_water(x, z)) < -10000.0)
+	else if ((water_y = BGCheckWater(x, z)) < -10000.0)
 	{
 	}
 	else if (y >= water_y && *level <= water_y)
@@ -534,12 +534,12 @@ static int shadow_init_square(
 	return FALSE;
 }
 
-static Gfx *shadow_draw_square(
+static Gfx *ShDrawSquare(
 	float x, float y, float z, SHORT size, u8 alpha, CHAR type
 )
 {
 	float level, height, radius;
-	if (shadow_init_square(x, y, z, &level, &alpha)) return NULL;
+	if (ShInitSquare(x, y, z, &level, &alpha)) return NULL;
 	height = y - level;
 	switch (type)
 	{
@@ -547,15 +547,15 @@ static Gfx *shadow_draw_square(
 		radius = size/2;
 		break;
 	case SHADOW_SQUARE:
-		radius = shadow_scale_size(size, height) / 2.0;
+		radius = ShScaleSize(size, height) / 2.0;
 		break;
 	case SHADOW_SQUARECUT:
-		radius = shadow_cut_size(size, height) / 2.0;
+		radius = ShCutSize(size, height) / 2.0;
 		break;
 	default:
 		return NULL;
 	}
-	return shadow_gfx_square(radius, radius, -height, alpha);
+	return ShGfxSquare(radius, radius, -height, alpha);
 }
 
 typedef struct shadow_rect
@@ -566,7 +566,7 @@ typedef struct shadow_rect
 }
 SHADOW_RECT;
 
-static Gfx *shadow_draw_rect(
+static Gfx *ShDrawRect(
 	float x, float y, float z, UNUSED SHORT size, u8 alpha, CHAR type
 )
 {
@@ -577,26 +577,26 @@ static Gfx *shadow_draw_rect(
 	};
 	float level, height, sizex, sizez;
 	CHAR i = type - SHADOW_RECTSTART;
-	if (shadow_init_square(x, y, z, &level, &alpha)) return NULL;
+	if (ShInitSquare(x, y, z, &level, &alpha)) return NULL;
 	height = y - level;
 	if (ISTRUE(rect[i].flag))
 	{
-		sizex = shadow_scale_size(rect[i].sizex, height);
-		sizez = shadow_scale_size(rect[i].sizez, height);
+		sizex = ShScaleSize(rect[i].sizex, height);
+		sizez = ShScaleSize(rect[i].sizez, height);
 	}
 	else
 	{
 		sizex = rect[i].sizex;
 		sizez = rect[i].sizez;
 	}
-	return shadow_gfx_square(sizex, sizez, -height, alpha);
+	return ShGfxSquare(sizex, sizez, -height, alpha);
 }
 
-Gfx *shadow_draw(float x, float y, float z, SHORT size, UCHAR alpha, CHAR type)
+Gfx *ShadowDraw(float x, float y, float z, SHORT size, UCHAR alpha, CHAR type)
 {
 	Gfx *gfx = NULL;
 	BGFACE *ground;
-	bg_check_ground(x, y, z, &ground);
+	BGCheckGround(x, y, z, &ground);
 	shadow_onwater = FALSE;
 	shadow_ondecal = FALSE;
 	shadow_offset = FALSE;
@@ -608,30 +608,29 @@ Gfx *shadow_draw(float x, float y, float z, SHORT size, UCHAR alpha, CHAR type)
 	switch (type)
 	{
 	case SHADOW_CIRCLE9:
-		gfx = shadow_draw_circle9(x, y, z, size, alpha);
+		gfx = ShDrawCircle9(x, y, z, size, alpha);
 		break;
 	case SHADOW_CIRCLE4:
-		gfx = shadow_draw_circle4(x, y, z, size, alpha);
+		gfx = ShDrawCircle4(x, y, z, size, alpha);
 		break;
 	case SHADOW_CIRCLE4FLAT:
-		gfx = shadow_draw_circle4flat(x, y, z, size, alpha);
+		gfx = ShDrawCircle4Flat(x, y, z, size, alpha);
 		break;
 	case SHADOW_SQUAREFIX:
-		gfx = shadow_draw_square(x, y, z, size, alpha, type);
+		gfx = ShDrawSquare(x, y, z, size, alpha, type);
 		break;
 	case SHADOW_SQUARE:
-		gfx = shadow_draw_square(x, y, z, size, alpha, type);
+		gfx = ShDrawSquare(x, y, z, size, alpha, type);
 		break;
 	case SHADOW_SQUARECUT:
-		gfx = shadow_draw_square(x, y, z, size, alpha, type);
+		gfx = ShDrawSquare(x, y, z, size, alpha, type);
 		break;
 	case SHADOW_MARIO:
-		gfx = shadow_draw_player(x, y, z, size, alpha, 0);
+		gfx = ShDrawPlayer(x, y, z, size, alpha, 0);
 		break;
 	default:
-		gfx = shadow_draw_rect(x, y, z, size, alpha, type);
+		gfx = ShDrawRect(x, y, z, size, alpha, type);
 		break;
 	}
 	return gfx;
 }
-

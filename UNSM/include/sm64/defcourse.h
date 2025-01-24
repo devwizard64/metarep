@@ -28,7 +28,8 @@
 #define COURSE_SA               24
 #define COURSE_ENDING           25
 
-#define COURSE_EXTRA            16
+#define COURSE_MIN              1
+#define COURSE_EXT              16
 #define COURSE_CAPSW            20
 #define COURSE_MAX              25
 

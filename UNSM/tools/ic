@@ -204,7 +204,7 @@ for fn in arg:
 		else:
 			for tok in token(line):
 				if tok == None: syntaxerr()
-				if len(mode) == 0:
+				if not mode:
 					if bank != None:
 						if tok == "}":
 							bank = None
@@ -377,7 +377,7 @@ for wave in wavedata:
 			if f.read(4) != B"AIFC": notaifc()
 			while True:
 				x = f.read(8)
-				if len(x) == 0: break
+				if not x: break
 				addr = f.tell()
 				code, size = struct.unpack(">4sI", x)
 				if code == B"COMM":
@@ -505,7 +505,7 @@ for bank in bankdata:
 				snd["loop"][0], snd["loop"][1], snd["loop"][2],
 			))
 			ptr += 16
-			if snd["loop"][2] != 0:
+			if snd["loop"][2]:
 				ctldata.append(".incbin \"%s\", %d, 32\n" % (
 					snd["path"], snd["loop"][3],
 				))

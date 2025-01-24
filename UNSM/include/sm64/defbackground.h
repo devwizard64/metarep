@@ -1,5 +1,5 @@
-#ifndef __SM64_DEFBACK_H__
-#define __SM64_DEFBACK_H__
+#ifndef __SM64_DEFBACKGROUND_H__
+#define __SM64_DEFBACKGROUND_H__
 
 #define BACK_A                  0
 #define BACK_D                  1
@@ -12,4 +12,4 @@
 #define BACK_C                  8
 #define BACK_J                  9
 
-#endif /* __SM64_DEFBACK_H__ */
+#endif /* __SM64_DEFBACKGROUND_H__ */

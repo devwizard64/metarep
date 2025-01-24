@@ -42,20 +42,20 @@ static char str_stage[64][16] =
 	"",
 };
 
-static int title_demo(int result)
+static int TitleDemo(int result)
 {
 	static u16 timer = 0;
 	demop = NULL;
-	if (result == 0)
+	if (!result)
 	{
-		if (cont1->held == 0 && cont1->d == 0)
+		if (!cont1->held && !cont1->dist)
 		{
 			if (++timer == 800)
 			{
-				bank_load(&demo_bank, demo_index);
+				BankLoad(&demo_bank, demo_index);
 				if (++demo_index == demo_bank.info->len) demo_index = 0;
-				demop = (DEMO *)(demo_bank.buf+4);
-				result = demo_bank.buf[0];
+				demop = (DEMO *)((char *)demo_bank.buf+4);
+				result = ((char *)demo_bank.buf)[0];
 				file_index = 1;
 				level_index = 1;
 			}
@@ -68,7 +68,7 @@ static int title_demo(int result)
 	return result;
 }
 
-static int title_debug(void)
+static int TitleDebug(void)
 {
 	int flag = FALSE;
 	if (cont1->down & A_BUTTON) stage_index +=  1, flag = TRUE;
@@ -99,61 +99,69 @@ static int title_debug(void)
 	return 0;
 }
 
-static int title_face(void)
+static int TitleFace(void)
 {
-	static short flag = TRUE;
 	int result = 0;
+#ifdef NEWVOICE
+	static short flag = TRUE;
 	if (ISTRUE(flag))
 	{
 		if (gfx_frame <= 128)   Na_FixSePlay(NA_SE2_32);
 		else                    Na_FixSePlay(NA_SE2_33);
 		flag = FALSE;
 	}
-	scene_demo();
+#endif
+	SceneDemo();
 	if (cont1->down & START_BUTTON)
 	{
 		Na_FixSePlay(NA_SE7_1E);
 		result = 100 + debug_stage;
+#ifdef NEWVOICE
 		flag = TRUE;
+#endif
 	}
-	return title_demo(result);
+	return TitleDemo(result);
 }
 
-static int title_gameover(void)
+static int TitleGameOver(void)
 {
-	static short flag = TRUE;
 	int result = 0;
+#ifdef NEWVOICE
+	static short flag = TRUE;
 	if (ISTRUE(flag))
 	{
 		Na_FixSePlay(NA_SE2_31);
 		flag = FALSE;
 	}
-	scene_demo();
+#endif
+	SceneDemo();
 	if (cont1->down & START_BUTTON)
 	{
 		Na_FixSePlay(NA_SE7_1E);
 		result = 100 + debug_stage;
+#ifdef NEWVOICE
 		flag = TRUE;
+#endif
 	}
-	return title_demo(result);
+	return TitleDemo(result);
 }
 
-static int title_logo(void)
+static int TitleLogo(void)
 {
-	bgm_play(NA_MODE_DEFAULT, NA_BGM_NULL, 0);
+	AudPlayBGM(NA_MODE_DEFAULT, NA_BGM_NULL, 0);
 	Na_FixSePlay(NA_SE7_14);
 	return 1;
 }
 
-long title_proc(SHORT code, UNUSED long status)
+long TitleProc(SHORT code, UNUSED long status)
 {
 	long result;
 	switch (code)
 	{
-	case 0: result = title_logo();      break;
-	case 1: result = title_face();      break;
-	case 2: result = title_gameover();  break;
-	case 3: result = title_debug();     break;
+	case 0: result = TitleLogo();      break;
+	case 1: result = TitleFace();      break;
+	case 2: result = TitleGameOver();  break;
+	case 3: result = TitleDebug();     break;
 #ifdef __GNUC__
 	default: __builtin_unreachable();
 #endif

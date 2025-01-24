@@ -318,15 +318,15 @@ d_staff = [False, d_staff_prc]
 # collision.c
 
 def d_collision_prc(self, argv):
-	flag     = self.u32() # T:flag(collision)
-	callback = ultra.c.aw(self)
-	return ["{0x%08X, %s}" % (flag, callback)]
+	type_ = UNSM.fmt.fmt_hittype(self, self.u32())
+	proc  = ultra.c.aw(self)
+	return ["{0x%08X, %s}" % (type_, proc)]
 d_collision = [False, d_collision_prc]
 
 # player.c
 # physics.c
 # pldemo.c
-# plhang.c
+# plspec.c
 # plwait.c
 
 # plmove.c
@@ -338,10 +338,10 @@ d_pl_move = [
 
 # pljump.c
 # plswim.c
-# plhold.c
+# pltake.c
 # callback.c
 # memory.c
-# save.c
+# backup.c
 # scene.c
 # draw.c
 # time.c
@@ -431,59 +431,59 @@ def d_pl_effect_prc(self, argv):
 	return ["{0x%08X, 0x%08X, %s, %s}" % (code, flag, shape, script)]
 d_pl_effect = [False, d_pl_effect_prc]
 
-# objlib.c
+# objectlib.c
 
-def d_obj_splash_prc(self, argv):
+def d_splash_prc(self, argv):
 	flag    = ultra.fmt_s16(self, self.s16())
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	script  = ultra.c.aw(self, extern=True)
-	ay_mul  = self.s16()
-	p_mul   = self.s16()
-	vf_add  = self.fmt_float(self.f())
-	vf_mul  = self.fmt_float(self.f())
-	vy_add  = self.fmt_float(self.f())
-	vy_mul  = self.fmt_float(self.f())
-	s_add   = self.fmt_float(self.f())
-	s_mul   = self.fmt_float(self.f())
+	ang_range   = self.s16()
+	pos_range   = self.s16()
+	velf_start  = self.fmt_float(self.f())
+	velf_range  = self.fmt_float(self.f())
+	vely_start  = self.fmt_float(self.f())
+	vely_range  = self.fmt_float(self.f())
+	scale_start = self.fmt_float(self.f())
+	scale_range = self.fmt_float(self.f())
 	return [
 		"%s, %s, %s," % (flag, shape, script),
-		"/*ang y*/\t%d," % ay_mul,
-		"/*pos  */\t%d," % p_mul,
-		"/*vel f*/\t%s, %s," % (vf_add, vf_mul),
-		"/*vel y*/\t%s, %s," % (vy_add, vy_mul),
-		"/*scale*/\t%s, %s," % (s_add, s_mul),
+		"/*ang  */\t%d," % ang_range,
+		"/*pos  */\t%d," % pos_range,
+		"/*velf */\t%s, %s," % (velf_start, velf_range),
+		"/*vely */\t%s, %s," % (vely_start, vely_range),
+		"/*scale*/\t%s, %s," % (scale_start, scale_range),
 	]
-d_obj_splash = [False, d_obj_splash_prc]
+d_splash = [False, d_splash_prc]
 
-def d_obj_effect_prc(self, argv):
-	arg     = self.s8()
-	count   = self.s8()
-	shape   = UNSM.fmt.fmt_shape(self, self.u8())
-	offset  = self.s8()
-	vf_add  = self.s8()
-	vf_mul  = self.s8()
-	vy_add  = self.s8()
-	vy_mul  = self.s8()
-	gravity = self.s8()
-	drag    = self.s8()
+def d_particle_prc(self, argv):
+	arg         = self.s8()
+	count       = self.s8()
+	shape       = UNSM.fmt.fmt_shape(self, self.u8())
+	offset      = self.s8()
+	velf_start  = self.s8()
+	velf_range  = self.s8()
+	vely_start  = self.s8()
+	vely_range  = self.s8()
+	gravity     = self.s8()
+	drag        = self.s8()
 	self.addr += 2
-	s_add   = self.fmt_float(self.f())
-	s_mul   = self.fmt_float(self.f())
+	scale_start = self.fmt_float(self.f())
+	scale_range = self.fmt_float(self.f())
 	return [
 		"/*arg    */\t%d," % arg,
 		"/*count  */\t%d," % count,
 		"/*shape  */\t%s," % shape,
 		"/*offset */\t%d," % offset,
-		"/*vel f  */\t%d, %d," % (vf_add, vf_mul),
-		"/*vel y  */\t%d, %d," % (vy_add, vy_mul),
+		"/*velf   */\t%d, %d," % (velf_start, velf_range),
+		"/*vely   */\t%d, %d," % (vely_start, vely_range),
 		"/*gravity*/\t%d," % gravity,
 		"/*drag   */\t%d," % drag,
-		"/*scale  */\t%s, %s," % (s_add, s_mul),
+		"/*scale  */\t%s, %s," % (scale_start, scale_range),
 	]
-d_obj_effect = [False, d_obj_effect_prc]
+d_particle = [False, d_particle_prc]
 
-def d_obj_hit_prc(self, argv):
-	code    = self.u32() # T:flag
+def d_hitinfo_prc(self, argv):
+	type_   = UNSM.fmt.fmt_hittype(self, self.u32())
 	offset  = self.u8()
 	ap      = self.s8()
 	hp      = self.s8()
@@ -493,15 +493,15 @@ def d_obj_hit_prc(self, argv):
 	dmg_r   = self.s16()
 	dmg_h   = self.s16()
 	return [
-		"/*code   */\t0x%08X," % code,
+		"/*type   */\t%s,"     % type_,
 		"/*offset */\t%d,"     % offset,
 		"/*ap     */\t%d,"     % ap,
 		"/*hp     */\t%d,"     % hp,
-		"/*coin   */\t%d,"     % coin,
+		"/*ncoin  */\t%d,"     % coin,
 		"/*hit r,h*/\t%d, %d," % (hit_r, hit_h),
 		"/*dmg r,h*/\t%d, %d," % (dmg_r, dmg_h),
 	]
-d_obj_hit = [False, d_obj_hit_prc]
+d_hitinfo = [False, d_hitinfo_prc]
 
 # object_a.c
 
@@ -617,14 +617,14 @@ def d_shadow_rect_prc(self, argv):
 	return ["{%s, %s, %s}" % (sizex, sizez, flag)]
 d_shadow_rect = [False, d_shadow_rect_prc]
 
-# back.c
+# background.c
 
 # water.c
 
-def d_water_prc(self, argv):
-	index   = self.s32()
-	texture = self.s32()
-	len_    = self.s32()
+def d_fluid_prc(self, argv):
+	code    = self.s32()
+	txt     = self.s32()
+	n       = self.s32()
 	data    = ultra.c.aw(self, extern=True)
 	start   = ultra.c.aw(self, extern=True)
 	end     = ultra.c.aw(self, extern=True)
@@ -632,25 +632,21 @@ def d_water_prc(self, argv):
 	r       = self.u8()
 	g       = self.u8()
 	b       = self.u8()
-	a       = self.u8()
+	alpha   = self.u8()
 	layer   = self.s32()
-	arg0    = (index, texture, len_, data)
-	arg1    = (start, end, draw)
-	arg2    = (r, g, b, a, UNSM.fmt.fmt_layer(self, layer))
-	if arg0+arg1+arg2 == (
-		0, 0, 0, "NULL",
-		"NULL", "NULL", "NULL",
-		0, 0, 0, 0, "LAYER_BACK"
+	arg     = (
+		code, txt, n, data, start, end, draw, r, g, b, alpha,
+		UNSM.fmt.fmt_layer(self, layer)
+	)
+	if arg == (
+		0, 0, 0, "NULL", "NULL", "NULL", "NULL", 0, 0, 0, 0, "LAYER_BACK"
 	):
 		return ["{0}"]
 	return [
-		"{",
-			"\t0x%04X, %d, %2d, %s," % arg0,
-			"\t%s, %s, %s," % arg1,
-			"\t0x%02X, 0x%02X, 0x%02X, 0x%02X, %s," % arg2,
-		"}",
+		"{0x%04X, %d, %2d, %s, %s, %s, %s, 0x%02X, 0x%02X, 0x%02X, 0x%02X, %s}"
+		% arg,
 	]
-d_water = [False, d_water_prc]
+d_fluid = [False, d_fluid_prc]
 
 # objshape.c
 
@@ -684,7 +680,7 @@ d_wave_shade = [False, d_wave_shade_prc]
 
 # tag.c
 
-def d_tag_obj_prc(self, argv):
+def d_tagobj_prc(self, argv):
 	start, = argv
 	i       = (self.save-start) // 8
 	script  = ultra.c.aw(self, extern=True)
@@ -693,18 +689,18 @@ def d_tag_obj_prc(self, argv):
 	if i != 0 and (script, shape, code) == ("o_coin", "S_COIN", 0):
 		return ["/*%3d*/\tTAGOBJ_NULL" % i]
 	return ["/*%3d*/\t{%s, %s, %d}" % (i, script, shape, code)]
-d_tag_obj = [False, d_tag_obj_prc]
+d_tagobj = [False, d_tagobj_prc]
 
-map_obj_ext = {}
+mapobj_ext = {}
 
-def d_map_obj_prc(self, argv):
+def d_mapobj_prc(self, argv):
 	index  = self.u8()
 	ext    = self.u8()
 	arg    = self.u8()
 	shape  = UNSM.fmt.fmt_shape(self, self.u8())
 	script = ultra.c.aw(self, extern=True)
-	map_obj_ext[index] = ext
-	index = UNSM.fmt.fmt_map_obj(index)
+	mapobj_ext[index] = ext
+	index = UNSM.fmt.fmt_mapobj(index)
 	ext   = "MAP_EXT_" + (
 		"NULL",
 		"ANG",
@@ -713,7 +709,7 @@ def d_map_obj_prc(self, argv):
 		"ANG_ARG",
 	)[ext]
 	return ["{%s, %s, %d, %s, %s}" % (index, ext, arg, shape, script)]
-d_map_obj = [False, d_map_obj_prc]
+d_mapobj = [False, d_mapobj_prc]
 
 def d_tag_prc(self, argv):
 	lst = []
@@ -917,8 +913,8 @@ def d_map_prc(self, argv):
 			lst.append("MAP_OBJECT, %d," % n)
 			for _ in range(n):
 				o = self.s16()
-				n = (3, 4, 5, 6, 4)[map_obj_ext[o]]
-				o = UNSM.fmt.fmt_map_obj(o)
+				n = (3, 4, 5, 6, 4)[mapobj_ext[o]]
+				o = UNSM.fmt.fmt_mapobj(o)
 				lst.append(" ".join(
 					[o + ","] + ["%d," % self.s16() for _ in range(n)]
 				))
@@ -929,7 +925,7 @@ def d_map_prc(self, argv):
 				lst.append(" ".join(["%d," % self.s16() for _ in range(6)]))
 		else:
 			n = 4 if x in {4, 14, 36, 37, 39, 44, 45} else 3
-			x = "%d" % x # T:enum(bg)
+			x = "%d" % x # T:enum(bgcode)
 			obj_tri.extend([
 				[x] + [self.s16() for _ in range(n)]
 				for _ in range(self.s16())
@@ -1117,7 +1113,7 @@ dyn_cmd = {
 def dyn_fmt_name(self, p, flag):
 	if flag: return "%d" % p
 	if p >= 0x8016F000: return ultra.fmt_addr(self, p)
-	if p == 0: return "NULL"
+	if not p: return "NULL"
 	self.save = self.addr
 	self.addr = p
 	x = "".join(self.asciz(4))
@@ -1599,7 +1595,7 @@ def s_message(self, argv):
 	count = 0
 	while self.addr < end:
 		x = self.u32()
-		if x == 0: break
+		if not x: break
 		addr = self.addr
 		self.addr = x
 		arg = []
@@ -1626,10 +1622,10 @@ def s_message(self, argv):
 	with open(fn, "w") as f: f.write(data)
 	self.file[-1][1].append("#include \"%s.h\"\n" % self.path_rel([path]))
 
-def s_back(self, argv):
+def s_background(self, argv):
 	seg, start = argv
 	ultra.c.init(self, seg, start)
-	self.file[-1][1].append("\nBACK %s =\n{{\n%s}};\n" % (
+	self.file[-1][1].append("\nBACKGROUND %s =\n{{\n%s}};\n" % (
 		self.meta.sym[seg][start].label, "".join([
 			"\t%s\n" % " ".join([
 				self.meta.sym[seg][self.u32()].label + ","
@@ -1698,11 +1694,7 @@ def shp_callback(self, argv):
 	self.addr += 1
 	arg = self.s16()
 	callback = ultra.c.aw(self)
-	# s_stage_weather
-	# s_face_proc
-	# s_objlib_8029D924
-	# s_wave_802D5B98
-	if callback == "s_stage_weather":
+	if callback == "CtrlWeather":
 		arg = "WEATHER_" + {
 			0: "NULL",
 			1: "SNOW",
@@ -1711,15 +1703,21 @@ def shp_callback(self, argv):
 			13: "WHIRLPOOL",
 			14: "JET",
 		}[arg]
+	elif callback == "CtrlFace":
+		arg = "%d" % arg # T:enum(face)
+	elif callback == "CtrlObjectAlpha":
+		arg = "%d" % arg # T:enum(CtrlObjectAlpha)
 	elif callback in {
-		"s_water_802D104C",
-		"s_water_802D1B70",
-		"s_water_802D1CDC",
-		"s_water_802D1E48",
-		"s_water_802D1FA8",
-		"s_water_802D2108",
+		"CtrlWaterDraw",
+		"CtrlFluid",
+		"CtrlFluidL",
+		"CtrlFluidDrawL",
+		"CtrlFluidDrawS",
+		"CtrlFluidProc",
 	}:
 		arg = "0x%04X" % arg
+	elif callback == "CtrlWaveDraw":
+		arg = "%d << 8 | %d" % (arg >> 8 & 0xFF, arg & 0xFF) # T:enum(wave)
 	else:
 		arg = "%d" % arg # T:enum(*)
 	return (None, arg, callback)
@@ -1777,7 +1775,7 @@ def shp_gfx_coord(self, argv):
 def shp_gfx_arg(self, argv):
 	c, m = argv
 	arg = self.u8()
-	if m == 0:
+	if not m:
 		x = "%d" % self.s16()
 		y = "%d" % self.s16()
 		z = "%d" % self.s16()
@@ -1881,7 +1879,7 @@ shp_str = (
 	"Callback", # 0x18
 	"Background", # 0x19
 	None, # 0x1A
-	"Load", # 0x1B
+	"Branch", # 0x1B
 	"Hand", # 0x1C
 	"Scale", # 0x1D
 	None, # 0x1E
@@ -1925,7 +1923,7 @@ shp_fnc = (
 	(shp_arg,), # 0x20
 )
 
-def d_s_script_prc(self, line, tab, argv):
+def d_shplang_prc(self, line, tab, argv):
 	end, = argv
 	t = 0
 	while self.addr < end:
@@ -1941,4 +1939,4 @@ def d_s_script_prc(self, line, tab, argv):
 			tab + "\t"*t + "s" + s + "(" + ", ".join(argv[1:]) + "),"
 		)
 		if c in {0x04}: t += 1
-d_s_script = [True, d_s_script_prc]
+d_shplang = [True, d_shplang_prc]

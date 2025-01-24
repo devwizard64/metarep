@@ -4,20 +4,19 @@ static s16 ride_80330E20 = 0;
 UNUSED static int ride_80330E24[4] = {0};
 static OBJECT *plride_obj = NULL;
 
-void plride_find(void)
+void PLRideFind(void)
 {
 	BGFACE *ground;
 	UNUSED OBJECT *obj;
-	float x, y, z;
-	float ground_y;
+	float x, y, z, ground_y;
 	int code;
 	if (!mario_obj) return;
-	x = mario_obj->o_pos_x;
-	y = mario_obj->o_pos_y;
-	z = mario_obj->o_pos_z;
-	ground_y = bg_check_ground(x, y, z, &ground);
-	if (objlib_802A3634(y-ground_y) < 4)    code = 0;
-	else                                    code = 1;
+	x = mario_obj->o_posx;
+	y = mario_obj->o_posy;
+	z = mario_obj->o_posz;
+	ground_y = BGCheckGround(x, y, z, &ground);
+	if (fabsf(y-ground_y) < 4)  code = 0;
+	else                        code = 1;
 	switch (code)
 	{
 	case 1:
@@ -39,90 +38,92 @@ void plride_find(void)
 	}
 }
 
-void mario_get_pos(float *x, float *y, float *z)
+void MarioGetPos(float *x, float *y, float *z)
 {
 	*x = player_data[0].pos[0];
 	*y = player_data[0].pos[1];
 	*z = player_data[0].pos[2];
 }
 
-void mario_set_pos(float x, float y, float z)
+void MarioSetPos(float x, float y, float z)
 {
 	player_data[0].pos[0] = x;
 	player_data[0].pos[1] = y;
 	player_data[0].pos[2] = z;
 }
 
-void ride_proc(int ismario, OBJECT *obj)
+void RideProc(int ismario, OBJECT *obj)
 {
 	float posx, posy, posz, gndx, gndy, gndz;
-	VECF pos, off, new;
-	VECS ang;
-	ang[0] = obj->o_ang_vel_x;
-	ang[1] = obj->o_ang_vel_y;
-	ang[2] = obj->o_ang_vel_z;
+	FVEC pos, off, new;
+	SVEC rot;
+	rot[0] = obj->o_rotx;
+	rot[1] = obj->o_roty;
+	rot[2] = obj->o_rotz;
 	if (ismario)
 	{
 		ride_80330E20 = 0;
-		mario_get_pos(&posx, &posy, &posz);
+		MarioGetPos(&posx, &posy, &posz);
 	}
 	else
 	{
-		posx = object->o_pos_x;
-		posy = object->o_pos_y;
-		posz = object->o_pos_z;
+		posx = object->o_posx;
+		posy = object->o_posy;
+		posz = object->o_posz;
 	}
-	posx += obj->o_vel_x;
-	posz += obj->o_vel_z;
-	if (ang[0] != 0 || ang[1] != 0 || ang[2] != 0)
+	posx += obj->o_velx;
+	posz += obj->o_velz;
+	if (rot[0] != 0 || rot[1] != 0 || rot[2] != 0)
 	{
-		UNUSED short angx = ang[0];
-		UNUSED short angz = ang[2];
-		UNUSED short angy = obj->o_shape_ang_y;
-		MTXF mf;
-		if (ismario) player_data[0].ang[1] += ang[1];
-		gndx = obj->o_pos_x;
-		gndy = obj->o_pos_y;
-		gndz = obj->o_pos_z;
+		UNUSED short rotx = rot[0];
+		UNUSED short rotz = rot[2];
+		UNUSED short angy = obj->o_shapeangy;
+		FMTX m;
+		if (ismario) player_data[0].ang[1] += rot[1];
+		gndx = obj->o_posx;
+		gndy = obj->o_posy;
+		gndz = obj->o_posz;
 		pos[0] = posx - gndx;
 		pos[1] = posy - gndy;
 		pos[2] = posz - gndz;
-		ang[0] = obj->o_shape_ang_x - obj->o_ang_vel_x;
-		ang[1] = obj->o_shape_ang_y - obj->o_ang_vel_y;
-		ang[2] = obj->o_shape_ang_z - obj->o_ang_vel_z;
-		mtxf_coord(mf, pos, ang);
-		objlib_8029F274(mf, off, pos);
-		ang[0] = obj->o_shape_ang_x;
-		ang[1] = obj->o_shape_ang_y;
-		ang[2] = obj->o_shape_ang_z;
-		mtxf_coord(mf, pos, ang);
-		objlib_8029F200(mf, new, off);
+		rot[0] = obj->o_shapeangx - obj->o_rotx;
+		rot[1] = obj->o_shapeangy - obj->o_roty;
+		rot[2] = obj->o_shapeangz - obj->o_rotz;
+		FMtxCoord(m, pos, rot);
+		InvTransform3(m, off, pos);
+		rot[0] = obj->o_shapeangx;
+		rot[1] = obj->o_shapeangy;
+		rot[2] = obj->o_shapeangz;
+		FMtxCoord(m, pos, rot);
+		MtxTransform3(m, new, off);
 		posx = new[0] + gndx;
 		posy = new[1] + gndy;
 		posz = new[2] + gndz;
 	}
 	if (ismario)
 	{
-		mario_set_pos(posx, posy, posz);
+		MarioSetPos(posx, posy, posz);
 	}
 	else
 	{
-		object->o_pos_x = posx;
-		object->o_pos_y = posy;
-		object->o_pos_z = posz;
+		object->o_posx = posx;
+		object->o_posy = posy;
+		object->o_posz = posz;
 	}
 }
 
-void plride_proc(void)
+void PLRideProc(void)
 {
 	OBJECT *obj = plride_obj;
 	if (!(object_flag & OBJECT_FROZEN))
 	{
-		if (mario_obj && obj) ride_proc(TRUE, obj);
+		if (mario_obj && obj) RideProc(TRUE, obj);
 	}
 }
 
-void plride_clear(void)
+#if REVISION > 199606
+void PLRideClear(void)
 {
 	plride_obj = NULL;
 }
+#endif
