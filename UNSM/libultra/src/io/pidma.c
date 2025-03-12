@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include "osint.h"
 
 extern OSDevMgr __osPiDevMgr;
 extern OSMesgQueue *osPiGetCmdQueue(void);
@@ -9,7 +10,45 @@ s32 osPiStartDma(
 )
 {
 	register s32 ret;
-	if (!__osPiDevMgr.active) return -1;
+	if (!__osPiDevMgr.active)
+	{
+#ifdef _DEBUG
+		__osError(ERR_OSPISTARTDMA_PIMGR, 0);
+#endif
+		return -1;
+	}
+#ifdef _DEBUG
+	if (priority != OS_MESG_PRI_NORMAL && priority != OS_MESG_PRI_HIGH)
+	{
+		__osError(ERR_OSPISTARTDMA_PRI, 1, priority);
+		return -1;
+	}
+	if (direction != OS_READ && direction != OS_WRITE)
+	{
+		__osError(ERR_OSPISTARTDMA_DIR, 1, direction);
+		return -1;
+	}
+	if (devAddr & 0x1)
+	{
+		__osError(ERR_OSPISTARTDMA_DEVADDR, 1, devAddr);
+		return -1;
+	}
+	if ((u32)dramAddr & 0x7)
+	{
+		__osError(ERR_OSPISTARTDMA_ADDR, 1, dramAddr);
+		return -1;
+	}
+	if (size & 0x1)
+	{
+		__osError(ERR_OSPISTARTDMA_SIZE, 1, size);
+		return -1;
+	}
+	if (size == 0 || size > 0x1000000)
+	{
+		__osError(ERR_OSPISTARTDMA_RANGE, 1, size);
+		return -1;
+	}
+#endif
 	if (direction == OS_READ)   mb->hdr.type = OS_MESG_TYPE_DMAREAD;
 	else                        mb->hdr.type = OS_MESG_TYPE_DMAWRITE;
 	mb->hdr.pri = priority;
@@ -17,6 +56,9 @@ s32 osPiStartDma(
 	mb->dramAddr = dramAddr;
 	mb->devAddr = devAddr;
 	mb->size = size;
+#if REVISION >= 199611
+	mb->piHandle = NULL;
+#endif
 	if (priority == OS_MESG_PRI_HIGH)
 	{
 		ret = osJamMesg(osPiGetCmdQueue(), (OSMesg)mb, OS_MESG_NOBLOCK);

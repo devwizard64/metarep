@@ -20,7 +20,7 @@ OBJECT *mario_obj;
 OBJECT *luigi_obj;
 OBJECT *object;
 OBJLANG *object_pc;
-s16 obj_prevcount;
+short obj_prevcount;
 
 int bglist_count;
 int bgface_count;
@@ -33,19 +33,19 @@ MAP *waterp;
 int water_table[20];
 AREA area_table[60][2];
 
-s16 object_80361250;
-s16 object_80361252;
-s16 object_80361254;
-s16 object_80361256;
-s16 object_80361258;
-s16 object_8036125A;
-s16 object_8036125C;
-s16 object_8036125E;
-s16 object_80361260;
-s16 object_80361262;
-s16 object_80361264;
+short object_80361250;
+short object_80361252;
+short object_80361254;
+short object_80361256;
+short object_80361258;
+short object_8036125A;
+short object_8036125C;
+short object_8036125E;
+short object_80361260;
+short object_80361262;
+short object_80361264;
 
-static s8 objproc_table[] =
+static s8 objproctab[] =
 {
 	OT_SYSTEM,
 	OT_MOVEBG,
@@ -60,7 +60,113 @@ static s8 objproc_table[] =
 	-1,
 };
 
-#include "player/player.c"
+/******************************************************************************/
+/* Player                                                                     */
+/******************************************************************************/
+
+static void Player_CopyInfo(void)
+{
+	int i = 0;
+	if (object != mario_obj) i++;
+	object->o_velx = player_data[i].vel[0];
+	object->o_vely = player_data[i].vel[1];
+	object->o_velz = player_data[i].vel[2];
+	object->o_posx = player_data[i].pos[0];
+	object->o_posy = player_data[i].pos[1];
+	object->o_posz = player_data[i].pos[2];
+	object->o_angx = object->s.ang[0];
+	object->o_angy = object->s.ang[1];
+	object->o_angz = object->s.ang[2];
+	object->o_shapeangx = object->s.ang[0];
+	object->o_shapeangy = object->s.ang[1];
+	object->o_shapeangz = object->s.ang[2];
+	object->o_rotx = player_data[i].rot[0];
+	object->o_roty = player_data[i].rot[1];
+	object->o_rotz = player_data[i].rot[2];
+}
+
+typedef struct pl_effect
+{
+	u32 code;
+	u32 flag;
+	u8 shape;
+	OBJLANG *script;
+}
+PL_EFFECT;
+
+extern OBJLANG obj_130002B8[];
+extern OBJLANG obj_13000428[];
+extern OBJLANG obj_13000A54[];
+extern OBJLANG obj_13000A98[];
+extern OBJLANG obj_13000AD8[];
+extern OBJLANG obj_13000D98[];
+extern OBJLANG obj_13000E24[];
+extern OBJLANG obj_13000E3C[];
+extern OBJLANG obj_13000E58[];
+extern OBJLANG obj_130011EC[];
+extern OBJLANG obj_13001390[];
+extern OBJLANG obj_130024AC[];
+extern OBJLANG obj_13002B08[];
+extern OBJLANG obj_13002C14[];
+extern OBJLANG obj_13002CE0[];
+extern OBJLANG obj_13002D50[];
+extern OBJLANG obj_13002D7C[];
+extern OBJLANG obj_13002DC0[];
+
+static PL_EFFECT pl_effecttab[] =
+{
+	{PE_00000001, 0x00000001, S_WHITEPUFF, obj_130024AC},
+	{PE_00000002, 0x00040000, S_NULL, obj_13000A54},
+	{PE_00000010, 0x00000010, S_NULL, obj_13000A98},
+	{PE_00000008, 0x00000008, S_SPARKLE, obj_13002B08},
+	{PE_00000020, 0x00000020, S_BUBBLE_A, obj_130002B8},
+	{PE_00000040, 0x00000040, S_SPLASH, obj_13002C14},
+	{PE_00000080, 0x00000080, S_RIPPLE_STOP, obj_13002CE0},
+	{PE_00000200, 0x00000200, S_DROPLET, obj_13000428},
+	{PE_00000400, 0x00000400, S_RIPPLE_MOVE, obj_13002DC0},
+	{PE_00000800, 0x00000800, S_FLAME, obj_130011EC},
+	{PE_00000100, 0x00000100, S_NULL, obj_13002D50},
+	{PE_00001000, 0x00001000, S_NULL, obj_13002D7C},
+	{PE_00002000, 0x00002000, S_NULL, obj_13001390},
+	{PE_00004000, 0x00010000, S_NULL, obj_13000E58},
+	{PE_00020000, 0x00020000, S_NULL, obj_13000D98},
+	{PE_00008000, 0x00004000, S_NULL, obj_13000E3C},
+	{PE_00010000, 0x00008000, S_NULL, obj_13000E24},
+	{PE_00040000, 0x00080000, S_NULL, obj_13000AD8},
+	{0},
+};
+
+static void Player_SetEffect(u32 flag, SHORT shape, OBJLANG *script)
+{
+	if (!(object->o_effect & flag))
+	{
+		OBJECT *obj;
+		object->o_effect |= flag;
+		obj = ObjMake(object, 0, shape, script);
+		ObjCopyCoord(obj, object);
+	}
+}
+
+void Mario_Proc(void)
+{
+	u32 flag = 0;
+	int i;
+	flag = MarioExec(object);
+	object->o_v0 = flag;
+	Player_CopyInfo();
+	i = 0;
+	while (pl_effecttab[i].code)
+	{
+		if (pl_effecttab[i].code & flag) Player_SetEffect(
+			pl_effecttab[i].flag,
+			pl_effecttab[i].shape,
+			pl_effecttab[i].script
+		);
+		i++;
+	}
+}
+
+/******************************************************************************/
 
 static int ObjListExecNormal(OBJECT *root, OBJECT *obj)
 {
@@ -91,7 +197,7 @@ static int ObjListExecFrozen(OBJECT *root, OBJECT *obj)
 				!(object_flag & OBJECT_FREEZEPLAYER)
 			) flag = TRUE;
 			if (
-				(object->o_hit_type & (HIT_DOOR|HIT_PORTDOOR)) &&
+				object->o_hit_type & (HIT_DOOR|HIT_PORTDOOR) &&
 				!(object_flag & OBJECT_FREEZEPLAYER)
 			) flag = TRUE;
 			if (object->flag & (OBJ_0010|OBJ_0020)) flag = TRUE;
@@ -174,8 +280,8 @@ void ObjectOpen(UNUSED int screen, ACTOR *actor)
 	object_flag = 0;
 	object_80361262 = 0;
 	object_80361264 = 0;
-#if REVISION > 199606
-	PLRideClear();
+#if REVISION >= 199609
+	MarioClearMoveBG();
 #endif
 	if (scene_index == 2) object_8036125C |= 1;
 	while (actor)
@@ -253,7 +359,7 @@ static void ObjectExec2(void)
 {
 	UNUSED int i;
 	int type, index = 2;
-	while ((type = objproc_table[index]) != -1)
+	while ((type = objproctab[index]) != -1)
 	{
 		obj_count += ObjListExec((OBJECT *)&obj_rootlist[type]);
 		index++;
@@ -264,7 +370,7 @@ static void ObjectCleanup(void)
 {
 	UNUSED int i;
 	int type, index = 0;
-	while ((type = objproc_table[index]) != -1)
+	while ((type = objproctab[index]) != -1)
 	{
 		ObjListCleanup((OBJECT *)&obj_rootlist[type]);
 		index++;
@@ -304,7 +410,7 @@ void ObjectProc(UNUSED int screen)
 	MoveBGClear();
 	t[2] = DbTimeCount(t[0]);
 	ObjectExec1();
-	PLRideProc();
+	MarioProcMoveBG();
 	t[3] = DbTimeCount(t[0]);
 	HitCheck();
 	t[4] = DbTimeCount(t[0]);
@@ -312,7 +418,7 @@ void ObjectProc(UNUSED int screen)
 	t[5] = DbTimeCount(t[0]);
 	ObjectCleanup();
 	t[6] = DbTimeCount(t[0]);
-	PLRideFind();
+	MarioFindMoveBG();
 	t[7] = DbTimeCount(t[0]);
 	t[0] = 0;
 	DebugResult();

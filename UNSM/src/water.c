@@ -6,7 +6,7 @@ typedef struct fluidinfo
 	int txt;
 	int n;
 	short *data;
-	Gfx *start;
+	Gfx *begin;
 	Gfx *end;
 	Gfx *draw;
 	u8 r;
@@ -18,9 +18,9 @@ typedef struct fluidinfo
 FLUIDINFO;
 
 static short water_txt;
-static s16 water_timer = 1;
-static s16 water_stamp = 0;
-static s8 water_color = 0;
+static short water_timer = 1;
+static short water_stamp = 0;
+static char water_color = 0;
 
 float pool_entry = 0;
 static int pool_flag = FALSE;
@@ -184,8 +184,8 @@ static void WaterSetVtx(
 	float scale, UCHAR alpha
 )
 {
-	SHORT s = 32 * (32.0*scale-1) * SIN(ang+off);
-	SHORT t = 32 * (32.0*scale-1) * COS(ang+off);
+	SHORT s = 32.0 * (32.0*scale-1) * SIN(ang+off);
+	SHORT t = 32.0 * (32.0*scale-1) * COS(ang+off);
 	if (water_color == 1)
 	{
 		VtxSet(vtx, i, x, y, z, s, t, 0xFF, 0xFF, 0x00, alpha);
@@ -351,7 +351,7 @@ static WATERINFO *WaterGetInfo(unsigned int code)
 	return NULL;
 }
 
-static void WaterGfxStart(unsigned int code, Gfx **g)
+static void WaterGfxBegin(unsigned int code, Gfx **g)
 {
 	switch (code)
 	{
@@ -393,7 +393,7 @@ void *CtrlWaterDraw(int code, SHAPE *shape, UNUSED void *data)
 		}
 		if (!(info = WaterGetInfo(shp->arg))) return NULL;
 		ShpSetLayer(&shp->s, LAYER_XLU_INTER);
-		WaterGfxStart(shp->arg, &g);
+		WaterGfxBegin(shp->arg, &g);
 		water_txt = -1;
 		for (i = 0; i < n; i++)
 		{
@@ -503,7 +503,7 @@ static Gfx *FluidGfx(short *data, FLUIDINFO *info, CHAR type)
 	if (!vtx || !gfx) return NULL;
 	FluidSetVtx0(vtx, data, info, type);
 	for (i = 1; i < info->n; i++) FluidSetVtxN(vtx, i, data, info, type);
-	gSPDisplayList(g++, info->start);
+	gSPDisplayList(g++, info->begin);
 	gDPLoadImageBlockT(
 		g++, txt_water[info->txt], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32
 	);

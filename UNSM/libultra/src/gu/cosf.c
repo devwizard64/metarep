@@ -34,7 +34,8 @@ float fcos(float x)
 		dx = absx;
 		dn = dx*rpi.d + 0.5;
 		n = dn >= 0 ? dn+0.5 : dn-0.5;
-		dn = n - 0.5;
+		dn = n;
+		dn -= 0.5;
 		dx -= dn*pihi.d;
 		dx -= dn*pilo.d;
 		xsq = dx*dx;

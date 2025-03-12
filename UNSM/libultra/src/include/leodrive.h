@@ -1,0 +1,26 @@
+#define ASIC_C2_BUFF            0x05000000
+#define ASIC_SECTOR_BUFF        0x05000400
+#define MSEQ_RAM_ADDR           0x05000580
+
+#define ASIC_DATA               0x05000500
+#define ASIC_MISC_REG           0x05000504
+#define ASIC_STATUS             0x05000508
+#define ASIC_CMD                0x05000508
+#define ASIC_CUR_TK             0x0500050C
+#define ASIC_BM_STATUS          0x05000510
+#define ASIC_BM_CTL             0x05000510
+#define ASIC_ERR_SECTOR         0x05000514
+#define ASIC_SEQ_STATUS         0x05000518
+#define ASIC_SEQ_CTL            0x05000518
+#define ASIC_CUR_SECTOR         0x0500051C
+#define ASIC_HARD_RESET         0x05000520
+#define ASIC_C1_S0              0x05000524
+#define ASIC_HOST_SECBYTE       0x05000528
+#define ASIC_C1_S2              0x0500052C
+#define ASIC_SEC_BYTE           0x05000530
+#define ASIC_C1_S4              0x05000534
+#define ASIC_C1_S6              0x05000538
+#define ASIC_CUR_ADDR           0x0500053C
+#define ASIC_ID_REG             0x05000540
+#define ASIC_TEST_REG           0x05000544
+#define ASIC_TEST_PIN_SEL       0x05000548

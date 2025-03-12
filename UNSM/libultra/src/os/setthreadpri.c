@@ -4,6 +4,13 @@
 void osSetThreadPri(OSThread *t, OSPri p)
 {
 	register u32 saveMask;
+#ifdef _DEBUG
+	if (p < OS_PRIORITY_IDLE || p > OS_PRIORITY_MAX)
+	{
+		__osError(ERR_OSSETTHREADPRI, 1, p);
+		return;
+	}
+#endif
 	saveMask = __osDisableInt();
 	if (!t) t = __osRunningThread;
 	if (t->priority != p)

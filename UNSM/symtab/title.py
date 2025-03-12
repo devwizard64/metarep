@@ -1,21 +1,19 @@
 import main
 
 sym_E0_Title = {
-	0x8016F000: main.sym("_menuSegmentStart"),
-	0x00269EA0: main.sym("_TitleSegmentRomStart"),
-	0x14000000: main.sym("p_logo", flag={"GLOBL"}),
-	0x14000078: main.sym("p_face", flag={"GLOBL"}),
-	0x14000104: main.sym("p_gameover", flag={"GLOBL"}),
-	0x14000190: main.sym("p_debug", flag={"GLOBL"}),
+	0x14000000: main.sym("seq_logo", flag={"GLOBL"}),
+	0x14000078: main.sym("seq_face", flag={"GLOBL"}),
+	0x14000104: main.sym("seq_gameover", flag={"GLOBL"}),
+	0x14000190: main.sym("seq_debug", flag={"GLOBL"}),
 	0x1400020C: main.sym("goto_fileselect"),
 	0x14000238: main.sym("goto_debug"),
 	0x1400025C: main.sym("goto_game"),
 	0x14000284: main.sym("goto_demo"),
 	0x140002A8: main.sym("goto_logo"),
-	0x140002D0: main.sym_var("s_logo", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x1400035C: main.sym_var("s_face", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x140003B8: main.sym_var("s_gameover", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x14000414: main.sym_var("s_debug", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x140002D0: main.sym_var("shp_logo", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x1400035C: main.sym_var("shp_face", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x140003B8: main.sym_var("shp_gameover", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x14000414: main.sym_var("shp_debug", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 seg_E0_Title = {
@@ -23,7 +21,6 @@ seg_E0_Title = {
 }
 
 sym_E0_TitleLogo = {
-	0x0026A3A0: main.sym("_TitleLogoSegmentRomStart"),
 	0x07007EA0: main.sym_var("txt_logo_wood", "static u16", "[]"),
 	0x070086A0: main.sym_var("txt_logo_marble", "static u16", "[]"),
 	0x07008EA0: main.sym_var("gfx_logo_marble", "static Gfx", "[]"),
@@ -38,7 +35,6 @@ sym_E0_TitleLogo = {
 }
 
 sym_E0_TitleDebug = {
-	0x0026F420: main.sym("_TitleDebugSegmentRomStart"),
 	0x07000000: main.sym_var("light_debug_super_s", "static Lights1"),
 	0x07000858: main.sym_var("gfx_debug_super_s", "Gfx", "[]", flag={"GLOBL"}),
 	0x07000A28: main.sym_var("light_debug_super_u", "static Lights1"),
@@ -158,9 +154,8 @@ imm_E0_TitleDebug = {
 }
 
 sym_E0_TitleBack = {
-	0x002708C0: main.sym("_TitleBackSegmentRomStart"),
 	0x0A000000: main.sym_var("vtx_titlebg", "static Vtx", "[]"),
-	0x0A000100: main.sym_var("gfx_titlebg_start", "Gfx", "[]", flag={"GLOBL"}),
+	0x0A000100: main.sym_var("gfx_titlebg_begin", "Gfx", "[]", flag={"GLOBL"}),
 	0x0A000118: main.sym_var("gfx_titlebg_vtx", "Gfx", "[]", flag={"GLOBL"}),
 	0x0A000130: main.sym_var("gfx_titlebg_0", "Gfx", "[]", flag={"GLOBL"}),
 	0x0A000148: main.sym_var("gfx_titlebg_1", "Gfx", "[]", flag={"GLOBL"}),

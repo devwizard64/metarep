@@ -31,9 +31,9 @@ extern unsigned char *levelname[];
 #define PAUSECAMY       2
 #endif
 
-s8 redcoin_count;
+char redcoin_count;
 static s8 camera_cursor = 1;
-s8 pausemenu_level = 1;
+char pausemenu_level = 1;
 
 void PauseMenu_Init(void)
 {
@@ -87,8 +87,8 @@ static void PauseMenu_DrawCourse(void)
 {
 	STATIC unsigned char str_course[] = {STR_COURSE};
 	STATIC unsigned char str_my_score[] = {STR_MY_SCORE};
-	STATIC unsigned char str_star[] = {CH_STAR, CH_NUL};
-	STATIC unsigned char str_nostar[] = {CH_NOSTAR, CH_NUL};
+	STATIC unsigned char str_star[] = {CH_STAR,CH_NUL};
+	STATIC unsigned char str_nostar[] = {CH_NOSTAR,CH_NUL};
 	unsigned char buf[4];
 	unsigned char **crstab = SegmentToVirtual(coursename);
 	unsigned char *crsname;
@@ -96,7 +96,7 @@ static void PauseMenu_DrawCourse(void)
 	unsigned char *lvlname;
 	UCHAR course = course_index-1;
 	UCHAR star = BuGetStar(course_index-1);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	if (course < COURSE_EXT-1)
 	{
@@ -104,7 +104,7 @@ static void PauseMenu_DrawCourse(void)
 		PrintStar(file_index-1, course, 118, 103);
 	}
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	if (course < COURSE_EXT-1 && BuStarCount(course))
 	{
@@ -114,7 +114,7 @@ static void PauseMenu_DrawCourse(void)
 	if (course < COURSE_EXT-1)
 	{
 		PrintLg(63, 157, str_course);
-		itostr(course_index, buf);
+		IntToStr(course_index, buf);
 		PrintLg(63+PAUSECOURSEWD, 157, buf);
 		lvlname = SegmentToVirtual(
 			lvltab[6*(course_index-1) + (pausemenu_level-1)]
@@ -122,17 +122,16 @@ static void PauseMenu_DrawCourse(void)
 		if (star & (1 << (pausemenu_level-1)))  PrintLg(98, 140, str_star);
 		else                                    PrintLg(98, 140, str_nostar);
 		PrintLg(116, 140, lvlname);
-#ifdef JAPANESE
-	}
-	PrintLg(117, 157, &crsname[3]);
-#endif
-#ifdef ENGLISH
+#if REVISION >= 199609
 		PrintLg(117, 157, &crsname[3]);
 	}
 	else
 	{
 		PrintLg(94, 157, &crsname[3]);
 	}
+#else
+	}
+	PrintLg(117, 157, &crsname[3]);
 #endif
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 }
@@ -144,7 +143,7 @@ static void PauseMenu_ProcCamera(SHORT x, SHORT y, s8 *cursor, SHORT space)
 	STATIC unsigned char str_normal_up_close[] = {STR_NORMAL_UP_CLOSE};
 	STATIC unsigned char str_normal_fixed[] = {STR_NORMAL_FIXED};
 	CursorProc(CURSOR_H, cursor, 1, 2);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	PrintLg(x+PAUSEJMARIX, y+PAUSEJUGEMUY, str_lakitu_mario);
 	PrintLg(x+PAUSENREALX, y+PAUSENORMALY, str_normal_up_close);
@@ -169,13 +168,19 @@ static void PauseMenu_ProcCourse(SHORT x, SHORT y, s8 *cursor, SHORT space)
 	STATIC unsigned char str_set_camera_angle_with_r[] =
 		{STR_SET_CAMERA_ANGLE_WITH_R};
 	CursorProc(CURSOR_V, cursor, 1, 3);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	PrintLg(x+10, y-2-PAUSELINE*0, str_continue);
 	PrintLg(x+10, y-2-PAUSELINE*1, str_exit_course);
+#if REVISION >= 199609
 	if (*cursor != 3)
 	{
 		PrintLg(x+10, y-2-31, str_set_camera_angle_with_r);
+#else
+	if (*cursor != 3) \
+	{ \
+		PrintLg(x+10, y-2-31, str_set_camera_angle_with_r);
+#endif
 		gSPDisplayList(glistp++, gfx_lgfont_end);
 		GfxTranslate(GFX_PUSH, x+PAUSECRSX, y+PAUSECRSY-space*(*cursor-1), 0);
 		gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
@@ -221,7 +226,7 @@ static void PauseMenu_InitSelect(void)
 static void PauseMenu_DrawSelect(void)
 {
 	STATIC unsigned char str_pause[] = {STR_PAUSE};
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	Print16(FONT_GLB, 123, 81, str_pause);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
@@ -231,7 +236,7 @@ static void PauseMenu_DrawStar(SHORT x, SHORT y, SHORT file, SHORT course)
 {
 	SHORT n = 0;
 	unsigned char buf[30];
-	STATIC unsigned char str_star[] = {CH_STAR, CH_NUL};
+	STATIC unsigned char str_star[] = {CH_STAR,CH_NUL};
 	UCHAR star = BuFileGetStar(file, course);
 	USHORT count = BuFileStarCount(file, course);
 	USHORT i = 0;
@@ -267,7 +272,7 @@ static void PauseMenu_DrawStar(SHORT x, SHORT y, SHORT file, SHORT course)
 static void PauseMenu_ProcScore(SHORT x, SHORT y)
 {
 	unsigned char **crstab = SegmentToVirtual(coursename);
-	STATIC unsigned char str_coin_x[] = {CH_COIN, CH_CROSS, CH_NUL};
+	STATIC unsigned char str_coin_x[] = {CH_COIN,CH_CROSS,CH_NUL};
 	unsigned char *crsname;
 	unsigned char buf[8];
 	SHORT prev = msg_cursor;
@@ -287,22 +292,22 @@ static void PauseMenu_ProcScore(SHORT x, SHORT y)
 			}
 		}
 	}
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	if (msg_cursor < COURSE_EXT-1)
 	{
 		crsname = SegmentToVirtual(crstab[msg_cursor]);
 		PauseMenu_DrawStar(x, y, file_index-1, msg_cursor);
 		PrintLg(x+34, y-5, str_coin_x);
-		itostr(BuGetCoin(msg_cursor), buf);
+		IntToStr(BuGetCoin(msg_cursor), buf);
 		PrintLg(x+34+20, y-5, buf);
 	}
 	else
 	{
-		STATIC unsigned char str_star_x[] = {CH_STAR, CH_CROSS, CH_NUL};
+		STATIC unsigned char str_star_x[] = {CH_STAR,CH_CROSS,CH_NUL};
 		crsname = SegmentToVirtual(crstab[25]);
 		PrintLg(x+40, y+13, str_star_x);
-		itostr(BuStarRange(15, 24), buf);
+		IntToStr(BuStarRange(15, 24), buf);
 		PrintLg(x+40+20, y+13, buf);
 	}
 	PrintLg(x-9, y+30, crsname);
@@ -338,7 +343,7 @@ static SHORT PauseMenu_Proc(void)
 		{
 			PauseMenu_ProcCourse(99, 93, &msg_cursor, PAUSELINE);
 		}
-		if ((contp->down & A_BUTTON) || (contp->down & START_BUTTON))
+		if (contp->down & A_BUTTON || contp->down & START_BUTTON)
 		{
 			GmFreeze(0, NULL);
 			Na_FixSePlay(NA_SE7_03);
@@ -354,7 +359,7 @@ static SHORT PauseMenu_Proc(void)
 		PauseMenu_DrawSelect();
 		PauseMenu_DrawScoreBox(160, 143);
 		PauseMenu_ProcScore(104, 60);
-		if ((contp->down & A_BUTTON) || (contp->down & START_BUTTON))
+		if (contp->down & A_BUTTON || contp->down & START_BUTTON)
 		{
 			GmFreeze(0, NULL);
 			Na_FixSePlay(NA_SE7_03);
@@ -375,7 +380,7 @@ static SHORT PauseMenu_Proc(void)
 static char savedemo_end = FALSE;
 static int savedemo_timer = 0;
 static int savedemo_coin = 0;
-s8 savemenu_code = 0;
+char savemenu_code = 0;
 
 #define SAVELINE        20
 
@@ -389,9 +394,14 @@ s8 savemenu_code = 0;
 #define SAVECATCHY      147
 
 #ifdef JAPANESE
+#if REVISION >= 199609
+#define HISCOREX        118
+#define CONGRATX        70
+#else
 #define HISCOREX        112
-#define HISCOREY        48
 #define CONGRATX        60
+#endif
+#define HISCOREY        48
 #define CONGRATY        67
 #define SAVEOPTX        10
 #define SAVEOPTY        2
@@ -401,8 +411,8 @@ s8 savemenu_code = 0;
 #endif
 #ifdef ENGLISH
 #define HISCOREX        109
-#define HISCOREY        36
 #define CONGRATX        70
+#define HISCOREY        36
 #define CONGRATY        67
 #define SAVEOPTX        12
 #define SAVEOPTY        0
@@ -416,7 +426,7 @@ static void SaveMenu_DrawBanner(CHAR code)
 	STATIC unsigned char str_hi_score[] = {STR_HI_SCORE};
 	STATIC unsigned char str_congratulations[] = {STR_CONGRATULATIONS};
 	UCHAR color = 200 + 50*SIN(msg_theta);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, color, color, color, 0xFF);
 	if (code == 0)  Print16(FONT_GLB, HISCOREX, HISCOREY, str_hi_score);
 	else            Print16(FONT_GLB, CONGRATX, CONGRATY, str_congratulations);
@@ -426,13 +436,13 @@ static void SaveMenu_DrawBanner(CHAR code)
 static void SaveMenu_ProcDemo(SHORT x, SHORT y)
 {
 	unsigned char buf[4];
-	STATIC unsigned char str16_coin[] = {CH16_COIN, CH_NUL};
-	STATIC unsigned char str16_cross[] = {CH16_CROSS, CH_NUL};
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	STATIC unsigned char str16_coin[] = {CH16_COIN,CH_NUL};
+	STATIC unsigned char str16_cross[] = {CH16_CROSS,CH_NUL};
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, 0xFF);
 	Print16(FONT_GLB, x+ 0, y, str16_coin);
 	Print16(FONT_GLB, x+16, y, str16_cross);
-	itostr(savedemo_coin, buf);
+	IntToStr(savedemo_coin, buf);
 	Print16(FONT_GLB, x+32, y, buf);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	if (savedemo_coin >= hud.coin)
@@ -443,7 +453,7 @@ static void SaveMenu_ProcDemo(SHORT x, SHORT y)
 	}
 	else
 	{
-		if ((savedemo_timer & 1) || hud.coin > 70)
+		if (savedemo_timer & 1 || hud.coin > 70)
 		{
 			savedemo_coin++;
 			Na_FixSePlay(NA_SE7_15);
@@ -457,16 +467,13 @@ static void SaveMenu_ProcDemo(SHORT x, SHORT y)
 				mario->life++;
 			}
 		}
-		if (hud.coin == savedemo_coin && bu_myscore)
-		{
-			Na_FixSePlay(NA_SE7_22);
-		}
+		if (savedemo_coin == hud.coin && bu_myscore) Na_FixSePlay(NA_SE7_22);
 	}
 }
 
 static void SaveMenu_ProcStar(int code, UCHAR star)
 {
-	if (hud.coin == savedemo_coin && !(bu_star & star))
+	if (savedemo_coin == hud.coin && !(bu_star & star))
 	{
 		if (!savemenu_code)
 		{
@@ -478,8 +485,10 @@ static void SaveMenu_ProcStar(int code, UCHAR star)
 
 static void SaveMenu_Draw(void)
 {
+#if REVISION < 199609
+	STATIC unsigned char str16_star[] = {CH16_STAR,CH_NUL};
+#endif
 #ifdef JAPANESE
-	STATIC unsigned char str16_star[] = {CH16_STAR, CH_NUL};
 	STATIC unsigned char str_course[] = {STR_COURSE};
 	STATIC unsigned char str_catch[] = {STR_CATCH};
 	STATIC unsigned char str_clear[] = {STR_CLEAR};
@@ -488,7 +497,9 @@ static void SaveMenu_Draw(void)
 	STATIC unsigned char str_course[] = {STR_COURSE};
 	UNUSED STATIC unsigned char str_catch[] = {STR_CATCH};
 	STATIC unsigned char str_clear[] = {STR_CLEAR};
-	STATIC unsigned char str16_star[] = {CH16_STAR, CH_NUL};
+#endif
+#if REVISION >= 199609
+	STATIC unsigned char str16_star[] = {CH16_STAR,CH_NUL};
 #endif
 	unsigned char **lvltab = SegmentToVirtual(levelname);
 	unsigned char **crstab = SegmentToVirtual(coursename);
@@ -502,8 +513,8 @@ static void SaveMenu_Draw(void)
 		else                name = SegmentToVirtual(
 			lvltab[6*(bu_course-1)+(bu_level-1)]
 		);
-		gSPDisplayList(glistp++, gfx_lgfont_start);
-		itostr(bu_course, buf);
+		gSPDisplayList(glistp++, gfx_lgfont_begin);
+		IntToStr(bu_course, buf);
 		gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, msg_alpha);
 		PrintLg(SAVECOURSEX+2, SAVECOURSEY-2, str_course);
 		PrintLg(SAVECOURSEX+SAVECOURSEWD+2, SAVECOURSEY-2, buf);
@@ -515,7 +526,7 @@ static void SaveMenu_Draw(void)
 	else if (bu_course == COURSE_BITDW || bu_course == COURSE_BITFS)
 	{
 		name = SegmentToVirtual(crstab[bu_course-1]);
-		gSPDisplayList(glistp++, gfx_lgfont_start);
+		gSPDisplayList(glistp++, gfx_lgfont_begin);
 		gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, msg_alpha);
 		PrintLg(SAVECLEARX+2, SAVECLEARY-2, name);
 		PrintLg(SAVECLEARX+CrsStrWd(name)+10+2, SAVECLEARY-2, str_clear);
@@ -534,11 +545,11 @@ static void SaveMenu_Draw(void)
 		SaveMenu_ProcDemo(SAVEDEMOX, SAVEDEMOY);
 		SaveMenu_ProcStar(1, 1 << (bu_level-1));
 	}
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	Print16(FONT_GLB, 55, 77, str16_star);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, msg_alpha);
 	PrintLg(SAVECATCHX+2, SAVECATCHY-2, name);
 #ifdef JAPANESE
@@ -558,7 +569,7 @@ static void SaveMenu_ProcSave(SHORT x, SHORT y, s8 *cursor, SHORT space)
 	STATIC unsigned char str_save_and_quit[] = {STR_SAVE_AND_QUIT};
 	STATIC unsigned char str_continue_dont_save[] = {STR_CONTINUE_DONT_SAVE};
 	CursorProc(CURSOR_V, cursor, 1, 3);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, msg_alpha);
 	PrintLg(x+SAVEOPTX, y+SAVEOPTY-SAVELINE*0, str_save_and_continue);
 	PrintLg(x+SAVEOPTX, y+SAVEOPTY-SAVELINE*1, str_save_and_quit);
@@ -590,7 +601,7 @@ static SHORT SaveMenu_Proc(void)
 		SaveMenu_Draw();
 		SaveMenu_ProcSave(100, 86, &msg_cursor, SAVELINE);
 		if (savedemo_timer > 110 && (
-			(contp->down & A_BUTTON) || (contp->down & START_BUTTON)
+			contp->down & A_BUTTON || contp->down & START_BUTTON
 		))
 		{
 			GmFreeze(0, NULL);

@@ -1,7 +1,7 @@
 #include <sm64.h>
 
 extern Gfx gfx_quad0[];
-extern Gfx gfx_wipe_start[];
+extern Gfx gfx_wipe_begin[];
 extern Gfx gfx_wipe_end[];
 extern Gfx gfx_wipe_draw[];
 
@@ -76,7 +76,7 @@ static int WpFadeGfx(CHAR screen, UCHAR frame, WIPE_FADE *fade, UCHAR alpha)
 	Vtx *vtx;
 	if ((vtx = WpFadeVtx(fade, alpha)))
 	{
-		gSPDisplayList(glistp++, gfx_wipe_start);
+		gSPDisplayList(glistp++, gfx_wipe_begin);
 		gDPSetCombineMode(glistp++, G_CC_SHADE, G_CC_SHADE);
 		gDPSetRenderMode(glistp++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
 		gSPVertex(glistp++, K0_TO_PHYS(vtx), 4, 0);
@@ -161,15 +161,15 @@ static void WpWindowVtx(
 	{
 	case 0:
 		WpWindowVtxSet(vtx, 0, screen, win, x, y, -size, -size, -31, 63);
-		WpWindowVtxSet(vtx, 1, screen, win, x, y, +size, -size,  31, 63);
-		WpWindowVtxSet(vtx, 2, screen, win, x, y, +size, +size,  31,  0);
-		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size, +size, -31,  0);
+		WpWindowVtxSet(vtx, 1, screen, win, x, y,  size, -size,  31, 63);
+		WpWindowVtxSet(vtx, 2, screen, win, x, y,  size,  size,  31,  0);
+		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size,  size, -31,  0);
 		break;
 	case 1:
 		WpWindowVtxSet(vtx, 0, screen, win, x, y, -size, -size,  0, 63);
-		WpWindowVtxSet(vtx, 1, screen, win, x, y, +size, -size, 63, 63);
-		WpWindowVtxSet(vtx, 2, screen, win, x, y, +size, +size, 63,  0);
-		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size, +size,  0,  0);
+		WpWindowVtxSet(vtx, 1, screen, win, x, y,  size, -size, 63, 63);
+		WpWindowVtxSet(vtx, 2, screen, win, x, y,  size,  size, 63,  0);
+		WpWindowVtxSet(vtx, 3, screen, win, x, y, -size,  size,  0,  0);
 		break;
 #ifdef __GNUC__
 	default: __builtin_unreachable();
@@ -194,7 +194,7 @@ static int WpWindow(
 	if (vtx)
 	{
 		WpWindowVtx(vtx, screen, win, x, y, size, code);
-		gSPDisplayList(glistp++, gfx_wipe_start);
+		gSPDisplayList(glistp++, gfx_wipe_begin);
 		gDPSetCombineMode(glistp++, G_CC_SHADE, G_CC_SHADE);
 		gDPSetRenderMode(glistp++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
 		gSPVertex(glistp++, K0_TO_PHYS(vtx), 8, 0);
@@ -284,7 +284,7 @@ static Gfx *CannonOverlayGfx(void)
 		VtxSet(vtx, 1, SCREEN_WD,         0, -1, 32*+36, 32*57, 0, 0, 0, 0xFF);
 		VtxSet(vtx, 2, SCREEN_WD, SCREEN_HT, -1, 32*+36, 32* 6, 0, 0, 0, 0xFF);
 		VtxSet(vtx, 3,         0, SCREEN_HT, -1, 32*-36, 32* 6, 0, 0, 0, 0xFF);
-		gSPDisplayList(g++, gfx_wipe_start);
+		gSPDisplayList(g++, gfx_wipe_begin);
 		gDPSetCombineMode(g++, G_CC_MODULATERGBDECALA, G_CC_MODULATERGBDECALA);
 		gDPSetTextureFilter(g++, G_TF_BILERP);
 		gDPLoadTextureBlock(

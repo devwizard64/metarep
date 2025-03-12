@@ -4,52 +4,53 @@
 #include <string.h>
 #include <getopt.h>
 
-#include "elf.h"
-#include "elf.c"
+#include <sm64/defdisk.h>
+
+#include "lib/elf.h"
+#include "lib/elf.c"
 
 #define HI(x)   (((x) >> 16) + ((x) >> 15 & 1))
 #define LO(x)   ((x) & 0xFFFF)
 
-typedef struct disk_header
+typedef struct diskheader
 {
 	uint32_t country;
-	uint8_t format_type;
-	uint8_t type;
-	uint16_t ipl_size;
-	uint8_t deftab[20];
-	uint32_t entry;
-	uint8_t defect[192];
-	uint16_t rom_end;
-	uint16_t ram_start;
-	uint16_t ram_end;
-	uint16_t pad;
+	uint8_t fmt_type;
+	uint8_t disk_type;
+	uint16_t ipl_load_len;
+	uint8_t defect_num[20];
+	uint32_t loadptr;
+	uint8_t defect_data[192];
+	uint16_t rom_end_lba;
+	uint16_t ram_start_lba;
+	uint16_t ram_end_lba;
 }
-DISK_HEADER;
+DISKHEADER;
 
-static void makeheader(DISK_HEADER *header, ELF *elf)
+static void makeheader(DISKHEADER *hdr, ELF *elf, int len)
 {
 	static const uint8_t defect[] =
 	{
-		0x04, 0x0C, 0x14, 0x1C, 0x24, 0x2C, 0x34, 0x3C, 0x44, 0x4C, 0x54, 0x5C,
-		0x10, 0x16, 0x1C, 0x22, 0x28, 0x2E, 0x34, 0x3A, 0x40, 0x46, 0x4C, 0x52,
-		0x01, 0x0C, 0x14, 0x1C, 0x24, 0x2C, 0x34, 0x3C, 0x44, 0x4C, 0x54, 0x5C,
-		0x04, 0x0C, 0x14, 0x1C, 0x24, 0x2C, 0x34, 0x3C, 0x44, 0x4C, 0x56, 0x5C,
-		0x56, 0x5C, 0x62, 0x68, 0x6E, 0x74, 0x7A, 0x80, 0x86, 0x8C, 0x92, 0x98,
+		0x04,0x0C,0x14,0x1C,0x24,0x2C,0x34,0x3C,0x44,0x4C,0x54,0x5C,
+		0x10,0x16,0x1C,0x22,0x28,0x2E,0x34,0x3A,0x40,0x46,0x4C,0x52,
+		0x01,0x0C,0x14,0x1C,0x24,0x2C,0x34,0x3C,0x44,0x4C,0x54,0x5C,
+		0x04,0x0C,0x14,0x1C,0x24,0x2C,0x34,0x3C,0x44,0x4C,0x56,0x5C,
+		0x56,0x5C,0x62,0x68,0x6E,0x74,0x7A,0x80,0x86,0x8C,0x92,0x98,
 	};
-	static const uint8_t defmap[16] = {12, 0, 24, 0, 0, 36, 0, 0, 48};
+	static const uint8_t defmap[16] = {12,0,24,0,0,36,0,0,48};
 	int i;
-	memset(header, ~0, sizeof(DISK_HEADER));
+	memset(hdr, ~0, sizeof(DISKHEADER));
 	for (i = 0; i < 16; i++)
 	{
-		header->deftab[i] = 12*(i+1);
-		memcpy(&header->defect[12*i], &defect[defmap[i]], 12);
+		hdr->defect_num[i] = 12*(i+1);
+		memcpy(&hdr->defect_data[12*i], &defect[defmap[i]], 12);
 	}
-	header->country = htonl(0xE848D316);
-	header->format_type = 0x10;
-	header->type = 0x10;
-	header->ipl_size = htons(54);
-	header->entry = elf->eh.entry;
-	header->rom_end = htons(108);
+	hdr->country = htonl(0xE848D316);
+	hdr->fmt_type = 0x10;
+	hdr->disk_type = 0x10;
+	hdr->ipl_load_len = htons(len);
+	hdr->loadptr = elf->eh.entry;
+	hdr->rom_end_lba = htons(108);
 }
 
 static void makecrt0(unsigned char *data, ELF *elf)
@@ -95,99 +96,177 @@ static void makecrt0(unsigned char *data, ELF *elf)
 	else if (entry) *p++ = htonl(0x00000000);
 }
 
-static void writebuffer(FILE *fp, const void *buf, size_t size, size_t end)
+typedef struct zone
 {
-	size_t n;
-	while ((n = end-ftell(fp)) > 0)
+	unsigned short size;
+	short lba;
+}
+ZONE;
+
+static const ZONE zonetab[] =
+{
+	{232*85,    0},
+	{216*85,  292},
+	{208*85,  584},
+	{208*85,  858},
+	{216*85, 1150},
+	{192*85, 1442},
+	{176*85, 1716},
+	{160*85, 1990},
+	{144*85, 2264},
+	{128*85, 2538},
+	{112*85, 2742},
+	{128*85, 2946},
+	{144*85, 3220},
+	{160*85, 3494},
+	{176*85, 3768},
+	{192*85, 4042},
+	{     0, 4316},
+};
+
+static void diskcopy(
+	char *disk, int lba, int nblk, const unsigned char *data, size_t size
+)
+{
+	static char buffer[0x100000];
+	const ZONE *zone;
+	lba += 24;
+	for (zone = zonetab; zone[1].lba < lba; zone++)
 	{
-		if (n > size) n = size;
-		fwrite(buf, 1, n, fp);
+		disk += zone->size * (zone[1].lba-zone[0].lba);
+	}
+	disk += zone->size * (lba-zone->lba);
+	while (size > 0 && nblk > 0)
+	{
+		size_t n, len;
+		for (len = 0; len < size && nblk > 0; nblk--)
+		{
+			if (len+zone->size > sizeof(buffer)) break;
+			len += zone->size;
+			if (++lba >= zone[1].lba) zone++;
+		}
+		n = len < size ? len : size;
+		memcpy(buffer, data, n);
+		data += n;
+		size -= n;
+		memcpy(disk, buffer, len);
+		disk += len;
 	}
 }
 
-static void writeheader(FILE *fp, DISK_HEADER *header)
+static int diskcalc(int lba, size_t size)
 {
-	int i;
-	for (i = 0; i < 85*2; i++) fwrite(header, 1, sizeof(DISK_HEADER), fp);
+	int nblk = 0;
+	const ZONE *zone;
+	lba += 24;
+	for (zone = zonetab; zone[1].lba < lba; zone++);
+	while (size >= zone->size)
+	{
+		size -= zone->size;
+		if (lba + ++nblk >= zone[1].lba) zone++;
+	}
+	if (size > 0) nblk++;
+	return nblk;
 }
 
-static void usage(const char *path)
+static int usage(const char *path)
 {
-	fprintf(stderr, "usage: %s [options] elffile\n", path);
-	fprintf(stderr,
-		"\t-R diskfile\n"
+	fprintf(
+		stderr,
+		"usage: %s [options] elffile\n"
+		"\t-R diskfile\n",
+		path
 	);
+	return 1;
 }
 
 int main(int argc, char *argv[])
 {
-	int i, c;
-	FILE *fp;
+	static char disk[0x3DEC800];
+	int i, c, ipl_len;
+	size_t size, ipl_size = 0x100000;
+	const char *path = "disk";
 	unsigned char *data;
-	size_t size;
-	ELF elf;
-	DISK_HEADER header;
-	unsigned char zero[4096];
 	unsigned char *wave = NULL;
-	const char *opt_disk = "disk";
+	DISKHEADER header;
+	FILE *fp;
+	ELF elf;
 	while ((c = getopt(argc, argv, "R:")) != -1)
 	{
 		switch (c)
 		{
 		case 'R':
-			opt_disk = optarg;
+			path = optarg;
 			break;
 		case '?':
-			usage(argv[0]);
-			return 1;
-			break;
+			return usage(argv[0]);
 		}
 	}
-	if (argc-optind != 1)
+	if (argc-optind != 1) return usage(argv[0]);
+	if (elf_open(&elf, argv[optind], "rb"))
 	{
-		usage(argv[0]);
+		fprintf(stderr, "error: could not open '%s'\n", argv[optind]);
 		return 1;
 	}
-	elf_open(&elf, argv[optind], "rb");
-	elf_load(&elf, data = malloc(size = elf_size(&elf)));
 	elf_loadsection(&elf);
-	makecrt0(data, &elf);
-	makeheader(&header, &elf);
+	data = calloc(size = 0x1000+elf_size(&elf), 1);
+	elf_load(&elf, data+0x1000);
+	makecrt0(data+0x1000, &elf);
 	for (i = 0; i < elf.symnum; i++)
 	{
 		const char *name = elf_stname(&elf, &elf.symtab[i]);
-		if (!strcmp(name, "_AudiotblSegmentRomStart")
+#if 0
+		if (!strcmp(name, "_codeSegmentRomEnd"))
 		{
 			uint32_t value = ntohl(elf.symtab[i].value);
-			unsigned char *audiotbl = data + value - 0x1000;
-			wave = audiotbl + ntohl(*(uint32_t *)(audiotbl+4));
+			ipl_size = value - 0x1000;
 			break;
 		}
+#else
+		if (!strcmp(name, "_AudiotblSegmentRomStart"))
+		{
+			uint32_t value = ntohl(elf.symtab[i].value);
+			unsigned char *audiotbl = data + value;
+			uint32_t wave_start = ntohl(*(uint32_t *)(audiotbl+4));
+			uint32_t wave_size  = ntohl(*(uint32_t *)(audiotbl+8));
+			if (wave_size != WAVE_SIZE)
+			{
+				fprintf(stderr, "error: WAVE_SIZE must be 0x%08X\n", wave_size);
+				return 1;
+			}
+			if (diskcalc(WAVE_LBA, wave_size) < WAVE_LEN)
+			{
+				fprintf(stderr, "error: WAVE_LEN must be >= %d\n", wave_len);
+				return 1;
+			}
+			wave = audiotbl + wave_start;
+			break;
+		}
+#endif
 	}
+	ipl_len = diskcalc(0, ipl_size);
+	makeheader(&header, &elf, ipl_len);
 	elf_close(&elf);
-	memset(zero, 0, sizeof(zero));
-	if (!(fp = fopen(opt_disk, "wb")))
+	for (i = 0; i < 85; i++) memcpy(disk+232*i, &header, 232);
+	memcpy(disk+232*85*1, disk+232*85*0, 232*85*1);
+	memcpy(disk+232*85*8, disk+232*85*0, 232*85*2);
+#if 0
+	diskcopy(disk, 0, 4292, data+0x1000, size-0x1000);
+#else
+	diskcopy(disk, 0, ipl_len, data+0x1000, size-0x1000);
+	if (size > ROM_START)
 	{
-		fprintf(stderr, "error: could not write '%s'\n", opt_disk);
+		diskcopy(disk, ROM_LBA, 566, data+ROM_START, size-ROM_START);
+	}
+	if (wave) diskcopy(disk, WAVE_LBA, WAVE_BLK, wave, data+size-wave);
+#endif
+	free(data);
+	if (!(fp = fopen(path, "wb")))
+	{
+		fprintf(stderr, "error: could not open '%s'\n", path);
 		return 1;
 	}
-	writeheader(fp, &header);
-	writebuffer(fp, zero, sizeof(zero), 232*85*8);
-	writeheader(fp, &header);
-	writebuffer(fp, zero, sizeof(zero), 232*85*24);
-	fwrite(data, 1, size < 232*85*54 ? size : 232*85*54, fp);
-	if (wave)
-	{
-		writebuffer(fp, zero, sizeof(zero), 232*85*292);
-		fwrite(wave, 1, 216*85*66, fp);
-	}
-	writebuffer(fp, zero, sizeof(zero), 232*85*292 + 216*85*292);
-	if (size > 0x40000-0x1000)
-	{
-		fwrite(data+0x40000-0x1000, 1, size-(0x40000-0x1000), fp);
-	}
-	writebuffer(fp, zero, sizeof(zero), 0x3DEC800);
+	fwrite(disk, 1, sizeof(disk), fp);
 	fclose(fp);
-	free(data);
 	return 0;
 }

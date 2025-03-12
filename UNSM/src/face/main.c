@@ -29,7 +29,7 @@ int face_main(void)
 	face_stdio_8018C7B4();
 	start_timer("dlgen");
 	stop_timer("dlgen");
-	face_mem_801780B0();
+	PrintMemInfo();
 	for (;;) face_gfx_801A534C();
 	imout();
 	return 0;

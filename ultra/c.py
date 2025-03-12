@@ -7,27 +7,28 @@ def init(self, seg, addr):
 	ultra.init(self, seg, addr)
 
 def fmt(self, lst):
-	f = self.file[-1][1]
-	for addr, sym, extern, line in lst:
-		if len(line) == 0: continue
-		if len(extern) > 0: f.append("\n\n")
+	data = self.file.data
+	for addr, sym, extern, ln in lst:
+		if len(ln) == 0: continue
+		if len(extern) > 0: data.append("\n\n")
 		for a, s in sorted(extern, key=lambda x: (x[0], x[1].label)):
 			start = "/* 0x%08X */ " % a if ultra.COMM_EADDR else ""
 			start += "extern "
-			f.append(s.fmt(start, ";") + "\n")
+			data.append(s.fmt(start, ";") + "\n")
 		start = "/* 0x%08X */ " % addr if ultra.COMM_VADDR else ""
 		if "DALIGN" in sym.flag: start += "DALIGN "
 		s = sym.fmt(start, " =")
-		if len(line) > 1 or line[0].endswith(",") or line[0].startswith("#"):
-			f.append("\n\n%s\n{\n" % s)
-			for ln in line:
-				x = ln.lstrip("\t")
-				f.append("%s\n" % x if x.startswith("#") else "\t%s\n" % ln)
-			f.append("};\n\n")
+		if len(ln) > 1 or ln[0].endswith(",") or ln[0].startswith("#"):
+			data.append("\n\n%s\n{\n" % s)
+			for s in ln:
+				x = s.lstrip("\t")
+				if x.startswith("#"):   data.append("%s\n" % x)
+				else:                   data.append("\t%s\n" % s)
+			data.append("};\n\n")
 		else:
-			if "\n" in line[0]: f.append("\n")
-			f.append("%s %s;\n" % (s, line[0]))
-			if "\n" in line[0]: f.append("\n")
+			if "\n" in ln[0]: data.append("\n")
+			data.append("%s %s;\n" % (s, ln[0]))
+			if "\n" in ln[0]: data.append("\n")
 
 def d_str_prc(self, argv):
 	size, s = argv
@@ -759,23 +760,23 @@ gfx_table = {
 }
 
 def gfx_prc(tab, cmd, argv):
-	lst = []
+	y = []
 	for x in argv:
-		if type(x) == str:  lst.append(x)
-		else:               lst.append("|".join(x))
-	return "gs%s(%s)," % (cmd, ", ".join(lst))
+		if type(x) == str:  y.append(x)
+		else:               y.append("|".join(x))
+	return "gs%s(%s)," % (cmd, ", ".join(y))
 
 def d_Gfx_prc(self, line, tab, argv):
 	end, = argv
 	table = [self.meta.c.gfx_table, gfx_table]
 	while self.addr < end:
-		lst_push(self, line)
+		f_data_push(self, line)
 		cmd = self.u8()
 		for t in table:
 			if cmd in t:
 				self.addr = self.save
-				f = t[cmd]
-				c = f[0](self, f[1:])
+				p = t[cmd]
+				c = p[0](self, p[1:])
 				if c is not None:
 					line[-1][-1].append(gfx_prc(tab, c[0], c[1:]))
 					break
@@ -844,36 +845,36 @@ d_OSViMode = [
 	[1, -1, d_OSViMode_fldRegs],
 ]
 
-def lst_push(self, line):
+def f_data_push(self, line):
 	global extern
 	self.save = self.addr
 	sym = self.get_sym(self.save)
-	if sym is not None and not (len(line) > 0 and line[-1][1] == sym):
+	if sym is not None and not (line and line[-1][1] == sym):
 		extern = set()
 		line.append((self.save, sym, extern, []))
 		return True
 	return False
 
-def s_data_lst(self, line, lst, tab):
-	for argv in lst:
-		start = "{"*argv[0]
-		end   = "}"*argv[0]
-		c = argv[1]
+def f_data_seq(self, line, seq, tab):
+	for cmd in seq:
+		start = "{"*cmd[0]
+		end   = "}"*cmd[0]
+		c = cmd[1]
 		if c < 0:
 			c = -c
 			end += ","
 		for _ in range(c):
-			lst_push(self, line)
-			if type(argv[2]) == list:
-				if argv[0] > 0:
+			f_data_push(self, line)
+			if isinstance(cmd[2], list):
+				if cmd[0] > 0:
 					line[-1][-1].append(tab + start)
-					s_data_lst(self, line, argv[2], tab + "\t")
+					f_data_seq(self, line, cmd[2], tab + "\t")
 					line[-1][-1].append(tab + end)
 				else:
-					s_data_lst(self, line, argv[2], tab)
+					f_data_seq(self, line, cmd[2], tab)
 			else:
-				n = argv[2]
-				t = argv[3]
+				n = cmd[2]
+				t = cmd[3]
 				if t is None:
 					self.addr += n
 				else:
@@ -882,66 +883,76 @@ def s_data_lst(self, line, lst, tab):
 						if t == "asciz": x = "".join(self.asciz(n))
 						line[-1][-1].append(tab + start + self.fmt_str(x) + end)
 					else:
-						r, f = t
+						r, p = t
 						if r:
-							for _ in range(n): f(self, line, tab, argv[4:])
+							for _ in range(n): p(self, line, tab, cmd[4:])
 						else:
 							line[-1][-1].append(tab + start + ", ".join([
-								("\n\t"+tab).join(f(self, argv[4:]))
+								("\n\t"+tab).join(p(self, cmd[4:]))
 								for _ in range(n)
 							]) + end)
 
-def s_data(self, argv):
-	seg, start, end, lst = argv
-	if start|end == 0 and len(lst) > 0:
-		raise RuntimeError("bad lst %s" % str(lst))
+def f_data(self, argv):
+	seg, start, end, seq = argv
+	if start|end == 0 and seq: raise RuntimeError("bad seq %s" % str(seq))
 	init(self, seg, start)
 	line = []
-	s_data_lst(self, line, lst, "")
+	f_data_seq(self, line, seq, "")
 	if self.addr != end:
 		print("warning: bad end %08X:%08X (%08X)" % (start, end, self.addr))
 	fmt(self, line)
 
-def s_declare(self, argv, var, comm, st):
-	seg, start, end = argv
-	f = self.file[-1][1]
-	for addr in sorted(self.meta.sym[seg].keys()):
-		if addr < start or addr >= end: continue
-		sym = self.meta.sym[seg][addr]
-		if hasattr(sym, "fmt"):
-			if var or ("GLOBL" in sym.flag and "LOCAL" not in sym.flag):
-				s = "/* 0x%08X */ " % addr + st if comm else st
-				if var and "BALIGN" in sym.flag: s += "BALIGN "
-				f.append(sym.fmt(s, ";") + "\n")
+def f_declare_sym(self, comm, extern, sym):
+	if not hasattr(sym, "fmt"): return
+	s = "/* 0x%08X */ " % addr if comm else ""
+	if extern:
+		if "GLOBL" not in sym.flag: return
+		if "LOCAL" in sym.flag: return
+		s += "extern "
+	else:
+		if "BALIGN" in sym.flag: s += "BALIGN "
+	self.file.data.append(sym.fmt(s, ";") + "\n")
 
-def s_bss(self, argv):
-	s_declare(self, argv, True, ultra.COMM_VADDR, "")
+def f_declare(self, argv, comm, extern):
+	if len(argv) == 2:
+		seg, lst = argv
+		for addr in lst:
+			f_declare_sym(self, comm, extern, self.meta.sym[seg][addr])
+	else:
+		seg, start, end = argv
+		for addr in sorted(self.meta.sym[seg].keys()):
+			if addr < start or addr >= end: continue
+			f_declare_sym(self, comm, extern, self.meta.sym[seg][addr])
 
-def s_extern(self, argv):
-	s_declare(self, argv, False, ultra.COMM_EADDR, "extern ")
+def f_bss(self, argv):
+	f_declare(self, argv, ultra.COMM_VADDR, False)
 
-def s_struct_lst(f, tab, lst):
+def f_extern(self, argv):
+	f_declare(self, argv, ultra.COMM_EADDR, True)
+
+def f_struct_seq(self, seq, tab=""):
 	tab += "\t"
-	for x in lst:
-		if type(x) == list:
-			c    = x[1]
-			name = x[2]
-			lst  = x[3]
-			end  = x[4] if len(x) > 4 else ""
-			f.append(tab+c+"\n" + tab+"{\n")
-			s_struct_lst(f, tab, lst)
-			f.append(tab+"}\n" + tab+name+end+";\n")
+	for cmd in seq:
+		if isinstance(cmd, str):
+			self.file.data.append(cmd + "\n")
+		elif isinstance(cmd, list):
+			c    = cmd[1]
+			name = cmd[2]
+			seq  = cmd[3]
+			end  = cmd[4] if len(cmd) > 4 else ""
+			self.file.data.append(tab+c+"\n" + tab+"{\n")
+			f_struct_seq(self, seq, tab)
+			self.file.data.append(tab+"}\n" + tab+name+end+";\n")
 		else:
-			sym = x[1]
-			f.append(sym.fmt(tab, ";") + "\n")
+			sym = cmd[1]
+			self.file.data.append(sym.fmt(tab, ";") + "\n")
 
-def s_struct(self, argv):
+def f_struct(self, argv):
 	tbl, = argv
-	f = self.file[-1][1]
-	for size, c, sname, dname, lst in tbl:
-		if dname:   f.append("typedef ")
-		if sname:   f.append("%s %s\n{\n" % (c, sname))
-		else:       f.append("%s\n{\n" % c)
-		s_struct_lst(f, "", lst)
-		if dname:   f.append("}\n%s;\n\n" % dname)
-		else:       f.append("};\n\n")
+	for size, c, sname, dname, seq in tbl:
+		if dname:   self.file.data.append("typedef ")
+		if sname:   self.file.data.append("%s %s\n{\n" % (c, sname))
+		else:       self.file.data.append("%s\n{\n" % c)
+		f_struct_seq(self, seq)
+		if dname:   self.file.data.append("}\n%s;\n\n" % dname)
+		else:       self.file.data.append("};\n\n")

@@ -1,24 +1,31 @@
 #include <sm64.h>
 
+#define JOINT_NULL      0
 #define JOINT_XYZ       1
 #define JOINT_Y         2
 #define JOINT_XZ        3
 #define JOINT_NOPOS     4
 #define JOINT_ANG       5
 
-static s16 draw_m;
+typedef struct jointsave
+{
+	u8 mode;
+	u8 shadow;
+	short frame;
+	float scale;
+	u16 *tbl;
+	short *val;
+}
+JOINTSAVE;
+
+static short draw_m;
 static FMTX draw_fmtx[32];
 static Mtx *draw_mtx[32];
 
-static u8 joint_save_type;
-static u8 joint_save_shadow;
-static s16 joint_save_frame;
-static float joint_save_scale;
-static u16 *joint_save_tbl;
-static short *joint_save_val;
-static u8 joint_type;
+static JOINTSAVE joint_save;
+static u8 joint_mode;
 static u8 joint_shadow;
-static s16 joint_frame;
+static short joint_frame;
 static float joint_scale;
 static u16 *joint_tbl;
 static short *joint_val;
@@ -140,7 +147,10 @@ static void DrawLayer(SLAYER *shp)
 		{
 			int i;
 			draw_layer = shp;
-			for (i = 0; i < LAYER_MAX; i++) shp->list[i] = NULL;
+			for (i = 0; i < LAYER_MAX; i++)
+			{
+				shp->list[i] = NULL;
+			}
 			DrawShape(shp->s.child);
 			DrawLayerList(shp);
 			draw_layer = NULL;
@@ -153,10 +163,10 @@ static void DrawOrtho(SORTHO *shp)
 	if (shp->s.child)
 	{
 		Mtx *mtx = GfxAlloc(sizeof(Mtx));
-		float l = (float)(draw_scene->x - draw_scene->w)/2 * shp->scale;
-		float r = (float)(draw_scene->x + draw_scene->w)/2 * shp->scale;
-		float t = (float)(draw_scene->y - draw_scene->h)/2 * shp->scale;
-		float b = (float)(draw_scene->y + draw_scene->h)/2 * shp->scale;
+		float l = (draw_scene->x - draw_scene->w)/2.0F * shp->scale;
+		float r = (draw_scene->x + draw_scene->w)/2.0F * shp->scale;
+		float t = (draw_scene->y - draw_scene->h)/2.0F * shp->scale;
+		float b = (draw_scene->y + draw_scene->h)/2.0F * shp->scale;
 		guOrtho(mtx, l, r, b, t, -2, +2, 1);
 		gSPPerspNormalize(glistp++, 0xFFFF);
 		gSPMatrix(
@@ -174,7 +184,11 @@ static void DrawPersp(SPERSP *shp)
 	{
 		u16 perspNorm;
 		Mtx *mtx = GfxAlloc(sizeof(Mtx));
+#ifdef PAL
+		float aspect = (float)draw_scene->w / draw_scene->h * 1.1F;
+#else
 		float aspect = (float)draw_scene->w / draw_scene->h;
+#endif
 		guPerspective(
 			mtx, &perspNorm, shp->fovy, aspect, shp->near, shp->far, 1
 		);
@@ -374,33 +388,33 @@ static void DrawJoint(SJOINT *shp)
 	Mtx *mtx = GfxAlloc(sizeof(Mtx));
 	SVecCpy(ang, svec_0);
 	FVecSet(pos, shp->pos[0], shp->pos[1], shp->pos[2]);
-	if (joint_type == JOINT_XYZ)
+	if (joint_mode == JOINT_XYZ)
 	{
 		pos[0] += JOINT_POS();
 		pos[1] += JOINT_POS();
 		pos[2] += JOINT_POS();
-		joint_type = JOINT_ANG;
+		joint_mode = JOINT_ANG;
 	}
-	else if (joint_type == JOINT_XZ)
+	else if (joint_mode == JOINT_XZ)
 	{
 		pos[0] += JOINT_POS();
 		joint_tbl += 2;
 		pos[2] += JOINT_POS();
-		joint_type = JOINT_ANG;
+		joint_mode = JOINT_ANG;
 	}
-	else if (joint_type == JOINT_Y)
+	else if (joint_mode == JOINT_Y)
 	{
 		joint_tbl += 2;
 		pos[1] += JOINT_POS();
 		joint_tbl += 2;
-		joint_type = JOINT_ANG;
+		joint_mode = JOINT_ANG;
 	}
-	else if (joint_type == JOINT_NOPOS)
+	else if (joint_mode == JOINT_NOPOS)
 	{
 		joint_tbl += 2*3;
-		joint_type = JOINT_ANG;
+		joint_mode = JOINT_ANG;
 	}
-	if (joint_type == JOINT_ANG)
+	if (joint_mode == JOINT_ANG)
 	{
 		ang[0] = JOINT();
 		ang[1] = JOINT();
@@ -421,16 +435,15 @@ static void DrawSkeleton(SKELETON *skel, int flag)
 	ANIME *anime = skel->anime;
 	if (flag) skel->frame = SkelStep(skel, &skel->vframe);
 	skel->stamp = draw_timer;
-	if      (anime->flag & ANIME_Y    ) joint_type = JOINT_Y;
-	else if (anime->flag & ANIME_XZ   ) joint_type = JOINT_XZ;
-	else if (anime->flag & ANIME_NOPOS) joint_type = JOINT_NOPOS;
-	else                                joint_type = JOINT_XYZ;
+	if      (anime->flag & ANIME_Y    ) joint_mode = JOINT_Y;
+	else if (anime->flag & ANIME_XZ   ) joint_mode = JOINT_XZ;
+	else if (anime->flag & ANIME_NOPOS) joint_mode = JOINT_NOPOS;
+	else                                joint_mode = JOINT_XYZ;
 	joint_frame = skel->frame;
 	joint_shadow = (anime->flag & ANIME_FIXSHADOW) == 0;
 	joint_tbl = SegmentToVirtual(anime->tbl);
 	joint_val = SegmentToVirtual(anime->val);
-	if (anime->waist == 0)  joint_scale = 1;
-	else                    joint_scale = (float)skel->waist/anime->waist;
+	joint_scale = anime->waist == 0 ? 1.0F : (float)skel->waist/anime->waist;
 }
 
 static void DrawShadow(SSHADOW *shp)
@@ -452,7 +465,7 @@ static void DrawShadow(SSHADOW *shp)
 			size = shp->size * draw_object->scale[0];
 		}
 		scale = 1;
-		if (joint_shadow && (joint_type == 1 || joint_type == 3))
+		if (joint_shadow && (joint_mode == JOINT_XYZ || joint_mode == JOINT_XZ))
 		{
 			float s, c;
 			SSCALE *child = (SSCALE *)shp->s.child;
@@ -501,7 +514,7 @@ static int SObjIsVisible(SOBJECT *shp, FMTX m)
 	float x;
 	if (shp->s.flag & SHP_OBJHIDE) return FALSE;
 	cull = (SCULL *)shp->shape;
-	ang = (draw_persp->fovy/2+1) * 0x8000/180 + 0.5F;
+	ang = DEG(draw_persp->fovy/2.0F+1) + 0.5F;
 	x = -m[3][2] * SIN(ang)/COS(ang);
 	if (cull && cull->s.type == ST_CULL)    dist = (float)cull->dist;
 	else                                    dist = 300;
@@ -556,7 +569,7 @@ static void DrawObject(SOBJECT *shp)
 			if (shp->s.child) DrawShape(shp->s.child);
 		}
 		draw_m--;
-		joint_type = 0;
+		joint_mode = JOINT_NULL;
 		shp->m = NULL;
 	}
 }
@@ -581,9 +594,9 @@ static void DrawHand(SHAND *shp)
 	if (shp->obj && shp->obj->shape)
 	{
 		int flag = (shp->obj->s.flag & SHP_ANIME) != 0;
-		pos[0] = (float)shp->pos[0]/4;
-		pos[1] = (float)shp->pos[1]/4;
-		pos[2] = (float)shp->pos[2]/4;
+		pos[0] = shp->pos[0]/4.0F;
+		pos[1] = shp->pos[1]/4.0F;
+		pos[2] = shp->pos[2]/4.0F;
 		FMtxPos(m, pos);
 		FMtxCpy(draw_fmtx[draw_m+1], *draw_object->m);
 		draw_fmtx[draw_m+1][3][0] = draw_fmtx[draw_m][3][0];
@@ -597,23 +610,23 @@ static void DrawHand(SHAND *shp)
 		draw_m++;
 		FMtxToMtx(mtx, draw_fmtx[draw_m]);
 		draw_mtx[draw_m] = mtx;
-		joint_save_type   = joint_type;
-		joint_save_shadow = joint_shadow;
-		joint_save_frame  = joint_frame;
-		joint_save_scale  = joint_scale;
-		joint_save_tbl    = joint_tbl;
-		joint_save_val    = joint_val;
-		joint_type = 0;
+		joint_save.mode   = joint_mode;
+		joint_save.shadow = joint_shadow;
+		joint_save.frame  = joint_frame;
+		joint_save.scale  = joint_scale;
+		joint_save.tbl    = joint_tbl;
+		joint_save.val    = joint_val;
+		joint_mode = JOINT_NULL;
 		draw_hand = shp;
 		if (shp->obj->skel.anime) DrawSkeleton(&shp->obj->skel, flag);
 		DrawShape(shp->obj->shape);
 		draw_hand = NULL;
-		joint_type   = joint_save_type;
-		joint_shadow = joint_save_shadow;
-		joint_frame  = joint_save_frame;
-		joint_scale  = joint_save_scale;
-		joint_tbl    = joint_save_tbl;
-		joint_val    = joint_save_val;
+		joint_mode   = joint_save.mode;
+		joint_shadow = joint_save.shadow;
+		joint_frame  = joint_save.frame;
+		joint_scale  = joint_save.scale;
+		joint_tbl    = joint_save.tbl;
+		joint_val    = joint_save.val;
 		draw_m--;
 	}
 	if (shp->s.s.child) DrawShape(shp->s.s.child);
@@ -677,10 +690,10 @@ void DrawScene(SSCENE *shp, Vp *viewport, Vp *scissor, u32 fill)
 		UNUSED int i;
 		Mtx *mtx;
 		Vp *vp = GfxAlloc(sizeof(Vp));
-		draw_arena = ArenaCreate(MemAvailable()-sizeof(ARENA), MEM_ALLOC_L);
+		draw_arena = ArenaCreateFull();
 		mtx = GfxAlloc(sizeof(Mtx));
 		draw_m = 0;
-		joint_type = 0;
+		joint_mode = JOINT_NULL;
 		SVecSet(vp->vp.vtrans, 4*shp->x, 4*shp->y, G_MAXZ/2);
 		SVecSet(vp->vp.vscale, 4*shp->w, 4*shp->h, G_MAXZ/2);
 		if (viewport != NULL)
@@ -705,7 +718,7 @@ void DrawScene(SSCENE *shp, Vp *viewport, Vp *scissor, u32 fill)
 		draw_scene = shp;
 		if (shp->s.child) DrawShape(shp->s.child);
 		draw_scene = NULL;
-		if (debug_mem) dprintf(
+		if (debug_info) dprintf(
 			180, 20+16, "MEM %d", draw_arena->size-draw_arena->used
 		);
 		MemFree(draw_arena);

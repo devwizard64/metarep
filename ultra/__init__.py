@@ -76,6 +76,9 @@ flag_sp_sw = [
 	(0x00040000, 0x00040000, "SP_SET_CPUSIGNAL"),
 ]
 
+def fmt_sp_sw(self, x):
+	return self.fmt_flag(flag_sp_sw, x)
+
 flag_sp_sr = [
 	(0x0001, 0x0001, "SP_STATUS_HALT"),
 	(0x0002, 0x0002, "SP_STATUS_BROKE"),
@@ -90,6 +93,9 @@ flag_sp_sr = [
 	(0x0400, 0x0400, "SP_STATUS_RSPSIGNAL"),
 	(0x0800, 0x0800, "SP_STATUS_CPUSIGNAL"),
 ]
+
+def fmt_sp_sr(self, x):
+	return self.fmt_flag(flag_sp_sr, x)
 
 flag_dpc_sw = [
 	(0x0001, 0x0001, "DPC_CLR_XBUS_DMEM_DMA"),
@@ -118,6 +124,9 @@ flag_dpc_sr = [
 	(0x0400, 0x0400, "DPC_STATUS_START_VALID"),
 ]
 
+def fmt_dpc_sr(self, x):
+	return self.fmt_flag(flag_dpc_sr, x)
+
 flag_OSTask_flags = [
 	(0x0001, 0x0001, "OS_TASK_YIELDED"),
 	(0x0002, 0x0002, "OS_TASK_DP_WAIT"),
@@ -129,10 +138,8 @@ flag_OSTask_flags = [
 	(0x0080, 0x0080, "OS_TASK_USR3"),
 ]
 
-fmt_OSTask_flags    = lambda self, x: self.fmt_flag(flag_OSTask_flags, x)
-fmt_sp_sr           = lambda self, x: self.fmt_flag(flag_sp_sr, x)
-fmt_sp_sw           = lambda self, x: self.fmt_flag(flag_sp_sw, x)
-fmt_dpc_sr          = lambda self, x: self.fmt_flag(flag_dpc_sr, x)
+def fmt_OSTask_flags(self, x):
+	return self.fmt_flag(flag_OSTask_flags, x)
 
 def fmt_s16(self, x):
 	return "-0x%04X" % -x if x < 0 else "0x%04X" % x
@@ -160,6 +167,8 @@ def fmt_addr(self, x, extern=False, addr=False, cast=None, array=None):
 def fmt_sizefmt(size):
 	return "0x%%0%dX" % max(2, (size.bit_length()+3)//4)
 
+unknown = set()
+
 def sym(self, addr, src=None, fmt="0x%08X", extern=False):
 	if addr == 0: return "NULL"
 	sym = self.find_sym(addr, src)
@@ -181,6 +190,15 @@ def aw(self, src=None, extern=False):
 
 def init(self, seg, addr):
 	self.c_init(">", seg, addr)
+
+def f_romheader(self, argv):
+	seg, = argv
+	init(self, seg, 0)
+	p = self.u32()
+	c = self.u32()
+	s = self.u32()
+	u = self.u32()
+	self.file.data.append("%08x%08x\n%08x%08x\n" % (p, c, 0, u))
 
 import ultra.asm
 import ultra.c

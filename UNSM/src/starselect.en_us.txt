@@ -1,0 +1,4 @@
+$lang:en
+
+$STR_MYSCORE
+MYSCORE

@@ -1,0 +1,81 @@
+#ifndef __SM64_DEFSEQLANG_H__
+#define __SM64_DEFSEQLANG_H__
+
+#define SEQ_CMP_AND             0
+#define SEQ_CMP_NAND            1
+#define SEQ_CMP_EQ              2
+#define SEQ_CMP_NE              3
+#define SEQ_CMP_LT              4
+#define SEQ_CMP_LE              5
+#define SEQ_CMP_GT              6
+#define SEQ_CMP_GE              7
+
+#define SEQ_VAR_FILE            0
+#define SEQ_VAR_COURSE          1
+#define SEQ_VAR_LEVEL           2
+#define SEQ_VAR_STAGE           3
+#define SEQ_VAR_SCENE           4
+
+#define SEQ_CMD_EXECUTE          0
+#define SEQ_CMD_CHAIN            1
+#define SEQ_CMD_EXIT             2
+#define SEQ_CMD_SLEEP            3
+#define SEQ_CMD_FREEZE           4
+#define SEQ_CMD_JUMP             5
+#define SEQ_CMD_CALL             6
+#define SEQ_CMD_RETURN           7
+#define SEQ_CMD_FOR              8
+#define SEQ_CMD_DONE             9
+#define SEQ_CMD_REPEAT           10
+#define SEQ_CMD_UNTIL            11
+#define SEQ_CMD_JUMPIF           12
+#define SEQ_CMD_CALLIF           13
+#define SEQ_CMD_IF               14
+#define SEQ_CMD_ELSE             15
+#define SEQ_CMD_ENDIF            16
+#define SEQ_CMD_CALLBACK         17
+#define SEQ_CMD_PROCESS          18
+#define SEQ_CMD_SET              19
+#define SEQ_CMD_PUSH             20
+#define SEQ_CMD_PULL             21
+#define SEQ_CMD_LOADCODE         22
+#define SEQ_CMD_LOADDATA         23
+#define SEQ_CMD_LOADPRES         24
+#define SEQ_CMD_LOADFACE         25
+#define SEQ_CMD_LOADTEXT         26
+#define SEQ_CMD_STAGEINIT        27
+#define SEQ_CMD_STAGEEXIT        28
+#define SEQ_CMD_COMPILEBEGIN     29
+#define SEQ_CMD_COMPILEEND       30
+#define SEQ_CMD_SCENEBEGIN       31
+#define SEQ_CMD_SCENEEND         32
+#define SEQ_CMD_SHAPEGFX         33
+#define SEQ_CMD_SHAPE            34
+#define SEQ_CMD_SHAPESCALE       35
+#define SEQ_CMD_OBJECT           36
+#define SEQ_CMD_PLAYER           37
+#define SEQ_CMD_PORT             38
+#define SEQ_CMD_BGPORT           39
+#define SEQ_CMD_CONNECT          40
+#define SEQ_CMD_SCENEOPEN        41
+#define SEQ_CMD_SCENECLOSE       42
+#define SEQ_CMD_PLAYEROPEN       43
+#define SEQ_CMD_PLAYERCLOSE      44
+#define SEQ_CMD_SCENEPROC        45
+#define SEQ_CMD_MAP              46
+#define SEQ_CMD_AREA             47
+#define SEQ_CMD_MESSAGE          48
+#define SEQ_CMD_ENV              49
+#define SEQ_CMD_50               50
+#define SEQ_CMD_WIPE             51
+#define SEQ_CMD_VIBLACK          52
+#define SEQ_CMD_VIGAMMA          53
+#define SEQ_CMD_BGM              54
+#define SEQ_CMD_PLAYBGM          55
+#define SEQ_CMD_AUDFADEOUT       56
+#define SEQ_CMD_TAG              57
+#define SEQ_CMD_58               58
+#define SEQ_CMD_JET              59
+#define SEQ_CMD_VAR              60
+
+#endif /* __SM64_DEFSEQLANG_H__ */

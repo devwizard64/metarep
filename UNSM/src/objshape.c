@@ -46,10 +46,10 @@ void *Ctrl_objshape_802D2360(int code, SHAPE *shape, UNUSED void *data)
 	return gfx;
 }
 
-s8 objshape_803612F0;
-static s16 objshape_803312F0 = 1;
-static s16 objshape_803312F4 = 0;
-static s16 objshape_803312F8 = 0;
+char objshape_803612F0;
+static short objshape_803312F0 = 1;
+static short objshape_803312F4 = 0;
+static short objshape_803312F8 = 0;
 
 /* RR carpet */
 void *Ctrl_objshape_802D2470(int code, UNUSED SHAPE *shape, UNUSED void *data)
@@ -112,15 +112,21 @@ void *Ctrl_objshape_802D2520(int code, SHAPE *shape, UNUSED void *data)
 		gSPDisplayList(g++, gfx_rr_07019200);
 		gSPEndDisplayList(g);
 		obj = (OBJECT *)draw_object;
-		if (mario_obj->ride == obj) objshape_803612F0 = 2;
+		if (mario_obj->movebg == obj) objshape_803612F0 = 2;
 		else if (obj->o_velf != 0.0) objshape_803612F0 = 1;
 		else objshape_803612F0 = 0;
 	}
 	return gfx;
 }
 
-extern Gfx gfx_wipe_start[];
+extern Gfx gfx_wipe_begin[];
+#ifdef MULTILANG
+extern Gfx gfx_ending_0[];
+extern Gfx gfx_ending_1[];
+extern Gfx gfx_ending_2[];
+#else
 extern Gfx gfx_ending[];
+#endif
 void *EndingDraw(int code, SHAPE *shape, UNUSED void *data)
 {
 	SCALLBACK *shp = (SCALLBACK *)shape;
@@ -129,8 +135,17 @@ void *EndingDraw(int code, SHAPE *shape, UNUSED void *data)
 	{
 		g = gfx = GfxAlloc(sizeof(Gfx)*3);
 		ShpSetLayer(&shp->s, LAYER_OPA_SURF);
-		gSPDisplayList(g++, gfx_wipe_start);
+		gSPDisplayList(g++, gfx_wipe_begin);
+#ifdef MULTILANG
+		switch (BuGetLang())
+		{
+		case 0: gSPDisplayList(g++, gfx_ending_0); break;
+		case 1: gSPDisplayList(g++, gfx_ending_1); break;
+		case 2: gSPDisplayList(g++, gfx_ending_2); break;
+		}
+#else
 		gSPDisplayList(g++, gfx_ending);
+#endif
 		gSPEndDisplayList(g);
 	}
 	return gfx;

@@ -2,7 +2,7 @@
 
 extern u16 *txt_glbfont[];
 extern u16 *txt_camera[];
-extern Gfx gfx_print_copy_start[];
+extern Gfx gfx_print_copy_begin[];
 extern Gfx gfx_print_copy_char[];
 extern Gfx gfx_print_copy_end[];
 extern u16 *txt_meter_n[];
@@ -17,16 +17,16 @@ extern Gfx gfx_meter_end[];
 #endif
 
 #define EDGE_X          22
-#define EDGE_Y          7
+#define EDGE_Y          15
 
 #define HUD_XL          EDGE_X
-#define HUD_YL          (BORDER_HT+EDGE_Y)
+#define HUD_YL          EDGE_Y
 #define HUD_XM          (SCREEN_WD/2)
 #define HUD_YM          (SCREEN_HT/2)
 #define HUD_XH          (SCREEN_WD-EDGE_X)
-#define HUD_YH          (SCREEN_HT-BORDER_HT-EDGE_Y)
+#define HUD_YH          (SCREEN_HT-EDGE_Y)
 
-#if REVISION > 199606
+#if REVISION >= 199609
 #define HUD_TOP         (HUD_YH-16)
 #else
 #define HUD_TOP         (HUD_YH-15)
@@ -38,8 +38,7 @@ extern Gfx gfx_meter_end[];
 #define COIN_X          (HUD_XM+8)
 #define COIN_Y          HUD_TOP
 
-/* JAPANESE ? */
-#if REVISION > 199606
+#if REVISION >= 199609
 #define STAR_X          (HUD_XH-16-16-24)
 #else
 #define STAR_X          (HUD_XH-16-16-19)
@@ -74,7 +73,7 @@ extern Gfx gfx_meter_end[];
 
 typedef struct meter
 {
-	s8 state;
+	char state;
 	short x;
 	short y;
 	float scale;
@@ -83,7 +82,7 @@ METER;
 
 static METER meter = {0, METER_X, METER_Y, 1};
 
-static s16 meter_power;
+static short meter_power;
 static int meter_timer = 0;
 UNUSED static short hud_80332600 = 0;
 UNUSED static short hud_80332604 = 10;
@@ -233,7 +232,7 @@ static void HUD_DrawCoin(void)
 static void HUD_DrawStar(void)
 {
 	CHAR flag = FALSE;
-	if (savemenu_code == 1 && (gfx_frame & 8)) return;
+	if (savemenu_code == 1 && gfx_frame & 8) return;
 	if (hud.star < 100) flag = TRUE;
 	dprint(STAR_X, STAR_Y, "-");
 	if (ISTRUE(flag)) dprint(STAR_X+16, STAR_Y, "*");
@@ -253,17 +252,26 @@ static void HUD_DrawTime(void)
 	USHORT min = time / (30*60);
 	USHORT sec = (time - 30*60*min) / 30;
 	USHORT frc = (USHORT)(time - 30*60*min - 30*sec) / 3;
+#ifdef MULTILANG
+	switch (BuGetLang())
+	{
+	case 0: dprint(TIME_X-0, TIME_Y, "TIME");   break;
+	case 1: dprint(TIME_X-5, TIME_Y, "TEMPS");  break;
+	case 2: dprint(TIME_X-0, TIME_Y, "ZEIT");   break;
+	}
+#else
 	dprint(TIME_X, TIME_Y, "TIME");
+#endif
 	dprintf(TIME_MIN_X, TIME_Y, "%0d", min);
 	dprintf(TIME_SEC_X, TIME_Y, "%02d", sec);
 	dprintf(TIME_FRC_X, TIME_Y, "%d", frc);
-	gSPDisplayList(glistp++, gfx_print_copy_start);
+	gSPDisplayList(glistp++, gfx_print_copy_begin);
 	HUD_DrawChar(TIME_QMS_X, TIME_QY, txt[56]);
 	HUD_DrawChar(TIME_QSF_X, TIME_QY, txt[57]);
 	gSPDisplayList(glistp++, gfx_print_copy_end);
 }
 
-static s16 hud_camera = 0;
+static short hud_camera = 0;
 
 void HUD_SetCamera(SHORT flag)
 {
@@ -276,7 +284,7 @@ static void HUD_DrawCamera(void)
 	int x = CAMERA_X;
 	int y = CAMERA_Y;
 	if (!hud_camera) return;
-	gSPDisplayList(glistp++, gfx_print_copy_start);
+	gSPDisplayList(glistp++, gfx_print_copy_begin);
 	HUD_DrawChar(x, y, txt[0]);
 	switch (hud_camera & 7) /* T:hud_camera */
 	{
@@ -303,7 +311,18 @@ void HUD_Draw(void)
 	}
 	else
 	{
+#ifdef PAL
+		Mtx *mtx = GfxAlloc(sizeof(Mtx));
+		if (!mtx) return;
+		GfxLoadIdent();
+		guOrtho(mtx, -16, SCREEN_WD+16, 0, SCREEN_HT, -10, 10, 1);
+		gSPPerspNormalize(glistp++, 0xFFFF);
+		gSPMatrix(
+			glistp++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_MUL|G_MTX_NOPUSH
+		);
+#else
 		GfxScreenProj();
+#endif
 		/* T:enum */
 		if (scenep && scenep->cam->mode == 10) DrawCannonReticle();
 		if (flag & HUD_LIFE) HUD_DrawLife();

@@ -7,6 +7,18 @@ void osCreateThread(
 {
 	register u32 saveMask;
 	OSIntMask mask;
+#ifdef _DEBUG
+	if ((u32)sp & 7)
+	{
+		__osError(ERR_OSCREATETHREAD_SP, 1, sp);
+		return;
+	}
+	if (p < OS_PRIORITY_IDLE || p > OS_PRIORITY_MAX)
+	{
+		__osError(ERR_OSCREATETHREAD_PRI, 1, p);
+		return;
+	}
+#endif
 	t->id = id;
 	t->priority = p;
 	t->next = NULL;

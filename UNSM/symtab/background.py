@@ -1,7 +1,6 @@
 import main
 
 sym_E0_BackgroundA = {
-	0x002AC6B0: main.sym("_BackgroundASegmentRomStart"),
 	0x0A000000: main.sym_var("background_a_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_a_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_a_02", "static u16", "[]"),
@@ -70,7 +69,6 @@ sym_E0_BackgroundA = {
 }
 
 sym_E0_BackgroundB = {
-	0x002B8F10: main.sym("_BackgroundBSegmentRomStart"),
 	0x0A000000: main.sym_var("background_b_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_b_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_b_02", "static u16", "[]"),
@@ -139,7 +137,6 @@ sym_E0_BackgroundB = {
 }
 
 sym_E0_BackgroundC = {
-	0x002C73D0: main.sym("_BackgroundCSegmentRomStart"),
 	0x0A000000: main.sym_var("background_c_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_c_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_c_02", "static u16", "[]"),
@@ -185,7 +182,6 @@ sym_E0_BackgroundC = {
 }
 
 sym_E0_BackgroundD = {
-	0x002D0040: main.sym("_BackgroundDSegmentRomStart"),
 	0x0A000000: main.sym_var("background_d_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_d_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_d_02", "static u16", "[]"),
@@ -239,7 +235,6 @@ sym_E0_BackgroundD = {
 }
 
 sym_E0_BackgroundE = {
-	0x002D64F0: main.sym("_BackgroundESegmentRomStart"),
 	0x0A000000: main.sym_var("background_e_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_e_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_e_02", "static u16", "[]"),
@@ -308,7 +303,6 @@ sym_E0_BackgroundE = {
 }
 
 sym_E0_BackgroundF = {
-	0x002E7880: main.sym("_BackgroundFSegmentRomStart"),
 	0x0A000000: main.sym_var("background_f_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_f_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_f_02", "static u16", "[]"),
@@ -377,7 +371,6 @@ sym_E0_BackgroundF = {
 }
 
 sym_E0_BackgroundG = {
-	0x002F14E0: main.sym("_BackgroundGSegmentRomStart"),
 	0x0A000000: main.sym_var("background_g_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_g_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_g_02", "static u16", "[]"),
@@ -446,7 +439,6 @@ sym_E0_BackgroundG = {
 }
 
 sym_E0_BackgroundH = {
-	0x002FB1B0: main.sym("_BackgroundHSegmentRomStart"),
 	0x0A000000: main.sym_var("background_h_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_h_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_h_02", "static u16", "[]"),
@@ -492,7 +484,6 @@ sym_E0_BackgroundH = {
 }
 
 sym_E0_BackgroundI = {
-	0x00301CD0: main.sym("_BackgroundISegmentRomStart"),
 	0x0A000000: main.sym_var("background_i_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_i_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_i_02", "static u16", "[]"),
@@ -561,7 +552,6 @@ sym_E0_BackgroundI = {
 }
 
 sym_E0_BackgroundJ = {
-	0x0030CEC0: main.sym("_BackgroundJSegmentRomStart"),
 	0x0A000000: main.sym_var("background_j_00", "static u16", "[]"),
 	0x0A000800: main.sym_var("background_j_01", "static u16", "[]"),
 	0x0A001000: main.sym_var("background_j_02", "static u16", "[]"),

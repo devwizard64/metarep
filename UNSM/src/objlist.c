@@ -1,6 +1,5 @@
 #include <sm64.h>
 
-UNUSED static
 void ListInit(LIST *root, LIST *free, LIST *data, size_t size, int count)
 {
 	int i;
@@ -17,7 +16,6 @@ void ListInit(LIST *root, LIST *free, LIST *data, size_t size, int count)
 	data->next = NULL;
 }
 
-UNUSED static
 LIST *ListAlloc(LIST *root, LIST *free)
 {
 	LIST *item;
@@ -52,7 +50,6 @@ static OBJECT *ObjListAlloc(OBJLIST *root, OBJLIST *free)
 	return obj;
 }
 
-UNUSED static
 void ListFree(LIST *free, LIST *item)
 {
 	item->next->prev = item->prev;
@@ -93,8 +90,8 @@ void ObjRootListInit(OBJLIST *root)
 	}
 }
 
-UNUSED static
-void objlist_802C9AD8(SHAPE *shape)
+UNUSED
+static void objlist_802C9AD8(SHAPE *shape)
 {
 	SHAPE *child;
 	SHAPE *next;
@@ -146,7 +143,7 @@ static OBJECT *ObjAlloc(OBJLIST *root)
 	obj->child = NULL;
 	obj->hit_status = 0;
 	obj->hit_count = 0;
-	for (i = 0; i < OBJ_MEM_MAX; i++) obj->mem[i].i = 0;
+	for (i = 0; i < OBJ_WORK_MAX; i++) obj->work[i].i = 0;
 	obj->_1C8 = NULL;
 	obj->sp = 0;
 	obj->sleep = 0;
@@ -156,18 +153,17 @@ static OBJECT *ObjAlloc(OBJLIST *root)
 	obj->dmg_h = 0;
 	obj->hit_offset = 0;
 	obj->_210 = NULL;
-	obj->ride = NULL;
+	obj->movebg = NULL;
 	obj->map = NULL;
 	obj->o_hit_timer = -1;
 	obj->o_ap = 0;
 	obj->o_hp = 2048;
 	obj->o_checkdist = 1000;
-	if (stage_index == STAGE_TTC)   obj->o_shapedist = 2000;
-	else                            obj->o_shapedist = 4000;
+	obj->o_shapedist = stage_index == STAGE_TTC ? 2000.0F : 4000.0F;
 	FMtxIdent(obj->mtx);
 	obj->actor_type = ACTORTYPE_NULL;
 	obj->actor_flag = NULL;
-	obj->o_pl_dist = 19000; /* T:def */
+	obj->o_targetdist = 19000; /* T:def */
 	obj->o_area = -1;
 	obj->s.s.flag &= ~SHP_OBJHIDE;
 	obj->s.pos[0] = -10000;

@@ -70,6 +70,9 @@ static void ContRead(void)
 {
 	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK);
 	osContGetReadData(cont_pad);
+#ifdef MOTOR
+	motor_8024C510();
+#endif
 	if ((cont1->pad->button & (U_JPAD|D_JPAD)) == (U_JPAD|D_JPAD))
 	{
 		sys_halt = TRUE;
@@ -88,11 +91,20 @@ static void ContRead(void)
 
 #else
 
+#ifdef MOTOR
+#define ContRead() \
+{ \
+	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK); \
+	osContGetReadData(cont_pad); \
+	motor_8024C510(); \
+}
+#else
 #define ContRead() \
 { \
 	osRecvMesg(&si_mq, &null_msg, OS_MESG_BLOCK); \
 	osContGetReadData(cont_pad); \
 }
+#endif
 
 #endif
 
@@ -113,6 +125,9 @@ static void GfxInitDP(void)
 	gDPSetRenderMode(glistp++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
 	gDPSetColorDither(glistp++, G_CD_MAGICSQ);
 	gDPSetCycleType(glistp++, G_CYC_FILL);
+#if REVISION >= 199707
+	gDPSetAlphaDither(glistp++, G_AD_PATTERN);
+#endif
 	gDPPipeSync(glistp++);
 }
 
@@ -232,10 +247,14 @@ static void GfxMakeTask(void)
 	gfx_task->task.t.data_ptr = (u64 *)framep->gfx;
 	gfx_task->task.t.data_size = sizeof(Gfx)*len;
 	gfx_task->task.t.yield_data_ptr = gfx_sp_yield;
+#if REVISION == 199605 /* ? */
+	gfx_task->task.t.yield_data_size = 0xBA0;
+#else
 	gfx_task->task.t.yield_data_size = OS_YIELD_DATA_SIZE;
+#endif
 }
 
-void GfxStart(void)
+void GfxBegin(void)
 {
 	SegmentWrite();
 	GfxInitDP();
@@ -279,7 +298,7 @@ static void FrameInit(void)
 	gfx_task = &framep->task;
 	glistp = framep->gfx;
 	gfx_mem = (char *)framep->gfx + sizeof(framep->gfx);
-	GfxStart();
+	GfxBegin();
 	GfxClear(0x00000000);
 	GfxEnd();
 	ScQueueGfxTask(&framep->task);
@@ -287,7 +306,7 @@ static void FrameInit(void)
 	gfx_frame++;
 }
 
-static void FrameStart(void)
+static void FrameBegin(void)
 {
 	framep = &frame_data[gfx_frame & 1];
 	SegmentSet(SEG_FRAME, framep);
@@ -434,11 +453,18 @@ static void ContInit(void)
 	controller_data[0].status = &cont_status[0];
 	controller_data[0].pad    = &cont_pad[0];
 	osContInit(&si_mq, &cont_bitpattern, cont_status);
+#ifdef DISK
+	eeprom_status = 1;
+#else
 	eeprom_status = osEepromProbe(&si_mq);
+#endif
 	for (c = 0, i = 0; i < MAXCONTROLLERS && c < CONTROLLER_MAX; i++)
 	{
 		if (cont_bitpattern & (1 << i))
 		{
+#ifdef MOTOR
+			controller_data[c  ].port = i;
+#endif
 			controller_data[c  ].status = &cont_status[i];
 			controller_data[c++].pad    = &cont_pad[i];
 		}
@@ -450,6 +476,7 @@ extern const char _MainSegmentRomEnd[];
 extern const char _GfxSegmentRomStart[];
 extern const char _GfxSegmentRomEnd[];
 extern const char _AnimeSegmentRomStart[];
+extern const char _AnimeSegmentRomEnd[];
 extern const char _DemoSegmentRomStart[];
 
 static void GfxInit(void)
@@ -464,7 +491,14 @@ static void GfxInit(void)
 	gfx_cimg[2] = K0_TO_PHYS(c_image_c);
 	mario_anime_buf = MemAlloc(16384, MEM_ALLOC_L);
 	SegmentSet(SEG_MARIO_ANIME, mario_anime_buf);
+#ifdef DISK
+	BankInitAnime(
+		&mario_anime_bank, _AnimeSegmentRomStart, _AnimeSegmentRomEnd,
+		mario_anime_buf
+	);
+#else
 	BankInit(&mario_anime_bank, _AnimeSegmentRomStart, mario_anime_buf);
+#endif
 	demo_buf = MemAlloc(2048, MEM_ALLOC_L);
 	SegmentSet(SEG_DEMO, demo_buf);
 	BankInit(&demo_bank, _DemoSegmentRomStart, demo_buf);
@@ -474,17 +508,28 @@ static void GfxInit(void)
 	MemLoadPres(SEG_GFX, _GfxSegmentRomStart, _GfxSegmentRomEnd);
 }
 
-extern PRGLANG p_main[];
+extern SEQLANG seq_main[];
 
 void GfxProc(UNUSED void *arg)
 {
-	PRGLANG *pc;
+	SEQLANG *pc;
+	debugf(("start gfx thread\n"));
 	GfxInit();
+#ifdef MOTOR
+	motor_8024C4A0();
+#endif
+	debugf(("init ctrl\n"));
 	ContInit();
+	debugf(("done ctrl\n"));
+#ifdef MOTOR
+	motor_8024CC10();
+#endif
 	BackupInit();
 	ScSetClient(SC_GFXCLIENT, &gfx_client, &gfx_vi_mq, (OSMesg)1);
-	pc = SegmentToVirtual(p_main);
-	Na_BgmPlay(2, NA_SEQ_SE, 0);
+	pc = SegmentToVirtual(seq_main);
+#if REVISION != 199605
+	Na_BgmPlay(NA_HANDLE_SE, NA_SEQ_SE, 0);
+#endif
 	AudSetMode(BuGetSound());
 	FrameInit();
 	for (;;)
@@ -495,12 +540,18 @@ void GfxProc(UNUSED void *arg)
 			continue;
 		}
 		TimeGfxCPU(TIME_GFXCPU_START);
-		if (cont_bitpattern) osContStartReadData(&si_mq);
+		if (cont_bitpattern)
+		{
+#ifdef MOTOR
+			motor_8024C4E4();
+#endif
+			osContStartReadData(&si_mq);
+		}
 		AudTick();
-		FrameStart();
+		FrameBegin();
 		ContProc();
-		pc = PrgLangExec(pc);
+		pc = SeqExec(pc);
 		FrameEnd();
-		if (debug_mem) dprintf(180, 20, "BUF %d", gfx_mem-(char *)glistp);
+		if (debug_info) dprintf(180, 20, "BUF %d", gfx_mem-(char *)glistp);
 	}
 }

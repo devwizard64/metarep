@@ -1,5 +1,9 @@
 #include <sm64.h>
 
+#ifdef DISK
+#define BankLoad BankLoadAnime
+#endif
+
 int PL_IsAnimeLast1F(PLAYER *pl)
 {
 	OBJECT *obj = pl->obj;
@@ -43,7 +47,7 @@ int PL_SetAnime(PLAYER *pl, int index)
 	return obj->s.skel.frame;
 }
 
-int PL_SetAnimeV(PLAYER *pl, int index, int speed)
+int PL_SetAnimeV(PLAYER *pl, int index, int vspeed)
 {
 	OBJECT *obj = pl->obj;
 	ANIME *anime = pl->anime->buf;
@@ -63,15 +67,15 @@ int PL_SetAnimeV(PLAYER *pl, int index, int speed)
 		}
 		else if (anime->flag & ANIME_REVERSE)
 		{
-			obj->s.skel.vframe = (anime->start << 16) + speed;
+			obj->s.skel.vframe = (anime->start << 16) + vspeed;
 		}
 		else
 		{
-			obj->s.skel.vframe = (anime->start << 16) - speed;
+			obj->s.skel.vframe = (anime->start << 16) - vspeed;
 		}
 		obj->s.skel.frame = obj->s.skel.vframe >> 16;
 	}
-	obj->s.skel.vspeed = speed;
+	obj->s.skel.vspeed = vspeed;
 	return obj->s.skel.frame;
 }
 
@@ -124,7 +128,7 @@ int PL_IsAnimeAtFrame(PLAYER *pl, SHORT frame)
 	return result;
 }
 
-int PL_GetAnimePos(OBJECT *obj, SHORT angy, SVEC pos)
+SHORT ObjGetAnimePos(OBJECT *obj, SHORT angy, SVEC pos)
 {
 	float x, z;
 	ANIME *anime = obj->s.skel.anime;
@@ -133,9 +137,9 @@ int PL_GetAnimePos(OBJECT *obj, SHORT angy, SVEC pos)
 	short *val = SegmentToVirtual(anime->val);
 	float s = SIN(angy);
 	float c = COS(angy);
-	x      = (float)val[AnimeIndex(frame, &tbl)] / 4;
-	pos[1] = (float)val[AnimeIndex(frame, &tbl)] / 4;
-	z      = (float)val[AnimeIndex(frame, &tbl)] / 4;
+	x      = val[AnimeIndex(frame, &tbl)] / 4.0F;
+	pos[1] = val[AnimeIndex(frame, &tbl)] / 4.0F;
+	z      = val[AnimeIndex(frame, &tbl)] / 4.0F;
 	pos[0] =  x*c + z*s;
 	pos[2] = -x*s + z*c;
 	return anime->flag;
@@ -144,7 +148,7 @@ int PL_GetAnimePos(OBJECT *obj, SHORT angy, SVEC pos)
 void PL_UseAnimePos(PLAYER *pl)
 {
 	SVEC pos;
-	SHORT flag = PL_GetAnimePos(pl->obj, pl->ang[1], pos);
+	SHORT flag = ObjGetAnimePos(pl->obj, pl->ang[1], pos);
 	if (flag & (ANIME_NOPOS|ANIME_Y))
 	{
 		pl->pos[0] += pos[0];
@@ -159,7 +163,7 @@ void PL_UseAnimePos(PLAYER *pl)
 SHORT PL_GetAnimeY(PLAYER *pl)
 {
 	SVEC pos;
-	PL_GetAnimePos(pl->obj, 0, pos);
+	ObjGetAnimePos(pl->obj, 0, pos);
 	return pos[1];
 }
 
@@ -176,7 +180,7 @@ void PL_TrigJumpVoice(PLAYER *pl)
 {
 	if (!(pl->flag & PL_VOICE))
 	{
-#ifdef NEWVOICE
+#if REVISION >= 199609
 		if (pl->state == PS_JUMP_02)    Na_ObjSePlay(Na_Se2_2B(), pl->obj);
 		else                            Na_ObjSePlay(Na_Se2_00(), pl->obj);
 #else
@@ -207,7 +211,7 @@ void PL_PlayEffect(PLAYER *pl, Na_Se se, int flag)
 	{
 		pl->effect |= PE_00004000;
 	}
-	if ((pl->flag & PL_METALCAP) || se == NA_SE0_43 || se == NA_SE2_1F)
+	if (pl->flag & PL_METALCAP || se == NA_SE0_43 || se == NA_SE2_1F)
 	{
 		Na_ObjSePlay(se, pl->obj);
 	}
@@ -228,28 +232,28 @@ void PL_TrigEffect(PLAYER *pl, Na_Se se, int flag)
 
 void PL_PlayLandEffect(PLAYER *pl, Na_Se se)
 {
-	PL_PlayEffect(pl, (pl->flag & PL_METALCAP) ? NA_SE0_29 : se, TRUE);
+	PL_PlayEffect(pl, pl->flag & PL_METALCAP ? NA_SE0_29 : se, TRUE);
 }
 
 void PL_TrigLandEffect(PLAYER *pl, Na_Se se)
 {
-	PL_TrigEffect(pl, (pl->flag & PL_METALCAP) ? NA_SE0_29 : se, TRUE);
+	PL_TrigEffect(pl, pl->flag & PL_METALCAP ? NA_SE0_29 : se, TRUE);
 }
 
 void PL_PlayFallEffect(PLAYER *pl, Na_Se se)
 {
-	PL_PlayEffect(pl, (pl->flag & PL_METALCAP) ? NA_SE0_2B : se, TRUE);
+	PL_PlayEffect(pl, pl->flag & PL_METALCAP ? NA_SE0_2B : se, TRUE);
 }
 
 void PL_TrigFallEffect(PLAYER *pl, Na_Se se)
 {
-	PL_TrigEffect(pl, (pl->flag & PL_METALCAP) ? NA_SE0_2B : se, TRUE);
+	PL_TrigEffect(pl, pl->flag & PL_METALCAP ? NA_SE0_2B : se, TRUE);
 }
 
 void PL_TrigJumpEffect(PLAYER *pl, Na_Se se, Na_Se voice)
 {
 	if (se == NA_SE0_00) PL_TrigEffect(
-		pl, (pl->flag & PL_METALCAP) ? NA_SE0_28 : NA_SE0_00, TRUE
+		pl, pl->flag & PL_METALCAP ? NA_SE0_28 : NA_SE0_00, TRUE
 	);
 	else PL_TrigSound(pl, se, PL_SOUND);
 	if (voice == PL_JUMPVOICE) PL_TrigJumpVoice(pl);
@@ -296,7 +300,7 @@ int PL_GetSlip(PLAYER *pl)
 		}
 	}
 	if (
-		pl->state == PS_MOVE_08 && pl->ground->ny > 0.5F &&
+		pl->state == PS_WALK_08 && pl->ground->ny > 0.5F &&
 		result == SLIP_DEFAULT
 	) result = SLIP_21;
 	return result;
@@ -324,7 +328,7 @@ u32 PL_GetSurface(PLAYER *pl)
 		{
 			result = 2 << 16;
 		}
-		else if (code >= 33 && code <= 39) /* T:bgcode */
+		else if (code >= BG_33 && code <= BG_39)
 		{
 			result = 7 << 16;
 		}
@@ -397,16 +401,6 @@ int PL_IsFaceDownSlope(PLAYER *pl, int flag)
 	angy = pl->ground_ang - angy;
 	return -0x4000 < angy && angy < 0x4000;
 }
-
-/* degrees */
-#define COS_1       0.9998477F
-#define COS_5       0.9961947F
-#define COS_10      0.9848077F
-#define COS_15      0.9659258F
-#define COS_20      0.9396926F
-#define COS_30      0.8660254F
-#define COS_38      0.7880108F
-#define COS_90      0.0000000F
 
 int PL_IsSlipMin(PLAYER *pl)
 {
@@ -618,30 +612,30 @@ static u32 PL_SetJump(PLAYER *pl, u32 state, u32 code)
 	return state;
 }
 
-static u32 PL_SetMove(PLAYER *pl, u32 state, UNUSED u32 code)
+static u32 PL_SetWalk(PLAYER *pl, u32 state, UNUSED u32 code)
 {
 	SHORT slip = PL_GetSlip(pl);
 	float speed = pl->speed;
 	float stick_dist = pl->stick_dist <= 8 ? pl->stick_dist : 8;
 	switch (state)
 	{
-	case PS_MOVE_00:
+	case PS_WALK_00:
 		if (slip != SLIP_19)
 		{
 			if (0 <= speed && speed < stick_dist) pl->speed = stick_dist;
 		}
 		pl->obj->o_v7 = 0;
 		break;
-	case PS_MOVE_02:
-		if (0 <= speed && speed < stick_dist/2) pl->speed = stick_dist/2;
+	case PS_WALK_02:
+		if (0 <= speed && speed < stick_dist/2.0F) pl->speed = stick_dist/2.0F;
 		break;
-	case PS_MOVE_10:
-		if (PL_IsFaceDownSlope(pl, FALSE))  state = PS_MOVE_12;
-		else                                state = PS_MOVE_13;
+	case PS_WALK_10:
+		if (PL_IsFaceDownSlope(pl, FALSE))  state = PS_WALK_12;
+		else                                state = PS_WALK_13;
 		break;
-	case PS_MOVE_11:
-		if (PL_IsFaceDownSlope(pl, FALSE))  state = PS_MOVE_14;
-		else                                state = PS_MOVE_15;
+	case PS_WALK_11:
+		if (PL_IsFaceDownSlope(pl, FALSE))  state = PS_WALK_14;
+		else                                state = PS_WALK_15;
 		break;
 	}
 	return state;
@@ -678,7 +672,7 @@ int PL_SetState(PLAYER *pl, u32 state, u32 code)
 {
 	switch (state & PC_MASK)
 	{
-	case PC_MOVE: state = PL_SetMove(pl, state, code); break;
+	case PC_WALK: state = PL_SetWalk(pl, state, code); break;
 	case PC_JUMP: state = PL_SetJump(pl, state, code); break;
 	case PC_SWIM: state = PL_SetSwim(pl, state, code); break;
 	case PC_DEMO: state = PL_SetDemo(pl, state, code); break;
@@ -690,15 +684,15 @@ int PL_SetState(PLAYER *pl, u32 state, u32 code)
 	pl->code = code;
 	pl->phase = 0;
 	pl->timer = 0;
-	return 1;
+	return TRUE;
 }
 
 int PL_SetTripJump(PLAYER *pl)
 {
 	if (pl->sink >= 11)
 	{
-		if (!pl->take)  return PL_SetState(pl, PS_MOVE_36, 0);
-		else            return PL_SetState(pl, PS_MOVE_37, 0);
+		if (!pl->take)  return PL_SetState(pl, PS_WALK_36, 0);
+		else            return PL_SetState(pl, PS_WALK_37, 0);
 	}
 	if (PL_IsSlipJump(pl))
 	{
@@ -710,10 +704,10 @@ int PL_SetTripJump(PLAYER *pl)
 	}
 	else switch (pl->prevstate)
 	{
-	case PS_MOVE_30: PL_SetState(pl, PS_JUMP_01, 0); break;
-	case PS_MOVE_31: PL_SetState(pl, PS_JUMP_01, 0); break;
+	case PS_WALK_30: PL_SetState(pl, PS_JUMP_01, 0); break;
+	case PS_WALK_31: PL_SetState(pl, PS_JUMP_01, 0); break;
 	case PS_WAIT_33: PL_SetState(pl, PS_JUMP_01, 0); break;
-	case PS_MOVE_32:
+	case PS_WALK_32:
 		if (pl->flag & PL_WINGCAP)  PL_SetState(pl, PS_JUMP_14, 0);
 		else if (pl->speed > 20)    PL_SetState(pl, PS_JUMP_02, 0);
 		else                        PL_SetState(pl, PS_JUMP_00, 0);
@@ -723,7 +717,7 @@ int PL_SetTripJump(PLAYER *pl)
 		break;
 	}
 	pl->jump_timer = 0;
-	return 1;
+	return TRUE;
 }
 
 int PL_SetStateJump(PLAYER *pl, u32 state, u32 code)
@@ -731,12 +725,12 @@ int PL_SetStateJump(PLAYER *pl, u32 state, u32 code)
 	UNUSED u32 prevstate = pl->state;
 	if (pl->sink >= 11)
 	{
-		if (!pl->take)  return PL_SetState(pl, PS_MOVE_36, 0);
-		else            return PL_SetState(pl, PS_MOVE_37, 0);
+		if (!pl->take)  return PL_SetState(pl, PS_WALK_36, 0);
+		else            return PL_SetState(pl, PS_WALK_37, 0);
 	}
-	if (PL_IsSlipJump(pl))    PL_SetSlipJump(pl);
-	else                        PL_SetState(pl, state, code);
-	return 1;
+	if (PL_IsSlipJump(pl))  PL_SetSlipJump(pl);
+	else                    PL_SetState(pl, state, code);
+	return TRUE;
 }
 
 int PL_SetStateDrop(PLAYER *pl, u32 state, u32 code)
@@ -755,32 +749,32 @@ int PL_CheckMotion(PLAYER *pl)
 {
 	if (pl->status & PA_JUMPREQ) return PL_SetState(pl, PS_JUMP_00, 0);
 	if (pl->status & PA_LANDREQ) return PL_SetState(pl, PS_JUMP_0C, 0);
-	if (pl->status & PA_MOVEREQ) return PL_SetState(pl, PS_MOVE_00, 0);
-	if (pl->status & PA_SLIPREQ) return PL_SetState(pl, PS_MOVE_10, 0);
-	return 0;
+	if (pl->status & PA_WALKREQ) return PL_SetState(pl, PS_WALK_00, 0);
+	if (pl->status & PA_SLIPREQ) return PL_SetState(pl, PS_WALK_10, 0);
+	return FALSE;
 }
 
 int PL_CheckMotionTake(PLAYER *pl)
 {
 	if (pl->status & PA_JUMPREQ) return PL_SetState(pl, PS_JUMP_20, 0);
 	if (pl->status & PA_LANDREQ) return PL_SetState(pl, PS_JUMP_21, 0);
-	if (pl->status & PA_MOVEREQ) return PL_SetState(pl, PS_MOVE_02, 0);
-	if (pl->status & PA_SLIPREQ) return PL_SetState(pl, PS_MOVE_11, 0);
-	return 0;
+	if (pl->status & PA_WALKREQ) return PL_SetState(pl, PS_WALK_02, 0);
+	if (pl->status & PA_SLIPREQ) return PL_SetState(pl, PS_WALK_11, 0);
+	return FALSE;
 }
 
 int PL_EnterField(PLAYER *pl)
 {
 	camera_80286188(pl->scene->cam, pl->scene->cam->_01, 1); /* T:enum */
 	SVecSet(pl->rot, 0, 0, 0);
-	if (!pl->take)  return PL_SetState(pl, PS_MOVE_00, 0);
-	else            return PL_SetState(pl, PS_MOVE_02, 0);
+	if (!pl->take)  return PL_SetState(pl, PS_WALK_00, 0);
+	else            return PL_SetState(pl, PS_WALK_02, 0);
 }
 
 int PL_EnterWater(PLAYER *pl)
 {
-	pl->speed /= 4;
-	pl->vel[1] /= 2;
+	pl->speed /= 4.0F;
+	pl->vel[1] /= 2.0F;
 	pl->pos[1] = pl->water - 100;
 	pl->ang[2] = 0;
 	SVecSet(pl->rot, 0, 0, 0);
@@ -790,34 +784,34 @@ int PL_EnterWater(PLAYER *pl)
 	return PL_SetState(pl, PS_SWIM_22, 0);
 }
 
-static void PL_ProcPress(PLAYER *pl)
+static void PL_ShowPress(PLAYER *pl)
 {
 	static u8 unpresstab[] =
 		{70, 50, 50, 60, 70, 80, 80, 60, 40, 20, 20, 30, 50, 60, 60, 40};
 	if (pl->press != 0xFF)
 	{
-		if (!pl->press)
+		if (pl->press == 0)
 		{
-			FVecSet(pl->obj->s.scale, 1.0F, 1.0F, 1.0F);
+			FVecSet(pl->obj->s.scale, 1, 1, 1);
 		}
 		else if (pl->press <= 16)
 		{
-			pl->press--;
-			pl->obj->s.scale[1] = 1 - 0.6F*unpresstab[16-(pl->press+1)]/100;
-			pl->obj->s.scale[0] = 1 + 0.4F*unpresstab[16-(pl->press+1)]/100;
+			pl->press -= 1;
+			pl->obj->s.scale[1] = 1 - 0.6F*unpresstab[15-pl->press]/100;
+			pl->obj->s.scale[0] = 1 + 0.4F*unpresstab[15-pl->press]/100;
 			pl->obj->s.scale[2] = pl->obj->s.scale[0];
 		}
 		else
 		{
-			pl->press--;
+			pl->press -= 1;
 			FVecSet(pl->obj->s.scale, 1.4F, 0.4F, 1.4F);
 		}
 	}
 }
 
-static void PL_ProcDebug(PLAYER *pl)
+static void PL_CheckDebug(PLAYER *pl)
 {
-	if (debug_mem)
+	if (debug_info)
 	{
 		float x = DIST2(pl->ground->nx, pl->ground->nz);
 		float y = pl->ground->ny;
@@ -827,7 +821,7 @@ static void PL_ProcDebug(PLAYER *pl)
 	}
 }
 
-static void PL_ProcButton(PLAYER *pl)
+static void PL_CheckButton(PLAYER *pl)
 {
 	if (pl->cont->down & A_BUTTON) pl->status |= PA_JUMPREQ;
 	if (pl->cont->held & A_BUTTON) pl->status |= PA_JUMPSTA;
@@ -843,16 +837,16 @@ static void PL_ProcButton(PLAYER *pl)
 	else if (pl->b_timer < 0xFF)        pl->b_timer++;
 }
 
-static void PL_ProcStick(PLAYER *pl)
+static void PL_CheckStick(PLAYER *pl)
 {
 	CONTROLLER *cont = pl->cont;
-	float dist = 64 * SQUARE(cont->dist/64);
-	if (!pl->press) pl->stick_dist = dist/2;
-	else            pl->stick_dist = dist/8;
+	float dist = 64 * SQUARE(cont->dist/64.0F);
+	if (!pl->press) pl->stick_dist = dist/2.0F;
+	else            pl->stick_dist = dist/8.0F;
 	if (pl->stick_dist > 0)
 	{
 		pl->stick_ang = ATAN2(-cont->y, cont->x) + pl->scene->cam->_02;
-		pl->status |= PA_MOVEREQ;
+		pl->status |= PA_WALKREQ;
 	}
 	else
 	{
@@ -860,7 +854,7 @@ static void PL_ProcStick(PLAYER *pl)
 	}
 }
 
-static void PL_ProcBG(PLAYER *pl)
+static void PL_CheckBG(PLAYER *pl)
 {
 	float gas;
 	BGHitWall(&pl->pos[0], &pl->pos[1], &pl->pos[2], 60, 50);
@@ -887,8 +881,8 @@ static void PL_ProcBG(PLAYER *pl)
 			pl->status |= PA_SLIPREQ;
 		}
 		if (
-			(pl->ground->flag & BG_MOVE) ||
-			(pl->roof && (pl->roof->flag & BG_MOVE))
+			pl->ground->flag & BG_MOVE ||
+			(pl->roof && pl->roof->flag & BG_MOVE)
 		)
 		{
 			float dist = pl->roof_y - pl->ground_y;
@@ -904,24 +898,27 @@ static void PL_ProcBG(PLAYER *pl)
 	}
 }
 
-static void PL_ProcStatus(PLAYER *pl)
+static void PL_CheckStatus(PLAYER *pl)
 {
 	pl->effect = 0;
 	pl->status = 0;
 	pl->hit_status = pl->obj->hit_status;
 	pl->flag &= 0xFFFFFF;
-	PL_ProcButton(pl);
-	PL_ProcStick(pl);
-	PL_ProcBG(pl);
-	PL_ProcDebug(pl);
+	PL_CheckButton(pl);
+	PL_CheckStick(pl);
+	PL_CheckBG(pl);
+	PL_CheckDebug(pl);
 	if (camera_8033C848 & 0x2000)
 	{
 		if (pl->state & PF_VIEW) pl->status |= PA_VIEWREQ;
 		else camera_8033C848 &= ~0x2000;
 	}
-	if (!(pl->status & (PA_MOVEREQ|PA_JUMPREQ))) pl->status |= PA_WAITREQ;
-	if (pl->obj->o_hit_result & (1|2|0x10)) pl->status |= PA_HIT;
-	PL_ProcTrampoline(pl);
+	if (!(pl->status & (PA_WALKREQ|PA_JUMPREQ))) pl->status |= PA_WAITREQ;
+	if (pl->obj->o_hit_result & (HR_000001|HR_000002|HR_000010))
+	{
+		pl->status |= PA_HIT;
+	}
+	PL_CheckTrampoline(pl);
 	if (pl->wall_timer > 0) pl->wall_timer--;
 	if (pl->jump_timer > 0) pl->jump_timer--;
 }
@@ -956,13 +953,13 @@ static void PL_ProcPower(PLAYER *pl)
 {
 	if (pl->power >= 0x100)
 	{
-		if (!(pl->recover | pl->damage))
+		if (!((unsigned int)pl->recover | (unsigned int)pl->damage))
 		{
-			if ((pl->status & PA_GAS) && !(pl->state & PF_DEMO))
+			if (pl->status & PA_GAS && !(pl->state & PF_DEMO))
 			{
 				if (!(pl->flag & PL_METALCAP) && !debug_stage) pl->power -= 4;
 			}
-			else if ((pl->state & PF_SWIM) && !(pl->state & PF_DEMO))
+			else if (pl->state & PF_SWIM && !(pl->state & PF_DEMO))
 			{
 				int issnow = (pl->scene->env & ENV_MASK) == ENV_SNOW;
 				if (pl->pos[1] >= pl->water-140 && !issnow)
@@ -990,30 +987,41 @@ static void PL_ProcPower(PLAYER *pl)
 		if ((pl->state & PC_MASK) == PC_SWIM && pl->power < 0x300)
 		{
 			Na_FixSePlay(NA_SE1_18);
+#ifdef MOTOR
+			if (motor_8030CE0C == 0)
+			{
+				motor_8030CE0C = 36;
+				if (motor_8024C8AC()) motor_8024C834(3, 30);
+			}
+		}
+		else
+		{
+			motor_8030CE0C = 0;
+#endif
 		}
 	}
 }
 
-static void PL_ProcInfo(PLAYER *pl)
+static void PL_SyncInfo(PLAYER *pl)
 {
-	pl->shape->state = pl->state;
+	pl->ctrl->state = pl->state;
 	pl->camera->state = pl->state;
 	SVecCpy(pl->camera->ang, pl->ang);
 	if (!(pl->flag & PL_02000000)) FVecCpy(pl->camera->pos, pl->pos);
 }
 
-static void PL_InitShape(PLAYER *pl)
+static void PL_ClearCtrl(PLAYER *pl)
 {
-	PL_SHAPE *pls = pl->shape;
-	pls->head = 1;
-	pls->eyes = 0;
-	pls->hand = 0;
-	pls->cap = 0;
-	pls->wing = 0;
+	PL_CTRL *ctrl = pl->ctrl;
+	ctrl->head = 1;
+	ctrl->eyes = 0;
+	ctrl->hand = 0;
+	ctrl->cap = 0;
+	ctrl->wing = 0;
 	pl->flag &= ~PL_00000040;
 }
 
-static void PL_ProcSink(PLAYER *pl)
+static void PL_ShowSink(PLAYER *pl)
 {
 	OBJECT *obj = pl->obj;
 	if (obj->s.m) (*obj->s.m)[3][1] -= pl->sink;
@@ -1032,7 +1040,7 @@ static u32 PL_ProcCap(PLAYER *pl)
 			state == PS_DEMO_06 ||
 			state == PS_DEMO_08 ||
 			state == PS_SPEC_31
-		)) pl->cap_timer--;
+		)) pl->cap_timer -= 1;
 		if (pl->cap_timer == 0)
 		{
 			AudStopSpecialBGM();
@@ -1040,7 +1048,7 @@ static u32 PL_ProcCap(PLAYER *pl)
 			if (!(pl->flag & PL_ANYCAP)) pl->flag &= ~PL_HEADCAP;
 		}
 		if (pl->cap_timer == 60) AudFadeoutSpecialBGM();
-		if (pl->cap_timer < 64 && (1ULL << pl->cap_timer & flash_pattern))
+		if (pl->cap_timer < 64 && 1ULL << pl->cap_timer & flash_pattern)
 		{
 			flag &= ~PL_SPECIALCAP;
 			if (!(flag & PL_ANYCAP)) flag &= ~PL_HEADCAP;
@@ -1049,43 +1057,40 @@ static u32 PL_ProcCap(PLAYER *pl)
 	return flag;
 }
 
-static void PL_ProcShape(PLAYER *pl)
+static void PL_SyncCtrl(PLAYER *pl)
 {
-	PL_SHAPE *pls = pl->shape;
+	PL_CTRL *ctrl = pl->ctrl;
 	u32 flag = PL_ProcCap(pl);
-	if (flag & PL_VANISHCAP) pls->cap = 0x100 | 0x80;
-	if (flag & PL_METALCAP) pls->cap |= 0x200;
-	if (flag & PL_00000040) pls->cap |= 0x200;
-	if (pl->invincible > 2 && (gfx_frame & 1))
+	if (flag & PL_VANISHCAP) ctrl->cap = 0x100 | 0x80;
+	if (flag & PL_METALCAP) ctrl->cap |= 0x200;
+	if (flag & PL_00000040) ctrl->cap |= 0x200;
+	if (pl->invincible > 2 && gfx_frame & 1)
 	{
 		mario->obj->s.s.flag |= SHP_OBJHIDE;
 	}
 	if (flag & PL_HANDCAP)
 	{
-		if (flag & PL_WINGCAP)  pls->hand = 4;
-		else                    pls->hand = 3;
+		if (flag & PL_WINGCAP)  ctrl->hand = 4;
+		else                    ctrl->hand = 3;
 	}
 	if (flag & PL_HEADCAP)
 	{
-		if (flag & PL_WINGCAP)  pls->head = 2;
-		else                    pls->head = 0;
+		if (flag & PL_WINGCAP)  ctrl->head = 2;
+		else                    ctrl->head = 0;
 	}
 	if (pl->state & PF_SHRT)    pl->obj->hit_h = 100;
 	else                        pl->obj->hit_h = 160;
-	if ((pl->flag & PL_00000080) && pl->alpha != 0xFF)
+	if (pl->flag & PL_00000080 && pl->alpha != 0xFF)
 	{
-		pls->cap &= ~0xFF;
-		pls->cap |= 0x100 | pl->alpha;
+		ctrl->cap &= ~0xFF;
+		ctrl->cap |= 0x100 | pl->alpha;
 	}
 }
 
 UNUSED
 static void DebugCap(USHORT button, u32 flag, USHORT timer, USHORT bgm)
 {
-	if (
-		(cont1->held & Z_TRIG) && (cont1->down & button) &&
-		!(mario->flag & flag)
-	)
+	if (cont1->held & Z_TRIG && cont1->down & button && !(mario->flag & flag))
 	{
 		mario->flag |= PL_HEADCAP + flag;
 		if (timer > mario->cap_timer) mario->cap_timer = timer;
@@ -1093,14 +1098,29 @@ static void DebugCap(USHORT button, u32 flag, USHORT timer, USHORT bgm)
 	}
 }
 
+#ifdef MOTOR
+extern OBJLANG obj_13003174[];
+
+static void PL_ProcMotor(void)
+{
+	if      (mario->effect & PE_00000010)   motor_8024C834(5, 80);
+	else if (mario->effect & PE_00000002)   motor_8024C834(5, 80);
+	else if (mario->effect & PE_00040000)   motor_8024C834(5, 80);
+	if (mario->take && mario->take->script == SegmentToVirtual(obj_13003174))
+	{
+		motor_8024C924();
+	}
+}
+#endif
+
 u32 MarioExec(UNUSED OBJECT *obj)
 {
-	int result = 1;
-	if (mario->state != PS_NULL)
+	int result = TRUE;
+	if (mario->state)
 	{
 		mario->obj->s.s.flag &= ~SHP_OBJHIDE;
-		PL_InitShape(mario);
-		PL_ProcStatus(mario);
+		PL_ClearCtrl(mario);
+		PL_CheckStatus(mario);
 		PL_CheckGroundCollision(mario);
 		PL_CheckCollision(mario);
 		if (!mario->ground) return 0;
@@ -1109,42 +1129,45 @@ u32 MarioExec(UNUSED OBJECT *obj)
 			switch (mario->state & PC_MASK)
 			{
 			case PC_WAIT: result = PL_ExecWait(mario); break;
-			case PC_MOVE: result = PL_ExecMove(mario); break;
+			case PC_WALK: result = PL_ExecWalk(mario); break;
 			case PC_JUMP: result = PL_ExecJump(mario); break;
 			case PC_SWIM: result = PL_ExecSwim(mario); break;
 			case PC_DEMO: result = PL_ExecDemo(mario); break;
 			case PC_SPEC: result = PL_ExecSpec(mario); break;
-			case PC_TAKE: result = PL_ExecTake(mario); break;
+			case PC_ATCK: result = PL_ExecAtck(mario); break;
 			}
 		}
-		PL_ProcSink(mario);
-		PL_ProcPress(mario);
+		PL_ShowSink(mario);
+		PL_ShowPress(mario);
 		PL_ProcSwimCamera(mario);
 		PL_ProcPower(mario);
-		PL_ProcInfo(mario);
-		PL_ProcShape(mario);
+		PL_SyncInfo(mario);
+		PL_SyncCtrl(mario);
 		if (mario->ground->code == BG_44)
 		{
-			object_a_802AE4C0(0, mario->ground->attr << 8);
-#if REVISION > 199606
+			enemya_802AE4C0(0, mario->ground->attr << 8);
+#if REVISION >= 199609
 			Na_ObjSePlay(NA_SE4_10, mario->obj);
 #endif
 		}
 		if (mario->ground->code == BG_56)
 		{
-			object_a_802AE4C0(1, 0);
-#if REVISION > 199606
+			enemya_802AE4C0(1, 0);
+#if REVISION >= 199609
 			Na_ObjSePlay(NA_SE4_10, mario->obj);
 #endif
 		}
 		AudProcEndlessMusic();
 		mario->obj->o_hit_result = 0;
+#ifdef MOTOR
+		PL_ProcMotor();
+#endif
 		return mario->effect;
 	}
 	return 0;
 }
 
-extern OBJLANG o_13003DF8[];
+extern OBJLANG obj_13003DF8[];
 
 void MarioEnter(void)
 {
@@ -1186,9 +1209,9 @@ void MarioEnter(void)
 	if (mario->pos[1] < mario->ground_y) mario->pos[1] = mario->ground_y;
 	mario->obj->s.pos[1] = mario->pos[1];
 	mario->state = mario->pos[1] <= mario->water-100 ? PS_SWIM_00 : PS_WAIT_01;
-	PL_InitShape(mario);
-	PL_ProcInfo(mario);
-	mario->shape->punch = 0;
+	PL_ClearCtrl(mario);
+	PL_SyncInfo(mario);
+	mario->ctrl->punch = 0;
 	mario->obj->o_posx = mario->pos[0];
 	mario->obj->o_posy = mario->pos[1];
 	mario->obj->o_posz = mario->pos[2];
@@ -1199,11 +1222,11 @@ void MarioEnter(void)
 	SVecSet(mario->obj->s.ang, 0, mario->ang[1], 0);
 	if (BuGetCap(pos))
 	{
-		OBJECT *obj = ObjMakeHere(mario->obj, S_CAP_S, o_13003DF8);
+		OBJECT *obj = ObjMakeHere(mario->obj, S_CAP_S, obj_13003DF8);
 		obj->o_posx = pos[0];
 		obj->o_posy = pos[1];
 		obj->o_posz = pos[2];
-		obj->mem[O_VELF].i = 0;
+		obj->work[O_VELF].i = 0;
 		obj->o_angy = 0;
 	}
 }
@@ -1215,7 +1238,7 @@ void MarioInit(void)
 	mario->state = PS_NULL;
 	mario->actor = &player_actor[0];
 	mario->camera = &pl_camera_data[0];
-	mario->shape = &pl_shape_data[0];
+	mario->ctrl = &pl_ctrl_data[0];
 	mario->cont = &controller_data[0];
 	mario->anime = &mario_anime_bank;
 	mario->coin = 0;

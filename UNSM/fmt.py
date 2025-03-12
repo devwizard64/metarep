@@ -252,7 +252,7 @@ fmt_o = (
 	"O_ROTY", # 36
 	"O_ROTZ", # 37
 	"O_ANIMEP", # 38
-	"O_TAKE", # 39
+	"O_ACTION", # 39
 	"O_WALL_R", # 40
 	"O_DRAG", # 41
 	"O_HIT_TYPE", # 42
@@ -262,12 +262,12 @@ fmt_o = (
 	"O_RELZ", # 46
 	"O_CODE", # 47
 	"48", # 48
-	"O_STATE", # 49
+	"O_MODE", # 49
 	"O_PHASE", # 50
 	"O_TIMER", # 51
 	"O_BOUNCE", # 52
-	"O_PL_DIST", # 53
-	"O_PL_ANG", # 54
+	"O_TARGETDIST", # 53
+	"O_TARGETANG", # 54
 	"O_SAVEX", # 55
 	"O_SAVEY", # 56
 	"O_SAVEZ", # 57
@@ -278,7 +278,7 @@ fmt_o = (
 	"O_AP", # 62
 	"O_HP", # 63
 	"O_ACTORINFO", # 64
-	"O_PREVSTATE", # 65
+	"O_PREVMODE", # 65
 	"O_HIT_FLAG", # 66
 	"O_CHECKDIST", # 67
 	"O_NCOIN", # 68
@@ -1602,98 +1602,98 @@ shp_TTM = {
 }
 
 shp_E0_code_data = {
-	# 0x80331920: shp_, # prg 40 125 (3a?)
-	# 0x80331928: shp_, # prg 41 181 (3a?)
-	0x80331938: shp_2F, # prg 43
-	0x80331998: shp_1H, # prg 55
-	0x803319A0: shp_1H, # prg 56
-	0x803319A8: shp_1H, # prg 57
-	0x803319B0: shp_1H, # prg 58
-	0x80331A68: shp_1A, # prg 81
-	0x80331A70: shp_1A, # prg 82
-	0x80331A80: shp_1A, # prg 84
-	0x80331AC8: shp_1B, # prg 93
-	0x80331AD0: shp_1B, # prg 94
-	0x80331AE0: shp_1B, # prg 96 88
-	0x80331B30: shp_2C, # prg 106
-	0x80331B40: shp_1K, # prg 108
-	0x80331B48: shp_2C, # prg 109
-	0x80331BB8: shp_1D, # prg 123
-	0x80331BC8: shp_1D, # prg 125
-	0x80331BD0: shp_1D, # prg 126
-	0x80331C28: shp_1E, # prg 137
-	0x80331C30: shp_1E, # prg 138
-	0x80331C48: shp_SSL, # prg 141
-	0x80331C98: shp_1F, # prg 151
-	0x80331CA0: shp_1F, # prg 152
-	0x80331CA8: shp_1F, # prg 153
-	0x80331CC0: shp_1K, # prg 156
-	0x80331D08: shp_1G, # prg 165
-	0x80331D10: shp_1G, # prg 166
-	0x80331D18: shp_1G, # prg 167
-	0x80331D28: shp_1G, # prg 169
-	0x80331D30: shp_1G, # prg 170
-	0x80331D38: shp_1G, # prg 171
-	0x80331D40: shp_1G, # prg 172
-	0x80331DC8: shp_1I, # prg 189
-	0x80331DD0: shp_1I, # prg 190
-	0x80331DD8: shp_1I, # prg 191
-	0x80331DE0: shp_1I, # prg 192
-	0x80331DE8: shp_1I, # prg 193
-	0x80331DF0: shp_1I, # prg 194
-	0x80331DF8: shp_1I, # prg 195
-	0x80331E00: shp_1I, # prg 196
-	0x80331F40: shp_2B, # prg 236
-	0x80331F48: shp_2B, # prg 237
-	0x80331F60: shp_2B, # prg 240
-	0x80331F68: shp_2B, # prg 241
-	0x80331F70: shp_2B, # prg 242
-	0x80331F78: shp_1D, # prg 243
-	0x80331FB8: shp_1F, # prg 251
-	0x80331FC0: shp_1F, # prg 252
-	0x80331FC8: shp_2C, # prg 253
-	0x80331FD8: shp_2C, # prg 255
-	0x80331FE0: shp_2C, # prg 256
-	0x80331FF0: shp_2C, # prg 258
-	0x80331FF8: shp_2C, # prg 259
-	0x80332000: shp_2C, # prg 260
-	0x80332008: shp_2C, # prg 261
-	0x80332010: shp_2C, # prg 262
-	0x80332018: shp_2C, # prg 263
-	0x803320E8: shp_2F, # prg 289
-	0x803320F0: shp_2F, # prg 290
-	0x80332108: shp_2F, # prg 293
-	0x80332158: shp_1K, # prg 303
+	# 0x80331920: shp_, # seq 40 125 (3a?)
+	# 0x80331928: shp_, # seq 41 181 (3a?)
+	0x80331938: shp_2F, # seq 43
+	0x80331998: shp_1H, # seq 55
+	0x803319A0: shp_1H, # seq 56
+	0x803319A8: shp_1H, # seq 57
+	0x803319B0: shp_1H, # seq 58
+	0x80331A68: shp_1A, # seq 81
+	0x80331A70: shp_1A, # seq 82
+	0x80331A80: shp_1A, # seq 84
+	0x80331AC8: shp_1B, # seq 93
+	0x80331AD0: shp_1B, # seq 94
+	0x80331AE0: shp_1B, # seq 96 88
+	0x80331B30: shp_2C, # seq 106
+	0x80331B40: shp_1K, # seq 108
+	0x80331B48: shp_2C, # seq 109
+	0x80331BB8: shp_1D, # seq 123
+	0x80331BC8: shp_1D, # seq 125
+	0x80331BD0: shp_1D, # seq 126
+	0x80331C28: shp_1E, # seq 137
+	0x80331C30: shp_1E, # seq 138
+	0x80331C48: shp_SSL, # seq 141
+	0x80331C98: shp_1F, # seq 151
+	0x80331CA0: shp_1F, # seq 152
+	0x80331CA8: shp_1F, # seq 153
+	0x80331CC0: shp_1K, # seq 156
+	0x80331D08: shp_1G, # seq 165
+	0x80331D10: shp_1G, # seq 166
+	0x80331D18: shp_1G, # seq 167
+	0x80331D28: shp_1G, # seq 169
+	0x80331D30: shp_1G, # seq 170
+	0x80331D38: shp_1G, # seq 171
+	0x80331D40: shp_1G, # seq 172
+	0x80331DC8: shp_1I, # seq 189
+	0x80331DD0: shp_1I, # seq 190
+	0x80331DD8: shp_1I, # seq 191
+	0x80331DE0: shp_1I, # seq 192
+	0x80331DE8: shp_1I, # seq 193
+	0x80331DF0: shp_1I, # seq 194
+	0x80331DF8: shp_1I, # seq 195
+	0x80331E00: shp_1I, # seq 196
+	0x80331F40: shp_2B, # seq 236
+	0x80331F48: shp_2B, # seq 237
+	0x80331F60: shp_2B, # seq 240
+	0x80331F68: shp_2B, # seq 241
+	0x80331F70: shp_2B, # seq 242
+	0x80331F78: shp_1D, # seq 243
+	0x80331FB8: shp_1F, # seq 251
+	0x80331FC0: shp_1F, # seq 252
+	0x80331FC8: shp_2C, # seq 253
+	0x80331FD8: shp_2C, # seq 255
+	0x80331FE0: shp_2C, # seq 256
+	0x80331FF0: shp_2C, # seq 258
+	0x80331FF8: shp_2C, # seq 259
+	0x80332000: shp_2C, # seq 260
+	0x80332008: shp_2C, # seq 261
+	0x80332010: shp_2C, # seq 262
+	0x80332018: shp_2C, # seq 263
+	0x803320E8: shp_2F, # seq 289
+	0x803320F0: shp_2F, # seq 290
+	0x80332108: shp_2F, # seq 293
+	0x80332158: shp_1K, # seq 303
 
 	# TTC object
-	# 0x803321A8: shp_, # prg 313
-	# 0x803321B0: shp_, # prg 314
-	# 0x803321B8: shp_, # prg 315
-	# 0x803321C0: shp_, # prg 316
-	# 0x803321C8: shp_, # prg 317
-	# 0x803321D0: shp_, # prg 318
-	# 0x803321D8: shp_, # prg 319
-	# 0x803321E0: shp_, # prg 320
-	# 0x803321E8: shp_, # prg 321
-	# 0x803321F0: shp_, # prg 322
-	# 0x803321F8: shp_, # prg 323
-	# 0x80332200: shp_, # prg 324
-	# 0x80332208: shp_, # prg 325
-	# 0x80332210: shp_, # prg 326
-	# 0x80332218: shp_, # prg 327
-	# 0x80332220: shp_, # prg 328
-	# 0x80332228: shp_, # prg 329
+	# 0x803321A8: shp_, # seq 313
+	# 0x803321B0: shp_, # seq 314
+	# 0x803321B8: shp_, # seq 315
+	# 0x803321C0: shp_, # seq 316
+	# 0x803321C8: shp_, # seq 317
+	# 0x803321D0: shp_, # seq 318
+	# 0x803321D8: shp_, # seq 319
+	# 0x803321E0: shp_, # seq 320
+	# 0x803321E8: shp_, # seq 321
+	# 0x803321F0: shp_, # seq 322
+	# 0x803321F8: shp_, # seq 323
+	# 0x80332200: shp_, # seq 324
+	# 0x80332208: shp_, # seq 325
+	# 0x80332210: shp_, # seq 326
+	# 0x80332218: shp_, # seq 327
+	# 0x80332220: shp_, # seq 328
+	# 0x80332228: shp_, # seq 329
 
 	# BitS object
-	# 0x803322D0: shp_, # prg 350 54
-	# 0x803322D8: shp_, # prg 351 55
-	# 0x803322E0: shp_, # prg 352 56
-	# 0x803322E8: shp_, # prg 353 57
-	# 0x803322F0: shp_, # prg 354 65
-	# 0x80332308: shp_, # prg 357 61
-	# 0x80332310: shp_, # prg 358 62
-	# 0x80332318: shp_, # prg 359 63
-	# 0x80332320: shp_, # prg 360 64
+	# 0x803322D0: shp_, # seq 350 54
+	# 0x803322D8: shp_, # seq 351 55
+	# 0x803322E0: shp_, # seq 352 56
+	# 0x803322E8: shp_, # seq 353 57
+	# 0x803322F0: shp_, # seq 354 65
+	# 0x80332308: shp_, # seq 357 61
+	# 0x80332310: shp_, # seq 358 62
+	# 0x80332318: shp_, # seq 359 63
+	# 0x80332320: shp_, # seq 360 64
 
 	0x80332370: shp_1I, # map 4
 	# 0x80332378: shp_, # map 5 172 (inside)

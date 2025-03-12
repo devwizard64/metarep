@@ -12,22 +12,22 @@ WIPE wipe;
 
 static Vp *sn_viewport = NULL;
 static Vp *sn_scissor = NULL;
-static s16 wipe_delay = 0;
+static short wipe_delay = 0;
 static u32 scene_fill = 0;
 static u32 blank_fill = 0;
 static u8 blank_r = 0;
 static u8 blank_g = 0;
 static u8 blank_b = 0;
 
-s16 file_index = 1;
-s16 course_index;
-s16 level_index;
-s16 stage_index = 1;
-s16 scene_index;
-s16 prev_course;
+short file_index = 1;
+short course_index;
+short level_index;
+short stage_index = 1;
+short scene_index;
+short prev_course;
 
-s16 msg_status;
-s16 msg_result;
+short msg_status;
+short msg_result;
 
 #define RGBA16(r, g, b, a) \
 	(((r) >> 3) << 11 | ((g) >> 3) << 6 | ((b) >> 3) << 1 | ((a) >> 7))
@@ -49,6 +49,24 @@ static void SnSetBlank(UCHAR r, UCHAR g, UCHAR b)
 	blank_b = b;
 }
 
+#ifdef MULTILANG
+static const char *no_controller[] =
+{
+	"NO CONTROLLER",
+	"MANETTE DEBRANCHEE",
+	"CONTROLLER FEHLT",
+};
+
+void SceneDemo(void)
+{
+	int lang = BuGetLang();
+	if ((gfx_frame & 31) < 20)
+	{
+		if (!cont_bitpattern) dprintc(SCREEN_WD/2, 20, no_controller[lang]);
+		else dprint(20, 20, "START");
+	}
+}
+#else
 void SceneDemo(void)
 {
 	if ((gfx_frame & 31) < 20)
@@ -59,57 +77,62 @@ void SceneDemo(void)
 		}
 		else
 		{
+#if REVISION == 199605
+			dprintc(SCREEN_WD/2, 20, "PRESS START");
+#else
 			dprintc(60, 20+18*1, "PRESS");
 			dprintc(60, 20+18*0, "START");
+#endif
 		}
 	}
 }
+#endif
 
 #define PORT_MAX    20
 
-extern OBJLANG o_13000720[];
-extern OBJLANG o_1300075C[];
-extern OBJLANG o_13000780[];
-extern OBJLANG o_130007A0[];
-extern OBJLANG o_portdoor[];
-extern OBJLANG o_13002F60[];
-extern OBJLANG o_13002F64[];
-extern OBJLANG o_13002F68[];
-extern OBJLANG o_13002F6C[];
-extern OBJLANG o_13002F70[];
-extern OBJLANG o_13002F74[];
-extern OBJLANG o_13002F78[];
-extern OBJLANG o_13002F7C[];
-extern OBJLANG o_13002F80[];
-extern OBJLANG o_13002F84[];
-extern OBJLANG o_13002F88[];
-extern OBJLANG o_13002F8C[];
-extern OBJLANG o_13002F90[];
-extern OBJLANG o_13002F94[];
-extern OBJLANG o_13003E3C[];
+extern OBJLANG obj_13000720[];
+extern OBJLANG obj_1300075C[];
+extern OBJLANG obj_13000780[];
+extern OBJLANG obj_130007A0[];
+extern OBJLANG obj_portdoor[];
+extern OBJLANG obj_13002F60[];
+extern OBJLANG obj_13002F64[];
+extern OBJLANG obj_13002F68[];
+extern OBJLANG obj_13002F6C[];
+extern OBJLANG obj_13002F70[];
+extern OBJLANG obj_13002F74[];
+extern OBJLANG obj_13002F78[];
+extern OBJLANG obj_13002F7C[];
+extern OBJLANG obj_13002F80[];
+extern OBJLANG obj_13002F84[];
+extern OBJLANG obj_13002F88[];
+extern OBJLANG obj_13002F8C[];
+extern OBJLANG obj_13002F90[];
+extern OBJLANG obj_13002F94[];
+extern OBJLANG obj_13003E3C[];
 
 static OBJLANG *port_script[PORT_MAX] =
 {
-	o_portdoor,
-	o_13003E3C,
-	o_13000720,
-	o_13000780,
-	o_130007A0,
-	o_1300075C,
-	o_13002F60,
-	o_13002F64,
-	o_13002F68,
-	o_13002F6C,
-	o_13002F70,
-	o_13002F74,
-	o_13002F78,
-	o_13002F94,
-	o_13002F7C,
-	o_13002F80,
-	o_13002F88,
-	o_13002F84,
-	o_13002F8C,
-	o_13002F90,
+	obj_portdoor,
+	obj_13003E3C,
+	obj_13000720,
+	obj_13000780,
+	obj_130007A0,
+	obj_1300075C,
+	obj_13002F60,
+	obj_13002F64,
+	obj_13002F68,
+	obj_13002F6C,
+	obj_13002F70,
+	obj_13002F74,
+	obj_13002F78,
+	obj_13002F94,
+	obj_13002F7C,
+	obj_13002F80,
+	obj_13002F88,
+	obj_13002F84,
+	obj_13002F8C,
+	obj_13002F90,
 };
 
 static u8 port_type[PORT_MAX] =
@@ -269,7 +292,7 @@ void SnOpenPlayer(void)
 
 void SnClosePlayer(void)
 {
-	if (scenep && (scenep->flag & SN_ACTIVE))
+	if (scenep && scenep->flag & SN_ACTIVE)
 	{
 		ObjectClose(0, mario_actor->group);
 		scenep->flag &= ~SN_ACTIVE;

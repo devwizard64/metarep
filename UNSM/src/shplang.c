@@ -17,10 +17,10 @@ static SHAPE **shape_reftab;
 static u16 shape_reflen;
 static unsigned long shp_stack[16];
 static SHAPE *shape_stack[32];
-static s16 shape_sp;
-static s16 shp_sp;
-UNUSED static s16 shape_fp;
-static s16 shp_fp;
+static short shape_sp;
+static short shp_sp;
+UNUSED static short shape_fp;
+static short shp_fp;
 static SHPLANG *shp_pc;
 
 SHAPE sobj_list;
@@ -43,9 +43,9 @@ static short *ShpGetSVec(SVEC dst, short *src)
 
 static short *ShpGetAng(SVEC dst, short *src)
 {
-	dst[0] = *src++ * 0x8000/180;
-	dst[1] = *src++ * 0x8000/180;
-	dst[2] = *src++ * 0x8000/180;
+	dst[0] = DEG(*src++);
+	dst[1] = DEG(*src++);
+	dst[2] = DEG(*src++);
 	return src;
 }
 
@@ -96,7 +96,7 @@ static void ShpCmdReturn(void)
 	shp_pc = (void *)shp_stack[--shp_sp];
 }
 
-static void ShpCmdStart(void)
+static void ShpCmdBegin(void)
 {
 	shape_stack[shape_sp+1] = shape_stack[shape_sp];
 	shape_sp++;
@@ -251,7 +251,7 @@ static void ShpCmdCoord(void)
 		break;
 	case 3:
 		SVecCpy(pos, svec_0);
-		SVecSet(ang, 0, ((short *)pc)[1] * 0x8000/180, 0);
+		SVecSet(ang, 0, DEG(((short *)pc)[1]), 0);
 		pc = (SHPLANG *)pc + 1;
 		break;
 	}
@@ -452,7 +452,7 @@ static void (*shp_cmdtab[])(void) =
 	ShpCmdExit,
 	ShpCmdJump,
 	ShpCmdReturn,
-	ShpCmdStart,
+	ShpCmdBegin,
 	ShpCmdEnd,
 	ShpCmdStore,
 	ShpCmdFlag,

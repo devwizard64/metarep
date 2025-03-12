@@ -14,16 +14,16 @@ beginseg
 	entry   entry
 	stack   entry_stack + BOOT_STACK_SIZE
 	include "$(BUILD)/code.o"
-	include "$(BUILD)/libultra/src/PR/rspboot.o"
-	include "$(BUILD)/libultra/src/PR/gspFast3D.fifo.o"
-	include "$(BUILD)/libultra/src/PR/aspMain.o"
+	include "$(BUILD)/lib/PR/rspboot.o"
+	include "$(BUILD)/lib/PR/gspFast3D.fifo.o"
+	include "$(BUILD)/lib/PR/aspMain.o"
 endseg
 
 beginseg
 	name    "ulib"
 	flags   OBJECT
 	address ADDRESS_ULIB
-	MAXADDR(ADDRESS_CIMG)
+	MAXADDR(ADDRESS_ULIB_END)
 	include "$(BUILD)/ulib.o"
 endseg
 
@@ -367,11 +367,11 @@ beginseg
 	name    "Object"
 	flags   OBJECT
 	address ADDRESS_OBJECT
-	include "$(BUILD)/src/obj_a.o"
-	include "$(BUILD)/src/obj_player.o"
-	include "$(BUILD)/src/obj_b.o"
-	include "$(BUILD)/src/obj_c.o"
-	include "$(BUILD)/src/obj_camera.o"
+	include "$(BUILD)/src/enemyaobj.o"
+	include "$(BUILD)/src/playerobj.o"
+	include "$(BUILD)/src/enemybobj.o"
+	include "$(BUILD)/src/enemycobj.o"
+	include "$(BUILD)/src/cameraobj.o"
 endseg
 
 beginseg
@@ -383,14 +383,16 @@ beginseg
 	include "$(BUILD)/src/titlebg.o"
 	include "$(BUILD)/src/fileselect.o"
 	include "$(BUILD)/src/starselect.o"
+#if REVISION != 199605
 	include "$(BUILD)/face.o"
+#endif
 endseg
 
 beginseg
 	name    "Title"
 	flags   OBJECT
 	address ADDRESS_MENU_DATA
-	include "$(BUILD)/stage/title/prg.o"
+	include "$(BUILD)/stage/title/seq.o"
 	include "$(BUILD)/stage/title/shp.o"
 endseg
 
@@ -415,6 +417,7 @@ beginseg
 	include "$(BUILD)/data/background/title.szp.o"
 endseg
 
+#if REVISION != 199605
 beginseg
 	name    "FaceData"
 	flags   OBJECT
@@ -422,12 +425,13 @@ beginseg
 	MAXADDR(ADDRESS_FACEDATA+0x70000)
 	include "$(BUILD)/facedata.o"
 endseg
+#endif
 
 beginseg
 	name    "Select"
 	flags   OBJECT
 	address ADDRESS_MENU_DATA
-	include "$(BUILD)/stage/select/prg.o"
+	include "$(BUILD)/stage/select/seq.o"
 	include "$(BUILD)/stage/select/shp.o"
 endseg
 
@@ -617,7 +621,7 @@ beginseg
 	name    "BBH"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bbh/prg.o"
+	include "$(BUILD)/stage/bbh/seq.o"
 	include "$(BUILD)/stage/bbh/shp.o"
 endseg
 
@@ -632,7 +636,7 @@ beginseg
 	name    "CCM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ccm/prg.o"
+	include "$(BUILD)/stage/ccm/seq.o"
 	include "$(BUILD)/stage/ccm/shp.o"
 endseg
 
@@ -647,7 +651,7 @@ beginseg
 	name    "Inside"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/inside/prg.o"
+	include "$(BUILD)/stage/inside/seq.o"
 	include "$(BUILD)/stage/inside/shp.o"
 endseg
 
@@ -662,7 +666,7 @@ beginseg
 	name    "HMC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/hmc/prg.o"
+	include "$(BUILD)/stage/hmc/seq.o"
 	include "$(BUILD)/stage/hmc/shp.o"
 endseg
 
@@ -677,7 +681,7 @@ beginseg
 	name    "SSL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ssl/prg.o"
+	include "$(BUILD)/stage/ssl/seq.o"
 	include "$(BUILD)/stage/ssl/shp.o"
 endseg
 
@@ -692,7 +696,7 @@ beginseg
 	name    "BoB"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bob/prg.o"
+	include "$(BUILD)/stage/bob/seq.o"
 	include "$(BUILD)/stage/bob/shp.o"
 endseg
 
@@ -707,7 +711,7 @@ beginseg
 	name    "SL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/sl/prg.o"
+	include "$(BUILD)/stage/sl/seq.o"
 	include "$(BUILD)/stage/sl/shp.o"
 endseg
 
@@ -722,7 +726,7 @@ beginseg
 	name    "WDW"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wdw/prg.o"
+	include "$(BUILD)/stage/wdw/seq.o"
 	include "$(BUILD)/stage/wdw/shp.o"
 endseg
 
@@ -737,7 +741,7 @@ beginseg
 	name    "JRB"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/jrb/prg.o"
+	include "$(BUILD)/stage/jrb/seq.o"
 	include "$(BUILD)/stage/jrb/shp.o"
 endseg
 
@@ -752,7 +756,7 @@ beginseg
 	name    "THI"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/thi/prg.o"
+	include "$(BUILD)/stage/thi/seq.o"
 	include "$(BUILD)/stage/thi/shp.o"
 endseg
 
@@ -767,7 +771,7 @@ beginseg
 	name    "TTC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ttc/prg.o"
+	include "$(BUILD)/stage/ttc/seq.o"
 	include "$(BUILD)/stage/ttc/shp.o"
 endseg
 
@@ -782,7 +786,7 @@ beginseg
 	name    "RR"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/rr/prg.o"
+	include "$(BUILD)/stage/rr/seq.o"
 	include "$(BUILD)/stage/rr/shp.o"
 endseg
 
@@ -797,7 +801,7 @@ beginseg
 	name    "Grounds"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/grounds/prg.o"
+	include "$(BUILD)/stage/grounds/seq.o"
 	include "$(BUILD)/stage/grounds/shp.o"
 endseg
 
@@ -812,7 +816,7 @@ beginseg
 	name    "BitDW"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitdw/prg.o"
+	include "$(BUILD)/stage/bitdw/seq.o"
 	include "$(BUILD)/stage/bitdw/shp.o"
 endseg
 
@@ -827,7 +831,7 @@ beginseg
 	name    "VCutM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/vcutm/prg.o"
+	include "$(BUILD)/stage/vcutm/seq.o"
 	include "$(BUILD)/stage/vcutm/shp.o"
 endseg
 
@@ -842,7 +846,7 @@ beginseg
 	name    "BitFS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitfs/prg.o"
+	include "$(BUILD)/stage/bitfs/seq.o"
 	include "$(BUILD)/stage/bitfs/shp.o"
 endseg
 
@@ -857,7 +861,7 @@ beginseg
 	name    "SA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/sa/prg.o"
+	include "$(BUILD)/stage/sa/seq.o"
 	include "$(BUILD)/stage/sa/shp.o"
 endseg
 
@@ -872,7 +876,7 @@ beginseg
 	name    "BitS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bits/prg.o"
+	include "$(BUILD)/stage/bits/seq.o"
 	include "$(BUILD)/stage/bits/shp.o"
 endseg
 
@@ -887,7 +891,7 @@ beginseg
 	name    "LLL"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/lll/prg.o"
+	include "$(BUILD)/stage/lll/seq.o"
 	include "$(BUILD)/stage/lll/shp.o"
 endseg
 
@@ -902,7 +906,7 @@ beginseg
 	name    "DDD"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ddd/prg.o"
+	include "$(BUILD)/stage/ddd/seq.o"
 	include "$(BUILD)/stage/ddd/shp.o"
 endseg
 
@@ -917,7 +921,7 @@ beginseg
 	name    "WF"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wf/prg.o"
+	include "$(BUILD)/stage/wf/seq.o"
 	include "$(BUILD)/stage/wf/shp.o"
 endseg
 
@@ -932,7 +936,7 @@ beginseg
 	name    "Ending"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ending/prg.o"
+	include "$(BUILD)/stage/ending/seq.o"
 	include "$(BUILD)/stage/ending/shp.o"
 endseg
 
@@ -947,7 +951,7 @@ beginseg
 	name    "Courtyard"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/courtyard/prg.o"
+	include "$(BUILD)/stage/courtyard/seq.o"
 	include "$(BUILD)/stage/courtyard/shp.o"
 endseg
 
@@ -962,7 +966,7 @@ beginseg
 	name    "PSS"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/pss/prg.o"
+	include "$(BUILD)/stage/pss/seq.o"
 	include "$(BUILD)/stage/pss/shp.o"
 endseg
 
@@ -977,7 +981,7 @@ beginseg
 	name    "CotMC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/cotmc/prg.o"
+	include "$(BUILD)/stage/cotmc/seq.o"
 	include "$(BUILD)/stage/cotmc/shp.o"
 endseg
 
@@ -992,7 +996,7 @@ beginseg
 	name    "TotWC"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/totwc/prg.o"
+	include "$(BUILD)/stage/totwc/seq.o"
 	include "$(BUILD)/stage/totwc/shp.o"
 endseg
 
@@ -1007,7 +1011,7 @@ beginseg
 	name    "BitDWA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitdwa/prg.o"
+	include "$(BUILD)/stage/bitdwa/seq.o"
 	include "$(BUILD)/stage/bitdwa/shp.o"
 endseg
 
@@ -1022,7 +1026,7 @@ beginseg
 	name    "WMotR"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/wmotr/prg.o"
+	include "$(BUILD)/stage/wmotr/seq.o"
 	include "$(BUILD)/stage/wmotr/shp.o"
 endseg
 
@@ -1037,7 +1041,7 @@ beginseg
 	name    "BitFSA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitfsa/prg.o"
+	include "$(BUILD)/stage/bitfsa/seq.o"
 	include "$(BUILD)/stage/bitfsa/shp.o"
 endseg
 
@@ -1052,7 +1056,7 @@ beginseg
 	name    "BitSA"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/bitsa/prg.o"
+	include "$(BUILD)/stage/bitsa/seq.o"
 	include "$(BUILD)/stage/bitsa/shp.o"
 endseg
 
@@ -1067,7 +1071,7 @@ beginseg
 	name    "TTM"
 	flags   OBJECT
 	address ADDRESS_STAGE_DATA
-	include "$(BUILD)/stage/ttm/prg.o"
+	include "$(BUILD)/stage/ttm/seq.o"
 	include "$(BUILD)/stage/ttm/shp.o"
 endseg
 

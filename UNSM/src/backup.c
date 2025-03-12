@@ -1,13 +1,21 @@
 #include <sm64.h>
 
+extern BACKUP backup;
+
 #define BU_INFO_KEY 0x4849  /* HI */
 #define BU_FILE_KEY 0x4441  /* DA */
 
-static u8 mid_level;
-static u8 mid_course;
-static u8 mid_stage;
-static u8 mid_scene;
-static u8 mid_port;
+typedef struct backupmid
+{
+	u8 level;
+	u8 course;
+	u8 stage;
+	u8 scene;
+	u8 port;
+}
+BACKUPMID;
+
+static BACKUPMID bu_mid;
 
 static char bu_info_dirty;
 static char bu_file_dirty;
@@ -19,7 +27,7 @@ u8 bu_myscore = FALSE;
 u8 bu_star = 0;
 u8 bu_jump = FALSE;
 
-s8 coursetab[] =
+char coursetab[] =
 {
 	COURSE_NULL,
 	COURSE_NULL,
@@ -66,17 +74,47 @@ static void BuInitDebug(void)
 	UNUSED int i;
 }
 
+#define BU_ADDR(addr)   ((unsigned long)(addr)-(unsigned long)&backup)
+
+#ifdef DISK
+
+#include <PR/leoappli.h>
+
+static int BackupRead(void *data, int size)
+{
+	char *ptr = (char *)ADDRESS_BACKUP;
+	DiskRead(LEO_LBA_RAM_TOP0, 1, ptr);
+	bcopy(ptr + BU_ADDR(data), data, size);
+	return 1;
+}
+
+static int BackupWrite(const void *data, int size)
+{
+	char *ptr = (char *)ADDRESS_BACKUP;
+	bcopy(data, ptr + BU_ADDR(data), size);
+	DiskWrite(LEO_LBA_RAM_TOP0, 1, ptr);
+	return 1;
+}
+
+#else
+
 static int BackupRead(void *data, int size)
 {
 	int ret = 0;
 	if (eeprom_status)
 	{
 		int n = 4;
-		int address = ((unsigned long)data-(unsigned long)&backup) / 8;
+		int address = BU_ADDR(data) / 8;
 		do
 		{
+#ifdef MOTOR
+			motor_8024C4E4();
+#endif
 			n--;
 			ret = osEepromLongRead(&si_mq, address, data, size);
+#ifdef MOTOR
+			motor_8024C510();
+#endif
 		}
 		while (n > 0 && ret);
 	}
@@ -89,16 +127,24 @@ static int BackupWrite(const void *data, int size)
 	if (eeprom_status)
 	{
 		int n = 4;
-		int address = ((unsigned long)data-(unsigned long)&backup) / 8;
+		int address = BU_ADDR(data) / 8;
 		do
 		{
+#ifdef MOTOR
+			motor_8024C4E4();
+#endif
 			n--;
 			ret = osEepromLongWrite(&si_mq, address, (void *)data, size);
+#ifdef MOTOR
+			motor_8024C510();
+#endif
 		}
 		while (n > 0 && ret);
 	}
 	return ret;
 }
+
+#endif
 
 static u16 BuCheckSum(unsigned char *data, int size)
 {
@@ -109,7 +155,7 @@ static u16 BuCheckSum(unsigned char *data, int size)
 
 static int BuCheck(void *data, int size, USHORT key)
 {
-	BUCHECK *check = (BUCHECK *)((size-sizeof(BUCHECK))+(char *)data);
+	BUCHECK *check = (BUCHECK *)(size-(int)sizeof(BUCHECK)+(char *)data);
 	if (check->key != key) return FALSE;
 	if (BuCheckSum(data, size) != check->sum) return FALSE;
 	return TRUE;
@@ -117,7 +163,7 @@ static int BuCheck(void *data, int size, USHORT key)
 
 static void BuCheckSet(void *data, int size, USHORT key)
 {
-	BUCHECK *check = (BUCHECK *)((size-sizeof(BUCHECK))+(char *)data);
+	BUCHECK *check = (BUCHECK *)(size-(int)sizeof(BUCHECK)+(char *)data);
 	check->key = key;
 	check->sum = BuCheckSum(data, size);
 }
@@ -153,7 +199,7 @@ static void BuInfoErase(void)
 
 static int BuGetTime(int file, int course)
 {
-	return backup.info[0].time[file] >> (2*course) & 3;
+	return backup.info[0].time[file] >> 2*course & 3;
 }
 
 static void BuSetTime(int file, int course, int time)
@@ -214,9 +260,9 @@ void BuFileErase(int file)
 	BuFileWrite(file);
 }
 
-void BuFileCopy(int src, int dst)
+VOID BuFileCopy(int src, int dst)
 {
-	UNUSED int i;
+	UNUSED int result;
 	BuUpdateTimeAll(dst);
 	bcopy(&backup.file[src][0], &backup.file[dst][0], sizeof(BACKUPFILE));
 	bu_file_dirty = TRUE;
@@ -234,9 +280,9 @@ void BackupInit(void)
 	x |= BuCheck(&backup.info[1], sizeof(BACKUPINFO), BU_INFO_KEY)<<1;
 	switch (x)
 	{
-	case FALSE<<0 | FALSE<<1: BuInfoErase();    break;
-	case TRUE <<0 | FALSE<<1: BuInfoRecover(0); break;
-	case FALSE<<0 | TRUE <<1: BuInfoRecover(1); break;
+	case FALSE<<0|FALSE<<1: BuInfoErase();    break;
+	case TRUE <<0|FALSE<<1: BuInfoRecover(0); break;
+	case FALSE<<0|TRUE <<1: BuInfoRecover(1); break;
 	}
 	for (i = 0; i < 4; i++)
 	{
@@ -244,9 +290,9 @@ void BackupInit(void)
 		x |= BuCheck(&backup.file[i][1], sizeof(BACKUPFILE), BU_FILE_KEY)<<1;
 		switch (x)
 		{
-		case FALSE<<0 | FALSE<<1: BuFileErase(i);       break;
-		case TRUE <<0 | FALSE<<1: BuFileRecover(i, 0);  break;
-		case FALSE<<0 | TRUE <<1: BuFileRecover(i, 1);  break;
+		case FALSE<<0|FALSE<<1: BuFileErase(i);       break;
+		case TRUE <<0|FALSE<<1: BuFileRecover(i, 0);  break;
+		case FALSE<<0|TRUE <<1: BuFileRecover(i, 1);  break;
 		}
 	}
 	BuInitDebug();
@@ -359,7 +405,7 @@ int BuFileStarRange(int file, int min, int max)
 
 void BuSetFlag(unsigned int flag)
 {
-	backup.file[file_index-1][0].flag |= BU_ACTIVE | flag;
+	backup.file[file_index-1][0].flag |= flag|BU_ACTIVE;
 	bu_file_dirty = TRUE;
 }
 
@@ -461,20 +507,34 @@ void BuInitCap(void)
 	}
 }
 
+#ifdef MULTILANG
+void BuSetLang(USHORT lang)
+{
+	backup.info[0].lang = lang;
+	bu_info_dirty = TRUE;
+	BuInfoWrite();
+}
+
+USHORT BuGetLang(void)
+{
+	return backup.info[0].lang;
+}
+#endif
+
 void BuClrMid(void)
 {
-	mid_course = COURSE_NULL;
+	bu_mid.course = COURSE_NULL;
 }
 
 void BuSetMid(PORTINFO *p)
 {
 	if (p->stage & 0x80)
 	{
-		mid_level  = level_index;
-		mid_course = course_index;
-		mid_stage  = p->stage & 0x7F;
-		mid_scene  = p->scene;
-		mid_port   = p->port;
+		bu_mid.level  = level_index;
+		bu_mid.course = course_index;
+		bu_mid.stage  = p->stage & 0x7F;
+		bu_mid.scene  = p->scene;
+		bu_mid.port   = p->port;
 	}
 }
 
@@ -483,19 +543,19 @@ int BuGetMid(PORTINFO *p)
 	short result = FALSE;
 	SHORT course = StageToCourse(p->stage & 0x7F);
 	if (
-		mid_course != COURSE_NULL &&
+		bu_mid.course != COURSE_NULL &&
 		prev_course == course &&
-		mid_level == level_index
+		bu_mid.level == level_index
 	)
 	{
-		p->stage = mid_stage;
-		p->scene = mid_scene;
-		p->port  = mid_port;
+		p->stage = bu_mid.stage;
+		p->scene = bu_mid.scene;
+		p->port  = bu_mid.port;
 		result = TRUE;
 	}
 	else
 	{
-		mid_course = 0;
+		bu_mid.course = COURSE_NULL;
 	}
 	return result;
 }

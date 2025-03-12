@@ -11,12 +11,14 @@
 #define BG_1                    1
 #define BG_4                    4   /* attr */
 #define BG_5                    5
+#define BG_9                    9
 #define BG_10                   10
 #define BG_14                   14  /* attr */
 #define BG_18                   18
 #define BG_19                   19
 #define BG_20                   20
 #define BG_21                   21
+#define BG_26                   26
 #define BG_CONNECT              27  /* 27..30 */
 #define BG_33                   33
 #define BG_34                   34
@@ -30,6 +32,7 @@
 #define BG_44                   44  /* attr */
 #define BG_45                   45  /* attr */
 #define BG_46                   46
+#define BG_47                   47
 #define BG_48                   48
 #define BG_50                   50
 #define BG_51                   51
@@ -51,8 +54,8 @@
 
 #define BGPORT_MAX              (3*15)
 
-#define BG_PORT                 (256-BGPORT_MAX)        /* 166..210 */
-#define BG_WAVE                 (BG_PORT-BGPORT_MAX)    /* 211..255 */
+#define BG_WAVE                 (BG_PORT-BGPORT_MAX)    /* 166..210 */
+#define BG_PORT                 (256-BGPORT_MAX)        /* 211..255 */
 #define BG_WAVEL(i)             (BG_WAVE + 3*(i) + 0)
 #define BG_WAVEM(i)             (BG_WAVE + 3*(i) + 1)
 #define BG_WAVER(i)             (BG_WAVE + 3*(i) + 2)

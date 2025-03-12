@@ -17,6 +17,13 @@ void osCreateViManager(OSPri pri)
 {
 	u32 savedMask;
 	OSPri oldPri, myPri;
+#ifdef _DEBUG
+	if (pri < OS_PRIORITY_IDLE || pri > OS_PRIORITY_MAX)
+	{
+		__osError(ERR_OSCREATEVIMANAGER, 1, pri);
+		return;
+	}
+#endif
 	if (__osViDevMgr.active) return;
 	__osTimerServicesInit();
 	osCreateMesgQueue(&viEventQueue, viEventBuf, 5);
@@ -42,6 +49,9 @@ void osCreateViManager(OSPri pri)
 	__osViDevMgr.evtQueue = &viEventQueue;
 	__osViDevMgr.acsQueue = NULL;
 	__osViDevMgr.dma = NULL;
+#if REVISION >= 199611
+	__osViDevMgr.edma = NULL;
+#endif
 	osCreateThread(
 		&viThread, 0, viMgrMain, &__osViDevMgr,
 		viThreadStack+OS_VIM_STACKSIZE/8, pri

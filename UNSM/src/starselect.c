@@ -1,17 +1,20 @@
 #include <sm64.h>
 
+#ifdef JAPANESE
+#include "starselect.ja_jp.h"
+#endif
 #ifdef ENGLISH
-#include "en_us.h"
+#include "starselect.en_us.h"
 #endif
 
-extern Gfx gfx_print_1cyc_start[];
+extern Gfx gfx_print_1cyc_begin[];
 extern Gfx gfx_print_1cyc_end[];
-extern Gfx gfx_lgfont_start[];
+extern Gfx gfx_lgfont_begin[];
 extern Gfx gfx_lgfont_end[];
 extern unsigned char *coursename[];
 extern unsigned char *levelname[];
 
-extern Gfx gfx_smfont_start[];
+extern Gfx gfx_smfont_begin[];
 extern Gfx gfx_smfont_end[];
 extern Gfx gfx_course[];
 
@@ -24,7 +27,7 @@ static s8 ss_option = 0;
 static s8 ss_cursor = 0;
 static int ss_timer = 0;
 
-extern OBJLANG o_selectstar[];
+extern OBJLANG obj_selectstar[];
 
 void SelectStar_Proc(void)
 {
@@ -53,7 +56,7 @@ static void StarMenu_Init100(UCHAR star)
 	if (star & 0100)
 	{
 		ss_obj[6] = ObjMakeAt(
-			object, 0, S_POWERSTAR, o_selectstar, 370, 24, -300, 0, 0, 0
+			object, 0, S_POWERSTAR, obj_selectstar, 370, 24, -300, 0, 0, 0
 		);
 		ss_obj[6]->o_f5 = 0.8;
 		ss_obj[6]->o_v0 = 2;
@@ -96,7 +99,7 @@ void StarMenu_Init(void)
 	for (i = 0; i < ss_count; i++)
 	{
 		ss_obj[i] = ObjMakeAt(
-			object, 0, shape[i], o_selectstar,
+			object, 0, shape[i], obj_selectstar,
 			-75*(ss_count-1) + 152*i, 248, -300, 0, 0, 0
 		);
 		ss_obj[i]->o_f5 = 1;
@@ -116,7 +119,7 @@ void StarMenu_Proc(void)
 		count = ss_cursor;
 		for (i = 0; i < ss_count; i++)
 		{
-			if ((star & (1 << i)) || i == ss_next-1)
+			if (star & (1 << i) || i == ss_next-1)
 			{
 				if (count == 0)
 				{
@@ -148,13 +151,19 @@ static void SsDrawCourse(void)
 	GfxTranslate(GFX_PUSH, COURSE_X, SCREEN_HT-COURSE_Y, 0);
 	gSPDisplayList(glistp++, gfx_course);
 	gSPPopMatrix(glistp++, G_MTX_MODELVIEW);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, 0xFF);
-	itostr(course_index, buf);
+	IntToStr(course_index, buf);
 	if (course_index < 10) Print16(FONT_GLB, COURSE_X-12/2, COURSE_Y-1, buf);
 	else                   Print16(FONT_GLB, COURSE_X-30/2, COURSE_Y-1, buf);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 }
+
+#if REVISION >= 199609
+#define LEVEL_X (SCREEN_WD/2+3)
+#else
+#define LEVEL_X (SCREEN_WD/2-2)
+#endif
 
 static void SsDraw(void)
 {
@@ -167,11 +176,11 @@ static void SsDraw(void)
 	SHORT course_x, level_x;
 	CHAR i;
 	GfxScreenProj();
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, 0xFF);
 	PrintCoin(1, file_index-1, course_index-1, SCREEN_WD/2-5, 106);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, 0xFF);
 	if (BuGetCoin(course_index-1))
 	{
@@ -181,12 +190,12 @@ static void SsDraw(void)
 	PrintLg(course_x, SCREEN_HT-16-(COURSE_Y+32), &crsname[3]);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	SsDrawCourse();
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, 0xFF);
 	if (ss_count)
 	{
 		lvlname = SegmentToVirtual(lvltab[6*(course_index-1)+ss_option]);
-		level_x = StrCenterX(SCREEN_WD/2+3, lvlname, 8);
+		level_x = StrCenterX(LEVEL_X, lvlname, 8);
 		PrintSm(level_x, 81, lvlname);
 	}
 	for (i = 1; i <= ss_count; i++)
@@ -220,15 +229,19 @@ long StarSelectInit(UNUSED SHORT code, UNUSED long status)
 long StarSelectProc(UNUSED SHORT code, UNUSED long status)
 {
 	if (ss_timer > 10 && (
-		(contp->down & A_BUTTON) ||
-		(contp->down & START_BUTTON) ||
-		(contp->down & B_BUTTON)
+		contp->down & A_BUTTON ||
+		contp->down & START_BUTTON ||
+		contp->down & B_BUTTON
 	))
 	{
-#ifdef NEWVOICE
+#if REVISION >= 199609
 		Na_FixSePlay(NA_SE7_24);
 #else
 		Na_FixSePlay(NA_SE7_1E);
+#endif
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
 #endif
 		if (ss_next >= ss_option+1) ss_result = ss_option+1;
 		else                        ss_result = ss_next;

@@ -5,7 +5,7 @@
 .set noreorder
 
 LEAF(osGetCount)
-	mfc0    v0, C0_COUNT
-	j       ra
+	mfc0 v0,C0_COUNT
+	j ra
 	nop
 END(osGetCount)

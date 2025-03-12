@@ -31,12 +31,38 @@ static OSTask *_VirtualToPhysicalTask(OSTask *intp)
 void osSpTaskLoad(OSTask *intp)
 {
 	OSTask *tp;
+#ifdef _DEBUG
+	if (intp->t.dram_stack && (u32)intp->t.dram_stack & 0xF)
+	{
+		__osError(ERR_OSSPTASKLOAD_DRAM, 1, intp->t.dram_stack);
+		return;
+	}
+	if (intp->t.output_buff && (u32)intp->t.output_buff & 0xF)
+	{
+		__osError(ERR_OSSPTASKLOAD_OUT, 1, intp->t.output_buff);
+		return;
+	}
+	if (intp->t.output_buff_size && (u32)intp->t.output_buff_size & 0xF)
+	{
+		__osError(ERR_OSSPTASKLOAD_OUTSIZE, 1, intp->t.output_buff_size);
+		return;
+	}
+	if (intp->t.yield_data_ptr && (u32)intp->t.yield_data_ptr & 0xF)
+	{
+		__osError(ERR_OSSPTASKLOAD_YIELD, 1, intp->t.yield_data_ptr);
+		return;
+	}
+#endif
 	tp = _VirtualToPhysicalTask(intp);
 	if (tp->t.flags & OS_TASK_YIELDED)
 	{
 		tp->t.ucode_data = tp->t.yield_data_ptr;
 		tp->t.ucode_data_size = tp->t.yield_data_size;
 		intp->t.flags &= ~OS_TASK_YIELDED;
+#if REVISION >= 199707
+		if (tp->t.flags & OS_TASK_LOADABLE) tp->t.ucode =
+			(u64 *)IO_READ((u32)intp->t.yield_data_ptr+OS_YIELD_DATA_SIZE-4);
+#endif
 	}
 	osWritebackDCache(tp, sizeof(OSTask));
 	__osSpSetStatus(

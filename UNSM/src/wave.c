@@ -35,9 +35,9 @@ typedef struct wavetri
 }
 WAVETRI;
 
-extern Gfx gfx_wave_s_start[];
+extern Gfx gfx_wave_s_begin[];
 extern Gfx gfx_wave_s_end[];
-extern Gfx gfx_wave_e_start[];
+extern Gfx gfx_wave_e_begin[];
 extern Gfx gfx_wave_e_end[];
 extern Gfx gfx_wave_draw[];
 extern short wave_meshdata[];
@@ -50,7 +50,7 @@ static float wave_posz;
 static WAVEVTX *wavevtx;
 static WAVETRI *wavetri;
 WAVE *wavep;
-s8 wave_8036131C; /* waterport status */
+char wave_8036131C; /* waterport status */
 
 extern WAVE wave_hmc_0702551C;
 
@@ -109,8 +109,8 @@ static WAVE **wavetab[] =
 	wavetab2,
 };
 
-static s16 wave_timer = 1;
-static s16 wave_stamp = 0;
+static short wave_timer = 1;
+static short wave_stamp = 0;
 
 static void WaveStopAll(WAVE *wave, WAVE **table)
 {
@@ -555,7 +555,7 @@ static Gfx *WaveGfxShade(WAVE *wave)
 	Gfx *gfx, *g = gfx = GfxAlloc(sizeof(Gfx)*(3+nmesh+3));
 	if (!gfx) return gfx;
 	gSPDisplayList(g++, WaveTransform(wave));
-	gSPDisplayList(g++, gfx_wave_s_start);
+	gSPDisplayList(g++, gfx_wave_s_begin);
 	gSPDisplayList(g++, wave->movegfx);
 	for (i = 0; i < nmesh; i++)
 	{
@@ -584,7 +584,7 @@ static Gfx *WaveGfxEnvMap(WAVE *wave)
 	Gfx *gfx, *g = gfx = GfxAlloc(sizeof(Gfx)*7);
 	if (!gfx) return gfx;
 	gSPDisplayList(g++, WaveTransform(wave));
-	gSPDisplayList(g++, gfx_wave_e_start);
+	gSPDisplayList(g++, gfx_wave_e_begin);
 	gSPDisplayList(g++, wave->movegfx);
 	mesh = SegmentToVirtual(meshlist[0]);
 	nvtx = mesh[0];

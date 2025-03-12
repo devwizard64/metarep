@@ -24,6 +24,12 @@ void osStartThread(OSThread *t)
 			__osEnqueueThread(&__osRunQueue, __osPopThread(t->queue));
 		}
 		break;
+#ifdef _DEBUG
+	default:
+		__osError(ERR_OSSTARTTHREAD, 0);
+		__osRestoreInt(saveMask);
+		return;
+#endif
 	}
 	if (!__osRunningThread)
 	{

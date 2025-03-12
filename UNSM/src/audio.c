@@ -9,7 +9,7 @@ static u16 bgm_stage   = BGM_NULL;
 static u16 bgm_shell   = BGM_NULL;
 static u16 bgm_special = BGM_NULL;
 
-static unsigned char aud_endless = FALSE;
+static unsigned char aud_endless_flag = FALSE;
 
 UNUSED static char aud_8032D618 = 0;
 UNUSED static u32 aud_levelse_8033B0A0[36];
@@ -20,7 +20,7 @@ static OSMesgQueue aud_vi_mq;
 static OSMesg aud_vi_mbox;
 static SCCLIENT aud_client;
 
-static s16 aud_modetab[] = {NA_OUTPUT_WIDE, NA_OUTPUT_MONO, NA_OUTPUT_PHONE};
+static short aud_modetab[] = {NA_OUTPUT_WIDE, NA_OUTPUT_MONO, NA_OUTPUT_PHONE};
 
 static Na_Se aud_levelse_data[36] =
 {
@@ -59,7 +59,7 @@ static Na_Se aud_levelse_data[36] =
 	NA_SE4_08,
 	NA_SE6_04_40,
 	NA_SE6_04_80,
-	NA_SE4_0D_0,
+	NA_SE4_0D_00,
 };
 
 void AudResetMute(void)
@@ -121,6 +121,9 @@ void AudPlayFaceSound(SHORT flag)
 	else if (flag & (1 << 6)) Na_FixSePlay(NA_SE7_06);
 	else if (flag & (1 << 7)) Na_FixSePlay(NA_SE7_07);
 	if      (flag & (1 << 8)) AudPlayLevelSe(20, NULL);
+#ifdef MOTOR
+	if      (flag & (1 << 5)) motor_8024C834(10, 60);
+#endif
 }
 
 void AudProcWaveSound(void)
@@ -150,9 +153,9 @@ void AudProcEndlessMusic(void)
 			}
 		}
 	}
-	if (aud_endless ^ flag)
+	if (aud_endless_flag ^ flag)
 	{
-		aud_endless = flag;
+		aud_endless_flag = flag;
 		if (flag)   Na_SeqPush(NA_BGM_ENDLESS, 0x00, 0xFF, 1000);
 		else        Na_SeqPull(500);
 	}

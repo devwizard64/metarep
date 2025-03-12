@@ -15,8 +15,26 @@
 #define ADDRESS_TIMG            0x801C1000
 #define ADDRESS_BUFFER          0x801CE000
 #define ADDRESS_FIFO            0x80227000
+#ifdef DISK
+#define ADDRESS_DISK            0x80246000
+#define ADDRESS_CODE            0x80400000
+#define ADDRESS_ULIB            0x80510000
+#define ADDRESS_BACKUP          0x80568000
+#define ADDRESS_ANIME           0x80570000
+#define ADDRESS_ULIB_END        ADDRESS_BACKUP
+#else
+#if REVISION >= 199707
+#define ADDRESS_CODE            0x80249000
+#define ADDRESS_ULIB            0x80378800
+#elif REVISION == 199703
+#define ADDRESS_CODE            0x80248180
+#define ADDRESS_ULIB            0x8036FF00
+#else
 #define ADDRESS_CODE            0x80246000
 #define ADDRESS_ULIB            0x80378800
+#endif
+#define ADDRESS_ULIB_END        ADDRESS_CIMG
+#endif
 #define ADDRESS_MENU            0x8016F000
 
 #define ADDRESS_FACEDATA        0x04000000
@@ -45,6 +63,7 @@
 #define ADDRESS_GLOBAL_SHP      0x16000000
 #define ADDRESS_PLAYER_SHP      0x17000000
 #define ADDRESS_DEMO            0x18000000
+#define ADDRESS_LANG            0x19000000
 
 #define SEG_FRAME               0x01
 #define SEG_GFX                 0x02
@@ -70,5 +89,6 @@
 #define SEG_GLOBAL_SHP          0x16
 #define SEG_PLAYER_SHP          0x17
 #define SEG_DEMO                0x18
+#define SEG_LANG                0x19
 
 #endif /* __SM64_SEGMENT_H__ */

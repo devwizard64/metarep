@@ -12,6 +12,12 @@
 #define SC_RSPDONE              3
 #define SC_RDPDONE              4
 
+extern long long entry_stack[BOOT_STACK_LEN];
+extern long long idle_stack[IDLE_STACK_LEN];
+extern long long sched_stack[MAIN_STACK_LEN];
+extern long long aud_stack[MAIN_STACK_LEN];
+extern long long gfx_stack[MAIN_STACK_LEN];
+
 UNUSED static OSThread rmon_thread;
 static OSThread idle_thread;
 static OSThread sched_thread;
@@ -36,15 +42,16 @@ static SCTASK *sc_gfxtask = NULL;
 static SCTASK *sc_audtask_next = NULL;
 static SCTASK *sc_gfxtask_next = NULL;
 static char sc_aud = TRUE;
-static u32 sc_vi = 0;
 
 OSIoMesg dma_mb;
 OSMesg null_msg;
 OSMesgQueue dma_mq;
 OSMesgQueue si_mq;
 
-s8 reset_timer = 0;
-s8 reset_frame = 0;
+u32 vi_count = 0;
+
+char reset_timer = 0;
+char reset_frame = 0;
 
 #ifdef GATEWAY
 char sys_halt = FALSE;
@@ -53,33 +60,33 @@ char sys_halt = FALSE;
 char debug_stage  = FALSE;
 char debug_thread = FALSE;
 char debug_time   = FALSE;
-char debug_mem    = FALSE;
+char debug_info   = FALSE;
 
 void DebugCheck(void)
 {
-	static u16 time_seq[] =
+	static u16 timeseq[] =
 		{U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
-	static u16 mem_seq[] =
+	static u16 infoseq[] =
 		{D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD};
-	static s16 time_idx = 0;
-	static s16 mem_idx = 0;
-	if (contp->down)
+	static short timeidx = 0;
+	static short infoidx = 0;
+	if (contp->down != 0)
 	{
-		if (time_seq[time_idx++] == contp->down)
+		if (timeseq[timeidx++] == contp->down)
 		{
-			if (time_idx == 8) time_idx = 0, debug_time ^= TRUE;
+			if (timeidx == 8) timeidx = 0, debug_time ^= TRUE;
 		}
 		else
 		{
-			time_idx = 0;
+			timeidx = 0;
 		}
-		if (mem_seq[mem_idx++] == contp->down)
+		if (infoseq[infoidx++] == contp->down)
 		{
-			if (mem_idx == 8) mem_idx = 0, debug_mem ^= TRUE;
+			if (infoidx == 8) infoidx = 0, debug_info ^= TRUE;
 		}
 		else
 		{
-			mem_idx = 0;
+			infoidx = 0;
 		}
 	}
 }
@@ -152,6 +159,9 @@ static void ScEventPreNMI(void)
 	Na_SeClear();
 	Na_LockSe();
 	AudFadeout(90);
+#if REVISION >= 199707
+	Na_J3_802F69CC();
+#endif
 }
 
 static void ScTaskFlush(void)
@@ -219,8 +229,12 @@ static void ScEventVI(void)
 {
 	UNUSED int i;
 	DebugSchedVI();
-	sc_vi++;
+	vi_count++;
+#if REVISION >= 199707
+	if (reset_timer > 0 && reset_timer < 100) reset_timer++;
+#else
 	if (reset_timer > 0) reset_timer++;
+#endif
 	ScTaskFlush();
 	if (sc_audtask)
 	{
@@ -243,6 +257,9 @@ static void ScEventVI(void)
 			ScTaskStart(M_GFXTASK);
 		}
 	}
+#ifdef MOTOR
+	motor_8024CC7C();
+#endif
 #ifdef GATEWAY
 	if (sc_audclient && !sys_halt)
 #else
@@ -393,11 +410,13 @@ void ScAudDisable(void)
 
 static void IdleProc(UNUSED void *arg)
 {
-#if REVISION > 199606
+#if REVISION >= 199609 && REVISION != 199703
 	int tv_type = osTvType;
 #endif
 	osCreateViManager(OS_PRIORITY_VIMGR);
-#if REVISION > 199606
+#ifdef PAL
+	osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
+#elif REVISION >= 199609
 	if (tv_type == OS_TV_NTSC)  osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
 	else                        osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
 #else
@@ -407,6 +426,9 @@ static void IdleProc(UNUSED void *arg)
 	osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
 	osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
 	osCreatePiManager(OS_PRIORITY_PIMGR, &pi_mq, pi_mbox, 32);
+#ifdef DISK
+	DiskInit();
+#endif
 	CreateThread(
 		&sched_thread, 3, SchedProc, NULL, sched_stack+MAIN_STACK_LEN, 100
 	);

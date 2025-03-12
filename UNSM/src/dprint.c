@@ -1,7 +1,7 @@
 #include <sm64.h>
 
 extern u16 *txt_glbfont[];
-extern Gfx gfx_print_copy_start[];
+extern Gfx gfx_print_copy_begin[];
 extern Gfx gfx_print_copy_char[];
 extern Gfx gfx_print_copy_end[];
 
@@ -9,13 +9,13 @@ typedef struct dprint
 {
 	int x;
 	int y;
-	s16 len;
+	short len;
 	char str[50];
 }
 DPRINT;
 
-static DPRINT *dprint_table[50];
-static s16 dprint_index = 0;
+static DPRINT *dplist[50];
+static short nprint = 0;
 
 static unsigned int Powi(int base, int exponent)
 {
@@ -25,12 +25,13 @@ static unsigned int Powi(int base, int exponent)
 	return x;
 }
 
-static void dprintFormat(
+static void dpFormat(
 	int value, int base, char *buf, int *index, UCHAR digit, CHAR zero
 )
 {
 	unsigned int power;
-	int e = 0, n, i = 0;
+	int e = 0;
+	int n, i = 0;
 	CHAR c;
 	char minus = FALSE;
 	char pad = ISTRUE(zero) ? '0' : -1;
@@ -79,7 +80,7 @@ static void dprintFormat(
 	*index += e + i;
 }
 
-static void dprintGetFmt(const char *fmt, int *index, u8 *digit, char *zero)
+static void dpGetFmt(const char *fmt, int *index, u8 *digit, char *zero)
 {
 	char buf[10];
 	CHAR n = 0;
@@ -106,54 +107,51 @@ void dprintf(int x, int y, const char *fmt, int value)
 	char c = 0, zero = FALSE;
 	u8 digit = 0;
 	int base = 0, n = 0, i = 0;
-	if (!(dprint_table[dprint_index] = malloc(sizeof(DPRINT)))) return;
-	dprint_table[dprint_index]->x = x;
-	dprint_table[dprint_index]->y = y;
+	if (!(dplist[nprint] = malloc(sizeof(DPRINT)))) return;
+	dplist[nprint]->x = x;
+	dplist[nprint]->y = y;
 	c = fmt[i];
 	while (c != '\0')
 	{
 		if (c == '%')
 		{
 			i++;
-			dprintGetFmt(fmt, &i, &digit, &zero);
+			dpGetFmt(fmt, &i, &digit, &zero);
 			if (fmt[i] != 'd' && fmt[i] != 'x') break;
 			if (fmt[i] == 'd') base = 10;
 			if (fmt[i] == 'x') base = 16;
 			i++;
-			dprintFormat(
-				value, base, &dprint_table[dprint_index]->str[n], &n,
-				digit, zero
-			);
+			dpFormat(value, base, &dplist[nprint]->str[n], &n, digit, zero);
 		}
 		else
 		{
-			dprint_table[dprint_index]->str[n] = c;
+			dplist[nprint]->str[n] = c;
 			n++;
 			i++;
 		}
 		c = fmt[i];
 	}
-	dprint_table[dprint_index]->len = n;
-	dprint_index++;
+	dplist[nprint]->len = n;
+	nprint++;
 }
 
 void dprint(int x, int y, const char *str)
 {
 	char c = 0;
 	int n = 0, i = 0;
-	if (!(dprint_table[dprint_index] = malloc(sizeof(DPRINT)))) return;
-	dprint_table[dprint_index]->x = x;
-	dprint_table[dprint_index]->y = y;
+	if (!(dplist[nprint] = malloc(sizeof(DPRINT)))) return;
+	dplist[nprint]->x = x;
+	dplist[nprint]->y = y;
 	c = str[i];
 	while (c != '\0')
 	{
-		dprint_table[dprint_index]->str[n] = c;
+		dplist[nprint]->str[n] = c;
 		n++;
 		i++;
 		c = str[i];
 	}
-	dprint_table[dprint_index]->len = n;
-	dprint_index++;
+	dplist[nprint]->len = n;
+	nprint++;
 }
 
 void dprintc(int x, int y, const char *str)
@@ -162,42 +160,42 @@ void dprintc(int x, int y, const char *str)
 	UNUSED u8 digit = 0;
 	UNUSED int base = 0;
 	int n = 0, i = 0;
-	if (!(dprint_table[dprint_index] = malloc(sizeof(DPRINT)))) return;
+	if (!(dplist[nprint] = malloc(sizeof(DPRINT)))) return;
 	c = str[i];
 	while (c != '\0')
 	{
-		dprint_table[dprint_index]->str[n] = c;
+		dplist[nprint]->str[n] = c;
 		n++;
 		i++;
 		c = str[i];
 	}
-	dprint_table[dprint_index]->len = n;
-	dprint_table[dprint_index]->x = x - 12*n/2;
-	dprint_table[dprint_index]->y = y;
-	dprint_index++;
+	dplist[nprint]->len = n;
+	dplist[nprint]->x = x - 12*n/2;
+	dplist[nprint]->y = y;
+	nprint++;
 }
 
-static CHAR dprintCvt(CHAR c)
+static CHAR dpCvt(CHAR c)
 {
-	if (c >= 'A' && c <= 'Z') return 10 + c-'A';
-	if (c >= 'a' && c <= 'z') return 10 + c-'a';
-	if (c >= '0' && c <= '9') return  0 + c-'0';
-	if (c == ' ') return -1;
-	if (c == '!') return 36;
-	if (c == '#') return 37;
-	if (c == '?') return 38;
-	if (c == '&') return 39;
-	if (c == '%') return 40;
-	if (c == '*') return 50;
-	if (c == '+') return 51;
-	if (c == ',') return 52;
-	if (c == '-') return 53;
-	if (c == '.') return 54;
-	if (c == '/') return 55;
+	if (c >= 'A' && c <= 'Z') return CH_A + c-'A';
+	if (c >= 'a' && c <= 'z') return CH_A + c-'a';
+	if (c >= '0' && c <= '9') return CH_0 + c-'0';
+	if (c == ' ') return CH16_SPACE;
+	if (c == '!') return CH16_BANG;
+	if (c == '#') return CH16_BANGBANG;
+	if (c == '?') return CH16_QUESTION;
+	if (c == '&') return CH16_AMPERSAND;
+	if (c == '%') return CH16_PERCENT;
+	if (c == '*') return CH16_CROSS;
+	if (c == '+') return CH16_COIN;
+	if (c == ',') return CH16_MARIO;
+	if (c == '-') return CH16_STAR;
+	if (c == '.') return CH16_SHADOW;
+	if (c == '/') return CH16_KEY;
 	return -1;
 }
 
-static void dprintDrawTxt(CHAR c)
+static void dpDrawTxt(CHAR c)
 {
 	u16 **txt = SegmentToVirtual(txt_glbfont);
 	gDPPipeSync(glistp++);
@@ -205,7 +203,7 @@ static void dprintDrawTxt(CHAR c)
 	gSPDisplayList(glistp++, gfx_print_copy_char);
 }
 
-static void dprintClamp(int *x, int *y)
+static void dpClamp(int *x, int *y)
 {
 	if (*x <           10) *x =           10;
 	if (*x > SCREEN_WD-20) *x = SCREEN_WD-20;
@@ -213,12 +211,12 @@ static void dprintClamp(int *x, int *y)
 	if (*y > SCREEN_HT-20) *y = SCREEN_HT-20;
 }
 
-static void dprintDrawChar(int x, int y, int n)
+static void dpDrawChar(int x, int y, int n)
 {
 	int sx = 12*n + x;
 	int sy = SCREEN_HT - (y+16);
 	unsigned int ux, uy;
-	dprintClamp(&sx, &sy);
+	dpClamp(&sx, &sy);
 	ux = sx;
 	uy = sy;
 	gSPTextureRectangle(
@@ -232,10 +230,10 @@ void dprintDraw(void)
 	int i, n;
 	CHAR c;
 	Mtx *mtx;
-	if (dprint_index == 0) return;
+	if (nprint == 0) return;
 	if (!(mtx = GfxAlloc(sizeof(Mtx))))
 	{
-		dprint_index = 0; /* memory leak */
+		nprint = 0; /* memory leak */
 		return;
 	}
 	guOrtho(mtx, 0, SCREEN_WD, 0, SCREEN_HT, -10, 10, 1);
@@ -243,19 +241,34 @@ void dprintDraw(void)
 	gSPMatrix(
 		glistp++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_LOAD|G_MTX_NOPUSH
 	);
-	gSPDisplayList(glistp++, gfx_print_copy_start);
-	for (i = 0; i < dprint_index; i++)
+	gSPDisplayList(glistp++, gfx_print_copy_begin);
+	for (i = 0; i < nprint; i++)
 	{
-		for (n = 0; n < dprint_table[i]->len; n++)
+		for (n = 0; n < dplist[i]->len; n++)
 		{
-			if ((c = dprintCvt(dprint_table[i]->str[n])) != -1)
+			if ((c = dpCvt(dplist[i]->str[n])) != -1)
 			{
-				dprintDrawTxt(c);
-				dprintDrawChar(dprint_table[i]->x, dprint_table[i]->y, n);
+#ifdef MULTILANG
+				if (c == CH16_U_UMLAUT)
+				{
+					dpDrawTxt(CH_U);
+					dpDrawChar(dplist[i]->x, dplist[i]->y, n);
+					dpDrawTxt(CH16_UMLAUT);
+					dpDrawChar(dplist[i]->x, dplist[i]->y+3, n);
+				}
+				else
+				{
+					dpDrawTxt(c);
+					dpDrawChar(dplist[i]->x, dplist[i]->y, n);
+				}
+#else
+				dpDrawTxt(c);
+				dpDrawChar(dplist[i]->x, dplist[i]->y, n);
+#endif
 			}
 		}
-		free(dprint_table[i]);
+		free(dplist[i]);
 	}
 	gSPDisplayList(glistp++, gfx_print_copy_end);
-	dprint_index = 0;
+	nprint = 0;
 }

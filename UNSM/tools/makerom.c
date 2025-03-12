@@ -4,25 +4,18 @@
 #include <string.h>
 #include <getopt.h>
 
-#include "elf.h"
-#include "elf.c"
+#include "lib/elf.h"
+#include "lib/elf.c"
 
 #define HI(x)   (((x) >> 16) + ((x) >> 15 & 1))
 #define LO(x)   ((x) & 0xFFFF)
 
-static void makeheader(unsigned char *data, const char *path)
+static void makeheader(unsigned char *data, FILE *fp)
 {
-	int i;
-	FILE *fp;
-	if (!(fp = fopen(path, "r")))
-	{
-		fprintf(stderr, "error: could not read '%s'\n", path);
-		exit(1);
-	}
+	int i, c;
 	for (i = 0; i < 32;)
 	{
-		int c = getc(fp);
-		if (c < 0) break;
+		if ((c = getc(fp)) < 0) break;
 		else if (c >= '0' && c <= '9') c -= '0'- 0;
 		else if (c >= 'A' && c <= 'F') c -= 'A'-10;
 		else if (c >= 'a' && c <= 'f') c -= 'a'-10;
@@ -31,7 +24,6 @@ static void makeheader(unsigned char *data, const char *path)
 		else            data[i >> 1] |= c;
 		i++;
 	}
-	fclose(fp);
 }
 
 static void makecrt0(unsigned char *data, ELF *elf)
@@ -110,89 +102,90 @@ static void calc3(unsigned char *data, size_t size)
 	data[0x17] = c1 >>  0;
 }
 
-static void usage(const char *path)
+static int usage(const char *path)
 {
-	fprintf(stderr, "usage: %s [options] elffile\n", path);
-	fprintf(stderr,
+	fprintf(
+		stderr,
+		"usage: %s [options] elffile\n"
 		"\t-r romfile\n"
 		"\t-h headerfile\n"
 		"\t-b bootfile\n"
 		"\t-F fontfile\n"
 		"\t-s romsize (Mbits)\n"
 		"\t-a align\n"
-		"\t-f filldata (0x00 - 0xff)\n"
+		"\t-f filldata (0x00 - 0xff)\n",
+		path
 	);
+	return 1;
 }
 
 int main(int argc, char *argv[])
 {
-	int c;
-	FILE *fp;
+	int c, fill = 0;
+	size_t end, size = 0, align = 0;
+	const char *path = "rom";
+	const char *header = "header";
+	const char *boot = "Boot";
+	const char *font = "font";
 	unsigned char *data;
-	size_t size, end, align;
+	FILE *fp;
 	ELF elf;
-	const char *opt_rom = "rom";
-	const char *opt_header = "header";
-	const char *opt_boot = "Boot";
-	const char *opt_font = "font";
-	long opt_size = 0;
-	long opt_align = 0;
-	long opt_fill = 0;
 	while ((c = getopt(argc, argv, "r:h:b:F:s:a:f:")) != -1)
 	{
 		switch (c)
 		{
 		case 'r':
-			opt_rom = optarg;
+			path = optarg;
 			break;
 		case 'h':
-			opt_header = optarg;
+			header = optarg;
 			break;
 		case 'b':
-			opt_boot = optarg;
+			boot = optarg;
 			break;
 		case 'F':
-			opt_font = optarg;
+			font = optarg;
 			break;
 		case 's':
-			opt_size = strtol(optarg, NULL, 0);
+			size = strtol(optarg, NULL, 0) << 17;
 			break;
 		case 'a':
-			opt_align = strtol(optarg, NULL, 0);
+			align = (1 << strtol(optarg, NULL, 0)) - 1;
 			break;
 		case 'f':
-			opt_fill = strtol(optarg, NULL, 0);
+			fill = strtol(optarg, NULL, 0);
 			break;
 		case '?':
-			usage(argv[0]);
-			return 1;
-			break;
+			return usage(argv[0]);
 		}
 	}
-	if (argc-optind != 1)
+	if (argc-optind != 1) return usage(argv[0]);
+	if (elf_open(&elf, argv[optind], "rb"))
 	{
-		usage(argv[0]);
+		fprintf(stderr, "error: could not open '%s'\n", argv[optind]);
 		return 1;
 	}
-	elf_open(&elf, argv[optind], "rb");
 	elf_loadsection(&elf);
 	end = 0x1000 + elf_size(&elf);
-	size = 1024*1024/8 * opt_size;
 	if (size < end) size = end;
-	align = (1 << opt_align) - 1;
-	size = (size+align) & ~align;
-	memset(data = malloc(size), 0, end);
-	makeheader(data, opt_header);
-	if (!(fp = fopen(opt_boot, "rb")))
+	data = calloc(size = (size+align) & ~align, 1);
+	if (!(fp = fopen(header, "r")))
 	{
-		fprintf(stderr, "error: could not read '%s'\n", opt_boot);
+		fprintf(stderr, "error: could not open '%s'\n", header);
+		return 1;
+	}
+	makeheader(data, fp);
+	fclose(fp);
+	if (!(fp = fopen(boot, "rb")))
+	{
+		fprintf(stderr, "error: could not open '%s'\n", boot);
 		return 1;
 	}
 	fread(&data[0x40], 1, 0xB70-0x40, fp);
 	fclose(fp);
-	if (!(fp = fopen(opt_font, "rb")))
+	if (!(fp = fopen(font, "rb")))
 	{
-		fprintf(stderr, "error: could not read '%s'\n", opt_font);
+		fprintf(stderr, "error: could not open '%s'\n", font);
 		return 1;
 	}
 	fread(&data[0xB70], 1, 0x1000-0xB70, fp);
@@ -201,11 +194,11 @@ int main(int argc, char *argv[])
 	makecrt0(data+0x1000, &elf);
 	*(uint32_t *)(data+8) = elf.eh.entry;
 	elf_close(&elf);
-	memset(data+end, opt_fill, size-end);
+	if (fill) memset(data+end, fill, size-end);
 	calc3(data, size);
-	if (!(fp = fopen(opt_rom, "wb")))
+	if (!(fp = fopen(path, "wb")))
 	{
-		fprintf(stderr, "error: could not write '%s'\n", opt_rom);
+		fprintf(stderr, "error: could not open '%s'\n", path);
 		return 1;
 	}
 	fwrite(data, 1, size, fp);

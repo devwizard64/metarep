@@ -1,7 +1,10 @@
 #include <sm64.h>
 
+#ifdef JAPANESE
+#include "fileselect.ja_jp.h"
+#endif
 #ifdef ENGLISH
-#include "en_us.h"
+#include "fileselect.en_us.h"
 #endif
 
 #define F_SELECT        -1
@@ -66,35 +69,35 @@
 #define TILE_SELECT     5
 #define TILE_DESELECT   6
 
-extern Gfx gfx_print_1cyc_start[];
+extern Gfx gfx_print_1cyc_begin[];
 extern Gfx gfx_print_1cyc_end[];
-extern Gfx gfx_lgfont_start[];
+extern Gfx gfx_lgfont_begin[];
 extern Gfx gfx_lgfont_end[];
 extern unsigned char *coursename[];
 
-extern Gfx gfx_smfont_start[];
+extern Gfx gfx_smfont_begin[];
 extern Gfx gfx_smfont_end[];
 extern Gfx gfx_select_cursor_0[];
 extern Gfx gfx_select_cursor_1[];
 
 static OBJECT *fs_obj[32];
 static s8 fs_state = F_SELECT;
-static s8 fs_mode = 1;
+static char fs_mode = 1;
 static u8 fs_alpha = 0;
 static float cursor_pos[2] = {0, 0};
-static s16 cursor_flag = 0;
+static short cursor_flag = 0;
 static short click_pos[2] = {-10000, -10000};
 static s8 click_file = -1;
 static char click_flag = FALSE;
-static s8 click_msg = 0;
+static char click_msg = 0;
 static u8 click_alpha = 0;
-static s16 click_timer = 0;
+static short click_timer = 0;
 static s8 sound_flag = 0;
 static u8 blink[2];
-static s8 erase_flag = 0;
+static char erase_flag = 0;
 static char fs_full = FALSE;
-static s8 fs_result = 0;
-static s8 score_flag = 0;
+static char fs_result = 0;
+static char score_flag = 0;
 
 void FileBack_Init(void)
 {
@@ -280,11 +283,11 @@ void FileTile_Proc(void)
 	ObjectSetScale(object->o_f5);
 }
 
-extern OBJLANG o_filetile[];
+extern OBJLANG obj_filetile[];
 
 #define FileMenu_MakeTile(obj, shape, scale, posx, posy, posz, angy) \
 	ObjMakeRel( \
-		obj, shape, o_filetile, (posx)/scale, (posy)/scale, posz, 0, angy, 0 \
+		obj, shape, obj_filetile, (posx)/scale, (posy)/scale, posz, 0, angy, 0 \
 	)
 #define FileMenu_InitTileSel(tile, shape, x, y) \
 { \
@@ -302,8 +305,8 @@ extern OBJLANG o_filetile[];
 	{ \
 		fs_obj[F_FILE+i] = FileMenu_MakeTile( \
 			object, S_FILE_MARIO_S, 1, \
-			(i & 1) ? +1500 : -6400, \
-			(i & 2) ?     0 : +2800, \
+			i & 1 ? +1500 : -6400, \
+			i & 2 ?     0 : +2800, \
 			0, 0 \
 		); \
 	} \
@@ -311,8 +314,8 @@ extern OBJLANG o_filetile[];
 	{ \
 		fs_obj[F_FILE+i] = FileMenu_MakeTile( \
 			object, S_FILE_NEW_S, 1, \
-			(i & 1) ? +1500 : -6400, \
-			(i & 2) ?     0 : +2800, \
+			i & 1 ? +1500 : -6400, \
+			i & 2 ?     0 : +2800, \
 			0, 0 \
 		); \
 	} \
@@ -324,8 +327,8 @@ extern OBJLANG o_filetile[];
 	{ \
 		fs_obj[tile+i] = FileMenu_MakeTile( \
 			obj, S_FILE_MARIO, 9, \
-			(i & 1) ? -1500 : +6400, \
-			(i & 2) ?     0 : +2800, \
+			i & 1 ? -1500 : +6400, \
+			i & 2 ?     0 : +2800, \
 			-100, -0x8000 \
 		); \
 	} \
@@ -333,8 +336,8 @@ extern OBJLANG o_filetile[];
 	{ \
 		fs_obj[tile+i] = FileMenu_MakeTile( \
 			obj, S_FILE_NEW, 9, \
-			(i & 1) ? -1500 : +6400, \
-			(i & 2) ?     0 : +2800, \
+			i & 1 ? -1500 : +6400, \
+			i & 2 ?     0 : +2800, \
 			-100, -0x8000 \
 		); \
 	} \
@@ -348,6 +351,9 @@ static void FileMenu_ScoreFile(OBJECT *obj, CHAR back)
 		if (cursor_flag == 2)
 		{
 			Na_FixSePlay(NA_SE7_07);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			obj->o_v0 = TILE_CLOSE;
 		}
 	}
@@ -383,6 +389,9 @@ static void FileMenu_ScoreProc(OBJECT *obj)
 				if (i == FS_SELECT || i == FS_COPY || i == FS_ERASE)
 				{
 					Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+					motor_8024C834(5, 80);
+#endif
 					fs_obj[i]->o_v0 = TILE_CLICK;
 					fs_state = i;
 				}
@@ -391,12 +400,18 @@ static void FileMenu_ScoreProc(OBJECT *obj)
 					if (ISTRUE(BuFileIsActive(i-FS_FILE)))
 					{
 						Na_FixSePlay(NA_SE7_06);
+#ifdef MOTOR
+						motor_8024C834(5, 80);
+#endif
 						fs_obj[i]->o_v0 = TILE_OPEN;
 						fs_state = i;
 					}
 					else
 					{
 						Na_FixSePlay(NA_SE7_0E);
+#ifdef MOTOR
+						motor_8024C834(5, 80);
+#endif
 						fs_obj[i]->o_v0 = TILE_CLICK;
 						if (click_timer > 30)
 						{
@@ -432,6 +447,9 @@ static void FileMenu_CopyFile(OBJECT *obj, int tile)
 		if (ISTRUE(BuFileIsActive(tile-FC_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[tile]->o_v0 = TILE_SELECT;
 			click_file = tile-FC_FILE;
 			obj->o_v6 = 1;
@@ -441,6 +459,9 @@ static void FileMenu_CopyFile(OBJECT *obj, int tile)
 		else
 		{
 			Na_FixSePlay(NA_SE7_0E);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[tile]->o_v0 = TILE_CLICK;
 			if (click_timer > 20)
 			{
@@ -454,19 +475,24 @@ static void FileMenu_CopyFile(OBJECT *obj, int tile)
 		if (ISFALSE(BuFileIsActive(tile-FC_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_1E);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			obj->o_v6 = 2;
 			click_flag = TRUE;
 			click_timer = 0;
 			BuFileCopy(click_file, tile-FC_FILE);
 			fs_obj[tile]->s.shape = shape_table[S_FILE_MARIO_S];
-			fs_obj[F_FILE + tile-FC_FILE]->s.shape =
-				shape_table[S_FILE_MARIO_S];
+			fs_obj[F_FILE+tile-FC_FILE]->s.shape = shape_table[S_FILE_MARIO_S];
 		}
 		else
 		{
 			if (tile == FC_FILE+click_file)
 			{
 				Na_FixSePlay(NA_SE7_0E);
+#ifdef MOTOR
+				motor_8024C834(5, 80);
+#endif
 				fs_obj[FC_FILE+click_file]->o_v0 = TILE_DESELECT;
 				obj->o_v6 = 0;
 				click_flag = TRUE;
@@ -498,6 +524,9 @@ static void FileMenu_CopyProc(OBJECT *obj)
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+						motor_8024C834(5, 80);
+#endif
 						fs_obj[i]->o_v0 = TILE_CLICK;
 						fs_state = i;
 					}
@@ -540,6 +569,9 @@ static void FileMenu_EraseFile(OBJECT *obj, int tile)
 		if (ISTRUE(BuFileIsActive(tile-FE_FILE)))
 		{
 			Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[tile]->o_v0 = TILE_SELECT;
 			click_file = tile-FE_FILE;
 			obj->o_v6 = 1;
@@ -549,6 +581,9 @@ static void FileMenu_EraseFile(OBJECT *obj, int tile)
 		else
 		{
 			Na_FixSePlay(NA_SE7_0E);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[tile]->o_v0 = TILE_CLICK;
 			if (click_timer > 20)
 			{
@@ -561,6 +596,9 @@ static void FileMenu_EraseFile(OBJECT *obj, int tile)
 		if (tile == FE_FILE+click_file)
 		{
 			Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
 			obj->o_v6 = 0;
 			click_flag = TRUE;
@@ -585,6 +623,9 @@ static void FileMenu_EraseProc(OBJECT *obj)
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+						motor_8024C834(5, 80);
+#endif
 						fs_obj[i]->o_v0 = TILE_CLICK;
 						fs_state = i;
 					}
@@ -629,6 +670,9 @@ static void FileMenu_OptionProc(OBJECT *obj)
 					if (obj->o_v6 == 0)
 					{
 						Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+						motor_8024C834(5, 80);
+#endif
 						fs_obj[i]->o_v0 = TILE_CLICK;
 						fs_state = i;
 						sound_flag = i-FO_SOUND;
@@ -807,24 +851,76 @@ static void FileMenu_Select(void)
 	}
 	switch (fs_state)
 	{
-	case F_FILE_A: Na_FixSePlay(NA_SE7_23); break;
-	case F_FILE_B: Na_FixSePlay(NA_SE7_23); break;
-	case F_FILE_C: Na_FixSePlay(NA_SE7_23); break;
-	case F_FILE_D: Na_FixSePlay(NA_SE7_23); break;
+	case F_FILE_A:
+#if REVISION >= 199609
+		Na_FixSePlay(NA_SE7_23);
+#else
+		Na_FixSePlay(NA_SE7_1E);
+#endif
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
+		break;
+	case F_FILE_B:
+#if REVISION >= 199609
+		Na_FixSePlay(NA_SE7_23);
+#else
+		Na_FixSePlay(NA_SE7_1E);
+#endif
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
+		break;
+	case F_FILE_C:
+#if REVISION >= 199609
+		Na_FixSePlay(NA_SE7_23);
+#else
+		Na_FixSePlay(NA_SE7_1E);
+#endif
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
+		break;
+	case F_FILE_D:
+#if REVISION >= 199609
+		Na_FixSePlay(NA_SE7_23);
+#else
+		Na_FixSePlay(NA_SE7_1E);
+#endif
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
+		break;
 	case F_SCORE:
 		Na_FixSePlay(NA_SE7_06);
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		FileMenu_ScoreInit(fs_obj[F_SCORE]);
 		break;
 	case F_COPY:
 		Na_FixSePlay(NA_SE7_06);
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		FileMenu_CopyInit(fs_obj[F_COPY]);
 		break;
 	case F_ERASE:
 		Na_FixSePlay(NA_SE7_06);
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		FileMenu_EraseInit(fs_obj[F_ERASE]);
 		break;
 	case F_OPTION:
 		Na_FixSePlay(NA_SE7_06);
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		FileMenu_OptionInit(fs_obj[F_OPTION]);
 		break;
 	}
@@ -873,14 +969,14 @@ void FileMenu_Proc(void)
 }
 
 static unsigned char str_return[] = {STR_RETURN};
-static unsigned char str_check_score[] = {STR_CHECK_SCORE};
-static unsigned char str_copy_file[] = {STR_COPY_FILE};
-static unsigned char str_erase_file[] = {STR_ERASE_FILE};
+static unsigned char str_view_score[] = {STR_VIEW_SCORE};
+static unsigned char str_file_copy[] = {STR_FILE_COPY};
+static unsigned char str_file_erase[] = {STR_FILE_ERASE};
 static unsigned char str_sound[][8] =
 {
 	{STR_STEREO},
 	{STR_MONO},
-	{STR_HEADSET},
+	{STR_PHONE},
 };
 static unsigned char str_mario_a[] = {STR_MARIO_A};
 static unsigned char str_mario_b[] = {STR_MARIO_B};
@@ -955,7 +1051,7 @@ static void FsDrawCursor(void)
 
 static void FsPrint16(CHAR font, SHORT x, SHORT y, const unsigned char *str)
 {
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha-click_alpha);
 	Print16(font, x, y, str);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
@@ -963,7 +1059,7 @@ static void FsPrint16(CHAR font, SHORT x, SHORT y, const unsigned char *str)
 
 static void FsPrintLg(SHORT x, SHORT y, const unsigned char *str)
 {
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha-click_alpha);
 	PrintLg(x, y, str);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
@@ -989,8 +1085,8 @@ static int ClickFade(void)
 
 static void FsDrawSelectFile(CHAR file, SHORT x, SHORT y)
 {
-	static unsigned char str_star[] = {CH16_STAR, CH_NUL};
-	static unsigned char str_cross[] = {CH16_CROSS, CH_NUL};
+	static unsigned char str_star[] = {CH16_STAR,CH_NUL};
+	static unsigned char str_cross[] = {CH16_CROSS,CH_NUL};
 	unsigned char buf[4];
 	CHAR offset = 0;
 	if (ISTRUE(BuFileIsActive(file)))
@@ -1002,7 +1098,7 @@ static void FsDrawSelectFile(CHAR file, SHORT x, SHORT y)
 			Print16(FONT_GLB, x+16, y, str_cross);
 			offset = 16;
 		}
-		itostr(total, buf);
+		IntToStr(total, buf);
 		Print16(FONT_GLB, x+16+offset, y, buf);
 	}
 	else
@@ -1013,32 +1109,52 @@ static void FsDrawSelectFile(CHAR file, SHORT x, SHORT y)
 
 static void FsDrawSelect(void)
 {
-	static unsigned char str_select_file[] = {STR_SELECT_FILE};
+	static unsigned char str_banner_select[] = {STR_BANNER_SELECT};
 	static unsigned char str_score[] = {STR_SCORE};
 	static unsigned char str_copy[] = {STR_COPY};
 	static unsigned char str_erase[] = {STR_ERASE};
+#if REVISION >= 199609
 #ifdef sgi
 	static short sound_x;
 #else
 	SHORT sound_x;
 #endif
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+#endif
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
-	Print16(FONT_GLB, 93, 35, str_select_file);
+#ifdef JAPANESE
+	Print16(FONT_SEL, 96, 35, str_banner_select);
+#endif
+#ifdef ENGLISH
+	Print16(FONT_GLB, 93, 35, str_banner_select);
+#endif
 	FsDrawSelectFile(0,  92,  78);
 	FsDrawSelectFile(1, 209,  78);
 	FsDrawSelectFile(2,  92, 118);
 	FsDrawSelectFile(3, 209, 118);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+#ifdef JAPANESE
+	PrintLg( 50, 39, str_score);
+	PrintLg(115, 39, str_copy);
+	PrintLg(180, 39, str_erase);
+#endif
+#ifdef ENGLISH
 	PrintLg( 52, 39, str_score);
 	PrintLg(117, 39, str_copy);
 	PrintLg(177, 39, str_erase);
+#endif
+#if REVISION >= 199609
 	sound_x = StrCenterX(254, str_sound[sound_flag], 10);
 	PrintLg(sound_x, 39, str_sound[sound_flag]);
+#else
+#ifdef JAPANESE
+	PrintLg(235, 39, str_sound[sound_flag]);
+#endif
+#endif
 	gSPDisplayList(glistp++, gfx_lgfont_end);
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	PrintSm( 92,  65, str_mario_a);
 	PrintSm(207,  65, str_mario_b);
@@ -1049,13 +1165,18 @@ static void FsDrawSelect(void)
 
 static void FsDrawScoreMsg(CHAR msg)
 {
-	static unsigned char str_check_file[] = {STR_CHECK_FILE};
-	static unsigned char str_no_saved_data_exists[] =
-		{STR_NO_SAVED_DATA_EXISTS};
+	static unsigned char str_banner_score[] = {STR_BANNER_SCORE};
+	static unsigned char str_no_data[] = {STR_NO_DATA};
 	switch (msg)
 	{
-	case 0: FsPrint16(FONT_GLB, 95, 35, str_check_file); break;
-	case 1: FsPrintLg(99, 190, str_no_saved_data_exists); break;
+#ifdef JAPANESE
+	case 0: FsPrint16(FONT_SEL, 90, 35, str_banner_score); break;
+	case 1: FsPrintLg(90, 190, str_no_data); break;
+#endif
+#ifdef ENGLISH
+	case 0: FsPrint16(FONT_GLB, 95, 35, str_banner_score); break;
+	case 1: FsPrintLg(99, 190, str_no_data); break;
+#endif
 	}
 }
 
@@ -1068,20 +1189,27 @@ static void FsDrawScore(void)
 		else                click_msg = 0;
 	}
 	FsDrawScoreMsg(click_msg);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	FsDrawSelectFile(0,  90,  76);
 	FsDrawSelectFile(1, 211,  76);
 	FsDrawSelectFile(2,  90, 119);
 	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+#ifdef JAPANESE
+	PrintLg( 45, 35, str_return);
+	PrintLg(128, 35, str_file_copy);
+	PrintLg(228, 35, str_file_erase);
+#endif
+#ifdef ENGLISH
 	PrintLg( 44, 35, str_return);
-	PrintLg(135, 35, str_copy_file);
-	PrintLg(231, 35, str_erase_file);
+	PrintLg(135, 35, str_file_copy);
+	PrintLg(231, 35, str_file_erase);
+#endif
 	gSPDisplayList(glistp++, gfx_lgfont_end);
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	PrintSm( 89,  62, str_mario_a);
 	PrintSm(211,  62, str_mario_b);
@@ -1092,37 +1220,33 @@ static void FsDrawScore(void)
 
 static void FsDrawCopyMsg(CHAR msg)
 {
-	static unsigned char str_copy_file[] = {STR_COPY_FILE};
-	static unsigned char str_copy_it_to_where[] = {STR_COPY_IT_TO_WHERE};
-	static unsigned char str_no_saved_data_exists[] =
-		{STR_NO_SAVED_DATA_EXISTS};
-	static unsigned char str_copying_completed[] = {STR_COPYING_COMPLETED};
-	static unsigned char str_saved_data_exists[] = {STR_SAVED_DATA_EXISTS};
-	static unsigned char str_no_empty_file[] = {STR_NO_EMPTY_FILE};
+	static unsigned char str_banner_copy[] = {STR_BANNER_COPY};
+	static unsigned char str_copy_where[] = {STR_COPY_WHERE};
+	static unsigned char str_no_data[] = {STR_NO_DATA};
+	static unsigned char str_copy_finish[] = {STR_COPY_FINISH};
+	static unsigned char str_data_exist[] = {STR_DATA_EXIST};
+	static unsigned char str_no_empty[] = {STR_NO_EMPTY};
 	switch (msg)
 	{
 	case 0:
-		if (ISTRUE(fs_full))
-		{
-			FsPrintLg(119, 190, str_no_empty_file);
-		}
-		else
-		{
-			FsPrint16(FONT_GLB, 104, 35, str_copy_file);
-		}
+#ifdef JAPANESE
+		if (ISTRUE(fs_full))    FsPrintLg(90, 190, str_no_empty);
+		else                    FsPrint16(FONT_SEL, 90, 35, str_banner_copy);
 		break;
-	case 1:
-		FsPrintLg(109, 190, str_copy_it_to_where);
+	case 1: FsPrintLg(90, 190, str_copy_where);    break;
+	case 2: FsPrintLg(90, 190, str_no_data);       break;
+	case 3: FsPrintLg(90, 190, str_copy_finish);   break;
+	case 4: FsPrintLg(90, 190, str_data_exist);    break;
+#endif
+#ifdef ENGLISH
+		if (ISTRUE(fs_full))    FsPrintLg(119, 190, str_no_empty);
+		else                    FsPrint16(FONT_GLB, 104, 35, str_banner_copy);
 		break;
-	case 2:
-		FsPrintLg(101, 190, str_no_saved_data_exists);
-		break;
-	case 3:
-		FsPrintLg(110, 190, str_copying_completed);
-		break;
-	case 4:
-		FsPrintLg(110, 190, str_saved_data_exists);
-		break;
+	case 1: FsPrintLg(109, 190, str_copy_where);    break;
+	case 2: FsPrintLg(101, 190, str_no_data);       break;
+	case 3: FsPrintLg(110, 190, str_copy_finish);   break;
+	case 4: FsPrintLg(110, 190, str_data_exist);    break;
+#endif
 	}
 }
 
@@ -1161,20 +1285,30 @@ static void FsDrawCopy(void)
 {
 	FsProcCopy();
 	FsDrawCopyMsg(click_msg);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	FsDrawSelectFile(0,  90,  76);
 	FsDrawSelectFile(1, 211,  76);
 	FsDrawSelectFile(2,  90, 119);
 	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+#ifdef JAPANESE
+	PrintLg( 45, 35, str_return);
+	PrintLg(133, 35, str_view_score);
+#endif
+#ifdef ENGLISH
 	PrintLg( 44, 35, str_return);
-	PrintLg(128, 35, str_check_score);
-	PrintLg(230, 35, str_erase_file);
+	PrintLg(128, 35, str_view_score);
+#endif
+#if REVISION >= 199609
+	PrintLg(230, 35, str_file_erase);
+#else
+	PrintLg(220, 35, str_file_erase);
+#endif
 	gSPDisplayList(glistp++, gfx_lgfont_end);
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	PrintSm( 89,  62, str_mario_a);
 	PrintSm(211,  62, str_mario_b);
@@ -1188,15 +1322,29 @@ static void FsDrawErasePrompt(SHORT x, SHORT y)
 	static unsigned char str_yes[] = {STR_YES};
 	static unsigned char str_no[] = {STR_NO};
 	SHORT theta = 0x1000*gfx_frame;
+#if REVISION >= 199609
 	SHORT posx = cursor_pos[0] + (x+70);
 	SHORT posy = cursor_pos[1] + 120;
+#else
+	SHORT posx = cursor_pos[0] + 160;
+	SHORT posy = cursor_pos[1] + 120;
+#endif
+#ifdef JAPANESE
+	if (posx < 164 && posx > 144 && posy < 210 && posy > 190)
+#endif
+#ifdef ENGLISH
 	if (posx < 169 && posx > 139 && posy < 210 && posy > 190)
+#endif
 	{
 		blink[0] = 0xFF-50 + 50*SIN(theta);
 		blink[1] = 150;
 		erase_flag = 1;
 	}
+#if REVISION >= 199707
+	else if (posx < 213 && posx > 193 && posy < 210 && posy > 190)
+#else
 	else if (posx < 218 && posx > 188 && posy < 210 && posy > 190)
+#endif
 	{
 		blink[0] = 150;
 		blink[1] = 0xFF-50 + 50*SIN(theta);
@@ -1213,6 +1361,9 @@ static void FsDrawErasePrompt(SHORT x, SHORT y)
 		if (erase_flag == 1)
 		{
 			Na_FixSePlay(NA_SE2_10);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[F_ERASE]->o_v6 = 2;
 			click_flag = TRUE;
 			click_timer = 0;
@@ -1224,6 +1375,9 @@ static void FsDrawErasePrompt(SHORT x, SHORT y)
 		else if (erase_flag == 2)
 		{
 			Na_FixSePlay(NA_SE7_11);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			fs_obj[FE_FILE+click_file]->o_v0 = TILE_DESELECT;
 			fs_obj[F_ERASE]->o_v6 = 0;
 			click_flag = TRUE;
@@ -1231,7 +1385,7 @@ static void FsDrawErasePrompt(SHORT x, SHORT y)
 			erase_flag = 0;
 		}
 	}
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, blink[0], blink[0], blink[0], fs_alpha);
 	PrintLg(x+56, y, str_yes);
 	gDPSetEnvColor(glistp++, blink[1], blink[1], blink[1], fs_alpha);
@@ -1241,31 +1395,55 @@ static void FsDrawErasePrompt(SHORT x, SHORT y)
 
 static void FsDrawEraseMsg(CHAR msg)
 {
-	STATIC unsigned char str_erase_file[] = {STR_ERASE_FILE};
-	STATIC unsigned char str_sure[] = {STR_SURE};
-	STATIC unsigned char str_no_saved_data_exists[] =
-		{STR_NO_SAVED_DATA_EXISTS};
-	STATIC unsigned char str_mario_a_just_erased[] = {STR_MARIO_A_JUST_ERASED};
-	STATIC unsigned char str_saved_data_exists[] = {STR_SAVED_DATA_EXISTS};
+	STATIC unsigned char str_banner_erase[] = {STR_BANNER_ERASE};
+	STATIC unsigned char str_really[] = {STR_REALLY};
+	STATIC unsigned char str_no_data[] = {STR_NO_DATA};
+	STATIC unsigned char str_erased[] = {STR_ERASED};
+	STATIC unsigned char str_data_exist[] = {STR_DATA_EXIST};
 	switch (msg)
 	{
+#ifdef JAPANESE
 	case 0:
-		FsPrint16(FONT_GLB, 98, 35, str_erase_file);
+#if REVISION >= 199707
+		FsPrint16(FONT_SEL, 111, 35, str_banner_erase);
+#else
+		FsPrint16(FONT_SEL, 96, 35, str_banner_erase);
+#endif
 		break;
 	case 1:
-		FsPrintLg(90, 190, str_sure);
+		FsPrintLg(90, 190, str_really);
 		FsDrawErasePrompt(90, 190);
 		break;
 	case 2:
-		FsPrintLg(100, 190, str_no_saved_data_exists);
+		FsPrintLg(90, 190, str_no_data);
 		break;
 	case 3:
-		str_mario_a_just_erased[6] = CH_A + click_file;
-		FsPrintLg(100, 190, str_mario_a_just_erased);
+		str_erased[3] = CH_A + click_file;
+		FsPrintLg(90, 190, str_erased);
 		break;
 	case 4:
-		FsPrintLg(100, 190, str_saved_data_exists);
+		FsPrintLg(90, 190, str_data_exist);
 		break;
+#endif
+#ifdef ENGLISH
+	case 0:
+		FsPrint16(FONT_GLB, 98, 35, str_banner_erase);
+		break;
+	case 1:
+		FsPrintLg(90, 190, str_really);
+		FsDrawErasePrompt(90, 190);
+		break;
+	case 2:
+		FsPrintLg(100, 190, str_no_data);
+		break;
+	case 3:
+		str_erased[6] = CH_A + click_file;
+		FsPrintLg(100, 190, str_erased);
+		break;
+	case 4:
+		FsPrintLg(100, 190, str_data_exist);
+		break;
+#endif
 	}
 }
 
@@ -1304,20 +1482,27 @@ static void FsDrawErase(void)
 {
 	FsProcErase();
 	FsDrawEraseMsg(click_msg);
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	FsDrawSelectFile(0,  90,  76);
 	FsDrawSelectFile(1, 211,  76);
 	FsDrawSelectFile(2,  90, 119);
 	FsDrawSelectFile(3, 211, 119);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
+#ifdef JAPANESE
+	PrintLg( 45, 35, str_return);
+	PrintLg(133, 35, str_view_score);
+	PrintLg(223, 35, str_file_copy);
+#endif
+#ifdef ENGLISH
 	PrintLg( 44, 35, str_return);
-	PrintLg(127, 35, str_check_score);
-	PrintLg(233, 35, str_copy_file);
+	PrintLg(127, 35, str_view_score);
+	PrintLg(233, 35, str_file_copy);
+#endif
 	gSPDisplayList(glistp++, gfx_lgfont_end);
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	PrintSm( 89,  62, str_mario_a);
 	PrintSm(211,  62, str_mario_b);
@@ -1329,14 +1514,21 @@ static void FsDrawErase(void)
 static void FsDrawOption(void)
 {
 	int i;
+#if REVISION >= 199609
 	SHORT x;
+#endif
 	UNUSED u8 alpha;
-	STATIC unsigned char str_sound_select[] = {STR_SOUND_SELECT};
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	STATIC unsigned char str_banner_option[] = {STR_BANNER_OPTION};
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
-	Print16(FONT_GLB, 88, 35, str_sound_select);
+#ifdef JAPANESE
+	Print16(FONT_SEL, 96, 35, str_banner_option);
+#endif
+#ifdef ENGLISH
+	Print16(FONT_GLB, 88, 35, str_banner_option);
+#endif
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	for (i = 0; i < 3; i++)
 	{
 		if (i == sound_flag)
@@ -1347,8 +1539,12 @@ static void FsDrawOption(void)
 		{
 			gDPSetEnvColor(glistp++, 0x00, 0x00, 0x00, fs_alpha);
 		}
+#if REVISION >= 199609
 		x = StrCenterX(87 + 74*i, str_sound[i], 10);
 		PrintLg(x, 87, str_sound[i]);
+#else
+		PrintLg(67 + 74*i, 87, str_sound[i]);
+#endif
 	}
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 }
@@ -1356,9 +1552,9 @@ static void FsDrawOption(void)
 static void FsDrawExtraStar(CHAR file, SHORT x, SHORT y)
 {
 	unsigned char buf[20];
-	static unsigned char str_star_x[] = {CH_STAR, CH_CROSS, CH_NUL};
+	static unsigned char str_star_x[] = {CH_STAR,CH_CROSS,CH_NUL};
 	PrintSm(x, y, str_star_x);
-	itostr(BuFileStarExtra(file), buf);
+	IntToStr(BuFileStarExtra(file), buf);
 	PrintSm(x+16, y, buf);
 }
 
@@ -1366,29 +1562,49 @@ static void FsDrawCourseScore(CHAR file, SHORT course, SHORT x, SHORT y)
 {
 	unsigned char buf[20];
 	UCHAR star = BuFileGetStar(file, course);
-	STATIC unsigned char str_coin_x[] = {CH_COIN, CH_CROSS, CH_NUL};
-	STATIC unsigned char str_star[] = {CH_STAR, CH_NUL};
+	STATIC unsigned char str_coin_x[] = {CH_COIN,CH_CROSS,CH_NUL};
+	STATIC unsigned char str_star[] = {CH_STAR,CH_NUL};
+#ifdef JAPANESE
+	STATIC unsigned char str_file[][5] =
+	{
+		{CH_HYPHEN,CH_HYPHEN,CH_HYPHEN,CH_HYPHEN,CH_NUL},
+		{CH_K_MA,CH_K_RI,CH_K_O,CH_A,CH_NUL},
+		{CH_K_MA,CH_K_RI,CH_K_O,CH_B,CH_NUL},
+		{CH_K_MA,CH_K_RI,CH_K_O,CH_C,CH_NUL},
+		{CH_K_MA,CH_K_RI,CH_K_O,CH_D,CH_NUL},
+	};
+#endif
+#ifdef ENGLISH
 	STATIC unsigned char str_file[][8] =
 	{
-		{STR_FILE_NULL},
-		{STR_FILE_A},
-		{STR_FILE_B},
-		{STR_FILE_C},
-		{STR_FILE_D},
+		{CH_HYPHEN,CH_HYPHEN,CH_HYPHEN,CH_HYPHEN,CH_NUL},
+		{SM_MARIOL,SM_MARIOR,CH_A,CH_NUL},
+		{SM_MARIOL,SM_MARIOR,CH_B,CH_NUL},
+		{SM_MARIOL,SM_MARIOR,CH_C,CH_NUL},
+		{SM_MARIOL,SM_MARIOR,CH_D,CH_NUL},
 	};
+#endif
 	if (score_flag == 0)
 	{
 		PrintSm(x+25, y, str_coin_x);
-		itostr(BuFileGetCoin(file, course), buf);
+		IntToStr(BuFileGetCoin(file, course), buf);
 		PrintSm(x+41, y, buf);
 		if (star & 0100) PrintSm(x+70, y, str_star);
 	}
 	else
 	{
+#ifdef JAPANESE
+		PrintSm(x, y, str_coin_x);
+		IntToStr(BuGetHiScoreCoin(course), buf);
+		PrintSm(x+16, y, buf);
+		PrintSm(x+45, y, str_file[BuGetHiScoreFile(course)]);
+#endif
+#ifdef ENGLISH
 		PrintSm(x+18, y, str_coin_x);
-		itostr(BuGetHiScoreCoin(course), buf);
+		IntToStr(BuGetHiScoreCoin(course), buf);
 		PrintSm(x+34, y, buf);
 		PrintSm(x+60, y, str_file[BuGetHiScoreFile(course)]);
+#endif
 	}
 }
 
@@ -1404,28 +1620,59 @@ static void FsDrawCourseStar(CHAR file, SHORT course, SHORT x, SHORT y)
 	PrintSm(x, y, buf);
 }
 
+#ifdef JAPANESE
+#if REVISION >= 199707
+#define FsPrintCourse(crstab, i) \
+{ \
+	PrintSm(23+5*(i<9), 35+12*i, SegmentToVirtual(crstab[i])); \
+	FsDrawCourseStar(file, i, 152, 35+12*i); \
+	FsDrawCourseScore(file, i, 213, 35+12*i); \
+}
+#else
+#define FsPrintCourse(crstab, i) \
+{ \
+	PrintSm(23, 35+12*i, SegmentToVirtual(crstab[i])); \
+	FsDrawCourseStar(file, i, 152, 35+12*i); \
+	FsDrawCourseScore(file, i, 213, 35+12*i); \
+}
+#endif
+#endif
+#ifdef ENGLISH
 #define FsPrintCourse(crstab, i) \
 { \
 	PrintSm(23+3*(i<9), 35+12*i, SegmentToVirtual(crstab[i])); \
 	FsDrawCourseStar(file, i, 171, 35+12*i); \
 	FsDrawCourseScore(file, i, 213, 35+12*i); \
 }
+#endif
 
 static void FsDrawScoreFile(CHAR file)
 {
-	STATIC unsigned char str_mario[] = {STR_MARIO};
+	STATIC unsigned char str_banner_mario[] = {STR_BANNER_MARIO};
+#if REVISION >= 199609
 	STATIC unsigned char str_hi_score[] = {STR_HI_SCORE};
 	STATIC unsigned char str_my_score[] = {STR_MY_SCORE};
-	unsigned char str_number[] = {0, CH_NUL};
+#endif
+	unsigned char str_number[] = {0,CH_NUL};
 	unsigned char **crstab = SegmentToVirtual(coursename);
+#if REVISION < 199609
+	STATIC unsigned char str_hi_score[] = {STR_HI_SCORE};
+	STATIC unsigned char str_my_score[] = {STR_MY_SCORE};
+#endif
 	str_number[0] = CH_A + file;
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
-	Print16(FONT_GLB, 25, 15, str_mario);
+#ifdef JAPANESE
+	Print16(FONT_SEL, 28, 15, str_banner_mario);
+	Print16(FONT_GLB, 86, 15, str_number);
+#endif
+#ifdef ENGLISH
+	Print16(FONT_GLB, 25, 15, str_banner_mario);
 	Print16(FONT_GLB, 95, 15, str_number);
+#endif
 	FsDrawSelectFile(file, 124, 15);
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
-	gSPDisplayList(glistp++, gfx_smfont_start);
+	gSPDisplayList(glistp++, gfx_smfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, fs_alpha);
 	FsPrintCourse(crstab, 0);
 	FsPrintCourse(crstab, 1);
@@ -1442,10 +1689,22 @@ static void FsDrawScoreFile(CHAR file)
 	FsPrintCourse(crstab, 12);
 	FsPrintCourse(crstab, 13);
 	FsPrintCourse(crstab, 14);
+#ifdef JAPANESE
+#if REVISION >= 199707
+	PrintSm(33, 215, SegmentToVirtual(crstab[25]));
+#else
+	PrintSm(23, 215, SegmentToVirtual(crstab[25]));
+#endif
+	FsDrawExtraStar(file, 152, 215);
+	if (score_flag == 0)    PrintSm(237, 24, str_my_score);
+	else                    PrintSm(237, 24, str_hi_score);
+#endif
+#ifdef ENGLISH
 	PrintSm(29, 215, SegmentToVirtual(crstab[25]));
 	FsDrawExtraStar(file, 171, 215);
 	if (score_flag == 0)    PrintSm(238, 24, str_my_score);
 	else                    PrintSm(231, 24, str_hi_score);
+#endif
 	gSPDisplayList(glistp++, gfx_smfont_end);
 }
 

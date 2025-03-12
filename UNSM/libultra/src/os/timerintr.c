@@ -7,6 +7,12 @@ u32 __osViIntrCount;
 u32 __osTimerCounter;
 OSTimer __osBaseTimer;
 OSTimer *__osTimerList = &__osBaseTimer;
+#ifndef _FINALROM
+OSMesgQueue __osProfTimerQ;
+OSProf *__osProfileList;
+OSProf *__osProfileListEnd;
+u32 __osProfileOverflowBin;
+#endif
 
 void __osTimerServicesInit(void)
 {
@@ -23,6 +29,11 @@ void __osTimerInterrupt(void)
 {
 	OSTimer *t;
 	u32 count, elapsed_cycles;
+#ifndef _FINALROM
+	u32 pc;
+	s32 offset;
+	OSProf *prof = __osProfileList;
+#endif
 	if (__osTimerList->next == __osTimerList) return;
 	for (;;)
 	{
@@ -46,7 +57,32 @@ void __osTimerInterrupt(void)
 		t->next->prev = t->prev;
 		t->next = NULL;
 		t->prev = NULL;
+#ifdef _FINALROM
 		if (t->mq) osSendMesg(t->mq, t->msg, OS_MESG_NOBLOCK);
+#else
+		if (t->mq)
+		{
+			if (t->mq != &__osProfTimerQ)
+			{
+				osSendMesg(t->mq, t->msg, OS_MESG_NOBLOCK);
+			}
+			else
+			{
+				pc = __osRunQueue->context.pc;
+				for (prof = __osProfileList; prof < __osProfileListEnd; prof++)
+				{
+					offset = pc - (u32)prof->text_start;
+					if (offset >= 0 && (s32)((u32)prof->text_end - pc) > 0)
+					{
+						++*(u16 *)((offset>>2) + prof->histo_base);
+						goto __ProfDone;
+					}
+				}
+				++__osProfileOverflowBin;
+			}
+		}
+__ProfDone:
+#endif
 		if (t->interval)
 		{
 			t->value = t->interval;

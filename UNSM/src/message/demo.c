@@ -6,9 +6,9 @@
 #endif
 
 static u16 demo_alpha = 0;
-static s16 caption = -1;
-static s16 demo_frame = -1;
-static s16 demo_timer = 0;
+static short caption = -1;
+static short demo_frame = -1;
+static short demo_timer = 0;
 static short caption_x;
 static short caption_y;
 
@@ -17,13 +17,13 @@ void StaffClear(void)
 	demo_alpha = 0;
 }
 
-void StaffDrawStart(void)
+void StaffBegin(void)
 {
-	gSPDisplayList(glistp++, gfx_print_1cyc_start);
+	gSPDisplayList(glistp++, gfx_print_1cyc_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, demo_alpha);
 }
 
-void StaffDrawEnd(void)
+void StaffEnd(void)
 {
 	gSPDisplayList(glistp++, gfx_print_1cyc_end);
 	if (demo_alpha < 250)   demo_alpha += 25;
@@ -76,7 +76,7 @@ void CaptionDraw(void)
 	SHORT x;
 	if (caption == -1) return;
 	GfxScreenProj();
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, demo_alpha);
 	x = StrCenterX(caption_x, captiontab[caption], 10);
 	PrintLg(x, SCREEN_HT-caption_y, captiontab[caption]);
@@ -93,7 +93,7 @@ void CaptionDraw(void)
 	demo_timer++;
 }
 
-#ifdef NEWVOICE
+#if REVISION >= 199609
 #define OPENING_TIME (30*9)
 #else
 #define OPENING_TIME (30*6+10)
@@ -120,10 +120,10 @@ static void OpeningDraw(void)
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, demo_alpha);
 	gSPDisplayList(glistp++, gfx_grounds_0700EA58);
 	gSPPopMatrix(glistp++, G_MTX_MODELVIEW);
-	gSPDisplayList(glistp++, gfx_lgfont_start);
+	gSPDisplayList(glistp++, gfx_lgfont_begin);
 	gDPSetEnvColor(glistp++, 20, 20, 20, demo_alpha);
 	PrintLg(OPENING_X, OPENING_Y, str);
-#ifdef NEWVOICE
+#if REVISION >= 199609
 	gDPSetEnvColor(glistp++, 0xFF, 0xFF, 0xFF, 0xFF);
 	gSPDisplayList(glistp++, gfx_lgfont_end);
 	gDPSetEnvColor(glistp++, 200, 80, 120, demo_alpha);
@@ -139,7 +139,7 @@ static void OpeningDraw(void)
 	{
 		caption = -1;
 		demo_alpha = 0;
-		msg_code = -1;
+		msg_code = MSG_NULL;
 		demo_timer = 0;
 		return;
 	}

@@ -97,14 +97,14 @@ size_t MemFree(void *ptr)
 		while (new->next) new = new->next;
 		mem_blockl = old;
 		mem_blockl->next = NULL;
-		mem_size += (char *)new - (char *)mem_blockl;
+		mem_size += (unsigned int)new - (unsigned int)mem_blockl;
 	}
 	else
 	{
 		while (new->prev) new = new->prev;
 		mem_blockr = old->next;
 		mem_blockr->prev = NULL;
-		mem_size += (char *)mem_blockr - (char *)new;
+		mem_size += (unsigned int)mem_blockr - (unsigned int)new;
 	}
 	return mem_size;
 }
@@ -121,7 +121,7 @@ void *MemRealloc(void *ptr, size_t size)
 	return new;
 }
 
-size_t MemAvailable(void)
+size_t MemGetFree(void)
 {
 	return mem_size - sizeof(MEM_BLOCK);
 }
@@ -149,7 +149,8 @@ size_t MemPull(void)
 	return mem_size;
 }
 
-void MemRead(char *dst, const char *start, const char *end)
+#ifndef DISK
+void RomRead(char *dst, const char *start, const char *end)
 {
 	size_t size = ALIGN16(end-start);
 	osInvalDCache(dst, size);
@@ -165,12 +166,13 @@ void MemRead(char *dst, const char *start, const char *end)
 		size  -= n;
 	}
 }
+#endif
 
 void *MemLoad(const char *start, const char *end, int mode)
 {
 	char *ptr;
 	size_t size = ALIGN16(end-start);
-	if ((ptr = MemAlloc(size, mode))) MemRead(ptr, start, end);
+	if ((ptr = MemAlloc(size, mode))) RomRead(ptr, start, end);
 	return ptr;
 }
 
@@ -192,7 +194,7 @@ void *MemLoadCode(char *addr, const char *start, const char *end)
 		{
 			bzero(ptr, dstsize);
 			osWritebackDCacheAll();
-			MemRead(ptr, start, end);
+			RomRead(ptr, start, end);
 			osInvalICache(ptr, dstsize);
 			osInvalDCache(ptr, dstsize);
 		}
@@ -211,7 +213,7 @@ void *MemLoadPres(int seg, const char *start, const char *end)
 	u32 *dstsize = (u32 *)(src + 4);
 	if (src)
 	{
-		MemRead(src, start, end);
+		RomRead(src, start, end);
 		if ((ptr = MemAlloc(*dstsize, MEM_ALLOC_L)))
 		{
 			slidec(src, ptr);
@@ -236,7 +238,7 @@ void *MemLoadText(int seg, const char *start, const char *end)
 	UNUSED u32 *dstsize = (u32 *)(src + 4);
 	if (src)
 	{
-		MemRead(src, start, end);
+		RomRead(src, start, end);
 		slidec(src, (char *)t_image);
 		SegmentSet(seg, t_image);
 		MemFree(src);
@@ -253,11 +255,11 @@ extern const char _ulibSegmentRomEnd[];
 void MemLoadULib(void)
 {
 	char *addr = (char *)ADDRESS_ULIB;
-	size_t dstsize = ADDRESS_CIMG-ADDRESS_ULIB;
+	size_t dstsize = ADDRESS_ULIB_END-ADDRESS_ULIB;
 	UNUSED size_t srcsize = ALIGN16(_ulibSegmentRomEnd-_ulibSegmentRomStart);
 	bzero(addr, dstsize);
 	osWritebackDCacheAll();
-	MemRead(addr, _ulibSegmentRomStart, _ulibSegmentRomEnd);
+	RomRead(addr, _ulibSegmentRomStart, _ulibSegmentRomEnd);
 	osInvalICache(addr, dstsize);
 	osInvalDCache(addr, dstsize);
 }
@@ -435,20 +437,51 @@ void BankInit(BANK *bank, const char *src, void *buf)
 	bank->buf = buf;
 }
 
-int BankLoad(BANK *bank, unsigned int index)
+int BankLoad(BANK *bank, int index)
 {
 	int result = FALSE;
 	BANKINFO *info = bank->info;
-	if (index < info->len)
+	if ((unsigned int)index < info->len)
 	{
 		const char *src  = info->table[index].start + info->src;
 		size_t      size = info->table[index].size;
 		if (bank->src != src)
 		{
-			MemRead(bank->buf, src, src+size);
+			RomRead(bank->buf, src, src+size);
 			bank->src = src;
 			result = TRUE;
 		}
 	}
 	return result;
 }
+
+#ifdef DISK
+void BankInitAnime(BANK *bank, const char *start, const char *end, void *buf)
+{
+	void *ptr = (void *)ADDRESS_ANIME;
+	BANKINFO *info = (BANKINFO *)ptr;
+	RomRead(ptr, start, end);
+	bank->info = info;
+	info->src = (const char *)ptr;
+	bank->src = NULL;
+	bank->buf = buf;
+}
+
+int BankLoadAnime(BANK *bank, int index)
+{
+	int result = FALSE;
+	BANKINFO *info = bank->info;
+	if ((unsigned int)index < info->len)
+	{
+		const char *src  = info->table[index].start + info->src;
+		size_t      size = info->table[index].size;
+		if (bank->src != src)
+		{
+			bcopy(src, bank->buf, size);
+			bank->src = src;
+			result = TRUE;
+		}
+	}
+	return result;
+}
+#endif

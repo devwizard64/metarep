@@ -16,7 +16,7 @@ void *CtrlObjectHand(int code, UNUSED SHAPE *shape, void *data)
 	return NULL;
 }
 
-extern OBJLANG o_13001850[];
+extern OBJLANG obj_13001850[];
 
 void *CtrlObjectAlpha(int code, SHAPE *shape, UNUSED void *data)
 {
@@ -41,14 +41,25 @@ void *CtrlObjectAlpha(int code, SHAPE *shape, UNUSED void *data)
 			if (shp->arg == 20) ShpSetLayer(&shp->s, LAYER_XLU_DECAL);
 			else                ShpSetLayer(&shp->s, LAYER_XLU_SURF);
 			obj->o_shape = 1;
-			if (alpha == 0 && SegmentToVirtual(o_13001850) == obj->script)
+#if REVISION >= 199609
+			if (alpha == 0 && SegmentToVirtual(obj_13001850) == obj->script)
 			{
 				obj->o_shape = 2;
 			}
-			if (shp->arg != 10 && (obj->flag & OBJ_DITHER))
+			if (shp->arg != 10 && obj->flag & OBJ_DITHER)
 			{
 				gDPSetAlphaCompare(g++, G_AC_DITHER);
 			}
+#else
+			if (shp->arg == 10)
+			{
+				if (db_work[5][3]) gDPSetAlphaCompare(g++, G_AC_DITHER);
+			}
+			else if (1 && obj->flag & OBJ_DITHER)
+			{
+				gDPSetAlphaCompare(g++, G_AC_DITHER);
+			}
+#endif
 		}
 		gDPSetEnvColor(g++, 0xFF, 0xFF, 0xFF, alpha);
 		gSPEndDisplayList(g);
@@ -170,18 +181,18 @@ void FMtxInvCatAffine(FMTX dst, FMTX src, FMTX cam)
 	dst[3][3] = 1;
 }
 
-extern OBJLANG o_13003464[];
-extern OBJLANG o_1300346C[];
-extern OBJLANG o_13003474[];
+extern OBJLANG obj_13003464[];
+extern OBJLANG obj_1300346C[];
+extern OBJLANG obj_13003474[];
 
-void ObjectSetTake(OBJECT *o, OBJLANG *script)
+void ObjectSetAction(OBJECT *o, OBJLANG *script)
 {
 	o->parent = object;
 	if (o->o_flag & OF_0400)
 	{
-		if (script == o_13003464) o->o_take = 1;
-		if (script == o_13003474) o->o_take = 2;
-		if (script == o_1300346C) o->o_take = 3;
+		if (script == obj_13003464) o->o_action = OA_1;
+		if (script == obj_13003474) o->o_action = OA_2;
+		if (script == obj_1300346C) o->o_action = OA_3;
 	}
 	else
 	{
@@ -290,12 +301,12 @@ SHORT ObjCalcAngY(OBJECT *obj, OBJECT *o)
 	return angy;
 }
 
-short ObjectTurnTo(OBJECT *a, OBJECT *b, SHORT mem, SHORT speed)
+short ObjectTurnTo(OBJECT *a, OBJECT *b, SHORT work, SHORT speed)
 {
 	float az, ax, bz, bx;
 	UNUSED float z;
 	SHORT target, ang;
-	switch (mem)
+	switch (work)
 	{
 	case O_ANGX:
 	case O_SHAPEANGX:
@@ -318,8 +329,8 @@ short ObjectTurnTo(OBJECT *a, OBJECT *b, SHORT mem, SHORT speed)
 	default: __builtin_unreachable();
 #endif
 	}
-	ang = object->mem[mem].i;
-	object->mem[mem].i = ApproachAng(ang, target, speed);
+	ang = object->work[work].i;
+	object->work[work].i = ApproachAng(ang, target, speed);
 	return target;
 }
 
@@ -372,7 +383,6 @@ OBJECT *ObjMakeRel(
 	return obj;
 }
 
-UNUSED static
 OBJECT *ObjMakeHereMtx(OBJECT *parent, int shape, OBJLANG *script)
 {
 	OBJECT *obj = ObjMakeHere(parent, shape, script);
@@ -486,7 +496,6 @@ OBJECT *ObjMakeOffScale(
 	return obj;
 }
 
-UNUSED static
 void ObjectMove3D(void)
 {
 	object->o_posx += object->o_velx;
@@ -529,7 +538,6 @@ void ObjSetShapePos(OBJECT *obj)
 	obj->s.pos[2] = obj->o_posz;
 }
 
-UNUSED static
 void ObjStartAnime(OBJECT *obj, int anime)
 {
 	ANIME **animetab = object->o_animep;
@@ -608,8 +616,8 @@ void ObjectSetAnime(int anime)
 void ObjectSetAnimeV(int anime, float speed)
 {
 	ANIME **animetab = object->o_animep;
-	int intspeed = speed * 0x10000;
-	SObjSetAnimeV(&object->s, &animetab[anime], intspeed);
+	int vspeed = VSPEED(speed);
+	SObjSetAnimeV(&object->s, &animetab[anime], vspeed);
 	object->o_anime = anime;
 }
 
@@ -621,7 +629,6 @@ void ObjInitAnime(OBJECT *obj, void *animep, int anime)
 	obj->o_anime = anime;
 }
 
-UNUSED static
 void ObjActivate(OBJECT *obj)
 {
 	obj->s.s.flag |= SHP_ACTIVE;
@@ -633,7 +640,6 @@ void ObjectSetActive(void)
 	object->s.s.flag |= SHP_ACTIVE;
 }
 
-UNUSED static
 void ObjDeactivate(OBJECT *obj)
 {
 	obj->s.s.flag &= ~SHP_ACTIVE;
@@ -677,7 +683,6 @@ void objectlib_8029F820(void)
 	ObjectSetActive();
 }
 
-UNUSED static
 void objectlib_8029F848(void)
 {
 	ObjectSetActive();
@@ -760,7 +765,6 @@ OBJECT *ObjGetEffect(void)
 	return o;
 }
 
-UNUSED static
 int ObjCountEffect(void)
 {
 	OBJECT *root = (OBJECT *)&obj_rootlist[OT_EFFECT];
@@ -800,7 +804,7 @@ OBJECT *ObjectFindTake(OBJLANG *script, float dist)
 		{
 			if (o->flag)
 			{
-				if (o->o_take)
+				if (o->o_action != OA_0)
 				{
 					if (ObjCalcDist3D(object, o) < dist)
 					{
@@ -815,17 +819,17 @@ OBJECT *ObjectFindTake(OBJLANG *script, float dist)
 	return result;
 }
 
-static void ObjectResetState(void)
+static void ObjectResetMode(void)
 {
 	object->o_timer = 0;
 	object->o_phase = 0;
 }
 
-void ObjectInitState(int state)
+void ObjectInitMode(int mode)
 {
-	object->o_state = state;
-	object->o_prevstate = state;
-	ObjectResetState();
+	object->o_mode = mode;
+	object->o_prevmode = mode;
+	ObjectResetMode();
 }
 
 void ObjectMatchP1Speed(float min, float scale)
@@ -847,7 +851,7 @@ void ObjectAnimeHold(void)
 	if (object->s.skel.frame >= 0) object->s.skel.frame--;
 }
 
-void ObjectAnimeHoldEnd(void)
+VOID ObjectAnimeHoldEnd(void)
 {
 	int f = object->s.skel.frame;
 	int end = object->s.skel.anime->frame - 2;
@@ -860,7 +864,7 @@ int objectlib_8029FF04(void)
 	int f = object->s.skel.frame;
 	int end = object->s.skel.anime->frame - 2;
 	int result = FALSE;
-	if ((flag & ANIME_NOLOOP) && f == end+1) result = TRUE;
+	if (flag & ANIME_NOLOOP && f == end+1) result = TRUE;
 	if (f == end) result = TRUE;
 	return result;
 }
@@ -887,7 +891,6 @@ int ObjectIsAnimeFrameRange(int start, int count)
 	else                                return FALSE;
 }
 
-UNUSED static
 int ObjectIsAnimeFrameTable(short *table)
 {
 	SHORT f = object->s.skel.frame;
@@ -907,7 +910,7 @@ int Player1IsJump(void)
 
 int objectlib_802A0154(void)
 {
-	if (player_data[0].state == PS_MOVE_16) return TRUE;
+	if (player_data[0].state == PS_WALK_16) return TRUE;
 	else return FALSE;
 }
 
@@ -917,12 +920,12 @@ void ObjectSetAnimeJump(float vely, int anime)
 	ObjectSetAnime(anime);
 }
 
-void objectlib_802A01D8(int anime, int state)
+void objectlib_802A01D8(int anime, int mode)
 {
 	ObjectHitOFF();
 	ObjectClrActive();
 	if (anime >= 0) ObjectSetAnime(anime);
-	object->o_state = state;
+	object->o_mode = mode;
 }
 
 static void objectlib_802A0234(float velf, float vely)
@@ -947,9 +950,9 @@ static void objectlib_802A0234(float velf, float vely)
 	if (object->o_velf != 0) objectlib_802A0E68(-4, -0.1F, 2);
 }
 
-void objectlib_802A0380(float velf, float vely, int state)
+void objectlib_802A0380(float velf, float vely, int mode)
 {
-	if (object->script == SegmentToVirtual(o_13001850))
+	if (object->script == SegmentToVirtual(obj_13001850))
 	{
 		ObjectSetPosOffParent(-41.684F, 85.859F, 321.577F);
 	}
@@ -958,14 +961,14 @@ void objectlib_802A0380(float velf, float vely, int state)
 	}
 	ObjectHitON();
 	ObjectSetActive();
-	object->o_take = 0;
-	if ((object->o_hit_flag & 0x10) || velf == 0) /* T:hit_flag */
+	object->o_action = OA_0;
+	if (object->o_hit_flag & HF_0010 || velf == 0)
 	{
 		objectlib_802A0234(0, 0);
 	}
 	else
 	{
-		object->o_state = state;
+		object->o_mode = mode;
 		objectlib_802A0234(velf, vely);
 	}
 }
@@ -974,7 +977,7 @@ void objectlib_802A0474(void)
 {
 	ObjectHitON();
 	ObjectSetActive();
-	object->o_take = 0;
+	object->o_action = OA_0;
 	objectlib_802A0234(0, 0);
 }
 
@@ -983,7 +986,6 @@ void ObjectSetShape(int shape)
 	object->s.shape = shape_table[shape];
 }
 
-UNUSED static
 void Player1SetFlag(u32 flag)
 {
 	player_data[0].flag |= flag;
@@ -1096,7 +1098,7 @@ static int objectlib_802A07E8(float ny, int flag)
 			object->o_posz = z;
 			return TRUE;
 		}
-		else if (dy < -50 && (object->o_move & OM_TOUCH))
+		else if (dy < -50 && object->o_move & OM_TOUCH)
 		{
 			object->o_move |= OM_0400;
 			return FALSE;
@@ -1256,7 +1258,6 @@ int CheckFlag(int *flag, int mask)
 	}
 }
 
-UNUSED static
 void ObjectHitWall(float offset, float radius)
 {
 	if (radius > 0.1) BGHitWall(
@@ -1357,7 +1358,6 @@ float ObjectDistToSave(void)
 	return dist;
 }
 
-UNUSED static
 int ObjectInSaveSquare(float size)
 {
 	if (object->o_savex-size > object->o_posx) return TRUE;
@@ -1367,7 +1367,6 @@ int ObjectInSaveSquare(float size)
 	return FALSE;
 }
 
-UNUSED static
 int ObjectInSaveRect(float xmin, float xmax, float zmin, float zmax)
 {
 	if (object->o_savex+xmin > object->o_posx) return TRUE;
@@ -1403,10 +1402,9 @@ void objectlib_802A1930(UNUSED OBJECT *obj, int a1)
 	camera_8032DF30 = object;
 }
 
-UNUSED static
 void objectlib_802A1960(UNUSED OBJECT *obj, UNUSED int a1, float dist)
 {
-	if (object->o_pl_dist < dist) mario_obj->o_hit_result = 1;
+	if (object->o_targetdist < dist) mario_obj->o_hit_result = HR_000001;
 }
 
 void ObjSetBillboard(OBJECT *obj)
@@ -1447,17 +1445,17 @@ static void ObjectMakeCoinCommon(
 	}
 }
 
-extern OBJLANG o_130009A4[];
-extern OBJLANG o_13003104[];
+extern OBJLANG obj_130009A4[];
+extern OBJLANG obj_13003104[];
 
 static void objectlib_802A1B34(OBJECT *obj, int max, float f7, SHORT range)
 {
-	ObjectMakeCoinCommon(obj, max, f7, o_13003104, range, S_BLUECOIN);
+	ObjectMakeCoinCommon(obj, max, f7, obj_13003104, range, S_BLUECOIN);
 }
 
 void ObjectMakeCoin(OBJECT *obj, int max, float f7)
 {
-	ObjectMakeCoinCommon(obj, max, f7, o_130009A4, 0, S_COIN);
+	ObjectMakeCoinCommon(obj, max, f7, obj_130009A4, 0, S_COIN);
 }
 
 void objectlib_802A1BDC(void)
@@ -1465,12 +1463,11 @@ void objectlib_802A1BDC(void)
 	OBJECT *o;
 	if (object->o_ncoin <= 0) return;
 	object->o_ncoin--;
-	o = ObjMakeHere(object, S_COIN, o_130009A4);
+	o = ObjMakeHere(object, S_COIN, obj_130009A4);
 	o->o_vely = 30;
 	ObjCopyPos(o, mario_obj);
 }
 
-UNUSED static
 float ObjectDistToSaveY(void)
 {
 	float dy = object->o_savey - object->o_posy;
@@ -1478,7 +1475,6 @@ float ObjectDistToSaveY(void)
 	return dy;
 }
 
-UNUSED static
 int objectlib_802A1CC4(void)
 {
 	int f = object->s.skel.frame;
@@ -1560,7 +1556,9 @@ static void objectlib_802A20F4(void)
 	if (ground)
 	{
 		if      (ground->code == BG_1)  object->o_move |= OM_0800;
+#if REVISION >= 199609
 		else if (ground->code == BG_10) object->o_move |= OM_4000;
+#endif
 		object->o_bgcode = ground->code;
 		object->o_bgarea = ground->area;
 	}
@@ -1573,7 +1571,11 @@ static void objectlib_802A20F4(void)
 
 static void objectlib_802A21D4(SHORT ang)
 {
+#if REVISION >= 199609
 	object->o_move &= ~(OM_0800|OM_4000);
+#else
+	object->o_move &= ~OM_0800;
+#endif
 	if (object->flag & (OBJ_0002|OBJ_0008))
 	{
 		objectlib_802A20F4();
@@ -1607,11 +1609,7 @@ void objectlib_802A2348(SHORT ang)
 	int negvel = FALSE;
 	if (!(object->flag & (OBJ_0002|OBJ_0008)))
 	{
-		if (ang < 0)
-		{
-			negang = TRUE;
-			ang = -ang;
-		}
+		if (ang < 0) {negang = TRUE; ang = -ang;}
 		ny = COS(182 * ang);
 		ObjectCalcVelF();
 		ObjectCalcDrag(drag);
@@ -1648,7 +1646,6 @@ void ObjectProcMoveF(void)
 	ObjectProcMove();
 }
 
-UNUSED static
 void ObjCopyCoordOff(
 	OBJECT *obj, OBJECT *o, float offx, float offy, float offz
 )
@@ -1684,24 +1681,24 @@ void ObjCopyCoordToShape(OBJECT *obj, OBJECT *o)
 
 void ObjAddTransform(OBJECT *obj, SHORT dst, SHORT src)
 {
-	float x = obj->mem[src+0].f;
-	float y = obj->mem[src+1].f;
-	float z = obj->mem[src+2].f;
-	obj->mem[dst+0].f += MDOT3(obj->mtx, 0, x, y, z);
-	obj->mem[dst+1].f += MDOT3(obj->mtx, 1, x, y, z);
-	obj->mem[dst+2].f += MDOT3(obj->mtx, 2, x, y, z);
+	float x = obj->work[src+0].f;
+	float y = obj->work[src+1].f;
+	float z = obj->work[src+2].f;
+	obj->work[dst+0].f += MDOT3(obj->mtx, 0, x, y, z);
+	obj->work[dst+1].f += MDOT3(obj->mtx, 1, x, y, z);
+	obj->work[dst+2].f += MDOT3(obj->mtx, 2, x, y, z);
 }
 
 void ObjCalcMtx(OBJECT *obj, SHORT pos, SHORT ang)
 {
 	FVEC vpos;
 	SVEC vang;
-	vpos[0] = obj->mem[pos+0].f;
-	vpos[1] = obj->mem[pos+1].f;
-	vpos[2] = obj->mem[pos+2].f;
-	vang[0] = obj->mem[ang+0].i;
-	vang[1] = obj->mem[ang+1].i;
-	vang[2] = obj->mem[ang+2].i;
+	vpos[0] = obj->work[pos+0].f;
+	vpos[1] = obj->work[pos+1].f;
+	vpos[2] = obj->work[pos+2].f;
+	vang[0] = obj->work[ang+0].i;
+	vang[1] = obj->work[ang+1].i;
+	vang[2] = obj->work[ang+2].i;
 	FMtxCoord(obj->mtx, vpos, vang);
 }
 
@@ -1729,7 +1726,6 @@ void ObjCalcRel(OBJECT *obj)
 	ObjectSetScale(1);
 }
 
-UNUSED static
 void ObjClrRel(OBJECT *obj)
 {
 	obj->o_flag &= ~OF_CALCREL;
@@ -1739,7 +1735,6 @@ void ObjClrRel(OBJECT *obj)
 	obj->mtx[3][2] = obj->o_posz;
 }
 
-UNUSED static
 void ObjectRotate(void)
 {
 	object->o_angx += object->o_rotx;
@@ -1754,7 +1749,6 @@ void ObjectRotateShape(void)
 	object->o_shapeangz += object->o_rotz;
 }
 
-UNUSED static
 void ObjectSyncAng(void)
 {
 	object->o_shapeangx = object->o_angx;
@@ -1857,7 +1851,7 @@ short objectlib_802A3268(void)
 	return angy;
 }
 
-extern OBJLANG o_130007DC[];
+extern OBJLANG obj_130007DC[];
 
 void ObjectMakeParticle(PARTICLE *part)
 {
@@ -1873,7 +1867,7 @@ void ObjectMakeParticle(PARTICLE *part)
 	for (i = 0; i < count; i++)
 	{
 		scale = RandF()*(part->scale_range*0.1F) + (part->scale_start*0.1F);
-		o = ObjMakeHere(object, part->shape, o_130007DC);
+		o = ObjMakeHere(object, part->shape, obj_130007DC);
 		o->o_code = part->code;
 		o->o_angy = Rand();
 		o->o_gravity = part->gravity;
@@ -1942,7 +1936,7 @@ int ObjectFlash(int start, int count)
 
 int objectlib_802A3754(void)
 {
-	if (object == mario_obj->ride)
+	if (object == mario_obj->movebg)
 	{
 		if (player_data[0].state == PS_WAIT_3C) return TRUE;
 	}
@@ -1951,12 +1945,12 @@ int objectlib_802A3754(void)
 
 void objectlib_802A37AC(void)
 {
-	object_a_802AAE8C(0, 0, 46);
+	enemya_802AAE8C(0, 0, 46);
 }
 
 void objectlib_802A37DC(Na_Se se)
 {
-	object_a_802AAE8C(0, 0, 46);
+	enemya_802AAE8C(0, 0, 46);
 	ObjectMakeSound(se);
 }
 
@@ -2017,7 +2011,7 @@ CHAR objectlib_802A3A88(void)
 	return result;
 }
 
-UNUSED static void objectlib_802A3B28(UNUSED OBJECT *obj, UNUSED OBJECT *o)
+void objectlib_802A3B28(UNUSED OBJECT *obj, UNUSED OBJECT *o)
 {
 }
 
@@ -2042,13 +2036,13 @@ UNUSED static void objectlib_802A3CEC(void)
 {
 }
 
-int ObjectIsMarioRide(void)
+int ObjectIsMarioBG(void)
 {
-	if (object == mario_obj->ride)  return TRUE;
-	else                            return FALSE;
+	if (object == mario_obj->movebg)    return TRUE;
+	else                                return FALSE;
 }
 
-UNUSED static int objectlib_802A3D40(int count, int offy)
+int objectlib_802A3D40(int count, int offy)
 {
 	if (object->o_timer & 1)    object->o_posy -= offy;
 	else                        object->o_posy += offy;
@@ -2061,27 +2055,27 @@ int objectlib_802A3DD4(int index)
 	static signed char table[] = {-8, 8, -4, 4};
 	if (index >= 4 || index < 0) return TRUE;
 	object->o_posy += table[index];
-	return 0;
+	return FALSE;
 }
 
-void ObjectCallState(OBJCALL **statetab)
+void ObjectCallMode(OBJCALL **modetab)
 {
-	OBJCALL *call = statetab[object->o_state];
+	OBJCALL *call = modetab[object->o_mode];
 	call();
 }
 
-extern OBJLANG o_1300080C[];
+extern OBJLANG obj_1300080C[];
 
 static OBJECT *objectlib_802A3E80(int code, int v9)
 {
-	OBJECT *o = ObjMakeHere(object, S_POWERSTAR, o_1300080C);
+	OBJECT *o = ObjMakeHere(object, S_POWERSTAR, obj_1300080C);
 	o->o_v9 = v9;
 	o->o_actorinfo = object->o_actorinfo;
 	o->o_code = code;
 	return o;
 }
 
-UNUSED static void objectlib_802A3EF8(void)
+void objectlib_802A3EF8(void)
 {
 	objectlib_802A3E80(0, 0);
 }
@@ -2098,7 +2092,7 @@ int objectlib_802A3F48(void)
 	float dy = object->o_savey - mario_obj->o_posy;
 	float dz = object->o_savez - mario_obj->o_posz;
 	float dist = DIST3(dx, dy, dz);
-	if (object->o_pl_dist > 2000 && dist > 2000)    return TRUE;
+	if (object->o_targetdist > 2000 && dist > 2000) return TRUE;
 	else                                            return FALSE;
 }
 
@@ -2188,9 +2182,9 @@ int objectlib_802A4360(HITINFO *hit, Na_Se se, int nocoin)
 	int result = FALSE;
 	ObjSetHitInfo(object, hit);
 	if (nocoin) object->o_ncoin = 0;
-	if (object->o_hit_result & 0x8000) /* T:hit_result */
+	if (object->o_hit_result & HR_008000)
 	{
-		if (object->o_hit_result & 0x4000) /* T:hit_result */
+		if (object->o_hit_result & HR_004000)
 		{
 			objectlib_802A37AC();
 			ObjectMakeCoin(object, object->o_ncoin, 20);
@@ -2208,8 +2202,8 @@ int objectlib_802A4360(HITINFO *hit, Na_Se se, int nocoin)
 
 void objectlib_802A4440(float a0, int a1)
 {
-	object_a_802AAE8C(0, 0, a0);
-	object_a_802AE0CC(30, S_SHARD, 3, 4);
+	enemya_802AAE8C(0, 0, a0);
+	enemya_802AE0CC(30, S_SHARD, 3, 4);
 	ObjKill(object);
 	if      (a1 == 1)   ObjectMakeCoin(object, object->o_ncoin, 20);
 	else if (a1 == 2)   objectlib_802A1B34(object, object->o_ncoin, 20, 150);
@@ -2250,7 +2244,6 @@ void *Ctrl_objectlib_802A45E4(int code, SHAPE *shape, UNUSED void *data)
 	return NULL;
 }
 
-UNUSED static
 void *Ctrl_objectlib_802A462C(int code, SHAPE *shape, UNUSED void *data)
 {
 	if (code == SC_DRAW)
@@ -2293,7 +2286,7 @@ void objectlib_802A4774(unsigned int flag)
 
 int objectlib_802A47A0(float radius, float height, UNUSED SHORT range)
 {
-	if (object->o_pl_dist < 1500)
+	if (object->o_targetdist < 1500)
 	{
 		float dist = ObjCalcDist2D(object, mario_obj);
 		UNUSED SHORT dang = ObjCalcAngY(mario_obj, object);
@@ -2313,10 +2306,10 @@ int objectlib_802A48BC(float radius, float height)
 	return objectlib_802A47A0(radius, height, 0x1000);
 }
 
-static void objectlib_802A48FC(int flag, int code)
+static void objectlib_802A48FC(int flag, int status)
 {
-	object->o_msg_code = code;
-	object->o_msg_state++;
+	object->o_msg_status = status;
+	object->o_msg_phase++;
 	if (!(flag & 0x10)) pldemo_80257640(0);
 }
 
@@ -2324,27 +2317,37 @@ int objectlib_802A4960(int a0, int flag, int msg, UNUSED int a3)
 {
 	int result = 0;
 	UNUSED int inrange = TRUE;
-	switch (object->o_msg_state)
+	switch (object->o_msg_phase)
 	{
 	case 0:
+#if REVISION >= 199609
 		if (pldemo_802575A8() || mario->state == PS_DEMO_06)
 		{
 			object_flag |= OBJECT_FREEZE;
 			object->flag |= OBJ_0020;
-			object->o_msg_state++;
+			object->o_msg_phase++;
 		}
 		else
 		{
 			break;
 		}
 		FALLTHROUGH;
+#else
+		if (mario->power >= 0x100)
+		{
+			object_flag |= OBJECT_FREEZE;
+			object->flag |= OBJ_0020;
+			object->o_msg_phase++;
+		}
+		break;
+#endif
 	case 1:
-		if (pldemo_80257640(a0) == 2) object->o_msg_state++;
+		if (pldemo_80257640(a0) == 2) object->o_msg_phase++;
 		break;
 	case 2:
 		if      (flag & 4)  MsgOpenPrompt(msg);
 		else if (flag & 2)  MsgOpen(msg);
-		object->o_msg_state++;
+		object->o_msg_phase++;
 		break;
 	case 3:
 		if (flag & 4)
@@ -2353,7 +2356,7 @@ int objectlib_802A4960(int a0, int flag, int msg, UNUSED int a3)
 		}
 		else if (flag & 2)
 		{
-			if (MsgGet() == -1) objectlib_802A48FC(flag, 3);
+			if (MsgGet() == MSG_NULL) objectlib_802A48FC(flag, 3);
 		}
 		else
 		{
@@ -2361,84 +2364,95 @@ int objectlib_802A4960(int a0, int flag, int msg, UNUSED int a3)
 		}
 		break;
 	case 4:
-		if (mario->state != PS_DEMO_06 || (flag & 0x10))
+		if (mario->state != PS_DEMO_06 || flag & 0x10)
 		{
 			object_flag &= ~OBJECT_FREEZE;
 			object->flag &= ~OBJ_0020;
-			result = object->o_msg_code;
-			object->o_msg_state = 0;
+			result = object->o_msg_status;
+			object->o_msg_phase = 0;
 		}
 		break;
 	default:
-		object->o_msg_state = 0;
+		object->o_msg_phase = 0;
 		break;
 	}
 	return result;
 }
 
-int objectlib_802A4BE4(int a0, int flag, int msg, int a3)
+int objectlib_802A4BE4(int a0, int flag, int a2, int msg)
 {
 	int result = 0;
 	int inrange = TRUE;
-	switch (object->o_msg_state)
+	switch (object->o_msg_phase)
 	{
 	case 0:
+#if REVISION >= 199609
 		if (pldemo_802575A8() || mario->state == PS_DEMO_06)
 		{
 			object_flag |= OBJECT_FREEZE;
 			object->flag |= OBJ_0020;
-			object->o_msg_state++;
-			object->o_msg_code = 0;
+			object->o_msg_phase++;
+			object->o_msg_status = 0;
 		}
 		else
 		{
 			break;
 		}
 		FALLTHROUGH;
+#else
+		if (mario->power >= 0x100)
+		{
+			object_flag |= OBJECT_FREEZE;
+			object->flag |= OBJ_0020;
+			object->o_msg_phase++;
+			object->o_msg_status = 0;
+		}
+		break;
+#endif
 	case 1:
 		if (flag & 1)
 		{
 			inrange = ObjectTurn(ObjCalcAngY(object, mario_obj), 0x800);
-			if (object->o_msg_code >= 33) inrange = TRUE;
+			if (object->o_msg_status > 32) inrange = TRUE;
 		}
 		if (pldemo_80257640(a0) == 2 && inrange)
 		{
-			object->o_msg_code = 0;
-			object->o_msg_state++;
+			object->o_msg_status = 0;
+			object->o_msg_phase++;
 		}
 		else
 		{
-			object->o_msg_code++;
+			object->o_msg_status++;
 		}
 		break;
 	case 2:
-		if (msg == 161)
+		if (a2 == 161)
 		{
-			if ((object->o_msg_code = camera_8028FFC8(msg, object)))
+			if ((object->o_msg_status = camera_8028FFC8(a2, object)))
 			{
-				object->o_msg_state++;
+				object->o_msg_phase++;
 			}
 		}
 		else
 		{
-			if ((object->o_msg_code = camera_8028FF04(msg, object, a3)))
+			if ((object->o_msg_status = camera_8028FF04(a2, object, msg)))
 			{
-				object->o_msg_state++;
+				object->o_msg_phase++;
 			}
 		}
 		break;
 	case 3:
 		if (flag & 0x10)
 		{
-			result = object->o_msg_code;
-			object->o_msg_state = 0;
+			result = object->o_msg_status;
+			object->o_msg_phase = 0;
 		}
 		else if (mario->state != PS_DEMO_06)
 		{
 			object_flag &= ~OBJECT_FREEZE;
 			object->flag &= ~OBJ_0020;
-			result = object->o_msg_code;
-			object->o_msg_state = 0;
+			result = object->o_msg_status;
+			object->o_msg_phase = 0;
 		}
 		else
 		{
@@ -2473,7 +2487,6 @@ void ObjectStand(void)
 	}
 }
 
-UNUSED static
 int MarioInRect(SHORT xmin, SHORT xmax, SHORT zmin, SHORT zmax)
 {
 	if (mario_obj->o_posx < xmin || xmax < mario_obj->o_posx) return FALSE;
@@ -2497,7 +2510,7 @@ int objectlib_802A513C(OBJECT *obj)
 		o = obj->hit[0];
 		if (o != mario_obj)
 		{
-			o->o_hit_result |= 1|0x4000|0x8000|0x00800000; /* T:hit_result */
+			o->o_hit_result |= HR_000001|HR_004000|HR_008000|HR_800000;
 			result = TRUE;
 		}
 	}
@@ -2507,7 +2520,7 @@ int objectlib_802A513C(OBJECT *obj)
 int objectlib_802A51AC(void)
 {
 	int result = FALSE;
-	if ((object->o_hit_result & 0x8000) && (object->o_hit_result & 0x4000))
+	if (object->o_hit_result & HR_008000 && object->o_hit_result & HR_004000)
 	{
 		result = TRUE;
 	}
@@ -2542,9 +2555,9 @@ void ObjectSetAnimeHoldEnd(int anime)
 
 int objectlib_802A52F8(void)
 {
-	if (object->o_hit_result & 0x800)
+	if (object->o_hit_result & HR_000800)
 	{
-		object->mem[0].i = 1;
+		object->work[O_VAR].i = 1;
 		ObjectHitOFF();
 		return TRUE;
 	}
@@ -2565,7 +2578,7 @@ int objectlib_802A5358(void)
 	return result;
 }
 
-UNUSED static void objectlib_802A540C(int l, int r, Na_Se se)
+void objectlib_802A540C(int l, int r, Na_Se se)
 {
 	if (ObjectIsAnimeFrame(l) || ObjectIsAnimeFrame(r))
 	{
@@ -2573,7 +2586,7 @@ UNUSED static void objectlib_802A540C(int l, int r, Na_Se se)
 	}
 }
 
-UNUSED static void objectlib_802A5460(void)
+void objectlib_802A5460(void)
 {
 	object_flag |= OBJECT_FREEZE|OBJECT_FREEZEPLAYER;
 	object->flag |= OBJ_0020;
@@ -2587,7 +2600,7 @@ void objectlib_802A5498(void)
 
 int objectlib_802A54D8(void)
 {
-	if (object->o_hit_result & 0x8000)
+	if (object->o_hit_result & HR_008000)
 	{
 		object->o_hit_result = 0;
 		return TRUE;
@@ -2598,21 +2611,23 @@ int objectlib_802A54D8(void)
 	}
 }
 
-extern OBJLANG o_13000830[];
+extern OBJLANG obj_13000830[];
 
 void objectlib_802A5524(void)
 {
 	if (object->o_ncoin >= 5)
 	{
-		ObjMakeHere(object, S_BLUECOIN, o_13000830);
+		ObjMakeHere(object, S_BLUECOIN, obj_13000830);
 		object->o_ncoin -= 5;
 	}
 }
 
+#if REVISION >= 199609
 void objectlib_802A5588(float x, float y, float z, float offy)
 {
 	float posy = object->o_posy;
 	object->o_posy += offy + db_work[5][0];
-	object_b_802F2B88(x, y, z);
+	enemyb_802F2B88(x, y, z);
 	object->o_posy = posy;
 }
+#endif

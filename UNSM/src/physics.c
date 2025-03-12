@@ -1,6 +1,6 @@
 #include <sm64.h>
 
-static s16 quicksand_speed[] = {12, 8, 4};
+static short quicksand_speed[] = {12, 8, 4};
 
 UNUSED static int physics_8033B290;
 
@@ -12,7 +12,7 @@ float PL_GetTrampolinePower(void)
 	return 0;
 }
 
-void PL_ProcTrampoline(UNUSED PLAYER *pl)
+void PL_CheckTrampoline(UNUSED PLAYER *pl)
 {
 }
 
@@ -32,7 +32,7 @@ void BumpCollision(BUMP *a, BUMP *b)
 	a->velz += -sa*dz + a->power*sb*-dz;
 }
 
-void BumpInit(
+VOID BumpInit(
 	BUMP *bump, float posx, float posz, float speed, SHORT angy, float power,
 	float radius
 )
@@ -56,17 +56,17 @@ void PL_Reflect(PLAYER *pl, int flag)
 	{
 		SHORT angy = ATAN2(pl->wall->nz, pl->wall->nx);
 		pl->ang[1] = angy - (short)(pl->ang[1] - angy);
-		Na_ObjSePlay((pl->flag & PL_METALCAP) ? NA_SE0_42 : NA_SE0_45, pl->obj);
+		Na_ObjSePlay(pl->flag & PL_METALCAP ? NA_SE0_42 : NA_SE0_45, pl->obj);
 	}
 	else
 	{
-		Na_ObjSePlay(NA_SE0_44_C, pl->obj);
+		Na_ObjSePlay(NA_SE0_44_C0, pl->obj);
 	}
 	if (flag)   PL_SetSpeed(pl, -pl->speed);
 	else        pl->ang[1] += 0x8000;
 }
 
-int PL_Sink(PLAYER *pl, float sink)
+int PL_ProcSink(PLAYER *pl, float sink)
 {
 	if (pl->state & PF_RIDE)
 	{
@@ -105,7 +105,7 @@ int PL_Sink(PLAYER *pl, float sink)
 			break;
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 int PL_SteepFall(PLAYER *pl, u32 state, u32 code)
@@ -146,15 +146,10 @@ int PL_ProcWind(PLAYER *pl)
 	{
 		float acc;
 		short angy = ground->attr << 8;
-		if (pl->state & PF_MOVE)
+		if (pl->state & PF_WALK)
 		{
 			short dang = pl->ang[1] - angy;
-#if REVISION < 199606
-			if (pl->speed > 0)  acc = -pl->speed*0.5F;
-			else                acc = -8;
-#else
 			acc = pl->speed > 0 ? -pl->speed*0.5F : -8;
-#endif
 			if (-0x4000 < dang && dang < 0x4000) acc *= -1;
 			acc *= COS(dang);
 		}
@@ -164,7 +159,7 @@ int PL_ProcWind(PLAYER *pl)
 		}
 		pl->vel[0] += acc * SIN(angy);
 		pl->vel[2] += acc * COS(angy);
-#if REVISION <= 199606
+#if REVISION < 199609
 		Na_ObjSePlay(NA_SE4_10, pl->obj);
 #endif
 		return TRUE;
@@ -230,7 +225,7 @@ static int PL_CheckWalk(PLAYER *pl, FVEC pos)
 		FVecCpy(pl->pos, pos);
 		pl->ground = ground;
 		pl->ground_y = ground_y;
-		return WALK_HITGROUND;
+		return WALK_FALL;
 	}
 	if (ground_y+160 >= roof_y) return WALK_STOP;
 	FVecSet(pl->pos, pos[0], ground_y, pos[2]);
@@ -239,11 +234,11 @@ static int PL_CheckWalk(PLAYER *pl, FVEC pos)
 	if (wall)
 	{
 		short dang = ATAN2(wall->nz, wall->nx) - pl->ang[1];
-		if (+0x2AAA <= dang && dang <= +0x5555) return WALK_CONTINUE;
-		if (-0x2AAA >= dang && dang >= -0x5555) return WALK_CONTINUE;
-		return WALK_HITWALL;
+		if (DEG( 60) <= dang && dang <= DEG( 120)) return WALK_STAY;
+		if (DEG(-60) >= dang && dang >= DEG(-120)) return WALK_STAY;
+		return WALK_WALL;
 	}
-	return WALK_CONTINUE;
+	return WALK_STAY;
 }
 
 int PL_ProcWalk(PLAYER *pl)
@@ -252,16 +247,16 @@ int PL_ProcWalk(PLAYER *pl)
 	FVEC pos;
 	for (i = 0; i < 4; i++)
 	{
-		pos[0] = pl->pos[0] + pl->vel[0]/4*pl->ground->ny;
-		pos[2] = pl->pos[2] + pl->vel[2]/4*pl->ground->ny;
+		pos[0] = pl->pos[0] + pl->vel[0]/4.0F * pl->ground->ny;
+		pos[2] = pl->pos[2] + pl->vel[2]/4.0F * pl->ground->ny;
 		pos[1] = pl->pos[1];
 		result = PL_CheckWalk(pl, pos);
-		if (result == WALK_HITGROUND || result == WALK_STOP) break;
+		if (result == WALK_FALL || result == WALK_STOP) break;
 	}
 	pl->surface = PL_GetSurface(pl);
 	FVecCpy(pl->obj->s.pos, pl->pos);
 	SVecSet(pl->obj->s.ang, 0, pl->ang[1], 0);
-	if (result == WALK_HITWALL) result = WALK_STOP;
+	if (result == WALK_WALL) result = WALK_STOP;
 	return result;
 }
 
@@ -273,7 +268,7 @@ static int PL_CheckLedge(PLAYER *pl, BGFACE *wall, FVEC oldpos, FVEC newpos)
 	if (pl->vel[1] > 0) return FALSE;
 	dx = newpos[0] - oldpos[0];
 	dz = newpos[2] - oldpos[2];
-	if (dx*pl->vel[0] + dz*pl->vel[2] > 0) return FALSE;
+	if (dx*pl->vel[0] + dz*pl->vel[2] > 0.0F) return FALSE;
 	pos[0] = newpos[0] - wall->nx*60;
 	pos[2] = newpos[2] - wall->nz*60;
 	pos[1] = BGCheckGround(pos[0], newpos[1]+160, pos[2], &ground);
@@ -305,10 +300,10 @@ static int PL_CheckJump(PLAYER *pl, FVEC pos, int flag)
 		if (newpos[1] <= pl->ground_y)
 		{
 			pl->pos[1] = pl->ground_y;
-			return JUMP_HITGROUND;
+			return JUMP_LAND;
 		}
 		pl->pos[1] = newpos[1];
-		return JUMP_HITWALL;
+		return JUMP_WALL;
 	}
 	if (pl->state & PF_RIDE)
 	{
@@ -329,34 +324,34 @@ static int PL_CheckJump(PLAYER *pl, FVEC pos, int flag)
 			pl->ground_y = ground_y;
 		}
 		pl->pos[1] = ground_y;
-		return JUMP_HITGROUND;
+		return JUMP_LAND;
 	}
 	if (newpos[1]+160 > roof_y)
 	{
 		if (pl->vel[1] >= 0)
 		{
 			pl->vel[1] = 0;
-			if ((flag & 2) && pl->roof && pl->roof->code == BG_5)
+			if (flag & 2 && pl->roof && pl->roof->code == BG_5)
 			{
 				return JUMP_HANG;
 			}
-			return JUMP_CONTINUE;
+			return JUMP_STAY;
 		}
 		if (newpos[1] <= pl->ground_y)
 		{
 			pl->pos[1] = pl->ground_y;
-			return JUMP_HITGROUND;
+			return JUMP_LAND;
 		}
 		pl->pos[1] = newpos[1];
-		return JUMP_HITWALL;
+		return JUMP_WALL;
 	}
-	if ((flag & 1) && !hwall && lwall)
+	if (flag & 1 && !hwall && lwall)
 	{
-		if (PL_CheckLedge(pl, lwall, pos, newpos)) return JUMP_HITLEDGE;
+		if (PL_CheckLedge(pl, lwall, pos, newpos)) return JUMP_LEDGE;
 		FVecCpy(pl->pos, newpos);
 		pl->ground = ground;
 		pl->ground_y = ground_y;
-		return JUMP_CONTINUE;
+		return JUMP_STAY;
 	}
 	FVecCpy(pl->pos, newpos);
 	pl->ground = ground;
@@ -369,10 +364,10 @@ static int PL_CheckJump(PLAYER *pl, FVEC pos, int flag)
 		if (dang < -0x6000 || dang > 0x6000)
 		{
 			pl->flag |= PL_40000000;
-			return JUMP_HITWALL;
+			return JUMP_WALL;
 		}
 	}
-	return JUMP_CONTINUE;
+	return JUMP_STAY;
 }
 
 static void PL_ProcSpinGravity(PLAYER *pl)
@@ -427,18 +422,16 @@ static void PL_ProcGravity(PLAYER *pl)
 	}
 	else if (PL_IsJumpCancel(pl))
 	{
-		pl->vel[1] /= 4;
+		pl->vel[1] /= 4.0F;
 	}
 	else if (pl->state & PF_SINK)
 	{
 		pl->vel[1] -= 1.6F;
 		if (pl->vel[1] < -16) pl->vel[1] = -16;
 	}
-	else if (
-		(pl->flag & PL_WINGCAP) && pl->vel[1] < 0 && (pl->status & PA_JUMPSTA)
-	)
+	else if (pl->flag & PL_WINGCAP && pl->vel[1] < 0 && pl->status & PA_JUMPSTA)
 	{
-		pl->shape->wing = 1;
+		pl->ctrl->wing = 1;
 		pl->vel[1] -= 2;
 		if (pl->vel[1] < -37.5F)
 		{
@@ -463,9 +456,9 @@ static void PL_ProcUpWind(PLAYER *pl)
 			else            vely = 50;
 			if (pl->vel[1] < vely)
 			{
-				if ((pl->vel[1] += vely/8) > vely) pl->vel[1] = vely;
+				if ((pl->vel[1] += vely/8.0F) > vely) pl->vel[1] = vely;
 			}
-#if REVISION <= 199606
+#if REVISION < 199609
 			Na_ObjSePlay(NA_SE4_10, pl->obj);
 #endif
 		}
@@ -479,13 +472,13 @@ int PL_ProcJump(PLAYER *pl, int flag)
 	pl->wall = NULL;
 	for (i = 0; i < 4; i++)
 	{
-		pos[0] = pl->pos[0] + pl->vel[0]/4;
-		pos[1] = pl->pos[1] + pl->vel[1]/4;
-		pos[2] = pl->pos[2] + pl->vel[2]/4;
+		pos[0] = pl->pos[0] + pl->vel[0]/4.0F;
+		pos[1] = pl->pos[1] + pl->vel[1]/4.0F;
+		pos[2] = pl->pos[2] + pl->vel[2]/4.0F;
 		code = PL_CheckJump(pl, pos, flag);
 		if (code) result = code;
 		if (
-			code == JUMP_HITGROUND || code == JUMP_HITLEDGE ||
+			code == JUMP_LAND || code == JUMP_LEDGE ||
 			code == JUMP_HANG || code == JUMP_BURN
 		) break;
 	}
@@ -498,7 +491,6 @@ int PL_ProcJump(PLAYER *pl, int flag)
 	return result;
 }
 
-UNUSED static
 void PL_SetSpeed3D(PLAYER *pl)
 {
 	pl->vel[0] = pl->speed * COS(pl->ang[0]) * SIN(pl->ang[1]);
@@ -506,7 +498,6 @@ void PL_SetSpeed3D(PLAYER *pl)
 	pl->vel[2] = pl->speed * COS(pl->ang[0]) * COS(pl->ang[1]);
 }
 
-UNUSED static
 void PL_SetSpeed2D(PLAYER *pl)
 {
 	pl->vel[0] = pl->slide_x = pl->speed * SIN(pl->ang[1]);

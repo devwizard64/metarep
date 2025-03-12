@@ -1,14 +1,32 @@
 #include <sm64.h>
 
+typedef struct tagobj
+{
+	OBJLANG *script;
+	short shape;
+	short code;
+}
+TAGOBJ;
+
+typedef struct mapobj
+{
+	u8 index;
+	u8 ext;
+	u8 arg;
+	u8 shape;
+	OBJLANG *script;
+}
+MAPOBJ;
+
 #include "tagobj.c"
 #include "mapobj.c"
 
-extern OBJLANG o_coin[];
-extern OBJLANG o_13000C44[];
-extern OBJLANG o_13002898[];
-extern OBJLANG o_130028CC[];
-extern OBJLANG o_130028FC[];
-extern OBJLANG o_1300292C[];
+extern OBJLANG obj_coin[];
+extern OBJLANG obj_13000C44[];
+extern OBJLANG obj_13002898[];
+extern OBJLANG obj_130028CC[];
+extern OBJLANG obj_130028FC[];
+extern OBJLANG obj_1300292C[];
 
 static SHORT TagAng(SHORT x)
 {
@@ -69,7 +87,7 @@ UNUSED
 static void TagEnterOLD(OBJLANG *script, TAG *tag)
 {
 	OBJECT *obj;
-	SHORT shape = script == o_coin ? S_COIN : S_NULL;
+	SHORT shape = script == obj_coin ? S_COIN : S_NULL;
 	obj = ObjMakeAt(
 		&object_dummy, 0, shape, script,
 		tag[1], tag[2], tag[3], 0, TagAng(tag[0]), 0
@@ -88,7 +106,7 @@ void TagObjLoad(SHORT scene, TAG *tag)
 		int n;
 		TAG buf[5];
 		OBJECT *obj;
-		s16 shape, code;
+		short shape, code;
 		OBJLANG *script;
 		if (*tag == -1) break;
 		n = (*tag & 0x1FF) - TAG_START;
@@ -137,25 +155,25 @@ void TagLoad(SHORT scene, TAG *tag)
 		switch (index)
 		{
 		case 0:
-			TagEnterCode(S_NULL, o_13002898, posx, posy, posz, angy, 0);
+			TagEnterCode(S_NULL, obj_13002898, posx, posy, posz, angy, 0);
 			break;
 		case 1:
-			TagEnterCode(54, o_130028CC, posx, posy, posz, angy, 0);
+			TagEnterCode(54, obj_130028CC, posx, posy, posz, angy, 0);
 			break;
 		case 2:
-			TagEnterCode(55, o_13000C44, posx, posy, posz, angy, 0);
+			TagEnterCode(55, obj_13000C44, posx, posy, posz, angy, 0);
 			break;
 		case 3:
-			TagEnterCode(57, o_130028FC, posx, posy, posz, angy, 0);
+			TagEnterCode(57, obj_130028FC, posx, posy, posz, angy, 0);
 			break;
 		case 4:
-			TagEnterCode(58, o_1300292C, posx, posy, posz, angy, 0);
+			TagEnterCode(58, obj_1300292C, posx, posy, posz, angy, 0);
 			break;
 		case 20:
-			TagEnterCode(S_COIN, o_coin, posx, posy, posz, angy, 0);
+			TagEnterCode(S_COIN, obj_coin, posx, posy, posz, angy, 0);
 			break;
 		case 21:
-			TagEnterCode(S_COIN, o_coin, posx, posy, posz, angy, 0);
+			TagEnterCode(S_COIN, obj_coin, posx, posy, posz, angy, 0);
 			break;
 		default:
 			break;

@@ -1,7 +1,7 @@
 #include <sm64.h>
 
 extern Gfx gfx_quad0[];
-extern Gfx gfx_background_start[];
+extern Gfx gfx_background_begin[];
 extern Gfx gfx_background_tile[];
 extern Gfx gfx_background_end[];
 
@@ -89,10 +89,10 @@ static Vtx *BackVtx(int index, CHAR shade)
 	SHORT y = BACK_HT - TILE_HT*(index/BACK_TW);
 	if (vtx)
 	{
-		BackSetVtx(vtx, 0, x+      0, y-      0,  0,  0, rgb[shade]);
-		BackSetVtx(vtx, 1, x+      0, y-TILE_HT,  0, 31, rgb[shade]);
+		BackSetVtx(vtx, 0, x        , y        ,  0,  0, rgb[shade]);
+		BackSetVtx(vtx, 1, x        , y-TILE_HT,  0, 31, rgb[shade]);
 		BackSetVtx(vtx, 2, x+TILE_WD, y-TILE_HT, 31, 31, rgb[shade]);
-		BackSetVtx(vtx, 3, x+TILE_WD, y-      0, 31,  0, rgb[shade]);
+		BackSetVtx(vtx, 3, x+TILE_WD, y        , 31,  0, rgb[shade]);
 	}
 	else
 	{
@@ -147,7 +147,7 @@ static Gfx *BackGfx(CHAR screen, CHAR type, CHAR shade)
 	else
 	{
 		Mtx *mtx = BackMtx(screen);
-		gSPDisplayList(g++, gfx_background_start);
+		gSPDisplayList(g++, gfx_background_begin);
 		gSPMatrix(
 			g++, K0_TO_PHYS(mtx), G_MTX_PROJECTION|G_MTX_MUL|G_MTX_NOPUSH
 		);

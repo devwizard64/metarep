@@ -200,8 +200,8 @@ void FMtxIdent(FMTX m)
 #ifdef sgi
 	register int i;
 	register float *f;
-	for (i = 0, f = &m[0][1]; i < 14; i++, f++) *f = 0;
-	for (i = 0, f = &m[0][0]; i < 4; i++, f += 5) *f = 1;
+	for (f = &m[0][1], i = 0; i < 14; i++, f += 1) *f = 0;
+	for (f = &m[0][0], i = 0; i <  4; i++, f += 5) *f = 1;
 #else
 	guMtxIdentF(m);
 #endif
@@ -330,15 +330,9 @@ void FMtxBillboard(FMTX dst, FMTX src, FVEC pos, SHORT angz)
 	dst[2][1] = 0;
 	dst[2][2] = 1;
 	dst[2][3] = 0;
-#define x pos[0]
-#define y pos[1]
-#define z pos[2]
-	dst[3][0] = src[0][0]*x + src[1][0]*y + src[2][0]*z + src[3][0];
-	dst[3][1] = src[0][1]*x + src[1][1]*y + src[2][1]*z + src[3][1];
-	dst[3][2] = src[0][2]*x + src[1][2]*y + src[2][2]*z + src[3][2];
-#undef x
-#undef y
-#undef z
+	dst[3][0] = MDOT4(src, 0, pos[0], pos[1], pos[2]);
+	dst[3][1] = MDOT4(src, 1, pos[0], pos[1], pos[2]);
+	dst[3][2] = MDOT4(src, 2, pos[0], pos[1], pos[2]);
 	dst[3][3] = 1;
 }
 
@@ -375,12 +369,12 @@ void FMtxGround(FMTX m, FVEC pos, SHORT angy, float radius)
 	FVEC v0, v1, v2, forward, vx, vy, vz;
 	float y;
 	float height = -radius*3;
-	v0[0] = pos[0] + SIN(angy+0x2AAA)*radius;
-	v0[2] = pos[2] + COS(angy+0x2AAA)*radius;
-	v1[0] = pos[0] + SIN(angy+0x8000)*radius;
-	v1[2] = pos[2] + COS(angy+0x8000)*radius;
-	v2[0] = pos[0] + SIN(angy+0xD555)*radius;
-	v2[2] = pos[2] + COS(angy+0xD555)*radius;
+	v0[0] = pos[0] + SIN(angy+DEG( 60))*radius;
+	v0[2] = pos[2] + COS(angy+DEG( 60))*radius;
+	v1[0] = pos[0] + SIN(angy+DEG(180))*radius;
+	v1[2] = pos[2] + COS(angy+DEG(180))*radius;
+	v2[0] = pos[0] + SIN(angy+DEG(300))*radius;
+	v2[2] = pos[2] + COS(angy+DEG(300))*radius;
 	v0[1] = BGCheckGround(v0[0], pos[1] + 150, v0[2], &ground);
 	v1[1] = BGCheckGround(v1[0], pos[1] + 150, v1[2], &ground);
 	v2[1] = BGCheckGround(v2[0], pos[1] + 150, v2[2], &ground);
@@ -558,7 +552,7 @@ static int AtanRef(float y, float x)
 
 short ATAN2(float y, float x)
 {
-	short ang;
+	USHORT ang;
 	if (x >= 0)
 	{
 		if (y >= 0)

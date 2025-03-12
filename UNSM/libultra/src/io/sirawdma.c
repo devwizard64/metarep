@@ -1,9 +1,59 @@
 #include <ultra64.h>
+#include <assert.h>
 #include "osint.h"
 #include "controller.h"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 s32 __osSiRawStartDma(s32 direction, void *dramAddr)
 {
+#ifdef _DEBUG
+	assert(((u32)dramAddr & 0x3) == 0);
+#endif
 	if (__osSiDeviceBusy()) return -1;
 	if (direction == OS_WRITE) osWritebackDCache(dramAddr, sizeof(OSPifRam));
 	IO_WRITE(SI_DRAM_ADDR_REG, osVirtualToPhysical(dramAddr));

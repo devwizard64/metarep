@@ -5,7 +5,7 @@
 #define SHP_CMD_EXIT            1
 #define SHP_CMD_JUMP            2
 #define SHP_CMD_RETURN          3
-#define SHP_CMD_START           4
+#define SHP_CMD_BEGIN           4
 #define SHP_CMD_END             5
 #define SHP_CMD_STORE           6
 #define SHP_CMD_FLAG            7

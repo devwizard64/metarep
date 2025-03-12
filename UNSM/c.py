@@ -1,3 +1,4 @@
+import os
 import struct
 import json
 
@@ -55,31 +56,30 @@ def gltf_primitive(gltf, buf, attrib, tri, mtl):
 	if mtl: primitive["material"] = gltf_mtltab[mtl]
 	return primitive
 
-def s_gltf(self, argv):
+def f_gltf(self, argv):
+	global gltf_path
 	global gltf_name
 	global gltf_mtl
 	global gltf_mtltab
 	global gltf_mesh
 	global gltf_meshinfo
 	global gltf_meshdata
-	gltf_name, gltf_mtl = argv
+	gltf_path, gltf_mtl = argv
 	gltf_mtltab = {mtl[0]: i for i, mtl in enumerate(gltf_mtl)}
 	gltf_mesh = []
 	gltf_meshinfo = {}
 	gltf_meshdata = {}
-	# print("\n%s_DEP := \\" % gltf_name.upper())
 
-def s_gltf_mesh(self, argv):
+def f_gltf_mesh(self, argv):
 	name, mesh = argv
 	gltf_mesh.append((name, mesh))
 	gltf_meshinfo[name] = mesh
 	gltf_meshdata[name] = [False, [None]*len(mesh)]
-	self.file[-1][1].append("#include \"%s.h\"\n" % self.path_rel([name]))
-	# print("\t%s.h \\" % self.path_join([name], 1))
-	# for light, mtl in mesh:
-	# 	print("\t%s.h \\" % self.path_join(["%s.%s" % (name, mtl)], 1))
+	self.file.data.append("#include \"%s.h\"\n" % os.path.join(
+		os.path.dirname(gltf_path), name
+	))
 
-def s_gltf_write(self, argv):
+def f_gltf_write(self, argv):
 	gltf = {
 		"asset": {
 			"generator": "metarep",
@@ -134,7 +134,7 @@ def s_gltf_write(self, argv):
 		[B"JSON", B" ", json.dumps(gltf, separators=(",", ":")).encode()],
 		[B"BIN", B"\0", B"".join(buf)],
 	]
-	fn = self.path_join([gltf_name + ".glb"])
+	fn = os.path.join(os.path.dirname(self.file.fn), gltf_path+".glb")
 	main.mkdir(fn)
 	with open(fn, "wb") as f:
 		size = 12 + sum([8+((len(data)+3) & ~3) for code, pad, data in chunk])
@@ -154,7 +154,7 @@ def gfx_prc(self, line, tab, end, name, index):
 		m = gltf_mtl[gltf_mtltab[mtl]]
 		if len(m) > 2:
 			txt = True
-			w, h = m[2][1:]
+			wd, ht = m[2][1:]
 			ss = st = 1
 			ts = tt = -0.5
 			if len(m) > 3:
@@ -218,8 +218,8 @@ def gfx_prc(self, line, tab, end, name, index):
 	if start == self.addr: return 0
 	attrib = [("POSITION", [v[0:3] for v in vtx], GLTF_FLOAT, 3, False, True)]
 	if txt: attrib.append(("TEXCOORD_0", [(
-		(v[3]*ss/32.0 - ts)/w,
-		(v[4]*st/32.0 - tt)/h,
+		(v[3]*ss/32.0 - ts)/wd,
+		(v[4]*st/32.0 - tt)/ht,
 	) for v in vtx], GLTF_FLOAT, 2, False, False))
 	if normal: attrib.append(("NORMAL", [
 		(v[5]/128.0, v[6]/128.0, v[7]/128.0) for v in vtx
@@ -232,27 +232,26 @@ def gfx_prc(self, line, tab, end, name, index):
 	], GLTF_UBYTE, 4, True, False))
 	if not light and normal: gltf_meshdata[name][0] = True
 	gltf_meshdata[name][1][index] = (attrib, tri, mtl)
-	name = "%s.%s" % (name, mtl)
-	line[-1][-1].append("#include \"%s.h\"" % self.path_rel([name]))
+	line[-1][-1].append("#include \"%s.%s.h\"" % (name, mtl))
 	return 1
 
-def s_obj(self, argv):
-	global obj_name
+def f_obj(self, argv):
+	global obj_path
 	global obj_vtx
 	global obj_tri
 	global obj_area
-	obj_name, = argv
+	obj_path, = argv
 	obj_vtx = None
 	obj_tri = []
 	obj_area = None
 
-def s_obj_write(self, argv):
-	fn = self.path_join([obj_name + ".obj"])
+def f_obj_write(self, argv):
+	fn = os.path.join(os.path.dirname(self.file.fn), obj_path+".obj")
 	main.mkdir(fn)
 	with open(fn, "w") as f:
 		f.write("# metarep\n")
 		for v in obj_vtx: f.write("v %d %d %d\n" % v)
-		f.write("o %s\n" % obj_name)
+		f.write("o %s\n" % os.path.basename(obj_path))
 		mtl = None
 		for i, t in enumerate(obj_tri):
 			m = t[0]
@@ -329,16 +328,16 @@ d_collision = [False, d_collision_prc]
 # plspec.c
 # plwait.c
 
-# plmove.c
+# plwalk.c
 
-d_pl_move = [
+d_plwalk = [
 	[0, -2, 1, ultra.c.d_s16],
 	[0, -5, 1, ultra.c.d_u32, "0x%08X"],
 ]
 
 # pljump.c
 # plswim.c
-# pltake.c
+# platck.c
 # callback.c
 # memory.c
 # backup.c
@@ -437,7 +436,7 @@ def d_splash_prc(self, argv):
 	flag    = ultra.fmt_s16(self, self.s16())
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	script  = ultra.c.aw(self, extern=True)
-	ang_range   = self.s16()
+	ang_range   = self.fmt_s16(self.s16())
 	pos_range   = self.s16()
 	velf_start  = self.fmt_float(self.f())
 	velf_range  = self.fmt_float(self.f())
@@ -447,7 +446,7 @@ def d_splash_prc(self, argv):
 	scale_range = self.fmt_float(self.f())
 	return [
 		"%s, %s, %s," % (flag, shape, script),
-		"/*ang  */\t%d," % ang_range,
+		"/*ang  */\t%s," % ang_range,
 		"/*pos  */\t%d," % pos_range,
 		"/*velf */\t%s, %s," % (velf_start, velf_range),
 		"/*vely */\t%s, %s," % (vely_start, vely_range),
@@ -503,24 +502,24 @@ def d_hitinfo_prc(self, argv):
 	]
 d_hitinfo = [False, d_hitinfo_prc]
 
-# object_a.c
+# enemya.c
 
-def d_object_a_0_prc(self, argv):
+def d_enemya0_prc(self, argv):
 	_00 = ultra.fmt_s16(self, self.s16())
 	self.addr += 2
 	_04 = self.fmt_float(self.f())
 	_08 = self.fmt_float(self.f())
 	return ["{%s, %s, %s}" % (_00, _04, _08)]
-d_object_a_0 = [False, d_object_a_0_prc]
+d_enemya0 = [False, d_enemya0_prc]
 
-def d_object_a_1_prc(self, argv):
+def d_enemya1_prc(self, argv):
 	flag    = self.s16()
 	scale   = self.s16()
 	map_    = ultra.c.aw(self, extern=True)
 	dist    = self.s16()
 	self.addr += 2
 	return ["{%d, %d, %s, %d}" % (flag, scale, map_, dist)]
-d_object_a_1 = [False, d_object_a_1_prc]
+d_enemya1 = [False, d_enemya1_prc]
 
 def d_80330260_prc(self, argv):
 	a = self.s32()
@@ -529,67 +528,67 @@ def d_80330260_prc(self, argv):
 	return ["{%s, %d}" % (a, b)]
 d_80330260 = [False, d_80330260_prc]
 
-def d_object_a_2_prc(self, argv):
+def d_enemya2_prc(self, argv):
 	count   = self.s16()
 	add     = self.s16()
 	mul     = self.s16()
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	map_    = ultra.c.aw(self, extern=True)
 	return ["{%d, %d, %d, %s, %s}" % (count, add, mul, shape, map_)]
-d_object_a_2 = [False, d_object_a_2_prc]
+d_enemya2 = [False, d_enemya2_prc]
 
-def d_object_a_3_prc(self, argv):
+def d_enemya3_prc(self, argv):
 	map_    = ultra.c.aw(self, extern=True)
 	posx    = self.s16()
 	posz    = self.s16()
 	angy    = ultra.fmt_s16(self, self.s16())
 	self.addr += 2
 	return ["{%s, %d, %d, %s}" % (map_, posx, posz, angy)]
-d_object_a_3 = [False, d_object_a_3_prc]
+d_enemya3 = [False, d_enemya3_prc]
 
-def d_object_a_4_prc(self, argv):
+def d_enemya4_prc(self, argv):
 	offset  = self.s32()
 	scalex  = self.fmt_float(self.f())
 	scaley  = self.fmt_float(self.f())
 	scalez  = self.fmt_float(self.f())
 	vel     = self.fmt_float(self.f())
 	return ["{%d, {%s, %s, %s}, %s}" % (offset, scalex, scaley, scalez, vel)]
-d_object_a_4 = [False, d_object_a_4_prc]
+d_enemya4 = [False, d_enemya4_prc]
 
-def d_object_a_5_prc(self, argv):
+def d_enemya5_prc(self, argv):
 	shape   = UNSM.fmt.fmt_shape(self, self.u8())
 	posx    = self.s8()
 	posz    = self.s8()
-	state   = self.s8()
+	mode    = self.s8()
 	data    = ultra.c.aw(self)
-	return ["{%s, %d, %d, %d, %s}" % (shape, posx, posz, state, data)]
-d_object_a_5 = [False, d_object_a_5_prc]
+	return ["{%s, %d, %d, %d, %s}" % (shape, posx, posz, mode, data)]
+d_enemya5 = [False, d_enemya5_prc]
 
-def d_object_a_6_prc(self, argv):
+def d_enemya6_prc(self, argv):
 	index   = self.u8()
 	flag    = self.u8()
 	arg     = self.u8()
 	shape   = UNSM.fmt.fmt_shape(self, self.u8())
 	script  = ultra.c.aw(self, extern=True)
 	return ["{%d, %d, %d, %s, %s}" % (index, flag, arg, shape, script)]
-d_object_a_6 = [False, d_object_a_6_prc]
+d_enemya6 = [False, d_enemya6_prc]
 
-def d_object_a_7_prc(self, argv):
+def d_enemya7_prc(self, argv):
 	offset  = self.s16()
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	map_    = ultra.c.aw(self, extern=True)
 	return ["{%d, %s, %s}" % (offset, shape, map_)]
-d_object_a_7 = [False, d_object_a_7_prc]
+d_enemya7 = [False, d_enemya7_prc]
 
-def d_object_a_8_prc(self, argv):
+def d_enemya8_prc(self, argv):
 	time        = self.s32()
 	anime       = self.s32() # T:enum(anime)
 	vel         = self.fmt_float(self.f())
 	anime_vel   = self.fmt_float(self.f())
 	return ["{%d, %d, %s, %s}" % (time, anime, vel, anime_vel)]
-d_object_a_8 = [False, d_object_a_8_prc]
+d_enemya8 = [False, d_enemya8_prc]
 
-# ride.c
+# movebg.c
 # hitcheck.c
 # objlist.c
 
@@ -626,7 +625,7 @@ def d_fluid_prc(self, argv):
 	txt     = self.s32()
 	n       = self.s32()
 	data    = ultra.c.aw(self, extern=True)
-	start   = ultra.c.aw(self, extern=True)
+	begin   = ultra.c.aw(self, extern=True)
 	end     = ultra.c.aw(self, extern=True)
 	draw    = ultra.c.aw(self, extern=True)
 	r       = self.u8()
@@ -635,7 +634,7 @@ def d_fluid_prc(self, argv):
 	alpha   = self.u8()
 	layer   = self.s32()
 	arg     = (
-		code, txt, n, data, start, end, draw, r, g, b, alpha,
+		code, txt, n, data, begin, end, draw, r, g, b, alpha,
 		UNSM.fmt.fmt_layer(self, layer)
 	)
 	if arg == (
@@ -686,12 +685,10 @@ def d_tagobj_prc(self, argv):
 	script  = ultra.c.aw(self, extern=True)
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	code    = self.s16()
-	if i != 0 and (script, shape, code) == ("o_coin", "S_COIN", 0):
+	if i != 0 and (script, shape, code) == ("obj_coin", "S_COIN", 0):
 		return ["/*%3d*/\tTAGOBJ_NULL" % i]
 	return ["/*%3d*/\t{%s, %s, %d}" % (i, script, shape, code)]
 d_tagobj = [False, d_tagobj_prc]
-
-mapobj_ext = {}
 
 def d_mapobj_prc(self, argv):
 	index  = self.u8()
@@ -699,7 +696,6 @@ def d_mapobj_prc(self, argv):
 	arg    = self.u8()
 	shape  = UNSM.fmt.fmt_shape(self, self.u8())
 	script = ultra.c.aw(self, extern=True)
-	mapobj_ext[index] = ext
 	index = UNSM.fmt.fmt_mapobj(index)
 	ext   = "MAP_EXT_" + (
 		"NULL",
@@ -747,11 +743,11 @@ def d_meter_prc(self, argv):
 	return ["{%d, %d, %d, %s}" % (mode, x, y, scale)]
 d_meter = [False, d_meter_prc]
 
-# object_b.c
+# enemyb.c
 
-# object_c.c
+# enemyc.c
 
-def d_object_c_0_prc(self, argv):
+def d_enemyc0_prc(self, argv):
 	msg_start   = UNSM.fmt.fmt_msg(self, self.s16())
 	msg_win     = UNSM.fmt.fmt_msg(self, self.s16())
 	path        = ultra.c.aw(self, extern=True)
@@ -762,24 +758,24 @@ def d_object_c_0_prc(self, argv):
 	return ["{%s, %s, %s, {%d, %d, %d}}" % (
 		msg_start, msg_win, path, star_x, star_y, star_z
 	)]
-d_object_c_0 = [False, d_object_c_0_prc]
+d_enemyc0 = [False, d_enemyc0_prc]
 
-def d_object_c_1_prc(self, argv):
+def d_enemyc1_prc(self, argv):
 	scale   = self.fmt_float(self.f())
 	se      = UNSM.fmt.fmt_na_se(self, self.u32())
 	dist    = self.s16()
 	damage  = self.s8()
 	self.addr += 1
 	return ["{%s, %s, %d, %d}" % (scale, se, dist, damage)]
-d_object_c_1 = [False, d_object_c_1_prc]
+d_enemyc1 = [False, d_enemyc1_prc]
 
-def d_object_c_2_prc(self, argv):
+def d_enemyc2_prc(self, argv):
 	map_    = ultra.c.aw(self, extern=True)
 	p_map   = ultra.c.aw(self, extern=True)
 	p_shape = UNSM.fmt.fmt_shape(self, self.s16())
 	self.addr += 2
 	return ["{%s, %s, %s}" % (map_, p_map, p_shape)]
-d_object_c_2 = [False, d_object_c_2_prc]
+d_enemyc2 = [False, d_enemyc2_prc]
 
 def d_80332AC0_prc(self, argv):
 	a = self.s16()
@@ -787,27 +783,27 @@ def d_80332AC0_prc(self, argv):
 	return ["{%d, %d}" % (a, b)]
 d_80332AC0 = [False, d_80332AC0_prc]
 
-def d_object_c_3_prc(self, argv):
+def d_enemyc3_prc(self, argv):
 	map_    = ultra.c.aw(self, extern=True)
 	shape   = UNSM.fmt.fmt_shape(self, self.s16())
 	self.addr += 2
 	return ["{%s, %s}" % (map_, shape)]
-d_object_c_3 = [False, d_object_c_3_prc]
+d_enemyc3 = [False, d_enemyc3_prc]
 
-def d_object_c_4_prc(self, argv):
+def d_enemyc4_prc(self, argv):
 	msg     = self.s16()
 	self.addr += 2
 	radius  = self.fmt_float(self.f())
 	height  = self.fmt_float(self.f())
 	return ["{%d, %s, %s}" % (msg, radius, height)]
-d_object_c_4 = [False, d_object_c_4_prc]
+d_enemyc4 = [False, d_enemyc4_prc]
 
-def d_object_c_5_prc(self, argv):
+def d_enemyc5_prc(self, argv):
 	shape   = UNSM.fmt.fmt_shape(self, self.s32())
 	script  = ultra.c.aw(self, extern=True)
 	scale   = self.fmt_float(self.f())
 	return ["{%s, %s, %s}" % (shape, script, scale)]
-d_object_c_5 = [False, d_object_c_5_prc]
+d_enemyc5 = [False, d_enemyc5_prc]
 
 # math.c
 
@@ -876,7 +872,7 @@ def d_anime_prc(self, line, tab, argv):
 d_anime = [True, d_anime_prc]
 
 # shplang.c
-# prglang.c
+# seqlang.c
 
 # bgcheck.c
 
@@ -904,7 +900,7 @@ def d_map_prc(self, argv):
 				for _ in range(self.s16())
 			]
 		elif x == 65:
-			lst.append("#include \"%s.h\"" % self.path_rel([name]))
+			lst.append("#include \"%s.h\"" % name)
 		elif x == 66:
 			lst.append("MAP_END,")
 			break
@@ -913,7 +909,11 @@ def d_map_prc(self, argv):
 			lst.append("MAP_OBJECT, %d," % n)
 			for _ in range(n):
 				o = self.s16()
-				n = (3, 4, 5, 6, 4)[mapobj_ext[o]]
+				if o == 30: n = 6
+				elif o >= 131 and o <= 136: n = 5
+				elif (o >= 101 and o <= 120) or (o >= 126 and o <= 130) or \
+					(o >= 137 and o <= 141) or o in {0,8,14,35,36}: n = 4
+				else: n = 3
 				o = UNSM.fmt.fmt_mapobj(o)
 				lst.append(" ".join(
 					[o + ","] + ["%d," % self.s16() for _ in range(n)]
@@ -939,7 +939,7 @@ def d_area_prc(self, argv):
 	name, n = argv
 	obj_area = [self.s8() for _ in range(n)]
 	self.addr = (self.addr+3) & ~3
-	return ["#include \"%s.h\"" % self.path_rel([name])]
+	return ["#include \"%s.h\"" % name]
 d_area = [False, d_area_prc]
 
 # objlang.c
@@ -1318,22 +1318,22 @@ texture_cvt_ia16 = [True, True, 1, lambda self: self.u16(), lambda x: (
 )]
 
 def d_texture_prc(self, argv):
-	fmt, w, h, name = argv
-	g, a, n, f, c = {
+	fmt, wd, ht, name = argv
+	g, a, n, t, c = {
 		"rgba16":   texture_cvt_rgba16,
 		"ia4":      texture_cvt_ia4,
 		"ia8":      texture_cvt_ia8,
 		"ia16":     texture_cvt_ia16,
 	}[fmt]
 	data = [
-		[x for x in [c(f(self)) for _ in range(w//n)] for x in x]
-		for _ in range(h)
+		[x for x in [c(t(self)) for _ in range(wd//n)] for x in x]
+		for _ in range(ht)
 	]
-	writer = png.Writer(w, h, greyscale=g, alpha=a)
-	fn = "%s.%s.png" % (self.path_join([name]), fmt)
+	writer = png.Writer(wd, ht, greyscale=g, alpha=a)
+	fn = "%s.%s.png" % (os.path.join(os.path.dirname(self.file.fn), name), fmt)
 	main.mkdir(fn)
 	with open(fn, "wb") as f: writer.write(f, data)
-	return ["#include \"%s.%s.h\"" % (self.path_rel([name]), fmt)]
+	return ["#include \"%s.%s.h\"" % (name, fmt)]
 d_texture = [False, d_texture_prc]
 
 def d_gfx_prc(self, line, tab, argv):
@@ -1342,12 +1342,12 @@ def d_gfx_prc(self, line, tab, argv):
 	i = 0
 	name = None
 	while self.addr < end:
-		ultra.c.lst_push(self, line)
+		ultra.c.f_data_push(self, line)
 		if type(lst[i]) == str:
 			name = lst[i]
 			i += 1
 		i += gfx_prc(self, line, tab, end, name, lst[i])
-		ultra.c.lst_push(self, line)
+		ultra.c.f_data_push(self, line)
 		start = self.addr
 		while self.addr < end:
 			w0 = self.u32()
@@ -1568,64 +1568,102 @@ gfx_table = {
 	0xE8: (g_rdptilesync,),
 }
 
-def s_message_str(self, lang, line):
-	lst = []
-	while True:
-		x = self.u8()
-		if x == 0xFF: break
-		lst.append(x)
-	i = 0
-	while i < len(lst):
-		for s, c in lang:
-			n = len(c)
-			if lst[i:i+n] == c:
-				line.append(s)
-				i += n
-				break
-		else:
-			raise RuntimeError("illegal character 0x%02X" % lst[i])
-	if not line[-1].endswith("\n"): line.append("\n")
-	self.addr = (self.addr+3) & ~3
+def japanese(self, c):
+	if c < 0x24:
+		return "０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"[c]
+	if c >= 0x40 and c < 0xA9: return (
+		"あいうえおかきくけこさしすせそたちつてとなにぬねの"
+		"はひふへほまみむめもやゆよらりるれろわをん。、"
+		"アイウエオカキクケコサシスセソタチツテトナニヌネノ"
+		"ハヒフヘホマミムメモヤユヨラリルレロワヲン　ー"
+		"ぇっゃゅょぁぃぅぉ"
+	)[c-0x40]
+	if c >= 0xD0 and c < 0xD9: return "ェッャュョァィゥォ"[c-0xD0]
+	if c >= 0xE0 and c <= 0xE4: return ("%d","（",")(","）","<->")[c-0xE0]
+	if c == 0xF0:
+		c = self.u8()
+		if c >= 0x45 and c < 0x54: return "がぎぐげござじずぜぞだぢづでど"[c-0x45]
+		if c >= 0x59 and c < 0x5E: return "ばびぶべぼ"[c-0x59]
+		if c >= 0x75 and c < 0x84: return "ガギグゲゴザジズゼゾダヂヅデド"[c-0x75]
+		if c >= 0x89 and c < 0x8E: return "バビブベボ"[c-0x89]
+		raise RuntimeError("illegal character F0 %02X" % c)
+	if c == 0xF1:
+		c = self.u8()
+		if c >= 0x59 and c < 0x5E: return "ぱぴぷぺぽ"[c-0x59]
+		if c >= 0x89 and c < 0x8E: return "パピプペポ"[c-0x89]
+		raise RuntimeError("illegal character F1 %02X" % c)
+	if c >= 0xF2 and c <= 0xF7: return "！％？『』〜"[c-0xF2]
+	if c == 0xFC: return "・"
+	if c >= 0xF8 and c <= 0xFD: return "{%s}" % "+-x*."[c-0xF8]
+	if c == 0xFE: return "\n"
+	return None
+
+def ja_select(self, c):
+	if c < 0x1D: return "ファイルセレクトをコピーするけマリオスアみどの？サウンド"[c]
+	return None
+
+def english(self, c):
+	if c < 0x40: return (
+		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'."
+	)[c]
+	if c >= 0x50 and c <= 0x58: return "{" + "^v<>ABCZR"[c-0x50] + "}"
+	if c == 0x6F: return ","
+	if c == 0x9E: return " "
+	if c == 0x9F: return "-"
+	if c >= 0xD0 and c <= 0xD2: return ("\t","the","you")[c-0xD0]
+	if c >= 0xE0 and c <= 0xE6: return ("%d","(",")(",")","<->","&",":")[c-0xE0]
+	if c == 0xF3: return "%%"
+	if c >= 0xF2 and c <= 0xF8: return "!%?[]~…"[c-0xF2]
+	if c >= 0xF8 and c <= 0xFD: return "{" + "+-x*."[c-0xF8] + "}"
+	if c == 0xFE: return "\n"
+	return None
 
 def s_message(self, argv):
-	seg, start, end, cmd, path, name, lang = argv[:7]
+	path, seg, start, end, mode, lang, name = argv[:7]
 	ultra.init(self, seg, start)
-	line = ["$name: %s\n$lang: %s\n\n" % (name, lang)]
-	lang = UNSM.tools.lang.table[lang]
+	line = ["$lang:%s\n$%s:%s\n\n" % (lang, mode, name)]
 	count = 0
 	while self.addr < end:
 		x = self.u32()
 		if not x: break
 		addr = self.addr
 		self.addr = x
-		arg = []
-		if cmd == "msg":
-			arg = self.s32()
+		if len(argv) > 7: line.append("# %s\n" % self.fmt(argv[7], count))
+		arg = ""
+		if mode == "message":
+			code = self.s32()
 			ln  = self.s8()
 			self.addr += 1
 			x   = self.s16()
 			y   = self.s16()
 			self.addr += 2
 			self.addr = self.u32()
-			arg = ["%d, %d, %d, %d" % (arg, ln, x, y)]
-		if len(argv) > 7: line.append("$$ %s\n" % self.fmt(argv[7], count))
-		line.append("$%s:" % cmd)
-		if arg: line.append(" " + "; ".join(arg))
-		line.append("\n")
-		s_message_str(self, lang, line)
+			line.append("$%d, %d, %d, %d\n" % (code, ln, x, y))
+		else:
+			line.append("$\n")
+		while True:
+			c = self.u8()
+			if c == 0xFF: break
+			s = {
+				"ja": japanese,
+				"ja.select": ja_select,
+				"en": english,
+			}[lang](self, c)
+			if s is None: raise RuntimeError("illegal character %02X" % c)
+			line.append(s)
+		if not line[-1].endswith("\n"): line.append("\n")
 		line.append("\n")
 		self.addr = addr
 		count += 1
 	data = "".join(line).rstrip("\n") + "\n"
-	fn = self.path_join([path + ".txt"])
+	fn = os.path.join(self.root, path)
 	main.mkdir(fn)
 	with open(fn, "w") as f: f.write(data)
-	self.file[-1][1].append("#include \"%s.h\"\n" % self.path_rel([path]))
 
-def s_background(self, argv):
+def f_background(self, argv):
 	seg, start = argv
 	ultra.c.init(self, seg, start)
-	self.file[-1][1].append("\nBACKGROUND %s =\n{{\n%s}};\n" % (
+	self.file.data.append("\nBACKGROUND %s =\n{{\n%s}};\n" % (
 		self.meta.sym[seg][start].label, "".join([
 			"\t%s\n" % " ".join([
 				self.meta.sym[seg][self.u32()].label + ","
@@ -1856,7 +1894,7 @@ shp_str = (
 	"Exit", # 0x01
 	"Jump", # 0x02
 	"Return", # 0x03
-	"Start", # 0x04
+	"Begin", # 0x04
 	"End", # 0x05
 	"Store", # 0x06
 	"Flag", # 0x07
@@ -1924,19 +1962,18 @@ shp_fnc = (
 )
 
 def d_shplang_prc(self, line, tab, argv):
-	end, = argv
-	t = 0
+	end = argv[0]
+	t = argv[1] if len(argv) > 1 else 0
 	while self.addr < end:
-		if ultra.c.lst_push(self, line): t = 0
+		if ultra.c.f_data_push(self, line): t = 0
 		c = self.u8()
 		f = shp_fnc[c]
 		argv = f[0](self, f[1:])
 		s = argv[0] if argv[0] is not None else shp_str[c]
-		if self.seg == "E0.TTM.data" and self.save == 0x0E00093C: c = 0x05
 		if c in {0x05} and t > 0: t -= 1
 		if c in {0x01}: t = 0
 		line[-1][-1].append(
-			tab + "\t"*t + "s" + s + "(" + ", ".join(argv[1:]) + "),"
+			tab + "\t"*t + "shp" + s + "(" + ", ".join(argv[1:]) + "),"
 		)
 		if c in {0x04}: t += 1
 d_shplang = [True, d_shplang_prc]

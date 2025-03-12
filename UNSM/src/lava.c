@@ -4,7 +4,7 @@ extern u16 *txt_weather_flower[];
 extern u16 *txt_weather_lava[];
 extern u16 *txt_weather_bubble[];
 extern Gfx gfx_weather_end[];
-extern Gfx gfx_lava_start[];
+extern Gfx gfx_lava_begin[];
 extern Gfx gfx_lava_txt[];
 
 UNUSED static char lava_803317A0 = 0;
@@ -107,7 +107,7 @@ static void LavaMakeLava(SVEC pos)
 			}
 		}
 	}
-	if ((r = 16*RandF()) == 8) Na_FixSePlay(0x300D0081);
+	if ((r = 16*RandF()) == 8) Na_FixSePlay(NA_SE3_0D);
 }
 
 static void WhirlpoolMove(int *x, int *y, int *z)
@@ -284,18 +284,18 @@ static void LavaVtx(Gfx *g, int i, SVEC v0, SVEC v1, SVEC v2, Vtx *template)
 	if (!vtx) return;
 	for (n = 0; n < 15; n += 3)
 	{
-		vtx[n+0] = template[0];
-		vtx[n+0].v.ob[0] = weatherp[i+n/3].x + v0[0];
-		vtx[n+0].v.ob[1] = weatherp[i+n/3].y + v0[1];
-		vtx[n+0].v.ob[2] = weatherp[i+n/3].z + v0[2];
-		vtx[n+1] = template[1];
-		vtx[n+1].v.ob[0] = weatherp[i+n/3].x + v1[0];
-		vtx[n+1].v.ob[1] = weatherp[i+n/3].y + v1[1];
-		vtx[n+1].v.ob[2] = weatherp[i+n/3].z + v1[2];
-		vtx[n+2] = template[2];
-		vtx[n+2].v.ob[0] = weatherp[i+n/3].x + v2[0];
-		vtx[n+2].v.ob[1] = weatherp[i+n/3].y + v2[1];
-		vtx[n+2].v.ob[2] = weatherp[i+n/3].z + v2[2];
+		*(vtx+n+0) = template[0];
+		(vtx+n+0)->v.ob[0] = (weatherp+(i+n/3))->x + v0[0];
+		(vtx+n+0)->v.ob[1] = (weatherp+(i+n/3))->y + v0[1];
+		(vtx+n+0)->v.ob[2] = (weatherp+(i+n/3))->z + v0[2];
+		*(vtx+n+1) = template[1];
+		(vtx+n+1)->v.ob[0] = (weatherp+(i+n/3))->x + v1[0];
+		(vtx+n+1)->v.ob[1] = (weatherp+(i+n/3))->y + v1[1];
+		(vtx+n+1)->v.ob[2] = (weatherp+(i+n/3))->z + v1[2];
+		*(vtx+n+2) = template[2];
+		(vtx+n+2)->v.ob[0] = (weatherp+(i+n/3))->x + v2[0];
+		(vtx+n+2)->v.ob[1] = (weatherp+(i+n/3))->y + v2[1];
+		(vtx+n+2)->v.ob[2] = (weatherp+(i+n/3))->z + v2[2];
 	}
 	gSPVertex(g, K0_TO_PHYS(vtx), 15, 0);
 }
@@ -343,7 +343,7 @@ static Gfx *LavaGfx(int code, UNUSED SVEC pos, SVEC eye, SVEC look)
 	WeatherGetCoord(look, eye, &dist, &angx, &angy);
 	LavaMake(code, look, v0, v1, v2);
 	WeatherXfm(v0, v1, v2, angx, angy);
-	gSPDisplayList(lava_glistp++, gfx_lava_start);
+	gSPDisplayList(lava_glistp++, gfx_lava_begin);
 	for (i = 0; i < lava_len; i += 5)
 	{
 		gDPPipeSync(lava_glistp++);

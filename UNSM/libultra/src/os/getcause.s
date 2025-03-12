@@ -5,7 +5,7 @@
 .set noreorder
 
 LEAF(__osGetCause)
-	mfc0    v0, C0_CAUSE
-	j       ra
+	mfc0 v0,C0_CAUSE
+	j ra
 	nop
 END(__osGetCause)

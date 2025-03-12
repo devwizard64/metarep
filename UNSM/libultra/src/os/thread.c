@@ -17,6 +17,9 @@ void __osDequeueThread(register OSThread **queue, register OSThread *t)
 		if (succ == t)
 		{
 			pred->next = t->next;
+#ifdef _DEBUG
+			t->next = NULL;
+#endif
 			return;
 		}
 		pred = succ;

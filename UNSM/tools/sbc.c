@@ -1,95 +1,115 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <getopt.h>
 
-typedef struct seq
+typedef struct bank
 {
 	char *path;
 	unsigned int offset, size;
 }
-SEQ;
+BANK;
+
+static int usage(const char *path)
+{
+	fprintf(
+		stderr, "usage: %s [-c code] [-a align] -o output input [...]\n", path
+	);
+	return 1;
+}
 
 int main(int argc, char *argv[])
 {
-	int i, n;
-	FILE *fp, *in;
-	char *buf;
-	SEQ *seq;
+	static char buffer[0x10000];
+	int i, n, c, count, index = 0, code = 0, align = 0;
 	unsigned int offset, size;
-	int code, count, index;
-	if (argc < 4)
+	const char *output = NULL;
+	BANK *bank;
+	FILE *fp, *in;
+	while ((c = getopt(argc, argv, "c:a:o:")) != -1)
 	{
-		fprintf(stderr, "usage: %s <code> <output> <input> [...]\n", argv[0]);
-		return 1;
+		switch (c)
+		{
+		case 'c':
+			code = strtol(optarg, NULL, 0);
+			break;
+		case 'a':
+			align = strtol(optarg, NULL, 0);
+			break;
+		case 'o':
+			output = optarg;
+			break;
+		case '?':
+			return usage(argv[0]);
+		}
 	}
-	code = strtol(argv[1], NULL, 0);
-	count = argc - 3;
-	buf = calloc(65536, 1);
-	seq = malloc(sizeof(SEQ)*count);
-	printf(".data\n.incbin \"%s\"\n", argv[2]);
-	if (!(fp = fopen(argv[2], "wb")))
+	if (!output || (count = argc-optind) < 1) return usage(argv[0]);
+	bank = malloc(sizeof(BANK)*count);
+	printf(".data\n.incbin \"%s\"\n", output);
+	if (!(fp = fopen(output, "wb")))
 	{
-		fprintf(stderr, "error: could not write '%s'\n", argv[2]);
+		fprintf(stderr, "error: could not open '%s'\n", output);
 		return 1;
 	}
 	fputc(code >> 8, fp);
 	fputc(code >> 0, fp);
 	fputc(count >> 8, fp);
 	fputc(count >> 0, fp);
-	index = 0;
 	offset = ((4+8*count)+15) & ~15;
 	for (i = 0; i < count; i++)
 	{
-		char *path = argv[3+i];
+		char *path = argv[optind+i];
 		for (n = 0; n < index; n++)
 		{
-			if (!strcmp(seq[n].path, path)) break;
+			if (!strcmp(bank[n].path, path)) break;
 		}
 		if (n == index)
 		{
 			if (!(in = fopen(path, "rb")))
 			{
-				fprintf(stderr, "error: could not read '%s'\n", path);
+				fprintf(stderr, "error: could not open '%s'\n", path);
 				return 1;
 			}
 			fseek(in, 0, SEEK_END);
 			size = (ftell(in)+15) & ~15;
 			fclose(in);
-			seq[n].path = path;
-			seq[n].offset = offset;
-			seq[n].size = size;
+			bank[n].path = path;
+			bank[n].offset = offset;
+			bank[n].size = size;
 			offset += size;
 			index++;
 		}
-		fputc(seq[n].offset >> 24, fp);
-		fputc(seq[n].offset >> 16, fp);
-		fputc(seq[n].offset >>  8, fp);
-		fputc(seq[n].offset >>  0, fp);
-		fputc(seq[n].size   >> 24, fp);
-		fputc(seq[n].size   >> 16, fp);
-		fputc(seq[n].size   >>  8, fp);
-		fputc(seq[n].size   >>  0, fp);
+		fputc(bank[n].offset >> 24, fp);
+		fputc(bank[n].offset >> 16, fp);
+		fputc(bank[n].offset >>  8, fp);
+		fputc(bank[n].offset >>  0, fp);
+		fputc(bank[n].size   >> 24, fp);
+		fputc(bank[n].size   >> 16, fp);
+		fputc(bank[n].size   >>  8, fp);
+		fputc(bank[n].size   >>  0, fp);
 	}
-	fwrite(buf, 1, -(4+8*count) & 15, fp);
+	fwrite(buffer, 1, -(4+8*count) & 15, fp);
 	for (i = 0; i < index; i++)
 	{
-		if (!(in = fopen(seq[i].path, "rb")))
+		if (!(in = fopen(bank[i].path, "rb")))
 		{
-			fprintf(stderr, "error: could not read '%s'\n", seq[i].path);
+			fprintf(stderr, "error: could not open '%s'\n", bank[i].path);
 			return 1;
 		}
-		size = seq[i].size;
-		while (size > 0)
+		for (size = bank[i].size; size > 0; size -= n)
 		{
-			n = size;
-			if (n > 65536) n = 65536;
-			fread(buf, 1, n, in);
-			fwrite(buf, 1, n, fp);
-			size -= n;
+			n = size < sizeof(buffer) ? size : sizeof(buffer);
+			fread(buffer, 1, n, in);
+			fwrite(buffer, 1, n, fp);
 		}
 		fclose(in);
 	}
+	if (align > 0)
+	{
+		n = align - (ftell(fp) & (align-1));
+		for (i = 0; i < n; i++) fputc(0, fp);
+	}
 	fclose(fp);
-	free(seq);
+	free(bank);
 	return 0;
 }

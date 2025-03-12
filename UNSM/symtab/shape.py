@@ -1,9 +1,6 @@
 import main
 
 sym_E0_Player = {
-	0x00114750: main.sym("_PlayerGfxSegmentRomStart"),
-	0x001279B0: main.sym("_PlayerShpSegmentRomStart"),
-
 	# mario
 	0x04000000: main.sym_var("light_mario", "static Lights1", "[]"),
 	0x04000090: main.sym_var("txt_mario_metal", "static u16", "[]"),
@@ -194,7 +191,7 @@ sym_E0_Player = {
 	0x0401AF20: main.sym_var("gfx_mario_capR_shade", "static Gfx", "[]"),
 	0x0401B080: main.sym_var("gfx_mario_wingsR_l", "static Gfx", "[]"),
 	0x0401B0B0: main.sym_var("gfx_mario_wingsR_r", "static Gfx", "[]"),
-	0x0401B0E0: main.sym_var("gfx_mario_wingsR_start", "static Gfx", "[]"),
+	0x0401B0E0: main.sym_var("gfx_mario_wingsR_begin", "static Gfx", "[]"),
 	0x0401B138: main.sym_var("gfx_mario_wingsR_end", "static Gfx", "[]"),
 	0x0401B158: main.sym_var("gfx_mario_capR_s", "Gfx", "[]", flag={"GLOBL"}),
 	0x0401B1D8: main.sym_var("gfx_mario_wingsR_s", "Gfx", "[]", flag={"GLOBL"}),
@@ -208,7 +205,7 @@ sym_E0_Player = {
 	0x0401C510: main.sym_var("gfx_mario_cap_shade", "static Gfx", "[]"),
 	0x0401C678: main.sym_var("gfx_mario_wings_wing_l", "static Gfx", "[]"),
 	0x0401C6A8: main.sym_var("gfx_mario_wings_wing_r", "static Gfx", "[]"),
-	0x0401C6D8: main.sym_var("gfx_mario_wings_start", "static Gfx", "[]"),
+	0x0401C6D8: main.sym_var("gfx_mario_wings_begin", "static Gfx", "[]"),
 	0x0401C730: main.sym_var("gfx_mario_wings_end", "static Gfx", "[]"),
 	0x0401C758: main.sym_var("gfx_mario_cap_s", "Gfx", "[]"), # unused
 	0x0401C7E8: main.sym_var("gfx_mario_cap_e", "Gfx", "[]"), # unused
@@ -249,7 +246,7 @@ sym_E0_Player = {
 	# smoke
 	0x040217C0: main.sym_var("vtx_smoke", "static Vtx", "[]"),
 	0x04021800: main.sym_var("txt_smoke", "static u16", "[]"),
-	0x04022000: main.sym_var("gfx_smoke_start", "static Gfx", "[]"),
+	0x04022000: main.sym_var("gfx_smoke_begin", "static Gfx", "[]"),
 	0x04022028: main.sym_var("gfx_smoke_smoke", "static Gfx", "[]"),
 	0x04022048: main.sym_var("gfx_smoke_end", "static Gfx", "[]"),
 	0x04022070: main.sym_var("gfx_smoke", "Gfx", "[]", flag={"GLOBL"}),
@@ -263,7 +260,7 @@ sym_E0_Player = {
 	0x04023948: main.sym_var("txt_wave_3", "static u16", "[]"),
 	0x04024148: main.sym_var("txt_wave_4", "static u16", "[]"),
 	0x04024948: main.sym_var("txt_wave_5", "static u16", "[]"),
-	0x04025148: main.sym_var("gfx_wave_start", "static Gfx", "[]"),
+	0x04025148: main.sym_var("gfx_wave_begin", "static Gfx", "[]"),
 	0x04025190: main.sym_var("gfx_wave_end", "static Gfx", "[]"),
 	0x040251C8: main.sym_var("gfx_wave", "static Gfx", "[]"),
 	0x040251E0: main.sym_var("gfx_wave_red", "static Gfx", "[]"),
@@ -286,7 +283,7 @@ sym_E0_Player = {
 	0x04025B58: main.sym_var("txt_ripple_1", "static u16", "[]"),
 	0x04026358: main.sym_var("txt_ripple_2", "static u16", "[]"),
 	0x04026B58: main.sym_var("txt_ripple_3", "static u16", "[]"),
-	0x04027358: main.sym_var("gfx_ripple_start", "static Gfx", "[]"),
+	0x04027358: main.sym_var("gfx_ripple_begin", "static Gfx", "[]"),
 	0x040273A0: main.sym_var("gfx_ripple_end", "static Gfx", "[]"),
 	0x040273D8: main.sym_var("gfx_ripple", "static Gfx", "[]"),
 	0x040273F0: main.sym_var("gfx_ripple_0", "Gfx", "[]", flag={"GLOBL"}),
@@ -334,7 +331,7 @@ sym_E0_Player = {
 	0x04032700: main.sym_var("vtx_droplet", "static Vtx", "[]"),
 	0x04032740: main.sym_var("vtx_droplet_red", "static Vtx", "[]"),
 	0x04032780: main.sym_var("txt_droplet", "static u16", "[]"),
-	0x04032980: main.sym_var("gfx_droplet_start", "static Gfx", "[]"),
+	0x04032980: main.sym_var("gfx_droplet_begin", "static Gfx", "[]"),
 	0x040329E0: main.sym_var("gfx_droplet_end", "static Gfx", "[]"),
 	0x04032A18: main.sym_var("gfx_droplet", "Gfx", "[]", flag={"GLOBL"}), # 164
 	0x04032A30: main.sym_var("gfx_droplet_red", "Gfx", "[]"), # unused
@@ -354,82 +351,82 @@ sym_E0_Player = {
 	0x04035360: main.sym_var("gfx_glow_4", "Gfx", "[]", flag={"GLOBL"}),
 
 	# bubble
-	0x17000000: main.sym_var("s_bubble_a", "SHPLANG", "[]", flag={"GLOBL"}), # 168
-	0x1700001C: main.sym_var("s_bubble_b", "SHPLANG", "[]", flag={"GLOBL"}), # 170
+	0x17000000: main.sym_var("shp_bubble_a", "SHPLANG", "[]", flag={"GLOBL"}), # 168
+	0x1700001C: main.sym_var("shp_bubble_b", "SHPLANG", "[]", flag={"GLOBL"}), # 170
 
 	# dust
-	0x17000038: main.sym_var("s_dust", "SHPLANG", "[]", flag={"GLOBL"}), # 150
+	0x17000038: main.sym_var("shp_dust", "SHPLANG", "[]", flag={"GLOBL"}), # 150
 
 	# smoke
-	0x17000084: main.sym_var("s_smoke", "SHPLANG", "[]", flag={"GLOBL"}), # 148, 156
+	0x17000084: main.sym_var("shp_smoke", "SHPLANG", "[]", flag={"GLOBL"}), # 148, 156
 
 	# wave
-	0x1700009C: main.sym_var("s_wave", "SHPLANG", "[]", flag={"GLOBL"}), # 165
-	0x170000E0: main.sym_var("s_wave_red", "SHPLANG", "[]"), # unused
+	0x1700009C: main.sym_var("shp_wave", "SHPLANG", "[]", flag={"GLOBL"}), # 165
+	0x170000E0: main.sym_var("shp_wave_red", "SHPLANG", "[]"), # unused
 
 	# ripple
-	0x17000124: main.sym_var("s_ripple_stop", "SHPLANG", "[]", flag={"GLOBL"}), # 166
-	0x17000168: main.sym_var("s_ripple_move", "SHPLANG", "[]", flag={"GLOBL"}), # 163
+	0x17000124: main.sym_var("shp_ripple_stop", "SHPLANG", "[]", flag={"GLOBL"}), # 166
+	0x17000168: main.sym_var("shp_ripple_move", "SHPLANG", "[]", flag={"GLOBL"}), # 163
 
 	# sparkle
-	0x170001BC: main.sym_var("s_sparkle", "SHPLANG", "[]", flag={"GLOBL"}), # 149
+	0x170001BC: main.sym_var("shp_sparkle", "SHPLANG", "[]", flag={"GLOBL"}), # 149
 
 	# splash
-	0x17000230: main.sym_var("s_splash", "SHPLANG", "[]", flag={"GLOBL"}), # 167
+	0x17000230: main.sym_var("shp_splash", "SHPLANG", "[]", flag={"GLOBL"}), # 167
 
 	# glow
-	0x17000284: main.sym_var("s_glow", "SHPLANG", "[]", flag={"GLOBL"}), # 143
+	0x17000284: main.sym_var("shp_glow", "SHPLANG", "[]", flag={"GLOBL"}), # 143
 
 	# mario
-	0x170002E0: main.sym_var("s_mario_hso_head", "static SHPLANG", "[]"),
-	0x1700041C: main.sym_var("s_mario_hso_handL", "static SHPLANG", "[]"),
-	0x17000494: main.sym_var("s_mario_hso_handR", "static SHPLANG", "[]"),
-	0x1700053C: main.sym_var("s_mario_hso", "static SHPLANG", "[]"),
-	0x170006F8: main.sym_var("s_mario_mso_handL", "static SHPLANG", "[]"),
-	0x17000770: main.sym_var("s_mario_mso_handR", "static SHPLANG", "[]"),
-	0x17000818: main.sym_var("s_mario_mso", "static SHPLANG", "[]"),
-	0x170009D4: main.sym_var("s_mario_lso_head", "static SHPLANG", "[]"),
-	0x17000B10: main.sym_var("s_mario_lso_handL", "static SHPLANG", "[]"),
-	0x17000B88: main.sym_var("s_mario_lso_handR", "static SHPLANG", "[]"),
-	0x17000C30: main.sym_var("s_mario_lso", "static SHPLANG", "[]"),
-	0x17000DEC: main.sym_var("s_mario_hsx_head", "static SHPLANG", "[]"),
-	0x17000F28: main.sym_var("s_mario_hsx_handL", "static SHPLANG", "[]"),
-	0x17000FA0: main.sym_var("s_mario_hsx_handR", "static SHPLANG", "[]"),
-	0x17001048: main.sym_var("s_mario_hsx", "static SHPLANG", "[]"),
-	0x17001204: main.sym_var("s_mario_msx_handL", "static SHPLANG", "[]"),
-	0x1700127C: main.sym_var("s_mario_msx_handR", "static SHPLANG", "[]"),
-	0x17001324: main.sym_var("s_mario_msx", "static SHPLANG", "[]"),
-	0x170014E0: main.sym_var("s_mario_lsx_head", "static SHPLANG", "[]"),
-	0x1700161C: main.sym_var("s_mario_lsx_handL", "static SHPLANG", "[]"),
-	0x17001694: main.sym_var("s_mario_lsx_handR", "static SHPLANG", "[]"),
-	0x1700173C: main.sym_var("s_mario_lsx", "static SHPLANG", "[]"),
-	0x170018F8: main.sym_var("s_mario_heo_head", "static SHPLANG", "[]"),
-	0x170019A4: main.sym_var("s_mario_heo_handL", "static SHPLANG", "[]"),
-	0x17001A1C: main.sym_var("s_mario_heo_handR", "static SHPLANG", "[]"),
-	0x17001AC4: main.sym_var("s_mario_heo", "static SHPLANG", "[]"),
-	0x17001C80: main.sym_var("s_mario_meo_handL", "static SHPLANG", "[]"),
-	0x17001CF8: main.sym_var("s_mario_meo_handR", "static SHPLANG", "[]"),
-	0x17001DA0: main.sym_var("s_mario_meo", "static SHPLANG", "[]"),
-	0x17001F5C: main.sym_var("s_mario_leo_head", "static SHPLANG", "[]"),
-	0x17002008: main.sym_var("s_mario_leo_handL", "static SHPLANG", "[]"),
-	0x17002080: main.sym_var("s_mario_leo_handR", "static SHPLANG", "[]"),
-	0x17002128: main.sym_var("s_mario_leo", "static SHPLANG", "[]"),
-	0x170022E4: main.sym_var("s_mario_hex_head", "static SHPLANG", "[]"),
-	0x17002390: main.sym_var("s_mario_hex_handL", "static SHPLANG", "[]"),
-	0x17002408: main.sym_var("s_mario_hex_handR", "static SHPLANG", "[]"),
-	0x170024B0: main.sym_var("s_mario_hex", "static SHPLANG", "[]"),
-	0x1700266C: main.sym_var("s_mario_mex_handL", "static SHPLANG", "[]"),
-	0x170026E4: main.sym_var("s_mario_mex_handR", "static SHPLANG", "[]"),
-	0x1700278C: main.sym_var("s_mario_mex", "static SHPLANG", "[]"),
-	0x17002958: main.sym_var("s_mario_lex_head", "static SHPLANG", "[]"),
-	0x17002A04: main.sym_var("s_mario_lex_handL", "static SHPLANG", "[]"),
-	0x17002A7C: main.sym_var("s_mario_lex_handR", "static SHPLANG", "[]"),
-	0x17002B24: main.sym_var("s_mario_lex", "static SHPLANG", "[]"),
-	0x17002CE0: main.sym_var("s_mario_h", "static SHPLANG", "[]"),
-	0x17002D14: main.sym_var("s_mario_m", "static SHPLANG", "[]"),
-	0x17002D48: main.sym_var("s_mario_l", "static SHPLANG", "[]"),
-	0x17002D7C: main.sym_var("s_mario_lod", "static SHPLANG", "[]"),
-	0x17002DD4: main.sym_var("s_mario", "SHPLANG", "[]", flag={"GLOBL"}), # 1
+	0x170002E0: main.sym_var("shp_mario_hso_head", "static SHPLANG", "[]"),
+	0x1700041C: main.sym_var("shp_mario_hso_handL", "static SHPLANG", "[]"),
+	0x17000494: main.sym_var("shp_mario_hso_handR", "static SHPLANG", "[]"),
+	0x1700053C: main.sym_var("shp_mario_hso", "static SHPLANG", "[]"),
+	0x170006F8: main.sym_var("shp_mario_mso_handL", "static SHPLANG", "[]"),
+	0x17000770: main.sym_var("shp_mario_mso_handR", "static SHPLANG", "[]"),
+	0x17000818: main.sym_var("shp_mario_mso", "static SHPLANG", "[]"),
+	0x170009D4: main.sym_var("shp_mario_lso_head", "static SHPLANG", "[]"),
+	0x17000B10: main.sym_var("shp_mario_lso_handL", "static SHPLANG", "[]"),
+	0x17000B88: main.sym_var("shp_mario_lso_handR", "static SHPLANG", "[]"),
+	0x17000C30: main.sym_var("shp_mario_lso", "static SHPLANG", "[]"),
+	0x17000DEC: main.sym_var("shp_mario_hsx_head", "static SHPLANG", "[]"),
+	0x17000F28: main.sym_var("shp_mario_hsx_handL", "static SHPLANG", "[]"),
+	0x17000FA0: main.sym_var("shp_mario_hsx_handR", "static SHPLANG", "[]"),
+	0x17001048: main.sym_var("shp_mario_hsx", "static SHPLANG", "[]"),
+	0x17001204: main.sym_var("shp_mario_msx_handL", "static SHPLANG", "[]"),
+	0x1700127C: main.sym_var("shp_mario_msx_handR", "static SHPLANG", "[]"),
+	0x17001324: main.sym_var("shp_mario_msx", "static SHPLANG", "[]"),
+	0x170014E0: main.sym_var("shp_mario_lsx_head", "static SHPLANG", "[]"),
+	0x1700161C: main.sym_var("shp_mario_lsx_handL", "static SHPLANG", "[]"),
+	0x17001694: main.sym_var("shp_mario_lsx_handR", "static SHPLANG", "[]"),
+	0x1700173C: main.sym_var("shp_mario_lsx", "static SHPLANG", "[]"),
+	0x170018F8: main.sym_var("shp_mario_heo_head", "static SHPLANG", "[]"),
+	0x170019A4: main.sym_var("shp_mario_heo_handL", "static SHPLANG", "[]"),
+	0x17001A1C: main.sym_var("shp_mario_heo_handR", "static SHPLANG", "[]"),
+	0x17001AC4: main.sym_var("shp_mario_heo", "static SHPLANG", "[]"),
+	0x17001C80: main.sym_var("shp_mario_meo_handL", "static SHPLANG", "[]"),
+	0x17001CF8: main.sym_var("shp_mario_meo_handR", "static SHPLANG", "[]"),
+	0x17001DA0: main.sym_var("shp_mario_meo", "static SHPLANG", "[]"),
+	0x17001F5C: main.sym_var("shp_mario_leo_head", "static SHPLANG", "[]"),
+	0x17002008: main.sym_var("shp_mario_leo_handL", "static SHPLANG", "[]"),
+	0x17002080: main.sym_var("shp_mario_leo_handR", "static SHPLANG", "[]"),
+	0x17002128: main.sym_var("shp_mario_leo", "static SHPLANG", "[]"),
+	0x170022E4: main.sym_var("shp_mario_hex_head", "static SHPLANG", "[]"),
+	0x17002390: main.sym_var("shp_mario_hex_handL", "static SHPLANG", "[]"),
+	0x17002408: main.sym_var("shp_mario_hex_handR", "static SHPLANG", "[]"),
+	0x170024B0: main.sym_var("shp_mario_hex", "static SHPLANG", "[]"),
+	0x1700266C: main.sym_var("shp_mario_mex_handL", "static SHPLANG", "[]"),
+	0x170026E4: main.sym_var("shp_mario_mex_handR", "static SHPLANG", "[]"),
+	0x1700278C: main.sym_var("shp_mario_mex", "static SHPLANG", "[]"),
+	0x17002958: main.sym_var("shp_mario_lex_head", "static SHPLANG", "[]"),
+	0x17002A04: main.sym_var("shp_mario_lex_handL", "static SHPLANG", "[]"),
+	0x17002A7C: main.sym_var("shp_mario_lex_handR", "static SHPLANG", "[]"),
+	0x17002B24: main.sym_var("shp_mario_lex", "static SHPLANG", "[]"),
+	0x17002CE0: main.sym_var("shp_mario_h", "static SHPLANG", "[]"),
+	0x17002D14: main.sym_var("shp_mario_m", "static SHPLANG", "[]"),
+	0x17002D48: main.sym_var("shp_mario_l", "static SHPLANG", "[]"),
+	0x17002D7C: main.sym_var("shp_mario_lod", "static SHPLANG", "[]"),
+	0x17002DD4: main.sym_var("shp_mario", "SHPLANG", "[]", flag={"GLOBL"}), # 1
 }
 
 imm_E0_Player = {
@@ -523,20 +520,15 @@ imm_E0_Player = {
 }
 
 sym_E0_Shape1A = {
-	0x0012A7E0: main.sym("_Shape1AGfxSegmentRomStart"),
-	0x00132850: main.sym("_Shape1AShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1a_85", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000018: main.sym_var("s_1a_86", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0001E4: main.sym_var("s_1a_87", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000248: main.sym_var("s_1a_88", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000264: main.sym_var("s_1a_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C00028C: main.sym_var("s_1a_89", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1a_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000018: main.sym_var("shp_1a_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0001E4: main.sym_var("shp_1a_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000248: main.sym_var("shp_1a_88", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000264: main.sym_var("shp_1a_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C00028C: main.sym_var("shp_1a_89", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1B = {
-	0x00132C60: main.sym("_Shape1BGfxSegmentRomStart"),
-	0x00134A70: main.sym("_Shape1BShpSegmentRomStart"),
-
 	# bully
 	0x050000E0: main.sym_var("txt_bully_horn", "static u16", "[]"),
 	0x050002E0: main.sym_var("gfx_bully_horn_horn", "static Gfx", "[]"),
@@ -575,11 +567,11 @@ sym_E0_Shape1B = {
 	0x05006178: main.sym_var("align_1", "UNUSED static long long"),
 
 	# bully
-	0x0C000000: main.sym_var("s_bully", "SHPLANG", "[]", flag={"GLOBL"}), # 86
-	0x0C000120: main.sym_var("s_bigbully", "SHPLANG", "[]", flag={"GLOBL"}), # 87
+	0x0C000000: main.sym_var("shp_bully", "SHPLANG", "[]", flag={"GLOBL"}), # 86
+	0x0C000120: main.sym_var("shp_bigbully", "SHPLANG", "[]", flag={"GLOBL"}), # 87
 
 	# blargg
-	0x0C000240: main.sym_var("s_blargg", "SHPLANG", "[]", flag={"GLOBL"}), # 84
+	0x0C000240: main.sym_var("shp_blargg", "SHPLANG", "[]", flag={"GLOBL"}), # 84
 }
 
 imm_E0_Shape1B = {
@@ -595,112 +587,89 @@ imm_E0_Shape1B = {
 }
 
 sym_E0_Shape1C = {
-	0x00134D20: main.sym("_Shape1CGfxSegmentRomStart"),
-	0x0013B5D0: main.sym("_Shape1CShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1c_86", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000308: main.sym_var("s_1c_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000328: main.sym_var("s_1c_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1c_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000308: main.sym_var("shp_1c_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000328: main.sym_var("shp_1c_85", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1D = {
-	0x0013B910: main.sym("_Shape1DGfxSegmentRomStart"),
-	0x00145C10: main.sym("_Shape1DShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1d_88", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000068: main.sym_var("s_1d_86", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C00010C: main.sym_var("s_1d_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1d_88", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000068: main.sym_var("shp_1d_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C00010C: main.sym_var("shp_1d_85", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1E = {
-	0x00145E90: main.sym("_Shape1EGfxSegmentRomStart"),
-	0x00151B70: main.sym("_Shape1EShpSegmentRomStart"),
 	0x05003F20: main.sym("0x05003F20"),
-	0x0C000000: main.sym_var("s_1e_87", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0002AC: main.sym_var("s_1e_0C0002AC", "static SHPLANG", "[]"),
-	0x0C0005E4: main.sym_var("s_1e_89", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0005A8: main.sym_var("s_1e_88", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000610: main.sym_var("s_1e_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000644: main.sym_var("s_1e_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1e_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0002AC: main.sym_var("shp_1e_0C0002AC", "static SHPLANG", "[]"),
+	0x0C0005E4: main.sym_var("shp_1e_89", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0005A8: main.sym_var("shp_1e_88", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000610: main.sym_var("shp_1e_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000644: main.sym_var("shp_1e_85", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1F = {
-	0x001521D0: main.sym("_Shape1FGfxSegmentRomStart"),
-	0x001602E0: main.sym("_Shape1FShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1f_85", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000110: main.sym_var("s_1f_86", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C00036C: main.sym_var("s_1f_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1f_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000110: main.sym_var("shp_1f_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C00036C: main.sym_var("shp_1f_87", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1G = {
-	0x00160670: main.sym("_Shape1GGfxSegmentRomStart"),
-	0x001656E0: main.sym("_Shape1GShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1g_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000104: main.sym_var("s_1g_87", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C00021C: main.sym_var("s_1g_85", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000348: main.sym_var("s_1g_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1g_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000104: main.sym_var("shp_1g_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C00021C: main.sym_var("shp_1g_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000348: main.sym_var("shp_1g_86", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1H = {
-	0x00165A50: main.sym("_Shape1HGfxSegmentRomStart"),
-	0x00166BD0: main.sym("_Shape1HShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1h_0C000000", "SHPLANG", "[]"), # unused
-	0x0C000018: main.sym_var("s_1h_0C000018", "SHPLANG", "[]"), # unused
-	0x0C000030: main.sym_var("s_1h_0C000030", "SHPLANG", "[]"), # unused
-	0x0C000048: main.sym_var("s_1h_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1h_0C000000", "SHPLANG", "[]"), # unused
+	0x0C000018: main.sym_var("shp_1h_0C000018", "SHPLANG", "[]"), # unused
+	0x0C000030: main.sym_var("shp_1h_0C000030", "SHPLANG", "[]"), # unused
+	0x0C000048: main.sym_var("shp_1h_85", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1I = {
-	0x00166C60: main.sym("_Shape1IGfxSegmentRomStart"),
-	0x0016D5C0: main.sym("_Shape1IShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1i_88", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0000C0: main.sym_var("s_1i_89", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0000D8: main.sym_var("s_1i_86", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000188: main.sym_var("s_1i_85", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0001B4: main.sym_var("s_1i_87", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000224: main.sym_var("s_1i_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000274: main.sym_var("s_1i_90", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1i_88", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0000C0: main.sym_var("shp_1i_89", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0000D8: main.sym_var("shp_1i_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000188: main.sym_var("shp_1i_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0001B4: main.sym_var("shp_1i_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000224: main.sym_var("shp_1i_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000274: main.sym_var("shp_1i_90", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1J = {
-	0x0016D870: main.sym("_Shape1JGfxSegmentRomStart"),
-	0x00180540: main.sym("_Shape1JShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1j_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000098: main.sym_var("s_1j_0C000098", "static SHPLANG", "[]"),
-	0x0C000254: main.sym_var("s_1j_0C000254", "static SHPLANG", "[]"),
-	0x0C000410: main.sym_var("s_1j_222", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1j_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000098: main.sym_var("shp_1j_0C000098", "static SHPLANG", "[]"),
+	0x0C000254: main.sym_var("shp_1j_0C000254", "static SHPLANG", "[]"),
+	0x0C000410: main.sym_var("shp_1j_222", "SHPLANG", "[]", flag={"GLOBL"}),
 	0x0C000460: main.sym_var("_0C000460", "UNUSED static long long"),
-	0x0C000468: main.sym_var("s_1j_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000468: main.sym_var("shp_1j_85", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape1K = {
-	0x00180BB0: main.sym("_Shape1KGfxSegmentRomStart"),
-	0x00187FA0: main.sym("_Shape1KShpSegmentRomStart"),
-	0x0C000000: main.sym_var("s_1k_89", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000030: main.sym_var("s_1k_87", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C0001BC: main.sym_var("s_1k_84", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000290: main.sym_var("s_1k_85", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0C000328: main.sym_var("s_1k_86", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000000: main.sym_var("shp_1k_89", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000030: main.sym_var("shp_1k_87", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C0001BC: main.sym_var("shp_1k_84", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000290: main.sym_var("shp_1k_85", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0C000328: main.sym_var("shp_1k_86", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape2A = {
-	0x00188440: main.sym("_Shape2AGfxSegmentRomStart"),
-	0x001B9070: main.sym("_Shape2AShpSegmentRomStart"),
-	0x0D000000: main.sym_var("s_2a_103", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000090: main.sym_var("s_2a_104", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0000B0: main.sym_var("s_2a_3", "SHPLANG", "[]", flag={"GLOBL"}), # local
-	0x0D0000D8: main.sym_var("s_2a_0D0000D8", "static SHPLANG", "[]"),
-	0x0D000424: main.sym_var("s_2a_0D000424", "static SHPLANG", "[]"),
-	0x0D000770: main.sym_var("s_2a_0D000770", "static SHPLANG", "[]"),
-	0x0D000AB8: main.sym_var("s_2a_0D000AB8", "static SHPLANG", "[]"),
-	0x0D000AC4: main.sym_var("s_2a_100", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000B40: main.sym_var("s_2a_105", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000BBC: main.sym_var("s_2a_101_179", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000BFC: main.sym_var("s_2a_102", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000000: main.sym_var("shp_2a_103", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000090: main.sym_var("shp_2a_104", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0000B0: main.sym_var("shp_2a_3", "SHPLANG", "[]", flag={"GLOBL"}), # local
+	0x0D0000D8: main.sym_var("shp_2a_0D0000D8", "static SHPLANG", "[]"),
+	0x0D000424: main.sym_var("shp_2a_0D000424", "static SHPLANG", "[]"),
+	0x0D000770: main.sym_var("shp_2a_0D000770", "static SHPLANG", "[]"),
+	0x0D000AB8: main.sym_var("shp_2a_0D000AB8", "static SHPLANG", "[]"),
+	0x0D000AC4: main.sym_var("shp_2a_100", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000B40: main.sym_var("shp_2a_105", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000BBC: main.sym_var("shp_2a_101_179", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000BFC: main.sym_var("shp_2a_102", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape2B = {
-	0x001B9CC0: main.sym("_Shape2BGfxSegmentRomStart"),
-	0x001C3DB0: main.sym("_Shape2BShpSegmentRomStart"),
-
 	# skeeter
 	0x06000000: main.sym_var("light_skeeter", "UNUSED static Lights1", "[]"), # unused
 	0x06000090: main.sym_var("txt_skeeter_sphere", "static u16", "[]"),
@@ -838,26 +807,26 @@ sym_E0_Shape2B = {
 	0x06017958: main.sym_var("align_6", "UNUSED static long long"),
 
 	# skeeter
-	0x0D000000: main.sym_var("s_skeeter", "SHPLANG", "[]", flag={"GLOBL"}), # 105
+	0x0D000000: main.sym_var("shp_skeeter", "SHPLANG", "[]", flag={"GLOBL"}), # 105
 
 	# kelp
-	0x0D000284: main.sym_var("s_kelp", "SHPLANG", "[]", flag={"GLOBL"}), # 193
+	0x0D000284: main.sym_var("shp_kelp", "SHPLANG", "[]", flag={"GLOBL"}), # 193
 
 	# watermine
-	0x0D0002F4: main.sym_var("s_watermine", "SHPLANG", "[]", flag={"GLOBL"}), # 179
+	0x0D0002F4: main.sym_var("shp_watermine", "SHPLANG", "[]", flag={"GLOBL"}), # 179
 
 	# piranha
-	0x0D000324: main.sym_var("s_piranha", "SHPLANG", "[]", flag={"GLOBL"}), # 103
+	0x0D000324: main.sym_var("shp_piranha", "SHPLANG", "[]", flag={"GLOBL"}), # 103
 
 	# bub
-	0x0D00038C: main.sym_var("s_bub", "SHPLANG", "[]", flag={"GLOBL"}), # 100
+	0x0D00038C: main.sym_var("shp_bub", "SHPLANG", "[]", flag={"GLOBL"}), # 100
 
 	# waterring
-	0x0D000414: main.sym_var("s_waterring", "SHPLANG", "[]", flag={"GLOBL"}), # 104
+	0x0D000414: main.sym_var("shp_waterring", "SHPLANG", "[]", flag={"GLOBL"}), # 104
 
 	# chest
-	0x0D000450: main.sym_var("s_chest", "SHPLANG", "[]", flag={"GLOBL"}), # 101
-	0x0D000468: main.sym_var("s_chestlid", "SHPLANG", "[]", flag={"GLOBL"}), # 102
+	0x0D000450: main.sym_var("shp_chest", "SHPLANG", "[]", flag={"GLOBL"}), # 101
+	0x0D000468: main.sym_var("shp_chestlid", "SHPLANG", "[]", flag={"GLOBL"}), # 102
 }
 
 imm_E0_Shape2B = {
@@ -904,23 +873,18 @@ imm_E0_Shape2B = {
 }
 
 sym_E0_Shape2C = {
-	0x001C4230: main.sym("_Shape2CGfxSegmentRomStart"),
-	0x001D7C90: main.sym("_Shape2CShpSegmentRomStart"),
 	0x06000A08: main.sym("0x06000A08"),
-	0x0D000000: main.sym_var("s_2c_106", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0000B8: main.sym_var("s_2c_107", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0000D0: main.sym_var("s_2c_191", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000214: main.sym_var("s_2c_104", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000358: main.sym_var("s_2c_100", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000480: main.sym_var("s_2c_103", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0005D0: main.sym_var("s_2c_101", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0005EC: main.sym_var("s_2c_102", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000000: main.sym_var("shp_2c_106", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0000B8: main.sym_var("shp_2c_107", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0000D0: main.sym_var("shp_2c_191", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000214: main.sym_var("shp_2c_104", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000358: main.sym_var("shp_2c_100", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000480: main.sym_var("shp_2c_103", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0005D0: main.sym_var("shp_2c_101", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0005EC: main.sym_var("shp_2c_102", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Shape2D = {
-	0x001D8310: main.sym("_Shape2DGfxSegmentRomStart"),
-	0x001E4BF0: main.sym("_Shape2DShpSegmentRomStart"),
-
 	# lakitu2
 	0x06000000: main.sym_var("txt_lakitu2_unused", "UNUSED static u16", "[]"),
 	0x06000800: main.sym_var("txt_lakitu2_eyes_open", "static u16", "[]"),
@@ -941,7 +905,7 @@ sym_E0_Shape2D = {
 	0x060049E0: main.sym_var("gfx_lakitu2_armL", "Gfx", "[]", flag={"GLOBL"}),
 	0x06004AD0: main.sym_var("light_lakitu2_eyes", "static Lights1", "[]"),
 	0x06004BA8: main.sym_var("gfx_lakitu2_eyes_eyes", "static Gfx", "[]"),
-	0x06004BE8: main.sym_var("gfx_lakitu2_eyes_start", "static Gfx", "[]"),
+	0x06004BE8: main.sym_var("gfx_lakitu2_eyes_begin", "static Gfx", "[]"),
 	0x06004C30: main.sym_var("gfx_lakitu2_eyes_end", "static Gfx", "[]"),
 	0x06004C60: main.sym_var("gfx_lakitu2_eyes_open", "Gfx", "[]", flag={"GLOBL"}),
 	0x06004C88: main.sym_var("gfx_lakitu2_eyes_closed", "Gfx", "[]", flag={"GLOBL"}),
@@ -1055,20 +1019,20 @@ sym_E0_Shape2D = {
 	0x06017E70: main.sym_var("align_3", "UNUSED static long long"),
 
 	# lakitu2
-	0x0D000000: main.sym_var("s_lakitu2", "SHPLANG", "[]", flag={"GLOBL"}), # 102
+	0x0D000000: main.sym_var("shp_lakitu2", "SHPLANG", "[]", flag={"GLOBL"}), # 102
 
 	# toad
-	0x0D000114: main.sym_var("s_toad_0D000114", "static SHPLANG", "[]"),
-	0x0D00027C: main.sym_var("s_toad_0D00027C", "static SHPLANG", "[]"),
-	0x0D0003E4: main.sym_var("s_toad", "SHPLANG", "[]", flag={"GLOBL"}), # 221
+	0x0D000114: main.sym_var("shp_toad_0D000114", "static SHPLANG", "[]"),
+	0x0D00027C: main.sym_var("shp_toad_0D00027C", "static SHPLANG", "[]"),
+	0x0D0003E4: main.sym_var("shp_toad", "SHPLANG", "[]", flag={"GLOBL"}), # 221
 
 	# mips
 	0x0D000440: main.sym_var("align_mips_start", "UNUSED static long long"),
-	0x0D000448: main.sym_var("s_mips", "SHPLANG", "[]", flag={"GLOBL"}), # 100
+	0x0D000448: main.sym_var("shp_mips", "SHPLANG", "[]", flag={"GLOBL"}), # 100
 	0x0D0005A8: main.sym_var("align_mips_end", "UNUSED static long long"),
 
 	# boo2
-	0x0D0005B0: main.sym_var("s_boo2", "SHPLANG", "[]", flag={"GLOBL"}), # 101
+	0x0D0005B0: main.sym_var("shp_boo2", "SHPLANG", "[]", flag={"GLOBL"}), # 101
 }
 
 imm_E0_Shape2D = {
@@ -1119,31 +1083,24 @@ imm_E0_Shape2D = {
 }
 
 sym_E0_Shape2E = {
-	0x001E51F0: main.sym("_Shape2EGfxSegmentRomStart"),
-	0x001E7D90: main.sym("_Shape2EShpSegmentRomStart"),
-	0x0D000000: main.sym_var("s_2e_0D000000", "static SHPLANG", "[]"),
-	0x0D000078: main.sym_var("s_2e_0D000078", "static SHPLANG", "[]"),
-	0x0D0000F0: main.sym_var("s_2e_102", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000000: main.sym_var("shp_2e_0D000000", "static SHPLANG", "[]"),
+	0x0D000078: main.sym_var("shp_2e_0D000078", "static SHPLANG", "[]"),
+	0x0D0000F0: main.sym_var("shp_2e_102", "SHPLANG", "[]", flag={"GLOBL"}),
 	0x0D000140: main.sym_var("_0D000140", "UNUSED static long long"),
 }
 
 sym_E0_Shape2F = {
-	0x001E7EE0: main.sym("_Shape2FGfxSegmentRomStart"),
-	0x001F1B30: main.sym("_Shape2FShpSegmentRomStart"),
 	0x0600DE38: main.sym("0x0600DE38"),
 	0x06013AE8: main.sym("0x06013AE8"),
-	0x0D000000: main.sym_var("s_2f_103", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D00001C: main.sym_var("s_2f_102", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0000DC: main.sym_var("s_2f_100", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D0001A0: main.sym_var("s_2f_206", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000230: main.sym_var("s_2f_104", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x0D000394: main.sym_var("s_2f_101", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000000: main.sym_var("shp_2f_103", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D00001C: main.sym_var("shp_2f_102", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0000DC: main.sym_var("shp_2f_100", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D0001A0: main.sym_var("shp_2f_206", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000230: main.sym_var("shp_2f_104", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x0D000394: main.sym_var("shp_2f_101", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 sym_E0_Common = {
-	0x001F2200: main.sym("_CommonGfxSegmentRomStart"),
-	0x002008D0: main.sym("_CommonShpSegmentRomStart"),
-
 	# bluecoinsw
 	0x08000000: main.sym_var("light_bluecoinsw", "static Lights1", "[]"),
 	0x08000018: main.sym_var("txt_bluecoinsw_side", "static u16", "[]"),
@@ -1299,7 +1256,7 @@ sym_E0_Common = {
 	0x08011A90: main.sym_var("txt_block_0", "static u16", "[]"),
 	0x08012290: main.sym_var("txt_block_1", "static u16", "[]"),
 	0x08012C30: main.sym_var("gfx_block_end", "static Gfx", "[]"),
-	0x08012CD8: main.sym_var("gfx_block_start", "static Gfx", "[]"),
+	0x08012CD8: main.sym_var("gfx_block_begin", "static Gfx", "[]"),
 	0x08012D20: main.sym_var("gfx_block_0", "Gfx", "[]", flag={"GLOBL"}),
 	0x08012D48: main.sym_var("gfx_block_1", "Gfx", "[]", flag={"GLOBL"}),
 	0x08012D70: main.sym_var("map_block", "MAP", "[]", flag={"GLOBL"}),
@@ -1321,10 +1278,10 @@ sym_E0_Common = {
 	0x08017E28: main.sym_var("txt_itembox_side_y", "static u16", "[]"),
 	0x08018FA8: main.sym_var("gfx_itembox_32x64_face", "static Gfx", "[]"),
 	0x08019008: main.sym_var("gfx_itembox_32x64_side", "static Gfx", "[]"),
-	0x08019058: main.sym_var("gfx_itembox_32x64_start", "static Gfx", "[]"),
+	0x08019058: main.sym_var("gfx_itembox_32x64_begin", "static Gfx", "[]"),
 	0x08019220: main.sym_var("gfx_itembox_64x32_face", "static Gfx", "[]"),
 	0x08019280: main.sym_var("gfx_itembox_64x32_side", "static Gfx", "[]"),
-	0x080192D0: main.sym_var("gfx_itembox_64x32_start", "static Gfx", "[]"),
+	0x080192D0: main.sym_var("gfx_itembox_64x32_begin", "static Gfx", "[]"),
 	0x08019318: main.sym_var("gfx_itembox_r", "Gfx", "[]", flag={"GLOBL"}),
 	0x08019378: main.sym_var("gfx_itembox_g", "Gfx", "[]", flag={"GLOBL"}),
 	0x080193D8: main.sym_var("gfx_itembox_b", "Gfx", "[]", flag={"GLOBL"}),
@@ -1338,7 +1295,7 @@ sym_E0_Common = {
 	0x0801A530: main.sym_var("txt_goomba_head_closed", "static u16", "[]"),
 	0x0801AD30: main.sym_var("light_goomba_body", "static Lights1", "[]"),
 	0x0801B2E8: main.sym_var("gfx_goomba_head", "static Gfx", "[]"),
-	0x0801B560: main.sym_var("gfx_goomba_head_start", "static Gfx", "[]"),
+	0x0801B560: main.sym_var("gfx_goomba_head_begin", "static Gfx", "[]"),
 	0x0801B5A0: main.sym_var("gfx_goomba_head_end", "static Gfx", "[]"),
 	0x0801B5C8: main.sym_var("gfx_goomba_head_open", "Gfx", "[]", flag={"GLOBL"}),
 	0x0801B5F0: main.sym_var("gfx_goomba_head_closed", "Gfx", "[]", flag={"GLOBL"}),
@@ -1361,7 +1318,7 @@ sym_E0_Common = {
 	0x08020A60: main.sym_var("txt_bobomb_red_r", "static u16", "[]"),
 	0x08021A60: main.sym_var("txt_bobomb_eyes_open", "static u16", "[]"),
 	0x08022260: main.sym_var("txt_bobomb_eyes_closed", "static u16", "[]"),
-	0x08022AC0: main.sym_var("gfx_bobomb_eyes_start", "static Gfx", "[]"),
+	0x08022AC0: main.sym_var("gfx_bobomb_eyes_begin", "static Gfx", "[]"),
 	0x08022B08: main.sym_var("gfx_bobomb_eyes_end", "static Gfx", "[]"),
 	0x08022B58: main.sym_var("gfx_bobomb_eyes_open", "Gfx", "[]", flag={"GLOBL"}),
 	0x08022B88: main.sym_var("gfx_bobomb_eyes_closed", "Gfx", "[]", flag={"GLOBL"}),
@@ -1391,7 +1348,7 @@ sym_E0_Common = {
 	# dotbox
 	0x08024CB8: main.sym_var("light_dotbox", "static Lights1", "[]"),
 	0x08024EB8: main.sym_var("gfx_dotbox_box", "static Gfx", "[]"),
-	0x08024F30: main.sym_var("gfx_dotbox_box_start", "static Gfx", "[]"),
+	0x08024F30: main.sym_var("gfx_dotbox_box_begin", "static Gfx", "[]"),
 	0x08024F58: main.sym_var("gfx_dotbox_box_end", "static Gfx", "[]"),
 	0x08024F88: main.sym_var("gfx_dotbox_box_r", "Gfx", "[]", flag={"GLOBL"}),
 	0x08024FA8: main.sym_var("gfx_dotbox_box_g", "Gfx", "[]", flag={"GLOBL"}),
@@ -1430,62 +1387,62 @@ sym_E0_Common = {
 	0x08028BE8: main.sym_var("align_18", "UNUSED static long long"),
 
 	# bluecoinsw
-	0x0F000000: main.sym_var("s_bluecoinsw", "SHPLANG", "[]", flag={"GLOBL"}), # 140
+	0x0F000000: main.sym_var("shp_bluecoinsw", "SHPLANG", "[]", flag={"GLOBL"}), # 140
 
 	# amp
 	0x0F000020: main.sym_var("align_amp_start", "UNUSED static long long"),
-	0x0F000028: main.sym_var("s_amp", "SHPLANG", "[]", flag={"GLOBL"}), # 194
+	0x0F000028: main.sym_var("shp_amp", "SHPLANG", "[]", flag={"GLOBL"}), # 194
 	0x0F0001A0: main.sym_var("align_amp_end", "UNUSED static long long"),
 
 	# cannon
-	0x0F0001A8: main.sym_var("s_cannon", "SHPLANG", "[]", flag={"GLOBL"}), # 128
+	0x0F0001A8: main.sym_var("shp_cannon", "SHPLANG", "[]", flag={"GLOBL"}), # 128
 
 	# cannonbarrel
-	0x0F0001C0: main.sym_var("s_cannonbarrel", "SHPLANG", "[]", flag={"GLOBL"}), # 127
+	0x0F0001C0: main.sym_var("shp_cannonbarrel", "SHPLANG", "[]", flag={"GLOBL"}), # 127
 
 	# chuckya
-	0x0F0001D8: main.sym_var("s_chuckya", "SHPLANG", "[]", flag={"GLOBL"}), # 223
+	0x0F0001D8: main.sym_var("shp_chuckya", "SHPLANG", "[]", flag={"GLOBL"}), # 223
 
 	# purplesw
-	0x0F0004CC: main.sym_var("s_purplesw", "SHPLANG", "[]", flag={"GLOBL"}), # 207
+	0x0F0004CC: main.sym_var("shp_purplesw", "SHPLANG", "[]", flag={"GLOBL"}), # 207
 
 	# lift
-	0x0F0004E4: main.sym_var("s_lift", "SHPLANG", "[]", flag={"GLOBL"}), # 202
+	0x0F0004E4: main.sym_var("shp_lift", "SHPLANG", "[]", flag={"GLOBL"}), # 202
 
 	# heart
-	0x0F0004FC: main.sym_var("s_heart", "SHPLANG", "[]", flag={"GLOBL"}), # 120
+	0x0F0004FC: main.sym_var("shp_heart", "SHPLANG", "[]", flag={"GLOBL"}), # 120
 
 	# flyguy
-	0x0F000518: main.sym_var("s_flyguy", "SHPLANG", "[]", flag={"GLOBL"}), # 220
+	0x0F000518: main.sym_var("shp_flyguy", "SHPLANG", "[]", flag={"GLOBL"}), # 220
 
 	# block
-	0x0F0005D0: main.sym_var("s_block", "SHPLANG", "[]", flag={"GLOBL"}), # 129
-	0x0F000610: main.sym_var("s_crate", "SHPLANG", "[]", flag={"GLOBL"}), # 130
+	0x0F0005D0: main.sym_var("shp_block", "SHPLANG", "[]", flag={"GLOBL"}), # 129
+	0x0F000610: main.sym_var("shp_crate", "SHPLANG", "[]", flag={"GLOBL"}), # 130
 
 	# ironball
-	0x0F000640: main.sym_var("s_ironball", "SHPLANG", "[]", flag={"GLOBL"}), # 180
-	0x0F00066C: main.sym_var("s_ironball_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 225
+	0x0F000640: main.sym_var("shp_ironball", "SHPLANG", "[]", flag={"GLOBL"}), # 180
+	0x0F00066C: main.sym_var("shp_ironball_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 225
 
 	# itembox
-	0x0F000694: main.sym_var("s_itembox", "SHPLANG", "[]", flag={"GLOBL"}), # 137
+	0x0F000694: main.sym_var("shp_itembox", "SHPLANG", "[]", flag={"GLOBL"}), # 137
 
 	# goomba
-	0x0F0006E4: main.sym_var("s_goomba", "SHPLANG", "[]", flag={"GLOBL"}), # 192
+	0x0F0006E4: main.sym_var("shp_goomba", "SHPLANG", "[]", flag={"GLOBL"}), # 192
 
 	# bobomb
-	0x0F0007B8: main.sym_var("s_bobomb", "SHPLANG", "[]", flag={"GLOBL"}), # 188
-	0x0F0008F4: main.sym_var("s_redbobomb", "SHPLANG", "[]", flag={"GLOBL"}), # 195
+	0x0F0007B8: main.sym_var("shp_bobomb", "SHPLANG", "[]", flag={"GLOBL"}), # 188
+	0x0F0008F4: main.sym_var("shp_redbobomb", "SHPLANG", "[]", flag={"GLOBL"}), # 195
 
 	# pushblock
-	0x0F000A30: main.sym_var("s_pushblock", "SHPLANG", "[]", flag={"GLOBL"}), # 217
+	0x0F000A30: main.sym_var("shp_pushblock", "SHPLANG", "[]", flag={"GLOBL"}), # 217
 
 	# dotbox
-	0x0F000A58: main.sym_var("s_dotbox", "SHPLANG", "[]", flag={"GLOBL"}), # 131
+	0x0F000A58: main.sym_var("shp_dotbox", "SHPLANG", "[]", flag={"GLOBL"}), # 131
 
 	# shell
-	0x0F000AB0: main.sym_var("s_shell", "SHPLANG", "[]", flag={"GLOBL"}), # 190
-	0x0F000ADC: main.sym_var("s_redshell_old", "SHPLANG", "[]"), # unused
-	0x0F000B08: main.sym_var("s_greenshell_old", "SHPLANG", "[]"), # unused
+	0x0F000AB0: main.sym_var("shp_shell", "SHPLANG", "[]", flag={"GLOBL"}), # 190
+	0x0F000ADC: main.sym_var("shp_redshell_old", "SHPLANG", "[]"), # unused
+	0x0F000B08: main.sym_var("shp_greenshell_old", "SHPLANG", "[]"), # unused
 }
 
 imm_E0_Common = {
@@ -1551,9 +1508,6 @@ imm_E0_Common = {
 }
 
 sym_E0_Global = {
-	0x00201410: main.sym("_GlobalGfxSegmentRomStart"),
-	0x00218DA0: main.sym("_GlobalShpSegmentRomStart"),
-
 	# puff
 	0x03000000: main.sym_var("vtx_whitepuff", "static Vtx", "[]"),
 	0x03000040: main.sym_var("vtx_blackpuff", "static Vtx", "[]"),
@@ -1598,7 +1552,7 @@ sym_E0_Global = {
 	0x03005F80: main.sym_var("txt_coin_1", "static u16", "[]"),
 	0x03006780: main.sym_var("txt_coin_2", "static u16", "[]"),
 	0x03006F80: main.sym_var("txt_coin_3", "static u16", "[]"),
-	0x03007780: main.sym_var("gfx_coin_start", "static Gfx", "[]"),
+	0x03007780: main.sym_var("gfx_coin_begin", "static Gfx", "[]"),
 	0x030077D0: main.sym_var("gfx_coin_end", "static Gfx", "[]"),
 	0x03007800: main.sym_var("gfx_coin_0", "Gfx", "[]", flag={"GLOBL"}),
 	0x03007828: main.sym_var("gfx_coin_1", "Gfx", "[]", flag={"GLOBL"}),
@@ -1654,7 +1608,7 @@ sym_E0_Global = {
 	0x03014128: main.sym_var("gfx_door_a_l_x", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014140: main.sym_var("vtx_door_star_h", "static Vtx", "[]"),
 	0x03014180: main.sym_var("vtx_door_star_l", "static Vtx", "[]"),
-	0x030141C0: main.sym_var("gfx_door_star_start", "static Gfx", "[]"),
+	0x030141C0: main.sym_var("gfx_door_star_begin", "static Gfx", "[]"),
 	0x03014218: main.sym_var("gfx_door_star_end", "static Gfx", "[]"),
 	0x03014250: main.sym_var("gfx_door_star_h", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014280: main.sym_var("gfx_door_star_l", "Gfx", "[]", flag={"GLOBL"}),
@@ -1664,14 +1618,14 @@ sym_E0_Global = {
 	0x03014340: main.sym_var("gfx_door_star3_l", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014370: main.sym_var("vtx_door_keyhole_h", "static Vtx", "[]"),
 	0x030143F0: main.sym_var("vtx_door_keyhole_l", "static Vtx", "[]"),
-	0x03014470: main.sym_var("gfx_door_keyhole_start", "static Gfx", "[]"),
+	0x03014470: main.sym_var("gfx_door_keyhole_begin", "static Gfx", "[]"),
 	0x030144E0: main.sym_var("gfx_door_keyhole_end", "static Gfx", "[]"),
 	0x03014528: main.sym_var("gfx_door_keyhole_h", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014540: main.sym_var("gfx_door_keyhole_l", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014888: main.sym_var("gfx_door_h_knob", "static Gfx", "[]"),
 	0x030149C0: main.sym_var("gfx_door_h_side", "static Gfx", "[]"),
 	0x03014A20: main.sym_var("gfx_door_h_face", "static Gfx", "[]"),
-	0x03014A50: main.sym_var("gfx_door_h_start", "static Gfx", "[]"),
+	0x03014A50: main.sym_var("gfx_door_h_begin", "static Gfx", "[]"),
 	0x03014A80: main.sym_var("gfx_door_b_h", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014B30: main.sym_var("gfx_door_c_h", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014BE0: main.sym_var("gfx_door_d_h", "Gfx", "[]", flag={"GLOBL"}),
@@ -1679,7 +1633,7 @@ sym_E0_Global = {
 	0x03014D40: main.sym_var("gfx_door_f_h", "Gfx", "[]", flag={"GLOBL"}),
 	0x03014EF0: main.sym_var("gfx_door_l_panel", "static Gfx", "[]"),
 	0x03014F30: main.sym_var("gfx_door_l_knob", "static Gfx", "[]"),
-	0x03014F68: main.sym_var("gfx_door_l_start", "static Gfx", "[]"),
+	0x03014F68: main.sym_var("gfx_door_l_begin", "static Gfx", "[]"),
 	0x03014F98: main.sym_var("gfx_door_b_l", "Gfx", "[]", flag={"GLOBL"}),
 	0x03015008: main.sym_var("gfx_door_c_l", "Gfx", "[]", flag={"GLOBL"}),
 	0x03015078: main.sym_var("gfx_door_d_l", "Gfx", "[]", flag={"GLOBL"}),
@@ -1777,7 +1731,7 @@ sym_E0_Global = {
 	0x03022D10: main.sym_var("gfx_cap_shade", "static Gfx", "[]"),
 	0x03022E78: main.sym_var("gfx_wings_wing_l", "static Gfx", "[]"),
 	0x03022EA8: main.sym_var("gfx_wings_wing_r", "static Gfx", "[]"),
-	0x03022ED8: main.sym_var("gfx_wings_start", "static Gfx", "[]"),
+	0x03022ED8: main.sym_var("gfx_wings_begin", "static Gfx", "[]"),
 	0x03022F20: main.sym_var("gfx_wings_end", "static Gfx", "[]"),
 	0x03022F48: main.sym_var("gfx_cap_s", "Gfx", "[]", flag={"GLOBL"}),
 	0x03022FF8: main.sym_var("gfx_cap_e", "Gfx", "[]", flag={"GLOBL"}),
@@ -1899,89 +1853,89 @@ sym_E0_Global = {
 	0x03033300: main.sym_var("align_22", "UNUSED static long long"),
 
 	# puff
-	0x16000000: main.sym_var("s_whitepuff", "SHPLANG", "[]", flag={"GLOBL"}), # 142
-	0x16000020: main.sym_var("s_blackpuff", "SHPLANG", "[]", flag={"GLOBL"}), # 224
+	0x16000000: main.sym_var("shp_whitepuff", "SHPLANG", "[]", flag={"GLOBL"}), # 142
+	0x16000020: main.sym_var("shp_blackpuff", "SHPLANG", "[]", flag={"GLOBL"}), # 224
 
 	# explosion
-	0x16000040: main.sym_var("s_explosion", "SHPLANG", "[]", flag={"GLOBL"}), # 205
+	0x16000040: main.sym_var("shp_explosion", "SHPLANG", "[]", flag={"GLOBL"}), # 205
 
 	# butterfly
-	0x160000A8: main.sym_var("s_butterfly", "SHPLANG", "[]", flag={"GLOBL"}), # 187
+	0x160000A8: main.sym_var("shp_butterfly", "SHPLANG", "[]", flag={"GLOBL"}), # 187
 
 	# coin
-	0x1600013C: main.sym_var("s_coin", "SHPLANG", "[]", flag={"GLOBL"}), # 116
-	0x160001A0: main.sym_var("s_coin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 117
-	0x16000200: main.sym_var("s_bluecoin", "SHPLANG", "[]", flag={"GLOBL"}), # 118
-	0x16000264: main.sym_var("s_bluecoin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 119
-	0x160002C4: main.sym_var("s_redcoin", "SHPLANG", "[]", flag={"GLOBL"}), # 215
-	0x16000328: main.sym_var("s_redcoin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 216
+	0x1600013C: main.sym_var("shp_coin", "SHPLANG", "[]", flag={"GLOBL"}), # 116
+	0x160001A0: main.sym_var("shp_coin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 117
+	0x16000200: main.sym_var("shp_bluecoin", "SHPLANG", "[]", flag={"GLOBL"}), # 118
+	0x16000264: main.sym_var("shp_bluecoin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 119
+	0x160002C4: main.sym_var("shp_redcoin", "SHPLANG", "[]", flag={"GLOBL"}), # 215
+	0x16000328: main.sym_var("shp_redcoin_noshadow", "SHPLANG", "[]", flag={"GLOBL"}), # 216
 
 	# pipe
-	0x16000388: main.sym_var("s_pipe", "SHPLANG", "[]", flag={"GLOBL"}), # 18, 22, 73, local
+	0x16000388: main.sym_var("shp_pipe", "SHPLANG", "[]", flag={"GLOBL"}), # 18, 22, 73, local
 
 	# door
-	0x160003A8: main.sym_var("s_door_a", "SHPLANG", "[]", flag={"GLOBL"}), # 28, 38, local
-	0x1600043C: main.sym_var("s_door_a_noback", "SHPLANG", "[]", flag={"GLOBL"}), # 39, local
-	0x160004D0: main.sym_var("s_door_b", "SHPLANG", "[]", flag={"GLOBL"}), # 29, 39, local
-	0x16000564: main.sym_var("s_door_c", "SHPLANG", "[]", flag={"GLOBL"}), # 30, 40? unused
-	0x160005F8: main.sym_var("s_door_d", "SHPLANG", "[]", flag={"GLOBL"}), # 31, 41, local
-	0x1600068C: main.sym_var("s_door_e", "SHPLANG", "[]", flag={"GLOBL"}), # 32, local
-	0x16000720: main.sym_var("s_door_f", "SHPLANG", "[]", flag={"GLOBL"}), # 29, local
-	0x160007B4: main.sym_var("s_stardoor", "SHPLANG", "[]", flag={"GLOBL"}), # 34, local
-	0x16000868: main.sym_var("s_stardoor1", "SHPLANG", "[]", flag={"GLOBL"}), # 35, local
-	0x1600091C: main.sym_var("s_stardoor3", "SHPLANG", "[]", flag={"GLOBL"}), # 36, local
-	0x160009D0: main.sym_var("s_keydoor", "SHPLANG", "[]", flag={"GLOBL"}), # 37, local
+	0x160003A8: main.sym_var("shp_door_a", "SHPLANG", "[]", flag={"GLOBL"}), # 28, 38, local
+	0x1600043C: main.sym_var("shp_door_a_noback", "SHPLANG", "[]", flag={"GLOBL"}), # 39, local
+	0x160004D0: main.sym_var("shp_door_b", "SHPLANG", "[]", flag={"GLOBL"}), # 29, 39, local
+	0x16000564: main.sym_var("shp_door_c", "SHPLANG", "[]", flag={"GLOBL"}), # 30, 40? unused
+	0x160005F8: main.sym_var("shp_door_d", "SHPLANG", "[]", flag={"GLOBL"}), # 31, 41, local
+	0x1600068C: main.sym_var("shp_door_e", "SHPLANG", "[]", flag={"GLOBL"}), # 32, local
+	0x16000720: main.sym_var("shp_door_f", "SHPLANG", "[]", flag={"GLOBL"}), # 29, local
+	0x160007B4: main.sym_var("shp_stardoor", "SHPLANG", "[]", flag={"GLOBL"}), # 34, local
+	0x16000868: main.sym_var("shp_stardoor1", "SHPLANG", "[]", flag={"GLOBL"}), # 35, local
+	0x1600091C: main.sym_var("shp_stardoor3", "SHPLANG", "[]", flag={"GLOBL"}), # 36, local
+	0x160009D0: main.sym_var("shp_keydoor", "SHPLANG", "[]", flag={"GLOBL"}), # 37, local
 
 	# doorkey
-	0x16000A84: main.sym_var("s_bowserkey", "SHPLANG", "[]", flag={"GLOBL"}), # 204
-	0x16000AB0: main.sym_var("s_doorkey", "SHPLANG", "[]", flag={"GLOBL"}), # 200
+	0x16000A84: main.sym_var("shp_bowserkey", "SHPLANG", "[]", flag={"GLOBL"}), # 204
+	0x16000AB0: main.sym_var("shp_doorkey", "SHPLANG", "[]", flag={"GLOBL"}), # 200
 
 	# flame
-	0x16000B10: main.sym_var("s_flame_shadow", "SHPLANG", "[]", flag={"GLOBL"}), # 203
-	0x16000B2C: main.sym_var("s_flame", "SHPLANG", "[]", flag={"GLOBL"}), # 144
-	0x16000B8C: main.sym_var("s_blueflame", "SHPLANG", "[]", flag={"GLOBL"}), # 145
+	0x16000B10: main.sym_var("shp_flame_shadow", "SHPLANG", "[]", flag={"GLOBL"}), # 203
+	0x16000B2C: main.sym_var("shp_flame", "SHPLANG", "[]", flag={"GLOBL"}), # 144
+	0x16000B8C: main.sym_var("shp_blueflame", "SHPLANG", "[]", flag={"GLOBL"}), # 145
 
 	# fish
-	0x16000BEC: main.sym_var("s_fish_shadow", "SHPLANG", "[]", flag={"GLOBL"}), # 186
-	0x16000C44: main.sym_var("s_fish", "SHPLANG", "[]", flag={"GLOBL"}), # 185
+	0x16000BEC: main.sym_var("shp_fish_shadow", "SHPLANG", "[]", flag={"GLOBL"}), # 186
+	0x16000C44: main.sym_var("shp_fish", "SHPLANG", "[]", flag={"GLOBL"}), # 185
 
 	# leaf
-	0x16000C8C: main.sym_var("s_leaf", "SHPLANG", "[]", flag={"GLOBL"}), # 162
+	0x16000C8C: main.sym_var("shp_leaf", "SHPLANG", "[]", flag={"GLOBL"}), # 162
 
 	# cap
-	0x16000CA4: main.sym_var("s_cap_s", "SHPLANG", "[]", flag={"GLOBL"}), # 136
-	0x16000CF0: main.sym_var("s_cap_e", "SHPLANG", "[]", flag={"GLOBL"}), # 134
-	0x16000D3C: main.sym_var("s_wingcap_s", "SHPLANG", "[]", flag={"GLOBL"}), # 135
-	0x16000DA8: main.sym_var("s_wingcap_e", "SHPLANG", "[]", flag={"GLOBL"}), # 133
+	0x16000CA4: main.sym_var("shp_cap_s", "SHPLANG", "[]", flag={"GLOBL"}), # 136
+	0x16000CF0: main.sym_var("shp_cap_e", "SHPLANG", "[]", flag={"GLOBL"}), # 134
+	0x16000D3C: main.sym_var("shp_wingcap_s", "SHPLANG", "[]", flag={"GLOBL"}), # 135
+	0x16000DA8: main.sym_var("shp_wingcap_e", "SHPLANG", "[]", flag={"GLOBL"}), # 133
 
 	# number
-	0x16000E14: main.sym_var("s_number", "SHPLANG", "[]", flag={"GLOBL"}), # 219
+	0x16000E14: main.sym_var("shp_number", "SHPLANG", "[]", flag={"GLOBL"}), # 219
 
 	# 1up
-	0x16000E84: main.sym_var("s_1up", "SHPLANG", "[]", flag={"GLOBL"}), # 212
+	0x16000E84: main.sym_var("shp_1up", "SHPLANG", "[]", flag={"GLOBL"}), # 212
 
 	# powerstar
-	0x16000EA0: main.sym_var("s_powerstar", "SHPLANG", "[]", flag={"GLOBL"}), # 122
+	0x16000EA0: main.sym_var("shp_powerstar", "SHPLANG", "[]", flag={"GLOBL"}), # 122
 
 	# shard
-	0x16000ED4: main.sym_var("s_shard", "SHPLANG", "[]", flag={"GLOBL"}), # 138
-	0x16000F24: main.sym_var("s_star", "SHPLANG", "[]", flag={"GLOBL"}), # 139
+	0x16000ED4: main.sym_var("shp_shard", "SHPLANG", "[]", flag={"GLOBL"}), # 138
+	0x16000F24: main.sym_var("shp_star", "SHPLANG", "[]", flag={"GLOBL"}), # 139
 
 	# shadestar
-	0x16000F6C: main.sym_var("s_shadestar", "SHPLANG", "[]", flag={"GLOBL"}), # 121
+	0x16000F6C: main.sym_var("shp_shadestar", "SHPLANG", "[]", flag={"GLOBL"}), # 121
 
 	# snow
-	0x16000F98: main.sym_var("s_snowball", "SHPLANG", "[]", flag={"GLOBL"}), # 160
+	0x16000F98: main.sym_var("shp_snowball", "SHPLANG", "[]", flag={"GLOBL"}), # 160
 
 	# signpost
-	0x16000FB4: main.sym_var("s_signpost", "SHPLANG", "[]", flag={"GLOBL"}), # 124
+	0x16000FB4: main.sym_var("shp_signpost", "SHPLANG", "[]", flag={"GLOBL"}), # 124
 
 	# tree
-	0x16000FE8: main.sym_var("s_tree_a", "SHPLANG", "[]", flag={"GLOBL"}), # 23, local
-	0x16001000: main.sym_var("s_tree_b", "SHPLANG", "[]", flag={"GLOBL"}), # 24, local
-	0x16001018: main.sym_var("s_tree_c", "SHPLANG", "[]", flag={"GLOBL"}), # 25, local
-	0x16001030: main.sym_var("s_tree_d", "SHPLANG", "[]", flag={"GLOBL"}), # 26, unused
-	0x16001048: main.sym_var("s_tree_e", "SHPLANG", "[]", flag={"GLOBL"}), # 27, local
+	0x16000FE8: main.sym_var("shp_tree_a", "SHPLANG", "[]", flag={"GLOBL"}), # 23, local
+	0x16001000: main.sym_var("shp_tree_b", "SHPLANG", "[]", flag={"GLOBL"}), # 24, local
+	0x16001018: main.sym_var("shp_tree_c", "SHPLANG", "[]", flag={"GLOBL"}), # 25, local
+	0x16001030: main.sym_var("shp_tree_d", "SHPLANG", "[]", flag={"GLOBL"}), # 26, unused
+	0x16001048: main.sym_var("shp_tree_e", "SHPLANG", "[]", flag={"GLOBL"}), # 27, local
 }
 
 imm_E0_Global = {

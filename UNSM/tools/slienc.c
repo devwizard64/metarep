@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "elf.h"
-#include "elf.c"
+#include "lib/elf.h"
+#include "lib/elf.c"
 
 #define BLK_OL  1
 #define BLK_SL  3
@@ -23,11 +23,11 @@
 #define slicpy() \
 { \
 	*c++ = data[i++]; \
-	t[cnt>>3] |= 0x80 >> (cnt&7); \
+	t[n>>3] |= 0x80 >> (n&7); \
 }
 #define slicnt() \
 { \
-	cnt = (cnt+1) & (BITCNT-1); \
+	n = (n+1) & (BITCNT-1); \
 }
 
 static int sliblk(const char *data, size_t size, size_t i, int *of, int *sz)
@@ -82,11 +82,10 @@ static size_t slielf(ELF *elf, const char *data, size_t size)
 
 int main(int argc, char *argv[])
 {
-	FILE *fp;
-	char *data;
-	size_t size, i, cnt;
-	char *stm, *pkt, *cpy, *s, *p, *c, *t;
+	size_t i, n, size;
+	char *data, *stm, *pkt, *cpy, *s, *p, *c, *t;
 	size_t poff, coff;
+	FILE *fp;
 	if (argc != 3)
 	{
 		fprintf(stderr, "usage: %s <input> <szp>\n", argv[0]);
@@ -95,7 +94,11 @@ int main(int argc, char *argv[])
 	if (!strcmp(argv[1]+strlen(argv[1])-4, ".elf"))
 	{
 		ELF elf;
-		elf_open(&elf, argv[1], "rb");
+		if (elf_open(&elf, argv[1], "rb"))
+		{
+			fprintf(stderr, "error: could not open '%s'\n", argv[1]);
+			return 1;
+		}
 		elf_loadsection(&elf);
 		elf_load(&elf, data = malloc(size = elf_size(&elf)));
 		size = slielf(&elf, data, size);
@@ -105,7 +108,7 @@ int main(int argc, char *argv[])
 	{
 		if (!(fp = fopen(argv[1], "rb")))
 		{
-			fprintf(stderr, "error: could not read '%s'\n", argv[1]);
+			fprintf(stderr, "error: could not open '%s'\n", argv[1]);
 			return 1;
 		}
 		fseek(fp, 0, SEEK_END);
@@ -118,7 +121,7 @@ int main(int argc, char *argv[])
 	p = pkt = malloc(size);
 	c = cpy = malloc(size);
 	i = 0;
-	cnt = 0;
+	n = 0;
 	while (i < size)
 	{
 		int x, of, sz, ofn, szn;
@@ -126,21 +129,21 @@ int main(int argc, char *argv[])
 		{
 			if (szn = sz+1, sliblk(data, size, i+1, &ofn, &szn))
 			{
-				if (cnt == 0) slitbl();
+				if (n == 0) slitbl();
 				slicpy();
 				slicnt();
 				of = ofn;
 				sz = szn;
 			}
 			x = i-of-BLK_OL;
-			if (cnt == 0) slitbl();
+			if (n == 0) slitbl();
 			slipkt();
 			slicnt();
 			i += sz;
 		}
 		else
 		{
-			if (cnt == 0) slitbl();
+			if (n == 0) slitbl();
 			slicpy();
 			slicnt();
 		}
@@ -149,7 +152,7 @@ int main(int argc, char *argv[])
 	printf(".data\n.incbin \"%s\"\n", argv[2]);
 	if (!(fp = fopen(argv[2], "wb")))
 	{
-		fprintf(stderr, "error: could not write '%s'\n", argv[2]);
+		fprintf(stderr, "error: could not open '%s'\n", argv[2]);
 		return 1;
 	}
 	poff = 16   + (s-stm);

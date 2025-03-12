@@ -5,6 +5,18 @@
 void osViSetSpecialFeatures(u32 func)
 {
 	register u32 saveMask;
+#ifdef _DEBUG
+	if (!__osViDevMgr.active)
+	{
+		__osError(ERR_OSVISETSPECIAL_VIMGR, 0);
+		return;
+	}
+	if (func < OS_VI_GAMMA_ON || func > OS_VI_DITHER_FILTER_OFF)
+	{
+		__osError(ERR_OSVISETSPECIAL_VALUE, 1, func);
+		return;
+	}
+#endif
 	saveMask = __osDisableInt();
 	if (func & OS_VI_GAMMA_ON)  __osViNext->control |= VI_CTRL_GAMMA_ON;
 	if (func & OS_VI_GAMMA_OFF) __osViNext->control &= ~VI_CTRL_GAMMA_ON;

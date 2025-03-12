@@ -8,6 +8,7 @@
 #include <sm64/gbiext.h>
 #include <sm64/segment.h>
 
+#include <sm64/defmath.h>
 #include <sm64/defaudio.h>
 #include <sm64/defshape.h>
 #include <sm64/defobject.h>
@@ -16,18 +17,20 @@
 #include <sm64/defshadow.h>
 #include <sm64/defbackground.h>
 #include <sm64/defwave.h>
+#include <sm64/defchar.h>
 #include <sm64/defmessage.h>
 #include <sm64/defweather.h>
 #include <sm64/defmapobj.h>
 #include <sm64/deftag.h>
 #include <sm64/defscene.h>
 #include <sm64/defplayer.h>
+#include <sm64/defanime.h>
 #include <sm64/defgame.h>
 #include <sm64/defstage.h>
 #include <sm64/defcourse.h>
 #include <sm64/defbackup.h>
 #include <sm64/defshplang.h>
-#include <sm64/defprglang.h>
+#include <sm64/defseqlang.h>
 #include <sm64/defobjlang.h>
 
 extern char __dummy0[];
@@ -133,13 +136,13 @@ extern char __dummy99[];
 
 #include <sm64/math.h>
 #include <sm64/memory.h>
+#include <sm64/disk.h>
 
 #include <sm64/main.h>
-
-#include <sm64/Na.h>
-
 #include <sm64/graphics.h>
+#include <sm64/Na.h>
 #include <sm64/audio.h>
+#include <sm64/motor.h>
 #include <sm64/time.h>
 
 #include <sm64/shape.h>
@@ -147,8 +150,6 @@ extern char __dummy99[];
 #include <sm64/script.h>
 #include <sm64/object.h>
 #include <sm64/map.h>
-
-#include <sm64/camera.h>
 
 #include <sm64/objectlib.h>
 #include <sm64/debug.h>
@@ -162,6 +163,13 @@ extern char __dummy99[];
 #include <sm64/message.h>
 #include <sm64/tag.h>
 #include <sm64/hud.h>
+
+#include <sm64/camera.h>
+#include <sm64/scene.h>
+#include <sm64/player.h>
+#include <sm64/game.h>
+#include <sm64/course.h>
+#include <sm64/backup.h>
 
 extern char __dummy100[];
 extern char __dummy101[];
@@ -213,101 +221,12 @@ extern char __dummy146[];
 extern char __dummy147[];
 extern char __dummy148[];
 extern char __dummy149[];
-extern char __dummy150[];
-extern char __dummy151[];
-extern char __dummy152[];
-extern char __dummy153[];
-extern char __dummy154[];
-extern char __dummy155[];
-extern char __dummy156[];
-extern char __dummy157[];
-extern char __dummy158[];
-extern char __dummy159[];
-extern char __dummy160[];
-extern char __dummy161[];
-extern char __dummy162[];
-extern char __dummy163[];
-extern char __dummy164[];
-extern char __dummy165[];
-extern char __dummy166[];
-extern char __dummy167[];
-extern char __dummy168[];
-extern char __dummy169[];
-extern char __dummy170[];
-extern char __dummy171[];
-extern char __dummy172[];
-extern char __dummy173[];
-extern char __dummy174[];
-extern char __dummy175[];
-extern char __dummy176[];
-extern char __dummy177[];
-extern char __dummy178[];
-extern char __dummy179[];
-extern char __dummy180[];
-extern char __dummy181[];
-extern char __dummy182[];
-extern char __dummy183[];
-extern char __dummy184[];
-extern char __dummy185[];
-extern char __dummy186[];
-extern char __dummy187[];
-extern char __dummy188[];
-extern char __dummy189[];
-extern char __dummy190[];
-extern char __dummy191[];
-extern char __dummy192[];
-extern char __dummy193[];
-extern char __dummy194[];
-extern char __dummy195[];
-extern char __dummy196[];
-extern char __dummy197[];
-extern char __dummy198[];
-extern char __dummy199[];
-
-#include <sm64/scene.h>
-#include <sm64/player.h>
-#include <sm64/game.h>
-#include <sm64/course.h>
-#include <sm64/backup.h>
 
 #include <sm64/buffer.h>
 
-#include <sm64/object_a.h>
-#include <sm64/object_b.h>
-#include <sm64/object_c.h>
-
-extern char __dummy200[];
-extern char __dummy201[];
-extern char __dummy202[];
-extern char __dummy203[];
-extern char __dummy204[];
-extern char __dummy205[];
-extern char __dummy206[];
-extern char __dummy207[];
-extern char __dummy208[];
-extern char __dummy209[];
-extern char __dummy210[];
-extern char __dummy211[];
-extern char __dummy212[];
-extern char __dummy213[];
-extern char __dummy214[];
-extern char __dummy215[];
-extern char __dummy216[];
-extern char __dummy217[];
-extern char __dummy218[];
-extern char __dummy219[];
-extern char __dummy220[];
-extern char __dummy221[];
-extern char __dummy222[];
-extern char __dummy223[];
-extern char __dummy224[];
-extern char __dummy225[];
-extern char __dummy226[];
-extern char __dummy227[];
-extern char __dummy228[];
-extern char __dummy229[];
-extern char __dummy230[];
-extern char __dummy231[];
+#include <sm64/enemya.h>
+#include <sm64/enemyb.h>
+#include <sm64/enemyc.h>
 
 #include <sm64/weather.h>
 

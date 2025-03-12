@@ -1,6 +1,10 @@
 #include <sm64.h>
 
-static char str_stage[64][16] =
+#if REVISION == 199605
+extern void Na_game_8048FFE8(void);
+#endif
+
+static char stagename[64][16] =
 {
 	"",
 	"",
@@ -42,15 +46,16 @@ static char str_stage[64][16] =
 	"",
 };
 
+static u16 demo_wait = 0;
+
 static int TitleDemo(int result)
 {
-	static u16 timer = 0;
 	demop = NULL;
 	if (!result)
 	{
 		if (!cont1->held && !cont1->dist)
 		{
-			if (++timer == 800)
+			if (++demo_wait == 800)
 			{
 				BankLoad(&demo_bank, demo_index);
 				if (++demo_index == demo_bank.info->len) demo_index = 0;
@@ -62,7 +67,7 @@ static int TitleDemo(int result)
 		}
 		else
 		{
-			timer = 0;
+			demo_wait = 0;
 		}
 	}
 	return result;
@@ -85,7 +90,7 @@ static int TitleDebug(void)
 	dprintc(SCREEN_WD/2, 80, "SELECT STAGE");
 	dprintc(SCREEN_WD/2, 30, "PRESS START BUTTON");
 	dprintf(40, 60, "%2d", stage_index);
-	dprint(80, 60, str_stage[stage_index-1]);
+	dprint(80, 60, stagename[stage_index-1]);
 	if (cont1->down & START_BUTTON)
 	{
 		if (cont1->held == (Z_TRIG|START_BUTTON|L_CBUTTONS|R_CBUTTONS))
@@ -102,7 +107,7 @@ static int TitleDebug(void)
 static int TitleFace(void)
 {
 	int result = 0;
-#ifdef NEWVOICE
+#if REVISION >= 199609
 	static short flag = TRUE;
 	if (ISTRUE(flag))
 	{
@@ -112,11 +117,18 @@ static int TitleFace(void)
 	}
 #endif
 	SceneDemo();
+#if REVISION == 199605
+	dprintc(SCREEN_WD/2, 90, "DISK VERSION");
+#endif
 	if (cont1->down & START_BUTTON)
 	{
 		Na_FixSePlay(NA_SE7_1E);
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
 		result = 100 + debug_stage;
-#ifdef NEWVOICE
+#if REVISION >= 199609
 		flag = TRUE;
 #endif
 	}
@@ -126,7 +138,7 @@ static int TitleFace(void)
 static int TitleGameOver(void)
 {
 	int result = 0;
-#ifdef NEWVOICE
+#if REVISION >= 199609
 	static short flag = TRUE;
 	if (ISTRUE(flag))
 	{
@@ -135,11 +147,18 @@ static int TitleGameOver(void)
 	}
 #endif
 	SceneDemo();
+#if REVISION == 199605
+	dprintc(SCREEN_WD/2, 90, "DISK VERSION");
+#endif
 	if (cont1->down & START_BUTTON)
 	{
 		Na_FixSePlay(NA_SE7_1E);
+#ifdef MOTOR
+		motor_8024C834(60, 70);
+		motor_8024C89C(1);
+#endif
 		result = 100 + debug_stage;
-#ifdef NEWVOICE
+#if REVISION >= 199609
 		flag = TRUE;
 #endif
 	}
@@ -148,10 +167,21 @@ static int TitleGameOver(void)
 
 static int TitleLogo(void)
 {
+#if REVISION == 199605
+	Na_game_8048FFE8();
+#else
 	AudPlayBGM(NA_MODE_DEFAULT, NA_BGM_NULL, 0);
 	Na_FixSePlay(NA_SE7_14);
+#endif
 	return 1;
 }
+
+#if REVISION < 199606
+static int TitleProc4(void)
+{
+	return 1;
+}
+#endif
 
 long TitleProc(SHORT code, UNUSED long status)
 {
@@ -162,6 +192,9 @@ long TitleProc(SHORT code, UNUSED long status)
 	case 1: result = TitleFace();      break;
 	case 2: result = TitleGameOver();  break;
 	case 3: result = TitleDebug();     break;
+#if REVISION < 199606
+	case 4: result = TitleProc4();     break;
+#endif
 #ifdef __GNUC__
 	default: __builtin_unreachable();
 #endif

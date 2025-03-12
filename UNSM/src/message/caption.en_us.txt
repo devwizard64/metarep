@@ -1,29 +1,20 @@
-$name: captiontab
-$lang: en
-
-$tbl:
+$lang:en
+$table:captiontab
+$
 Mario!
-
-$tbl:
+$
 The power of the Stars is restored to the castle...
-
-$tbl:
+$
 ...and it's all thanks to you!
-
-$tbl:
+$
 Thank you, Mario!
-
-$tbl:
+$
 We have to do something special for you...
-
-$tbl:
+$
 Listen, everybody,
-
-$tbl:
+$
 let's bake a delicious cake...
-
-$tbl:
+$
 ...for Mario...
-
-$tbl:
+$
 Mario!

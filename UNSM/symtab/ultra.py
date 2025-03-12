@@ -13,8 +13,8 @@ sym_globl = {
 	0x8000031C: main.sym("osAppNMIBuffer"),
 }
 
-sym_IPL3 = {
-	# PR/Boot.s
+sym_IPL3_6102 = {
+	# Boot.s
 	# bulk_rom
 	# cart_rom
 	# clear_rsp
@@ -42,8 +42,7 @@ sym_IPL3 = {
 	0xA4000498: main.sym("send2", flag={"LOCAL"}),
 	0xA40004C0: main.sym("block17s", flag={"LOCAL"}),
 	0xA40004C4: main.sym("cart", flag={"LOCAL"}),
-	# 0xA40004DC: main.sym("waitread", flag={"LOCAL"}),
-	0xA40004E0: main.sym("waitread.L", flag={"LOCAL"}),
+	0xA40004DC: main.sym("waitread", flag={"LOCAL"}),
 	0xA4000514: main.sym("waitdma", flag={"LOCAL"}),
 	0xA40006BC: main.sym("skip", flag={"LOCAL"}),
 	0xA4000728: main.sym("rom", flag={"LOCAL"}),
@@ -56,29 +55,19 @@ sym_IPL3 = {
 	0xA40007EC: main.sym("CCloop1"),
 	0xA4000880: main.sym("FindCC"),
 	0xA4000894: main.sym("prepass_loop", flag={"LOCAL"}),
-	# 0xA40008C8: main.sym("next_pass", flag={"LOCAL"}),
-	0xA40008CC: main.sym("next_pass.L", flag={"LOCAL"}),
-	# 0xA40008F8: main.sym("done_findcc", flag={"LOCAL"}),
-	0xA40008FC: main.sym("done_findcc.L", flag={"LOCAL"}),
-	# 0xA40008FC: main.sym("return_findcc", flag={"LOCAL"}),
-	0xA4000900: main.sym("return_findcc.L", flag={"LOCAL"}),
+	0xA40008C8: main.sym("next_pass", flag={"LOCAL"}),
+	0xA40008F8: main.sym("done_findcc", flag={"LOCAL"}),
+	0xA40008FC: main.sym("return_findcc", flag={"LOCAL"}),
 	0xA400090C: main.sym("TestCCValue"),
-	# 0xA4000924: main.sym("jloop", flag={"LOCAL"}),
-	0xA4000928: main.sym("jloop.L", flag={"LOCAL"}),
+	0xA4000924: main.sym("jloop", flag={"LOCAL"}),
 	0xA4000940: main.sym("kloop", flag={"LOCAL"}),
-	# 0xA4000950: main.sym("no_passcount", flag={"LOCAL"}),
-	0xA4000954: main.sym("no_passcount.L", flag={"LOCAL"}),
+	0xA4000950: main.sym("no_passcount", flag={"LOCAL"}),
 	0xA4000980: main.sym("ConvertManualToAuto"),
-	# 0xA40009A0: main.sym("big_loop", flag={"LOCAL"}),
-	0xA40009A4: main.sym("big_loop.L", flag={"LOCAL"}),
-	# 0xA40009B4: main.sym("coverloop", flag={"LOCAL"}),
-	0xA40009B8: main.sym("coverloop.L", flag={"LOCAL"}),
-	# 0xA40009F4: main.sym("pos", flag={"LOCAL"}),
-	0xA40009F8: main.sym("pos.L", flag={"LOCAL"}),
-	# 0xA4000A08: main.sym("compare_done", flag={"LOCAL"}),
-	0xA4000A0C: main.sym("compare_done.L", flag={"LOCAL"}),
-	# 0xA4000A28: main.sym("return_value", flag={"LOCAL"}),
-	0xA4000A2C: main.sym("return_value.L", flag={"LOCAL"}),
+	0xA40009A0: main.sym("big_loop", flag={"LOCAL"}),
+	0xA40009B4: main.sym("coverloop", flag={"LOCAL"}),
+	0xA40009F4: main.sym("pos", flag={"LOCAL"}),
+	0xA4000A08: main.sym("compare_done", flag={"LOCAL"}),
+	0xA4000A28: main.sym("return_value", flag={"LOCAL"}),
 	0xA4000A30: main.sym("convert_done", flag={"LOCAL"}),
 	0xA4000A40: main.sym("WriteCC"),
 	0xA4000A64: main.sym("non_auto", flag={"LOCAL"}),
@@ -97,11 +86,14 @@ sym_D_rspboot_text = {
 	0x040010B4: main.sym("@@dmabusy", flag={"LOCAL"}),
 }
 
+def fmt_size(self, x):
+	return "0x%04X-1" % (x+1 & 0xFFFF)
+
 imm_D_rspboot_text = {
 	0x04001000: ("%d",),
 	0x04001008: ("os_task",),
 	0x0400100C: (ultra.fmt_struct_OSTask,),
-	0x04001010: (lambda self, x: "0x%04X-1" % (x+1 & 0xFFFF),),
+	0x04001010: (fmt_size,),
 	0x04001044: (ultra.fmt_sp_sr,),
 	0x04001058: (ultra.fmt_sp_sw,),
 	0x04001068: (ultra.fmt_struct_OSTask,),
@@ -228,8 +220,11 @@ sym_D_gspFast3D_fifo_text_exit = {
 	0x04001788: main.sym("yield"),
 }
 
+def fmt_u16(self, x):
+	return "0x%04X" % (x & 0xFFFF)
+
 imm_D_gspFast3D_fifo_text_exit = {
-	0x040017C8: (lambda self, x: "0x%04X" % (x & 0xFFFF),),
+	0x040017C8: (fmt_u16,),
 }
 
 sym_D_gspFast3D_fifo_data = {

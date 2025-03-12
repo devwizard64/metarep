@@ -21,11 +21,11 @@ void ObjectStepSound(STEPSOUND *ss)
 	}
 }
 
-extern OBJLANG o_1300229C[];
+extern OBJLANG obj_1300229C[];
 
 void ObjectMakeSound(Na_Se se)
 {
-	OBJECT *obj = ObjMakeHere(object, 0, o_1300229C);
+	OBJECT *obj = ObjMakeHere(object, 0, obj_1300229C);
 	obj->o_v0 = se;
 }
 
@@ -36,10 +36,19 @@ void ObjectLevelSound(Na_Se se)
 
 void ObjectPlaySound(Na_Se se)
 {
+#ifdef MOTOR
+	if (object->s.s.flag & SHP_ACTIVE)
+	{
+		Na_ObjSePlay(se, object);
+		if (se == NA_SE5_03) motor_8024C834(3, 60);
+		if (se == NA_SE5_68) motor_8024C834(3, 60);
+		if (se == NA_SE5_16_60) motor_8024C834(5, 80);
+	}
+#else
 	if (object->s.s.flag & SHP_ACTIVE) Na_ObjSePlay(se, object);
+#endif
 }
 
-UNUSED static
 int CalcSeVol1(float dist)
 {
 	int vol;
@@ -49,7 +58,6 @@ int CalcSeVol1(float dist)
 	return vol;
 }
 
-UNUSED static
 int CalcSeVol2(float dist)
 {
 	int vol;

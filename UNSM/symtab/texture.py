@@ -1,7 +1,6 @@
 import main
 
 sym_E0_TextureA = {
-	0x0031E1D0: main.sym("_TextureASegmentRomStart"),
 	0x09000000: main.sym_var("txt_a_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_a_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_a_2", "u16", "[]"),
@@ -29,7 +28,6 @@ sym_E0_TextureA = {
 }
 
 sym_E0_TextureB = {
-	0x00326E40: main.sym("_TextureBSegmentRomStart"),
 	0x09000000: main.sym_var("txt_b_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_b_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_b_2", "u16", "[]"),
@@ -51,7 +49,6 @@ sym_E0_TextureB = {
 }
 
 sym_E0_TextureC = {
-	0x0032D070: main.sym("_TextureCSegmentRomStart"),
 	0x09000000: main.sym_var("txt_c_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_c_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_c_2", "u16", "[]"),
@@ -77,7 +74,6 @@ sym_E0_TextureC = {
 }
 
 sym_E0_TextureD = {
-	0x00334B30: main.sym("_TextureDSegmentRomStart"),
 	0x09000000: main.sym_var("txt_d_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_d_1", "u16", "[]"),
 	0x09001800: main.sym_var("txt_d_2", "u16", "[]"),
@@ -96,7 +92,6 @@ sym_E0_TextureD = {
 }
 
 sym_E0_TextureE = {
-	0x0033D710: main.sym("_TextureESegmentRomStart"),
 	0x09000000: main.sym_var("txt_e_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_e_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_e_2", "u16", "[]"),
@@ -115,7 +110,6 @@ sym_E0_TextureE = {
 }
 
 sym_E0_TextureF = {
-	0x00341140: main.sym("_TextureFSegmentRomStart"),
 	0x09000000: main.sym_var("txt_f_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_f_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_f_2", "u16", "[]"),
@@ -137,7 +131,6 @@ sym_E0_TextureF = {
 }
 
 sym_E0_TextureG = {
-	0x00347A50: main.sym("_TextureGSegmentRomStart"),
 	0x09000000: main.sym_var("txt_g_0", "u16", "[]"),
 	0x09001000: main.sym_var("txt_g_1", "u16", "[]"),
 	0x09001800: main.sym_var("txt_g_2", "u16", "[]"),
@@ -159,7 +152,6 @@ sym_E0_TextureG = {
 }
 
 sym_E0_TextureH = {
-	0x0034E760: main.sym("_TextureHSegmentRomStart"),
 	0x09000000: main.sym_var("txt_h_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_h_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_h_2", "u16", "[]"),
@@ -180,7 +172,6 @@ sym_E0_TextureH = {
 }
 
 sym_E0_TextureI = {
-	0x00351960: main.sym("_TextureISegmentRomStart"),
 	0x09000000: main.sym_var("txt_i_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_i_1", "u16", "[]"),
 	0x09001800: main.sym_var("txt_i_2", "u16", "[]"),
@@ -206,7 +197,6 @@ sym_E0_TextureI = {
 }
 
 sym_E0_TextureJ = {
-	0x00357350: main.sym("_TextureJSegmentRomStart"),
 	0x09000000: main.sym_var("txt_j_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_j_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_j_2", "u16", "[]"),
@@ -234,7 +224,6 @@ sym_E0_TextureJ = {
 }
 
 sym_E0_TextureK = {
-	0x0035ED10: main.sym("_TextureKSegmentRomStart"),
 	0x09000000: main.sym_var("txt_k_0", "u16", "[]"),
 	0x09000800: main.sym_var("txt_k_1", "u16", "[]"),
 	0x09001000: main.sym_var("txt_k_2", "u16", "[]"),
@@ -261,7 +250,6 @@ sym_E0_TextureK = {
 }
 
 sym_E0_TextureL = {
-	0x00365980: main.sym("_TextureLSegmentRomStart"),
 	0x09000000: main.sym_var("txt_l_0", "u16", "[]"),
 	0x09001000: main.sym_var("txt_l_1", "u16", "[]"),
 	0x09002000: main.sym_var("txt_l_2", "u16", "[]"),

@@ -1,9 +1,20 @@
 #include <sm64.h>
 
+typedef struct time
+{
+	short audcpu_i;
+	short audrcp_i;
+	OSTime gfxcpu[TIME_GFXCPU_MAX];
+	OSTime gfxrcp[TIME_GFXRCP_MAX];
+	OSTime audcpu[TIME_AUDCPU_MAX];
+	OSTime audrcp[TIME_AUDRCP_MAX];
+}
+TIME;
+
 static TIME time_data[2];
-static s16 time_mode = 0;
-static s16 time_cpu = 1;
-static s16 time_rcp = 0;
+static short time_mode = 0;
+static short time_cpu = 1;
+static short time_rcp = 0;
 
 void TimeGfxCPU(int index)
 {

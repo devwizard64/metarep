@@ -44,6 +44,9 @@ int _Printf(
 		static const char fchar[] = " +-#0";
 		static const unsigned int fbit[] = {_FSP, _FPL, _FMI, _FNO, _FZE, 0};
 		char ac[32];
+#if REVISION >= 199707
+		for (c = *s; c != '\0' && c != '%';) c = *++s;
+#else
 		while ((c = *s++) > 0)
 		{
 			if (c == '%')
@@ -52,6 +55,7 @@ int _Printf(
 				break;
 			}
 		}
+#endif
 		PUT(fmt, s-fmt);
 		if (c == '\0') return x.nchar;
 		fmt = ++s;

@@ -1,13 +1,18 @@
+#!/usr/bin/env python3
+
 import sys
 import os
 import struct
 import shutil
 import importlib
 
+import time
+
 def chk(self, s, x, t):
-	if type(x) is not t: raise TypeError("%s(): %s: %s must be %s (is %s)" % (
-		type(self).__name__, self.label, s, t.__name__, repr(x)
-	))
+	if not isinstance(x, t):
+		raise TypeError("%s(): %s: %s must be %s (is %s)" % (
+			type(self).__name__, self.label, s, t.__name__, repr(x)
+		))
 
 def fmt_pre(v, j, end=""):
 	if v.endswith("*"):
@@ -84,28 +89,36 @@ class sym_var_fnc:
 def mkdir(fn):
 	os.makedirs(os.path.dirname(fn), exist_ok=True)
 
+# 0.10000000149011612 -> 0.1F
+def round_cvt(decode, encode, data):
+	x = decode(data)
+	for i in range(64):
+		r = round(x, i)
+		if encode(r) == data: return r
+	return x
+
 # debug print
 def arg_repr(x):
 	if x is None: return "None"
 	if callable(x): return x.__name__
-	if type(x) == int:
-		return "-0x%X(%d)" % (-x, x) if x < 0 else "0x%X(%d)" % (x, x)
+	if isinstance(x, int):
+		s = "-0x%X" % -x if x < 0 else "0x%X" % x
+		return "%s(%d)" % (s, x)
 	if type(x) in {bool, str, list, dict, tuple, set}:
 		s = repr(x)
 		return s[:20]+"..."+s[-20+3:] if len(s) > 40 else s
 	print("WARNING: type '%s' has no repr !" % type(x))
 	return repr(x)
 
-# call list
-def s_call(self, argv):
-	lst, = argv
-	for argv in lst:
-		# debug print
-		# if argv[0] != s_call:
-		# 	print("[%s]" % ", ".join([arg_repr(x) for x in argv]))
-		argv[0](self, argv[1:])
-
-class segment:
+# donor format: name:[donor, start, end, addr, name[, callback]]
+# name - name of segment
+# donor: [path[, callback]]
+#     path - name of donor file
+#     callback (optional) - function to parse image (unscramble/extract ROM)
+# start, end - physical or logical address of segment (ROM offset)
+# addr - virtual address of segment
+# callback (optional) - function to parse segment (unscramble/decompress)
+class SEGMENT:
 	def __init__(self, start, end, addr, data):
 		self.start = start
 		self.end   = end
@@ -122,134 +135,57 @@ class segment:
 			return self.data[start:stop:step]
 		raise TypeError("bad key %s (%s)" % (key, type(key)))
 
-# load segment table from donor file
-# path - path list to donor file
-# lst - [start, end, addr, name[, callback]]
-#     start, end - physical or logical address of segment (ROM offset)
-#     addr - virtual address of segment
-#     name - name of segment
-#     callback (optional) - function to parse segment (unscramble, decompress)
-# callback (optional) - function to parse image (unscramble, extract VROM)
-def s_segment(self, argv):
-	path, lst = argv[:2]
-	fn = os.path.join(*path)
-	with open(fn, "rb") as f: data = f.read()
-	if len(argv) > 2: data = argv[2](self, argv[3:], data)
-	for arg in lst:
-		start, end, addr, name = arg[:4]
-		seg = data[start:end]
-		if len(arg) > 4:
-			fn = os.path.join(".cache", "%s.%s.bin" % (self.name, name))
-			if os.path.isfile(fn):
-				with open(fn, "rb") as f: seg = f.read()
-			else:
-				seg = arg[4](self, arg[5:], seg)
-				mkdir(fn)
-				with open(fn, "wb") as f: f.write(seg)
-		self.segment[name] = segment(start, end, addr, seg)
-		self.segtab[start] = name
+class FILE:
+	def __init__(self, work, path):
+		self.path = path
+		self.fn = os.path.join(work.root, path)
+		self.data = []
+	def process(self):
+		data = "".join(self.data).strip("\n")
+		while "\n\n\n" in data: data = data.replace("\n\n\n", "\n\n")
+		if data: data += "\n"
+		return data
+	def write(self):
+		data = self.process()
+		mkdir(self.fn)
+		with open(self.fn, "w") as f: f.write(data)
 
-# copy from module directory to output directory
-# src - path list relative to module directory
-# dst - path list relative to output directory
-def s_copy(self, argv):
-	src, dst = argv
-	src = os.path.join(self.name, *src)
-	dst = self.path_join(dst)
-	mkdir(dst)
-	if os.path.islink(src):
-		os.symlink(os.readlink(src), dst)
-	elif os.path.isdir(src):
-		shutil.copytree(src, dst)
-	else:
-		shutil.copy2(src, dst)
-
-# push directory to directory stack
-def s_dir(self, argv):
-	path, = argv
-	self.path.append(path)
-
-# pop directory
-def s_pop(self, argv):
-	self.path.pop()
-
-# open file
-def s_file(self, argv):
-	fn, = argv
-	self.file.append((self.path_join([fn]), []))
-	if os.path.isfile(self.file[-1][0]):
-		with open(self.file[-1][0], "r") as f: self.file[-1][1].append(f.read())
-
-# join line and strip triple newline
-def line_prc(line):
-	data = "".join(line).strip("\n")
-	while "\n\n\n" in data: data = data.replace("\n\n\n", "\n\n")
-	if len(data) > 0: data += "\n"
-	return data
-
-# write last file
-def s_write(self, argv):
-	fn, line = self.file.pop()
-	data = line_prc(line)
-	mkdir(fn)
-	with open(fn, "w") as f: f.write(data)
-
-# write binary
-# seg - name of segment
-# start, end - virtual address range of binary
-# path - path list of binary file
-def s_bin(self, argv):
-	seg, start, end, path = argv
-	fn = self.path_join(path)
-	mkdir(fn)
-	with open(fn, "wb") as f: f.write(self.segment[seg][start:end])
-
-# add string to file
-def s_str(self, argv):
-	self.file[argv[1] if len(argv) > 1 else -1][1].append(argv[0])
-
-# 0.10000000149011612 -> 0.1F
-def round_cvt(dec, enc, data):
-	x = dec(data)
-	for i in range(64):
-		r = round(x, i)
-		if enc(r) == data: return r
-	return x
-
-class script:
-	def __init__(self, name, path):
+class WORK:
+	def __init__(self, name, root, meta):
 		self.name = name
-		self.meta = importlib.import_module(name)
-		self.root = path # root directory of output
-		self.path = [] # output directory stack (relative to root)
-		self.file = [] # file stack
+		self.root = root # root directory of output
+		self.meta = meta
 		self.segment = {} # segment table by segment name
-		self.segtab = {} # segment name table by segment start
 		self.seg = None # current segment name
 		self.addr = None # current address
 		self.save = None # save address
-
-	def main(self):
-		if os.path.isdir(self.root):
-			if os.path.isfile(os.path.join(self.root, "__init__.py")):
-				raise RuntimeError("'%s' is a module" % self.root)
-			shutil.rmtree(self.root)
-		try:
-			s_call(self, [self.meta.lst])
-		except:
-			if len(self.file) > 0:
-				fn, line = self.file[-1]
-				data = line_prc(line)
-				print("%s\n%s%s\nFILE:'%s'" % ("+"*40, data, "+"*40, fn))
-			raise
-	# join path with root and trim beginning
-	def path_join(self, path, i=0):
-		return os.path.join(*([self.root] + self.path + path)[i:])
-	# with path, get relative path of current file
-	def path_rel(self, path):
-		start = os.path.dirname(self.file[-1][0])
-		return os.path.relpath(self.path_join(path), start)
-
+		self.file = None
+	def load(self, seg):
+		for arg in self.meta.donor[seg]:
+			donor, start, end, addr = arg[:4]
+			fn = os.path.join("donor", donor[0])
+			if not os.path.isfile(fn): continue
+			size = end-start
+			with open(fn, "rb") as f:
+				if len(donor) > 1:
+					data = donor[1](self, donor[2:], f, start, size)
+				else:
+					f.seek(start)
+					data = f.read(size)
+			if len(arg) > 4: data = arg[4](self, arg[5:], data)
+			self.segment[seg] = SEGMENT(start, end, addr, data)
+			break
+	def exec(self, seq):
+		for cmd in seq:
+			try:
+				# debug print
+				# print("[%s]" % ", ".join([arg_repr(x) for x in cmd]))
+				cmd[0](self, cmd[1:])
+			except:
+				if self.file: print("%s\n%s%s\nFILE:'%s'" % (
+					"+"*40, self.file.process(), "+"*40, self.file.path
+				))
+				raise
 	# with address, get the intended segment name
 	# table.seg - segment name override (for ambiguous case)
 	def get_seg(self, addr):
@@ -259,7 +195,6 @@ class script:
 				seg = self.meta.seg[seg][addr]
 		return seg
 	# with address, get the symbol entry
-	# src - standing address; if addr is Nth byte of command, src is 0th byte
 	def get_sym(self, addr):
 		seg = self.seg
 		if seg in self.meta.sym:
@@ -268,6 +203,7 @@ class script:
 		return None
 	# with address, find the symbol entry
 	# prefer symbol within current or intended segment
+	# src - standing address; if addr is Nth byte of command, src is 0th byte
 	def find_sym(self, addr, src=None):
 		seg = self.seg
 		if src is not None: seg = self.get_seg(src)
@@ -297,7 +233,7 @@ class script:
 		self.e = e # endianness ("<"=LE, ">"=BE)
 		self.seg = seg # segment name
 		self.addr = addr # address
-	# get next N bytes of output
+	# get next N bytes of content
 	def c_next(self, n):
 		data = self.segment[self.seg][self.addr:self.addr+n]
 		self.addr += n
@@ -305,7 +241,6 @@ class script:
 		# if len(data) < n: data += B"\0" * (n-len(data))
 		return data
 
-	# TODO: rename to numbers instead of bhiqfd
 	def s8(self):
 		x = self.c_next(1)
 		if len(x) != 1: return None
@@ -330,7 +265,7 @@ class script:
 		x = self.c_next(3)
 		if len(x) != 3: return None
 		if self.e == "<": l, h, b = struct.unpack("<BBB", x)
-		if self.e == ">": b, h, l = struct.unpack("<BBB", x)
+		if self.e == ">": b, h, l = struct.unpack(">BBB", x)
 		return l | h << 8 | b << 16
 	def s32(self):
 		x = self.c_next(4)
@@ -384,7 +319,7 @@ class script:
 
 	# allpurpose format
 	def fmt(self, fmt, x):
-		if type(fmt) == str:
+		if isinstance(fmt, str):
 			if "%" in fmt: return fmt % x
 			return fmt
 		if callable(fmt): return fmt(self, x)
@@ -394,7 +329,7 @@ class script:
 	# format bit flag
 	def fmt_flag(self, flag, x):
 		lst = [s for m, i, s in flag if (x & m) == i]
-		return "|".join(lst) if len(lst) > 0 else "0"
+		return "|".join(lst) if lst else "0"
 	# format s16 in hexadecimal
 	def fmt_s16(self, x):
 		return "-0x%04X" % -x if x < 0 else "0x%04X" % x
@@ -418,18 +353,128 @@ class script:
 			argv = []
 			for byte in mask:
 				x, = struct.unpack(">B", self.c_next(1))
-				if byte == None:
+				if byte is None:
 					argv.append(x)
 				else:
 					if byte != x: break
 			else:
 				x = callback(self, arg, argv)
-				if x != None: return x
+				if x is not None: return x
 			self.addr = self.save
 		return None
 
+def s_if_cmp(self, cmp):
+	if isinstance(cmp, str):
+		return cmp in self.segment
+	if isinstance(cmp, tuple): # and
+		for seg in cmp:
+			if seg not in self.segment: return False
+		return True
+	if isinstance(cmp, set): # or
+		for seg in cmp:
+			if seg in self.segment: return True
+		return False
+	raise TypeError("s_if(): invalid seg type")
+
+def s_if(self, argv):
+	for i in range(0, len(argv), 2):
+		cmp = argv[i+0]
+		seq = argv[i+1]
+		if s_if_cmp(self, cmp):
+			self.exec(seq)
+			break
+
+# write binary
+# path - path of binary file
+# seg - name of segment
+# start, end - virtual address range of binary
+def s_bin(self, argv):
+	path, seg, start, end = argv
+	fn = os.path.join(self.root, path)
+	mkdir(fn)
+	with open(fn, "wb") as f: f.write(self.segment[seg][start:end])
+
+# open text file
+# path - path of text file
+# seq - sequence to execute
+def s_file(self, argv):
+	path, seq = argv
+	self.file = FILE(self, path)
+	self.exec(seq)
+	self.file.write()
+	self.file = None
+
+# add string to file
+def f_str(self, argv):
+	s, = argv
+	self.file.data.append(s)
+
+def f_load(self, argv):
+	path, = argv
+	fn = os.path.join(self.root, path)
+	with open(fn, "r") as f: self.file.data.append(f.read())
+
+class SEQUENCE:
+	def __init__(self, name, root, work=None):
+		self.name = name
+		self.root = root
+		self.work = work
+		self.meta = importlib.import_module(name)
+	def exec(self):
+		if os.path.isdir(self.root):
+			if os.path.isfile(os.path.join(self.root, "__init__.py")):
+				raise RuntimeError("'%s' is a module" % self.root)
+			shutil.rmtree(self.root)
+		copy, work = self.meta.work[self.work]
+		for arg in copy:
+			if isinstance(arg, str): src = dst = arg
+			else: src, dst = arg
+			src = os.path.join(self.name, src)
+			dst = os.path.join(self.root, dst)
+			mkdir(dst)
+			if os.path.islink(src): os.symlink(os.readlink(src), dst)
+			elif os.path.isdir(src): shutil.copytree(src, dst)
+			else: shutil.copy2(src, dst)
+		if 0:
+			for seg, seq in work:
+				w = WORK(self.name, self.root, self.meta)
+				for seg in seg: w.load(seg)
+				w.exec(seq)
+		else:
+			pidtab = []
+			for seg, seq in work:
+				pid = os.fork()
+				if pid == 0:
+					w = WORK(self.name, self.root, self.meta)
+					for seg in seg: w.load(seg)
+					w.exec(seq)
+					return
+				pidtab.append(pid)
+			for pid in pidtab: os.waitpid(pid, 0)
+	def check(self):
+		segtab = {}
+		for seg in self.meta.donor:
+			for arg in self.meta.donor[seg]:
+				donor, start, end, addr = arg[:4]
+				fn = os.path.join("donor", donor[0])
+				size = end-start
+				with open(fn, "rb") as f:
+					if len(donor) > 1:
+						data = donor[1](self, donor[2:], f, start, size)
+					else:
+						f.seek(start)
+						data = f.read(size)
+				if len(arg) > 4: data = arg[4](self, arg[5:], data)
+				if data not in segtab: segtab[data] = []
+				segtab[data].append(seg)
+		for x in segtab.values():
+			if len(x) > 1: print(" ".join(x))
+
 if __name__ == "__main__":
-	if len(sys.argv) != 3:
-		sys.stderr.write("usage: %s <meta> <output>\n" % argv[0])
+	if len(sys.argv) < 3 or len(sys.argv) > 4:
+		sys.stderr.write("usage: %s <meta> <output> [work]\n" % argv[0])
 		sys.exit(1)
-	script(sys.argv[1], sys.argv[2]).main()
+	work = sys.argv[3] if len(sys.argv) > 3 else None
+	seq = SEQUENCE(sys.argv[1], sys.argv[2], work)
+	# seq.check()
+	seq.exec()

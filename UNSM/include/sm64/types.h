@@ -12,6 +12,12 @@
 
 #define lenof(x)                (sizeof((x)) / sizeof((x)[0]))
 
+#ifdef DEBUG
+#define debugf(x) osSyncPrintf x
+#else
+#define debugf(x)
+#endif
+
 #ifdef sgi
 #define ISFALSE(x)              ((x) == FALSE)
 #define ISTRUE(x)               ((x) == TRUE)
@@ -20,6 +26,7 @@ typedef signed char CHAR;
 typedef unsigned char UCHAR;
 typedef short SHORT;
 typedef unsigned short USHORT;
+typedef int VOID;
 #else
 #define ISFALSE(x)              (!(x))
 #define ISTRUE(x)               (x)
@@ -28,6 +35,7 @@ typedef int CHAR;
 typedef int UCHAR;
 typedef int SHORT;
 typedef int USHORT;
+typedef void VOID;
 #endif
 
 typedef short SVEC[3];
@@ -40,10 +48,10 @@ typedef char AREA;
 typedef short PATH;
 
 typedef unsigned long SHPLANG;
-typedef char PRGLANG;
+typedef char SEQLANG;
 typedef unsigned long OBJLANG;
 
-typedef long PRGCALL(SHORT code, long status);
+typedef long SEQCALL(SHORT code, long status);
 typedef void OBJCALL(void);
 
 #endif /* __SM64_TYPES_H__ */

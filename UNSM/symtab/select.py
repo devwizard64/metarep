@@ -1,9 +1,6 @@
 import main
 
 sym_E0_Select = {
-	0x002A6120: main.sym("_SelectSegmentRomStart"),
-	0x002A65B0: main.sym("_SelectGfxSegmentRomStart"),
-
 	0x07000000: main.sym_var("light_file", "static Lights1", "[]"),
 	0x07000018: main.sym_var("txt_file_light", "static u16", "[]"),
 	0x07000818: main.sym_var("txt_file_shade", "static u16", "[]"),
@@ -11,11 +8,11 @@ sym_E0_Select = {
 	0x07002018: main.sym_var("txt_file_new", "static u16", "[]"),
 	0x07003018: main.sym_var("vtx_file_edge", "static Vtx", "[]"),
 	0x07003118: main.sym_var("vtx_file_face", "static Vtx", "[]"),
-	0x07003158: main.sym_var("gfx_file_start", "static Gfx", "[]"),
+	0x07003158: main.sym_var("gfx_file_begin", "static Gfx", "[]"),
 	0x070031A0: main.sym_var("gfx_file_edge", "static Gfx", "[]"),
 	0x07003218: main.sym_var("gfx_file_face", "static Gfx", "[]"),
 	0x07003258: main.sym_var("vtx_file_back", "static Vtx", "[]"),
-	0x07003298: main.sym_var("gfx_file_back_start", "static Gfx", "[]"),
+	0x07003298: main.sym_var("gfx_file_back_begin", "static Gfx", "[]"),
 	0x070032E0: main.sym_var("gfx_file_back_end", "static Gfx", "[]"),
 	0x07003330: main.sym_var("gfx_file_mario", "Gfx", "[]", flag={"GLOBL"}),
 	0x07003380: main.sym_var("gfx_file_new", "Gfx", "[]", flag={"GLOBL"}),
@@ -30,7 +27,7 @@ sym_E0_Select = {
 	0x07005468: main.sym_var("txt_tile_purple", "static u16", "[]"),
 	0x07005C68: main.sym_var("vtx_tile", "static Vtx", "[]"),
 	0x07006038: main.sym_var("gfx_tile", "static Gfx", "[]"),
-	0x07006150: main.sym_var("gfx_tile_start", "static Gfx", "[]"),
+	0x07006150: main.sym_var("gfx_tile_begin", "static Gfx", "[]"),
 	0x07006198: main.sym_var("gfx_tile_end", "static Gfx", "[]"),
 	0x070061C8: main.sym_var("gfx_tile_red", "Gfx", "[]", flag={"GLOBL"}),
 	0x070061F8: main.sym_var("gfx_tile_blue", "Gfx", "[]", flag={"GLOBL"}),
@@ -86,46 +83,46 @@ sym_E0_Select = {
 	0x0700AE00: main.sym_var("txt_smfont_7", "static u8", "[]"),
 	0x0700AE40: main.sym_var("txt_smfont_8", "static u8", "[]"),
 	0x0700AE80: main.sym_var("txt_smfont_9", "static u8", "[]"),
-	0x0700AEC0: main.sym_var("txt_smfont_u_a", "static u8", "[]"),
-	0x0700AF00: main.sym_var("txt_smfont_u_b", "static u8", "[]"),
-	0x0700AF40: main.sym_var("txt_smfont_u_c", "static u8", "[]"),
-	0x0700AF80: main.sym_var("txt_smfont_u_d", "static u8", "[]"),
-	0x0700AFC0: main.sym_var("txt_smfont_u_e", "static u8", "[]"),
-	0x0700B000: main.sym_var("txt_smfont_u_f", "static u8", "[]"),
-	0x0700B040: main.sym_var("txt_smfont_u_g", "static u8", "[]"),
-	0x0700B080: main.sym_var("txt_smfont_u_h", "static u8", "[]"),
-	0x0700B0C0: main.sym_var("txt_smfont_u_i", "static u8", "[]"),
-	0x0700B100: main.sym_var("txt_smfont_u_j", "static u8", "[]"),
-	0x0700B140: main.sym_var("txt_smfont_u_k", "static u8", "[]"),
-	0x0700B180: main.sym_var("txt_smfont_u_l", "static u8", "[]"),
-	0x0700B1C0: main.sym_var("txt_smfont_u_m", "static u8", "[]"),
-	0x0700B200: main.sym_var("txt_smfont_u_n", "static u8", "[]"),
-	0x0700B240: main.sym_var("txt_smfont_u_o", "static u8", "[]"),
-	0x0700B280: main.sym_var("txt_smfont_u_p", "static u8", "[]"),
-	0x0700B2C0: main.sym_var("txt_smfont_u_q", "static u8", "[]"),
-	0x0700B300: main.sym_var("txt_smfont_u_r", "static u8", "[]"),
-	0x0700B340: main.sym_var("txt_smfont_u_s", "static u8", "[]"),
-	0x0700B380: main.sym_var("txt_smfont_u_t", "static u8", "[]"),
-	0x0700B3C0: main.sym_var("txt_smfont_u_u", "static u8", "[]"),
-	0x0700B400: main.sym_var("txt_smfont_u_v", "static u8", "[]"),
-	0x0700B440: main.sym_var("txt_smfont_u_w", "static u8", "[]"),
-	0x0700B480: main.sym_var("txt_smfont_u_x", "static u8", "[]"),
-	0x0700B4C0: main.sym_var("txt_smfont_u_y", "static u8", "[]"),
-	0x0700B500: main.sym_var("txt_smfont_u_z", "static u8", "[]"),
+	0x0700AEC0: main.sym_var("txt_smfont_upper_a", "static u8", "[]"),
+	0x0700AF00: main.sym_var("txt_smfont_upper_b", "static u8", "[]"),
+	0x0700AF40: main.sym_var("txt_smfont_upper_c", "static u8", "[]"),
+	0x0700AF80: main.sym_var("txt_smfont_upper_d", "static u8", "[]"),
+	0x0700AFC0: main.sym_var("txt_smfont_upper_e", "static u8", "[]"),
+	0x0700B000: main.sym_var("txt_smfont_upper_f", "static u8", "[]"),
+	0x0700B040: main.sym_var("txt_smfont_upper_g", "static u8", "[]"),
+	0x0700B080: main.sym_var("txt_smfont_upper_h", "static u8", "[]"),
+	0x0700B0C0: main.sym_var("txt_smfont_upper_i", "static u8", "[]"),
+	0x0700B100: main.sym_var("txt_smfont_upper_j", "static u8", "[]"),
+	0x0700B140: main.sym_var("txt_smfont_upper_k", "static u8", "[]"),
+	0x0700B180: main.sym_var("txt_smfont_upper_l", "static u8", "[]"),
+	0x0700B1C0: main.sym_var("txt_smfont_upper_m", "static u8", "[]"),
+	0x0700B200: main.sym_var("txt_smfont_upper_n", "static u8", "[]"),
+	0x0700B240: main.sym_var("txt_smfont_upper_o", "static u8", "[]"),
+	0x0700B280: main.sym_var("txt_smfont_upper_p", "static u8", "[]"),
+	0x0700B2C0: main.sym_var("txt_smfont_upper_q", "static u8", "[]"),
+	0x0700B300: main.sym_var("txt_smfont_upper_r", "static u8", "[]"),
+	0x0700B340: main.sym_var("txt_smfont_upper_s", "static u8", "[]"),
+	0x0700B380: main.sym_var("txt_smfont_upper_t", "static u8", "[]"),
+	0x0700B3C0: main.sym_var("txt_smfont_upper_u", "static u8", "[]"),
+	0x0700B400: main.sym_var("txt_smfont_upper_v", "static u8", "[]"),
+	0x0700B440: main.sym_var("txt_smfont_upper_w", "static u8", "[]"),
+	0x0700B480: main.sym_var("txt_smfont_upper_x", "static u8", "[]"),
+	0x0700B4C0: main.sym_var("txt_smfont_upper_y", "static u8", "[]"),
+	0x0700B500: main.sym_var("txt_smfont_upper_z", "static u8", "[]"),
 	0x0700B540: main.sym_var("txt_smfont_coin", "static u8", "[]"),
-	0x0700B580: main.sym_var("txt_smfont_multiply", "static u8", "[]"),
+	0x0700B580: main.sym_var("txt_smfont_cross", "static u8", "[]"),
 	0x0700B5C0: main.sym_var("txt_smfont_star", "static u8", "[]"),
 	0x0700B600: main.sym_var("txt_smfont_hyphen", "static u8", "[]"),
 	0x0700B640: main.sym_var("txt_smfont_comma", "static u8", "[]"),
 	0x0700B680: main.sym_var("txt_smfont_apostrophe", "static u8", "[]"),
-	0x0700B6C0: main.sym_var("txt_smfont_exclaim", "static u8", "[]"),
+	0x0700B6C0: main.sym_var("txt_smfont_bang", "static u8", "[]"),
 	0x0700B700: main.sym_var("txt_smfont_question", "static u8", "[]"),
-	0x0700B740: main.sym_var("txt_smfont_mario_l", "static u8", "[]"),
-	0x0700B780: main.sym_var("txt_smfont_mario_r", "static u8", "[]"),
+	0x0700B740: main.sym_var("txt_smfont_marioL", "static u8", "[]"),
+	0x0700B780: main.sym_var("txt_smfont_marioR", "static u8", "[]"),
 	0x0700B7C0: main.sym_var("txt_smfont_period", "static u8", "[]"),
 	0x0700B800: main.sym_var("txt_smfont_ampersand", "static u8", "[]"),
 	0x0700B840: main.sym_var("txt_smfont", "u8 *", "[]"),
-	0x0700BC40: main.sym_var("gfx_smfont_start", "Gfx", "[]", flag={"GLOBL"}),
+	0x0700BC40: main.sym_var("gfx_smfont_begin", "Gfx", "[]", flag={"GLOBL"}),
 	0x0700BC98: main.sym_var("gfx_smfont_end", "Gfx", "[]", flag={"GLOBL"}),
 
 	0x0700BCD8: main.sym_var("align_course", "UNUSED static long long"),
@@ -137,21 +134,21 @@ sym_E0_Select = {
 
 	0x0700DE30: main.sym_var("map_select", "MAP", "[]"),
 
-	0x14000000: main.sym("p_fileselect", flag={"GLOBL"}),
-	0x14000118: main.sym("p_starselect", flag={"GLOBL"}),
+	0x14000000: main.sym("seq_fileselect", flag={"GLOBL"}),
+	0x14000118: main.sym("seq_starselect", flag={"GLOBL"}),
 	0x140001C0: main.sym(".return", flag={"LOCAL"}),
-	0x140001D0: main.sym_var("s_file_mario", "SHPLANG", "[]", flag={"GLOBL"}), # 3
-	0x14000200: main.sym_var("s_file_mario_s", "SHPLANG", "[]", flag={"GLOBL"}), # 8
-	0x14000230: main.sym_var("s_file_new", "SHPLANG", "[]", flag={"GLOBL"}), # 9
-	0x14000260: main.sym_var("s_file_new_s", "SHPLANG", "[]", flag={"GLOBL"}), # 10
-	0x14000290: main.sym_var("s_tile_red", "SHPLANG", "[]", flag={"GLOBL"}), # 4
-	0x140002B8: main.sym_var("s_tile_blue", "SHPLANG", "[]", flag={"GLOBL"}), # 5
-	0x140002E0: main.sym_var("s_tile_yellow", "SHPLANG", "[]", flag={"GLOBL"}), # 6
-	0x14000308: main.sym_var("s_tile_green", "SHPLANG", "[]", flag={"GLOBL"}), # 7
-	0x14000330: main.sym_var("s_tile_purple", "SHPLANG", "[]", flag={"GLOBL"}), # 11
-	0x14000358: main.sym_var("s_tile_button", "SHPLANG", "[]", flag={"GLOBL"}), # 12
-	0x14000380: main.sym_var("s_fileselect", "SHPLANG", "[]", flag={"GLOBL"}),
-	0x14000408: main.sym_var("s_starselect", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x140001D0: main.sym_var("shp_file_mario", "SHPLANG", "[]", flag={"GLOBL"}), # 3
+	0x14000200: main.sym_var("shp_file_mario_s", "SHPLANG", "[]", flag={"GLOBL"}), # 8
+	0x14000230: main.sym_var("shp_file_new", "SHPLANG", "[]", flag={"GLOBL"}), # 9
+	0x14000260: main.sym_var("shp_file_new_s", "SHPLANG", "[]", flag={"GLOBL"}), # 10
+	0x14000290: main.sym_var("shp_tile_red", "SHPLANG", "[]", flag={"GLOBL"}), # 4
+	0x140002B8: main.sym_var("shp_tile_blue", "SHPLANG", "[]", flag={"GLOBL"}), # 5
+	0x140002E0: main.sym_var("shp_tile_yellow", "SHPLANG", "[]", flag={"GLOBL"}), # 6
+	0x14000308: main.sym_var("shp_tile_green", "SHPLANG", "[]", flag={"GLOBL"}), # 7
+	0x14000330: main.sym_var("shp_tile_purple", "SHPLANG", "[]", flag={"GLOBL"}), # 11
+	0x14000358: main.sym_var("shp_tile_button", "SHPLANG", "[]", flag={"GLOBL"}), # 12
+	0x14000380: main.sym_var("shp_fileselect", "SHPLANG", "[]", flag={"GLOBL"}),
+	0x14000408: main.sym_var("shp_starselect", "SHPLANG", "[]", flag={"GLOBL"}),
 }
 
 imm_E0_Select = {

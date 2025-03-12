@@ -1,6 +1,5 @@
 #include <sm64.h>
 
-UNUSED static
 OBJECT *ObjDebugHit(OBJECT *obj)
 {
 	OBJECT *hit;
@@ -54,14 +53,14 @@ static int ObjCheckDmg(OBJECT *a, OBJECT *b)
 	float dz = a->o_posz - b->o_posz;
 	float radius = a->dmg_r + b->dmg_r;
 	float dist = DIST2(dx, dz);
-	if (a == mario_obj) b->o_hit_flag |= 2; /* T:hit_flag */
+	if (a == mario_obj) b->o_hit_flag |= HF_0002;
 	if (radius > dist)
 	{
 		float ah = al + a->hit_h;
 		float bh = bl + b->dmg_h;
 		if (al > bh) return FALSE;
 		if (ah < bl) return FALSE;
-		if (a == mario_obj) b->o_hit_flag &= ~2; /* T:hit_flag */
+		if (a == mario_obj) b->o_hit_flag &= ~HF_0002;
 		return TRUE;
 	}
 #ifndef sgi
@@ -133,7 +132,7 @@ static void HitCheckAttack(void)
 	OBJECT *obj = root->next;
 	while (obj != root)
 	{
-		if (obj->o_pl_dist < 2000 && !(obj->flag & OBJ_0200))
+		if (obj->o_targetdist < 2000 && !(obj->flag & OBJ_0200))
 		{
 			HitCheckList(obj, obj->next, root);
 			HITCHECK(obj, OT_ENEMYA);

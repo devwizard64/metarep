@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "elf.h"
-#include "elf.c"
+#include "lib/elf.h"
+#include "lib/elf.c"
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +12,11 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "usage: %s <elf>\n", argv[0]);
 		return 1;
 	}
-	elf_open(&elf, argv[1], "rb");
+	if (elf_open(&elf, argv[1], "rb"))
+	{
+		fprintf(stderr, "error: could not open '%s'\n", argv[1]);
+		return 1;
+	}
 	elf_loadsection(&elf);
 	for (i = 0; i < elf.symnum; i++)
 	{

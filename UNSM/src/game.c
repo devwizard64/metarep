@@ -44,22 +44,22 @@ HUD hud;
 PLAYER player_data[1];
 PLAYER *mario = &player_data[0];
 
-static s16 game_state;
-static s16 game_timer;
+static short game_state;
+static short game_timer;
 
 static short freeze_timer;
 static FREEZECALL *freeze_callback;
 
 static PL_ENTRY mario_entry;
-static s16 game_result;
+static short game_result;
 
-static s16 fade_mode;
-static s16 fade_timer;
-static s16 fade_port;
+static short fade_mode;
+static short fade_timer;
+static short fade_port;
 static u32 fade_code;
 
-UNUSED static s16 game_8032D940 = 0;
-UNUSED static s16 game_8033B25C;
+UNUSED static short game_8032D940 = 0;
+UNUSED static short game_8033B25C;
 static char time_flag;
 static char mid_flag = FALSE;
 
@@ -67,7 +67,7 @@ char first_msg;
 
 static void GmSceneProc(short *);
 
-int GmTimeCtrl(int code)
+USHORT GmTimeCtrl(int code)
 {
 	switch (code)
 	{
@@ -93,7 +93,7 @@ int GmTimeCtrl(int code)
 
 static int GmCheckPause(void)
 {
-	int msgopen = MsgGet() >= 0;
+	int msgopen = MsgIsOpen();
 	int demo = (mario->state & PF_DEMO) != 0;
 	if (!(demo || msgopen || wipe.active || fade_mode != FADE_NULL))
 	{
@@ -210,7 +210,7 @@ static void GmInitPort(void)
 {
 	PORT *port = SnGetPort(mario_entry.port);
 	int type = SnGetPortType(port->obj);
-	if (mario->state != PS_NULL)
+	if (mario->state)
 	{
 		player_actor[0].pos[0] = port->obj->o_posx;
 		player_actor[0].pos[1] = port->obj->o_posy;
@@ -256,7 +256,7 @@ static void GmInitPort(void)
 		{
 			AudPlaySpecialBGM(NA_BGM_SPECIAL);
 		}
-#if REVISION > 199606
+#if REVISION >= 199609
 		if (stage_index == STAGE_BOB)
 		{
 			if (Na_BgmGet() != NA_BGM_RACE && time_flag)
@@ -264,15 +264,11 @@ static void GmInitPort(void)
 				Na_BgmPlay(0, NA_BGM_RACE, 0);
 			}
 		}
-#endif
-		if (mario_entry.stage == STAGE_INSIDE && mario_entry.scene == 1 &&
-#if REVISION > 199606
+		if (
+			mario_entry.stage == STAGE_INSIDE &&
+			mario_entry.scene == 1 &&
 			(mario_entry.port == 31 || mario_entry.port == 32)
-#else
-			mario_entry.port == 31
-#endif
 		) Na_FixSePlay(NA_SE7_1D);
-#if REVISION > 199606
 		if (mario_entry.stage == STAGE_GROUNDS && mario_entry.scene == 1)
 		{
 			if (
@@ -282,6 +278,12 @@ static void GmInitPort(void)
 				mario_entry.port == 30
 			) Na_FixSePlay(NA_SE7_1D);
 		}
+#else
+		if (
+			mario_entry.stage == STAGE_INSIDE &&
+			mario_entry.scene == 1 &&
+			mario_entry.port == 31
+		) Na_FixSePlay(NA_SE7_1D);
 #endif
 	}
 }
@@ -373,7 +375,7 @@ static int GmIsSameBGM(SHORT port)
 {
 	PORT *portp = SnGetPort(port);
 	SHORT stage = portp->p.stage & 0x7F;
-#if REVISION > 199606
+#if REVISION >= 199609
 	SHORT scene = portp->p.scene;
 	SHORT result = TRUE;
 	if (stage == STAGE_BOB && stage == stage_index && scene == scene_index)
@@ -395,7 +397,9 @@ static int GmIsSameBGM(SHORT port)
 	USHORT bgm  = scene_table[portp->p.scene].bgm;
 	SHORT result =
 		stage == stage_index && mode == scenep->bgm_mode && bgm == scenep->bgm;
+#if REVISION >= 199606
 	if (Na_BgmGet() != bgm) result = FALSE;
+#endif
 #endif
 	return result;
 }
@@ -451,6 +455,10 @@ static void GmProcBGPort(void)
 				mario->obj->s.s.flag &= ~SHP_ACTIVE;
 				Na_FixSePlay(NA_SE7_1E);
 				AudFadeout(NA_TIME(50));
+#ifdef MOTOR
+				motor_8024C834(80, 70);
+				motor_8024C89C(1);
+#endif
 			}
 		}
 	}
@@ -467,7 +475,7 @@ int PL_Fade(PLAYER *pl, int mode)
 		switch (mode)
 		{
 		case FADE_LOGO:
-		case FADE_FACE:
+		case FADE_FACE: \
 			fade_timer = 20;
 			fade_port = PORT_WIN;
 			prev_course = 0;
@@ -508,7 +516,7 @@ int PL_Fade(PLAYER *pl, int mode)
 			fade_timer = 30;
 			fade_port = PORT_ROOF;
 			SnWipe(WIPE_FADE_OUT, 30, 0xFF, 0xFF, 0xFF);
-#if REVISION > 199606
+#if REVISION >= 199609
 			Na_FixSePlay(NA_SE7_1E);
 #endif
 			break;
@@ -566,7 +574,7 @@ static void GmProcFade(void)
 	if (fade_mode != FADE_NULL && --fade_timer == 0)
 	{
 		MsgClose();
-		if (debug_stage && (fade_mode & FADE_EXIT))
+		if (debug_stage && fade_mode & FADE_EXIT)
 		{
 			GmExit(EXIT_DEBUG);
 		}
@@ -609,10 +617,7 @@ static void GmProcFade(void)
 					fade_code
 				);
 				BuSetMid(&portp->p);
-				if (mario_entry.type != CHANGE_STAGE)
-				{
-					GmFreeze(2, NULL);
-				}
+				if (mario_entry.type != CHANGE_STAGE) GmFreeze(2, NULL);
 				break;
 			}
 		}
@@ -626,15 +631,14 @@ static void GmProcHUD(void)
 		SHORT power = mario->power > 0 ? mario->power >> 8 : 0;
 		if (course_index > 0)   hud.flag |= HUD_COIN;
 		else                    hud.flag &= ~HUD_COIN;
-		if (hud.coin < mario->coin && (gfx_frame & 1))
+		if (hud.coin < mario->coin && gfx_frame & 1)
 		{
-			Na_Se se = (mario->state & (PF_SWIM|PF_SINK)) ?
-				NA_SE3_12 : NA_SE3_11;
+			Na_Se se = mario->state & (PF_SWIM|PF_SINK) ? NA_SE3_12 : NA_SE3_11;
 			hud.coin++;
 			Na_ObjSePlay(se, mario->obj);
 		}
 		if (mario->life > 100) mario->life = 100;
-#if REVISION > 199606
+#if REVISION >= 199609
 		if (mario->coin > 999) mario->coin = 999;
 		if (hud.coin    > 999) hud.coin    = 999;
 #else
@@ -695,6 +699,9 @@ static int GmProcNormal(void)
 		else if (GmCheckPause())
 		{
 			AudSetMute(AUD_PAUSE);
+#ifdef MOTOR
+			motor_8024CB90();
+#endif
 			camera_8033C848 |= 0x8000;
 			GmSetState(GM_PAUSE);
 		}
@@ -825,7 +832,7 @@ static int GmInit(void)
 	fade_mode = FADE_NULL;
 	freeze_timer = 0;
 	game_result = 0;
-	hud.flag = !staffp ? (HUD_ALL & ~HUD_TIME) : 0;
+	hud.flag = !staffp ? HUD_ALL : 0;
 	time_flag = FALSE;
 	if (mario_entry.type != CHANGE_NULL)
 	{
@@ -846,7 +853,7 @@ static int GmInit(void)
 			{
 				PL_SetState(mario, PS_WAIT_01, 0);
 			}
-			else if (!debug_stage && mario->state != PS_NULL)
+			else if (!debug_stage && mario->state)
 			{
 				if (BuIsActive())
 				{
@@ -863,6 +870,9 @@ static int GmInit(void)
 		else            SnWipe(WIPE_STAR_IN, 16, 0xFF, 0xFF, 0xFF);
 		if (!demop) AudPlayBGM(scenep->bgm_mode, scenep->bgm, 0);
 	}
+#ifdef MOTOR
+	if (!demop) motor_8024CB90();
+#endif
 	if (mario->state == PS_DEMO_01) Na_OpeningLockSe();
 	return 1;
 }
@@ -878,8 +888,29 @@ long GameProc(SHORT code, UNUSED long status)
 	return result;
 }
 
+#ifdef MULTILANG
+extern const char _Lang0SegmentRomStart[], _Lang0SegmentRomEnd[];
+extern const char _Lang1SegmentRomStart[], _Lang1SegmentRomEnd[];
+extern const char _Lang2SegmentRomStart[], _Lang2SegmentRomEnd[];
+#endif
+
 long GameInit(UNUSED SHORT code, long status)
 {
+#ifdef MULTILANG
+	SHORT lang = BuGetLang();
+	switch (lang)
+	{
+	case 0:
+		MemLoadPres(0x19, _Lang0SegmentRomStart, _Lang0SegmentRomEnd);
+		break;
+	case 1:
+		MemLoadPres(0x19, _Lang1SegmentRomStart, _Lang1SegmentRomEnd);
+		break;
+	case 2:
+		MemLoadPres(0x19, _Lang2SegmentRomStart, _Lang2SegmentRomEnd);
+		break;
+	}
+#endif
 	mario_entry.type = CHANGE_NULL;
 	fade_mode = FADE_NULL;
 	first_msg = !BuIsActive();
@@ -892,7 +923,7 @@ long GameInit(UNUSED SHORT code, long status)
 	BuClrMid();
 	BuInitCap();
 	camera_80287BC4();
-	object_b_802E3E50();
+	enemyb_802E3E50();
 	return status;
 }
 

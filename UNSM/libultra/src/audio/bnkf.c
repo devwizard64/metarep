@@ -5,6 +5,10 @@ static void _bnkfPatchInst(ALInstrument *i, s32 offset, s32 table);
 static void _bnkfPatchSound(ALSound *s, s32 offset, s32 table);
 static void _bnkfPatchWaveTable(ALWaveTable *w, s32 offset, s32 table);
 
+#ifdef sgi
+#define static
+#endif
+
 #define PATCH(x, offset) ((x) = (void *)((char *)(x) + offset))
 
 void alSeqFileNew(ALSeqFile *file, u8 *base)
@@ -33,10 +37,7 @@ void alBnkfNew(ALBankFile *file, u8 *table)
 	}
 }
 
-#ifndef sgi
-static
-#endif
-void _bnkfPatchBank(ALBank *bank, s32 offset, s32 table) 
+static void _bnkfPatchBank(ALBank *bank, s32 offset, s32 table) 
 {
 	int i;
 	if (bank->flags) return;
@@ -56,10 +57,7 @@ void _bnkfPatchBank(ALBank *bank, s32 offset, s32 table)
 	}
 }
 
-#ifndef sgi
-static
-#endif
-void _bnkfPatchInst(ALInstrument *inst, s32 offset, s32 table)
+static void _bnkfPatchInst(ALInstrument *inst, s32 offset, s32 table)
 {
 	int i;
 	if (inst->flags) return;
@@ -71,10 +69,7 @@ void _bnkfPatchInst(ALInstrument *inst, s32 offset, s32 table)
 	}
 }
 
-#ifndef sgi
-static
-#endif
-void _bnkfPatchSound(ALSound *s, s32 offset, s32 table)
+static void _bnkfPatchSound(ALSound *s, s32 offset, s32 table)
 {
 	if (s->flags) return;
 	s->flags = 1;
@@ -84,10 +79,7 @@ void _bnkfPatchSound(ALSound *s, s32 offset, s32 table)
 	_bnkfPatchWaveTable(s->wavetable, offset, table);
 }
 
-#ifndef sgi
-static
-#endif
-void _bnkfPatchWaveTable(ALWaveTable *w, s32 offset, s32 table)
+static void _bnkfPatchWaveTable(ALWaveTable *w, s32 offset, s32 table)
 {
 	if (w->flags) return;
 	w->flags = 1;

@@ -1,7 +1,7 @@
 #include <sm64.h>
 
 static SOBJECT mario_mirror;
-PL_SHAPE pl_shape_data[2];
+PL_CTRL pl_ctrl_data[2];
 
 void *CtrlWeather(int code, SHAPE *shape, UNUSED void *data)
 {
@@ -79,6 +79,11 @@ void *CtrlBackground(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlFace(int code, SHAPE *shape, void *data)
 {
 	Gfx *gfx = NULL;
+#if REVISION == 199605
+	(void)code;
+	(void)shape;
+	(void)data;
+#else
 	SHORT sound = 0;
 	SCALLBACK *shp = (SCALLBACK *)shape;
 	UNUSED FMTX *m = data;
@@ -90,25 +95,26 @@ void *CtrlFace(int code, SHAPE *shape, void *data)
 		sound = face_gfx_8019C9C8();
 		AudPlayFaceSound(sound);
 	}
+#endif
 	return gfx;
 }
 
 static void callback_8027657C(void)
 {
-	if (object->o_pl_dist > 700) object->o_v6 = FALSE;
-	if (!object->o_v6 && object->o_pl_dist < 600) object->o_v7 = 2;
+	if (object->o_targetdist > 700) object->o_v6 = FALSE;
+	if (!object->o_v6 && object->o_targetdist < 600) object->o_v7 = 2;
 }
 
 static void callback_802765FC(void)
 {
-	if (object->o_pl_dist > 700)
+	if (object->o_targetdist > 700)
 	{
 		object->o_v7 = 3;
 	}
 	else if (!object->o_v6)
 	{
-		object->o_hit_flag = 0x4000; /* T:hit_flag */
-		if (object->o_hit_result & 0x8000) /* T:hit_result */
+		object->o_hit_flag = HF_4000;
+		if (object->o_hit_result & HR_008000)
 		{
 			object->o_hit_result = 0;
 			object->o_v7 = 4;
@@ -119,24 +125,15 @@ static void callback_802765FC(void)
 
 static void callback_802766B4(void)
 {
-	if (objectlib_802A4BE4(3, 1, 162, object->o_v5))
+	if (objectlib_802A4BE4(3, 1, MSG_162, object->o_v5))
 	{
 		object->o_v6 = TRUE;
 		object->o_v7 = 3;
 		switch (object->o_v5)
 		{
-		case 82: /* T:msg */
-			object->o_v5 = 154; /* T:msg */
-			object_a_802AB558(0);
-			break;
-		case 76: /* T:msg */
-			object->o_v5 = 155; /* T:msg */
-			object_a_802AB558(1);
-			break;
-		case 83: /* T:msg */
-			object->o_v5 = 156; /* T:msg */
-			object_a_802AB558(2);
-			break;
+		case MSG_82: object->o_v5 = MSG_154; enemya_802AB558(0); break;
+		case MSG_76: object->o_v5 = MSG_155; enemya_802AB558(1); break;
+		case MSG_83: object->o_v5 = MSG_156; enemya_802AB558(2); break;
 		}
 	}
 }
@@ -175,17 +172,17 @@ void callback_80276910(void)
 	int has_msg = TRUE;
 	switch (msg)
 	{
-	case 82: /* T:msg */
+	case MSG_82:
 		has_msg = total >= 12;
-		if (flag & ((1 << 0) << 24)) msg = 154; /* T:msg */
+		if (flag & ((1 << 0) << 24)) msg = MSG_154;
 		break;
-	case 76: /* T:msg */
+	case MSG_76:
 		has_msg = total >= 25;
-		if (flag & ((1 << 1) << 24)) msg = 155; /* T:msg */
+		if (flag & ((1 << 1) << 24)) msg = MSG_155;
 		break;
-	case 83: /* T:msg */
+	case MSG_83:
 		has_msg = total >= 35;
-		if (flag & ((1 << 2) << 24)) msg = 156; /* T:msg */
+		if (flag & ((1 << 2) << 24)) msg = MSG_156;
 		break;
 	}
 	if (has_msg)
@@ -201,11 +198,11 @@ void callback_80276910(void)
 	}
 }
 
-extern OBJLANG o_13002AF0[];
+extern OBJLANG obj_13002AF0[];
 
 static void callback_80276AA0(SHORT angy)
 {
-	OBJECT *obj = ObjMakeHere(object, 0, o_13002AF0);
+	OBJECT *obj = ObjMakeHere(object, 0, obj_13002AF0);
 	obj->o_posx += 100 * SIN(0x2800*object->o_v6 + angy);
 	obj->o_posz += 100 * COS(0x2800*object->o_v6 + angy);
 	obj->o_posy -= object->o_v6 * (float)10;
@@ -293,10 +290,10 @@ void *CtrlPlayerAlpha(int code, SHAPE *shape, UNUSED void *data)
 	UNUSED int i;
 	Gfx *gfx = NULL;
 	SCALLBACK *shp = (SCALLBACK *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->arg];
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->arg];
 	if (code == SC_DRAW)
 	{
-		SHORT alpha = (pls->cap & 0x100) ? (pls->cap & 0xFF) : 0xFF; /* T: */
+		SHORT alpha = ctrl->cap & 0x100 ? ctrl->cap & 0xFF : 0xFF; /* T: */
 		gfx = callback_80276F90(shp, alpha);
 	}
 	return gfx;
@@ -305,10 +302,10 @@ void *CtrlPlayerAlpha(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlPlayerLOD(int code, SHAPE *shape, UNUSED void *data)
 {
 	SSELECT *shp = (SSELECT *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->code];
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->code];
 	if (code == SC_DRAW)
 	{
-		shp->index = (pls->state & PF_WAIT) == 0;
+		shp->index = (ctrl->state & PF_WAIT) == 0;
 	}
 	return NULL;
 }
@@ -317,10 +314,10 @@ void *CtrlPlayerEyes(int code, SHAPE *shape, UNUSED void *data)
 {
 	static char eyestab[] = {1, 2, 1, 0, 1, 2, 1, 0};
 	SSELECT *shp = (SSELECT *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->code];
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->code];
 	if (code == SC_DRAW)
 	{
-		if (pls->eyes == 0)
+		if (ctrl->eyes == 0)
 		{
 			SHORT i = (32*shp->code + draw_timer) >> 1 & 31;
 			if (i < 7)  shp->index = eyestab[i];
@@ -328,7 +325,7 @@ void *CtrlPlayerEyes(int code, SHAPE *shape, UNUSED void *data)
 		}
 		else
 		{
-			shp->index = pls->eyes - 1;
+			shp->index = ctrl->eyes - 1;
 		}
 	}
 	return NULL;
@@ -337,20 +334,20 @@ void *CtrlPlayerEyes(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlPlayerTorso(int code, SHAPE *shape, UNUSED void *data)
 {
 	SCALLBACK *shp = (SCALLBACK *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->arg];
-	u32 state = pls->state;
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->arg];
+	u32 state = ctrl->state;
 	if (code == SC_DRAW)
 	{
-		SANG *ang = (SANG *)shape->next;
+		SANG *torso = (SANG *)shape->next;
 		if (!(
-			state == PS_MOVE_12 ||
-			state == PS_MOVE_14 ||
-			state == PS_MOVE_00 ||
-			state == PS_MOVE_06
-		)) SVecCpy(pls->torso_ang, svec_0);
-		ang->ang[0] = pls->torso_ang[1];
-		ang->ang[1] = pls->torso_ang[2];
-		ang->ang[2] = pls->torso_ang[0];
+			state == PS_WALK_12 ||
+			state == PS_WALK_14 ||
+			state == PS_WALK_00 ||
+			state == PS_WALK_06
+		)) SVecCpy(ctrl->torso_ang, svec_0);
+		torso->ang[0] = ctrl->torso_ang[1];
+		torso->ang[1] = ctrl->torso_ang[2];
+		torso->ang[2] = ctrl->torso_ang[0];
 	}
 	return NULL;
 }
@@ -358,27 +355,27 @@ void *CtrlPlayerTorso(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlPlayerNeck(int code, SHAPE *shape, UNUSED void *data)
 {
 	SCALLBACK *shp = (SCALLBACK *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->arg];
-	u32 state = pls->state;
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->arg];
+	u32 state = ctrl->state;
 	if (code == SC_DRAW)
 	{
-		SANG *ang = (SANG *)shape->next;
+		SANG *neck = (SANG *)shape->next;
 		CAMERA *cam = (CAMERA *)draw_camera->s.arg;
 		if (cam->mode == 6) /* T:enum */
 		{
-			ang->ang[0] = pl_camera_data[0].neck_angy;
-			ang->ang[2] = pl_camera_data[0].neck_angx;
+			neck->ang[0] = pl_camera_data[0].neck_angy;
+			neck->ang[2] = pl_camera_data[0].neck_angx;
 		}
 		else if (state & PF_HEAD)
 		{
-			ang->ang[0] = pls->neck_ang[1];
-			ang->ang[1] = pls->neck_ang[2];
-			ang->ang[2] = pls->neck_ang[0];
+			neck->ang[0] = ctrl->neck_ang[1];
+			neck->ang[1] = ctrl->neck_ang[2];
+			neck->ang[2] = ctrl->neck_ang[0];
 		}
 		else
 		{
-			SVecSet(pls->neck_ang, 0, 0, 0);
-			SVecSet(ang->ang, 0, 0, 0);
+			SVecSet(ctrl->neck_ang, 0, 0, 0);
+			SVecSet(neck->ang, 0, 0, 0);
 		}
 	}
 	return NULL;
@@ -387,20 +384,20 @@ void *CtrlPlayerNeck(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlMarioHand(int code, SHAPE *shape, UNUSED void *data)
 {
 	SSELECT *shp = (SSELECT *)shape;
-	PL_SHAPE *pls = &pl_shape_data[0];
+	PL_CTRL *ctrl = &pl_ctrl_data[0];
 	if (code == SC_DRAW)
 	{
-		if (pls->hand == 0)
+		if (ctrl->hand == 0)
 		{
-			shp->index = (pls->state & PF_HAND) != 0;
+			shp->index = (ctrl->state & PF_HAND) != 0;
 		}
 		else if (shp->code == 0)
 		{
-			shp->index = pls->hand < 5 ? pls->hand : 1;
+			shp->index = ctrl->hand < 5 ? ctrl->hand : 1;
 		}
 		else
 		{
-			shp->index = pls->hand < 2 ? pls->hand : 0;
+			shp->index = ctrl->hand < 2 ? ctrl->hand : 0;
 		}
 	}
 	return NULL;
@@ -414,21 +411,21 @@ void *CtrlMarioPunch(int code, SHAPE *shape, UNUSED void *data)
 		{10, 14, 20, 30, 10, 10},
 		{10, 16, 20, 26, 26, 20},
 	};
-	static s16 stamp = 0;
+	static short stamp = 0;
 	SCALLBACK *shp = (SCALLBACK *)shape;
 	SSCALE *scale = (SSCALE *)shape->next;
-	PL_SHAPE *pls = &pl_shape_data[0];
+	PL_CTRL *ctrl = &pl_ctrl_data[0];
 	if (code == SC_DRAW)
 	{
 		scale->scale = 1;
-		if (shp->arg == (pls->punch >> 6))
+		if (shp->arg == (ctrl->punch >> 6))
 		{
-			if (stamp != draw_timer && (pls->punch & 63) > 0)
+			if (stamp != draw_timer && (ctrl->punch & 63) > 0)
 			{
-				pls->punch--;
+				ctrl->punch -= 1;
 				stamp = draw_timer;
 			}
-			scale->scale = (float)punchtab[shp->arg][pls->punch & 63]/10;
+			scale->scale = (float)punchtab[shp->arg][ctrl->punch & 63]/10;
 		}
 	}
 	return NULL;
@@ -437,10 +434,10 @@ void *CtrlMarioPunch(int code, SHAPE *shape, UNUSED void *data)
 void *CtrlPlayerCap(int code, SHAPE *shape, UNUSED void *data)
 {
 	SSELECT *shp = (SSELECT *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->code];
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->code];
 	if (code == SC_DRAW)
 	{
-		shp->index = pls->cap >> 8;
+		shp->index = ctrl->cap >> 8;
 	}
 	return NULL;
 }
@@ -449,15 +446,15 @@ void *CtrlPlayerHead(int code, SHAPE *shape, UNUSED void *data)
 {
 	SHAPE *next = shape->next;
 	SSELECT *shp = (SSELECT *)shape;
-	PL_SHAPE *pls = &pl_shape_data[shp->code];
+	PL_CTRL *ctrl = &pl_ctrl_data[shp->code];
 	if (code == SC_DRAW)
 	{
-		shp->index = pls->head & 1; /* T:flag */
+		shp->index = ctrl->head & 1; /* T:flag */
 		while (next != shape)
 		{
 			if (next->type == ST_COORD)
 			{
-				if (pls->head & 2)  next->flag |= SHP_ACTIVE; /* T:flag */
+				if (ctrl->head & 2) next->flag |= SHP_ACTIVE; /* T:flag */
 				else                next->flag &= ~SHP_ACTIVE;
 			}
 			next = next->next;
@@ -472,8 +469,8 @@ void *CtrlPlayerWing(int code, SHAPE *shape, UNUSED void *data)
 	SCALLBACK *shp = (SCALLBACK *)shape;
 	if (code == SC_DRAW)
 	{
-		SANG *ang = (SANG *)shape->next;
-		if (pl_shape_data[shp->arg >> 1].wing == 0)
+		SANG *wing = (SANG *)shape->next;
+		if (pl_ctrl_data[shp->arg >> 1].wing == 0)
 		{
 			x = 0x1000 * (1+COS(0x1000*(draw_timer & 15)));
 		}
@@ -481,8 +478,8 @@ void *CtrlPlayerWing(int code, SHAPE *shape, UNUSED void *data)
 		{
 			x = 0x1800 * (1+COS(0x2000*(draw_timer & 7)));
 		}
-		if (!(shp->arg & 1))    ang->ang[0] = -x;
-		else                    ang->ang[0] = +x;
+		if (!(shp->arg & 1))    wing->ang[0] = -x;
+		else                    wing->ang[0] = +x;
 	}
 	return NULL;
 }
@@ -498,17 +495,11 @@ void *CtrlPlayerHand(int code, SHAPE *shape, void *data)
 		if (pl->take)
 		{
 			shp->obj = &pl->take->s;
-			switch (pl->shape->take)
+			switch (pl->ctrl->take)
 			{
 			case 1:
-				if (pl->state & PF_THRW)
-				{
-					SVecSet(shp->pos, 50, 0, 0);
-				}
-				else
-				{
-					SVecSet(shp->pos, 50, 0, 110);
-				}
+				if (pl->state & PF_THRW)    SVecSet(shp->pos, 50, 0, 0);
+				else                        SVecSet(shp->pos, 50, 0, 110);
 				break;
 			case 2:
 				SVecSet(shp->pos, 145, -173, 180);
@@ -521,7 +512,7 @@ void *CtrlPlayerHand(int code, SHAPE *shape, void *data)
 	}
 	else if (code == SC_MTX)
 	{
-		CalcScenePos(pl->shape->hand_pos, *m, *draw_camera->m);
+		CalcScenePos(pl->ctrl->hand_pos, *m, *draw_camera->m);
 	}
 	return NULL;
 }

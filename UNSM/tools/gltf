@@ -6,7 +6,7 @@ import struct
 import base64
 import json
 
-def gltf_uri(obj):
+def glTF_uri(obj):
 	uri = obj["uri"]
 	if uri.startswith("data:"):
 		assert uri.startswith("data:application/octet-stream;base64,")
@@ -20,15 +20,15 @@ def gltf_uri(obj):
 		with open(uri, "rb") as f: data = f.read()
 	return data
 
-def gltf_bufferView(obj):
+def glTF_bufferView(obj):
 	bufferView = gltf["bufferViews"][obj["bufferView"]]
 	i = bufferView["byteOffset"] if "byteOffset" in bufferView else 0
 	n = bufferView["byteLength"]
 	return buftab[bufferView["buffer"]][i:i+n]
 
-def gltf_array(i):
+def glTF_array(i):
 	accessor = gltf["accessors"][i]
-	data = gltf_bufferView(accessor)
+	data = glTF_bufferView(accessor)
 	count = accessor["count"]
 	i = accessor["componentType"]-5120
 	f = "bBhHiIf"[i]
@@ -37,14 +37,11 @@ def gltf_array(i):
 	if t.startswith("VEC"):
 		f = "<"+t[3:]+f
 		n *= int(t[3:])
-		return [
-			struct.unpack(f, data[n*i:n*(i+1)])
-			for i in range(count)
-		]
+		return [struct.unpack(f, data[n*i:n*(i+1)]) for i in range(count)]
 	assert t == "SCALAR"
 	return struct.unpack("<"+str(count)+f, data)
 
-def gltf_rotation(node):
+def glTF_rotation(node):
 	rotation = node["rotation"]
 	xx = rotation[0]*rotation[0]
 	xy = rotation[0]*rotation[1]
@@ -61,7 +58,7 @@ def gltf_rotation(node):
 		(  2*(xz-yw),   2*(yz+xw), 1-2*(xx+yy)),
 	)
 
-def gltf_attr(m, attrib, attr):
+def glTF_attr(m, attrib, attr):
 	if attr in attrib:
 		for i in range(len(attrib[attr])):
 			x, y, z = attrib[attr][i]
@@ -71,27 +68,27 @@ def gltf_attr(m, attrib, attr):
 				m[0][2]*x + m[1][2]*y + m[2][2]*z,
 			)
 
-def gltf_attrib(node, primitive):
+def glTF_attrib(node, primitive):
 	attrib = {
-		attribute: gltf_array(primitive["attributes"][attribute])
+		attribute: glTF_array(primitive["attributes"][attribute])
 		for attribute in primitive["attributes"]
 	}
 	if "rotation" in node:
-		m = gltf_rotation(node)
-		gltf_attr(m, attrib, "POSITION")
-		gltf_attr(m, attrib, "NORMAL")
+		m = glTF_rotation(node)
+		glTF_attr(m, attrib, "POSITION")
+		glTF_attr(m, attrib, "NORMAL")
 	return attrib
 
-def gltf_tri(primitive):
+def glTF_tri(primitive):
 	mode = primitive["mode"] if "mode" in primitive else 4
 	assert mode == 4
-	return gltf_array(primitive["indices"])
+	return glTF_array(primitive["indices"])
 
-def gltf_material(primitive):
+def glTF_material(primitive):
 	if "material" in primitive: return gltf["materials"][primitive["material"]]
 	return None
 
-def gltf_image(material):
+def glTF_image(material):
 	if "pbrMetallicRoughness" in material:
 		x = material["pbrMetallicRoughness"]
 		if "baseColorTexture" in x:
@@ -113,18 +110,16 @@ def sb(x): return max(  -128, min(  127, int(round(x))))
 def ub(x): return max(     0, min(  255, int(round(x))))
 
 def gfx_v(v):
-	if debug or v not in vbuf:
-		i = len(vbuf)
-		vbuf.append(v)
-		return i
-	return vbuf.index(v)
+	if not debug and v in vbuf: return vbuf.index(v)
+	i = len(vbuf)
+	vbuf.append(v)
+	return i
 
 def gfx_flush():
 	global vcnt
 	if vbuf:
-		for v in vbuf: vf.write((
-			"\t{{{%6d, %6d, %6d}, 0, {%6d, %6d}, {%4d, %4d, %4d, %4d}}},\n"
-		) % (
+		for v in vbuf:
+			vf.write("\t{{{%d,%d,%d},0,{%d,%d},{%d,%d,%d,%d}}},\n" % (
 				position[v][0],
 				position[v][1],
 				position[v][2],
@@ -134,20 +129,17 @@ def gfx_flush():
 				vg[0][v][vg[1]] if vg else 0,
 				vb[0][v][vb[1]] if vb else 0,
 				va[0][v][va[1]] if va else 0,
-		))
-		f.write("gsSPVertex(&vtx_%s_%s[%d], %d, 0),\n" % (
+			))
+		f.write("gsSPVertex(&vtx_%s_%s[%d],%d,0),\n" % (
 			name, mtl, vcnt, len(vbuf)
 		))
 		vcnt += len(vbuf)
 		vbuf.clear()
 	if tbuf:
 		for i in range(0, len(tbuf) & ~1, 2): f.write(
-			"gsSP2Triangles(%2d, %2d, %2d, 0, %2d, %2d, %2d, 0),\n" %
-				(tbuf[i+0] + tbuf[i+1])
+			"gsSP2Triangles(%d,%d,%d,0,%d,%d,%d,0),\n" % (tbuf[i+0]+tbuf[i+1])
 		)
-		if len(tbuf) & 1: f.write(
-			"gsSP1Triangle(%2d, %2d, %2d, 0),\n" % tbuf[-1]
-		)
+		if len(tbuf) & 1: f.write("gsSP1Triangle(%d,%d,%d,0),\n" % tbuf[-1])
 		tbuf.clear()
 
 fn = None
@@ -196,7 +188,7 @@ buftab = []
 imgtab = []
 for buffer in gltf["buffers"]:
 	if "uri" in buffer:
-		buftab.append(gltf_uri(buffer))
+		buftab.append(glTF_uri(buffer))
 	else:
 		if len(buftab) > 0: illfmt()
 		if len(chunk) < 2: illfmt()
@@ -205,9 +197,9 @@ for buffer in gltf["buffers"]:
 if "images" in gltf:
 	for image in gltf["images"]:
 		if "uri" in image:
-			data = gltf_uri(image)
+			data = glTF_uri(image)
 		else:
-			data = gltf_bufferView(image)
+			data = glTF_bufferView(image)
 		if data.startswith(B"\211PNG\r\n\32\n"):
 			assert data[12:16] == B"IHDR"
 			imgtab.append(struct.unpack(">II", data[16:24]))
@@ -219,9 +211,9 @@ for node in gltf["nodes"]:
 	with open(os.path.join(path, mesh["name"] + ".h"), "w") as vf:
 		first = True
 		for primitive in mesh["primitives"]:
-			attrib = gltf_attrib(node, primitive)
-			material = gltf_material(primitive)
-			tri = gltf_tri(primitive)
+			attrib = glTF_attrib(node, primitive)
+			material = glTF_material(primitive)
+			tri = glTF_tri(primitive)
 			position = [[sh(x) for x in x] for x in attrib["POSITION"]]
 			texcoord = None
 			vr = None
@@ -253,20 +245,20 @@ for node in gltf["nodes"]:
 				if "a" in x: va = (color, x["a"])
 			if material:
 				if "TEXCOORD_0" in attrib:
-					w, h = gltf_image(material)
+					wd, ht = glTF_image(material)
 					ss = st = 1
 					ts = tt = -0.5
 					if "extras" in material:
 						x = material["extras"]
-						if "w" in x: w = x["w"]
-						if "h" in x: h = x["h"]
+						if "wd" in x: wd = x["wd"]
+						if "ht" in x: ht = x["ht"]
 						if "ss" in x: ss = x["ss"]
 						if "st" in x: st = x["st"]
 						if "ts" in x: ts = x["ts"]
 						if "tt" in x: tt = x["tt"]
 					texcoord = [(
-						sh(32*((w*s + ts)/ss)),
-						sh(32*((h*t + tt)/st)),
+						sh(32*((wd*s + ts)/ss)),
+						sh(32*((ht*t + tt)/st)),
 					) for s, t in attrib["TEXCOORD_0"]]
 			mtl = "%s.%s" % (
 				mesh["name"], material["name"] if material else None
@@ -285,9 +277,10 @@ for node in gltf["nodes"]:
 				vf.write("static Vtx vtx_%s_%s[] =\n{\n" % (name, mtl))
 				for i in range(0, len(tri), 3):
 					t = tri[i:i+3]
-					n = 16
-					for v in t:
-						if debug or v not in vbuf: n -= 1
+					n = 16-3
+					if not debug:
+						for v in t:
+							if v in vbuf: n += 1
 					if len(vbuf) > n: gfx_flush()
 					tbuf.append(tuple([gfx_v(v) for v in t]))
 				gfx_flush()

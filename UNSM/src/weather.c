@@ -5,11 +5,11 @@ extern Gfx gfx_weather_end[];
 extern Gfx gfx_snow_b[];
 
 WEATHER *weatherp;
-s8 weather_code = WEATHER_NULL;
+char weather_code = WEATHER_NULL;
 
 static int snow_pos[3];
-static s16 snow_len;
-static s16 snow_max;
+static short snow_len;
+static short snow_max;
 
 static int SnowInit(int code)
 {
@@ -113,7 +113,7 @@ static void SnowMakeSnow(int x, int y, int z)
 		else
 		{
 			(weatherp+i)->x += (RandF()*2-1) + (SHORT)(dx/1.2);
-			(weatherp+i)->y -=               - (SHORT)(dy*0.8) + 2;
+			(weatherp+i)->y -=             2 - (SHORT)(dy*0.8);
 			(weatherp+i)->z += (RandF()*2-1) + (SHORT)(dz/1.2);
 		}
 	}
@@ -141,7 +141,7 @@ static void SnowMakeBlizzard(int x, int y, int z)
 		else
 		{
 			(weatherp+i)->x += (RandF()*2-1) + (SHORT)(dx/1.2) + 20;
-			(weatherp+i)->y -=               - (SHORT)(dy*0.8) + 5;
+			(weatherp+i)->y -=             5 - (SHORT)(dy*0.8);
 			(weatherp+i)->z += (RandF()*2-1) + (SHORT)(dz/1.2);
 		}
 	}
@@ -207,18 +207,18 @@ static void SnowVtx(Gfx *g, int i, SVEC v0, SVEC v1, SVEC v2)
 	if (!vtx) return;
 	for (n = 0; n < 15; n += 3)
 	{
-		vtx[n+0] = template[0];
-		vtx[n+0].v.ob[0] = weatherp[i+n/3].x + v0[0];
-		vtx[n+0].v.ob[1] = weatherp[i+n/3].y + v0[1];
-		vtx[n+0].v.ob[2] = weatherp[i+n/3].z + v0[2];
-		vtx[n+1] = template[1];
-		vtx[n+1].v.ob[0] = weatherp[i+n/3].x + v1[0];
-		vtx[n+1].v.ob[1] = weatherp[i+n/3].y + v1[1];
-		vtx[n+1].v.ob[2] = weatherp[i+n/3].z + v1[2];
-		vtx[n+2] = template[2];
-		vtx[n+2].v.ob[0] = weatherp[i+n/3].x + v2[0];
-		vtx[n+2].v.ob[1] = weatherp[i+n/3].y + v2[1];
-		vtx[n+2].v.ob[2] = weatherp[i+n/3].z + v2[2];
+		*(vtx+n+0) = template[0];
+		(vtx+n+0)->v.ob[0] = (weatherp+(i+n/3))->x + v0[0];
+		(vtx+n+0)->v.ob[1] = (weatherp+(i+n/3))->y + v0[1];
+		(vtx+n+0)->v.ob[2] = (weatherp+(i+n/3))->z + v0[2];
+		*(vtx+n+1) = template[1];
+		(vtx+n+1)->v.ob[0] = (weatherp+(i+n/3))->x + v1[0];
+		(vtx+n+1)->v.ob[1] = (weatherp+(i+n/3))->y + v1[1];
+		(vtx+n+1)->v.ob[2] = (weatherp+(i+n/3))->z + v1[2];
+		*(vtx+n+2) = template[2];
+		(vtx+n+2)->v.ob[0] = (weatherp+(i+n/3))->x + v2[0];
+		(vtx+n+2)->v.ob[1] = (weatherp+(i+n/3))->y + v2[1];
+		(vtx+n+2)->v.ob[2] = (weatherp+(i+n/3))->z + v2[2];
 	}
 	gSPVertex(g, K0_TO_PHYS(vtx), 15, 0);
 }
@@ -268,8 +268,10 @@ static Gfx *SnowGfx(int code, SVEC pos, SVEC eye, SVEC look)
 	for (i = 0; i < snow_len; i += 5)
 	{
 		SnowVtx(g++, i, v0, v1, v2);
-		gSP2Triangles(g++,  0,  1,  2, 0,  3,  4,  5, 0);
-		gSP2Triangles(g++,  6,  7,  8, 0,  9, 10, 11, 0);
+		gSP1Triangle(g++,  0,  1,  2, 0);
+		gSP1Triangle(g++,  3,  4,  5, 0);
+		gSP1Triangle(g++,  6,  7,  8, 0);
+		gSP1Triangle(g++,  9, 10, 11, 0);
 		gSP1Triangle(g++, 12, 13, 14, 0);
 	}
 	gSPDisplayList(g++, gfx_weather_end);
@@ -280,7 +282,7 @@ static Gfx *SnowGfx(int code, SVEC pos, SVEC eye, SVEC look)
 Gfx *WeatherDraw(int code, SVEC pos, SVEC look, SVEC eye)
 {
 	Gfx *gfx;
-	if (MsgGet() != -1) return NULL;
+	if (MsgGet() != MSG_NULL) return NULL;
 	if (weather_code != WEATHER_NULL && weather_code != code)
 	{
 		code = WEATHER_NULL;

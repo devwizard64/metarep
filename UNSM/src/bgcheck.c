@@ -73,7 +73,7 @@ static int BGListCheckWall(BGLIST *list, WALLCHECK *check)
 			if (face->code == BG_114) continue;
 			if (face->code == BG_123)
 			{
-				if (object && (object->flag & OBJ_0040)) continue;
+				if (object && object->flag & OBJ_0040) continue;
 				if (object && object == mario_obj)
 				{
 					if (mario->flag & PL_VANISHCAP) continue;
@@ -115,8 +115,8 @@ int BGCheckWall(WALLCHECK *check)
 	check->count = 0;
 	if (wx < MAP_MIN_X || wx > MAP_MAX_X) return count;
 	if (wz < MAP_MIN_Z || wz > MAP_MAX_Z) return count;
-	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
-	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
+	ix = (wx+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
+	iz = (wz+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_WALL].next;
 	count += BGListCheckWall(list, check);
 	list = statbg_root[iz][ix].list[BG_WALL].next;
@@ -180,8 +180,8 @@ float BGCheckRoof(float x, float y, float z, BGFACE **roof)
 	*roof = NULL;
 	if (wx < MAP_MIN_X || wx > MAP_MAX_X) return stat_y;
 	if (wz < MAP_MIN_Z || wz > MAP_MAX_Z) return stat_y;
-	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
-	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
+	ix = (wx+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
+	iz = (wz+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_ROOF].next;
 	movebg = BGListCheckRoof(list, wx, wy, wz, &move_y);
 	list = statbg_root[iz][ix].list[BG_ROOF].next;
@@ -196,7 +196,6 @@ float BGCheckRoof(float x, float y, float z, BGFACE **roof)
 	return stat_y;
 }
 
-UNUSED static
 float ObjCheckGroundY(OBJECT *obj)
 {
 	BGFACE *ground;
@@ -206,9 +205,10 @@ float ObjCheckGroundY(OBJECT *obj)
 	return ground_y;
 }
 
+static PLANE ground_plane;
+
 float BGCheckPlane(float x, float y, float z, PLANE **plane)
 {
-	static PLANE ground_plane;
 	UNUSED static char pad[56];
 	BGFACE *ground;
 	float ground_y = BGCheckGround(x, y, z, &ground);
@@ -271,7 +271,6 @@ float BGCheckGroundY(float x, float y, float z)
 	return ground_y;
 }
 
-UNUSED static
 float BGCheckGroundMoveBG(float x, float y, float z, BGFACE **ground)
 {
 	BGLIST *list;
@@ -280,8 +279,8 @@ float BGCheckGroundMoveBG(float x, float y, float z, BGFACE **ground)
 	SHORT wx = (short)x;
 	SHORT wy = (short)y;
 	SHORT wz = (short)z;
-	SHORT ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
-	SHORT iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
+	SHORT ix = (wx+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
+	SHORT iz = (wz+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_GROUND].next;
 	face = BGListCheckGround(list, wx, wy, wz, &ground_y);
 	*ground = face;
@@ -302,8 +301,8 @@ float BGCheckGround(float x, float y, float z, BGFACE **ground)
 	*ground = NULL;
 	if (wx < MAP_MIN_X || wx > MAP_MAX_X) return stat_y;
 	if (wz < MAP_MIN_Z || wz > MAP_MAX_Z) return stat_y;
-	ix = ((wx+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
-	iz = ((wz+MAP_HALF)/BGAREA_SIZE) & BGAREA_MASK;
+	ix = (wx+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
+	iz = (wz+MAP_HALF)/BGAREA_SIZE & BGAREA_MASK;
 	list = movebg_root[iz][ix].list[BG_GROUND].next;
 	movebg = BGListCheckGround(list, wx, wy, wz, &move_y);
 	list = statbg_root[iz][ix].list[BG_GROUND].next;
@@ -438,7 +437,6 @@ void BGCheckDebug(float x, float z)
 	bgdebug.wall = 0;
 }
 
-UNUSED static
 int BGHitGroundRoof(
 	int flag, float *x, float *y, float *z, float radius,
 	BGFACE **face, float *face_y

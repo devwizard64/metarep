@@ -5,7 +5,7 @@
 .set noreorder
 
 LEAF(__osGetSR)
-	mfc0    v0, C0_SR
-	j       ra
+	mfc0 v0,C0_SR
+	j ra
 	nop
 END(__osGetSR)

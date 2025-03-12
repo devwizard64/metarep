@@ -1,3 +1,8 @@
+#if REVISION >= 199707
+.globl leoBootID
+	leoBootID = 0x800001A0
+	.space 32
+#endif
 .globl osTvType
 	osTvType = 0x80000300
 .globl osRomType

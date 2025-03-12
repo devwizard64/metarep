@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 extern u32 __osGetCause(void);
 extern void __osSetCause(u32);
 extern u32 __osGetCompare(void);
@@ -11,6 +13,15 @@ extern u32 __osDisableInt(void);
 extern void __osRestoreInt(u32);
 extern u32 __osSetFpcCsr(u32);
 extern u32 __osGetFpcCsr(void);
+
+#if REVISION >= 199611
+extern void __osSetHWIntrRoutine(OSHWIntr, s32 (*handler)(void));
+
+extern void __osSetGlobalIntMask(OSHWIntr);
+extern void __osResetGlobalIntMask(OSHWIntr);
+
+extern s32 __osLeoInterrupt(void);
+#endif
 
 extern u32 __osGetTLBASID(void);
 extern u32 __osGetTLBPageMask(s32);
@@ -30,6 +41,10 @@ extern s32 __osSpRawWriteIo(u32, u32);
 extern s32 __osSpRawReadIo(u32, u32 *);
 extern s32 __osSpRawStartDma(s32, u32, void *, u32);
 
+extern void __osError(s16, s16, ...);
+extern OSThread *__osGetCurrFaultedThread(void);
+extern OSThread *__osGetNextFaultedThread(OSThread *);
+
 extern void __osGIOInit(s32);
 extern void __osGIOInterrupt(s32);
 extern void __osGIORawInterrupt(s32);
@@ -47,6 +62,8 @@ extern void __osDevMgrMain(void *);
 extern int __osPiDeviceBusy(void);
 
 extern int __osDpDeviceBusy(void);
+
+extern void __osLogWrite(OSLog *, s16, s16, va_list);
 
 extern void __osViInit(void);
 

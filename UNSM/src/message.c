@@ -1,10 +1,10 @@
 #include <sm64.h>
 
 #ifdef JAPANESE
-#include "ja_jp.h"
+#include "message.ja_jp.h"
 #endif
 #ifdef ENGLISH
-#include "en_us.h"
+#include "message.en_us.h"
 #endif
 
 #ifdef ENGLISH
@@ -29,17 +29,17 @@ static u8 kerningtab[256] =
 };
 #endif
 
-static s8 msg_state = 0;
+static char msg_state = 0;
 static float msg_angle = 90;
 static short msg_theta;
 static float msg_scale = 19;
 static short msg_scroll = 0;
-static s8 msg_type = 0;
-static s16 msg_code = -1;
-static s16 msg_next = 0;
-static s16 msg_index = 0;
+static char msg_type = 0;
+static short msg_code = MSG_NULL;
+static short msg_next = 0;
+static short msg_index = 0;
 static s8 msg_cursor = 1;
-static s8 msg_cursor_line;
+static char msg_cursor_line;
 static char msg_cursor_flag = FALSE;
 static int msg_value;
 static u16 msg_alpha;
@@ -64,20 +64,20 @@ SHORT MessageProc(void)
 {
 	SHORT result = 0;
 	GfxScreenProj();
-	if (menu_code != -1)
+	if (menu_code != MENU_NULL)
 	{
 		switch (menu_code)
 		{
-		case 0: result = PauseMenu_Proc();  break;
-		case 1: result = PauseMenu_Proc();  break;
-		case 2: result = SaveMenu_Proc();   break;
-		case 3: result = SaveMenu_Proc();   break;
+		case MENU_0:        result = PauseMenu_Proc();  break;
+		case MENU_PAUSE:    result = PauseMenu_Proc();  break;
+		case MENU_SAVE:     result = SaveMenu_Proc();   break;
+		case MENU_3:        result = SaveMenu_Proc();   break;
 		}
 		msg_theta += 0x1000;
 	}
-	else if (msg_code != -1)
+	else if (msg_code != MSG_NULL)
 	{
-		if (msg_code == 20)
+		if (msg_code == MSG_20)
 		{
 			OpeningDraw();
 			return result;

@@ -75,7 +75,7 @@ void _Ldtob(_Pft *px, char code)
 			if (gen < nsig) nsig = gen;
 			if (nsig > 0)
 			{
-				char drop = gen > nsig && p[nsig] >= '5' ? '9' : '0';
+				char drop = nsig < gen && p[nsig] >= '5' ? '9' : '0';
 				int n;
 				for (n = nsig; p[--n] == drop;)
 					nsig--;

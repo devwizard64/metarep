@@ -47,7 +47,7 @@ static float ShScaleSize(float size, float height)
 	}
 	else
 	{
-		scale = size * (1 - 0.5*height/600);
+		scale = size * (1 - 0.5*height/600.0);
 	}
 	return scale;
 }

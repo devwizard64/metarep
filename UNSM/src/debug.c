@@ -153,6 +153,7 @@ static void DbPlayerMapInfo(void)
 	);
 	water_y = BGCheckWater(object->o_posx, object->o_posz);
 	DbPrintTitle("mapinfo", 0);
+#if REVISION != 199703
 	DbPrintInfo("area %x", area);
 	DbPrintInfo("wx   %d", object->o_posx);
 	DbPrintInfo("wy	  %d", object->o_posy);
@@ -166,6 +167,7 @@ static void DbPlayerMapInfo(void)
 		DbPrintInfo("bgarea   %d", ground->area);
 	}
 	if (object->o_posy < water_y) DbPrintInfo("water %d", water_y);
+#endif
 }
 
 static void DbPlayerCheckInfo(void)
@@ -191,9 +193,9 @@ static void DbPrintEdit(const char *fmt[])
 	{
 		db_edit_flag++;
 		for (i = 0; i < 8; i++) DbPrintInfo(fmt[i], db_work[db_page][i]);
-		DbPrintOffset(0, -(8-db_line));
+		DbPrintOffset(0, -1-(unsigned int)(7-db_line));
 		DbPrintInfo(fmt[8], 0);
-		DbPrintOffset(0, +(8-db_line)-1);
+		DbPrintOffset(0, -1+(unsigned int)(7-db_line)+1);
 	}
 }
 
@@ -253,12 +255,14 @@ void DebugClear(void)
 	DbProcButton();
 }
 
-UNUSED static
-void DebugProcSeq(void)
+UNUSED
+static void DebugProcSeq(void)
 {
+#if REVISION != 199703
 	static s8 index = 0;
-	static s16 seqdata[] = {U_CBUTTONS, L_CBUTTONS, D_CBUTTONS, R_CBUTTONS, -1};
-	s16 *seq = seqdata;
+	static short seqdata[] =
+		{U_CBUTTONS, L_CBUTTONS, D_CBUTTONS, R_CBUTTONS, -1};
+	short *seq = seqdata;
 	SHORT x;
 	if (!(cont1->held & L_TRIG))
 	{
@@ -280,29 +284,32 @@ void DebugProcSeq(void)
 			index = 0;
 		}
 	}
+#endif
 }
 
-UNUSED static
-void DebugProcPage(void)
+UNUSED
+static void DebugProcPage(void)
 {
+#if REVISION != 199703
 	if (debug_flag & DEBUG_SHOW)
 	{
-		if ((cont1->down & L_JPAD) && (cont1->held & (L_TRIG|R_TRIG)))
+		if (cont1->down & L_JPAD && cont1->held & (L_TRIG|R_TRIG))
 		{
 			db_page++;
 		}
-		if ((cont1->down & R_JPAD) && (cont1->held & (L_TRIG|R_TRIG)))
+		if (cont1->down & R_JPAD && cont1->held & (L_TRIG|R_TRIG))
 		{
 			db_page--;
 		}
 		if (db_page > 5) db_page = 0;
 		if (db_page < 0) db_page = 5;
 	}
+#endif
 }
 
-UNUSED static
 void DebugProcEdit(void)
 {
+#if REVISION != 199703
 	if (cont1->down & Z_TRIG) db_hideinfo ^= TRUE;
 	if (!(cont1->held & (L_TRIG|R_TRIG)) && !db_hideinfo)
 	{
@@ -334,6 +341,7 @@ void DebugProcEdit(void)
 			db_work[db_page][db_line] += step;
 		}
 	}
+#endif
 }
 
 void DebugExec(void)
@@ -369,9 +377,9 @@ void DebugPlayer(void)
 	}
 }
 
-extern OBJLANG o_13000708[];
-extern OBJLANG o_13001650[];
-extern OBJLANG o_13001F3C[];
+extern OBJLANG obj_13000708[];
+extern OBJLANG obj_13001650[];
+extern OBJLANG obj_13001F3C[];
 
 void DebugProc(void)
 {
@@ -380,22 +388,22 @@ void DebugProc(void)
 	{
 		if (cont1->down & R_JPAD)
 		{
-			ObjMakeOff(0, 0, 100, 200, object, S_SHELL, o_13001F3C);
+			ObjMakeOff(0, 0, 100, 200, object, S_SHELL, obj_13001F3C);
 		}
 		if (cont1->down & L_JPAD)
 		{
-			ObjMakeOff(0, 0, 100, 200, object, S_CRATE, o_13001650);
+			ObjMakeOff(0, 0, 100, 200, object, S_CRATE, obj_13001650);
 		}
 		if (cont1->down & D_JPAD)
 		{
-			ObjMakeOff(0, 0, 100, 200, object, S_SHELL, o_13000708);
+			ObjMakeOff(0, 0, 100, 200, object, S_SHELL, obj_13000708);
 		}
 	}
 }
 
-UNUSED static
 void DebugPrintMoveStatus(void)
 {
+#if REVISION != 199703
 	if (object->o_move & OM_BOUND)      DbPrint("BOUND   %x", object->o_move);
 	if (object->o_move & OM_TOUCH)      DbPrint("TOUCH   %x", object->o_move);
 	if (object->o_move & OM_TAKEOFF)    DbPrint("TAKEOFF %x", object->o_move);
@@ -405,9 +413,9 @@ void DebugPrintMoveStatus(void)
 	if (object->o_move & OM_B_WATER)    DbPrint("B WATER %x", object->o_move);
 	if (object->o_move & OM_SKY)        DbPrint("SKY     %x", object->o_move);
 	if (object->o_move & OM_OUT_SCOPE)  DbPrint("OUT SCOPE %x", object->o_move);
+#endif
 }
 
-UNUSED static
 void DebugSetHit(HITINFO *hit)
 {
 	hit->hit_r = db_work[5][1];

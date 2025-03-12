@@ -9,7 +9,7 @@ BGROOT movebg_root[BGAREA_N][BGAREA_N];
 BGLIST *bglist_data;
 BGFACE *bgface_data;
 #define bglist_max BGLIST_MAX
-s16 bgface_max;
+short bgface_max;
 int bgload_8038EEA4[12];
 
 static BGLIST *BGListAlloc(void)
@@ -18,6 +18,7 @@ static BGLIST *BGListAlloc(void)
 	list->next = NULL;
 	if (bglist_count >= bglist_max)
 	{
+		debugf((" mcMakeBGCheckList OVERFLOW\n"));
 	}
 	return list;
 }
@@ -27,6 +28,7 @@ static BGFACE *BGFaceAlloc(void)
 	BGFACE *face = &bgface_data[bgface_count]; bgface_count++;
 	if (bgface_count >= bgface_max)
 	{
+		debugf((" mcMakeBGCheckData OVERFLOW\n"));
 	}
 	face->code = 0;
 	face->attr = 0;
@@ -277,6 +279,7 @@ static void StatBGWater(MAP **map)
 	n = *(*map)++;
 	if (n > 20)
 	{
+		debugf(("Error Water Over\n"));
 	}
 	for (i = 0; i < n; i++)
 	{
@@ -327,6 +330,7 @@ void MapLoad(SHORT scene, MAP *map, AREA *area, TAG *tag)
 		else if (code > MAP_FACE) StatBGFace(&map, vtx, code, &area);
 		else
 		{
+			debugf((" BGCode Error \n"));
 		}
 	}
 	if (tag && *tag != -1)
@@ -378,7 +382,7 @@ static void MoveBGVtx(MAP **map, MAP *vtx)
 	*map = v;
 }
 
-extern OBJLANG o_13001C34[];
+extern OBJLANG obj_13001C34[];
 
 static void MoveBGFace(MAP **map, MAP *vtx)
 {
@@ -389,7 +393,7 @@ static void MoveBGFace(MAP **map, MAP *vtx)
 	hasattr = BGFaceHasAttr(code);
 	flag = BGFaceFlag(code);
 	flag |= BG_MOVE;
-	if (object->script == SegmentToVirtual(o_13001C34)) area = 5;
+	if (object->script == SegmentToVirtual(obj_13001C34)) area = 5;
 	else area = 0;
 	for (i = 0; i < n; i++)
 	{
@@ -414,19 +418,16 @@ void ObjectMapLoad(void)
 	UNUSED int i;
 	MAP vtx[3*200];
 	MAP *map = object->map;
-	float pl_dist = object->o_pl_dist;
+	float targetdist = object->o_targetdist;
 	float checkdist = object->o_checkdist;
-	if (object->o_pl_dist == 19000) /* T:def */
+	if (object->o_targetdist == 19000) /* T:def */
 	{
-		pl_dist = ObjCalcDist3D(object, mario_obj);
+		targetdist = ObjCalcDist3D(object, mario_obj);
 	}
-	if (object->o_checkdist > 4000)
-	{
-		object->o_shapedist = object->o_checkdist;
-	}
+	if (object->o_checkdist > 4000) object->o_shapedist = object->o_checkdist;
 	if (
 		!(object_flag & OBJECT_FROZEN) &&
-		pl_dist < checkdist &&
+		targetdist < checkdist &&
 		!(object->flag & OBJ_0008)
 	)
 	{
@@ -434,12 +435,6 @@ void ObjectMapLoad(void)
 		MoveBGVtx(&map, vtx);
 		while (*map != MAP_BGEND) MoveBGFace(&map, vtx);
 	}
-	if (pl_dist < object->o_shapedist)
-	{
-		object->s.s.flag |= SHP_ACTIVE;
-	}
-	else
-	{
-		object->s.s.flag &= ~SHP_ACTIVE;
-	}
+	if (targetdist < object->o_shapedist)   object->s.s.flag |= SHP_ACTIVE;
+	else                                    object->s.s.flag &= ~SHP_ACTIVE;
 }

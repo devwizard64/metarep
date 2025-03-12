@@ -1,27 +1,25 @@
 #include <sm64.h>
+#include <sm64/defdisk.h>
 #include <PR/leoappli.h>
 
 #define BLK_SIZE_ZONE2          17680
 
 #ifdef DISK
 
-#define ROM_LBA                 560
-#define ROM_START               0x40000
-
 #define AUDBUFSIZE              0x60000
 #define GFXBUFSIZE              0xA0000
 
-static char *disk_audbuf = (char *)0x80246000;
-static char *disk_gfxbuf = (char *)0x80246000 + AUDBUFSIZE;
+static char *disk_audbuf = (char *)ADDRESS_DISK;
+static char *disk_gfxbuf = (char *)ADDRESS_DISK + AUDBUFSIZE;
 static u32 disk_lastlba = -1;
 static u32 disk_lastxfer = -1;
 
 void DiskInit(void)
 {
-	leoInitialize(149, 150);
+	leoInitialize(LEO_PRIORITY_WRK, LEO_PRIORITY_INT);
 }
 
-static void DiskRead(u32 lba, u32 xfer_blks, void *buff_ptr)
+void DiskRead(u32 lba, u32 xfer_blks, void *buff_ptr)
 {
 	volatile LEOCmdRead cmd;
 	if (lba == disk_lastlba && xfer_blks <= disk_lastxfer) return;
@@ -37,14 +35,14 @@ static void DiskRead(u32 lba, u32 xfer_blks, void *buff_ptr)
 		cmd.buff_ptr = buff_ptr;
 		disk_lastlba = lba;
 		disk_lastxfer = xfer_blks;
-		cmd.size = 0;
+		cmd.post = NULL;
 		leoCommand((void *)&cmd);
-		while (cmd.header.status == 0);
+		while (!cmd.header.status);
 	}
-	while (cmd.header.status != 1);
+	while (cmd.header.status != LEO_STATUS_GOOD);
 }
 
-void DiskWrite(u32 lba, u32 xfer_blks, void *buff_ptr)
+void DiskWrite(u32 lba, u32 xfer_blks, const void *buff_ptr)
 {
 	volatile LEOCmdWrite cmd;
 	cmd.header.command = LEO_COMMAND_WRITE;
@@ -54,46 +52,42 @@ void DiskWrite(u32 lba, u32 xfer_blks, void *buff_ptr)
 	cmd.header.status = 0;
 	cmd.lba = lba;
 	cmd.xfer_blks = xfer_blks;
-	cmd.buff_ptr = buff_ptr;
-	cmd.size = 0;
+	cmd.buff_ptr = (void *)buff_ptr;
+	cmd.post = NULL;
 	leoCommand((void *)&cmd);
-	while (cmd.header.status == 0);
+	while (!cmd.header.status);
 }
 
 /* audio dma */
 void disk_8040BAEC(char *dst, const char *start, const char *end)
 {
-	u32 rom_start = (u32)start - ROM_START;
-	u32 lba_start = ROM_LBA + rom_start/BLK_SIZE_ZONE2;
-	char *ptr = (char *)((long)disk_audbuf + rom_start%BLK_SIZE_ZONE2);
+	u32 rom = (u32)start - ROM_START;
+	u32 lba = ROM_LBA + rom/BLK_SIZE_ZONE2;
+	char *src = (char *)((long)disk_audbuf + rom%BLK_SIZE_ZONE2);
 	unsigned int size = end - start;
-	if (size == 0xDE230)
+	if (size == WAVE_SIZE)
 	{
-		DiskRead(268, 66, dst);
+		DiskRead(WAVE_LBA, WAVE_LEN, dst);
 		return;
 	}
 	if (size > AUDBUFSIZE) return;
 	DiskRead(
-		lba_start,
-		ROM_LBA + ((u32)end-ROM_START-1)/BLK_SIZE_ZONE2+1 - lba_start,
-		disk_audbuf
+		lba, ROM_LBA+((u32)end-ROM_START-1)/BLK_SIZE_ZONE2+1 - lba, disk_audbuf
 	);
-	bcopy(ptr, dst, size);
+	bcopy(src, dst, size);
 }
 
-void MemRead(char *dst, const char *start, const char *end)
+void RomRead(char *dst, const char *start, const char *end)
 {
-	u32 rom_start = (u32)start - ROM_START;
-	u32 lba_start = ROM_LBA + rom_start/BLK_SIZE_ZONE2;
-	char *ptr = (char *)((long)disk_gfxbuf + rom_start%BLK_SIZE_ZONE2);
+	u32 rom = (u32)start - ROM_START;
+	u32 lba = ROM_LBA + rom/BLK_SIZE_ZONE2;
+	char *src = (char *)((long)disk_gfxbuf + rom%BLK_SIZE_ZONE2);
 	unsigned int size = end - start;
 	if (size > GFXBUFSIZE) return;
 	DiskRead(
-		lba_start,
-		ROM_LBA + ((u32)end-ROM_START-1)/BLK_SIZE_ZONE2+1 - lba_start,
-		disk_gfxbuf
+		lba, ROM_LBA+((u32)end-ROM_START-1)/BLK_SIZE_ZONE2+1 - lba, disk_gfxbuf
 	);
-	bcopy(ptr, dst, size);
+	bcopy(src, dst, size);
 }
 
 #endif

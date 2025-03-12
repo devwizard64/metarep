@@ -20,11 +20,13 @@
 #define PL_SWEEPKICK            0x00400000
 #define PL_02000000             0x02000000  /* camera */
 #define PL_40000000             0x40000000
+#define PL_80000000             0x80000000
 
-#define PA_MOVEREQ              0x0001
+#define PA_WALKREQ              0x0001
 #define PA_JUMPREQ              0x0002
 #define PA_LANDREQ              0x0004
 #define PA_SLIPREQ              0x0008
+#define PA_MOTION               (PA_WALKREQ|PA_JUMPREQ|PA_LANDREQ|PA_SLIPREQ)
 #define PA_VIEWREQ              0x0010
 #define PA_WAITREQ              0x0020
 #define PA_PRESREQ              0x0040
@@ -36,7 +38,9 @@
 #define PA_ATCKREQ              0x2000
 #define PA_TRIGSTA              0x4000
 #define PA_TRIGREQ              0x8000
-#if REVISION > 199606
+#define PA_ACTION               \
+	(PA_MOTION|PA_VIEWREQ|PA_HIT|PA_ATCKREQ|PA_TRIGREQ)
+#if REVISION >= 199609
 #define PA_READREQ              (PA_JUMPREQ|PA_ATCKREQ)
 #else
 #define PA_READREQ              PA_ATCKREQ
@@ -62,7 +66,7 @@
 #define PE_00040000             0x00040000
 
 #define PF_WAIT                 0x00000200
-#define PF_MOVE                 0x00000400
+#define PF_WALK                 0x00000400
 #define PF_JUMP                 0x00000800
 #define PF_DEMO                 0x00001000
 #define PF_SWIM                 0x00002000
@@ -86,12 +90,12 @@
 
 #define PC_MASK                 0x1C0
 #define PC_WAIT                 0x000
-#define PC_MOVE                 0x040
+#define PC_WALK                 0x040
 #define PC_JUMP                 0x080
 #define PC_SWIM                 0x0C0
 #define PC_DEMO                 0x100
 #define PC_SPEC                 0x140
-#define PC_TAKE                 0x180
+#define PC_ATCK                 0x180
 
 #define PS_MASK                 0x1FF
 
@@ -133,48 +137,48 @@
 #define PS_WAIT_3C              /* 0x0080023C */ (PC_WAIT|0x3C|PF_WAIT|PF_ATCK)
 #define PS_WAIT_3D              /* 0x0C00023D */ (PC_WAIT|0x3D|PF_WAIT|PF_VIEW|PF_QUIT)
 #define PS_WAIT_3E              /* 0x0C00023E */ (PC_WAIT|0x3E|PF_WAIT|PF_VIEW|PF_QUIT)
-#define PS_WAIT_3F              /* 0x0800043F */ (PC_WAIT|0x3F|PF_MOVE|PF_QUIT)
+#define PS_WAIT_3F              /* 0x0800043F */ (PC_WAIT|0x3F|PF_WALK|PF_QUIT)
 
-#define PS_MOVE_00              /* 0x04000440 */ (PC_MOVE|0x00|PF_MOVE|PF_VIEW)
-#define PS_MOVE_02              /* 0x00000442 */ (PC_MOVE|0x02|PF_MOVE)
-#define PS_MOVE_03              /* 0x00000443 */ (PC_MOVE|0x03|PF_MOVE)
-#define PS_MOVE_04              /* 0x00000444 */ (PC_MOVE|0x04|PF_MOVE)
-#define PS_MOVE_05              /* 0x04000445 */ (PC_MOVE|0x05|PF_MOVE|PF_VIEW)
-#define PS_MOVE_06              /* 0x20810446 */ (PC_MOVE|0x06|PF_MOVE|PF_RIDE|PF_ATCK|PF_HEAD)
-#define PS_MOVE_07              /* 0x00000447 */ (PC_MOVE|0x07|PF_MOVE)
-#define PS_MOVE_08              /* 0x04008448 */ (PC_MOVE|0x08|PF_MOVE|PF_SHRT|PF_VIEW)
-#define PS_MOVE_09              /* 0x00020449 */ (PC_MOVE|0x09|PF_MOVE|PF_DMGE)
-#define PS_MOVE_0A              /* 0x0400044A */ (PC_MOVE|0x0A|PF_MOVE|PF_VIEW)
-#define PS_MOVE_0B              /* 0x0000044B */ (PC_MOVE|0x0B|PF_MOVE)
-#define PS_MOVE_10              /* 0x00000050 */ (PC_MOVE|0x10)
-#define PS_MOVE_11              /* 0x00000051 */ (PC_MOVE|0x11)
-#define PS_MOVE_12              /* 0x00840452 */ (PC_MOVE|0x12|PF_MOVE|PF_SLIP|PF_ATCK)
-#define PS_MOVE_13              /* 0x008C0453 */ (PC_MOVE|0x13|PF_MOVE|PF_SLIP|PF_DIVE|PF_ATCK)
-#define PS_MOVE_14              /* 0x00840454 */ (PC_MOVE|0x14|PF_MOVE|PF_SLIP|PF_ATCK)
-#define PS_MOVE_15              /* 0x008C0455 */ (PC_MOVE|0x15|PF_MOVE|PF_SLIP|PF_DIVE|PF_ATCK)
-#define PS_MOVE_16              /* 0x00880456 */ (PC_MOVE|0x16|PF_MOVE|PF_DIVE|PF_ATCK)
-#define PS_MOVE_17              /* 0x00800457 */ (PC_MOVE|0x17|PF_MOVE|PF_ATCK)
-#define PS_MOVE_19              /* 0x04808459 */ (PC_MOVE|0x19|PF_MOVE|PF_SHRT|PF_ATCK|PF_VIEW)
-#define PS_MOVE_1A              /* 0x0080045A */ (PC_MOVE|0x1A|PF_MOVE|PF_ATCK)
-#define PS_MOVE_20              /* 0x00020460 */ (PC_MOVE|0x20|PF_MOVE|PF_DMGE)
-#define PS_MOVE_21              /* 0x00020461 */ (PC_MOVE|0x21|PF_MOVE|PF_DMGE)
-#define PS_MOVE_22              /* 0x00020462 */ (PC_MOVE|0x22|PF_MOVE|PF_DMGE)
-#define PS_MOVE_23              /* 0x00020463 */ (PC_MOVE|0x23|PF_MOVE|PF_DMGE)
-#define PS_MOVE_24              /* 0x00020464 */ (PC_MOVE|0x24|PF_MOVE|PF_DMGE)
-#define PS_MOVE_25              /* 0x00020465 */ (PC_MOVE|0x25|PF_MOVE|PF_DMGE)
-#define PS_MOVE_26              /* 0x00020466 */ (PC_MOVE|0x26|PF_MOVE|PF_DMGE)
-#define PS_MOVE_27              /* 0x00020467 */ (PC_MOVE|0x27|PF_MOVE|PF_DMGE)
-#define PS_MOVE_30              /* 0x04000470 */ (PC_MOVE|0x30|PF_MOVE|PF_VIEW)
-#define PS_MOVE_31              /* 0x04000471 */ (PC_MOVE|0x31|PF_MOVE|PF_VIEW)
-#define PS_MOVE_32              /* 0x04000472 */ (PC_MOVE|0x32|PF_MOVE|PF_VIEW)
-#define PS_MOVE_33              /* 0x04000473 */ (PC_MOVE|0x33|PF_MOVE|PF_VIEW)
-#define PS_MOVE_34              /* 0x00000474 */ (PC_MOVE|0x34|PF_MOVE)
-#define PS_MOVE_35              /* 0x00000475 */ (PC_MOVE|0x35|PF_MOVE)
-#define PS_MOVE_36              /* 0x00000476 */ (PC_MOVE|0x36|PF_MOVE)
-#define PS_MOVE_37              /* 0x00000477 */ (PC_MOVE|0x37|PF_MOVE)
-#define PS_MOVE_38              /* 0x04000478 */ (PC_MOVE|0x38|PF_MOVE|PF_VIEW)
-#define PS_MOVE_39              /* 0x00000479 */ (PC_MOVE|0x39|PF_MOVE)
-#define PS_MOVE_3A              /* 0x0400047A */ (PC_MOVE|0x3A|PF_MOVE|PF_VIEW)
+#define PS_WALK_00              /* 0x04000440 */ (PC_WALK|0x00|PF_WALK|PF_VIEW)
+#define PS_WALK_02              /* 0x00000442 */ (PC_WALK|0x02|PF_WALK)
+#define PS_WALK_03              /* 0x00000443 */ (PC_WALK|0x03|PF_WALK)
+#define PS_WALK_04              /* 0x00000444 */ (PC_WALK|0x04|PF_WALK)
+#define PS_WALK_05              /* 0x04000445 */ (PC_WALK|0x05|PF_WALK|PF_VIEW)
+#define PS_WALK_06              /* 0x20810446 */ (PC_WALK|0x06|PF_WALK|PF_RIDE|PF_ATCK|PF_HEAD)
+#define PS_WALK_07              /* 0x00000447 */ (PC_WALK|0x07|PF_WALK)
+#define PS_WALK_08              /* 0x04008448 */ (PC_WALK|0x08|PF_WALK|PF_SHRT|PF_VIEW)
+#define PS_WALK_09              /* 0x00020449 */ (PC_WALK|0x09|PF_WALK|PF_DMGE)
+#define PS_WALK_0A              /* 0x0400044A */ (PC_WALK|0x0A|PF_WALK|PF_VIEW)
+#define PS_WALK_0B              /* 0x0000044B */ (PC_WALK|0x0B|PF_WALK)
+#define PS_WALK_10              /* 0x00000050 */ (PC_WALK|0x10)
+#define PS_WALK_11              /* 0x00000051 */ (PC_WALK|0x11)
+#define PS_WALK_12              /* 0x00840452 */ (PC_WALK|0x12|PF_WALK|PF_SLIP|PF_ATCK)
+#define PS_WALK_13              /* 0x008C0453 */ (PC_WALK|0x13|PF_WALK|PF_SLIP|PF_DIVE|PF_ATCK)
+#define PS_WALK_14              /* 0x00840454 */ (PC_WALK|0x14|PF_WALK|PF_SLIP|PF_ATCK)
+#define PS_WALK_15              /* 0x008C0455 */ (PC_WALK|0x15|PF_WALK|PF_SLIP|PF_DIVE|PF_ATCK)
+#define PS_WALK_16              /* 0x00880456 */ (PC_WALK|0x16|PF_WALK|PF_DIVE|PF_ATCK)
+#define PS_WALK_17              /* 0x00800457 */ (PC_WALK|0x17|PF_WALK|PF_ATCK)
+#define PS_WALK_19              /* 0x04808459 */ (PC_WALK|0x19|PF_WALK|PF_SHRT|PF_ATCK|PF_VIEW)
+#define PS_WALK_1A              /* 0x0080045A */ (PC_WALK|0x1A|PF_WALK|PF_ATCK)
+#define PS_WALK_20              /* 0x00020460 */ (PC_WALK|0x20|PF_WALK|PF_DMGE)
+#define PS_WALK_21              /* 0x00020461 */ (PC_WALK|0x21|PF_WALK|PF_DMGE)
+#define PS_WALK_22              /* 0x00020462 */ (PC_WALK|0x22|PF_WALK|PF_DMGE)
+#define PS_WALK_23              /* 0x00020463 */ (PC_WALK|0x23|PF_WALK|PF_DMGE)
+#define PS_WALK_24              /* 0x00020464 */ (PC_WALK|0x24|PF_WALK|PF_DMGE)
+#define PS_WALK_25              /* 0x00020465 */ (PC_WALK|0x25|PF_WALK|PF_DMGE)
+#define PS_WALK_26              /* 0x00020466 */ (PC_WALK|0x26|PF_WALK|PF_DMGE)
+#define PS_WALK_27              /* 0x00020467 */ (PC_WALK|0x27|PF_WALK|PF_DMGE)
+#define PS_WALK_30              /* 0x04000470 */ (PC_WALK|0x30|PF_WALK|PF_VIEW)
+#define PS_WALK_31              /* 0x04000471 */ (PC_WALK|0x31|PF_WALK|PF_VIEW)
+#define PS_WALK_32              /* 0x04000472 */ (PC_WALK|0x32|PF_WALK|PF_VIEW)
+#define PS_WALK_33              /* 0x04000473 */ (PC_WALK|0x33|PF_WALK|PF_VIEW)
+#define PS_WALK_34              /* 0x00000474 */ (PC_WALK|0x34|PF_WALK)
+#define PS_WALK_35              /* 0x00000475 */ (PC_WALK|0x35|PF_WALK)
+#define PS_WALK_36              /* 0x00000476 */ (PC_WALK|0x36|PF_WALK)
+#define PS_WALK_37              /* 0x00000477 */ (PC_WALK|0x37|PF_WALK)
+#define PS_WALK_38              /* 0x04000478 */ (PC_WALK|0x38|PF_WALK|PF_VIEW)
+#define PS_WALK_39              /* 0x00000479 */ (PC_WALK|0x39|PF_WALK)
+#define PS_WALK_3A              /* 0x0400047A */ (PC_WALK|0x3A|PF_WALK|PF_VIEW)
 
 #define PS_JUMP_00              /* 0x03000880 */ (PC_JUMP|0x00|PF_JUMP|PF_WIND|PF_JPCN)
 #define PS_JUMP_01              /* 0x03000881 */ (PC_JUMP|0x01|PF_JUMP|PF_WIND|PF_JPCN)
@@ -202,7 +206,7 @@
 #define PS_JUMP_24              /* 0x108008A4 */ (PC_JUMP|0x24|PF_JUMP|PF_ATCK|PF_HAND)
 #define PS_JUMP_26              /* 0x010008A6 */ (PC_JUMP|0x26|PF_JUMP|PF_WIND)
 #define PS_JUMP_27              /* 0x000008A7 */ (PC_JUMP|0x27|PF_JUMP)
-#define PS_JUMP_28              /* 0x000004A8 */ (PC_JUMP|0x28|PF_MOVE)
+#define PS_JUMP_28              /* 0x000004A8 */ (PC_JUMP|0x28|PF_WALK)
 #define PS_JUMP_29              /* 0x008008A9 */ (PC_JUMP|0x29|PF_JUMP|PF_ATCK)
 #define PS_JUMP_2A              /* 0x018008AA */ (PC_JUMP|0x2A|PF_JUMP|PF_ATCK|PF_WIND)
 #define PS_JUMP_2B              /* 0x830008AB */ (PC_JUMP|0x2B|PF_JUMP|PF_WIND|PF_JPCN|PF_THRW)
@@ -231,29 +235,29 @@
 #define PS_SWIM_06              /* 0x300222C6 */ (PC_SWIM|0x06|PF_WAIT|PF_SWIM|PF_DMGE|PF_HAND|PF_HEAD)
 #define PS_SWIM_07              /* 0x300032C7 */ (PC_SWIM|0x07|PF_WAIT|PF_DEMO|PF_SWIM|PF_HAND|PF_HEAD)
 #define PS_SWIM_08              /* 0x300222C8 */ (PC_SWIM|0x08|PF_WAIT|PF_SWIM|PF_DMGE|PF_HAND|PF_HEAD)
-#define PS_SWIM_10              /* 0x300024D0 */ (PC_SWIM|0x10|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_11              /* 0x300024D1 */ (PC_SWIM|0x11|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_12              /* 0x300024D2 */ (PC_SWIM|0x12|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_13              /* 0x300024D3 */ (PC_SWIM|0x13|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_14              /* 0x300024D4 */ (PC_SWIM|0x14|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_15              /* 0x300024D5 */ (PC_SWIM|0x15|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_16              /* 0x300024D6 */ (PC_SWIM|0x16|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_20              /* 0x300024E0 */ (PC_SWIM|0x20|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
-#define PS_SWIM_21              /* 0x300024E1 */ (PC_SWIM|0x21|PF_MOVE|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_10              /* 0x300024D0 */ (PC_SWIM|0x10|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_11              /* 0x300024D1 */ (PC_SWIM|0x11|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_12              /* 0x300024D2 */ (PC_SWIM|0x12|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_13              /* 0x300024D3 */ (PC_SWIM|0x13|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_14              /* 0x300024D4 */ (PC_SWIM|0x14|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_15              /* 0x300024D5 */ (PC_SWIM|0x15|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_16              /* 0x300024D6 */ (PC_SWIM|0x16|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_20              /* 0x300024E0 */ (PC_SWIM|0x20|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
+#define PS_SWIM_21              /* 0x300024E1 */ (PC_SWIM|0x21|PF_WALK|PF_SWIM|PF_HAND|PF_HEAD)
 #define PS_SWIM_22              /* 0x300022E2 */ (PC_SWIM|0x22|PF_WAIT|PF_SWIM|PF_HAND|PF_HEAD)
 #define PS_SWIM_23              /* 0x300222E3 */ (PC_SWIM|0x23|PF_WAIT|PF_SWIM|PF_DMGE|PF_HAND|PF_HEAD)
 #define PS_SWIM_30              /* 0x080042F0 */ (PC_SWIM|0x30|PF_WAIT|PF_SINK|PF_QUIT)
 #define PS_SWIM_31              /* 0x080042F1 */ (PC_SWIM|0x31|PF_WAIT|PF_SINK|PF_QUIT)
-#define PS_SWIM_32              /* 0x000044F2 */ (PC_SWIM|0x32|PF_MOVE|PF_SINK)
-#define PS_SWIM_33              /* 0x000044F3 */ (PC_SWIM|0x33|PF_MOVE|PF_SINK)
+#define PS_SWIM_32              /* 0x000044F2 */ (PC_SWIM|0x32|PF_WALK|PF_SINK)
+#define PS_SWIM_33              /* 0x000044F3 */ (PC_SWIM|0x33|PF_WALK|PF_SINK)
 #define PS_SWIM_34              /* 0x000042F4 */ (PC_SWIM|0x34|PF_WAIT|PF_SINK)
 #define PS_SWIM_35              /* 0x000042F5 */ (PC_SWIM|0x35|PF_WAIT|PF_SINK)
 #define PS_SWIM_36              /* 0x000042F6 */ (PC_SWIM|0x36|PF_WAIT|PF_SINK)
 #define PS_SWIM_37              /* 0x000042F7 */ (PC_SWIM|0x37|PF_WAIT|PF_SINK)
-#define PS_SWIM_38              /* 0x000044F8 */ (PC_SWIM|0x38|PF_MOVE|PF_SINK)
-#define PS_SWIM_39              /* 0x000044F9 */ (PC_SWIM|0x39|PF_MOVE|PF_SINK)
-#define PS_SWIM_3A              /* 0x000044FA */ (PC_SWIM|0x3A|PF_MOVE|PF_SINK)
-#define PS_SWIM_3B              /* 0x000044FB */ (PC_SWIM|0x3B|PF_MOVE|PF_SINK)
+#define PS_SWIM_38              /* 0x000044F8 */ (PC_SWIM|0x38|PF_WALK|PF_SINK)
+#define PS_SWIM_39              /* 0x000044F9 */ (PC_SWIM|0x39|PF_WALK|PF_SINK)
+#define PS_SWIM_3A              /* 0x000044FA */ (PC_SWIM|0x3A|PF_WALK|PF_SINK)
+#define PS_SWIM_3B              /* 0x000044FB */ (PC_SWIM|0x3B|PF_WALK|PF_SINK)
 
 #define PS_DEMO_00              /* 0x00001300 */ (PC_DEMO|0x00|PF_WAIT|PF_DEMO)
 #define PS_DEMO_01              /* 0x04001301 */ (PC_DEMO|0x01|PF_WAIT|PF_DEMO|PF_VIEW)
@@ -297,7 +301,7 @@
 #define PS_DEMO_32              /* 0x00001932 */ (PC_DEMO|0x32|PF_JUMP|PF_DEMO)
 #define PS_DEMO_33              /* 0x00001333 */ (PC_DEMO|0x33|PF_WAIT|PF_DEMO)
 #define PS_DEMO_34              /* 0x00001934 */ (PC_DEMO|0x34|PF_JUMP|PF_DEMO)
-#define PS_DEMO_35              /* 0x00001535 */ (PC_DEMO|0x35|PF_MOVE|PF_DEMO)
+#define PS_DEMO_35              /* 0x00001535 */ (PC_DEMO|0x35|PF_WALK|PF_DEMO)
 #define PS_DEMO_36              /* 0x00001336 */ (PC_DEMO|0x36|PF_WAIT|PF_DEMO)
 #define PS_DEMO_37              /* 0x00001337 */ (PC_DEMO|0x37|PF_WAIT|PF_DEMO)
 #define PS_DEMO_38              /* 0x00020338 */ (PC_DEMO|0x38|PF_WAIT|PF_DMGE)
@@ -315,36 +319,36 @@
 #define PS_SPEC_05              /* 0x00100345 */ (PC_SPEC|0x05|PF_WAIT|PF_POLE)
 #define PS_SPEC_08              /* 0x08200348 */ (PC_SPEC|0x08|PF_WAIT|PF_ROOF|PF_QUIT)
 #define PS_SPEC_09              /* 0x00200349 */ (PC_SPEC|0x09|PF_WAIT|PF_ROOF)
-#define PS_SPEC_0A              /* 0x0020054A */ (PC_SPEC|0x0A|PF_MOVE|PF_ROOF)
+#define PS_SPEC_0A              /* 0x0020054A */ (PC_SPEC|0x0A|PF_WALK|PF_ROOF)
 #define PS_SPEC_0B              /* 0x0800034B */ (PC_SPEC|0x0B|PF_WAIT|PF_QUIT)
-#define PS_SPEC_0C              /* 0x0000054C */ (PC_SPEC|0x0C|PF_MOVE)
-#define PS_SPEC_0D              /* 0x0000054D */ (PC_SPEC|0x0D|PF_MOVE)
-#define PS_SPEC_0E              /* 0x0000054E */ (PC_SPEC|0x0E|PF_MOVE)
-#define PS_SPEC_0F              /* 0x0000054F */ (PC_SPEC|0x0F|PF_MOVE)
+#define PS_SPEC_0C              /* 0x0000054C */ (PC_SPEC|0x0C|PF_WALK)
+#define PS_SPEC_0D              /* 0x0000054D */ (PC_SPEC|0x0D|PF_WALK)
+#define PS_SPEC_0E              /* 0x0000054E */ (PC_SPEC|0x0E|PF_WALK)
+#define PS_SPEC_0F              /* 0x0000054F */ (PC_SPEC|0x0F|PF_WALK)
 #define PS_SPEC_30              /* 0x00020370 */ (PC_SPEC|0x30|PF_WAIT|PF_DMGE)
 #define PS_SPEC_31              /* 0x00001371 */ (PC_SPEC|0x31|PF_WAIT|PF_DEMO)
 #define PS_SPEC_32              /* 0x10020372 */ (PC_SPEC|0x32|PF_WAIT|PF_DMGE|PF_HAND)
 
-#define PS_TAKE_00              /* 0x00800380 */ (PC_TAKE|0x00|PF_WAIT|PF_ATCK)
-#define PS_TAKE_03              /* 0x00000383 */ (PC_TAKE|0x03|PF_WAIT)
-#define PS_TAKE_05              /* 0x00000385 */ (PC_TAKE|0x05|PF_WAIT)
-#define PS_TAKE_06              /* 0x00000386 */ (PC_TAKE|0x06|PF_WAIT)
-#define PS_TAKE_07              /* 0x00000387 */ (PC_TAKE|0x07|PF_WAIT)
-#define PS_TAKE_08              /* 0x80000588 */ (PC_TAKE|0x08|PF_MOVE|PF_THRW)
-#define PS_TAKE_09              /* 0x80000589 */ (PC_TAKE|0x09|PF_MOVE|PF_THRW)
-#define PS_TAKE_10              /* 0x00000390 */ (PC_TAKE|0x10|PF_WAIT)
-#define PS_TAKE_11              /* 0x00000391 */ (PC_TAKE|0x11|PF_WAIT)
-#define PS_TAKE_12              /* 0x00000392 */ (PC_TAKE|0x12|PF_WAIT)
+#define PS_ATCK_00              /* 0x00800380 */ (PC_ATCK|0x00|PF_WAIT|PF_ATCK)
+#define PS_ATCK_03              /* 0x00000383 */ (PC_ATCK|0x03|PF_WAIT)
+#define PS_ATCK_05              /* 0x00000385 */ (PC_ATCK|0x05|PF_WAIT)
+#define PS_ATCK_06              /* 0x00000386 */ (PC_ATCK|0x06|PF_WAIT)
+#define PS_ATCK_07              /* 0x00000387 */ (PC_ATCK|0x07|PF_WAIT)
+#define PS_ATCK_08              /* 0x80000588 */ (PC_ATCK|0x08|PF_WALK|PF_THRW)
+#define PS_ATCK_09              /* 0x80000589 */ (PC_ATCK|0x09|PF_WALK|PF_THRW)
+#define PS_ATCK_10              /* 0x00000390 */ (PC_ATCK|0x10|PF_WAIT)
+#define PS_ATCK_11              /* 0x00000391 */ (PC_ATCK|0x11|PF_WAIT)
+#define PS_ATCK_12              /* 0x00000392 */ (PC_ATCK|0x12|PF_WAIT)
 
-#define WALK_HITGROUND          0
-#define WALK_CONTINUE           1
+#define WALK_FALL               0
+#define WALK_STAY               1
 #define WALK_STOP               2
-#define WALK_HITWALL            3
+#define WALK_WALL               3
 
-#define JUMP_CONTINUE           0
-#define JUMP_HITGROUND          1
-#define JUMP_HITWALL            2
-#define JUMP_HITLEDGE           3
+#define JUMP_STAY               0
+#define JUMP_LAND               1
+#define JUMP_WALL               2
+#define JUMP_LEDGE              3
 #define JUMP_HANG               4
 #define JUMP_BURN               6
 

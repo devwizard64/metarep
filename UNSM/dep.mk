@@ -1,59 +1,108 @@
-CODE_OBJ := \
+CODE_OBJ :=
+ifneq ($(filter P0 J3 C3,$(TARGET)),)
+	CODE_OBJ += $(BUILD)/src/fault.o
+endif
+CODE_OBJ += \
 	$(BUILD)/src/main.o \
 	$(BUILD)/src/graphics.o \
-	$(BUILD)/src/audio.o \
-	$(BUILD)/src/game.o \
-	$(BUILD)/src/collision.o \
-	$(BUILD)/src/player.o \
-	$(BUILD)/src/physics.o \
-	$(BUILD)/src/pldemo.o $(BUILD)/src/pldemo.data.o \
-	$(BUILD)/src/plspec.o $(BUILD)/src/plspec.data.o \
-	$(BUILD)/src/plwait.o $(BUILD)/src/plwait.data.o \
-	$(BUILD)/src/plmove.o $(BUILD)/src/plmove.data.o \
-	$(BUILD)/src/pljump.o $(BUILD)/src/pljump.data.o \
-	$(BUILD)/src/plswim.o $(BUILD)/src/plswim.data.o \
-	$(BUILD)/src/pltake.o $(BUILD)/src/pltake.data.o \
+	$(BUILD)/src/audio.o
+ifneq ($(MOTOR),)
+	CODE_OBJ += $(BUILD)/src/motor.o
+endif
+CODE_OBJ += $(BUILD)/src/game.o
+ifneq ($(TARGET),DD)
+	CODE_OBJ += \
+		$(BUILD)/src/collision.o \
+		$(BUILD)/src/player.o \
+		$(BUILD)/src/physics.o \
+		$(BUILD)/src/pldemo.o \
+		$(BUILD)/src/plspec.o \
+		$(BUILD)/src/plwait.o \
+		$(BUILD)/src/plwalk.o \
+		$(BUILD)/src/pljump.o \
+		$(BUILD)/src/plswim.o \
+		$(BUILD)/src/platck.o
+endif
+CODE_OBJ += \
 	$(BUILD)/src/callback.o \
 	$(BUILD)/src/memory.o \
 	$(BUILD)/src/backup.o \
 	$(BUILD)/src/scene.o \
 	$(BUILD)/src/draw.o \
-	$(BUILD)/src/time.o \
-	$(BUILD)/src/slidec.o \
-	$(BUILD)/src/camera.o $(BUILD)/src/camera.data.o \
+	$(BUILD)/src/time.o
+ifneq ($(DISK),)
+	CODE_OBJ += $(BUILD)/src/disk.o
+endif
+CODE_OBJ += \
+	$(BUILD)/src/slidec.o
+
+CODE_OBJ += \
+	$(BUILD)/src/$(TARGET)/camera.o $(BUILD)/src/$(TARGET)/camera.data.o
+
+CODE_OBJ += \
 	$(BUILD)/src/course.o \
-	$(BUILD)/src/object.o \
-	$(BUILD)/src/objectlib.o \
-	$(BUILD)/src/object_a.o $(BUILD)/src/object_a.data.o \
-	$(BUILD)/src/ride.o \
-	$(BUILD)/src/hitcheck.o \
-	$(BUILD)/src/objlist.o \
+	$(BUILD)/src/object.o
+ifneq ($(TARGET),P0)
+	CODE_OBJ += $(BUILD)/src/objectlib.o
+endif
+CODE_OBJ += \
+	$(BUILD)/src/enemya.o \
+	$(BUILD)/src/movebg.o
+ifneq ($(TARGET),P0)
+	CODE_OBJ += $(BUILD)/src/hitcheck.o $(BUILD)/src/objlist.o
+endif
+CODE_OBJ += \
 	$(BUILD)/src/objsound.o \
-	$(BUILD)/src/debug.o \
+	$(BUILD)/src/debug.o
+
+CODE_OBJ += \
 	$(BUILD)/src/wipe.o \
 	$(BUILD)/src/shadow.o \
 	$(BUILD)/src/background.o \
 	$(BUILD)/src/water.o \
 	$(BUILD)/src/objshape.o \
-	$(BUILD)/src/wave.o \
+	$(BUILD)/src/wave.o
+
+CODE_OBJ += \
 	$(BUILD)/src/dprint.o \
 	$(BUILD)/src/message.o \
 	$(BUILD)/src/weather.o \
 	$(BUILD)/src/lava.o \
 	$(BUILD)/src/tag.o \
 	$(BUILD)/src/hud.o \
-	$(BUILD)/src/object_b.o $(BUILD)/src/object_b.data.o \
-	$(BUILD)/src/object_c.o $(BUILD)/src/object_c.data.o
+	$(BUILD)/src/$(TARGET)/enemyb.o $(BUILD)/src/$(TARGET)/enemyb.data.o
+
+CODE_OBJ += \
+	$(BUILD)/src/$(TARGET)/enemyc.o $(BUILD)/src/$(TARGET)/enemyc.data.o
 
 ULIB_OBJ := \
 	$(BUILD)/src/math.o \
 	$(BUILD)/src/mathtbl.o \
 	$(BUILD)/src/shape.o \
 	$(BUILD)/src/shplang.o \
-	$(BUILD)/src/prglang.o \
+	$(BUILD)/src/seqlang.o \
 	$(BUILD)/src/bgcheck.o \
 	$(BUILD)/src/bgload.o \
 	$(BUILD)/src/objlang.o
+ifeq ($(TARGET),DD)
+	ULIB_OBJ += \
+		$(BUILD)/src/player.o \
+		$(BUILD)/src/pldemo.o \
+		$(BUILD)/src/plspec.o \
+		$(BUILD)/src/plwait.o \
+		$(BUILD)/src/plwalk.o \
+		$(BUILD)/src/pljump.o \
+		$(BUILD)/src/plswim.o \
+		$(BUILD)/src/platck.o \
+		$(BUILD)/src/collision.o \
+		$(BUILD)/src/physics.o
+endif
+ifeq ($(TARGET),P0)
+	ULIB_OBJ += \
+		$(BUILD)/src/hitcheck.o \
+		$(BUILD)/src/objlist.o \
+		$(BUILD)/src/objectlib.o
+endif
 
 MENU_OBJ := \
 	$(BUILD)/src/title.o \
@@ -62,31 +111,39 @@ MENU_OBJ := \
 	$(BUILD)/src/starselect.o
 
 AUDIO_OBJ := \
-	$(BUILD)/src/audio/driver.o $(BUILD)/src/audio/driver.data.o \
-	$(BUILD)/src/audio/memory.o $(BUILD)/src/audio/memory.data.o \
-	$(BUILD)/src/audio/system.o \
-	$(BUILD)/src/audio/voice.o $(BUILD)/src/audio/voice.data.o \
-	$(BUILD)/src/audio/effect.o $(BUILD)/src/audio/effect.data.o \
-	$(BUILD)/src/audio/sequence.o $(BUILD)/src/audio/sequence.data.o \
-	$(BUILD)/src/audio/game.o $(BUILD)/src/audio/game.data.o \
-	$(BUILD)/src/audio/data.o
+	$(BUILD)/src/audio/$(NA_REVISION)/driver.o $(BUILD)/src/audio/$(NA_REVISION)/driver.data.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/memory.o $(BUILD)/src/audio/$(NA_REVISION)/memory.data.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/system.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/voice.o $(BUILD)/src/audio/$(NA_REVISION)/voice.data.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/effect.o $(BUILD)/src/audio/$(NA_REVISION)/effect.data.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/sequence.o $(BUILD)/src/audio/$(NA_REVISION)/sequence.data.o \
+	$(BUILD)/src/audio/$(NA_REVISION)/game.o $(BUILD)/src/audio/$(NA_REVISION)/game.data.o
+ifeq ($(NA_VERSION),2)
+	AUDIO_OBJ += $(BUILD)/src/audio/$(NA_REVISION)/h.o $(BUILD)/src/audio/$(NA_REVISION)/h.data.o
+endif
+AUDIO_OBJ += $(BUILD)/src/audio/$(NA_REVISION)/data.o
+
+BC_OBJ :=
+ifeq ($(TARGET),C3)
+	BC_OBJ += $(BUILD)/src/bc.o
+endif
 
 FACE_OBJ := \
 	$(BUILD)/src/face/main.o \
-	$(BUILD)/src/face/memory.o $(BUILD)/src/face/memory.data.o \
+	$(BUILD)/src/face/memory.o \
 	$(BUILD)/src/face/sound.o \
-	$(BUILD)/src/face/draw.o $(BUILD)/src/face/draw.data.o \
-	$(BUILD)/src/face/object.o $(BUILD)/src/face/object.data.o \
-	$(BUILD)/src/face/skin.o $(BUILD)/src/face/skin.data.o \
-	$(BUILD)/src/face/particle.o $(BUILD)/src/face/particle.data.o \
-	$(BUILD)/src/face/dynlist.o $(BUILD)/src/face/dynlist.data.o \
-	$(BUILD)/src/face/gadget.o $(BUILD)/src/face/gadget.data.o \
-	$(BUILD)/src/face/stdio.o $(BUILD)/src/face/stdio.data.o \
-	$(BUILD)/src/face/joint.o $(BUILD)/src/face/joint.data.o \
-	$(BUILD)/src/face/net.o $(BUILD)/src/face/net.data.o \
-	$(BUILD)/src/face/math.o $(BUILD)/src/face/math.data.o \
-	$(BUILD)/src/face/shape.o $(BUILD)/src/face/shape.data.o \
-	$(BUILD)/src/face/gfx.o $(BUILD)/src/face/gfx.data.o
+	$(BUILD)/src/face/draw.text.o $(BUILD)/src/face/draw.data.o \
+	$(BUILD)/src/face/object.text.o $(BUILD)/src/face/object.data.o \
+	$(BUILD)/src/face/skin.text.o $(BUILD)/src/face/skin.data.o \
+	$(BUILD)/src/face/particle.text.o $(BUILD)/src/face/particle.data.o \
+	$(BUILD)/src/face/dynlist.text.o $(BUILD)/src/face/dynlist.data.o \
+	$(BUILD)/src/face/gadget.text.o $(BUILD)/src/face/gadget.data.o \
+	$(BUILD)/src/face/stdio.text.o $(BUILD)/src/face/stdio.data.o \
+	$(BUILD)/src/face/joint.text.o $(BUILD)/src/face/joint.data.o \
+	$(BUILD)/src/face/net.text.o $(BUILD)/src/face/net.data.o \
+	$(BUILD)/src/face/math.text.o $(BUILD)/src/face/math.data.o \
+	$(BUILD)/src/face/shape.text.o $(BUILD)/src/face/shape.data.o \
+	$(BUILD)/src/face/gfx.text.o $(BUILD)/src/face/gfx.data.o
 
 FACEDATA_OBJ := \
 	$(BUILD)/src/face/data/ico1.o \
@@ -95,23 +152,34 @@ FACEDATA_OBJ := \
 	$(BUILD)/src/face/data/mario_anim.o
 
 IDO_C := \
+	$(BUILD)/src/fault.o \
 	$(BUILD)/src/main.o \
 	$(BUILD)/src/graphics.o \
 	$(BUILD)/src/audio.o \
+	$(BUILD)/src/motor.o \
 	$(BUILD)/src/game.o \
 	$(BUILD)/src/collision.o \
 	$(BUILD)/src/player.o \
 	$(BUILD)/src/physics.o \
+	$(BUILD)/src/pldemo.o \
+	$(BUILD)/src/plspec.o \
+	$(BUILD)/src/plwait.o \
+	$(BUILD)/src/plwalk.o \
+	$(BUILD)/src/pljump.o \
+	$(BUILD)/src/plswim.o \
+	$(BUILD)/src/platck.o \
 	$(BUILD)/src/callback.o \
 	$(BUILD)/src/memory.o \
 	$(BUILD)/src/backup.o \
 	$(BUILD)/src/scene.o \
 	$(BUILD)/src/draw.o \
 	$(BUILD)/src/time.o \
+	$(BUILD)/src/disk.o \
 	$(BUILD)/src/course.o \
 	$(BUILD)/src/object.o \
 	$(BUILD)/src/objectlib.o \
-	$(BUILD)/src/ride.o \
+	$(BUILD)/src/enemya.o \
+	$(BUILD)/src/movebg.o \
 	$(BUILD)/src/hitcheck.o \
 	$(BUILD)/src/objlist.o \
 	$(BUILD)/src/objsound.o \
@@ -128,10 +196,12 @@ IDO_C := \
 	$(BUILD)/src/lava.o \
 	$(BUILD)/src/tag.o \
 	$(BUILD)/src/hud.o \
+	$(BUILD)/src/enemyb.o \
+	$(BUILD)/src/enemyc.o \
 	$(BUILD)/src/math.o \
 	$(BUILD)/src/shape.o \
 	$(BUILD)/src/shplang.o \
-	$(BUILD)/src/prglang.o \
+	$(BUILD)/src/seqlang.o \
 	$(BUILD)/src/bgcheck.o \
 	$(BUILD)/src/bgload.o \
 	$(BUILD)/src/objlang.o \
@@ -142,7 +212,20 @@ IDO_C := \
 	$(BUILD)/data/buffer.o \
 	$(BUILD)/src/audio/heap.o \
 	$(BUILD)/src/face/main.o \
+	$(BUILD)/src/face/memory.o \
 	$(BUILD)/src/face/sound.o \
+	$(BUILD)/src/face/draw.o \
+	$(BUILD)/src/face/object.o \
+	$(BUILD)/src/face/skin.o \
+	$(BUILD)/src/face/particle.o \
+	$(BUILD)/src/face/dynlist.o \
+	$(BUILD)/src/face/gadget.o \
+	$(BUILD)/src/face/stdio.o \
+	$(BUILD)/src/face/joint.o \
+	$(BUILD)/src/face/net.o \
+	$(BUILD)/src/face/math.o \
+	$(BUILD)/src/face/shape.o \
+	$(BUILD)/src/face/gfx.o \
 	$(BUILD)/src/face/data/ico1.o \
 	$(BUILD)/src/face/data/spot.o \
 	$(BUILD)/src/face/data/mario.o \
@@ -153,13 +236,14 @@ IDO_S := \
 	$(BUILD)/src/mathtbl.o
 
 OBJ := \
-	$(BUILD)/libultra/src/PR/rspboot.o \
-	$(BUILD)/libultra/src/PR/gspFast3D.fifo.o \
-	$(BUILD)/libultra/src/PR/aspMain.o \
+	$(BUILD)/lib/PR/rspboot.o \
+	$(BUILD)/lib/PR/gspFast3D.fifo.o \
+	$(BUILD)/lib/PR/aspMain.o \
 	$(BUILD)/code.o \
-	$(BUILD)/ulib.o \
-	$(BUILD)/face.o \
-	$(BUILD)/facedata.o
+	$(BUILD)/ulib.o
+ifneq ($(TARGET),DD)
+	OBJ += $(BUILD)/face.o $(BUILD)/facedata.o
+endif
 
 DATA := \
 	$(BUILD)/data/cimg.o \
@@ -167,161 +251,30 @@ DATA := \
 	$(BUILD)/data/timg.o \
 	$(BUILD)/data/buffer.o \
 	$(BUILD)/data/fifo.o \
-	$(BUILD)/src/obj_a.o \
-	$(BUILD)/src/obj_player.o \
-	$(BUILD)/src/obj_b.o \
-	$(BUILD)/src/obj_c.o \
-	$(BUILD)/src/obj_camera.o \
+	$(BUILD)/src/enemyaobj.o \
+	$(BUILD)/src/playerobj.o \
+	$(BUILD)/src/enemybobj.o \
+	$(BUILD)/src/enemycobj.o \
+	$(BUILD)/src/cameraobj.o \
 	$(BUILD)/data/main.o \
+	$(patsubst %.c,$(BUILD)/%.o,$(wildcard shape/*/shp.c)) \
 	$(BUILD)/data/game.o \
+	$(patsubst %.sx,$(BUILD)/%.o,$(wildcard stage/*/seq.sx)) \
+	$(patsubst %.c,$(BUILD)/%.o,$(wildcard stage/*/shp.c)) \
 	$(BUILD)/data/anime.o \
 	$(BUILD)/data/demo.o
 
 SZP := \
 	$(BUILD)/data/gfx.szp.o \
-	$(BUILD)/data/weather/gfx.szp.o
-
-SHAPE_SZP := \
-	$(BUILD)/shape/player/gfx.szp.o \
-	$(BUILD)/shape/1a/gfx.szp.o \
-	$(BUILD)/shape/1b/gfx.szp.o \
-	$(BUILD)/shape/1c/gfx.szp.o \
-	$(BUILD)/shape/1d/gfx.szp.o \
-	$(BUILD)/shape/1e/gfx.szp.o \
-	$(BUILD)/shape/1f/gfx.szp.o \
-	$(BUILD)/shape/1g/gfx.szp.o \
-	$(BUILD)/shape/1h/gfx.szp.o \
-	$(BUILD)/shape/1i/gfx.szp.o \
-	$(BUILD)/shape/1j/gfx.szp.o \
-	$(BUILD)/shape/1k/gfx.szp.o \
-	$(BUILD)/shape/2a/gfx.szp.o \
-	$(BUILD)/shape/2b/gfx.szp.o \
-	$(BUILD)/shape/2c/gfx.szp.o \
-	$(BUILD)/shape/2d/gfx.szp.o \
-	$(BUILD)/shape/2e/gfx.szp.o \
-	$(BUILD)/shape/2f/gfx.szp.o \
-	$(BUILD)/shape/3common/gfx.szp.o \
-	$(BUILD)/shape/global/gfx.szp.o
-
-SHAPE_DATA := \
-	$(BUILD)/shape/player/shp.o \
-	$(BUILD)/shape/1a/shp.o \
-	$(BUILD)/shape/1b/shp.o \
-	$(BUILD)/shape/1c/shp.o \
-	$(BUILD)/shape/1d/shp.o \
-	$(BUILD)/shape/1e/shp.o \
-	$(BUILD)/shape/1f/shp.o \
-	$(BUILD)/shape/1g/shp.o \
-	$(BUILD)/shape/1h/shp.o \
-	$(BUILD)/shape/1i/shp.o \
-	$(BUILD)/shape/1j/shp.o \
-	$(BUILD)/shape/1k/shp.o \
-	$(BUILD)/shape/2a/shp.o \
-	$(BUILD)/shape/2b/shp.o \
-	$(BUILD)/shape/2c/shp.o \
-	$(BUILD)/shape/2d/shp.o \
-	$(BUILD)/shape/2e/shp.o \
-	$(BUILD)/shape/2f/shp.o \
-	$(BUILD)/shape/3common/shp.o \
-	$(BUILD)/shape/global/shp.o
-
-BACKGROUND_SZP := \
-	$(BUILD)/data/background/title.szp.o \
-	$(BUILD)/data/background/a.szp.o \
-	$(BUILD)/data/background/b.szp.o \
-	$(BUILD)/data/background/c.szp.o \
-	$(BUILD)/data/background/d.szp.o \
-	$(BUILD)/data/background/e.szp.o \
-	$(BUILD)/data/background/f.szp.o \
-	$(BUILD)/data/background/g.szp.o \
-	$(BUILD)/data/background/h.szp.o \
-	$(BUILD)/data/background/i.szp.o \
-	$(BUILD)/data/background/j.szp.o
-
-TEXTURE_SZP := \
-	$(BUILD)/data/texture/a.szp.o \
-	$(BUILD)/data/texture/b.szp.o \
-	$(BUILD)/data/texture/c.szp.o \
-	$(BUILD)/data/texture/d.szp.o \
-	$(BUILD)/data/texture/e.szp.o \
-	$(BUILD)/data/texture/f.szp.o \
-	$(BUILD)/data/texture/g.szp.o \
-	$(BUILD)/data/texture/h.szp.o \
-	$(BUILD)/data/texture/i.szp.o \
-	$(BUILD)/data/texture/j.szp.o \
-	$(BUILD)/data/texture/k.szp.o \
-	$(BUILD)/data/texture/l.szp.o
-
-STAGE_SZP := \
+	$(patsubst %.bin,$(BUILD)/%.szp.o,$(wildcard shape/*/gfx.bin)) \
+	$(patsubst %.c,$(BUILD)/%.szp.o,$(wildcard shape/*/gfx.c)) \
+	$(patsubst %.c,$(BUILD)/%.szp.o,$(wildcard data/background/*.c)) \
+	$(patsubst %.c,$(BUILD)/%.szp.o,$(wildcard data/texture/*.c)) \
+	$(BUILD)/data/weather/gfx.szp.o \
 	$(BUILD)/stage/title/logo.szp.o \
 	$(BUILD)/stage/title/debug.szp.o \
-	$(BUILD)/stage/select/gfx.szp.o \
-	$(BUILD)/stage/bbh/gfx.szp.o \
-	$(BUILD)/stage/ccm/gfx.szp.o \
-	$(BUILD)/stage/inside/gfx.szp.o \
-	$(BUILD)/stage/hmc/gfx.szp.o \
-	$(BUILD)/stage/ssl/gfx.szp.o \
-	$(BUILD)/stage/bob/gfx.szp.o \
-	$(BUILD)/stage/sl/gfx.szp.o \
-	$(BUILD)/stage/wdw/gfx.szp.o \
-	$(BUILD)/stage/jrb/gfx.szp.o \
-	$(BUILD)/stage/thi/gfx.szp.o \
-	$(BUILD)/stage/ttc/gfx.szp.o \
-	$(BUILD)/stage/rr/gfx.szp.o \
-	$(BUILD)/stage/grounds/gfx.szp.o \
-	$(BUILD)/stage/bitdw/gfx.szp.o \
-	$(BUILD)/stage/vcutm/gfx.szp.o \
-	$(BUILD)/stage/bitfs/gfx.szp.o \
-	$(BUILD)/stage/sa/gfx.szp.o \
-	$(BUILD)/stage/bits/gfx.szp.o \
-	$(BUILD)/stage/lll/gfx.szp.o \
-	$(BUILD)/stage/ddd/gfx.szp.o \
-	$(BUILD)/stage/wf/gfx.szp.o \
-	$(BUILD)/stage/ending/gfx.szp.o \
-	$(BUILD)/stage/courtyard/gfx.szp.o \
-	$(BUILD)/stage/pss/gfx.szp.o \
-	$(BUILD)/stage/cotmc/gfx.szp.o \
-	$(BUILD)/stage/totwc/gfx.szp.o \
-	$(BUILD)/stage/bitdwa/gfx.szp.o \
-	$(BUILD)/stage/wmotr/gfx.szp.o \
-	$(BUILD)/stage/bitfsa/gfx.szp.o \
-	$(BUILD)/stage/bitsa/gfx.szp.o \
-	$(BUILD)/stage/ttm/gfx.szp.o
-
-STAGE_DATA := \
-	$(BUILD)/stage/title/prg.o $(BUILD)/stage/title/shp.o \
-	$(BUILD)/stage/select/prg.o $(BUILD)/stage/select/shp.o \
-	$(BUILD)/stage/bbh/prg.o $(BUILD)/stage/bbh/shp.o \
-	$(BUILD)/stage/ccm/prg.o $(BUILD)/stage/ccm/shp.o \
-	$(BUILD)/stage/inside/prg.o $(BUILD)/stage/inside/shp.o \
-	$(BUILD)/stage/hmc/prg.o $(BUILD)/stage/hmc/shp.o \
-	$(BUILD)/stage/ssl/prg.o $(BUILD)/stage/ssl/shp.o \
-	$(BUILD)/stage/bob/prg.o $(BUILD)/stage/bob/shp.o \
-	$(BUILD)/stage/sl/prg.o $(BUILD)/stage/sl/shp.o \
-	$(BUILD)/stage/wdw/prg.o $(BUILD)/stage/wdw/shp.o \
-	$(BUILD)/stage/jrb/prg.o $(BUILD)/stage/jrb/shp.o \
-	$(BUILD)/stage/thi/prg.o $(BUILD)/stage/thi/shp.o \
-	$(BUILD)/stage/ttc/prg.o $(BUILD)/stage/ttc/shp.o \
-	$(BUILD)/stage/rr/prg.o $(BUILD)/stage/rr/shp.o \
-	$(BUILD)/stage/grounds/prg.o $(BUILD)/stage/grounds/shp.o \
-	$(BUILD)/stage/bitdw/prg.o $(BUILD)/stage/bitdw/shp.o \
-	$(BUILD)/stage/vcutm/prg.o $(BUILD)/stage/vcutm/shp.o \
-	$(BUILD)/stage/bitfs/prg.o $(BUILD)/stage/bitfs/shp.o \
-	$(BUILD)/stage/sa/prg.o $(BUILD)/stage/sa/shp.o \
-	$(BUILD)/stage/bits/prg.o $(BUILD)/stage/bits/shp.o \
-	$(BUILD)/stage/lll/prg.o $(BUILD)/stage/lll/shp.o \
-	$(BUILD)/stage/ddd/prg.o $(BUILD)/stage/ddd/shp.o \
-	$(BUILD)/stage/wf/prg.o $(BUILD)/stage/wf/shp.o \
-	$(BUILD)/stage/ending/prg.o $(BUILD)/stage/ending/shp.o \
-	$(BUILD)/stage/courtyard/prg.o $(BUILD)/stage/courtyard/shp.o \
-	$(BUILD)/stage/pss/prg.o $(BUILD)/stage/pss/shp.o \
-	$(BUILD)/stage/cotmc/prg.o $(BUILD)/stage/cotmc/shp.o \
-	$(BUILD)/stage/totwc/prg.o $(BUILD)/stage/totwc/shp.o \
-	$(BUILD)/stage/bitdwa/prg.o $(BUILD)/stage/bitdwa/shp.o \
-	$(BUILD)/stage/wmotr/prg.o $(BUILD)/stage/wmotr/shp.o \
-	$(BUILD)/stage/bitfsa/prg.o $(BUILD)/stage/bitfsa/shp.o \
-	$(BUILD)/stage/bitsa/prg.o $(BUILD)/stage/bitsa/shp.o \
-	$(BUILD)/stage/ttm/prg.o $(BUILD)/stage/ttm/shp.o
+	$(patsubst %.bin,$(BUILD)/%.szp.o,$(wildcard stage/*/gfx.bin)) \
+	$(patsubst %.c,$(BUILD)/%.szp.o,$(wildcard stage/*/gfx.c))
 
 AUDIO_DATA := \
 	$(BUILD)/src/audio/heap.o \
@@ -331,211 +284,49 @@ AUDIO_DATA := \
 	$(BUILD)/audio/seq.o \
 	$(BUILD)/audio/bnk.o
 
-AUDIO_INS := audio/se.ins audio/music.ins
 AUDIO_SEQ := \
-	audio/se/se.seq \
-	audio/music/starcatch.seq \
-	audio/music/title.seq \
-	audio/music/field.seq \
-	audio/music/castle.seq \
-	audio/music/water.seq \
-	audio/music/fire.seq \
-	audio/music/arena.seq \
-	audio/music/snow.seq \
-	audio/music/slider.seq \
-	audio/music/ghost.seq \
-	audio/music/lullaby.seq \
-	audio/music/dungeon.seq \
-	audio/music/starselect.seq \
-	audio/music/special.seq \
-	audio/music/metal.seq \
-	audio/music/bowsermsg.seq \
-	audio/music/bowser.seq \
-	audio/music/hiscore.seq \
-	audio/music/merrygoround.seq \
-	audio/music/fanfare.seq \
-	audio/music/starappear.seq \
-	audio/music/battle.seq \
-	audio/music/arenaclear.seq \
-	audio/music/endless.seq \
-	audio/music/final.seq \
-	audio/music/staff.seq \
-	audio/music/solution.seq \
-	audio/music/toadmsg.seq \
-	audio/music/peachmsg.seq \
-	audio/music/intro.seq \
-	audio/music/finalclear.seq \
-	audio/music/ending.seq \
-	audio/music/fileselect.seq \
-	audio/music/lakitumsg.seq
-
-LIBULTRA_OBJ :=
-ifeq ($(TARGET),E0)
-	LIBULTRA_OBJ += $(BUILD)/libultra/src/os/parameters.o
+	audio/$(TARGET)/seq/se.seq \
+	audio/$(TARGET)/seq/starcatch.seq \
+	audio/$(TARGET)/seq/title.seq \
+	audio/$(TARGET)/seq/field.seq \
+	audio/$(TARGET)/seq/castle.seq \
+	audio/$(TARGET)/seq/water.seq \
+	audio/$(TARGET)/seq/fire.seq \
+	audio/$(TARGET)/seq/arena.seq \
+	audio/$(TARGET)/seq/snow.seq \
+	audio/$(TARGET)/seq/slider.seq \
+	audio/$(TARGET)/seq/ghost.seq \
+	audio/$(TARGET)/seq/lullaby.seq \
+	audio/$(TARGET)/seq/dungeon.seq \
+	audio/$(TARGET)/seq/starselect.seq \
+	audio/$(TARGET)/seq/special.seq \
+	audio/$(TARGET)/seq/metal.seq \
+	audio/$(TARGET)/seq/bowsermsg.seq \
+	audio/$(TARGET)/seq/bowser.seq \
+	audio/$(TARGET)/seq/hiscore.seq \
+	audio/$(TARGET)/seq/merrygoround.seq \
+	audio/$(TARGET)/seq/fanfare.seq \
+	audio/$(TARGET)/seq/starappear.seq \
+	audio/$(TARGET)/seq/battle.seq \
+	audio/$(TARGET)/seq/arenaclear.seq \
+	audio/$(TARGET)/seq/endless.seq \
+	audio/$(TARGET)/seq/final.seq \
+	audio/$(TARGET)/seq/staff.seq \
+	audio/$(TARGET)/seq/solution.seq \
+	audio/$(TARGET)/seq/toadmsg.seq \
+	audio/$(TARGET)/seq/peachmsg.seq \
+	audio/$(TARGET)/seq/intro.seq \
+	audio/$(TARGET)/seq/finalclear.seq \
+	audio/$(TARGET)/seq/ending.seq \
+	audio/$(TARGET)/seq/fileselect.seq
+ifneq ($(NA_REVISION),100)
+	AUDIO_SEQ += audio/$(TARGET)/seq/lakitumsg.seq
 endif
-LIBULTRA_OBJ += \
-	$(BUILD)/libultra/src/io/vitbl.o \
-	$(BUILD)/libultra/src/os/settime.o \
-	$(BUILD)/libultra/src/os/maptlb.o \
-	$(BUILD)/libultra/src/os/unmaptlball.o \
-	$(BUILD)/libultra/src/rmon/sprintf.o \
-	$(BUILD)/libultra/src/os/createmesgqueue.o \
-	$(BUILD)/libultra/src/os/seteventmesg.o \
-	$(BUILD)/libultra/src/io/visetevent.o \
-	$(BUILD)/libultra/src/os/createthread.o \
-	$(BUILD)/libultra/src/os/recvmesg.o \
-	$(BUILD)/libultra/src/io/sptask.o \
-	$(BUILD)/libultra/src/io/sptaskyield.o \
-	$(BUILD)/libultra/src/os/sendmesg.o \
-	$(BUILD)/libultra/src/io/sptaskyielded.o \
-	$(BUILD)/libultra/src/os/startthread.o \
-	$(BUILD)/libultra/src/os/writebackdcacheall.o \
-	$(BUILD)/libultra/src/io/vimgr.o \
-	$(BUILD)/libultra/src/io/visetmode.o \
-	$(BUILD)/libultra/src/io/viblack.o \
-	$(BUILD)/libultra/src/io/visetspecial.o \
-	$(BUILD)/libultra/src/io/pimgr.o \
-	$(BUILD)/libultra/src/os/setthreadpri.o \
-	$(BUILD)/libultra/src/os/initialize.o \
-	$(BUILD)/libultra/src/io/viswapbuf.o \
-	$(BUILD)/libultra/src/gu/sqrtf.o \
-	$(BUILD)/libultra/src/io/contreaddata.o \
-	$(BUILD)/libultra/src/io/controller.o \
-	$(BUILD)/libultra/src/io/conteepprobe.o \
-	$(BUILD)/libultra/src/libc/ll.o \
-	$(BUILD)/libultra/src/os/invaldcache.o \
-	$(BUILD)/libultra/src/io/pidma.o \
-	$(BUILD)/libultra/src/libc/bzero.o \
-	$(BUILD)/libultra/src/os/invalicache.o \
-	$(BUILD)/libultra/src/io/conteeplongread.o \
-	$(BUILD)/libultra/src/io/conteeplongwrite.o \
-	$(BUILD)/libultra/src/libc/bcopy.o \
-	$(BUILD)/libultra/src/gu/ortho.o \
-	$(BUILD)/libultra/src/gu/perspective.o \
-	$(BUILD)/libultra/src/os/gettime.o \
-	$(BUILD)/libultra/src/libc/llcvt.o \
-	$(BUILD)/libultra/src/gu/cosf.o \
-	$(BUILD)/libultra/src/gu/sinf.o \
-	$(BUILD)/libultra/src/gu/translate.o \
-	$(BUILD)/libultra/src/gu/rotate.o \
-	$(BUILD)/libultra/src/gu/scale.o \
-	$(BUILD)/libultra/src/io/aisetfreq.o \
-	$(BUILD)/libultra/src/audio/bnkf.o \
-	$(BUILD)/libultra/src/os/writebackdcache.o \
-	$(BUILD)/libultra/src/io/aigetlen.o \
-	$(BUILD)/libultra/src/io/aisetnextbuf.o \
-	$(BUILD)/libultra/src/os/timerintr.o \
-	$(BUILD)/libultra/src/rmon/xprintf.o \
-	$(BUILD)/libultra/src/libc/string.o \
-	$(BUILD)/libultra/src/os/thread.o \
-	$(BUILD)/libultra/src/os/interrupt.o \
-	$(BUILD)/libultra/src/io/vi.o \
-	$(BUILD)/libultra/src/os/exceptasm.o \
-	$(BUILD)/libultra/src/gu/libm_vals.o \
-	$(BUILD)/libultra/src/os/virtualtophysical.o \
-	$(BUILD)/libultra/src/io/spsetstat.o \
-	$(BUILD)/libultra/src/io/spsetpc.o \
-	$(BUILD)/libultra/src/io/sprawdma.o \
-	$(BUILD)/libultra/src/io/sp.o \
-	$(BUILD)/libultra/src/io/spgetstat.o \
-	$(BUILD)/libultra/src/os/getthreadpri.o \
-	$(BUILD)/libultra/src/io/vigetcurrcontext.o \
-	$(BUILD)/libultra/src/io/viswapcontext.o \
-	$(BUILD)/libultra/src/os/getcount.o \
-	$(BUILD)/libultra/src/io/piacs.o \
-	$(BUILD)/libultra/src/io/pirawdma.o \
-	$(BUILD)/libultra/src/io/devmgr.o \
-	$(BUILD)/libultra/src/os/setsr.o \
-	$(BUILD)/libultra/src/os/getsr.o \
-	$(BUILD)/libultra/src/os/setfpccsr.o \
-	$(BUILD)/libultra/src/io/sirawread.o \
-	$(BUILD)/libultra/src/io/sirawwrite.o \
-	$(BUILD)/libultra/src/os/maptlbrdb.o \
-	$(BUILD)/libultra/src/io/pirawread.o
-ifeq ($(TARGET),J0)
-	LIBULTRA_OBJ += $(BUILD)/libultra/src/os/parameters.o
-endif
-LIBULTRA_OBJ += \
-	$(BUILD)/libultra/src/io/siacs.o \
-	$(BUILD)/libultra/src/io/sirawdma.o \
-	$(BUILD)/libultra/src/os/settimer.o \
-	$(BUILD)/libultra/src/io/conteepwrite.o \
-	$(BUILD)/libultra/src/os/jammesg.o \
-	$(BUILD)/libultra/src/io/pigetcmdq.o \
-	$(BUILD)/libultra/src/io/conteepread.o \
-	$(BUILD)/libultra/src/gu/mtxutil.o \
-	$(BUILD)/libultra/src/gu/normalize.o \
-	$(BUILD)/libultra/src/io/ai.o \
-	$(BUILD)/libultra/src/os/setcompare.o \
-	$(BUILD)/libultra/src/rmon/xlitob.o \
-	$(BUILD)/libultra/src/rmon/xldtob.o \
-	$(BUILD)/libultra/src/vimodentsclan1.o \
-	$(BUILD)/libultra/src/vimodepallan1.o \
-	$(BUILD)/libultra/src/os/kdebugserver.o \
-	$(BUILD)/libultra/src/os/syncputchars.o \
-	$(BUILD)/libultra/src/os/setintmask.o \
-	$(BUILD)/libultra/src/os/destroythread.o \
-	$(BUILD)/libultra/src/os/probetlb.o \
-	$(BUILD)/libultra/src/io/si.o \
-	$(BUILD)/libultra/src/libc/ldiv.o \
-	$(BUILD)/libultra/src/os/getcause.o \
-	$(BUILD)/libultra/src/os/atomic.o
-
-LIBULTRA_CO3 := \
-	$(BUILD)/libultra/src/gu/ortho.o \
-	$(BUILD)/libultra/src/gu/perspective.o \
-	$(BUILD)/libultra/src/gu/cosf.o \
-	$(BUILD)/libultra/src/gu/sinf.o \
-	$(BUILD)/libultra/src/gu/translate.o \
-	$(BUILD)/libultra/src/gu/rotate.o \
-	$(BUILD)/libultra/src/gu/scale.o \
-	$(BUILD)/libultra/src/audio/bnkf.o \
-	$(BUILD)/libultra/src/libc/string.o \
-	$(BUILD)/libultra/src/gu/mtxutil.o \
-	$(BUILD)/libultra/src/gu/normalize.o \
-	$(BUILD)/libultra/src/libc/ldiv.o
-
-LIBULTRA_CMIPS3 := \
-	$(BUILD)/libultra/src/libc/ll.o \
-	$(BUILD)/libultra/src/libc/llcvt.o
-
-LIBULTRA_SMIPS3 := \
-	$(BUILD)/libultra/src/os/exceptasm.o
-
-################################################################################
-# Face
-
-FACE_DEP := \
-	src/face/hand.0.rgba16.h \
-	src/face/hand.1.rgba16.h \
-	src/face/red_star.0.rgba16.h \
-	src/face/red_star.1.rgba16.h \
-	src/face/red_star.2.rgba16.h \
-	src/face/red_star.3.rgba16.h \
-	src/face/red_star.4.rgba16.h \
-	src/face/red_star.5.rgba16.h \
-	src/face/red_star.6.rgba16.h \
-	src/face/red_star.7.rgba16.h \
-	src/face/silver_star.0.rgba16.h \
-	src/face/silver_star.1.rgba16.h \
-	src/face/silver_star.2.rgba16.h \
-	src/face/silver_star.3.rgba16.h \
-	src/face/silver_star.4.rgba16.h \
-	src/face/silver_star.5.rgba16.h \
-	src/face/silver_star.6.rgba16.h \
-	src/face/silver_star.7.rgba16.h \
-	src/face/spark.0.rgba16.h \
-	src/face/spark.1.rgba16.h \
-	src/face/spark.2.rgba16.h \
-	src/face/spark.3.rgba16.h \
-	src/face/spark.4.rgba16.h \
-	src/face/spark.5.rgba16.h \
-	src/face/phong.ia8.h
 
 ################################################################################
 # Player
 
-MARIO_DEP := \
+MARIO_GFX := \
 	shape/player/mario/h_waist.h \
 	shape/player/mario/h_waist.blue.h \
 	shape/player/mario/h_uarmL.h \
@@ -682,7 +473,7 @@ MARIO_DEP := \
 ################################################################################
 # Shape1B
 
-BULLY_DEP := \
+BULLY_GFX := \
 	shape/1b/bully/horn.h \
 	shape/1b/bully/horn.horn.h \
 	shape/1b/bully/shoeL.h \
@@ -702,7 +493,7 @@ BULLY_DEP := \
 	shape/1b/bully/eyes.h \
 	shape/1b/bully/eyes.eye.h
 
-BLARGG_DEP := \
+BLARGG_GFX := \
 	shape/1b/blargg/lower_jaw.h \
 	shape/1b/blargg/lower_jaw.teeth.h \
 	shape/1b/blargg/lower_jaw.lower_jaw.h \
@@ -715,7 +506,7 @@ BLARGG_DEP := \
 ################################################################################
 # Shape2B
 
-SKEETER_DEP := \
+SKEETER_GFX := \
 	shape/2b/skeeter/body.h \
 	shape/2b/skeeter/body.sphere.h \
 	shape/2b/skeeter/tail_end.h \
@@ -763,7 +554,7 @@ SKEETER_DEP := \
 	shape/2b/skeeter/body_old.h \
 	shape/2b/skeeter/body_old.shade.h
 
-KELP_DEP := \
+KELP_GFX := \
 	shape/2b/kelp/0.h \
 	shape/2b/kelp/0.0.h \
 	shape/2b/kelp/1.h \
@@ -773,14 +564,14 @@ KELP_DEP := \
 	shape/2b/kelp/3.h \
 	shape/2b/kelp/3.3.h
 
-WATERMINE_DEP := \
+WATERMINE_GFX := \
 	shape/2b/watermine/mine.h \
 	shape/2b/watermine/mine.l.h \
 	shape/2b/watermine/mine.r.h \
 	shape/2b/watermine/spike.h \
 	shape/2b/watermine/spike.spike.h
 
-PIRANHA_DEP := \
+PIRANHA_GFX := \
 	shape/2b/piranha/body.h \
 	shape/2b/piranha/body.piranha.h \
 	shape/2b/piranha/fin.h \
@@ -788,7 +579,7 @@ PIRANHA_DEP := \
 	shape/2b/piranha/tail.h \
 	shape/2b/piranha/tail.piranha.h
 
-BUB_DEP := \
+BUB_GFX := \
 	shape/2b/bub/body.h \
 	shape/2b/bub/body.goggles.h \
 	shape/2b/bub/body.fin.h \
@@ -803,11 +594,11 @@ BUB_DEP := \
 	shape/2b/bub/finR.h \
 	shape/2b/bub/finR.fin.h
 
-WATERRING_DEP := \
+WATERRING_GFX := \
 	shape/2b/waterring/waterring.h \
 	shape/2b/waterring/waterring.shade.h
 
-CHEST_DEP := \
+CHEST_GFX := \
 	shape/2b/chest/box.h \
 	shape/2b/chest/box.keyhole.h \
 	shape/2b/chest/box.latch.h \
@@ -821,7 +612,7 @@ CHEST_DEP := \
 ################################################################################
 # Shape2D
 
-LAKITU2_DEP := \
+LAKITU2_GFX := \
 	shape/2d/lakitu2/body.h \
 	shape/2d/lakitu2/body.shell.h \
 	shape/2d/lakitu2/body.skin.h \
@@ -845,7 +636,7 @@ LAKITU2_DEP := \
 	shape/2d/lakitu2/rod2.h \
 	shape/2d/lakitu2/rod2.rod4.h
 
-TOAD_DEP := \
+TOAD_GFX := \
 	shape/2d/toad/head.h \
 	shape/2d/toad/head.face.h \
 	shape/2d/toad/head.spot.h \
@@ -864,7 +655,7 @@ TOAD_DEP := \
 	shape/2d/toad/shoeL.h \
 	shape/2d/toad/shoeL.shoe.h
 
-MIPS_DEP := \
+MIPS_GFX := \
 	shape/2d/mips/0.h \
 	shape/2d/mips/0.face.h \
 	shape/2d/mips/0.light1.h \
@@ -901,7 +692,7 @@ MIPS_DEP := \
 	shape/2d/mips/11.h \
 	shape/2d/mips/11.light2.h
 
-BOO2_DEP := \
+BOO2_GFX := \
 	shape/2d/boo2/boo.h \
 	shape/2d/boo2/boo.mouth.h \
 	shape/2d/boo2/boo.eyes.h \
@@ -910,12 +701,12 @@ BOO2_DEP := \
 ################################################################################
 # Common
 
-BLUECOINSW_DEP := \
+BLUECOINSW_GFX := \
 	shape/3common/bluecoinsw/bluecoinsw.h \
 	shape/3common/bluecoinsw/bluecoinsw.side.h \
 	shape/3common/bluecoinsw/bluecoinsw.top.h
 
-AMP_DEP := \
+AMP_GFX := \
 	shape/3common/amp/arc.h \
 	shape/3common/amp/arc.arc.h \
 	shape/3common/amp/eyes.h \
@@ -941,21 +732,21 @@ AMP_DEP := \
 	shape/3common/amp/eyes_old.h \
 	shape/3common/amp/eyes_old.shade_old.h
 
-CANNONLID_DEP := \
+CANNONLID_GFX := \
 	shape/3common/cannonlid/cannonlid.h \
 	shape/3common/cannonlid/cannonlid.lid.h
 
-CANNON_DEP := \
+CANNON_GFX := \
 	shape/3common/cannon/cannon.h \
 	shape/3common/cannon/cannon.side.h \
 	shape/3common/cannon/cannon.shade.h
 
-CANNONBARREL_DEP := \
+CANNONBARREL_GFX := \
 	shape/3common/cannonbarrel/cannonbarrel.h \
 	shape/3common/cannonbarrel/cannonbarrel.rim.h \
 	shape/3common/cannonbarrel/cannonbarrel.shade.h
 
-CHUCKYA_DEP := \
+CHUCKYA_GFX := \
 	shape/3common/chuckya/body.h \
 	shape/3common/chuckya/body.purple_l.h \
 	shape/3common/chuckya/body.purple_r.h \
@@ -980,21 +771,21 @@ CHUCKYA_DEP := \
 	shape/3common/chuckya/back.h \
 	shape/3common/chuckya/back.back.h
 
-PURPLESW_DEP := \
+PURPLESW_GFX := \
 	shape/3common/purplesw/purplesw.h \
 	shape/3common/purplesw/purplesw.side.h \
 	shape/3common/purplesw/purplesw.top.h
 
-LIFT_DEP := \
+LIFT_GFX := \
 	shape/3common/lift/lift.h \
 	shape/3common/lift/lift.side.h \
 	shape/3common/lift/lift.face.h
 
-HEART_DEP := \
+HEART_GFX := \
 	shape/3common/heart/heart.h \
 	shape/3common/heart/heart.heart.h
 
-FLYGUY_DEP := \
+FLYGUY_GFX := \
 	shape/3common/flyguy/footR.h \
 	shape/3common/flyguy/footR.foot.h \
 	shape/3common/flyguy/footL.h \
@@ -1009,11 +800,11 @@ FLYGUY_DEP := \
 	shape/3common/flyguy/body.cloth_red.h \
 	shape/3common/flyguy/body.black.h
 
-BLOCK_DEP := \
+BLOCK_GFX := \
 	shape/3common/block/block.h \
 	shape/3common/block/block.block.h
 
-ITEMBOX_DEP := \
+ITEMBOX_GFX := \
 	shape/3common/itembox/32x64.h \
 	shape/3common/itembox/32x64.32x64_face.h \
 	shape/3common/itembox/32x64.32x64_side.h \
@@ -1021,7 +812,7 @@ ITEMBOX_DEP := \
 	shape/3common/itembox/64x32.64x32_face.h \
 	shape/3common/itembox/64x32.64x32_side.h
 
-GOOMBA_DEP := \
+GOOMBA_GFX := \
 	shape/3common/goomba/head.h \
 	shape/3common/goomba/head.head.h \
 	shape/3common/goomba/body.h \
@@ -1035,7 +826,7 @@ GOOMBA_DEP := \
 	shape/3common/goomba/body_old.h \
 	shape/3common/goomba/body_old.body_old.h
 
-BOBOMB_DEP := \
+BOBOMB_GFX := \
 	shape/3common/bobomb/eyes.h \
 	shape/3common/bobomb/eyes.eyes.h \
 	shape/3common/bobomb/footR.h \
@@ -1045,11 +836,11 @@ BOBOMB_DEP := \
 	shape/3common/bobomb/cap.h \
 	shape/3common/bobomb/cap.cap.h
 
-PUSHBLOCK_DEP := \
+PUSHBLOCK_GFX := \
 	shape/3common/pushblock/pushblock.h \
 	shape/3common/pushblock/pushblock.pushblock.h
 
-DOTBOX_DEP := \
+DOTBOX_GFX := \
 	shape/3common/dotbox/box.h \
 	shape/3common/dotbox/box.box.h \
 	shape/3common/dotbox/dot.h \
@@ -1057,17 +848,17 @@ DOTBOX_DEP := \
 	shape/3common/dotbox/mark.h \
 	shape/3common/dotbox/mark.mark.h
 
-TESTLIFT_DEP := \
+TESTLIFT_GFX := \
 	shape/3common/testlift/testlift.h \
 	shape/3common/testlift/testlift.shade.h
 
-SHELL_OLD_DEP := \
+SHELL_OLD_GFX := \
 	shape/3common/shell/shell_old.h \
 	shape/3common/shell/shell_old.top.h \
 	shape/3common/shell/shell_old.bottom.h \
 	shape/3common/shell/shell_old.side.h
 
-SHELL_DEP := \
+SHELL_GFX := \
 	shape/3common/shell/shell.h \
 	shape/3common/shell/shell.top.h \
 	shape/3common/shell/shell.bottom.h \
@@ -1077,20 +868,20 @@ SHELL_DEP := \
 ################################################################################
 # Global
 
-BUTTERFLY_DEP := \
+BUTTERFLY_GFX := \
 	shape/global/butterfly/l.h \
 	shape/global/butterfly/l.wing.h \
 	shape/global/butterfly/r.h \
 	shape/global/butterfly/r.wing.h
 
-PIPE_DEP := \
+PIPE_GFX := \
 	shape/global/pipe/side.h \
 	shape/global/pipe/side.side.h \
 	shape/global/pipe/end.h \
 	shape/global/pipe/end.top.h \
 	shape/global/pipe/end.bottom.h
 
-DOOR_DEP := \
+DOOR_GFX := \
 	shape/global/door/ah.h \
 	shape/global/door/ah.a_side.h \
 	shape/global/door/ah.a_face.h \
@@ -1108,17 +899,17 @@ DOOR_DEP := \
 	shape/global/door/l.b_face.h \
 	shape/global/door/l.knob.h
 
-DOORKEY_DEP := \
+DOORKEY_GFX := \
 	shape/global/doorkey/key.h \
 	shape/global/doorkey/key.key.h
 
-FISH_DEP := \
+FISH_GFX := \
 	shape/global/fish/body.h \
 	shape/global/fish/body.fish.h \
 	shape/global/fish/tail.h \
 	shape/global/fish/tail.fish.h
 
-CAP_DEP := \
+CAP_GFX := \
 	shape/global/cap/cap.h \
 	shape/global/cap/cap.logo.h \
 	shape/global/cap/cap.red.h \
@@ -1127,24 +918,24 @@ CAP_DEP := \
 	shape/global/cap/wing.wing_l.h \
 	shape/global/cap/wing.wing_r.h
 
-POWERSTAR_DEP := \
+POWERSTAR_GFX := \
 	shape/global/powerstar/star.h \
 	shape/global/powerstar/star.star.h \
 	shape/global/powerstar/eyes.h \
 	shape/global/powerstar/eyes.eye.h
 
-SHADESTAR_DEP := \
+SHADESTAR_GFX := \
 	shape/global/shadestar/star.h \
 	shape/global/shadestar/star.star.h
 
-SIGNPOST_DEP := \
+SIGNPOST_GFX := \
 	shape/global/signpost/post.h \
 	shape/global/signpost/post.wood.h \
 	shape/global/signpost/sign.h \
 	shape/global/signpost/sign.wood.h \
 	shape/global/signpost/sign.face.h
 
-TREE_DEP := \
+TREE_GFX := \
 	shape/global/tree/a.h \
 	shape/global/tree/a.a_l.h \
 	shape/global/tree/a.a_r.h \
@@ -1160,7 +951,7 @@ TREE_DEP := \
 ################################################################################
 # Title
 
-LOGO_DEP := \
+LOGO_GFX := \
 	stage/title/logo.h \
 	stage/title/logo.marble.h \
 	stage/title/logo.wood.h \
@@ -1169,7 +960,7 @@ LOGO_DEP := \
 	stage/title/symbol.copyright.h \
 	stage/title/symbol.trademark.h
 
-DEBUG_DEP := \
+DEBUG_GFX := \
 	stage/title/super_s.h \
 	stage/title/super_s.super_s.h \
 	stage/title/super_u.h \
@@ -1194,19 +985,19 @@ DEBUG_DEP := \
 ################################################################################
 # Select
 
-FILE_DEP := \
+FILE_GFX := \
 	stage/select/file/file.h \
 	stage/select/file/file.edge.h \
 	stage/select/file/file.face.h
 
-TILE_DEP := \
+TILE_GFX := \
 	stage/select/tile/tile.h \
 	stage/select/tile/tile.tile.h
 
 ################################################################################
 # BoB
 
-BATTLEFIELD_DEP := \
+BATTLEFIELD_GFX := \
 	stage/bob/battlefield/smooth.h \
 	stage/bob/battlefield/smooth.c11.h \
 	stage/bob/battlefield/smooth.c18.h \
@@ -1238,22 +1029,22 @@ BATTLEFIELD_DEP := \
 	stage/bob/battlefield/cave.h \
 	stage/bob/battlefield/cave.c17_cave.h
 
-BOB_54_DEP := \
+BOB_54_GFX := \
 	stage/bob/54/54.h \
 	stage/bob/54/54.c16.h
 
-BOB_55_DEP := \
+BOB_55_GFX := \
 	stage/bob/55/55.h \
 	stage/bob/55/55.c12.h
 
-BOB_56_DEP := \
+BOB_56_GFX := \
 	stage/bob/56/56.h \
 	stage/bob/56/56.c16.h
 
 ################################################################################
 # PSS
 
-MINISLIDER_DEP := \
+MINISLIDER_GFX := \
 	stage/pss/minislider/0.h \
 	stage/pss/minislider/0.i21_shade.h \
 	stage/pss/minislider/0.i21_light.h \
@@ -1280,257 +1071,25 @@ MINISLIDER_DEP := \
 
 ################################################################################
 
-GFX_DEP := \
-	data/gfx/glbfont/0.rgba16.h \
-	data/gfx/glbfont/1.rgba16.h \
-	data/gfx/glbfont/2.rgba16.h \
-	data/gfx/glbfont/3.rgba16.h \
-	data/gfx/glbfont/4.rgba16.h \
-	data/gfx/glbfont/5.rgba16.h \
-	data/gfx/glbfont/6.rgba16.h \
-	data/gfx/glbfont/7.rgba16.h \
-	data/gfx/glbfont/8.rgba16.h \
-	data/gfx/glbfont/9.rgba16.h \
-	data/gfx/glbfont/a.rgba16.h \
-	data/gfx/glbfont/b.rgba16.h \
-	data/gfx/glbfont/c.rgba16.h \
-	data/gfx/glbfont/d.rgba16.h \
-	data/gfx/glbfont/e.rgba16.h \
-	data/gfx/glbfont/f.rgba16.h \
-	data/gfx/glbfont/g.rgba16.h \
-	data/gfx/glbfont/h.rgba16.h \
-	data/gfx/glbfont/i.rgba16.h \
-	data/gfx/glbfont/k.rgba16.h \
-	data/gfx/glbfont/l.rgba16.h \
-	data/gfx/glbfont/m.rgba16.h \
-	data/gfx/glbfont/n.rgba16.h \
-	data/gfx/glbfont/o.rgba16.h \
-	data/gfx/glbfont/p.rgba16.h \
-	data/gfx/glbfont/r.rgba16.h \
-	data/gfx/glbfont/s.rgba16.h \
-	data/gfx/glbfont/t.rgba16.h \
-	data/gfx/glbfont/u.rgba16.h \
-	data/gfx/glbfont/w.rgba16.h \
-	data/gfx/glbfont/y.rgba16.h \
-	data/gfx/glbfont/squote.rgba16.h \
-	data/gfx/glbfont/dquote.rgba16.h \
-	data/gfx/glbfont/multiply.rgba16.h \
-	data/gfx/glbfont/coin.rgba16.h \
-	data/gfx/glbfont/mario.rgba16.h \
-	data/gfx/glbfont/star.rgba16.h \
-	data/gfx/staff/3.rgba16.h \
-	data/gfx/staff/4.rgba16.h \
-	data/gfx/staff/6.rgba16.h \
-	data/gfx/staff/a.rgba16.h \
-	data/gfx/staff/b.rgba16.h \
-	data/gfx/staff/c.rgba16.h \
-	data/gfx/staff/d.rgba16.h \
-	data/gfx/staff/e.rgba16.h \
-	data/gfx/staff/f.rgba16.h \
-	data/gfx/staff/g.rgba16.h \
-	data/gfx/staff/h.rgba16.h \
-	data/gfx/staff/i.rgba16.h \
-	data/gfx/staff/j.rgba16.h \
-	data/gfx/staff/k.rgba16.h \
-	data/gfx/staff/l.rgba16.h \
-	data/gfx/staff/m.rgba16.h \
-	data/gfx/staff/n.rgba16.h \
-	data/gfx/staff/o.rgba16.h \
-	data/gfx/staff/p.rgba16.h \
-	data/gfx/staff/q.rgba16.h \
-	data/gfx/staff/r.rgba16.h \
-	data/gfx/staff/s.rgba16.h \
-	data/gfx/staff/t.rgba16.h \
-	data/gfx/staff/u.rgba16.h \
-	data/gfx/staff/v.rgba16.h \
-	data/gfx/staff/w.rgba16.h \
-	data/gfx/staff/x.rgba16.h \
-	data/gfx/staff/y.rgba16.h \
-	data/gfx/staff/z.rgba16.h \
-	data/gfx/staff/period.rgba16.h \
-	data/gfx/lgfont/0.ia4.h \
-	data/gfx/lgfont/1.ia4.h \
-	data/gfx/lgfont/2.ia4.h \
-	data/gfx/lgfont/3.ia4.h \
-	data/gfx/lgfont/4.ia4.h \
-	data/gfx/lgfont/5.ia4.h \
-	data/gfx/lgfont/6.ia4.h \
-	data/gfx/lgfont/7.ia4.h \
-	data/gfx/lgfont/8.ia4.h \
-	data/gfx/lgfont/9.ia4.h \
-	data/gfx/lgfont/u_a.ia4.h \
-	data/gfx/lgfont/u_b.ia4.h \
-	data/gfx/lgfont/u_c.ia4.h \
-	data/gfx/lgfont/u_d.ia4.h \
-	data/gfx/lgfont/u_e.ia4.h \
-	data/gfx/lgfont/u_f.ia4.h \
-	data/gfx/lgfont/u_g.ia4.h \
-	data/gfx/lgfont/u_h.ia4.h \
-	data/gfx/lgfont/u_i.ia4.h \
-	data/gfx/lgfont/u_j.ia4.h \
-	data/gfx/lgfont/u_k.ia4.h \
-	data/gfx/lgfont/u_l.ia4.h \
-	data/gfx/lgfont/u_m.ia4.h \
-	data/gfx/lgfont/u_n.ia4.h \
-	data/gfx/lgfont/u_o.ia4.h \
-	data/gfx/lgfont/u_p.ia4.h \
-	data/gfx/lgfont/u_q.ia4.h \
-	data/gfx/lgfont/u_r.ia4.h \
-	data/gfx/lgfont/u_s.ia4.h \
-	data/gfx/lgfont/u_t.ia4.h \
-	data/gfx/lgfont/u_u.ia4.h \
-	data/gfx/lgfont/u_v.ia4.h \
-	data/gfx/lgfont/u_w.ia4.h \
-	data/gfx/lgfont/u_x.ia4.h \
-	data/gfx/lgfont/u_y.ia4.h \
-	data/gfx/lgfont/u_z.ia4.h \
-	data/gfx/lgfont/l_a.ia4.h \
-	data/gfx/lgfont/l_b.ia4.h \
-	data/gfx/lgfont/l_c.ia4.h \
-	data/gfx/lgfont/l_d.ia4.h \
-	data/gfx/lgfont/l_e.ia4.h \
-	data/gfx/lgfont/l_f.ia4.h \
-	data/gfx/lgfont/l_g.ia4.h \
-	data/gfx/lgfont/l_h.ia4.h \
-	data/gfx/lgfont/l_i.ia4.h \
-	data/gfx/lgfont/l_j.ia4.h \
-	data/gfx/lgfont/l_k.ia4.h \
-	data/gfx/lgfont/l_l.ia4.h \
-	data/gfx/lgfont/l_m.ia4.h \
-	data/gfx/lgfont/l_n.ia4.h \
-	data/gfx/lgfont/l_o.ia4.h \
-	data/gfx/lgfont/l_p.ia4.h \
-	data/gfx/lgfont/l_q.ia4.h \
-	data/gfx/lgfont/l_r.ia4.h \
-	data/gfx/lgfont/l_s.ia4.h \
-	data/gfx/lgfont/l_t.ia4.h \
-	data/gfx/lgfont/l_u.ia4.h \
-	data/gfx/lgfont/l_v.ia4.h \
-	data/gfx/lgfont/l_w.ia4.h \
-	data/gfx/lgfont/l_x.ia4.h \
-	data/gfx/lgfont/l_y.ia4.h \
-	data/gfx/lgfont/l_z.ia4.h \
-	data/gfx/lgfont/arrow.ia4.h \
-	data/gfx/lgfont/exclaim.ia4.h \
-	data/gfx/lgfont/coin.ia4.h \
-	data/gfx/lgfont/multiply.ia4.h \
-	data/gfx/lgfont/paren_l.ia4.h \
-	data/gfx/lgfont/paren_rl.ia4.h \
-	data/gfx/lgfont/paren_r.ia4.h \
-	data/gfx/lgfont/tilde.ia4.h \
-	data/gfx/lgfont/period.ia4.h \
-	data/gfx/lgfont/percent.ia4.h \
-	data/gfx/lgfont/bullet.ia4.h \
-	data/gfx/lgfont/comma.ia4.h \
-	data/gfx/lgfont/apostrophe.ia4.h \
-	data/gfx/lgfont/question.ia4.h \
-	data/gfx/lgfont/star.ia4.h \
-	data/gfx/lgfont/star_outline.ia4.h \
-	data/gfx/lgfont/quote_l.ia4.h \
-	data/gfx/lgfont/quote_r.ia4.h \
-	data/gfx/lgfont/colon.ia4.h \
-	data/gfx/lgfont/hyphen.ia4.h \
-	data/gfx/lgfont/ampersand.ia4.h \
-	data/gfx/lgfont/button_a.ia4.h \
-	data/gfx/lgfont/button_b.ia4.h \
-	data/gfx/lgfont/button_c.ia4.h \
-	data/gfx/lgfont/button_z.ia4.h \
-	data/gfx/lgfont/button_r.ia4.h \
-	data/gfx/lgfont/button_cu.ia4.h \
-	data/gfx/lgfont/button_cd.ia4.h \
-	data/gfx/lgfont/button_cl.ia4.h \
-	data/gfx/lgfont/button_cr.ia4.h \
-	data/gfx/camera/camera.rgba16.h \
-	data/gfx/camera/lakitu.rgba16.h \
-	data/gfx/camera/cross.rgba16.h \
-	data/gfx/camera/up.rgba16.h \
-	data/gfx/camera/down.rgba16.h \
-	data/gfx/select.ja_jp.h \
-	data/gfx/message.ja_jp.h data/gfx/message.en_us.h \
-	data/gfx/course.ja_jp.h data/gfx/course.en_us.h \
-	data/gfx/level.ja_jp.h data/gfx/level.en_us.h \
-	data/gfx/shadow/circle.ia8.h \
-	data/gfx/shadow/square.ia8.h \
-	data/gfx/wipe/star.ia8.h \
-	data/gfx/wipe/circle.ia8.h \
-	data/gfx/wipe/mario.ia8.h \
-	data/gfx/wipe/bowser.ia8.h \
-	data/gfx/water/0.rgba16.h \
-	data/gfx/water/1.rgba16.h \
-	data/gfx/water/2.rgba16.h \
-	data/gfx/water/mist.ia16.h \
-	data/gfx/water/lava.rgba16.h \
-	data/gfx/minimap/arrow.ia8.h
+FACE_DEP := $(patsubst %.png,%.h,$(wildcard src/face/*.png)) \
 
+GFX_DIR := glbfont staff lgfont camera shadow wipe water minimap
+GFX_DEP := \
+	$(patsubst %.png,%.h,$(foreach dir,$(GFX_DIR),$(wildcard data/gfx/$(dir)/*.png))) \
+	$(patsubst %.txt,%.h,$(wildcard data/gfx/*.txt))
+
+PLAYER_DIR := mario bubble dust smoke wave ripple sparkle splash droplet glow
 PLAYER_DEP := \
-	shape/player/mario/metal.rgba16.h \
-	shape/player/mario/button.rgba16.h \
-	shape/player/mario/logo.rgba16.h \
-	shape/player/mario/sideburn.rgba16.h \
-	shape/player/mario/moustache.rgba16.h \
-	shape/player/mario/eyes_open.rgba16.h \
-	shape/player/mario/eyes_half.rgba16.h \
-	shape/player/mario/eyes_closed.rgba16.h \
-	shape/player/mario/eyes_left.rgba16.h \
-	shape/player/mario/eyes_right.rgba16.h \
-	shape/player/mario/eyes_up.rgba16.h \
-	shape/player/mario/eyes_down.rgba16.h \
-	shape/player/mario/eyes_dead.rgba16.h \
-	shape/player/mario/wing_l.rgba16.h \
-	shape/player/mario/wing_r.rgba16.h \
-	shape/player/mario/metal_wing_l.rgba16.h \
-	shape/player/mario/metal_wing_r.rgba16.h \
-	$(MARIO_DEP) \
-	shape/player/bubble/a.rgba16.h \
-	shape/player/bubble/b.rgba16.h \
-	shape/player/dust/0.ia16.h \
-	shape/player/dust/1.ia16.h \
-	shape/player/dust/2.ia16.h \
-	shape/player/dust/3.ia16.h \
-	shape/player/dust/4.ia16.h \
-	shape/player/dust/5.ia16.h \
-	shape/player/dust/6.ia16.h \
-	shape/player/smoke/smoke.ia16.h \
-	shape/player/wave/0.ia16.h \
-	shape/player/wave/1.ia16.h \
-	shape/player/wave/2.ia16.h \
-	shape/player/wave/3.ia16.h \
-	shape/player/wave/4.ia16.h \
-	shape/player/wave/5.ia16.h \
-	shape/player/ripple/0.ia16.h \
-	shape/player/ripple/1.ia16.h \
-	shape/player/ripple/2.ia16.h \
-	shape/player/ripple/3.ia16.h \
-	shape/player/sparkle/0.rgba16.h \
-	shape/player/sparkle/1.rgba16.h \
-	shape/player/sparkle/2.rgba16.h \
-	shape/player/sparkle/3.rgba16.h \
-	shape/player/sparkle/4.rgba16.h \
-	shape/player/sparkle/5.rgba16.h \
-	shape/player/splash/0.rgba16.h \
-	shape/player/splash/1.rgba16.h \
-	shape/player/splash/2.rgba16.h \
-	shape/player/splash/3.rgba16.h \
-	shape/player/splash/4.rgba16.h \
-	shape/player/splash/5.rgba16.h \
-	shape/player/splash/6.rgba16.h \
-	shape/player/splash/7.rgba16.h \
-	shape/player/droplet/droplet.rgba16.h \
-	shape/player/glow/0.ia16.h \
-	shape/player/glow/1.ia16.h \
-	shape/player/glow/2.ia16.h \
-	shape/player/glow/3.ia16.h \
-	shape/player/glow/4.ia16.h
+	$(patsubst %.png,%.h,$(foreach dir,$(PLAYER_DIR),$(wildcard shape/player/$(dir)/*.png))) \
+	$(MARIO_GFX)
 
 SHAPE_1A_DEP :=
 
+SHAPE_1B_DIR := bully blargg
 SHAPE_1B_DEP := \
-	shape/1b/bully/horn.rgba16.h \
-	shape/1b/bully/body_l.rgba16.h \
-	shape/1b/bully/body_r.rgba16.h \
-	shape/1b/bully/eye.rgba16.h \
-	$(BULLY_DEP) \
-	$(BLARGG_DEP)
+	$(patsubst %.png,%.h,$(foreach dir,$(SHAPE_1B_DIR),$(wildcard shape/1b/$(dir)/*.png))) \
+	$(BULLY_GFX) \
+	$(BLARGG_GFX)
 
 SHAPE_1C_DEP :=
 SHAPE_1D_DEP :=
@@ -1544,1203 +1103,99 @@ SHAPE_1K_DEP :=
 
 SHAPE_2A_DEP :=
 
+SHAPE_2B_DIR := skeeter kelp watermine piranha bub waterring chest
 SHAPE_2B_DEP := \
-	shape/2b/skeeter/sphere.rgba16.h \
-	shape/2b/skeeter/iris.rgba16.h \
-	$(SKEETER_DEP) \
-	shape/2b/kelp/0.rgba16.h \
-	shape/2b/kelp/1.rgba16.h \
-	shape/2b/kelp/2.rgba16.h \
-	shape/2b/kelp/3.rgba16.h \
-	$(KELP_DEP) \
-	shape/2b/watermine/l.rgba16.h \
-	shape/2b/watermine/r.rgba16.h \
-	shape/2b/watermine/spike.rgba16.h \
-	$(WATERMINE_DEP) \
-	shape/2b/piranha/piranha.rgba16.h \
-	$(PIRANHA_DEP) \
-	shape/2b/bub/goggles.rgba16.h \
-	shape/2b/bub/fin.rgba16.h \
-	shape/2b/bub/eyes.rgba16.h \
-	shape/2b/bub/scale.rgba16.h \
-	$(BUB_DEP) \
-	shape/2b/waterring/waterring.rgba16.h \
-	$(WATERRING_DEP) \
-	shape/2b/chest/keyhole.rgba16.h \
-	shape/2b/chest/inside.rgba16.h \
-	shape/2b/chest/latch.rgba16.h \
-	shape/2b/chest/outside.rgba16.h \
-	$(CHEST_DEP)
+	$(patsubst %.png,%.h,$(foreach dir,$(SHAPE_2B_DIR),$(wildcard shape/2b/$(dir)/*.png))) \
+	$(SKEETER_GFX) \
+	$(KELP_GFX) \
+	$(WATERMINE_GFX) \
+	$(PIRANHA_GFX) \
+	$(BUB_GFX) \
+	$(WATERRING_GFX) \
+	$(CHEST_GFX)
 
 SHAPE_2C_DEP :=
 
+SHAPE_2D_DIR := lakitu2 toad mips boo2
 SHAPE_2D_DEP := \
-	shape/2d/lakitu2/unused.rgba16.h \
-	shape/2d/lakitu2/eyes_open.rgba16.h \
-	shape/2d/lakitu2/eyes_closed.rgba16.h \
-	shape/2d/lakitu2/shell.rgba16.h \
-	shape/2d/lakitu2/mouth.rgba16.h \
-	shape/2d/lakitu2/lens.rgba16.h \
-	$(LAKITU2_DEP) \
-	shape/2d/toad/face.rgba16.h \
-	shape/2d/toad/spot.rgba16.h \
-	$(TOAD_DEP) \
-	shape/2d/mips/face.rgba16.h \
-	$(MIPS_DEP) \
-	shape/2d/boo2/eyes.rgba16.h \
-	shape/2d/boo2/mouth.rgba16.h \
-	$(BOO2_DEP)
+	$(patsubst %.png,%.h,$(foreach dir,$(SHAPE_2D_DIR),$(wildcard shape/2d/$(dir)/*.png))) \
+	$(LAKITU2_GFX) \
+	$(TOAD_GFX) \
+	$(MIPS_GFX) \
+	$(BOO2_GFX)
 
 SHAPE_2E_DEP :=
 SHAPE_2F_DEP :=
 
+COMMON_DIR := bluecoinsw amp cannonlid cannon cannonbarrel chuckya purplesw lift heart flyguy block itembox goomba bobomb pushblock dotbox shell
 COMMON_DEP := \
-	shape/3common/bluecoinsw/side.rgba16.h \
-	shape/3common/bluecoinsw/top.rgba16.h \
-	$(BLUECOINSW_DEP) \
-	shape/3common/bluecoinsw/map.h \
-	shape/3common/amp/arc.rgba16.h \
-	shape/3common/amp/eyes.rgba16.h \
-	shape/3common/amp/body.rgba16.h \
-	shape/3common/amp/mouth.rgba16.h \
-	$(AMP_DEP) \
-	shape/3common/cannonlid/lid.rgba16.h \
-	$(CANNONLID_DEP) \
-	shape/3common/cannonlid/map.h \
-	shape/3common/cannon/side.rgba16.h \
-	$(CANNON_DEP) \
-	shape/3common/cannonbarrel/rim.rgba16.h \
-	$(CANNONBARREL_DEP) \
-	shape/3common/chuckya/eyes.rgba16.h \
-	shape/3common/chuckya/purple.rgba16.h \
-	shape/3common/chuckya/red.rgba16.h \
-	shape/3common/chuckya/purple_l.rgba16.h \
-	shape/3common/chuckya/purple_r.rgba16.h \
-	$(CHUCKYA_DEP) \
-	shape/3common/purplesw/side.rgba16.h \
-	shape/3common/purplesw/top.rgba16.h \
-	$(PURPLESW_DEP) \
-	shape/3common/purplesw/map.h \
-	shape/3common/lift/side.rgba16.h \
-	shape/3common/lift/face.rgba16.h \
-	$(LIFT_DEP) \
-	shape/3common/lift/map.h \
-	shape/3common/heart/heart.rgba16.h \
-	$(HEART_DEP) \
-	shape/3common/flyguy/cloth.rgba16.h \
-	shape/3common/flyguy/face.rgba16.h \
-	shape/3common/flyguy/propeller.ia16.h \
-	$(FLYGUY_DEP) \
-	shape/3common/block/0.rgba16.h \
-	shape/3common/block/1.rgba16.h \
-	$(BLOCK_DEP) \
-	shape/3common/block/map.h \
-	shape/3common/itembox/face_b.rgba16.h \
-	shape/3common/itembox/side_b.rgba16.h \
-	shape/3common/itembox/face_g.rgba16.h \
-	shape/3common/itembox/side_g.rgba16.h \
-	shape/3common/itembox/face_r.rgba16.h \
-	shape/3common/itembox/side_r.rgba16.h \
-	shape/3common/itembox/face_y.rgba16.h \
-	shape/3common/itembox/side_y.rgba16.h \
-	$(ITEMBOX_DEP) \
-	shape/3common/goomba/body.rgba16.h \
-	shape/3common/goomba/head_open.rgba16.h \
-	shape/3common/goomba/head_closed.rgba16.h \
-	$(GOOMBA_DEP) \
-	shape/3common/bobomb/black_l.rgba16.h \
-	shape/3common/bobomb/black_r.rgba16.h \
-	shape/3common/bobomb/red_l.rgba16.h \
-	shape/3common/bobomb/red_r.rgba16.h \
-	shape/3common/bobomb/eyes_open.rgba16.h \
-	shape/3common/bobomb/eyes_closed.rgba16.h \
-	$(BOBOMB_DEP) \
-	shape/3common/pushblock/pushblock.rgba16.h \
-	$(PUSHBLOCK_DEP) \
-	shape/3common/pushblock/map.h \
-	shape/3common/dotbox/dot.rgba16.h \
-	shape/3common/dotbox/mark.rgba16.h \
-	$(DOTBOX_DEP) \
-	shape/3common/dotbox/map.h \
-	$(TESTLIFT_DEP) \
-	shape/3common/testlift/map.h \
-	$(SHELL_OLD_DEP) \
-	shape/3common/shell/bottom.rgba16.h \
-	shape/3common/shell/top.rgba16.h \
-	$(SHELL_DEP)
+	$(patsubst %.png,%.h,$(foreach dir,$(COMMON_DIR),$(wildcard shape/3common/$(dir)/*.png))) \
+	$(BLUECOINSW_GFX) shape/3common/bluecoinsw/map.h \
+	$(AMP_GFX) \
+	$(CANNONLID_GFX) shape/3common/cannonlid/map.h \
+	$(CANNON_GFX) \
+	$(CANNONBARREL_GFX) \
+	$(CHUCKYA_GFX) \
+	$(PURPLESW_GFX) shape/3common/purplesw/map.h \
+	$(LIFT_GFX) shape/3common/lift/map.h \
+	$(HEART_GFX) \
+	$(FLYGUY_GFX) \
+	$(BLOCK_GFX) shape/3common/block/map.h \
+	$(ITEMBOX_GFX) \
+	$(GOOMBA_GFX) \
+	$(BOBOMB_GFX) \
+	$(PUSHBLOCK_GFX) shape/3common/pushblock/map.h \
+	$(DOTBOX_GFX) shape/3common/dotbox/map.h \
+	$(TESTLIFT_GFX) shape/3common/testlift/map.h \
+	$(SHELL_OLD_GFX) \
+	$(SHELL_GFX)
 
+GLOBAL_DIR := puff explosion butterfly coin pipe door flame fish stone leaf cap meter 1up powerstar sand shard snow signpost tree
 GLOBAL_DEP := \
-	shape/global/puff/puff.ia16.h \
-	shape/global/explosion/0.rgba16.h \
-	shape/global/explosion/1.rgba16.h \
-	shape/global/explosion/2.rgba16.h \
-	shape/global/explosion/3.rgba16.h \
-	shape/global/explosion/4.rgba16.h \
-	shape/global/explosion/5.rgba16.h \
-	shape/global/explosion/6.rgba16.h \
-	shape/global/butterfly/wing.rgba16.h \
-	$(BUTTERFLY_DEP) \
-	shape/global/coin/0.ia16.h \
-	shape/global/coin/1.ia16.h \
-	shape/global/coin/2.ia16.h \
-	shape/global/coin/3.ia16.h \
-	shape/global/pipe/side.rgba16.h \
-	shape/global/pipe/top.rgba16.h \
-	$(PIPE_DEP) \
-	shape/global/pipe/map.h \
-	shape/global/door/a_face.rgba16.h \
-	shape/global/door/a_side.rgba16.h \
-	shape/global/door/b_face.rgba16.h \
-	shape/global/door/b_side.rgba16.h \
-	shape/global/door/d_face.rgba16.h \
-	shape/global/door/d_side.rgba16.h \
-	shape/global/door/e_face.rgba16.h \
-	shape/global/door/e_side.rgba16.h \
-	shape/global/door/f_face.rgba16.h \
-	shape/global/door/f_side.rgba16.h \
-	shape/global/door/star.rgba16.h \
-	shape/global/door/star1.rgba16.h \
-	shape/global/door/star3.rgba16.h \
-	shape/global/door/keyhole.rgba16.h \
-	$(DOOR_DEP) \
-	$(DOORKEY_DEP) \
-	shape/global/flame/0.ia16.h \
-	shape/global/flame/1.ia16.h \
-	shape/global/flame/2.ia16.h \
-	shape/global/flame/3.ia16.h \
-	shape/global/flame/4.ia16.h \
-	shape/global/flame/5.ia16.h \
-	shape/global/flame/6.ia16.h \
-	shape/global/flame/7.ia16.h \
-	shape/global/fish/fish.rgba16.h \
-	$(FISH_DEP) \
-	shape/global/stone/stone.rgba16.h \
-	shape/global/leaf/leaf.rgba16.h \
-	shape/global/map/door.h \
-	shape/global/map/13002018.h \
-	shape/global/cap/metal.rgba16.h \
-	shape/global/cap/logo.rgba16.h \
-	shape/global/cap/wing_l.rgba16.h \
-	shape/global/cap/wing_r.rgba16.h \
-	shape/global/cap/metal_wing_l.rgba16.h \
-	shape/global/cap/metal_wing_r.rgba16.h \
-	$(CAP_DEP) \
-	shape/global/meter/0_l.rgba16.h \
-	shape/global/meter/0_r.rgba16.h \
-	shape/global/meter/8.rgba16.h \
-	shape/global/meter/7.rgba16.h \
-	shape/global/meter/6.rgba16.h \
-	shape/global/meter/5.rgba16.h \
-	shape/global/meter/4.rgba16.h \
-	shape/global/meter/3.rgba16.h \
-	shape/global/meter/2.rgba16.h \
-	shape/global/meter/1.rgba16.h \
-	shape/global/1up/1up.rgba16.h \
-	shape/global/powerstar/star.rgba16.h \
-	shape/global/powerstar/eye.rgba16.h \
-	$(POWERSTAR_DEP) \
-	shape/global/sand/sand.rgba16.h \
-	shape/global/shard/cork.rgba16.h \
-	$(SHADESTAR_DEP) \
-	shape/global/snow/snow.rgba16.h \
-	shape/global/signpost/wood.rgba16.h \
-	shape/global/signpost/face.rgba16.h \
-	$(SIGNPOST_DEP) \
-	shape/global/signpost/map.h \
-	shape/global/tree/a_l.rgba16.h \
-	shape/global/tree/a_r.rgba16.h \
-	shape/global/tree/b.rgba16.h \
-	shape/global/tree/c.rgba16.h \
-	shape/global/tree/e.rgba16.h \
-	$(TREE_DEP)
+	$(patsubst %.png,%.h,$(foreach dir,$(GLOBAL_DIR),$(wildcard shape/global/$(dir)/*.png))) \
+	$(BUTTERFLY_GFX) \
+	$(PIPE_GFX) shape/global/pipe/map.h \
+	$(DOOR_GFX) \
+	$(DOORKEY_GFX) \
+	$(FISH_GFX) \
+	shape/global/map/door.h shape/global/map/13002018.h \
+	$(CAP_GFX) \
+	$(POWERSTAR_GFX) \
+	$(SHADESTAR_GFX) \
+	$(SIGNPOST_GFX) shape/global/signpost/map.h \
+	$(TREE_GFX)
 
 TITLE_LOGO_DEP := \
-	stage/title/wood.rgba16.h \
-	stage/title/marble.rgba16.h \
-	stage/title/copyright.rgba16.h \
-	stage/title/trademark.rgba16.h \
-	$(LOGO_DEP)
+	$(patsubst %.png,%.h,$(wildcard stage/title/*.png)) \
+	$(LOGO_GFX)
 
 TITLE_DEBUG_DEP := \
-	$(DEBUG_DEP)
+	$(DEBUG_GFX)
 
-TITLE_BACK_DEP := \
-	data/background/title/mario.0.rgba16.h \
-	data/background/title/mario.1.rgba16.h \
-	data/background/title/mario.2.rgba16.h \
-	data/background/title/mario.3.rgba16.h \
-	data/background/title/gameover.0.rgba16.h \
-	data/background/title/gameover.1.rgba16.h \
-	data/background/title/gameover.2.rgba16.h \
-	data/background/title/gameover.3.rgba16.h
+TITLE_BACK_DEP := $(patsubst %.png,%.h,$(wildcard data/background/title/*.png))
 
+SELECT_DIR := file tile cursor selfont smfont course
 SELECT_DEP := \
-	stage/select/file/light.rgba16.h \
-	stage/select/file/shade.rgba16.h \
-	stage/select/file/mario.rgba16.h \
-	stage/select/file/new.rgba16.h \
-	$(FILE_DEP) \
-	stage/select/tile/erase.rgba16.h \
-	stage/select/tile/copy.rgba16.h \
-	stage/select/tile/main.rgba16.h \
-	stage/select/tile/score.rgba16.h \
-	stage/select/tile/sound.rgba16.h \
-	$(TILE_DEP) \
-	stage/select/cursor/0.rgba16.h \
-	stage/select/cursor/1.rgba16.h \
-	stage/select/selfont/k_hu.rgba16.h \
-	stage/select/selfont/k_xa.rgba16.h \
-	stage/select/selfont/k_i.rgba16.h \
-	stage/select/selfont/k_ru.rgba16.h \
-	stage/select/selfont/k_se.rgba16.h \
-	stage/select/selfont/k_re.rgba16.h \
-	stage/select/selfont/k_ku.rgba16.h \
-	stage/select/selfont/k_to.rgba16.h \
-	stage/select/selfont/h_wo.rgba16.h \
-	stage/select/selfont/k_ko.rgba16.h \
-	stage/select/selfont/k_pi.rgba16.h \
-	stage/select/selfont/chouonpu.rgba16.h \
-	stage/select/selfont/h_su.rgba16.h \
-	stage/select/selfont/h_ru.rgba16.h \
-	stage/select/selfont/h_ke.rgba16.h \
-	stage/select/selfont/k_ma.rgba16.h \
-	stage/select/selfont/k_ri.rgba16.h \
-	stage/select/selfont/k_o.rgba16.h \
-	stage/select/selfont/k_su.rgba16.h \
-	stage/select/selfont/k_a.rgba16.h \
-	stage/select/selfont/h_mi.rgba16.h \
-	stage/select/selfont/h_do.rgba16.h \
-	stage/select/selfont/h_no.rgba16.h \
-	stage/select/selfont/question.rgba16.h \
-	stage/select/selfont/k_sa.rgba16.h \
-	stage/select/selfont/k_u.rgba16.h \
-	stage/select/selfont/k_n.rgba16.h \
-	stage/select/selfont/k_do.rgba16.h \
-	stage/select/smfont/0.ia8.h \
-	stage/select/smfont/1.ia8.h \
-	stage/select/smfont/2.ia8.h \
-	stage/select/smfont/3.ia8.h \
-	stage/select/smfont/4.ia8.h \
-	stage/select/smfont/5.ia8.h \
-	stage/select/smfont/6.ia8.h \
-	stage/select/smfont/7.ia8.h \
-	stage/select/smfont/8.ia8.h \
-	stage/select/smfont/9.ia8.h \
-	stage/select/smfont/u_a.ia8.h \
-	stage/select/smfont/u_b.ia8.h \
-	stage/select/smfont/u_c.ia8.h \
-	stage/select/smfont/u_d.ia8.h \
-	stage/select/smfont/u_e.ia8.h \
-	stage/select/smfont/u_f.ia8.h \
-	stage/select/smfont/u_g.ia8.h \
-	stage/select/smfont/u_h.ia8.h \
-	stage/select/smfont/u_i.ia8.h \
-	stage/select/smfont/u_j.ia8.h \
-	stage/select/smfont/u_k.ia8.h \
-	stage/select/smfont/u_l.ia8.h \
-	stage/select/smfont/u_m.ia8.h \
-	stage/select/smfont/u_n.ia8.h \
-	stage/select/smfont/u_o.ia8.h \
-	stage/select/smfont/u_p.ia8.h \
-	stage/select/smfont/u_q.ia8.h \
-	stage/select/smfont/u_r.ia8.h \
-	stage/select/smfont/u_s.ia8.h \
-	stage/select/smfont/u_t.ia8.h \
-	stage/select/smfont/u_u.ia8.h \
-	stage/select/smfont/u_v.ia8.h \
-	stage/select/smfont/u_w.ia8.h \
-	stage/select/smfont/u_x.ia8.h \
-	stage/select/smfont/u_y.ia8.h \
-	stage/select/smfont/u_z.ia8.h \
-	stage/select/smfont/coin.ia8.h \
-	stage/select/smfont/multiply.ia8.h \
-	stage/select/smfont/star.ia8.h \
-	stage/select/smfont/hyphen.ia8.h \
-	stage/select/smfont/comma.ia8.h \
-	stage/select/smfont/apostrophe.ia8.h \
-	stage/select/smfont/exclaim.ia8.h \
-	stage/select/smfont/question.ia8.h \
-	stage/select/smfont/mario_l.ia8.h \
-	stage/select/smfont/mario_r.ia8.h \
-	stage/select/smfont/period.ia8.h \
-	stage/select/smfont/ampersand.ia8.h \
-	stage/select/course/h.rgba16.h \
-	stage/select/course/l.rgba16.h \
+	$(patsubst %.png,%.h,$(foreach dir,$(SELECT_DIR),$(wildcard stage/select/$(dir)/*.png))) \
+	$(FILE_GFX) \
+	$(TILE_GFX) \
 	stage/select/map.h
 
-BACKGROUND_A_DEP := \
-	data/background/a/00.rgba16.h \
-	data/background/a/01.rgba16.h \
-	data/background/a/02.rgba16.h \
-	data/background/a/03.rgba16.h \
-	data/background/a/04.rgba16.h \
-	data/background/a/05.rgba16.h \
-	data/background/a/06.rgba16.h \
-	data/background/a/07.rgba16.h \
-	data/background/a/10.rgba16.h \
-	data/background/a/11.rgba16.h \
-	data/background/a/12.rgba16.h \
-	data/background/a/13.rgba16.h \
-	data/background/a/14.rgba16.h \
-	data/background/a/15.rgba16.h \
-	data/background/a/16.rgba16.h \
-	data/background/a/17.rgba16.h \
-	data/background/a/20.rgba16.h \
-	data/background/a/21.rgba16.h \
-	data/background/a/22.rgba16.h \
-	data/background/a/23.rgba16.h \
-	data/background/a/24.rgba16.h \
-	data/background/a/25.rgba16.h \
-	data/background/a/26.rgba16.h \
-	data/background/a/27.rgba16.h \
-	data/background/a/30.rgba16.h \
-	data/background/a/31.rgba16.h \
-	data/background/a/32.rgba16.h \
-	data/background/a/33.rgba16.h \
-	data/background/a/34.rgba16.h \
-	data/background/a/35.rgba16.h \
-	data/background/a/36.rgba16.h \
-	data/background/a/37.rgba16.h \
-	data/background/a/40.rgba16.h \
-	data/background/a/41.rgba16.h \
-	data/background/a/42.rgba16.h \
-	data/background/a/43.rgba16.h \
-	data/background/a/44.rgba16.h \
-	data/background/a/45.rgba16.h \
-	data/background/a/46.rgba16.h \
-	data/background/a/47.rgba16.h \
-	data/background/a/50.rgba16.h \
-	data/background/a/51.rgba16.h \
-	data/background/a/52.rgba16.h \
-	data/background/a/53.rgba16.h \
-	data/background/a/54.rgba16.h \
-	data/background/a/55.rgba16.h \
-	data/background/a/56.rgba16.h \
-	data/background/a/57.rgba16.h \
-	data/background/a/60.rgba16.h \
-	data/background/a/61.rgba16.h \
-	data/background/a/62.rgba16.h \
-	data/background/a/63.rgba16.h \
-	data/background/a/64.rgba16.h \
-	data/background/a/65.rgba16.h \
-	data/background/a/66.rgba16.h \
-	data/background/a/67.rgba16.h \
-	data/background/a/70.rgba16.h \
-	data/background/a/71.rgba16.h \
-	data/background/a/72.rgba16.h \
-	data/background/a/73.rgba16.h \
-	data/background/a/74.rgba16.h \
-	data/background/a/75.rgba16.h \
-	data/background/a/76.rgba16.h \
-	data/background/a/77.rgba16.h
+BACKGROUND_A_DEP := $(patsubst %.png,%.h,$(wildcard data/background/a/*.png))
+BACKGROUND_B_DEP := $(patsubst %.png,%.h,$(wildcard data/background/b/*.png))
+BACKGROUND_C_DEP := $(patsubst %.png,%.h,$(wildcard data/background/c/*.png))
+BACKGROUND_D_DEP := $(patsubst %.png,%.h,$(wildcard data/background/d/*.png))
+BACKGROUND_E_DEP := $(patsubst %.png,%.h,$(wildcard data/background/e/*.png))
+BACKGROUND_F_DEP := $(patsubst %.png,%.h,$(wildcard data/background/f/*.png))
+BACKGROUND_G_DEP := $(patsubst %.png,%.h,$(wildcard data/background/g/*.png))
+BACKGROUND_H_DEP := $(patsubst %.png,%.h,$(wildcard data/background/h/*.png))
+BACKGROUND_I_DEP := $(patsubst %.png,%.h,$(wildcard data/background/i/*.png))
+BACKGROUND_J_DEP := $(patsubst %.png,%.h,$(wildcard data/background/j/*.png))
 
-BACKGROUND_B_DEP := \
-	data/background/b/00.rgba16.h \
-	data/background/b/01.rgba16.h \
-	data/background/b/02.rgba16.h \
-	data/background/b/03.rgba16.h \
-	data/background/b/04.rgba16.h \
-	data/background/b/05.rgba16.h \
-	data/background/b/06.rgba16.h \
-	data/background/b/07.rgba16.h \
-	data/background/b/10.rgba16.h \
-	data/background/b/11.rgba16.h \
-	data/background/b/12.rgba16.h \
-	data/background/b/13.rgba16.h \
-	data/background/b/14.rgba16.h \
-	data/background/b/15.rgba16.h \
-	data/background/b/16.rgba16.h \
-	data/background/b/17.rgba16.h \
-	data/background/b/20.rgba16.h \
-	data/background/b/21.rgba16.h \
-	data/background/b/22.rgba16.h \
-	data/background/b/23.rgba16.h \
-	data/background/b/24.rgba16.h \
-	data/background/b/25.rgba16.h \
-	data/background/b/26.rgba16.h \
-	data/background/b/27.rgba16.h \
-	data/background/b/30.rgba16.h \
-	data/background/b/31.rgba16.h \
-	data/background/b/32.rgba16.h \
-	data/background/b/33.rgba16.h \
-	data/background/b/34.rgba16.h \
-	data/background/b/35.rgba16.h \
-	data/background/b/36.rgba16.h \
-	data/background/b/37.rgba16.h \
-	data/background/b/40.rgba16.h \
-	data/background/b/41.rgba16.h \
-	data/background/b/42.rgba16.h \
-	data/background/b/43.rgba16.h \
-	data/background/b/44.rgba16.h \
-	data/background/b/45.rgba16.h \
-	data/background/b/46.rgba16.h \
-	data/background/b/47.rgba16.h \
-	data/background/b/50.rgba16.h \
-	data/background/b/51.rgba16.h \
-	data/background/b/52.rgba16.h \
-	data/background/b/53.rgba16.h \
-	data/background/b/54.rgba16.h \
-	data/background/b/55.rgba16.h \
-	data/background/b/56.rgba16.h \
-	data/background/b/57.rgba16.h \
-	data/background/b/60.rgba16.h \
-	data/background/b/61.rgba16.h \
-	data/background/b/62.rgba16.h \
-	data/background/b/63.rgba16.h \
-	data/background/b/64.rgba16.h \
-	data/background/b/65.rgba16.h \
-	data/background/b/66.rgba16.h \
-	data/background/b/67.rgba16.h \
-	data/background/b/70.rgba16.h \
-	data/background/b/71.rgba16.h \
-	data/background/b/72.rgba16.h \
-	data/background/b/73.rgba16.h \
-	data/background/b/74.rgba16.h \
-	data/background/b/75.rgba16.h \
-	data/background/b/76.rgba16.h \
-	data/background/b/77.rgba16.h
+TEXTURE_DEP := $(patsubst %.png,%.h,$(wildcard data/texture/*.png))
 
-BACKGROUND_C_DEP := \
-	data/background/c/00.rgba16.h \
-	data/background/c/01.rgba16.h \
-	data/background/c/02.rgba16.h \
-	data/background/c/03.rgba16.h \
-	data/background/c/04.rgba16.h \
-	data/background/c/05.rgba16.h \
-	data/background/c/06.rgba16.h \
-	data/background/c/07.rgba16.h \
-	data/background/c/10.rgba16.h \
-	data/background/c/11.rgba16.h \
-	data/background/c/12.rgba16.h \
-	data/background/c/13.rgba16.h \
-	data/background/c/14.rgba16.h \
-	data/background/c/15.rgba16.h \
-	data/background/c/16.rgba16.h \
-	data/background/c/17.rgba16.h \
-	data/background/c/20.rgba16.h \
-	data/background/c/21.rgba16.h \
-	data/background/c/22.rgba16.h \
-	data/background/c/23.rgba16.h \
-	data/background/c/24.rgba16.h \
-	data/background/c/25.rgba16.h \
-	data/background/c/26.rgba16.h \
-	data/background/c/27.rgba16.h \
-	data/background/c/30.rgba16.h \
-	data/background/c/31.rgba16.h \
-	data/background/c/32.rgba16.h \
-	data/background/c/33.rgba16.h \
-	data/background/c/34.rgba16.h \
-	data/background/c/35.rgba16.h \
-	data/background/c/36.rgba16.h \
-	data/background/c/37.rgba16.h \
-	data/background/c/40.rgba16.h \
-	data/background/c/41.rgba16.h \
-	data/background/c/42.rgba16.h \
-	data/background/c/43.rgba16.h \
-	data/background/c/44.rgba16.h \
-	data/background/c/45.rgba16.h \
-	data/background/c/46.rgba16.h \
-	data/background/c/47.rgba16.h \
-	data/background/c/50.rgba16.h
-
-BACKGROUND_D_DEP := \
-	data/background/d/00.rgba16.h \
-	data/background/d/01.rgba16.h \
-	data/background/d/02.rgba16.h \
-	data/background/d/03.rgba16.h \
-	data/background/d/04.rgba16.h \
-	data/background/d/05.rgba16.h \
-	data/background/d/06.rgba16.h \
-	data/background/d/07.rgba16.h \
-	data/background/d/10.rgba16.h \
-	data/background/d/11.rgba16.h \
-	data/background/d/12.rgba16.h \
-	data/background/d/13.rgba16.h \
-	data/background/d/14.rgba16.h \
-	data/background/d/15.rgba16.h \
-	data/background/d/16.rgba16.h \
-	data/background/d/17.rgba16.h \
-	data/background/d/20.rgba16.h \
-	data/background/d/21.rgba16.h \
-	data/background/d/22.rgba16.h \
-	data/background/d/23.rgba16.h \
-	data/background/d/24.rgba16.h \
-	data/background/d/25.rgba16.h \
-	data/background/d/26.rgba16.h \
-	data/background/d/27.rgba16.h \
-	data/background/d/30.rgba16.h \
-	data/background/d/31.rgba16.h \
-	data/background/d/32.rgba16.h \
-	data/background/d/33.rgba16.h \
-	data/background/d/34.rgba16.h \
-	data/background/d/35.rgba16.h \
-	data/background/d/36.rgba16.h \
-	data/background/d/37.rgba16.h \
-	data/background/d/40.rgba16.h \
-	data/background/d/41.rgba16.h \
-	data/background/d/42.rgba16.h \
-	data/background/d/43.rgba16.h \
-	data/background/d/44.rgba16.h \
-	data/background/d/45.rgba16.h \
-	data/background/d/46.rgba16.h \
-	data/background/d/47.rgba16.h \
-	data/background/d/50.rgba16.h \
-	data/background/d/51.rgba16.h \
-	data/background/d/52.rgba16.h \
-	data/background/d/53.rgba16.h \
-	data/background/d/54.rgba16.h \
-	data/background/d/55.rgba16.h \
-	data/background/d/56.rgba16.h \
-	data/background/d/57.rgba16.h \
-	data/background/d/60.rgba16.h
-
-BACKGROUND_E_DEP := \
-	data/background/e/00.rgba16.h \
-	data/background/e/01.rgba16.h \
-	data/background/e/02.rgba16.h \
-	data/background/e/03.rgba16.h \
-	data/background/e/04.rgba16.h \
-	data/background/e/05.rgba16.h \
-	data/background/e/06.rgba16.h \
-	data/background/e/07.rgba16.h \
-	data/background/e/10.rgba16.h \
-	data/background/e/11.rgba16.h \
-	data/background/e/12.rgba16.h \
-	data/background/e/13.rgba16.h \
-	data/background/e/14.rgba16.h \
-	data/background/e/15.rgba16.h \
-	data/background/e/16.rgba16.h \
-	data/background/e/17.rgba16.h \
-	data/background/e/20.rgba16.h \
-	data/background/e/21.rgba16.h \
-	data/background/e/22.rgba16.h \
-	data/background/e/23.rgba16.h \
-	data/background/e/24.rgba16.h \
-	data/background/e/25.rgba16.h \
-	data/background/e/26.rgba16.h \
-	data/background/e/27.rgba16.h \
-	data/background/e/30.rgba16.h \
-	data/background/e/31.rgba16.h \
-	data/background/e/32.rgba16.h \
-	data/background/e/33.rgba16.h \
-	data/background/e/34.rgba16.h \
-	data/background/e/35.rgba16.h \
-	data/background/e/36.rgba16.h \
-	data/background/e/37.rgba16.h \
-	data/background/e/40.rgba16.h \
-	data/background/e/41.rgba16.h \
-	data/background/e/42.rgba16.h \
-	data/background/e/43.rgba16.h \
-	data/background/e/44.rgba16.h \
-	data/background/e/45.rgba16.h \
-	data/background/e/46.rgba16.h \
-	data/background/e/47.rgba16.h \
-	data/background/e/50.rgba16.h \
-	data/background/e/51.rgba16.h \
-	data/background/e/52.rgba16.h \
-	data/background/e/53.rgba16.h \
-	data/background/e/54.rgba16.h \
-	data/background/e/55.rgba16.h \
-	data/background/e/56.rgba16.h \
-	data/background/e/57.rgba16.h \
-	data/background/e/60.rgba16.h \
-	data/background/e/61.rgba16.h \
-	data/background/e/62.rgba16.h \
-	data/background/e/63.rgba16.h \
-	data/background/e/64.rgba16.h \
-	data/background/e/65.rgba16.h \
-	data/background/e/66.rgba16.h \
-	data/background/e/67.rgba16.h \
-	data/background/e/70.rgba16.h \
-	data/background/e/71.rgba16.h \
-	data/background/e/72.rgba16.h \
-	data/background/e/73.rgba16.h \
-	data/background/e/74.rgba16.h \
-	data/background/e/75.rgba16.h \
-	data/background/e/76.rgba16.h \
-	data/background/e/77.rgba16.h
-
-BACKGROUND_F_DEP := \
-	data/background/f/00.rgba16.h \
-	data/background/f/01.rgba16.h \
-	data/background/f/02.rgba16.h \
-	data/background/f/03.rgba16.h \
-	data/background/f/04.rgba16.h \
-	data/background/f/05.rgba16.h \
-	data/background/f/06.rgba16.h \
-	data/background/f/07.rgba16.h \
-	data/background/f/10.rgba16.h \
-	data/background/f/11.rgba16.h \
-	data/background/f/12.rgba16.h \
-	data/background/f/13.rgba16.h \
-	data/background/f/14.rgba16.h \
-	data/background/f/15.rgba16.h \
-	data/background/f/16.rgba16.h \
-	data/background/f/17.rgba16.h \
-	data/background/f/20.rgba16.h \
-	data/background/f/21.rgba16.h \
-	data/background/f/22.rgba16.h \
-	data/background/f/23.rgba16.h \
-	data/background/f/24.rgba16.h \
-	data/background/f/25.rgba16.h \
-	data/background/f/26.rgba16.h \
-	data/background/f/27.rgba16.h \
-	data/background/f/30.rgba16.h \
-	data/background/f/31.rgba16.h \
-	data/background/f/32.rgba16.h \
-	data/background/f/33.rgba16.h \
-	data/background/f/34.rgba16.h \
-	data/background/f/35.rgba16.h \
-	data/background/f/36.rgba16.h \
-	data/background/f/37.rgba16.h \
-	data/background/f/40.rgba16.h \
-	data/background/f/41.rgba16.h \
-	data/background/f/42.rgba16.h \
-	data/background/f/43.rgba16.h \
-	data/background/f/44.rgba16.h \
-	data/background/f/45.rgba16.h \
-	data/background/f/46.rgba16.h \
-	data/background/f/47.rgba16.h \
-	data/background/f/50.rgba16.h \
-	data/background/f/51.rgba16.h \
-	data/background/f/52.rgba16.h \
-	data/background/f/53.rgba16.h \
-	data/background/f/54.rgba16.h \
-	data/background/f/55.rgba16.h \
-	data/background/f/56.rgba16.h \
-	data/background/f/57.rgba16.h \
-	data/background/f/60.rgba16.h \
-	data/background/f/61.rgba16.h \
-	data/background/f/62.rgba16.h \
-	data/background/f/63.rgba16.h \
-	data/background/f/64.rgba16.h \
-	data/background/f/65.rgba16.h \
-	data/background/f/66.rgba16.h \
-	data/background/f/67.rgba16.h \
-	data/background/f/70.rgba16.h \
-	data/background/f/71.rgba16.h \
-	data/background/f/72.rgba16.h \
-	data/background/f/73.rgba16.h \
-	data/background/f/74.rgba16.h \
-	data/background/f/75.rgba16.h \
-	data/background/f/76.rgba16.h \
-	data/background/f/77.rgba16.h
-
-BACKGROUND_G_DEP := \
-	data/background/g/00.rgba16.h \
-	data/background/g/01.rgba16.h \
-	data/background/g/02.rgba16.h \
-	data/background/g/03.rgba16.h \
-	data/background/g/04.rgba16.h \
-	data/background/g/05.rgba16.h \
-	data/background/g/06.rgba16.h \
-	data/background/g/07.rgba16.h \
-	data/background/g/10.rgba16.h \
-	data/background/g/11.rgba16.h \
-	data/background/g/12.rgba16.h \
-	data/background/g/13.rgba16.h \
-	data/background/g/14.rgba16.h \
-	data/background/g/15.rgba16.h \
-	data/background/g/16.rgba16.h \
-	data/background/g/17.rgba16.h \
-	data/background/g/20.rgba16.h \
-	data/background/g/21.rgba16.h \
-	data/background/g/22.rgba16.h \
-	data/background/g/23.rgba16.h \
-	data/background/g/24.rgba16.h \
-	data/background/g/25.rgba16.h \
-	data/background/g/26.rgba16.h \
-	data/background/g/27.rgba16.h \
-	data/background/g/30.rgba16.h \
-	data/background/g/31.rgba16.h \
-	data/background/g/32.rgba16.h \
-	data/background/g/33.rgba16.h \
-	data/background/g/34.rgba16.h \
-	data/background/g/35.rgba16.h \
-	data/background/g/36.rgba16.h \
-	data/background/g/37.rgba16.h \
-	data/background/g/40.rgba16.h \
-	data/background/g/41.rgba16.h \
-	data/background/g/42.rgba16.h \
-	data/background/g/43.rgba16.h \
-	data/background/g/44.rgba16.h \
-	data/background/g/45.rgba16.h \
-	data/background/g/46.rgba16.h \
-	data/background/g/47.rgba16.h \
-	data/background/g/50.rgba16.h \
-	data/background/g/51.rgba16.h \
-	data/background/g/52.rgba16.h \
-	data/background/g/53.rgba16.h \
-	data/background/g/54.rgba16.h \
-	data/background/g/55.rgba16.h \
-	data/background/g/56.rgba16.h \
-	data/background/g/57.rgba16.h \
-	data/background/g/60.rgba16.h \
-	data/background/g/61.rgba16.h \
-	data/background/g/62.rgba16.h \
-	data/background/g/63.rgba16.h \
-	data/background/g/64.rgba16.h \
-	data/background/g/65.rgba16.h \
-	data/background/g/66.rgba16.h \
-	data/background/g/67.rgba16.h \
-	data/background/g/70.rgba16.h \
-	data/background/g/71.rgba16.h \
-	data/background/g/72.rgba16.h \
-	data/background/g/73.rgba16.h \
-	data/background/g/74.rgba16.h \
-	data/background/g/75.rgba16.h \
-	data/background/g/76.rgba16.h \
-	data/background/g/77.rgba16.h
-
-BACKGROUND_H_DEP := \
-	data/background/h/00.rgba16.h \
-	data/background/h/01.rgba16.h \
-	data/background/h/02.rgba16.h \
-	data/background/h/03.rgba16.h \
-	data/background/h/04.rgba16.h \
-	data/background/h/05.rgba16.h \
-	data/background/h/06.rgba16.h \
-	data/background/h/07.rgba16.h \
-	data/background/h/10.rgba16.h \
-	data/background/h/11.rgba16.h \
-	data/background/h/12.rgba16.h \
-	data/background/h/13.rgba16.h \
-	data/background/h/14.rgba16.h \
-	data/background/h/15.rgba16.h \
-	data/background/h/16.rgba16.h \
-	data/background/h/17.rgba16.h \
-	data/background/h/20.rgba16.h \
-	data/background/h/21.rgba16.h \
-	data/background/h/22.rgba16.h \
-	data/background/h/23.rgba16.h \
-	data/background/h/24.rgba16.h \
-	data/background/h/25.rgba16.h \
-	data/background/h/26.rgba16.h \
-	data/background/h/27.rgba16.h \
-	data/background/h/30.rgba16.h \
-	data/background/h/31.rgba16.h \
-	data/background/h/32.rgba16.h \
-	data/background/h/33.rgba16.h \
-	data/background/h/34.rgba16.h \
-	data/background/h/35.rgba16.h \
-	data/background/h/36.rgba16.h \
-	data/background/h/37.rgba16.h \
-	data/background/h/40.rgba16.h \
-	data/background/h/41.rgba16.h \
-	data/background/h/42.rgba16.h \
-	data/background/h/43.rgba16.h \
-	data/background/h/44.rgba16.h \
-	data/background/h/45.rgba16.h \
-	data/background/h/46.rgba16.h \
-	data/background/h/47.rgba16.h \
-	data/background/h/50.rgba16.h
-
-BACKGROUND_I_DEP := \
-	data/background/i/00.rgba16.h \
-	data/background/i/01.rgba16.h \
-	data/background/i/02.rgba16.h \
-	data/background/i/03.rgba16.h \
-	data/background/i/04.rgba16.h \
-	data/background/i/05.rgba16.h \
-	data/background/i/06.rgba16.h \
-	data/background/i/07.rgba16.h \
-	data/background/i/10.rgba16.h \
-	data/background/i/11.rgba16.h \
-	data/background/i/12.rgba16.h \
-	data/background/i/13.rgba16.h \
-	data/background/i/14.rgba16.h \
-	data/background/i/15.rgba16.h \
-	data/background/i/16.rgba16.h \
-	data/background/i/17.rgba16.h \
-	data/background/i/20.rgba16.h \
-	data/background/i/21.rgba16.h \
-	data/background/i/22.rgba16.h \
-	data/background/i/23.rgba16.h \
-	data/background/i/24.rgba16.h \
-	data/background/i/25.rgba16.h \
-	data/background/i/26.rgba16.h \
-	data/background/i/27.rgba16.h \
-	data/background/i/30.rgba16.h \
-	data/background/i/31.rgba16.h \
-	data/background/i/32.rgba16.h \
-	data/background/i/33.rgba16.h \
-	data/background/i/34.rgba16.h \
-	data/background/i/35.rgba16.h \
-	data/background/i/36.rgba16.h \
-	data/background/i/37.rgba16.h \
-	data/background/i/40.rgba16.h \
-	data/background/i/41.rgba16.h \
-	data/background/i/42.rgba16.h \
-	data/background/i/43.rgba16.h \
-	data/background/i/44.rgba16.h \
-	data/background/i/45.rgba16.h \
-	data/background/i/46.rgba16.h \
-	data/background/i/47.rgba16.h \
-	data/background/i/50.rgba16.h \
-	data/background/i/51.rgba16.h \
-	data/background/i/52.rgba16.h \
-	data/background/i/53.rgba16.h \
-	data/background/i/54.rgba16.h \
-	data/background/i/55.rgba16.h \
-	data/background/i/56.rgba16.h \
-	data/background/i/57.rgba16.h \
-	data/background/i/60.rgba16.h \
-	data/background/i/61.rgba16.h \
-	data/background/i/62.rgba16.h \
-	data/background/i/63.rgba16.h \
-	data/background/i/64.rgba16.h \
-	data/background/i/65.rgba16.h \
-	data/background/i/66.rgba16.h \
-	data/background/i/67.rgba16.h \
-	data/background/i/70.rgba16.h \
-	data/background/i/71.rgba16.h \
-	data/background/i/72.rgba16.h \
-	data/background/i/73.rgba16.h \
-	data/background/i/74.rgba16.h \
-	data/background/i/75.rgba16.h \
-	data/background/i/76.rgba16.h \
-	data/background/i/77.rgba16.h
-
-BACKGROUND_J_DEP := \
-	data/background/j/00.rgba16.h \
-	data/background/j/01.rgba16.h \
-	data/background/j/02.rgba16.h \
-	data/background/j/03.rgba16.h \
-	data/background/j/04.rgba16.h \
-	data/background/j/05.rgba16.h \
-	data/background/j/06.rgba16.h \
-	data/background/j/07.rgba16.h \
-	data/background/j/10.rgba16.h \
-	data/background/j/11.rgba16.h \
-	data/background/j/12.rgba16.h \
-	data/background/j/13.rgba16.h \
-	data/background/j/14.rgba16.h \
-	data/background/j/15.rgba16.h \
-	data/background/j/16.rgba16.h \
-	data/background/j/17.rgba16.h \
-	data/background/j/20.rgba16.h \
-	data/background/j/21.rgba16.h \
-	data/background/j/22.rgba16.h \
-	data/background/j/23.rgba16.h \
-	data/background/j/24.rgba16.h \
-	data/background/j/25.rgba16.h \
-	data/background/j/26.rgba16.h \
-	data/background/j/27.rgba16.h \
-	data/background/j/30.rgba16.h \
-	data/background/j/31.rgba16.h \
-	data/background/j/32.rgba16.h \
-	data/background/j/33.rgba16.h \
-	data/background/j/34.rgba16.h \
-	data/background/j/35.rgba16.h \
-	data/background/j/36.rgba16.h \
-	data/background/j/37.rgba16.h \
-	data/background/j/40.rgba16.h \
-	data/background/j/41.rgba16.h \
-	data/background/j/42.rgba16.h \
-	data/background/j/43.rgba16.h \
-	data/background/j/44.rgba16.h \
-	data/background/j/45.rgba16.h \
-	data/background/j/46.rgba16.h \
-	data/background/j/47.rgba16.h \
-	data/background/j/50.rgba16.h \
-	data/background/j/51.rgba16.h \
-	data/background/j/52.rgba16.h \
-	data/background/j/53.rgba16.h \
-	data/background/j/54.rgba16.h \
-	data/background/j/55.rgba16.h \
-	data/background/j/56.rgba16.h \
-	data/background/j/57.rgba16.h \
-	data/background/j/60.rgba16.h \
-	data/background/j/61.rgba16.h \
-	data/background/j/62.rgba16.h \
-	data/background/j/63.rgba16.h \
-	data/background/j/64.rgba16.h \
-	data/background/j/65.rgba16.h \
-	data/background/j/66.rgba16.h \
-	data/background/j/67.rgba16.h \
-	data/background/j/70.rgba16.h \
-	data/background/j/71.rgba16.h \
-	data/background/j/72.rgba16.h \
-	data/background/j/73.rgba16.h \
-	data/background/j/74.rgba16.h \
-	data/background/j/75.rgba16.h \
-	data/background/j/76.rgba16.h \
-	data/background/j/77.rgba16.h
-
-TEXTURE_A_DEP := \
-	data/texture/a0.rgba16.h \
-	data/texture/a1.rgba16.h \
-	data/texture/a2.rgba16.h \
-	data/texture/a3.rgba16.h \
-	data/texture/a4.rgba16.h \
-	data/texture/a5.rgba16.h \
-	data/texture/a6.rgba16.h \
-	data/texture/a7.rgba16.h \
-	data/texture/a8.rgba16.h \
-	data/texture/a9.rgba16.h \
-	data/texture/a10.rgba16.h \
-	data/texture/a11.rgba16.h \
-	data/texture/a12.rgba16.h \
-	data/texture/a13.rgba16.h \
-	data/texture/a14.rgba16.h \
-	data/texture/a15.rgba16.h \
-	data/texture/a16.rgba16.h \
-	data/texture/a17.rgba16.h \
-	data/texture/a18.rgba16.h \
-	data/texture/a19.rgba16.h \
-	data/texture/a20.rgba16.h \
-	data/texture/a21.rgba16.h \
-	data/texture/a22.rgba16.h \
-	data/texture/a23.rgba16.h
-
-TEXTURE_B_DEP := \
-	data/texture/b0.rgba16.h \
-	data/texture/b1.rgba16.h \
-	data/texture/b2.rgba16.h \
-	data/texture/b3.rgba16.h \
-	data/texture/b4.rgba16.h \
-	data/texture/b5.rgba16.h \
-	data/texture/b6.rgba16.h \
-	data/texture/b7.rgba16.h \
-	data/texture/b8.rgba16.h \
-	data/texture/b9.rgba16.h \
-	data/texture/b10.rgba16.h \
-	data/texture/b11.rgba16.h \
-	data/texture/b12.rgba16.h \
-	data/texture/b13.rgba16.h \
-	data/texture/b14.rgba16.h \
-	data/texture/b15_g17.ia16.h \
-	data/texture/b16.ia16.h \
-	data/texture/b17.ia16.h
-
-TEXTURE_C_DEP := \
-	data/texture/c0.rgba16.h \
-	data/texture/c1.rgba16.h \
-	data/texture/c2.rgba16.h \
-	data/texture/c3.rgba16.h \
-	data/texture/c4.rgba16.h \
-	data/texture/c5.rgba16.h \
-	data/texture/c6.rgba16.h \
-	data/texture/c7.rgba16.h \
-	data/texture/c8.rgba16.h \
-	data/texture/c9.rgba16.h \
-	data/texture/c10.rgba16.h \
-	data/texture/c11.rgba16.h \
-	data/texture/c12.rgba16.h \
-	data/texture/c13.rgba16.h \
-	data/texture/c14.rgba16.h \
-	data/texture/c15.rgba16.h \
-	data/texture/c16.rgba16.h \
-	data/texture/c17.rgba16.h \
-	data/texture/c18.rgba16.h \
-	data/texture/c19.rgba16.h \
-	data/texture/c20.rgba16.h \
-	data/texture/c21_j22_k22.ia16.h
-
-TEXTURE_D_DEP := \
-	data/texture/d0.rgba16.h \
-	data/texture/d1.rgba16.h \
-	data/texture/d2.rgba16.h \
-	data/texture/d3.rgba16.h \
-	data/texture/d4.rgba16.h \
-	data/texture/d5.rgba16.h \
-	data/texture/d6.rgba16.h \
-	data/texture/d7.rgba16.h \
-	data/texture/d8.rgba16.h \
-	data/texture/d9.rgba16.h \
-	data/texture/d10.rgba16.h \
-	data/texture/d11.rgba16.h \
-	data/texture/d12.rgba16.h \
-	data/texture/d13.rgba16.h \
-	data/texture/d14.rgba16.h
-
-TEXTURE_E_DEP := \
-	data/texture/e0.rgba16.h \
-	data/texture/e1.rgba16.h \
-	data/texture/e2.rgba16.h \
-	data/texture/e3.rgba16.h \
-	data/texture/e4.rgba16.h \
-	data/texture/e5.rgba16.h \
-	data/texture/e6.rgba16.h \
-	data/texture/e7.rgba16.h \
-	data/texture/e8_j12.rgba16.h \
-	data/texture/e9.rgba16.h \
-	data/texture/e10_i17.rgba16.h \
-	data/texture/e11.rgba16.h \
-	data/texture/e12.rgba16.h \
-	data/texture/e13.rgba16.h \
-	data/texture/e14.rgba16.h
-
-TEXTURE_F_DEP := \
-	data/texture/f0.rgba16.h \
-	data/texture/f1.rgba16.h \
-	data/texture/f2.rgba16.h \
-	data/texture/f3.rgba16.h \
-	data/texture/f4.rgba16.h \
-	data/texture/f5.rgba16.h \
-	data/texture/f6.rgba16.h \
-	data/texture/f7.rgba16.h \
-	data/texture/f8.rgba16.h \
-	data/texture/f9.rgba16.h \
-	data/texture/f10.rgba16.h \
-	data/texture/f11.rgba16.h \
-	data/texture/f12.rgba16.h \
-	data/texture/f13.rgba16.h \
-	data/texture/f14.rgba16.h \
-	data/texture/f15.rgba16.h \
-	data/texture/f16.ia16.h \
-	data/texture/f17.ia16.h
-
-TEXTURE_G_DEP := \
-	data/texture/g0.rgba16.h \
-	data/texture/g1.rgba16.h \
-	data/texture/g2.rgba16.h \
-	data/texture/g3.rgba16.h \
-	data/texture/g4.rgba16.h \
-	data/texture/g5.rgba16.h \
-	data/texture/g6.rgba16.h \
-	data/texture/g7.rgba16.h \
-	data/texture/g8.rgba16.h \
-	data/texture/g9.rgba16.h \
-	data/texture/g10.rgba16.h \
-	data/texture/g11.rgba16.h \
-	data/texture/g12.rgba16.h \
-	data/texture/g13.rgba16.h \
-	data/texture/g14.rgba16.h \
-	data/texture/g15.rgba16.h \
-	data/texture/g16.ia16.h \
-	data/texture/b15_g17.ia16.h
-
-TEXTURE_H_DEP := \
-	data/texture/h0.rgba16.h \
-	data/texture/h1_l6.rgba16.h \
-	data/texture/h2.rgba16.h \
-	data/texture/h3.rgba16.h \
-	data/texture/h4.rgba16.h \
-	data/texture/h5.rgba16.h \
-	data/texture/h6.rgba16.h \
-	data/texture/h7.rgba16.h \
-	data/texture/h8.rgba16.h \
-	data/texture/h9.rgba16.h \
-	data/texture/h10.rgba16.h \
-	data/texture/h11.rgba16.h \
-	data/texture/h12.rgba16.h \
-	data/texture/h13.rgba16.h \
-	data/texture/h14.rgba16.h \
-	data/texture/h15.rgba16.h \
-	data/texture/h16.rgba16.h
-
-TEXTURE_I_DEP := \
-	data/texture/i0.rgba16.h \
-	data/texture/i1.rgba16.h \
-	data/texture/i2.rgba16.h \
-	data/texture/i3.rgba16.h \
-	data/texture/i4.rgba16.h \
-	data/texture/i5.rgba16.h \
-	data/texture/i6.rgba16.h \
-	data/texture/i7.rgba16.h \
-	data/texture/i8.rgba16.h \
-	data/texture/i9.rgba16.h \
-	data/texture/i10.rgba16.h \
-	data/texture/i11.rgba16.h \
-	data/texture/i12.rgba16.h \
-	data/texture/i13.rgba16.h \
-	data/texture/i14.rgba16.h \
-	data/texture/i15.rgba16.h \
-	data/texture/i16.rgba16.h \
-	data/texture/e10_i17.rgba16.h \
-	data/texture/i18.rgba16.h \
-	data/texture/i19.rgba16.h \
-	data/texture/i20.rgba16.h \
-	data/texture/i21.rgba16.h
-
-TEXTURE_J_DEP := \
-	data/texture/j0.rgba16.h \
-	data/texture/j1.rgba16.h \
-	data/texture/j2.rgba16.h \
-	data/texture/j3.rgba16.h \
-	data/texture/j4.rgba16.h \
-	data/texture/j5.rgba16.h \
-	data/texture/j6.rgba16.h \
-	data/texture/j7.rgba16.h \
-	data/texture/j8.rgba16.h \
-	data/texture/j9.rgba16.h \
-	data/texture/j10.rgba16.h \
-	data/texture/j11.rgba16.h \
-	data/texture/e8_j12.rgba16.h \
-	data/texture/j13.rgba16.h \
-	data/texture/j14.rgba16.h \
-	data/texture/j15.rgba16.h \
-	data/texture/j16.rgba16.h \
-	data/texture/j17.rgba16.h \
-	data/texture/j18.rgba16.h \
-	data/texture/j19.rgba16.h \
-	data/texture/j20.rgba16.h \
-	data/texture/j21.rgba16.h \
-	data/texture/c21_j22_k22.ia16.h \
-	data/texture/j23.ia16.h
-
-TEXTURE_K_DEP := \
-	data/texture/k0.rgba16.h \
-	data/texture/k1.rgba16.h \
-	data/texture/k2.rgba16.h \
-	data/texture/k3.rgba16.h \
-	data/texture/k4.rgba16.h \
-	data/texture/k5.rgba16.h \
-	data/texture/k6.rgba16.h \
-	data/texture/k7.rgba16.h \
-	data/texture/k8.rgba16.h \
-	data/texture/k9.rgba16.h \
-	data/texture/k10.rgba16.h \
-	data/texture/k11.rgba16.h \
-	data/texture/k12.rgba16.h \
-	data/texture/k13.rgba16.h \
-	data/texture/k14.rgba16.h \
-	data/texture/k15.rgba16.h \
-	data/texture/k16.rgba16.h \
-	data/texture/k17.rgba16.h \
-	data/texture/k18.rgba16.h \
-	data/texture/k19.rgba16.h \
-	data/texture/k20.rgba16.h \
-	data/texture/k21.rgba16.h \
-	data/texture/c21_j22_k22.ia16.h
-
-TEXTURE_L_DEP := \
-	data/texture/l0.rgba16.h \
-	data/texture/l1.rgba16.h \
-	data/texture/l2.rgba16.h \
-	data/texture/l3.rgba16.h \
-	data/texture/l4.rgba16.h \
-	data/texture/l5.rgba16.h \
-	data/texture/h1_l6.rgba16.h \
-	data/texture/l7.rgba16.h \
-	data/texture/l8.rgba16.h \
-	data/texture/l9.rgba16.h \
-	data/texture/l10.rgba16.h \
-	data/texture/l11.rgba16.h \
-	data/texture/l12.rgba16.h \
-	data/texture/l13.rgba16.h \
-	data/texture/l14.rgba16.h \
-	data/texture/l15.rgba16.h \
-	data/texture/l16.rgba16.h \
-	data/texture/l17.rgba16.h
-
-WEATHER_DEP := \
-	data/weather/flower/0.rgba16.h \
-	data/weather/flower/1.rgba16.h \
-	data/weather/flower/2.rgba16.h \
-	data/weather/flower/3.rgba16.h \
-	data/weather/lava/0.rgba16.h \
-	data/weather/lava/1.rgba16.h \
-	data/weather/lava/2.rgba16.h \
-	data/weather/lava/3.rgba16.h \
-	data/weather/lava/4.rgba16.h \
-	data/weather/lava/5.rgba16.h \
-	data/weather/lava/6.rgba16.h \
-	data/weather/lava/7.rgba16.h \
-	data/weather/bubble/0.rgba16.h \
-	data/weather/snow/a.rgba16.h \
-	data/weather/snow/b.rgba16.h
+WEATHER_DIR := flower lava bubble snow
+WEATHER_DEP := $(patsubst %.png,%.h,$(foreach dir,$(WEATHER_DIR),$(wildcard data/weather/$(dir)/*.png)))
 
 BBH_DEP :=
 CCM_DEP :=
@@ -2749,15 +1204,11 @@ HMC_DEP :=
 SSL_DEP :=
 
 BOB_DEP := \
-	stage/bob/0.rgba16.h \
-	stage/bob/1.rgba16.h \
-	stage/bob/2.rgba16.h \
-	stage/bob/3.rgba16.h \
-	stage/bob/4.rgba16.h \
-	$(BATTLEFIELD_DEP) \
-	$(BOB_54_DEP) \
-	$(BOB_55_DEP) \
-	$(BOB_56_DEP) \
+	$(patsubst %.png,%.h,$(wildcard stage/bob/*.png)) \
+	$(BATTLEFIELD_GFX) \
+	$(BOB_54_GFX) \
+	$(BOB_55_GFX) \
+	$(BOB_56_GFX) \
 	stage/bob/battlefield/map.h \
 	stage/bob/54/map.h \
 	stage/bob/55/map.h \
@@ -2779,63 +1230,13 @@ LLL_DEP :=
 DDD_DEP :=
 WF_DEP :=
 
-ENDING_DEP := \
-	stage/ending/0.rgba16.h \
-	stage/ending/1.rgba16.h \
-	stage/ending/2.rgba16.h \
-	stage/ending/3.rgba16.h \
-	stage/ending/4.rgba16.h \
-	stage/ending/5.rgba16.h \
-	stage/ending/6.rgba16.h \
-	stage/ending/7.rgba16.h \
-	stage/ending/8.rgba16.h \
-	stage/ending/9.rgba16.h \
-	stage/ending/10.rgba16.h \
-	stage/ending/11.rgba16.h \
-	stage/ending/12.rgba16.h \
-	stage/ending/13.rgba16.h \
-	stage/ending/14.rgba16.h \
-	stage/ending/15.rgba16.h \
-	stage/ending/16.rgba16.h \
-	stage/ending/17.rgba16.h \
-	stage/ending/18.rgba16.h \
-	stage/ending/19.rgba16.h \
-	stage/ending/20.rgba16.h \
-	stage/ending/21.rgba16.h \
-	stage/ending/22.rgba16.h \
-	stage/ending/23.rgba16.h \
-	stage/ending/24.rgba16.h \
-	stage/ending/25.rgba16.h \
-	stage/ending/26.rgba16.h \
-	stage/ending/27.rgba16.h \
-	stage/ending/28.rgba16.h \
-	stage/ending/29.rgba16.h \
-	stage/ending/30.rgba16.h \
-	stage/ending/31.rgba16.h \
-	stage/ending/32.rgba16.h \
-	stage/ending/33.rgba16.h \
-	stage/ending/34.rgba16.h \
-	stage/ending/35.rgba16.h \
-	stage/ending/36.rgba16.h \
-	stage/ending/37.rgba16.h \
-	stage/ending/38.rgba16.h \
-	stage/ending/39.rgba16.h \
-	stage/ending/40.rgba16.h \
-	stage/ending/41.rgba16.h \
-	stage/ending/42.rgba16.h \
-	stage/ending/43.rgba16.h \
-	stage/ending/44.rgba16.h \
-	stage/ending/45.rgba16.h \
-	stage/ending/46.rgba16.h \
-	stage/ending/47.rgba16.h
+ENDING_DEP := $(patsubst %.png,%.h,$(wildcard stage/ending/*.png))
 
 COURTYARD_DEP :=
 
 PSS_DEP := \
-	stage/pss/0.rgba16.h \
-	stage/pss/1.ia16.h \
-	stage/pss/2.rgba16.h \
-	$(MINISLIDER_DEP) \
+	$(patsubst %.png,%.h,$(wildcard stage/pss/*.png)) \
+	$(MINISLIDER_GFX) \
 	stage/pss/minislider/map.h
 
 COTMC_DEP :=
@@ -2847,10 +1248,7 @@ BITSA_DEP :=
 TTM_DEP :=
 
 DEP := \
-	src/ja_jp.h \
-	src/en_us.h \
-	src/message/caption.ja_jp.h \
-	src/message/caption.en_us.h \
+	$(patsubst %.txt,%.h,$(wildcard src/*.txt) $(wildcard src/message/*.txt)) \
 	$(FACE_DEP) \
 	$(GFX_DEP) \
 	$(PLAYER_DEP) \
@@ -2887,18 +1285,7 @@ DEP := \
 	$(BACKGROUND_H_DEP) \
 	$(BACKGROUND_I_DEP) \
 	$(BACKGROUND_J_DEP) \
-	$(TEXTURE_A_DEP) \
-	$(TEXTURE_B_DEP) \
-	$(TEXTURE_C_DEP) \
-	$(TEXTURE_D_DEP) \
-	$(TEXTURE_E_DEP) \
-	$(TEXTURE_F_DEP) \
-	$(TEXTURE_G_DEP) \
-	$(TEXTURE_H_DEP) \
-	$(TEXTURE_I_DEP) \
-	$(TEXTURE_J_DEP) \
-	$(TEXTURE_K_DEP) \
-	$(TEXTURE_L_DEP) \
+	$(TEXTURE_DEP) \
 	$(WEATHER_DEP) \
 	$(BBH_DEP) \
 	$(CCM_DEP) \
@@ -2932,9 +1319,9 @@ DEP := \
 	$(BITSA_DEP) \
 	$(TTM_DEP)
 
-src/message.c: src/ja_jp.h src/en_us.h src/message/caption.ja_jp.h src/message/caption.en_us.h
-src/fileselect.c: src/ja_jp.h src/en_us.h
-src/starselect.c: src/ja_jp.h src/en_us.h
+src/message.c: $(patsubst %.txt,%.h,$(wildcard src/message*.txt) $(wildcard src/message/*.txt))
+src/fileselect.c: $(patsubst %.txt,%.h,$(wildcard src/fileselect*.txt))
+src/starselect.c: $(patsubst %.txt,%.h,$(wildcard src/starselect*.txt))
 src/face/gfx.data.c: $(FACE_DEP)
 data/gfx.c: $(GFX_DEP)
 shape/player/gfx.c: $(PLAYER_DEP)
@@ -2971,18 +1358,18 @@ data/background/g.c: $(BACKGROUND_G_DEP)
 data/background/h.c: $(BACKGROUND_H_DEP)
 data/background/i.c: $(BACKGROUND_I_DEP)
 data/background/j.c: $(BACKGROUND_J_DEP)
-data/texture/a.c: $(TEXTURE_A_DEP)
-data/texture/b.c: $(TEXTURE_B_DEP)
-data/texture/c.c: $(TEXTURE_C_DEP)
-data/texture/d.c: $(TEXTURE_D_DEP)
-data/texture/e.c: $(TEXTURE_E_DEP)
-data/texture/f.c: $(TEXTURE_F_DEP)
-data/texture/g.c: $(TEXTURE_G_DEP)
-data/texture/h.c: $(TEXTURE_H_DEP)
-data/texture/i.c: $(TEXTURE_I_DEP)
-data/texture/j.c: $(TEXTURE_J_DEP)
-data/texture/k.c: $(TEXTURE_K_DEP)
-data/texture/l.c: $(TEXTURE_L_DEP)
+data/texture/a.c: $(TEXTURE_DEP)
+data/texture/b.c: $(TEXTURE_DEP)
+data/texture/c.c: $(TEXTURE_DEP)
+data/texture/d.c: $(TEXTURE_DEP)
+data/texture/e.c: $(TEXTURE_DEP)
+data/texture/f.c: $(TEXTURE_DEP)
+data/texture/g.c: $(TEXTURE_DEP)
+data/texture/h.c: $(TEXTURE_DEP)
+data/texture/i.c: $(TEXTURE_DEP)
+data/texture/j.c: $(TEXTURE_DEP)
+data/texture/k.c: $(TEXTURE_DEP)
+data/texture/l.c: $(TEXTURE_DEP)
 data/weather/gfx.c: $(WEATHER_DEP)
 stage/bbh/gfx.c: $(BBH_DEP)
 stage/ccm/gfx.c: $(CCM_DEP)
@@ -3017,67 +1404,67 @@ stage/bitsa/gfx.c: $(BITSA_DEP)
 stage/ttm/gfx.c: $(TTM_DEP)
 
 # Player
-$(MARIO_DEP)&: shape/player/mario/mario.glb tools/gltf; tools/gltf $<
+$(MARIO_GFX)&: shape/player/mario/mario.glb tools/gltf; tools/gltf $<
 # Shape1B
-$(BULLY_DEP)&: shape/1b/bully/bully.glb tools/gltf; tools/gltf $<
-$(BLARGG_DEP)&: shape/1b/blargg/blargg.glb tools/gltf; tools/gltf $<
+$(BULLY_GFX)&: shape/1b/bully/bully.glb tools/gltf; tools/gltf $<
+$(BLARGG_GFX)&: shape/1b/blargg/blargg.glb tools/gltf; tools/gltf $<
 # Shape2B
-$(SKEETER_DEP)&: shape/2b/skeeter/skeeter.glb tools/gltf; tools/gltf $<
-$(KELP_DEP)&: shape/2b/kelp/kelp.glb tools/gltf; tools/gltf $<
-$(WATERMINE_DEP)&: shape/2b/watermine/watermine.glb tools/gltf; tools/gltf $<
-$(PIRANHA_DEP)&: shape/2b/piranha/piranha.glb tools/gltf; tools/gltf $<
-$(BUB_DEP)&: shape/2b/bub/bub.glb tools/gltf; tools/gltf $<
-$(WATERRING_DEP)&: shape/2b/waterring/waterring.glb tools/gltf; tools/gltf $<
-$(CHEST_DEP)&: shape/2b/chest/chest.glb tools/gltf; tools/gltf $<
+$(SKEETER_GFX)&: shape/2b/skeeter/skeeter.glb tools/gltf; tools/gltf $<
+$(KELP_GFX)&: shape/2b/kelp/kelp.glb tools/gltf; tools/gltf $<
+$(WATERMINE_GFX)&: shape/2b/watermine/watermine.glb tools/gltf; tools/gltf $<
+$(PIRANHA_GFX)&: shape/2b/piranha/piranha.glb tools/gltf; tools/gltf $<
+$(BUB_GFX)&: shape/2b/bub/bub.glb tools/gltf; tools/gltf $<
+$(WATERRING_GFX)&: shape/2b/waterring/waterring.glb tools/gltf; tools/gltf $<
+$(CHEST_GFX)&: shape/2b/chest/chest.glb tools/gltf; tools/gltf $<
 # Shape2D
-$(LAKITU2_DEP)&: shape/2d/lakitu2/lakitu2.glb tools/gltf; tools/gltf $<
-$(TOAD_DEP)&: shape/2d/toad/toad.glb tools/gltf; tools/gltf $<
-$(MIPS_DEP)&: shape/2d/mips/mips.glb tools/gltf; tools/gltf $<
-$(BOO2_DEP)&: shape/2d/boo2/boo2.glb tools/gltf; tools/gltf -g $<
+$(LAKITU2_GFX)&: shape/2d/lakitu2/lakitu2.glb tools/gltf; tools/gltf $<
+$(TOAD_GFX)&: shape/2d/toad/toad.glb tools/gltf; tools/gltf $<
+$(MIPS_GFX)&: shape/2d/mips/mips.glb tools/gltf; tools/gltf $<
+$(BOO2_GFX)&: shape/2d/boo2/boo2.glb tools/gltf; tools/gltf -g $<
 # Common
-$(BLUECOINSW_DEP)&: shape/3common/bluecoinsw/bluecoinsw.glb tools/gltf; tools/gltf $<
-$(AMP_DEP)&: shape/3common/amp/amp.glb tools/gltf; tools/gltf $<
-$(CANNONLID_DEP)&: shape/3common/cannonlid/cannonlid.glb tools/gltf; tools/gltf $<
-$(CANNON_DEP)&: shape/3common/cannon/cannon.glb tools/gltf; tools/gltf $<
-$(CANNONBARREL_DEP)&: shape/3common/cannonbarrel/cannonbarrel.glb tools/gltf; tools/gltf $<
-$(CHUCKYA_DEP)&: shape/3common/chuckya/chuckya.glb tools/gltf; tools/gltf $<
-$(PURPLESW_DEP)&: shape/3common/purplesw/purplesw.glb tools/gltf; tools/gltf $<
-$(LIFT_DEP)&: shape/3common/lift/lift.glb tools/gltf; tools/gltf $<
-$(HEART_DEP)&: shape/3common/heart/heart.glb tools/gltf; tools/gltf $<
-$(FLYGUY_DEP)&: shape/3common/flyguy/flyguy.glb tools/gltf; tools/gltf $<
-$(BLOCK_DEP)&: shape/3common/block/block.glb tools/gltf; tools/gltf $<
-$(ITEMBOX_DEP)&: shape/3common/itembox/itembox.glb tools/gltf; tools/gltf $<
-$(GOOMBA_DEP)&: shape/3common/goomba/goomba.glb tools/gltf; tools/gltf $<
-$(BOBOMB_DEP)&: shape/3common/bobomb/bobomb.glb tools/gltf; tools/gltf $<
-$(PUSHBLOCK_DEP)&: shape/3common/pushblock/pushblock.glb tools/gltf; tools/gltf $<
-$(DOTBOX_DEP)&: shape/3common/dotbox/dotbox.glb tools/gltf; tools/gltf $<
-$(TESTLIFT_DEP)&: shape/3common/testlift/testlift.glb tools/gltf; tools/gltf -g $<
-$(SHELL_OLD_DEP)&: shape/3common/shell/shell_old.glb tools/gltf; tools/gltf -g $<
-$(SHELL_DEP)&: shape/3common/shell/shell.glb tools/gltf; tools/gltf $<
+$(BLUECOINSW_GFX)&: shape/3common/bluecoinsw/bluecoinsw.glb tools/gltf; tools/gltf $<
+$(AMP_GFX)&: shape/3common/amp/amp.glb tools/gltf; tools/gltf $<
+$(CANNONLID_GFX)&: shape/3common/cannonlid/cannonlid.glb tools/gltf; tools/gltf $<
+$(CANNON_GFX)&: shape/3common/cannon/cannon.glb tools/gltf; tools/gltf $<
+$(CANNONBARREL_GFX)&: shape/3common/cannonbarrel/cannonbarrel.glb tools/gltf; tools/gltf $<
+$(CHUCKYA_GFX)&: shape/3common/chuckya/chuckya.glb tools/gltf; tools/gltf $<
+$(PURPLESW_GFX)&: shape/3common/purplesw/purplesw.glb tools/gltf; tools/gltf $<
+$(LIFT_GFX)&: shape/3common/lift/lift.glb tools/gltf; tools/gltf $<
+$(HEART_GFX)&: shape/3common/heart/heart.glb tools/gltf; tools/gltf $<
+$(FLYGUY_GFX)&: shape/3common/flyguy/flyguy.glb tools/gltf; tools/gltf $<
+$(BLOCK_GFX)&: shape/3common/block/block.glb tools/gltf; tools/gltf $<
+$(ITEMBOX_GFX)&: shape/3common/itembox/itembox.glb tools/gltf; tools/gltf $<
+$(GOOMBA_GFX)&: shape/3common/goomba/goomba.glb tools/gltf; tools/gltf $<
+$(BOBOMB_GFX)&: shape/3common/bobomb/bobomb.glb tools/gltf; tools/gltf $<
+$(PUSHBLOCK_GFX)&: shape/3common/pushblock/pushblock.glb tools/gltf; tools/gltf $<
+$(DOTBOX_GFX)&: shape/3common/dotbox/dotbox.glb tools/gltf; tools/gltf $<
+$(TESTLIFT_GFX)&: shape/3common/testlift/testlift.glb tools/gltf; tools/gltf -g $<
+$(SHELL_OLD_GFX)&: shape/3common/shell/shell_old.glb tools/gltf; tools/gltf -g $<
+$(SHELL_GFX)&: shape/3common/shell/shell.glb tools/gltf; tools/gltf $<
 # Global
-$(BUTTERFLY_DEP)&: shape/global/butterfly/butterfly.glb tools/gltf; tools/gltf -g $<
-$(PIPE_DEP)&: shape/global/pipe/pipe.glb tools/gltf; tools/gltf $<
-$(DOOR_DEP)&: shape/global/door/door.glb tools/gltf; tools/gltf $<
-$(DOORKEY_DEP)&: shape/global/doorkey/doorkey.glb tools/gltf; tools/gltf $<
-$(FISH_DEP)&: shape/global/fish/fish.glb tools/gltf; tools/gltf $<
-$(CAP_DEP)&: shape/global/cap/cap.glb tools/gltf; tools/gltf $<
-$(POWERSTAR_DEP)&: shape/global/powerstar/powerstar.glb tools/gltf; tools/gltf $<
-$(SHADESTAR_DEP)&: shape/global/shadestar/shadestar.glb tools/gltf; tools/gltf $<
-$(SIGNPOST_DEP)&: shape/global/signpost/signpost.glb tools/gltf; tools/gltf $<
-$(TREE_DEP)&: shape/global/tree/tree.glb tools/gltf; tools/gltf $<
+$(BUTTERFLY_GFX)&: shape/global/butterfly/butterfly.glb tools/gltf; tools/gltf -g $<
+$(PIPE_GFX)&: shape/global/pipe/pipe.glb tools/gltf; tools/gltf $<
+$(DOOR_GFX)&: shape/global/door/door.glb tools/gltf; tools/gltf $<
+$(DOORKEY_GFX)&: shape/global/doorkey/doorkey.glb tools/gltf; tools/gltf $<
+$(FISH_GFX)&: shape/global/fish/fish.glb tools/gltf; tools/gltf $<
+$(CAP_GFX)&: shape/global/cap/cap.glb tools/gltf; tools/gltf $<
+$(POWERSTAR_GFX)&: shape/global/powerstar/powerstar.glb tools/gltf; tools/gltf $<
+$(SHADESTAR_GFX)&: shape/global/shadestar/shadestar.glb tools/gltf; tools/gltf $<
+$(SIGNPOST_GFX)&: shape/global/signpost/signpost.glb tools/gltf; tools/gltf $<
+$(TREE_GFX)&: shape/global/tree/tree.glb tools/gltf; tools/gltf $<
 # Title
-$(LOGO_DEP)&: stage/title/logo.glb tools/gltf; tools/gltf $<
-$(DEBUG_DEP)&: stage/title/debug.glb tools/gltf; tools/gltf -g $<
+$(LOGO_GFX)&: stage/title/logo.glb tools/gltf; tools/gltf $<
+$(DEBUG_GFX)&: stage/title/debug.glb tools/gltf; tools/gltf -g $<
 # Select
-$(FILE_DEP)&: stage/select/file/file.glb tools/gltf; tools/gltf $<
-$(TILE_DEP)&: stage/select/tile/tile.glb tools/gltf; tools/gltf $<
+$(FILE_GFX)&: stage/select/file/file.glb tools/gltf; tools/gltf $<
+$(TILE_GFX)&: stage/select/tile/tile.glb tools/gltf; tools/gltf $<
 # BoB
-$(BATTLEFIELD_DEP)&: stage/bob/battlefield/battlefield.glb tools/gltf; tools/gltf $<
-$(BOB_54_DEP)&: stage/bob/54/54.glb tools/gltf; tools/gltf $<
-$(BOB_55_DEP)&: stage/bob/55/55.glb tools/gltf; tools/gltf $<
-$(BOB_56_DEP)&: stage/bob/56/56.glb tools/gltf; tools/gltf $<
+$(BATTLEFIELD_GFX)&: stage/bob/battlefield/battlefield.glb tools/gltf; tools/gltf $<
+$(BOB_54_GFX)&: stage/bob/54/54.glb tools/gltf; tools/gltf $<
+$(BOB_55_GFX)&: stage/bob/55/55.glb tools/gltf; tools/gltf $<
+$(BOB_56_GFX)&: stage/bob/56/56.glb tools/gltf; tools/gltf $<
 # PSS
-$(MINISLIDER_DEP)&: stage/pss/minislider/minislider.glb tools/gltf; tools/gltf $<
+$(MINISLIDER_GFX)&: stage/pss/minislider/minislider.glb tools/gltf; tools/gltf $<
 
 # Common
 shape/3common/bluecoinsw/map.h: shape/3common/bluecoinsw/bluecoinsw.obj tools/obj; tools/obj $< $@

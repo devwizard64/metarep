@@ -19,26 +19,27 @@ static void ObjectScriptEntry(OBJLANG *script)
 	object->sp = 0;
 }
 
+static u16 rand_seed;
+
 u16 Rand(void)
 {
-	static u16 seed;
 	USHORT a, b;
-	if (seed == 0x560A) seed = 0;
-	a = (seed & 0xFF) << 8;
-	a ^= seed;
-	seed = ((a & 0x00FF) << 8) + ((a & 0xFF00) >> 8);
-	a = ((a & 0xFF) << 1) ^ seed;
-	b = (a >> 1) ^ 0xFF80;
+	if (rand_seed == 0x560A) rand_seed = 0;
+	a = (rand_seed & 0xFF) << 8;
+	a ^= rand_seed;
+	rand_seed = ((a & 0x00FF) << 8) + ((a & 0xFF00) >> 8);
+	a = (a & 0xFF) << 1 ^ rand_seed;
+	b = a >> 1 ^ 0xFF80;
 	if (!(a & 1))
 	{
-		if (b == 0xAA55)    seed = 0;
-		else                seed = b ^ 0x1FF4;
+		if (b == 0xAA55)    rand_seed = 0;
+		else                rand_seed = b ^ 0x1FF4;
 	}
 	else
 	{
-		seed = b ^ 0x8180;
+		rand_seed = b ^ 0x8180;
 	}
-	return seed;
+	return rand_seed;
 }
 
 float RandF(void)
@@ -80,6 +81,7 @@ static unsigned long ObjectPull(void)
 UNUSED
 static void ObjectError(void)
 {
+	debugf(("error\n"));
 	for (;;);
 }
 
@@ -104,7 +106,7 @@ static int ObjCmdBillboard(void)
 	return 0;
 }
 
-static int ObjCmdShape(void)
+static int ObjCmdSetShape(void)
 {
 	int shape = OBJ_SHORTL(0);
 	object->s.shape = shape_table[shape];
@@ -192,10 +194,10 @@ static int ObjCmdSleep(void)
 	return 1;
 }
 
-static int ObjCmdMemSleep(void)
+static int ObjCmdSleepW(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	int time = object->mem[mem].i;
+	UCHAR work = OBJ_UCHARB(0);
+	int time = object->work[work].i;
 	if (object->sleep < time-1)
 	{
 		object->sleep++;
@@ -293,129 +295,129 @@ static int ObjCmdCallback(void)
 
 static int ObjCmdSetF(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	float x = OBJ_SHORTL(0);
-	object->mem[mem].f = x;
+	object->work[work].f = x;
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmdSetI(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	SHORT x = OBJ_SHORTL(0);
-	object->mem[mem].i = x;
+	object->work[work].i = x;
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmdSetS(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	int x = OBJ_SHORTL(1);
-	object->mem[mem].i = x;
+	object->work[work].i = x;
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdSetRandF(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	float add = OBJ_SHORTL(0);
-	float mul = OBJ_SHORTH(1);
-	object->mem[mem].f = add + mul*RandF();
+	UCHAR work = OBJ_UCHARB(0);
+	float start = OBJ_SHORTL(0);
+	float range = OBJ_SHORTH(1);
+	object->work[work].f = start + range*RandF();
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdSetRandI(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	int add = OBJ_SHORTL(0);
-	int mul = OBJ_SHORTH(1);
-	object->mem[mem].i = add + (int)(mul*RandF());
+	UCHAR work = OBJ_UCHARB(0);
+	int start = OBJ_SHORTL(0);
+	int range = OBJ_SHORTH(1);
+	object->work[work].i = start + (int)(range*RandF());
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdSetRandA(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	int add = OBJ_SHORTL(0);
+	UCHAR work = OBJ_UCHARB(0);
+	int start = OBJ_SHORTL(0);
 	int shift = OBJ_SHORTH(1);
-	object->mem[mem].i = add + (Rand() >> shift);
+	object->work[work].i = start + (Rand() >> shift);
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdAddRandF(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	float add = OBJ_SHORTL(0);
-	float mul = OBJ_SHORTH(1);
-	object->mem[mem].f = object->mem[mem].f + add + mul*RandF();
+	UCHAR work = OBJ_UCHARB(0);
+	float start = OBJ_SHORTL(0);
+	float range = OBJ_SHORTH(1);
+	object->work[work].f = object->work[work].f + start + range*RandF();
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdAddRandA(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	int add = OBJ_SHORTL(0);
+	UCHAR work = OBJ_UCHARB(0);
+	int start = OBJ_SHORTL(0);
 	int shift = OBJ_SHORTH(1);
 	int x = Rand();
-	object->mem[mem].i = object->mem[mem].i + add + (x >> shift);
+	object->work[work].i = object->work[work].i + start + (x >> shift);
 	object_pc += 2;
 	return 0;
 }
 
 static int ObjCmdAddF(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	float val = OBJ_SHORTL(0);
-	object->mem[mem].f += val;
+	object->work[work].f += val;
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmdAddI(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	SHORT val = OBJ_SHORTL(0);
-	object->mem[mem].i += val;
+	object->work[work].i += val;
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmdSetFlag(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	int flag = OBJ_SHORTL(0);
 	flag &= 0xFFFF;
-	object->mem[mem].i |= flag;
+	object->work[work].i |= flag;
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmdClrFlag(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	int flag = OBJ_SHORTL(0);
 	flag = (flag & 0xFFFF) ^ 0xFFFF;
-	object->mem[mem].i &= flag;
+	object->work[work].i &= flag;
 	object_pc += 1;
 	return 0;
 }
 
-static int ObjCmdPtr(void)
+static int ObjCmdSetPtr(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
-	object->mem[mem].p = OBJ_PTR(1);
+	UCHAR work = OBJ_UCHARB(0);
+	object->work[work].p = OBJ_PTR(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int ObjCmdAnime(void)
+static int ObjCmdSetAnime(void)
 {
 	int anime = OBJ_UCHARB(0);
 	ANIME **animetab = object->o_animep;
@@ -438,46 +440,46 @@ static int ObjCmdGround(void)
 
 static int ObjCmd24(void)
 {
-	UNUSED UCHAR mem = OBJ_UCHARB(0);
+	UNUSED UCHAR work = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmd26(void)
 {
-	UNUSED UCHAR mem = OBJ_UCHARB(0);
+	UNUSED UCHAR work = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
 static int ObjCmd25(void)
 {
-	UNUSED UCHAR mem = OBJ_UCHARB(0);
+	UNUSED UCHAR work = OBJ_UCHARB(0);
 	object_pc += 1;
 	return 0;
 }
 
-static int ObjCmdMemAddF(void)
+static int ObjCmdAddFW(void)
 {
-	int mem = OBJ_UCHARB(0);
+	int work = OBJ_UCHARB(0);
 	int a = OBJ_UCHARC(0);
 	int b = OBJ_UCHARD(0);
-	object->mem[mem].f = object->mem[a].f + object->mem[b].f;
+	object->work[work].f = object->work[a].f + object->work[b].f;
 	object_pc += 1;
 	return 0;
 }
 
-static int ObjCmdMemAddI(void)
+static int ObjCmdAddIW(void)
 {
-	int mem = OBJ_UCHARB(0);
+	int work = OBJ_UCHARB(0);
 	int a = OBJ_UCHARC(0);
 	int b = OBJ_UCHARD(0);
-	object->mem[mem].i = object->mem[a].i + object->mem[b].i;
+	object->work[work].i = object->work[a].i + object->work[b].i;
 	object_pc += 1;
 	return 0;
 }
 
-static int ObjCmdHitBox(void)
+static int ObjCmdSetHitBox(void)
 {
 	SHORT radius = OBJ_SHORTH(1);
 	SHORT height = OBJ_SHORTL(1);
@@ -487,7 +489,7 @@ static int ObjCmdHitBox(void)
 	return 0;
 }
 
-static int ObjCmdDmgBox(void)
+static int ObjCmdSetDmgBox(void)
 {
 	SHORT radius = OBJ_SHORTH(1);
 	SHORT height = OBJ_SHORTL(1);
@@ -497,7 +499,7 @@ static int ObjCmdDmgBox(void)
 	return 0;
 }
 
-static int ObjCmdHitBoxOff(void)
+static int ObjCmdSetHitBoxOff(void)
 {
 	SHORT radius = OBJ_SHORTH(1);
 	SHORT height = OBJ_SHORTL(1);
@@ -511,29 +513,29 @@ static int ObjCmdHitBoxOff(void)
 
 static int ObjCmd36(void)
 {
-	UNUSED SHORT mem = OBJ_UCHARB(0);
+	UNUSED SHORT work = OBJ_UCHARB(0);
 	UNUSED SHORT x = OBJ_SHORTL(0);
 	object_pc += 1;
 	return 0;
 }
 
-extern OBJLANG o_signpost[];
-extern OBJLANG o_13004FD4[];
-extern OBJLANG o_13005024[];
+extern OBJLANG obj_signpost[];
+extern OBJLANG obj_13004FD4[];
+extern OBJLANG obj_13005024[];
 
 static int ObjCmdInit(void)
 {
-	if (ObjectHasScript(o_13004FD4)) ObjectInitArea();
-	if (ObjectHasScript(o_13005024)) ObjectInitArea();
-	if (ObjectHasScript(o_signpost)) object->o_checkdist = 150;
+	if (ObjectHasScript(obj_13004FD4)) ObjectInitArea();
+	if (ObjectHasScript(obj_13005024)) ObjectInitArea();
+	if (ObjectHasScript(obj_signpost)) object->o_checkdist = 150;
 	object_pc += 1;
 	return 0;
 }
 
 UNUSED
-static void ObjLangSetRandTbl(int len)
+static void ObjectSetRandTbl(int len)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	int table[16];
 	int i;
 	for (i = 0; i <= len/2; i += 2)
@@ -541,10 +543,10 @@ static void ObjLangSetRandTbl(int len)
 		table[i+0] = OBJ_SHORTH(1+i);
 		table[i+1] = OBJ_SHORTL(1+i);
 	}
-	object->mem[mem].i = table[(int)(RandF() * len)];
+	object->work[work].i = table[(int)(RandF() * len)];
 }
 
-static int ObjCmdMap(void)
+static int ObjCmdSetMap(void)
 {
 	MAP *map = SegmentToVirtual(OBJ_PTR(1));
 	object->map = map;
@@ -561,30 +563,30 @@ static int ObjCmdSavePos(void)
 	return 0;
 }
 
-static int ObjCmdHitType(void)
+static int ObjCmdSetHitType(void)
 {
 	object->o_hit_type = OBJ_INT(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int ObjCmdHitFlag(void)
+static int ObjCmdSetHitFlag(void)
 {
 	object->o_hit_flag = OBJ_INT(1);
 	object_pc += 2;
 	return 0;
 }
 
-static int ObjCmdScale(void)
+static int ObjCmdSetScale(void)
 {
-	UNUSED UCHAR mem = OBJ_UCHARB(0);
+	UNUSED UCHAR work = OBJ_UCHARB(0);
 	SHORT scale = OBJ_SHORTL(0);
 	ObjectSetScale((float)scale / 100);
 	object_pc += 1;
 	return 0;
 }
 
-static int ObjCmdPhysics(void)
+static int ObjCmdSetPhysics(void)
 {
 	UNUSED float g, h;
 	object->o_wall_r    = OBJ_SHORTH(1);
@@ -599,17 +601,17 @@ static int ObjCmdPhysics(void)
 	return 0;
 }
 
-static int ObjCmdMemClrParentFlag(void)
+static int ObjCmdClrParentFlagW(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	int flag = OBJ_INT(1);
 	flag ^= 0xFFFFFFFF;
-	object->parent->mem[mem].i &= flag;
+	object->parent->work[work].i &= flag;
 	object_pc += 2;
 	return 0;
 }
 
-static int ObjCmdSplash(void)
+static int ObjCmdMakeSplash(void)
 {
 	SPLASH *splash = OBJ_PTR(1);
 	ObjMakeSplash(object, splash);
@@ -619,9 +621,9 @@ static int ObjCmdSplash(void)
 
 static int ObjCmdInc(void)
 {
-	UCHAR mem = OBJ_UCHARB(0);
+	UCHAR work = OBJ_UCHARB(0);
 	SHORT period = OBJ_SHORTL(0);
-	if (!(gfx_frame % period)) object->mem[mem].i++;
+	if (!(gfx_frame % period)) object->work[work].i++;
 	object_pc += 1;
 	return 0;
 }
@@ -655,35 +657,35 @@ static int (*obj_cmdtab[])(void) =
 	ObjCmd24,
 	ObjCmd25,
 	ObjCmd26,
-	ObjCmdShape,
+	ObjCmdSetShape,
 	ObjCmdMakeObj,
 	ObjCmdDestroy,
 	ObjCmdGround,
-	ObjCmdMemAddF,
-	ObjCmdMemAddI,
+	ObjCmdAddFW,
+	ObjCmdAddIW,
 	ObjCmdBillboard,
 	ObjCmdHide,
-	ObjCmdHitBox,
+	ObjCmdSetHitBox,
 	ObjCmd36,
-	ObjCmdMemSleep,
+	ObjCmdSleepW,
 	ObjCmdFor2,
-	ObjCmdPtr,
-	ObjCmdAnime,
+	ObjCmdSetPtr,
+	ObjCmdSetAnime,
 	ObjCmdMakeObjCode,
-	ObjCmdMap,
-	ObjCmdHitBoxOff,
+	ObjCmdSetMap,
+	ObjCmdSetHitBoxOff,
 	ObjCmdMakeChild,
 	ObjCmdSavePos,
-	ObjCmdDmgBox,
-	ObjCmdHitType,
-	ObjCmdPhysics,
-	ObjCmdHitFlag,
-	ObjCmdScale,
-	ObjCmdMemClrParentFlag,
+	ObjCmdSetDmgBox,
+	ObjCmdSetHitType,
+	ObjCmdSetPhysics,
+	ObjCmdSetHitFlag,
+	ObjCmdSetScale,
+	ObjCmdClrParentFlagW,
 	ObjCmdInc,
 	ObjCmdClrActive,
 	ObjCmdSetS,
-	ObjCmdSplash,
+	ObjCmdMakeSplash,
 };
 
 void ObjLangInit(void)
@@ -699,8 +701,8 @@ void ObjLangExec(void)
 	int result;
 	if (flag & OF_CALCPLDIST)
 	{
-		object->o_pl_dist = ObjCalcDist3D(object, mario_obj);
-		dist = object->o_pl_dist;
+		object->o_targetdist = ObjCalcDist3D(object, mario_obj);
+		dist = object->o_targetdist;
 	}
 	else
 	{
@@ -708,12 +710,12 @@ void ObjLangExec(void)
 	}
 	if (flag & OF_CALCPLANG)
 	{
-		object->o_pl_ang = ObjCalcAngY(object, mario_obj);
+		object->o_targetang = ObjCalcAngY(object, mario_obj);
 	}
-	if (object->o_state != object->o_prevstate)
+	if (object->o_mode != object->o_prevmode)
 	{
 		object->o_timer = 0, object->o_phase = 0,
-		object->o_prevstate = object->o_state;
+		object->o_prevmode = object->o_mode;
 	}
 	object_pc = object->pc;
 	do
@@ -724,10 +726,10 @@ void ObjLangExec(void)
 	while (!result);
 	object->pc = object_pc;
 	if (object->o_timer < 0x3FFFFFFF) object->o_timer++;
-	if (object->o_state != object->o_prevstate)
+	if (object->o_mode != object->o_prevmode)
 	{
 		object->o_timer = 0, object->o_phase = 0,
-		object->o_prevstate = object->o_state;
+		object->o_prevmode = object->o_mode;
 	}
 	flag = object->o_flag;
 	if (flag & OF_SETSHAPEANG) ObjSetShapeAng(object);
@@ -743,14 +745,14 @@ void ObjLangExec(void)
 	}
 	else if (flag & OF_CALCPLDIST)
 	{
-		if (!(object->map || (flag & OF_0080)))
+		if (!(object->map || flag & OF_0080))
 		{
 			if (dist > object->o_shapedist)
 			{
 				object->s.s.flag &= ~SHP_ACTIVE;
 				object->flag |= OBJ_0002;
 			}
-			else if (!object->o_take)
+			else if (object->o_action == OA_0)
 			{
 				object->s.s.flag |= SHP_ACTIVE;
 				object->flag &= ~OBJ_0002;

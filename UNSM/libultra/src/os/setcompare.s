@@ -5,7 +5,7 @@
 .set noreorder
 
 LEAF(__osSetCompare)
-	mtc0    a0, C0_COMPARE
-	j       ra
+	mtc0 a0,C0_COMPARE
+	j ra
 	nop
 END(__osSetCompare)

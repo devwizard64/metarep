@@ -30,13 +30,21 @@ s32 osContInit(OSMesgQueue *mq, u8 *bitpattern, OSContStatus *data)
 		osRecvMesg(&timerMesgQueue, &dummy, OS_MESG_BLOCK);
 	}
 	__osMaxControllers = MAXCONTROLLERS;
+#if REVISION >= 199611
+	__osPackRequestData(CONT_REQUEST);
+#else
 	__osPackRequestData(CONT_RESET);
+#endif
 	ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
 	osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 	ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
 	osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 	__osContGetInitData(bitpattern, data);
+#if REVISION >= 199611
+	__osContLastCmd = CONT_REQUEST;
+#else
 	__osContLastCmd = CONT_RESET;
+#endif
 	__osSiCreateAccessQueue();
 	osCreateMesgQueue(&__osEepromTimerQ, &__osEepromTimerMsg, 1);
 	return ret;

@@ -435,7 +435,7 @@ void SSceneNotify(SSCENE *shp, int code)
 	{
 		draw_scene = shp;
 		if (shp->s.child) ShpNotify(shp->s.child, code);
-		draw_scene = 0;
+		draw_scene = NULL;
 	}
 }
 
@@ -488,13 +488,13 @@ void SObjSetAnime(SOBJECT *shp, ANIME **animep)
 	{
 		shp->skel.anime = anime;
 		shp->skel.frame =
-			anime->start + ((anime->flag & ANIME_REVERSE) ? 1 : -1);
+			anime->start + (anime->flag & ANIME_REVERSE ? 1 : -1);
 		shp->skel.vspeed = 0;
 		shp->skel.waist = 0;
 	}
 }
 
-void SObjSetAnimeV(SOBJECT *shp, ANIME **animep, int speed)
+void SObjSetAnimeV(SOBJECT *shp, ANIME **animep, int vspeed)
 {
 	ANIME **ap = SegmentToVirtual(animep);
 	ANIME *anime = SegmentToVirtual(*ap);
@@ -502,12 +502,11 @@ void SObjSetAnimeV(SOBJECT *shp, ANIME **animep, int speed)
 	{
 		shp->skel.anime = anime;
 		shp->skel.waist = 0;
-		shp->skel.vframe =
-			(anime->start << 16) +
-			((anime->flag & ANIME_REVERSE) ? speed : -speed);
+		shp->skel.vframe = (anime->start << 16) +
+			(anime->flag & ANIME_REVERSE ? vspeed : -vspeed);
 		shp->skel.frame = shp->skel.vframe >> 16;
 	}
-	shp->skel.vspeed = speed;
+	shp->skel.vspeed = vspeed;
 }
 
 int AnimeIndex(int frame, u16 **tbl)
@@ -520,17 +519,17 @@ int AnimeIndex(int frame, u16 **tbl)
 }
 
 #ifdef sgi
-#define GETFRAME()  (*(s16 *)&frame)
-#define SETFRAME(x) (*(s16 *)&frame = (x))
+#define GETFRAME()  (*(short *)&frame)
+#define SETFRAME(x) (*(short *)&frame = (x))
 #else
 #define GETFRAME()  (frame >> 16)
 #define SETFRAME(x) (frame = (frame & 0xFFFF) | (x) << 16)
 #endif
-int SkelStep(SKELETON *skel, s32 *vframe)
+int SkelStep(SKELETON *skel, int *vframe)
 {
-	s32 frame;
+	int frame;
 	ANIME *anime = skel->anime;
-	if (skel->stamp == draw_timer || (anime->flag & ANIME_NOSTEP))
+	if (skel->stamp == draw_timer || anime->flag & ANIME_NOSTEP)
 	{
 		if (vframe) *vframe = skel->vframe;
 		return skel->frame;
@@ -561,7 +560,6 @@ int SkelStep(SKELETON *skel, s32 *vframe)
 #undef GETFRAME
 #undef SETFRAME
 
-UNUSED static
 void SObjGetAnimePos(SOBJECT *shp, FVEC pos)
 {
 	ANIME *anime = shp->skel.anime;
@@ -581,7 +579,6 @@ void SObjGetAnimePos(SOBJECT *shp, FVEC pos)
 	}
 }
 
-UNUSED static
 SSCENE *ShpGetScene(SHAPE *shape)
 {
 	SSCENE *shp = NULL;

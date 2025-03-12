@@ -90,36 +90,36 @@ static COLLISION collisiontab[] =
 
 static u32 fdamagetab[3][3] =
 {
-	{PS_MOVE_25, PS_MOVE_23, PS_MOVE_21},
+	{PS_WALK_25, PS_WALK_23, PS_WALK_21},
 	{PS_JUMP_31, PS_JUMP_31, PS_JUMP_32},
 	{PS_SWIM_06, PS_SWIM_06, PS_SWIM_06},
 };
 
 static u32 bdamagetab[3][3] =
 {
-	{PS_MOVE_24, PS_MOVE_22, PS_MOVE_20},
+	{PS_WALK_24, PS_WALK_22, PS_WALK_20},
 	{PS_JUMP_30, PS_JUMP_30, PS_JUMP_33},
 	{PS_SWIM_05, PS_SWIM_05, PS_SWIM_05},
 };
 
 static u8 door_flag = FALSE;
 static u8 pipe_flag = FALSE;
-static u8 silder_flag = FALSE;
+static u8 slider_flag = FALSE;
 static u8 hit_enemy;
 static short invincible;
 
-extern OBJLANG o_13003DB8[];
-extern OBJLANG o_13003DD8[];
-extern OBJLANG o_13003DF8[];
-extern OBJLANG o_13003E1C[];
+extern OBJLANG obj_13003DB8[];
+extern OBJLANG obj_13003DD8[];
+extern OBJLANG obj_13003DF8[];
+extern OBJLANG obj_13003E1C[];
 
 static u32 ObjGetCapFlag(OBJECT *obj)
 {
 	OBJLANG *script = VirtualToSegment(SEG_OBJECT, obj->script);
-	if      (script == o_13003DF8) return PL_DEFCAP;
-	else if (script == o_13003DD8) return PL_METALCAP;
-	else if (script == o_13003DB8) return PL_WINGCAP;
-	else if (script == o_13003E1C) return PL_VANISHCAP;
+	if      (script == obj_13003DF8) return PL_DEFCAP;
+	else if (script == obj_13003DD8) return PL_METALCAP;
+	else if (script == obj_13003DB8) return PL_WINGCAP;
+	else if (script == obj_13003E1C) return PL_VANISHCAP;
 	return 0;
 }
 
@@ -146,20 +146,20 @@ static int PL_CheckAttack(PLAYER *pl, OBJECT *obj)
 	u32 state = pl->state;
 	if (state & PF_ATCK)
 	{
-		if (state == PS_TAKE_00 || state == PS_MOVE_17 || state == PS_JUMP_2C)
+		if (state == PS_ATCK_00 || state == PS_WALK_17 || state == PS_JUMP_2C)
 		{
 			short dang = PL_GetAngToObj(pl, obj) - pl->ang[1];
 			if (pl->flag & PL_PUNCH)
 			{
-				if (-0x2AAA <= dang && dang <= 0x2AAA) attack = PH_PUNCH;
+				if (DEG(-60) <= dang && dang <= DEG(60)) attack = PH_PUNCH;
 			}
 			if (pl->flag & PL_KICK)
 			{
-				if (-0x2AAA <= dang && dang <= 0x2AAA) attack = PH_KICK;
+				if (DEG(-60) <= dang && dang <= DEG(60)) attack = PH_KICK;
 			}
 			if (pl->flag & PL_SWEEPKICK)
 			{
-				if (-0x4000 <= dang && dang <= 0x4000) attack = PH_SWEEPKICK;
+				if (DEG(-90) <= dang && dang <= DEG(90)) attack = PH_SWEEPKICK;
 			}
 		}
 		else if (state == PS_JUMP_29 || state == PS_JUMP_24)
@@ -170,7 +170,7 @@ static int PL_CheckAttack(PLAYER *pl, OBJECT *obj)
 		{
 			if (pl->vel[1] < 0 && pl->phase == 0) attack = PH_POUND;
 		}
-		else if (state == PS_JUMP_2A || state == PS_MOVE_1A)
+		else if (state == PS_JUMP_2A || state == PS_WALK_1A)
 		{
 			attack = PH_SLIDEKICK;
 		}
@@ -183,7 +183,7 @@ static int PL_CheckAttack(PLAYER *pl, OBJECT *obj)
 			if (pl->speed <= -26 || 26 <= pl->speed) attack = PH_SLIDING;
 		}
 	}
-	if (!attack && (state & PF_JUMP))
+	if (!attack && state & PF_JUMP)
 	{
 		if (pl->vel[1] < 0)
 		{
@@ -223,20 +223,20 @@ static int ObjAttack(OBJECT *obj, int attack)
 		result = 6;
 		break;
 	}
-	obj->o_hit_result = (0x4000|0x8000) + result; /* T:hit_result */
+	obj->o_hit_result = HR_004000+HR_008000+result;
 	return result;
 }
 
-extern OBJLANG o_13000708[];
-extern OBJLANG o_13003464[];
-extern OBJLANG o_1300346C[];
-extern OBJLANG o_13003474[];
+extern OBJLANG obj_13000708[];
+extern OBJLANG obj_13003464[];
+extern OBJLANG obj_1300346C[];
+extern OBJLANG obj_13003474[];
 
 void PL_StopRide(PLAYER *pl)
 {
 	if (pl->ride)
 	{
-		pl->ride->o_hit_result = 0x00400000; /* T:hit_result */
+		pl->ride->o_hit_result = HR_400000;
 		AudStopShellBGM();
 		pl->ride = NULL;
 	}
@@ -247,7 +247,7 @@ void PL_TakeObject(PLAYER *pl)
 	if (!pl->take)
 	{
 		pl->take = pl->attach;
-		ObjectSetTake(pl->take, o_13003464);
+		ObjectSetAction(pl->take, obj_13003464);
 	}
 }
 
@@ -255,14 +255,14 @@ void PL_DropObject(PLAYER *pl)
 {
 	if (pl->take)
 	{
-		if (pl->take->script == SegmentToVirtual(o_13000708))
+		if (pl->take->script == SegmentToVirtual(obj_13000708))
 		{
 			AudStopShellBGM();
 		}
-		ObjectSetTake(pl->take, o_1300346C);
-		pl->take->o_posx = pl->shape->hand_pos[0];
+		ObjectSetAction(pl->take, obj_1300346C);
+		pl->take->o_posx = pl->ctrl->hand_pos[0];
 		pl->take->o_posy = pl->pos[1];
-		pl->take->o_posz = pl->shape->hand_pos[2];
+		pl->take->o_posz = pl->ctrl->hand_pos[2];
 		pl->take->o_angy = pl->ang[1];
 		pl->take = NULL;
 	}
@@ -272,14 +272,14 @@ void PL_ThrowObject(PLAYER *pl)
 {
 	if (pl->take)
 	{
-		if (pl->take->script == SegmentToVirtual(o_13000708))
+		if (pl->take->script == SegmentToVirtual(obj_13000708))
 		{
 			AudStopShellBGM();
 		}
-		ObjectSetTake(pl->take, o_13003474);
-		pl->take->o_posx = pl->shape->hand_pos[0] + 32*SIN(pl->ang[1]);
-		pl->take->o_posy = pl->shape->hand_pos[1];
-		pl->take->o_posz = pl->shape->hand_pos[2] + 32*COS(pl->ang[1]);
+		ObjectSetAction(pl->take, obj_13003474);
+		pl->take->o_posx = pl->ctrl->hand_pos[0] + 32*SIN(pl->ang[1]);
+		pl->take->o_posy = pl->ctrl->hand_pos[1];
+		pl->take->o_posz = pl->ctrl->hand_pos[2] + 32*COS(pl->ang[1]);
 		pl->take->o_angy = pl->ang[1];
 		pl->take = NULL;
 	}
@@ -308,8 +308,8 @@ void PL_BlowCap(PLAYER *pl, float speed)
 	{
 		BuSetCap(pl->pos[0], pl->pos[1], pl->pos[2]);
 		pl->flag &= ~(PL_DEFCAP|PL_HEADCAP);
-		obj = ObjMakeHere(pl->obj, S_CAP_S, o_13003DF8);
-		obj->o_posy += (pl->state & PF_SHRT) ? 120.0F : 180.0F;
+		obj = ObjMakeHere(pl->obj, S_CAP_S, obj_13003DF8);
+		obj->o_posy += pl->state & PF_SHRT ? 120.0F : 180.0F;
 		obj->o_velf = speed;
 		obj->o_angy = (short)(pl->ang[1] + 0x400);
 		if (pl->speed < 0) obj->o_angy = (short)(obj->o_angy+0x8000);
@@ -339,11 +339,11 @@ void MarioReturnCap(void)
 static int PL_IsTaking(PLAYER *pl, OBJECT *obj)
 {
 	u32 state = pl->state;
-	if (state == PS_MOVE_16 || state == PS_JUMP_0A)
+	if (state == PS_WALK_16 || state == PS_JUMP_0A)
 	{
-		if (!(obj->o_hit_flag & 4)) return TRUE;
+		if (!(obj->o_hit_flag & HF_0004)) return TRUE;
 	}
-	else if (state == PS_TAKE_00 || state == PS_MOVE_17)
+	else if (state == PS_ATCK_00 || state == PS_WALK_17)
 	{
 		if (pl->code < 2) return TRUE;
 	}
@@ -361,7 +361,7 @@ OBJECT *PL_GetHitObj(PLAYER *pl, int type)
 	return NULL;
 }
 
-extern OBJLANG o_13001850[];
+extern OBJLANG obj_13001850[];
 
 int PL_CheckTaking(PLAYER *pl)
 {
@@ -369,24 +369,24 @@ int PL_CheckTaking(PLAYER *pl)
 	if (pl->status & PA_TAKEREQ)
 	{
 		OBJLANG *script = VirtualToSegment(SEG_OBJECT, pl->collide->script);
-		if (script == o_13001850)
+		if (script == obj_13001850)
 		{
 			short dang = pl->ang[1] - pl->collide->o_angy;
-			if (-0x5555 <= dang && dang <= 0x5555)
+			if (DEG(-120) <= dang && dang <= DEG(120))
 			{
 				pl->ang[1] = pl->collide->o_angy;
 				pl->attach = pl->collide;
-				result = PL_SetState(pl, PS_TAKE_10, 0);
+				result = PL_SetState(pl, PS_ATCK_10, 0);
 			}
 		}
 		else
 		{
 			short dang = PL_GetAngToObj(pl, pl->collide) - pl->ang[1];
-			if (-0x2AAA <= dang && dang <= 0x2AAA)
+			if (DEG(-60) <= dang && dang <= DEG(60))
 			{
 				pl->attach = pl->collide;
 				if (!(pl->state & PF_JUMP)) PL_SetState(
-					pl, (pl->state & PF_DIVE) ? PS_TAKE_05 : PS_TAKE_03, 0
+					pl, (pl->state & PF_DIVE) ? PS_ATCK_05 : PS_ATCK_03, 0
 				);
 				result = 1;
 			}
@@ -403,7 +403,7 @@ static u32 PL_BumpObject(PLAYER *pl)
 	UNUSED short ob_dang;
 	u32 state = PS_NULL;
 	OBJECT *obj = pl->collide;
-	float pl_power = obj->hit_r * 3/53;
+	float pl_power = obj->hit_r * 3/53.0F;
 	float ob_power = 53 / obj->hit_r;
 	BumpInit(
 		&pl_bump, pl->pos[0], pl->pos[2], pl->speed, pl->ang[1], pl_power, 50+2
@@ -431,12 +431,12 @@ static u32 PL_BumpObject(PLAYER *pl)
 		pl->ang[1] += 0x8000;
 		pl->speed *= -1;
 		if (pl->state & PF_JUMP)    state = PS_JUMP_30;
-		else                        state = PS_MOVE_24;
+		else                        state = PS_WALK_24;
 	}
 	else
 	{
 		if (pl->state & PF_JUMP)    state = PS_JUMP_31;
-		else                        state = PS_MOVE_25;
+		else                        state = PS_WALK_25;
 	}
 	return state;
 }
@@ -467,13 +467,13 @@ static u32 PL_GetBlowState(PLAYER *pl)
 	{
 		pl->speed *= -1;
 		if (pl->state & (PF_JUMP|PF_POLE|PF_ROOF))  state = PS_JUMP_30;
-		else                                        state = PS_MOVE_24;
+		else                                        state = PS_WALK_24;
 	}
 	else
 	{
 		pl->ang[1] += 0x8000;
 		if (pl->state & (PF_JUMP|PF_POLE|PF_ROOF))  state = PS_JUMP_31;
-		else                                        state = PS_MOVE_25;
+		else                                        state = PS_WALK_25;
 	}
 	return state;
 }
@@ -484,7 +484,7 @@ static u32 PL_GetDamageState(PLAYER *pl, UNUSED int ap)
 	SHORT i = 0, n = 0;
 	SHORT angy = PL_GetAngToObj(pl, pl->collide);
 	short dang = angy - pl->ang[1];
-	SHORT power = pl->power - 64*pl->damage;
+	SHORT power = pl->power - 0x40*pl->damage;
 	if      (pl->state & (PF_SWIM|PF_SINK))         i = 2;
 	else if (pl->state & (PF_JUMP|PF_POLE|PF_ROOF)) i = 1;
 	if      (power < 0x100)             n = 2;
@@ -549,7 +549,7 @@ static void PL_PunchKickRecoil(PLAYER *pl, int attack)
 {
 	if (attack & (PH_PUNCH|PH_KICK|PH_SWEEPKICK))
 	{
-		if (pl->state == PS_TAKE_00) pl->state = PS_MOVE_17;
+		if (pl->state == PS_ATCK_00) pl->state = PS_WALK_17;
 		if (pl->state & PF_JUMP)    PL_SetSpeed(pl, -16);
 		else                        PL_SetSpeed(pl, -48);
 		camera_8027F590(1);
@@ -557,7 +557,7 @@ static void PL_PunchKickRecoil(PLAYER *pl, int attack)
 	}
 	if (attack & (PH_PUNCH|PH_KICK|PH_SWEEPKICK|PH_SLIDING))
 	{
-		Na_ObjSePlay(NA_SE0_44_B, pl->obj);
+		Na_ObjSePlay(NA_SE0_44_B0, pl->obj);
 	}
 }
 
@@ -578,24 +578,30 @@ static int PL_TakeDamage(PLAYER *pl)
 	if (!(pl->flag & PL_HEADCAP)) ap += (ap+1) / 2;
 	if (pl->flag & PL_METALCAP) ap = 0;
 	pl->damage += 4*ap;
+#ifdef MOTOR
+	motor_8024C834(5, 80);
+#endif
 	camera_8027F590(sp1C);
 	return ap;
 }
 
 static int PL_CheckDamage(PLAYER *pl, OBJECT *obj)
 {
-	if (!invincible && !(pl->flag & PL_VANISHCAP) && !(obj->o_hit_flag & 2))
+	if (
+		!invincible && !(pl->flag & PL_VANISHCAP) &&
+		!(obj->o_hit_flag & HF_0002)
+	)
 	{
 		int ap;
-		obj->o_hit_result = 0x2000|0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_002000|HR_008000;
 		pl->collide = obj;
 		ap = PL_TakeDamage(pl);
-		if (obj->o_hit_flag & 8) pl->speed = 40;
+		if (obj->o_hit_flag & HF_0008) pl->speed = 40;
 		if (obj->o_ap > 0) Na_ObjSePlay(NA_SE2_0A, pl->obj);
 		player_802521A0(pl);
 		return PL_SetStateDrop(pl, PL_GetDamageState(pl, obj->o_ap), ap);
 	}
-	return 0;
+	return FALSE;
 }
 
 static void collision_8024DAAC(PLAYER *pl)
@@ -615,32 +621,38 @@ static int PL_CollideCoin(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	pl->coin += obj->o_ap;
 	pl->recover += 4*obj->o_ap;
-	obj->o_hit_result = 0x8000; /* T:hit_result */
+	obj->o_hit_result = HR_008000;
 	if (course_index >= COURSE_MIN && course_index < COURSE_EXT)
 	{
-		if (pl->coin-obj->o_ap < 100 && pl->coin >= 100) object_a_802AB558(6);
+		if (pl->coin-obj->o_ap < 100 && pl->coin >= 100) enemya_802AB558(6);
 	}
-	return 0;
+#ifdef MOTOR
+	if (obj->o_ap > 1) motor_8024C834(5, 80);
+#endif
+	return FALSE;
 }
 
 static int PL_CollideRecover(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	pl->recover += 4*obj->o_ap;
-	obj->o_hit_result = 0x8000; /* T:hit_result */
-	return 0;
+	obj->o_hit_result = HR_008000;
+	return FALSE;
 }
 
-extern OBJLANG o_130038B0[];
+extern OBJLANG obj_130038B0[];
 
 static int PL_CollideStar(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	int level;
 	u32 state = PS_DEMO_02;
-	int stay = (obj->o_hit_flag & 0x400) != 0;
-	int sp18 = (obj->o_hit_flag & 0x800) != 0;
+	int stay = (obj->o_hit_flag & HF_0400) != 0;
+	int sp18 = (obj->o_hit_flag & HF_0800) != 0;
 	if (pl->power >= 0x100)
 	{
 		PL_DropAll(pl);
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		if (!stay)
 		{
 			pl->damage = 0;
@@ -651,8 +663,8 @@ static int PL_CollideStar(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		if (pl->state & PF_SWIM) state = PS_DEMO_03;
 		if (pl->state & PF_SINK) state = PS_DEMO_03;
 		if (pl->state & PF_JUMP) state = PS_DEMO_04;
-		ObjMakeHere(obj, 0, o_130038B0);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		ObjMakeHere(obj, 0, obj_130038B0);
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		level = ObjGetArg(obj) & 31;
@@ -664,13 +676,13 @@ static int PL_CollideStar(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			AudFadeoutBGM(NA_TIME(16));
 		}
 		Na_ObjSePlay(NA_SE7_1E, pl->obj);
-#if REVISION > 199606
+#if REVISION >= 199609
 		player_802521A0(pl);
 #endif
 		if (sp18) return PL_SetState(pl, PS_DEMO_09, 0);
 		return PL_SetState(pl, state, (sp18 << 1) + stay);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideCage(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -678,20 +690,20 @@ static int PL_CollideCage(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	if (pl->state != PS_DEMO_35 && pl->state != PS_DEMO_34)
 	{
 		PL_DropAll(pl);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		if (pl->state & PF_JUMP) return PL_SetState(pl, PS_DEMO_35, 0);
 		return PL_SetState(pl, PS_DEMO_34, 0);
 	}
-	return 0;
+	return FALSE;
 }
 
 extern MAP map_pipe[];
 
 static int PL_CollidePipe(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (obj->o_hit_flag & 1)
+	if (obj->o_hit_flag & HF_0001)
 	{
 		u32 state = pl->state;
 		if (state == PS_DEMO_37)
@@ -715,18 +727,31 @@ static int PL_CollidePipe(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	{
 		if (pl->state != PS_DEMO_23)
 		{
-			obj->o_hit_result = 0x8000; /* T:hit_result */
+			obj->o_hit_result = HR_008000;
 			pl->collide = obj;
 			pl->attach = obj;
+#ifdef MOTOR
+			if (obj->map == SegmentToVirtual(map_pipe))
+			{
+				Na_ObjSePlay(NA_SE7_16, pl->obj);
+				motor_8024C834(15, 80);
+			}
+			else
+			{
+				Na_ObjSePlay(NA_SE7_19, pl->obj);
+				motor_8024C834(12, 80);
+			}
+#else
 			Na_ObjSePlay(
 				obj->map == SegmentToVirtual(map_pipe) ? NA_SE7_16 : NA_SE7_19,
 				pl->obj
 			);
+#endif
 			PL_StopRide(pl);
 			return PL_SetState(pl, PS_DEMO_00, 4 << 16 | 2);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollidePortDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -734,17 +759,17 @@ static int PL_CollidePortDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	u32 state = PS_NULL;
 	u32 flag = BuGetFlag();
 	SHORT arg = ObjGetArg(obj);
-	if (pl->state == PS_MOVE_00 || pl->state == PS_MOVE_0A)
+	if (pl->state == PS_WALK_00 || pl->state == PS_WALK_0A)
 	{
 		if (arg == 1 && !(flag & BU_KEYDOOR2))
 		{
 			if (!(flag & BU_KEY2))
 			{
 				if (!door_flag) PL_SetState(
-					pl, PS_DEMO_05, (flag & BU_KEY1) ? 23 : 22
+					pl, PS_DEMO_05, flag & BU_KEY1 ? MSG_23 : MSG_22
 				);
 				door_flag = TRUE;
-				return 0;
+				return FALSE;
 			}
 			state = PS_DEMO_2E;
 		}
@@ -753,17 +778,17 @@ static int PL_CollidePortDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			if (!(flag & BU_KEY1))
 			{
 				if (!door_flag) PL_SetState(
-					pl, PS_DEMO_05, (flag & BU_KEY2) ? 23 : 22
+					pl, PS_DEMO_05, flag & BU_KEY2 ? MSG_23 : MSG_22
 				);
 				door_flag = TRUE;
-				return 0;
+				return FALSE;
 			}
 			state = PS_DEMO_2E;
 		}
-		if (pl->state == PS_MOVE_00 || pl->state == PS_MOVE_0A)
+		if (pl->state == PS_WALK_00 || pl->state == PS_WALK_0A)
 		{
 			u32 code = 4 + PL_GetDoorCode(pl, obj);
-			if (state == PS_NULL)
+			if (!state)
 			{
 				if (code & 1)   state = PS_DEMO_20;
 				else            state = PS_DEMO_21;
@@ -773,7 +798,7 @@ static int PL_CollidePortDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			return PL_SetState(pl, state, code);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 u32 PL_GetStarDoorFlag(OBJECT *obj)
@@ -809,7 +834,7 @@ static int PL_CollideDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	SHORT arg = ObjGetArg(obj);
 	SHORT star = BuStarTotal();
-	if (pl->state == PS_MOVE_00 || pl->state == PS_MOVE_0A)
+	if (pl->state == PS_WALK_00 || pl->state == PS_WALK_0A)
 	{
 		if (star >= arg)
 		{
@@ -820,21 +845,21 @@ static int PL_CollideDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			flag = PL_GetStarDoorFlag(obj);
 			pl->collide = obj;
 			pl->attach = obj;
-			if (obj->o_hit_flag & 0x20) state = PS_DEMO_31;
+			if (obj->o_hit_flag & HF_0020) state = PS_DEMO_31;
 			if (flag && !(BuGetFlag() & flag)) state = PS_DEMO_2F;
 			return PL_SetState(pl, state, code);
 		}
 		else if (!door_flag)
 		{
-			u32 code = 22 << 16;
+			u32 code = MSG_22 << 16;
 			switch (arg)
 			{
-			case  1: code = 24 << 16; break;
-			case  3: code = 25 << 16; break;
-			case  8: code = 26 << 16; break;
-			case 30: code = 27 << 16; break;
-			case 50: code = 28 << 16; break;
-			case 70: code = 29 << 16; break;
+			case  1: code = MSG_24 << 16; break;
+			case  3: code = MSG_25 << 16; break;
+			case  8: code = MSG_26 << 16; break;
+			case 30: code = MSG_27 << 16; break;
+			case 50: code = MSG_28 << 16; break;
+			case 70: code = MSG_29 << 16; break;
 			}
 			code += arg - star;
 			door_flag = TRUE;
@@ -850,7 +875,7 @@ static int PL_CollideDoor(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			return PL_SetState(pl, PS_DEMO_31, PL_GetDoorCode(pl, obj));
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideCannon(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -858,12 +883,12 @@ static int PL_CollideCannon(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	if (pl->state != PS_SPEC_31)
 	{
 		PL_DropAll(pl);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		return PL_SetState(pl, PS_SPEC_31, 0);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideIgloo(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -871,7 +896,7 @@ static int PL_CollideIgloo(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	pl->collide = obj;
 	pl->attach = obj;
 	PL_RepelFromObj(pl, obj, 5);
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideTornado(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -882,15 +907,18 @@ static int PL_CollideTornado(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		PL_DropAll(pl);
 		PL_SetSpeed(pl, 0);
 		player_802521A0(pl);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		pl_obj->o_v6 = 0x400;
 		pl_obj->o_f7 = pl->pos[1] - obj->o_posy;
 		Na_ObjSePlay(NA_SE2_10, pl->obj);
+#ifdef MOTOR
+		motor_8024C834(30, 60);
+#endif
 		return PL_SetState(pl, PS_SPEC_32, pl->state == PS_JUMP_24);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideWhirlpool(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -899,15 +927,18 @@ static int PL_CollideWhirlpool(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	if (pl->state != PS_SWIM_23)
 	{
 		PL_DropAll(pl);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		pl->speed = 0;
 		pl_obj->o_f7 = pl->pos[1] - obj->o_posy;
 		Na_ObjSePlay(NA_SE2_10, pl->obj);
+#ifdef MOTOR
+		motor_8024C834(30, 60);
+#endif
 		return PL_SetState(pl, PS_SWIM_23, 0);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideWind(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -916,7 +947,7 @@ static int PL_CollideWind(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	if (pl->state != PS_JUMP_38)
 	{
 		PL_DropAll(pl);
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		pl->attach = obj;
 		pl->ang[1] = obj->o_angy+0x8000;
@@ -927,7 +958,7 @@ static int PL_CollideWind(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		player_802521A0(pl);
 		return PL_SetState(pl, PS_JUMP_38, 0);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideBurn(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -937,12 +968,15 @@ static int PL_CollideBurn(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		!invincible &&
 		!(pl->flag & PL_METALCAP) &&
 		!(pl->flag & PL_VANISHCAP) &&
-		!(obj->o_hit_flag & 2)
+		!(obj->o_hit_flag & HF_0002)
 	)
 	{
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
-		if ((pl->state & (PF_SWIM|PF_SINK)) || pl->water-pl->pos[1] > 50)
+		if (pl->state & (PF_SWIM|PF_SINK) || pl->water-pl->pos[1] > 50)
 		{
 			Na_ObjSePlay(NA_SE3_03, pl->obj);
 		}
@@ -951,11 +985,11 @@ static int PL_CollideBurn(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			pl->obj->o_v7 = 0;
 			player_802521A0(pl);
 			Na_ObjSePlay(NA_SE2_14, pl->obj);
-			if ((pl->state & PF_JUMP) && pl->vel[1] <= 0) state = PS_JUMP_35;
+			if (pl->state & PF_JUMP && pl->vel[1] <= 0) state = PS_JUMP_35;
 			return PL_SetStateDrop(pl, state, 1);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideBullet(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -964,12 +998,12 @@ static int PL_CollideBullet(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	{
 		if (pl->flag & PL_METALCAP)
 		{
-			obj->o_hit_result = 0x4000|0x8000; /* T:hit_result */
+			obj->o_hit_result = HR_004000|HR_008000;
 			Na_ObjSePlay(NA_SE0_58, pl->obj);
 		}
 		else
 		{
-			obj->o_hit_result = 0x2000|0x8000; /* T:hit_result */
+			obj->o_hit_result = HR_002000|HR_008000;
 			pl->collide = obj;
 			PL_TakeDamage(pl);
 			Na_ObjSePlay(NA_SE2_0A, pl->obj);
@@ -979,24 +1013,24 @@ static int PL_CollideBullet(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			);
 		}
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideClam(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (obj->o_hit_flag & 0x2000)
+	if (obj->o_hit_flag & HF_2000)
 	{
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->collide = obj;
 		return PL_SetState(pl, PS_DEMO_17, 0);
 	}
 	else
 	{
-		if (PL_CheckDamage(pl, obj)) return 1;
+		if (PL_CheckDamage(pl, obj)) return TRUE;
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 1;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return TRUE;
 }
 
 static int PL_CollideBump(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1008,41 +1042,53 @@ static int PL_CollideBump(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	pl->collide = obj;
 	if (attack & PH_LOWATTACK)
 	{
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		PL_RepelFromObj(pl, obj, 5);
 		pl->speed = -16;
 		obj->o_angy = pl->ang[1];
 		obj->o_velf = 3392 / obj->hit_r;
 		ObjAttack(obj, attack);
 		PL_PunchKickRecoil(pl, attack);
-		return 1;
+		return TRUE;
 	}
 	else if (
 		!invincible &&
 		!(pl->flag & PL_VANISHCAP) &&
-		!(obj->o_hit_flag & 2)
+		!(obj->o_hit_flag & HF_0002)
 	)
 	{
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->invincible = 2;
 		player_802521A0(pl);
 		Na_ObjSePlay(NA_SE2_09, pl->obj);
 		Na_ObjSePlay(NA_SE5_17, pl->obj);
 		PL_RepelFromObj(pl, obj, 5);
 		PL_SetStateDrop(pl, PL_BumpObject(pl), 0);
-		return 1;
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
+		return TRUE;
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideElecShock(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (!invincible && !(pl->flag & PL_VANISHCAP) && !(obj->o_hit_flag & 2))
+	if (
+		!invincible && !(pl->flag & PL_VANISHCAP) &&
+		!(obj->o_hit_flag & HF_0002)
+	)
 	{
 		u32 code = (pl->state & (PF_JUMP|PF_POLE|PF_ROOF)) == 0;
-		obj->o_hit_result = 0x2000|0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_002000|HR_008000;
 		pl->collide = obj;
 		PL_TakeDamage(pl);
 		Na_ObjSePlay(NA_SE2_0A, pl->obj);
+#ifdef MOTOR
+		motor_8024C834(70, 60);
+#endif
 		if (pl->state & (PF_SWIM|PF_SINK))
 		{
 			return PL_SetStateDrop(pl, PS_SWIM_08, 0);
@@ -1053,22 +1099,22 @@ static int PL_CollideElecShock(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			return PL_SetStateDrop(pl, PS_DEMO_38, code);
 		}
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 UNUSED
 static int PL_CollideDummy(UNUSED PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideEnemy(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (PL_CheckDamage(pl, obj)) return 1;
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (PL_CheckDamage(pl, obj)) return TRUE;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideFlyEnemy(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1079,16 +1125,19 @@ static int PL_CollideFlyEnemy(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	else                        attack = PL_CheckAttack(pl, obj);
 	if (attack & PH_ALLATTACK)
 	{
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		ObjAttack(obj, attack);
 		PL_PunchKickRecoil(pl, attack);
 		if (attack & PH_HEADATTACK) PL_HeadAttack(pl, obj);
 		if (attack & PH_STOMP)
 		{
-			if (obj->o_hit_flag & 0x80)
+			if (obj->o_hit_flag & HF_0080)
 			{
 				PL_Stomp(pl, obj, 80);
 				collision_8024DAAC(pl);
-#ifdef NEWVOICE
+#if REVISION >= 199609
 				Na_ObjSePlay(NA_SE2_34, pl->obj);
 #endif
 				return PL_SetStateDrop(pl, PS_JUMP_24, 0);
@@ -1101,10 +1150,10 @@ static int PL_CollideFlyEnemy(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	}
 	else
 	{
-		if (PL_CheckDamage(pl, obj)) return 1;
+		if (PL_CheckDamage(pl, obj)) return TRUE;
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideBounce(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1114,15 +1163,18 @@ static int PL_CollideBounce(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	else                        attack = PL_CheckAttack(pl, obj);
 	if (attack & PH_LOWATTACK)
 	{
+#ifdef MOTOR
+		motor_8024C834(5, 80);
+#endif
 		ObjAttack(obj, attack);
 		PL_PunchKickRecoil(pl, attack);
 		if (attack & PH_STOMP)
 		{
-			if (obj->o_hit_flag & 0x80)
+			if (obj->o_hit_flag & HF_0080)
 			{
 				PL_Stomp(pl, obj, 80);
 				collision_8024DAAC(pl);
-#ifdef NEWVOICE
+#if REVISION >= 199609
 				Na_ObjSePlay(NA_SE2_34, pl->obj);
 #endif
 				return PL_SetStateDrop(pl, PS_JUMP_24, 0);
@@ -1135,10 +1187,10 @@ static int PL_CollideBounce(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	}
 	else
 	{
-		if (PL_CheckDamage(pl, obj)) return 1;
+		if (PL_CheckDamage(pl, obj)) return TRUE;
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideSpiny(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1146,22 +1198,22 @@ static int PL_CollideSpiny(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	int attack = PL_CheckAttack(pl, obj);
 	if (attack & PH_PUNCH)
 	{
-		obj->o_hit_result = 1|0x4000|0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_000001|HR_004000|HR_008000;
 		PL_PunchKickRecoil(pl, attack);
 	}
 	else
 	{
-		if (PL_CheckDamage(pl, obj)) return 1;
+		if (PL_CheckDamage(pl, obj)) return TRUE;
 	}
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideDamage(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
-	if (PL_CheckDamage(pl, obj)) return 1;
-	if (!(obj->o_hit_flag & 2)) hit_enemy = TRUE;
-	return 0;
+	if (PL_CheckDamage(pl, obj)) return TRUE;
+	if (!(obj->o_hit_flag & HF_0002)) hit_enemy = TRUE;
+	return FALSE;
 }
 
 static int PL_CollideItemBox(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1177,9 +1229,9 @@ static int PL_CollideItemBox(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		case PH_STOMP:      PL_Stomp(pl, obj, 30); break;
 		case PH_HEADATTACK: PL_HeadAttack(pl, obj); break;
 		}
-		return 1;
+		return TRUE;
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideShell(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1189,7 +1241,7 @@ static int PL_CollideShell(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		int attack = PL_CheckAttack(pl, obj);
 		if (
 			attack == PH_STOMP ||
-			pl->state == PS_MOVE_00 || pl->state == PS_MOVE_02
+			pl->state == PS_WALK_00 || pl->state == PS_WALK_02
 		)
 		{
 			pl->collide = obj;
@@ -1199,34 +1251,37 @@ static int PL_CollideShell(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			player_802521A0(pl);
 			AudPlayShellBGM();
 			PL_DropObject(pl);
-			return PL_SetState(pl, PS_MOVE_06, 0);
+			return PL_SetState(pl, PS_WALK_06, 0);
 		}
 		PL_RepelFromObj(pl, obj, 2);
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CheckTaken(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	if (!(pl->state & (PF_JUMP|PF_DMGE|PF_ATCK)) || !invincible)
 	{
-		if (obj->o_hit_flag & 4)
+		if (obj->o_hit_flag & HF_0004)
 		{
-			if (PL_IsFacingObj(pl, obj, 0x2AAA))
+			if (PL_IsFacingObj(pl, obj, DEG(60)))
 			{
 				PL_DropAll(pl);
-				obj->o_hit_result = 0x800|0x8000; /* T:hit_result */
+				obj->o_hit_result = HR_000800|HR_008000;
 				pl->ang[1] = obj->o_angy;
 				pl->collide = obj;
 				pl->attach = obj;
 				player_802521A0(pl);
-				Na_ObjSePlay(NA_SE2_0B, pl->obj);
+				Na_ObjSePlay(NA_SE2_0B_80, pl->obj);
+#ifdef MOTOR
+				motor_8024C834(5, 80);
+#endif
 				return PL_SetState(pl, PS_SPEC_30, 0);
 			}
 		}
 	}
 	PL_RepelFromObj(pl, obj, -5);
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollidePole(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1236,9 +1291,17 @@ static int PL_CollidePole(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	{
 		if (!(pl->prevstate & PF_POLE) || pl->attach != obj)
 		{
-			int sp20 = pl->speed <= 10;
+#if REVISION >= 199707
+			float speed = pl->speed;
+			OBJECT *pl_obj = pl->obj;
+			int flag;
+			PL_DropAll(pl);
+			flag = speed <= 10;
+#else
+			int flag = pl->speed <= 10;
 			OBJECT *pl_obj = pl->obj;
 			PL_DropAll(pl);
+#endif
 			pl->collide = obj;
 			pl->attach = obj;
 			pl->vel[1] = 0;
@@ -1246,13 +1309,20 @@ static int PL_CollidePole(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 			pl_obj->o_v5 = 0;
 			pl_obj->o_v6 = 0;
 			pl_obj->o_f7 = pl->pos[1] - obj->o_posy;
-			if (sp20) return PL_SetState(pl, PS_SPEC_01, 0);
-			pl_obj->o_v6 = 0x1000 + 0x100*pl->speed;
+			if (flag) return PL_SetState(pl, PS_SPEC_01, 0);
+#if REVISION >= 199707
+			pl_obj->o_v6 = 0x1000 +     speed*0x100;
+#else
+			pl_obj->o_v6 = 0x1000 + pl->speed*0x100;
+#endif
 			collision_8024DAAC(pl);
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			return PL_SetState(pl, PS_SPEC_02, 0);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideHang(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1263,14 +1333,17 @@ static int PL_CollideHang(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		if (gfx_frame - pl->attach->o_v7 > 30)
 		{
 			PL_DropAll(pl);
-			obj->o_hit_result = 1; /* T:hit_result */
+			obj->o_hit_result = HR_000001;
 			pl->collide = obj;
 			pl->attach = obj;
+#ifdef MOTOR
+			motor_8024C834(5, 80);
+#endif
 			player_802521A0(pl);
 			return PL_SetState(pl, PS_JUMP_28, 0);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideCap(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
@@ -1281,7 +1354,7 @@ static int PL_CollideCap(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 	if (pl->state != PS_JUMP_38 && flag)
 	{
 		pl->collide = obj;
-		obj->o_hit_result = 0x8000; /* T:hit_result */
+		obj->o_hit_result = HR_008000;
 		pl->flag &= ~(PL_HEADCAP|PL_HANDCAP);
 		pl->flag |= flag;
 		switch (flag)
@@ -1291,7 +1364,7 @@ static int PL_CollideCap(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		case PL_WINGCAP:    timer = 30*60; bgm = NA_BGM_SPECIAL; break;
 		}
 		if (timer > pl->cap_timer) pl->cap_timer = timer;
-		if ((pl->state & PF_READ) || pl->state == PS_MOVE_00)
+		if (pl->state & PF_READ || pl->state == PS_WALK_00)
 		{
 			pl->flag |= PL_HANDCAP;
 			PL_SetState(pl, PS_DEMO_3D, 0);
@@ -1303,43 +1376,43 @@ static int PL_CollideCap(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 		Na_ObjSePlay(NA_SE7_1E, pl->obj);
 		Na_ObjSePlay(NA_SE2_0C, pl->obj);
 		if (bgm) AudPlaySpecialBGM(bgm);
-		return 1;
+		return TRUE;
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideTake(PLAYER *pl, u32 type, OBJECT *obj)
 {
 	OBJLANG *script = VirtualToSegment(SEG_OBJECT, obj->script);
-	if (obj->o_hit_flag & 0x100)
+	if (obj->o_hit_flag & HF_0100)
 	{
 		int attack = PL_CheckAttack(pl, obj);
 		if (attack & (PH_KICK|PH_SWEEPKICK))
 		{
 			ObjAttack(obj, attack);
 			PL_PunchKickRecoil(pl, attack);
-			return 0;
+			return FALSE;
 		}
 	}
-	if (obj->o_hit_flag & 4)
+	if (obj->o_hit_flag & HF_0004)
 	{
-		if (PL_CheckTaken(pl, type, obj)) return 1;
+		if (PL_CheckTaken(pl, type, obj)) return TRUE;
 	}
-	if (PL_IsTaking(pl, obj) && !(obj->o_hit_flag & 0x200))
+	if (PL_IsTaking(pl, obj) && !(obj->o_hit_flag & HF_0200))
 	{
 		pl->collide = obj;
 		pl->status |= PA_TAKEREQ;
-		return 1;
+		return TRUE;
 	}
-	if (script != o_13001850) PL_RepelFromObj(pl, obj, -5);
-	return 0;
+	if (script != obj_13001850) PL_RepelFromObj(pl, obj, -5);
+	return FALSE;
 }
 
 static int PL_CanOpenMessage(PLAYER *pl, int flag)
 {
 	SHORT anime;
 	if (pl->state & PF_READ) return TRUE;
-	if (pl->state == PS_MOVE_00)
+	if (pl->state == PS_WALK_00)
 	{
 		if (flag) return TRUE;
 		anime = pl->obj->s.skel.index;
@@ -1348,21 +1421,23 @@ static int PL_CanOpenMessage(PLAYER *pl, int flag)
 	return FALSE;
 }
 
+#if REVISION >= 199609
+#define READRANGE   90
+#else
+#define READRANGE   80
+#endif
+
 static int PL_CheckReading(PLAYER *pl, OBJECT *obj)
 {
 	if (
 		(pl->status & PA_READREQ) &&
 		PL_CanOpenMessage(pl, FALSE) &&
-		PL_IsFacingObj(pl, obj, 0x4000)
+		PL_IsFacingObj(pl, obj, DEG(READRANGE))
 	)
 	{
 		short dang = (SHORT)(obj->o_angy+0x8000) - pl->ang[1];
 		float posx, posz;
-#if REVISION > 199606
-		if (-0x4000 <= dang && dang <= 0x4000)
-#else
-		if (-0x38E3 <= dang && dang <= 0x38E3)
-#endif
+		if (DEG(-READRANGE) <= dang && dang <= DEG(READRANGE))
 		{
 			posx = obj->o_posx + 105*SIN(obj->o_angy);
 			posz = obj->o_posz + 105*COS(obj->o_angy);
@@ -1374,7 +1449,7 @@ static int PL_CheckReading(PLAYER *pl, OBJECT *obj)
 			return PL_SetState(pl, PS_DEMO_08, 0);
 		}
 	}
-	return 0;
+	return FALSE;
 }
 
 static int PL_CheckTalking(PLAYER *pl, OBJECT *obj)
@@ -1384,7 +1459,7 @@ static int PL_CheckTalking(PLAYER *pl, OBJECT *obj)
 		short dang = (SHORT)PL_GetAngToObj(pl, obj) - pl->ang[1];
 		if (-0x4000 <= dang && dang <= 0x4000)
 		{
-			obj->o_hit_result = 0x8000; /* T:hit_result */
+			obj->o_hit_result = HR_008000;
 			pl->collide = obj;
 			pl->attach = obj;
 			PL_RepelFromObj(pl, obj, -10);
@@ -1392,17 +1467,17 @@ static int PL_CheckTalking(PLAYER *pl, OBJECT *obj)
 		}
 	}
 	PL_RepelFromObj(pl, obj, -10);
-	return 0;
+	return FALSE;
 }
 
 static int PL_CollideMessage(PLAYER *pl, UNUSED u32 type, OBJECT *obj)
 {
 	int result = 0;
-	if (obj->o_hit_flag & 0x1000)
+	if (obj->o_hit_flag & HF_1000)
 	{
 		result = PL_CheckReading(pl, obj);
 	}
-	else if (obj->o_hit_flag & 0x4000)
+	else if (obj->o_hit_flag & HF_4000)
 	{
 		result = PL_CheckTalking(pl, obj);
 	}
@@ -1423,17 +1498,17 @@ static void PL_CheckPunchKickWall(PLAYER *pl)
 		pos[1] = pl->pos[1];
 		if (PL_CheckWall(pos, 80, 5))
 		{
-			if (pl->state != PS_MOVE_17 || pl->speed >= 0)
+			if (pl->state != PS_WALK_17 || pl->speed >= 0)
 			{
-				if (pl->state == PS_TAKE_00) pl->state = PS_MOVE_17;
+				if (pl->state == PS_ATCK_00) pl->state = PS_WALK_17;
 				PL_SetSpeed(pl, -48);
-				Na_ObjSePlay(NA_SE0_44_B, pl->obj);
+				Na_ObjSePlay(NA_SE0_44_B0, pl->obj);
 				pl->effect |= PE_00040000;
 			}
 			else if (pl->state & PF_JUMP)
 			{
 				PL_SetSpeed(pl, -16);
-				Na_ObjSePlay(NA_SE0_44_B, pl->obj);
+				Na_ObjSePlay(NA_SE0_44_B0, pl->obj);
 				pl->effect |= PE_00040000;
 			}
 		}
@@ -1444,7 +1519,7 @@ void PL_CheckCollision(PLAYER *pl)
 {
 	int i;
 	hit_enemy = FALSE;
-	invincible = (pl->state & PF_DMGE) || pl->invincible;
+	invincible = pl->state & PF_DMGE || pl->invincible;
 	if (!(pl->state & PF_DEMO) && pl->hit_status)
 	{
 		for (i = 0; i < (int)lenof(collisiontab); i++)
@@ -1454,7 +1529,7 @@ void PL_CheckCollision(PLAYER *pl)
 			{
 				OBJECT *obj = PL_GetHitObj(pl, type);
 				pl->hit_status &= ~type;
-				if (!(obj->o_hit_result & 0x8000)) /* T:hit_result */
+				if (!(obj->o_hit_result & HR_008000))
 				{
 					if (collisiontab[i].proc(pl, type, obj)) break;
 				}
@@ -1483,10 +1558,7 @@ static void PL_GroundBurn(PLAYER *pl)
 {
 	if (!(pl->state & PF_RIDE) && pl->pos[1] < pl->ground_y+10)
 	{
-		if (!(pl->flag & PL_METALCAP))
-		{
-			pl->damage += (pl->flag & PL_HEADCAP) ? 4*3 : 4*4+2;
-		}
+		if (!(pl->flag & PL_METALCAP)) PL_Damage(pl, 3);
 		player_802521A0(pl);
 		PL_SetStateDrop(pl, PS_JUMP_37, 0);
 	}
@@ -1498,21 +1570,21 @@ static void PL_StartTimer(UNUSED PLAYER *pl)
 	{
 		GmTimeShow();
 		GmTimeStart();
-		silder_flag = TRUE;
+		slider_flag = TRUE;
 	}
 }
 
 static void PL_StopTimer(PLAYER *pl)
 {
-	if (silder_flag)
+	if (slider_flag)
 	{
 		USHORT t = GmTimeStop();
 		if (t < 30*21)
 		{
 			ObjSetArg(pl->obj, 1);
-			object_b_802F2B88(-6358, -4300, 4700);
+			enemyb_802F2B88(-6358, -4300, 4700);
 		}
-		silder_flag = FALSE;
+		slider_flag = FALSE;
 	}
 }
 

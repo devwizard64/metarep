@@ -47,6 +47,29 @@ typedef struct
 }
 __OSContRequesFormatShort;
 
+typedef struct
+{
+	u8 dummy;
+	u8 txsize;
+	u8 rxsize;
+	u8 cmd;
+	u16 addr;
+	u8 data[BLOCKSIZE];
+	u8 datacrc;
+}
+__OSContRamReadFormat;
+
+extern OSPifRam __osPfsPifRam;
+extern int __osPfsLastChannel;
+
+extern s32 __osContRamRead(OSMesgQueue *, int, u16, u8 *);
+extern s32 __osContRamWrite(OSMesgQueue *, int, u16, u8 *, int);
+
+extern s32 __osPfsGetStatus(OSMesgQueue *, int);
+
+extern void __osPfsRequestData(u8);
+extern void __osPfsGetInitData(u8 *, OSContStatus *);
+
 #define EEPROM_WAIT             12000
 
 typedef struct
@@ -85,3 +108,6 @@ extern u8 __osMaxControllers;
 extern void __osPackRequestData(u8);
 extern void __osPackResetData(void);
 extern void __osContGetInitData(u8 *, OSContStatus *);
+
+extern u8 __osContAddressCrc(u16);
+extern u8 __osContDataCrc(u8 *);

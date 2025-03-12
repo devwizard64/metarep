@@ -1,13 +1,13 @@
 #include <sm64.h>
 
-extern Gfx gfx_wipe_start[];
+extern Gfx gfx_wipe_begin[];
 
 extern Gfx gfx_logo[];
 extern Gfx gfx_symbol[];
 extern float logo_scale_a[];
 extern float logo_scale_b[];
 
-extern Gfx gfx_titlebg_start[];
+extern Gfx gfx_titlebg_begin[];
 extern Gfx gfx_titlebg_vtx[];
 extern Gfx gfx_titlebg_0[];
 extern Gfx gfx_titlebg_1[];
@@ -19,7 +19,7 @@ extern u16 *txt_titlebg_gameover[];
 
 static int titlebg_timer;
 static int titlebg_count;
-static s16 titlebg_frame;
+static short titlebg_frame;
 static int titlebg_alpha;
 
 void *CtrlTitleLogo(int code, SHAPE *shape, UNUSED void *data)
@@ -84,7 +84,7 @@ void *CtrlTitleSymbol(int code, SHAPE *shape, UNUSED void *data)
 	else if (code == SC_DRAW)
 	{
 		g = gfx = GfxAlloc(sizeof(Gfx)*5);
-		gSPDisplayList(g++, gfx_wipe_start);
+		gSPDisplayList(g++, gfx_wipe_begin);
 		gDPSetEnvColor(g++, 0xFF, 0xFF, 0xFF, titlebg_alpha);
 		switch (titlebg_alpha)
 		{
@@ -157,8 +157,8 @@ void *CtrlTitleBG(int code, SHAPE *shape, UNUSED void *data)
 	{
 		g = gfx = GfxAlloc(sizeof(Gfx)*(2 + 4*3 + 2));
 		ShpSetLayer(&shp->s, LAYER_OPA_SURF);
-		gSPDisplayList(g++, gfx_wipe_start);
-		gSPDisplayList(g++, gfx_titlebg_start);
+		gSPDisplayList(g++, gfx_wipe_begin);
+		gSPDisplayList(g++, gfx_titlebg_begin);
 		for (i = 0; i < 4*3; i++)
 		{
 			gSPDisplayList(g++, TitleBGTile(i, bg));
@@ -181,7 +181,10 @@ void *CtrlGameOverBG(int code, SHAPE *shape, UNUSED void *data)
 		int i;
 		titlebg_timer = 0;
 		titlebg_count = -2;
-		for (i = 0; i < 4*3; i++) bg[i] = 1;
+		for (i = 0; i < 4*3; i++)
+		{
+			bg[i] = 1;
+		}
 	}
 	else
 	{
@@ -201,8 +204,8 @@ void *CtrlGameOverBG(int code, SHAPE *shape, UNUSED void *data)
 		}
 		if (titlebg_count != 12-1) titlebg_timer++;
 		ShpSetLayer(&shp->s, LAYER_OPA_SURF);
-		gSPDisplayList(g++, gfx_wipe_start);
-		gSPDisplayList(g++, gfx_titlebg_start);
+		gSPDisplayList(g++, gfx_wipe_begin);
+		gSPDisplayList(g++, gfx_titlebg_begin);
 		for (i = 0; i < 4*3; i++)
 		{
 			gSPDisplayList(g++, TitleBGTile(i, bg));

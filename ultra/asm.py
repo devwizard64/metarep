@@ -239,20 +239,18 @@ element_table = (
 	"[7]",  # 1111
 )
 
-btbl = {}
-
 def sym(self, addr, src=None):
-	btbl[self.seg].add(addr)
+	self.btbl[self.seg].add(addr)
 	sym = self.get_sym(addr)
 	if sym is not None: return sym.label
-	if mode == 0: return "%d$" % ((addr-addr_s) >> 2)
+	if self.core == 0: return "%d$" % ((addr-self.start) >> 2)
 	return ".L%08X" % addr
 
 def aw(self, src=None):
 	return sym(self, self.u32(), src)
 
-def str_prc(self, ptr, argv):
-	if imm is not None:
+def str_prc(self, line, inst, ptr, argv):
+	if inst.imm is not None:
 		i = 0
 		for arg in argv:
 			if arg in {
@@ -266,217 +264,231 @@ def str_prc(self, ptr, argv):
 				I_BDST,
 				I_JDST,
 			}:
-				if imm[i] is not None: inst_fmt[arg] = imm[i]
+				if inst.imm[i] is not None: inst.fmt[arg] = inst.imm[i]
 				i += 1
-	lst = tuple([self.fmt(inst_fmt[arg], inst_arg[arg]) for arg in argv])
+	lst = tuple([self.fmt(inst.fmt[arg], inst.arg[arg]) for arg in argv])
 	if None in lst:
 		raise RuntimeError("ultra.asm.str_prc(): bad arg (\"%s\" %% %s)" % (
 			ptr, str(lst)
 		))
 	return ptr % lst
 
-def lst_prc(self, ptr, argv):
-	p = ptr[inst_arg[argv[0]]]
+def lst_prc(self, line, inst, ptr, argv):
+	p = ptr[inst.arg[argv[0]]]
 	if p is not None:
 		ptr, argv = p
-		if type(ptr) == list:   return lst_prc(self, ptr, argv)
-		if type(ptr) == str:    return str_prc(self, ptr, argv)
-		if callable(ptr):       return ptr(self, argv)
+		if type(ptr) == list:   return lst_prc(self, line, inst, ptr, argv)
+		if type(ptr) == str:    return str_prc(self, line, inst, ptr, argv)
+		if callable(ptr):       return ptr(self, argv, line, inst)
 		raise RuntimeError("ultra.asm.lst_prc(): bad arg (%s)" % str(p))
 	return None
 
-def lui_write(reg, val):
-	if lui_flag & 1: lui_table[reg] = val
-	if lui_flag & 2: lui_next[reg]  = val
+def lui_write(self, reg, val):
+	if self.lui_flag & 1: self.lui_table[reg] = val
+	if self.lui_flag & 2: self.lui_next[reg]  = val
 
-def fnc_clear(self, argv):
-	reg = inst_arg[argv[1]]
-	op   = inst_arg[I_OP]
-	func = inst_arg[I_FUNC]
-	rs   = inst_arg[I_RS]
-	rt   = inst_arg[I_RT]
-	if not (op == 0x00 and func == 0x21) or (reg != rs and reg != rt):
-		lui_write(reg, None)
-	return str_prc(self, argv[0], argv[1:])
+def fnc_clear(self, argv, line, inst):
+	reg = inst.arg[argv[1]]
+	op   = inst.arg[I_OP]
+	func = inst.arg[I_FUNC]
+	rs   = inst.arg[I_RS]
+	rt   = inst.arg[I_RT]
+	if op == 0x00 and func == 0x21:
+		if reg != rs and reg != rt: lui_write(self, reg, None)
+	else:
+		lui_write(self, reg, None)
+	return str_prc(self, line, inst, argv[0], argv[1:])
 
-def fnc_clearf(self, argv):
-	return str_prc(self, argv[0], argv[1:])
+def fnc_clearf(self, argv, line, inst):
+	return str_prc(self, line, inst, argv[0], argv[1:])
 
-def fnc_clearv(self, argv):
-	return str_prc(self, argv[0], argv[1:])
+def fnc_clearv(self, argv, line, inst):
+	return str_prc(self, line, inst, argv[0], argv[1:])
 
-def fnc_or(self, argv):
+def fnc_or(self, argv, line, inst):
 	ptr, argv = ["or      %s, %s, %s", [I_RD, I_RS, I_RT]]
-	if mode == 0:
-		if inst_arg[I_RT] == 0:
-			ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
-	lui_write(inst_arg[I_RD], None)
-	return str_prc(self, ptr, argv)
+	if self.core == 0:
+		if inst.arg[I_RT] == 0: ptr, argv = ["move    %s, %s", [I_RD, I_RS]]
+	lui_write(self, inst.arg[I_RD], None)
+	return str_prc(self, line, inst, ptr, argv)
 
-def fnc_j(self, argv):
+def fnc_j(self, argv, line, inst):
 	if argv[1][0] == I_JDST:
-		jdst = inst_arg[I_JDST]
-		inst_arg[I_JDST] = ultra.sym(self, jdst, self.save)
+		jdst = inst.arg[I_JDST]
+		inst.arg[I_JDST] = ultra.sym(self, jdst, self.save)
 		#if argv[0].startswith("j       "):
-		#    inst_arg[I_JDST] = sym(self, jdst, self.save)
+		#    inst.arg[I_JDST] = sym(self, jdst, self.save)
 		#else:
-		#    inst_arg[I_JDST] = ultra.sym(self, jdst, self.save)
-		inst_fmt[I_JDST] = "%s"
-	return str_prc(self, argv[0], argv[1])
+		#    inst.arg[I_JDST] = ultra.sym(self, jdst, self.save)
+		inst.fmt[I_JDST] = "%s"
+	return str_prc(self, line, inst, argv[0], argv[1])
 
-def fnc_b(self, argv):
-	global lui_next
-	global lui_flag
-	bdst = inst_arg[I_BDST]
-	lui_stack[bdst] = lui_next = lui_table[:]
-	inst_arg[I_BDST] = sym(self, bdst)
-	inst_fmt[I_BDST] = "%s"
+def fnc_b(self, argv, line, inst):
 	cnt, ptr = argv[:2]
-	argv = [I_RS, I_RT]
-	lui_flag = 3
+	self.lui_flag = 3
 	# regimm
-	if inst_arg[I_OP] == 0x01:
+	if inst.arg[I_OP] == 0x01:
 		# b?z $0
-		if inst_arg[I_RS] == 0:
+		if inst.arg[I_RS] == 0:
 			# bgezal $0 -> bal
-			if inst_arg[I_RT] == 0x11:
+			if inst.arg[I_RT] == 0x11:
 				cnt, ptr = [0, "bal     "]
 			# bgezall $0 -> ball
-			elif inst_arg[I_RT] == 0x13:
+			elif inst.arg[I_RT] == 0x13:
 				cnt, ptr = [0, "ball    "]
-		if inst_arg[I_RT] in {0x02, 0x03, 0x12, 0x13}:
-			lui_flag = 2
+		if inst.arg[I_RT] in {0x02, 0x03, 0x12, 0x13}: self.lui_flag = 2
 	# bc1?
-	elif inst_arg[I_OP] == 0x11:
-		if inst_arg[I_RS] == 0x08:
-			if inst_arg[I_RT] in {0x02, 0x03}:
-				lui_flag = 2
+	elif inst.arg[I_OP] == 0x11:
+		if inst.arg[I_RS] == 0x08:
+			if inst.arg[I_RT] in {0x02, 0x03}: self.lui_flag = 2
 	# b? rs, $0
-	elif inst_arg[I_RT] == 0x00:
-		# beq
-		if inst_arg[I_OP] == 0x04:
-			# beq $0, $0 -> b
-			if inst_arg[I_RS] == 0:
-				cnt, ptr = [0, "b       "]
-			# beq rs, $0 -> beqz rs
-			else:
-				cnt, ptr = [1, "beqz    "]
-		# bne rs, $0 -> bnez rs
-		elif inst_arg[I_OP] == 0x05:
-			cnt, ptr = [1, "bnez    "]
-		# beql rs, $0 -> beqzl rs
-		elif inst_arg[I_OP] == 0x14:
-			cnt, ptr = [1, "beqzl   "]
-		# bnel rs, $0 -> bnezl rs
-		elif inst_arg[I_OP] == 0x15:
-			cnt, ptr = [1, "bnezl   "]
-	for i in range(cnt):
-		ptr += "%s, "
-	return str_prc(self, ptr + "%s", argv[:cnt] + [I_BDST])
+	else:
+		if inst.arg[I_RT] == 0x00:
+			# beq
+			if inst.arg[I_OP] == 0x04:
+				# beq $0, $0 -> b
+				if inst.arg[I_RS] == 0:
+					cnt, ptr = [0, "b       "]
+				# beq rs, $0 -> beqz rs
+				else:
+					cnt, ptr = [1, "beqz    "]
+			# bne rs, $0 -> bnez rs
+			elif inst.arg[I_OP] == 0x05:
+				cnt, ptr = [1, "bnez    "]
+			# beql rs, $0 -> beqzl rs
+			elif inst.arg[I_OP] == 0x14:
+				cnt, ptr = [1, "beqzl   "]
+			# bnel rs, $0 -> bnezl rs
+			elif inst.arg[I_OP] == 0x15:
+				cnt, ptr = [1, "bnezl   "]
+		if inst.arg[I_OP] in {0x14, 0x15, 0x16, 0x17}: self.lui_flag = 2
+	bdst = inst.arg[I_BDST]
+	fmt = "%s"
+	if self.lui_flag == 2:
+		save = self.addr
+		ninst = self.u32()
+		self.addr = bdst-4
+		tinst = self.u32()
+		self.addr = save
+		if ninst == tinst:
+			bdst -= 4
+			fmt = "%s+4"
+	self.lui_stack[bdst] = self.lui_next = self.lui_table[:]
+	inst.arg[I_BDST] = sym(self, bdst)
+	inst.fmt[I_BDST] = fmt
+	ptr += "%s, "*cnt + "%s"
+	argv = [I_RS, I_RT][:cnt] + [I_BDST]
+	return str_prc(self, line, inst, ptr, argv)
 
-def fnc_addiu(self, argv):
+def fnc_addiu(self, argv, line, inst):
 	ptr, argv = ["addiu   %s, %s, %s", [I_RT, I_RS, I_IMMS]]
-	if mode == 0:
+	if self.core == 0:
 		# addiu rt, $0, imm -> li rt, imm
-		if inst_arg[I_RS] == 0:
+		if inst.arg[I_RS] == 0:
 			ptr, argv = ["li      %s, %s", [I_RT, I_IMMS]]
 		# lui rt, hi(addr) ... addiu rt, rt, lo(addr)
-		elif lui_table[inst_arg[I_RS]] is not None:
-			ln, immh = lui_table[inst_arg[I_RS]]
-			inst_arg[I_IMMS] = ultra.sym(
-				self, immh + inst_arg[I_IMMS], self.save
+		elif self.lui_table[inst.arg[I_RS]] is not None:
+			ln, immh = self.lui_table[inst.arg[I_RS]]
+			inst.arg[I_IMMS] = ultra.sym(
+				self, immh + inst.arg[I_IMMS], self.save
 			)
-			inst_fmt[I_IMMS] = "%s"
-			if inst_arg[I_RT] == inst_arg[I_RS]:
-				if macro:
-					line[ln] = (
-						line[ln][0],
-						str_prc(self, "la.u    %s, %s", [I_RS, I_IMMS])
-					)
-					ptr, argv = ["la.l    %s, %s", [I_RT, I_IMMS]]
-				else:
-					line[ln] = (
-						line[ln][0],
-						str_prc(self, "lui     %s, %%hi(%s)", [I_RS, I_IMMS])
-					)
-					ptr, argv = ["addiu   %s, %%lo(%s)", [I_RT, I_IMMS]]
+			inst.fmt[I_IMMS] = "%s"
+			if inst.arg[I_RT] == inst.arg[I_RS]:
+				line[ln] = (line[ln][0], str_prc(
+					self, line, inst, "lui     %s, %%hi(%s)", [I_RS, I_IMMS]
+				))
+				ptr, argv = ["addiu   %s, %%lo(%s)", [I_RT, I_IMMS]]
 			else:
-				line[ln] = (
-					line[ln][0],
-					str_prc(self, "lui     %s, %%hi(%s)", [I_RS, I_IMMS])
-				)
+				line[ln] = (line[ln][0], str_prc(
+					self, line, inst, "lui     %s, %%hi(%s)", [I_RS, I_IMMS]
+				))
 				ptr, argv = ["addiu   %s, %s, %%lo(%s)", [I_RT, I_RS, I_IMMS]]
 	else:
 		# ARMIPS rejects this
-		# if inst_arg[I_RS] == 0:
-		#     inst_arg[I_IMMU] = ultra.sym(self, inst_arg[I_IMMU], self.save)
-		#     inst_fmt[I_IMMU] = "%s"
+		# if inst.arg[I_RS] == 0:
+		#     inst.arg[I_IMMU] = ultra.sym(self, inst.arg[I_IMMU], self.save)
+		#     inst.fmt[I_IMMU] = "%s"
 		#     ptr, argv = ["la      %s, %s", [I_RT, I_IMMU]]
 		pass
-	lui_write(inst_arg[I_RT], None)
-	return str_prc(self, ptr, argv)
+	lui_write(self, inst.arg[I_RT], None)
+	return str_prc(self, line, inst, ptr, argv)
 
-def fnc_ori(self, argv):
+def fnc_daddiu(self, argv, line, inst):
+	ptr, argv = ["daddiu  %s, %s, %s", [I_RT, I_RS, I_IMMS]]
+	if self.core == 0:
+		# lui rt, hi(addr) ... daddiu rt, rt, lo(addr)
+		if self.lui_table[inst.arg[I_RS]] is not None:
+			ln, immh = self.lui_table[inst.arg[I_RS]]
+			inst.arg[I_IMMS] = ultra.sym(
+				self, immh + inst.arg[I_IMMS], self.save
+			)
+			inst.fmt[I_IMMS] = "%s"
+			if inst.arg[I_RT] == inst.arg[I_RS]:
+				line[ln] = (line[ln][0], str_prc(
+					self, line, inst, "lui     %s, %%hi(%s)", [I_RS, I_IMMS]
+				))
+				ptr, argv = ["daddiu  %s, %%lo(%s)", [I_RT, I_IMMS]]
+			else:
+				line[ln] = (line[ln][0], str_prc(
+					self, line, inst, "lui     %s, %%hi(%s)", [I_RS, I_IMMS]
+				))
+				ptr, argv = ["daddiu  %s, %s, %%lo(%s)", [I_RT, I_RS, I_IMMS]]
+	lui_write(self, inst.arg[I_RT], None)
+	return str_prc(self, line, inst, ptr, argv)
+
+def fnc_ori(self, argv, line, inst):
 	ptr, argv = ["ori     %s, %s, %s", [I_RT, I_RS, I_IMMU]]
-	if inst_arg[I_RS] == 0:
-		if mode == 0:
+	if inst.arg[I_RS] == 0:
+		if self.core == 0:
 			# ori rt, $0, imm -> li rt, imm
-			if inst_arg[I_IMMU] >= 0x8000:
+			if inst.arg[I_IMMU] >= 0x8000:
 				ptr, argv = ["li      %s, %s", [I_RT, I_IMMU]]
 		else:
 			pass
 	# lui rt, imm ... ori rt, rt, imm -> li.u rt, imm ... li.l rt, imm
-	elif inst_arg[I_RT] == inst_arg[I_RS]:
-		if lui_table[inst_arg[I_RT]] is not None:
-			ln, immh = lui_table[inst_arg[I_RT]]
-			inst_arg[I_IMMU] = immh | inst_arg[I_IMMU]
-			inst_fmt[I_IMMU] = "0x%08X"
+	elif inst.arg[I_RT] == inst.arg[I_RS]:
+		if self.lui_table[inst.arg[I_RT]] is not None:
+			ln, immh = self.lui_table[inst.arg[I_RT]]
+			inst.arg[I_IMMU] = immh | inst.arg[I_IMMU]
+			inst.fmt[I_IMMU] = "0x%08X"
 			if line[ln][1].startswith("li"):
-				if macro:
-					line[ln] = (
-						line[ln][0],
-						str_prc(self, "li.u    %s, %s", [I_RT, I_IMMU])
-					)
-					ptr, argv = ["li.l    %s, %s", [I_RT, I_IMMU]]
-				else:
-					line[ln] = (
-						line[ln][0],
-						str_prc(self, "lui     %s, %s >> 16", [I_RT, I_IMMU])
-					)
-					ptr, argv = ["ori     %s, %s & 0xFFFF", [I_RT, I_IMMU]]
-	lui_write(inst_arg[I_RT], None)
-	return str_prc(self, ptr, argv)
+				line[ln] = (line[ln][0], str_prc(
+					self, line, inst, "lui     %s, %s >> 16", [I_RT, I_IMMU]
+				))
+				ptr, argv = ["ori     %s, %s & 0xFFFF", [I_RT, I_IMMU]]
+	lui_write(self, inst.arg[I_RT], None)
+	return str_prc(self, line, inst, ptr, argv)
 
-def fnc_lui(self, argv):
-	if inst_arg[I_RT] != 0:
-		lui_write(inst_arg[I_RT], (len(line), inst_arg[I_IMMH]))
-	if imm is not None:
+def fnc_lui(self, argv, line, inst):
+	if inst.arg[I_RT] != 0:
+		lui_write(self, inst.arg[I_RT], (len(line), inst.arg[I_IMMH]))
+	if inst.imm is not None:
 		ptr, argv = "lui     %s, %s", [I_RT, I_IMMU]
 	else:
 		ptr, argv = "li      %s, %s", [I_RT, I_IMMH]
-	return str_prc(self, ptr, argv)
+	return str_prc(self, line, inst, ptr, argv)
 
-def rsp_prc(self, i):
-	sym = self.find_sym(0x04000000 | inst_arg[i], self.save)
+def rsp_prc(self, inst, i):
+	sym = self.find_sym(0x04000000 | inst.arg[i], self.save)
 	if sym is not None:
-		inst_arg[i] = sym.label
-		inst_fmt[i] = "lo(%s)"
+		inst.arg[i] = sym.label
+		inst.fmt[i] = "lo(%s)"
 	# else:
-	# 	print("0x%03X," % inst_arg[i])
+	# 	print("0x%03X," % inst.arg[i])
 
-def fnc_ls(self, argv):
+def fnc_ls(self, argv, line, inst):
 	ptr, argv = [argv[0], [argv[1], I_IMMS, I_RS]]
-	if mode == 0:
-		if lui_table[inst_arg[I_RS]] is not None:
-			ln, immh = lui_table[inst_arg[I_RS]]
-			inst_arg[I_IMMS] = ultra.sym(
-				self, immh + inst_arg[I_IMMS], self.save
+	if self.core == 0:
+		if self.lui_table[inst.arg[I_RS]] is not None:
+			ln, immh = self.lui_table[inst.arg[I_RS]]
+			inst.arg[I_IMMS] = ultra.sym(
+				self, immh + inst.arg[I_IMMS], self.save
 			)
-			inst_fmt[I_IMMS] = "%%hi(%s)"
-			line[ln] = (
-				line[ln][0], str_prc(self, "lui     %s, %s", [I_RS, I_IMMS])
-			)
-			inst_fmt[I_IMMS] = "%%lo(%s)"
+			inst.fmt[I_IMMS] = "%%hi(%s)"
+			line[ln] = (line[ln][0], str_prc(
+				self, line, inst, "lui     %s, %s", [I_RS, I_IMMS]
+			))
+			inst.fmt[I_IMMS] = "%%lo(%s)"
 		if ptr in {
 			"lb      ",
 			"lh      ",
@@ -487,26 +499,24 @@ def fnc_ls(self, argv):
 			"lwr     ",
 			"lwu     ",
 		}:
-			lui_write(inst_arg[argv[0]], None)
+			lui_write(self, inst.arg[argv[0]], None)
 		# this doesn't really make sense, but it fixes libultra
 		elif ptr == "cache   ":
-			lui_write(inst_arg[argv[2]], None)
+			lui_write(self, inst.arg[argv[2]], None)
 	else:
-		if inst_arg[I_RS] == 0:
-			rsp_prc(self, I_IMMS)
+		if inst.arg[I_RS] == 0: rsp_prc(self, inst, I_IMMS)
 	ptr += "%s, %s(%s)"
-	return str_prc(self, ptr, argv)
+	return str_prc(self, line, inst, ptr, argv)
 
-def fnc_lsv(self, argv):
-	inst_arg[I_OFFS] <<= argv[1]
+def fnc_lsv(self, argv, line, inst):
+	inst.arg[I_OFFS] <<= argv[1]
 	ptr, argv = [argv[0], [I_VT, I_E, I_OFFS, I_RS]]
-	if mode == 0:
+	if self.core == 0:
 		pass
 	else:
-		if inst_arg[I_RS] == 0:
-			rsp_prc(self, I_OFFS)
+		if inst.arg[I_RS] == 0: rsp_prc(self, inst, I_OFFS)
 	ptr += "%s%s, %s(%s)"
-	return str_prc(self, ptr, argv)
+	return str_prc(self, line, inst, ptr, argv)
 
 lst_special = [
 	(fnc_clear, ["sll     %s, %s, %s", I_RD, I_RT, I_SA]),
@@ -1047,7 +1057,7 @@ lst_op = [
 	(fnc_b, [1, "blezl   "]),
 	(fnc_b, [1, "bgtzl   "]),
 	(fnc_clear, ["daddi   %s, %s, %s", I_RT, I_RS, I_IMMS]),
-	(fnc_clear, ["daddiu  %s, %s, %s", I_RT, I_RS, I_IMMS]),
+	(fnc_daddiu, None),
 	(fnc_ls, ["ldl     ", I_RT]),
 	(fnc_ls, ["ldr     ", I_RT]),
 	None,
@@ -1088,13 +1098,14 @@ lst_op = [
 	(fnc_ls, ["sd      ", I_RT]),
 ]
 
-def init(self, seg, addr):
-	global btbl
+def init(self, seg, addr, core):
 	ultra.init(self, seg, addr)
-	if self.seg not in btbl: btbl[self.seg] = set()
+	self.core = core
+	if not hasattr(self, "btbl"): self.btbl = {}
+	if self.seg not in self.btbl: self.btbl[self.seg] = set()
 
-def fmt(self, line):
-	f = self.file[-1][1]
+def fmt(self, start, line):
+	data = self.file.data
 	last = None
 	for addr, ln in line:
 		if addr is not None:
@@ -1102,150 +1113,144 @@ def fmt(self, line):
 				sym = self.get_sym(addr)
 				if sym is not None:
 					if "LOCAL" not in sym.flag:
-						addr_s = addr
-						if last is not None: f.append("\n")
+						start = addr
+						if last is not None: data.append("\n")
 						if ultra.COMM_LABEL and hasattr(sym, "fmt"):
 							if ultra.COMM_LADDR:
-								start = "/* 0x%08X   " % addr
+								s = "/* 0x%08X   " % addr
 							else:
-								start = "/* "
-							f.append(sym.fmt(start, " */")+"\n")
+								s = "/* "
+							data.append(sym.fmt(s, " */")+"\n")
 						else:
 							if ultra.COMM_LADDR:
-								f.append("/* 0x%08X */\n" % addr)
-					if "GLOBL" in sym.flag: f.append(".globl %s\n" % sym.label)
-					f.append("%s:\n" % sym.label)
-				elif addr in btbl[self.seg]:
-					if mode == 0:   f.append("%d$:\n" % ((addr-addr_s)//4))
-					else:           f.append(".L%08X:\n" % addr)
+								data.append("/* 0x%08X */\n" % addr)
+					if "GLOBL" in sym.flag:
+						data.append(".globl %s\n" % sym.label)
+					data.append("%s:\n" % sym.label)
+				elif addr in self.btbl[self.seg]:
+					if self.core == 0:
+						data.append("%d$:\n" % ((addr-start) >> 2))
+					else:
+						data.append(".L%08X:\n" % addr)
 				last = addr
-		if ultra.COMM_LINE: f.append("/*%08X*/\t%s\n" % (addr, ln))
-		else:               f.append("\t%s\n" % ln)
+		if ultra.COMM_LINE: data.append("/*%08X*/\t%s\n" % (addr, ln))
+		else:               data.append("\t%s\n" % ln)
 
-def s_code_start(self):
-	global addr_s
-	global reg_table
-	global lui_stack
-	global lui_table
-	global lui_next
-	global lui_flag
-	addr_s = self.addr
-	reg_table = 64*[False]
-	lui_stack = {}
-	lui_table = 32*[None]
-	lui_next  = None
-	lui_flag  = 1
+def f_code_start(self):
+	self.start = self.addr
+	self.lui_stack = {}
+	self.lui_table = 32*[None]
+	self.lui_next  = None
+	self.lui_flag  = 1
 
-def s_code(self, argv):
-	global mode
-	global macro
-	global sep
-	global line
-	global inst_arg
-	global inst_fmt
-	global lui_table
-	global lui_flag
-	global imm
-	seg, start, end, mode, macro, sep = argv
-	init(self, seg, start)
-	gpr  = (gpr_cpu,  gpr_rsp)[mode]
-	cop0 = (cop0_cpu, cop0_rsp)[mode]
+class INST:
+	def __init__(self, work, inst, core):
+		self.work = work
+		self.inst = inst
+		f0 = inst >> 26 & 0x3F
+		f1 = inst >>  0 & 0x3F
+		r0 = inst >> 21 & 0x1F
+		r1 = inst >> 16 & 0x1F
+		r2 = inst >> 11 & 0x1F
+		r3 = inst >>  6 & 0x1F
+		e0 = inst >> 21 & 0x0F
+		e1 = inst >> 11 & 0x0F
+		e2 = inst >>  7 & 0x0F
+		i0 = (inst >> 0 & 0x7F) - (inst << 1 & 0x80)
+		i1 = inst >>  0 & 0xFFFF
+		i2 = i1 - (i1 << 1 & 0x10000)
+		i3 = inst <<  0 & 0x03FFFFFF
+		i4 = inst >>  6 & 0x000FFFFF
+		gpr = (gpr_cpu, gpr_rsp)[core]
+		cop0 = (cop0_cpu, cop0_rsp)[core]
+		self.arg = [
+			f0, # op
+			f1, # func
+			r0, # rs
+			r1, # rt
+			r2, # rd
+			r3, # sa
+			r1, # cache
+			(r1, i4)[core], # code
+			r2, # c0reg
+			r2, # c1ctl
+			r0, # c1fmt
+			r1, # ft
+			r2, # fs
+			r3, # fd
+			r1, # vt
+			r2, # vs
+			r3, # vd
+			e0, # ev
+			e1, # de
+			e2, # e
+			i0, # offs
+			i2, # imms
+			i1, # immu
+			i1 << 16, # immh
+			self.work.addr + (i2 << 2), # bdst
+			(self.work.addr & 0xF0000000) | (i3 << 2), # jdst
+		]
+		self.fmt = [
+			"", # op
+			"", # func
+			gpr, # rs
+			gpr, # rt
+			gpr, # rd
+			"%d", # sa
+			"0x%02X", # cache
+			"%d", # code
+			cop0, # c0reg
+			cop1_ctl, # c1ctl
+			cop1_fmt, # c1fmt
+			"$f%d", # ft
+			"$f%d", # fs
+			"$f%d", # fd
+			"$v%d", # vt
+			"$v%d", # vs
+			"$v%d", # vd
+			element_table, # ev
+			element_table, # de
+			"[%d]", # e
+			ultra.fmt_s16, # offs
+			ultra.fmt_s16, # imms
+			"0x%04X", # immu
+			"0x%08X", # immh
+			"", # bdst
+			"0x%08X", # jdst
+		]
+		self.imm = self.work.get_imm(self.work.save)
+
+def f_code(self, argv):
+	seg, start, end, core = argv
+	init(self, seg, start, core)
 	line = []
-	s_code_start(self)
+	f_code_start(self)
 	while self.addr < end:
 		self.save = self.addr
 		sym = self.get_sym(self.save)
-		if sym is not None and "LOCAL" not in sym.flag: s_code_start(self)
-		if self.save in lui_stack: lui_table = lui_stack[self.save][:]
-		flag = lui_flag
+		if sym is not None and "LOCAL" not in sym.flag: f_code_start(self)
+		if self.save in self.lui_stack:
+			self.lui_table = self.lui_stack[self.save][:]
+		flag = self.lui_flag
 		inst = self.u32()
 		if inst == 0:
 			line.append((self.save, "nop"))
 		else:
-			f0 = inst >> 26 & 0x3F
-			f1 = inst >>  0 & 0x3F
-			r0 = inst >> 21 & 0x1F
-			r1 = inst >> 16 & 0x1F
-			r2 = inst >> 11 & 0x1F
-			r3 = inst >>  6 & 0x1F
-			e0 = inst >> 21 & 0x0F
-			e1 = inst >> 11 & 0x0F
-			e2 = inst >>  7 & 0x0F
-			i0 = (inst >> 0 & 0x7F) - (inst << 1 & 0x80)
-			i1 = inst >>  0 & 0xFFFF
-			i2 = i1 - (i1 << 1 & 0x10000)
-			i3 = inst <<  0 & 0x03FFFFFF
-			i4 = inst >>  6 & 0x000FFFFF
-			inst_arg = [
-				f0, # op
-				f1, # func
-				r0, # rs
-				r1, # rt
-				r2, # rd
-				r3, # sa
-				r1, # cache
-				(r1, i4)[mode], # code
-				r2, # c0reg
-				r2, # c1ctl
-				r0, # c1fmt
-				r1, # ft
-				r2, # fs
-				r3, # fd
-				r1, # vt
-				r2, # vs
-				r3, # vd
-				e0, # ev
-				e1, # de
-				e2, # e
-				i0, # offs
-				i2, # imms
-				i1, # immu
-				i1 << 16, # immh
-				self.addr + (i2 << 2), # bdst
-				(self.addr & 0xF0000000) | (i3 << 2), # jdst
-			]
-			inst_fmt = [
-				"", # op
-				"", # func
-				gpr, # rs
-				gpr, # rt
-				gpr, # rd
-				"%d", # sa
-				"0x%02X", # cache
-				"%d", # code
-				cop0, # c0reg
-				cop1_ctl, # c1ctl
-				cop1_fmt, # c1fmt
-				"$f%d", # ft
-				"$f%d", # fs
-				"$f%d", # fd
-				"$v%d", # vt
-				"$v%d", # vs
-				"$v%d", # vd
-				element_table, # ev
-				element_table, # de
-				"[%d]", # e
-				ultra.fmt_s16, # offs
-				ultra.fmt_s16, # imms
-				"0x%04X", # immu
-				"0x%08X", # immh
-				"", # bdst
-				"0x%08X", # jdst
-			]
-			imm = self.get_imm(self.save)
-			ln = lst_prc(self, lst_op, [I_OP])
-			if ln is not None:
-				line.append((self.save, ln))
+			inst = INST(self, inst, core)
+			result = lst_prc(self, line, inst, lst_op, [I_OP])
+			if result is not None:
+				line.append((self.save, result))
 			else:
 				print("warning: illegal opcode 0x%08X:0x%08X" % (
-					self.save, inst
+					self.save, inst.inst
 				))
 				line.append((self.save, (
 					".word 0x%08X",
 					"nop :: .org .-4 :: .word 0x%08X",
-				)[mode] % inst))
-		if flag != 1: lui_flag = 1
-	fmt(self, line)
+				)[core] % inst.inst))
+		if flag != 1: self.lui_flag = 1
+	fmt(self, start, line)
 
 def d_fmt(self, argv, x, fmt="%d"):
 	return self.fmt(argv[0] if len(argv) > 0 else fmt, x)
@@ -1270,35 +1275,34 @@ def d_align_prc(self, argv):
 	return "%d" % x
 d_align = [".align", d_align_prc]
 
-def lst_main(self, line, lst):
-	for argv in lst:
-		for _ in range(argv[0]):
-			if type(argv[1]) == list:
-				lst_main(self, line, argv[1])
+def f_data_seq(self, line, seq):
+	for cmd in seq:
+		for _ in range(cmd[0]):
+			if isinstance(cmd[1], list):
+				f_data_seq(self, line, cmd[1])
 			else:
 				self.save = self.addr
-				n = argv[1]
-				t = argv[2]
-				if type(t) == str and t in {"ascii", "asciz"}:
+				n = cmd[1]
+				t = cmd[2]
+				if isinstance(t, str) and t in {"ascii", "asciz"}:
 					line.append((self.save, ".%s \"%s\"" % (
 						t, "".join([chr(self.u8()) for _ in range(n)])
 					)))
 					if t == "asciz": self.addr += 1
 				else:
 					line.append((self.save, "%s %s" % (t[0], ",".join([
-						t[1](self, argv[3:]) for _ in range(n)
+						t[1](self, cmd[3:]) for _ in range(n)
 					]))))
 
-def s_data(self, argv):
-	seg, start, end, lst = argv
-	init(self, seg, start)
+def f_data(self, argv):
+	seg, start, end, core, seq = argv
+	init(self, seg, start, core)
 	line = []
-	lst_main(self, line, lst)
-	fmt(self, line)
+	f_data_seq(self, line, seq)
+	fmt(self, start, line)
 
-def s_definelabel(self, argv):
+def f_definelabel(self, path, line, argv):
 	seg, = argv
-	f = self.file[-1][1]
 	mask = tuple(seg.split("."))
 	for i in self.meta.sym:
 		if mask == tuple(seg.split(".")[:len(mask)]):
@@ -1306,45 +1310,34 @@ def s_definelabel(self, argv):
 				s = sym[addr]
 				if "-" in s.label or "+" in s.label: continue
 				if "LOCAL" not in s.flag:
-					f.append("%s0x%08X\n" % (
+					line.append("%s0x%08X\n" % (
 						(".definelabel %s, " % s.label).ljust(64), addr
 					))
 
-def s_struct_lst(line, prefix, lst):
-	for x in lst:
-		if type(x) == list:
-			off  = x[0]
-			name = x[2]
-			lst  = x[3]
+def f_struct_seq(self, line, prefix, seq):
+	for cmd in seq:
+		if isinstance(cmd, list):
+			off  = cmd[0]
+			name = cmd[2]
+			seq  = cmd[3]
 			pre  = prefix + (name,)
 			line.append((off,) + pre)
-			s_struct_lst(line, pre, lst)
+			f_struct_seq(line, pre, seq)
 		else:
-			off = x[0]
-			sym = x[1]
+			off = cmd[0]
+			sym = cmd[1]
 			line.append((off,) + prefix + (sym.label,))
 
-def s_struct(self, argv):
+def f_struct(self, argv):
 	tbl, = argv
-	f = self.file[-1][1]
 	for size, c, name, lst in tbl:
 		fmt = ultra.fmt_sizefmt(size)
 		line = []
-		s_struct_lst(line, (name,), lst)
+		f_struct_seq(line, (name,), lst)
 		line.append((size, "sizeof", name))
-		f += [
+		self.file.data.extend([
 			("#define %s " % "__".join(x[1:])).ljust(32) + fmt % x[0] + "\n"
-			for x in line
+			for x in ln
 			if x[0] is not None
-		]
-		f.append("\n")
-
-def s_header(self, argv):
-	seg, = argv
-	ultra.init(self, seg, 0)
-	p = self.u32()
-	c = self.u32()
-	s = self.u32()
-	u = self.u32()
-	self.addr += 0x30
-	self.file[-1][1].append("%08x%08x\n%08x%08x\n" % (p, c, 0, u))
+		])
+		self.file.data.append("\n")
